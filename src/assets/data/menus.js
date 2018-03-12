@@ -1,5 +1,11 @@
 const menus = [
-
+	{
+		Target: 'home',
+		Href: '/home',
+		Name: '首页',
+		IsShow: '1',
+		Icon: 'home-icon',
+	},
 	{
 		Target: 'carrierbill',
 		Href: '/carrierbill',
