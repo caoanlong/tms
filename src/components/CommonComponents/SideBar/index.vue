@@ -16,17 +16,16 @@
 import { mapGetters } from 'vuex'
 import ScrollBar from '../ScrollBar'
 import SidebarItem from './SidebarItem'
+import menus from '../../../assets/data/menus'
+
 export default {
 	name: 'sideBar',
 	computed: {
-		// ...mapGetters([
-		// 	'permission_routers',
-		// 	'sidebar'
-		// ]),
 		...mapGetters([
-			'menus',
+			// 'menus',
 			'sidebar'
 		]),
+		menus: () => menus,
 		isCollapse() {
 			return !this.sidebar.opened
 		}

@@ -1,13 +1,13 @@
 <template>
 	<div class="app-wrapper clearfix" :class="{hideSidebar: !sidebar.opened}">
 		<sidebar class="sidebar-container"></sidebar>
-		<div class="main-container right-container">
+		<!-- <div class="main-container right-container">
 			<div class="top-bar">
 				<navbar></navbar>
 				<tags-view></tags-view>
 			</div>
 			<app-main></app-main>
-		</div>
+		</div> -->
 	</div>
 </template>
 <script type="text/javascript">
