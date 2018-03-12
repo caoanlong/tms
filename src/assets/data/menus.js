@@ -1,11 +1,5 @@
 const menus = [
-	{
-		Target: 'home',
-		Href: '/home',
-		Name: '首页',
-		IsShow: '1',
-		Icon: 'home-icon'
-	},
+
 	{
 		Target: 'carrierbill',
 		Href: '/carrierbill',
@@ -15,10 +9,12 @@ const menus = [
 		redirect: '/carrierbills',
 		children: [
 			{
+
 				Target: 'carrierbills',
 				Href: '/carrierbills',
 				Name: '承运单列表',
 				IsShow: '1',
+
 				Icon: 'home-icon'
 			},
 			{
