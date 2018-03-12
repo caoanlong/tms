@@ -34,13 +34,22 @@ let routerMap = [
 						meta: {
 							title: '承运单列表'
 						},
+						component: () => import ('../components/Carrierbill'),
 					},
 					{
-						path: '/addcarrierbills',
-						name: 'addcarrierbills',
+						path: '/addcarrierbill',
+						name: 'addcarrierbill',
 						meta: {
 							title: '添加承运单'
 						},
+					},
+					{
+						path: '/viewcarrierbill',
+						name: 'viewcarrierbill',
+						meta: {
+							title: '承运单详情'
+						},
+						component: () => import ('../components/Carrierbill/Viewcarrierbill')
 					},
 					{
 						path: '/controls',
