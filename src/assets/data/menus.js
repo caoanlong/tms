@@ -12,34 +12,105 @@ const menus = [
 		Name: '承运单',
 		IsShow: '1',
 		Icon: 'home-icon',
-		redirect: '/carrierbills',
 		children: [
 			{
-
 				Target: 'carrierbills',
 				Href: '/carrierbills',
 				Name: '承运单列表',
-				IsShow: '1',
-
-				Icon: 'home-icon'
+				IsShow: '1'
 			},
 			{
-				Target: 'addcarrierbill',
-				Href: '/addcarrierbill',
-				Name: '添加承运单',
-				IsShow: '0'
+				Target: 'controls',
+				Href: '/controls',
+				Name: '调度列表',
+				IsShow: '1'
+			}
+		]
+	},
+	{
+		Target: 'settlemanage',
+		Href: '/settlemanage',
+		Name: '结算管理',
+		IsShow: '1',
+		Icon: 'home-icon',
+		children: [
+			{
+				Target: 'receivablesum',
+				Href: '/receivablesum',
+				Name: '应收汇总',
+				IsShow: '1'
 			},
 			{
-				Target: 'editcarrierbill',
-				Href: '/editcarrierbill',
-				Name: '编辑承运单',
-				IsShow: '0'
+				Target: 'receivableinfo',
+				Href: '/receivableinfo',
+				Name: '应收明细',
+				IsShow: '1'
 			},
 			{
-				Target: 'viewcarrierbill',
-				Href: '/viewcarrierbill',
-				Name: '查看承运单',
-				IsShow: '0'
+				Target: 'payablesum',
+				Href: '/payablesum',
+				Name: '应付汇总',
+				IsShow: '1'
+			},
+			{
+				Target: 'payableinfo',
+				Href: '/payableinfo',
+				Name: '应付明细',
+				IsShow: '1'
+			},
+			{
+				Target: 'settleconfig',
+				Href: '/settleconfig',
+				Name: '结算设置',
+				IsShow: '1'
+			}
+		]
+	},
+	{
+		Target: 'transteam',
+		Href: '/transteam',
+		Name: '运输队',
+		IsShow: '1',
+		Icon: 'home-icon',
+		children: [
+			{
+				Target: 'truck',
+				Href: '/truck',
+				Name: '车辆',
+				IsShow: '1'
+			},
+			{
+				Target: 'person',
+				Href: '/person',
+				Name: '人员',
+				IsShow: '1'
+			},
+			{
+				Target: 'transinfo',
+				Href: '/transinfo',
+				Name: '运输档案',
+				IsShow: '1'
+			}
+		]
+	},
+	{
+		Target: 'collaborator',
+		Href: '/collaborator',
+		Name: '合作伙伴',
+		IsShow: '1',
+		Icon: 'home-icon',
+		children: [
+			{
+				Target: 'shipper',
+				Href: '/shipper',
+				Name: '托运人',
+				IsShow: '1'
+			},
+			{
+				Target: 'recdeliverycom',
+				Href: '/recdeliverycom',
+				Name: '收发货单位',
+				IsShow: '1'
 			}
 		]
 	}
