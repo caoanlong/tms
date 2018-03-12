@@ -70,14 +70,56 @@ let routerMap = [
 					}
 				]
 			},
+			{
+				path: '/settlemanage',
+				name: 'settlemanage',
+				meta: {
+					title: '结算管理'
+				},
+				component: () => import ('../components/Settlemanage'),
+				redirect: '/receivablesum',
+				children: [
+					{
+						path: '/receivablesum',
+						name: 'receivablesum',
+						meta: {
+							title: '应收汇总'
+						},
+						component: () => import ('../components/Settlemanage/Receivablesum'),
+					},
+					{
+						path: '/receivableinfo',
+						name: 'receivableinfo',
+						meta: {
+							title: '应收明细'
+						},
+						component: () => import ('../components/Settlemanage/Receivableinfo'),
+					},
+					{
+						path: '/payablesum',
+						name: 'payablesum',
+						meta: {
+							title: '应付汇总'
+						},
+						component: () => import ('../components/Settlemanage/Payablesum'),
+					},
+					{
+						path: '/payableinfo',
+						name: 'payableinfo',
+						meta: {
+							title: '应付明细'
+						},
+					}
+				]
+			}
 		]
 	}
 ]
 const router = new Router({
-  scrollBehavior: () => ({
-    y: 0
-  }),
-  routes: routerMap
+	scrollBehavior: () => ({
+		y: 0
+	}),
+	routes: routerMap
 })
 
 export default router
