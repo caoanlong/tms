@@ -33,33 +33,41 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus">添加</el-button>
+                <el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
-					ref="roleTable" 
+					ref="recTable" 
 					:data="tableData" 
 					border style="width: 100%" size="mini">
-					<el-table-column type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="角色名称" prop="Name" align="left"></el-table-column>
-					<el-table-column label="英文名称" prop="EnName" align="left"></el-table-column>
-					<el-table-column label="归属机构" prop="sys_organization.Name" align="left"></el-table-column>
-					<el-table-column label="数据范围" align="left">
+					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
+					<el-table-column label="发货单位" prop="deliveryer"></el-table-column>
+					<el-table-column label="收货单位" prop="receiver"></el-table-column>
+					<el-table-column label="总趟次" prop="totalNum" width="80"></el-table-column>
+					<el-table-column label="地区" prop="area" width="120"></el-table-column>
+					<el-table-column label="地点" prop="address"></el-table-column>
+					<el-table-column label="总货量" prop="totalGoods"></el-table-column>
+					<el-table-column label="总运费" prop="totalFreight" align="center" width="120"></el-table-column>
+					<el-table-column label="操作" align="center" width="120">
 						<template slot-scope="scope">
-							<span 
-							v-for="sysDataScope in sysDataScopes" 
-							:key="sysDataScope.Dict_ID" 
-							v-if="sysDataScope.VALUE == scope.row.DataScope">{{sysDataScope.NAME}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="操作" width="420" align="center">
-						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view">查看</el-button>
-							<el-button type="default" size="mini" icon="el-icon-edit">修改</el-button>
-							<el-button type="default" size="mini" icon="el-icon-delete">删除</el-button>
+							<el-button type="default" size="mini" icon="el-icon-view" @click="viewinfo">查看明细</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
+                <table class="total-table">
+                    <tr>
+                        <td width="60" align="center">合计</td>
+                        <td></td>
+                        <td></td>
+                        <td width="80"></td>
+                        <td width="120"></td>
+                        <td></td>
+                        <td></td>
+                        <td width="120" align="center">{{totalFreightNum}}</td>
+                        <td width="120"></td>
+                    </tr>
+                </table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
 						<span>总共 {{count}} 条记录每页显示</span>
@@ -96,10 +104,56 @@
                 endDate: '',
 				pageIndex: 1,
 				pageSize: 10,
-                count: 0,
-                tableData: []
+                count: 87,
+                tableData: [
+                    {
+                        'deliveryer': '安化',
+                        'receiver': '安宁恒源爆破工程有限公司',
+                        'totalNum': 5,
+                        'area': '昆明市',
+                        'address': '安宁',
+                        'totalGoods': '9.792吨',
+                        'totalFreight': 725.59
+                    },
+                    {
+                        'deliveryer': '安化',
+                        'receiver': '昆明市特里亚民爆器材专营公司晋宁分公司',
+                        'totalNum': 1,
+                        'area': '昆明市',
+                        'address': '晋宁一中队',
+                        'totalGoods': '48.96吨/28方/19930件',
+                        'totalFreight': 1953.5
+                    },
+                    {
+                        'deliveryer': '安化',
+                        'receiver': '昆明市特立亚石林分公司',
+                        'totalNum': 19,
+                        'area': '昆明市',
+                        'address': '石林',
+                        'totalGoods': '186.048吨',
+                        'totalFreight': 25674.7
+                    },
+                    {
+                        'deliveryer': '安化',
+                        'receiver': '昆明市特里阿拉善分公司',
+                        'totalNum': 3,
+                        'area': '昆明市',
+                        'address': '海口',
+                        'totalGoods': '34吨/25方/100件',
+                        'totalFreight': 2700.9
+                    }
+                ]
 			}
-		},
+        },
+        computed: {
+            totalFreightNum() {
+                let total = 0
+                this.tableData.forEach(item => {
+                    total = total + item.totalFreight
+                })
+                return total.toFixed(2)
+            }
+        },
 		created() {
 		},
 		methods: {
@@ -118,6 +172,9 @@
                 this.startDate = new Date(date[0]).getTime()
                 this.endDate = new Date(date[1]).getTime()
             },
+            viewinfo() {
+                this.$router.push({name: 'receivableinfo'})
+            }
 		}
 	}
 </script>

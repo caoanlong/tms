@@ -41,21 +41,9 @@ const menus = [
 				IsShow: '1'
 			},
 			{
-				Target: 'receivableinfo',
-				Href: '/receivableinfo',
-				Name: '应收明细',
-				IsShow: '1'
-			},
-			{
 				Target: 'payablesum',
 				Href: '/payablesum',
 				Name: '应付汇总',
-				IsShow: '1'
-			},
-			{
-				Target: 'payableinfo',
-				Href: '/payableinfo',
-				Name: '应付明细',
 				IsShow: '1'
 			},
 			{

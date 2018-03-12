@@ -74,6 +74,7 @@ let routerMap = [
 						meta: {
 							title: '应收明细'
 						},
+						component: () => import ('../components/Settlemanage/Receivableinfo')
 					},
 					{
 						path: '/payablesum',
@@ -81,6 +82,7 @@ let routerMap = [
 						meta: {
 							title: '应付汇总'
 						},
+						component: () => import ('../components/Settlemanage/Payablesum')
 					},
 					{
 						path: '/payableinfo',
