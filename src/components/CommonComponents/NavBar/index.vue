@@ -6,12 +6,12 @@
 			<el-tooltip effect="dark" content="navbar.theme" placement="bottom"></el-tooltip>
 			<el-dropdown class="avatar-container right-menu-item">
 				<div class="avatar-wrapper">
-					<img class="user-avatar" :src="'Photo'" @error="errorImg">
+					<img class="user-avatar" src="'Photo'" @error="errorImg">
 					<span class="user-text">你好！{{'Name'}}</span>
 					<i class="el-icon-caret-bottom"></i>
 				</div>
-				<!-- <el-dropdown-menu slot="dropdown">
-					<router-link :to="{name:'userprofile'}">
+				<el-dropdown-menu slot="dropdown">
+					<router-link to="{name:'userprofile'}">
 						<el-dropdown-item>个人资料</el-dropdown-item>
 					</router-link>
 					<router-link to="/">
@@ -20,7 +20,7 @@
 					<el-dropdown-item divided>
 						<span @click="logout" style="display:block;">退出</span>
 					</el-dropdown-item>
-				</el-dropdown-menu> -->
+				</el-dropdown-menu>
 			</el-dropdown>
 		</div>
 	</el-menu>
