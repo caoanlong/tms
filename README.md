@@ -1,12 +1,12 @@
 # ah-admin
 
-> A Vue.js project
+> A admin system for Anhua with Vue.js
 
 ## Build Setup
 
 ``` bash
 # install dependencies
-npm install
+yarn & npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
