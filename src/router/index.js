@@ -34,7 +34,7 @@ let routerMap = [
 						meta: {
 							title: '承运单列表'
 						},
-						component: () => import ('../components/Carrierbill'),
+						component: () => import ('../components/Carrierbill/Carrierbills'),
 					},
 					{
 						path: '/addcarrierbill',
@@ -42,6 +42,7 @@ let routerMap = [
 						meta: {
 							title: '添加承运单'
 						},
+						component: () => import ('../components/Carrierbill/Addcarrierbill'),
 					},
 					{
 						path: '/viewcarrierbill',
@@ -57,6 +58,15 @@ let routerMap = [
 						meta: {
 							title: '调度列表'
 						},
+						component: () => import ('../components/Carrierbill/Controls')
+					},
+					{
+						path: '/viewcontrols',
+						name: 'viewcontrols',
+						meta: {
+							title: '调度详情'
+						},
+						component: () => import ('../components/Carrierbill/ViewControls')
 					}
 				]
 			},

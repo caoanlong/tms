@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">查看货源</div>
+			<div slot="header" class="clearfix">承运单详情</div>
 			<el-row>
 				<el-col :span="8">
 					<el-form label-width="120px">
