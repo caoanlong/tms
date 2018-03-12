@@ -19,84 +19,54 @@ let routerMap = [
 				},
 				component: () => import ('../components/Home')
 			},
-			// {
-			// 	path: '/carrierbill',
-			// 	name: 'carrierbill',
-			// 	meta: {
-			// 		title: '承运单'
-			// 	},
-			// 	component: () => import ('../components/Carrierbill'),
-			// 	redirect: '/carrierbills',
-			// 	children: [
-			// 		{
-			// 			path: '/carrierbills',
-			// 			name: 'carrierbills',
-			// 			meta: {
-			// 				title: '承运单列表'
-			// 			},
-			// 		},
-			// 		{
-			// 			path: '/addcarrierbills',
-			// 			name: 'addcarrierbills',
-			// 			meta: {
-			// 				title: '添加承运单'
-			// 			},
-			// 		},
-			// 		{
-			// 			path: '/controls',
-			// 			name: 'controls',
-			// 			meta: {
-			// 				title: '调度列表'
-			// 			},
-			// 		}
-			// 	]
-			// },
 			{
-				path: '/settlemanage',
-				name: 'settlemanage',
+				path: '/carrierbill',
+				name: 'carrierbill',
 				meta: {
-					title: '结算管理'
+					title: '承运单'
 				},
-				component: () => import ('../components/Settlemanage'),
-				redirect: '/receivablesum',
+				component: () => import ('../components/Carrierbill'),
+				redirect: '/carrierbills',
 				children: [
 					{
-						path: '/receivablesum',
-						name: 'receivablesum',
+						path: '/carrierbills',
+						name: 'carrierbills',
 						meta: {
-							title: '应收汇总'
+							title: '承运单列表'
 						},
-						component: () => import ('../components/Settlemanage/Receivablesum')
+						component: () => import ('../components/Carrierbill/Carrierbills'),
 					},
 					{
-						path: '/receivableinfo',
-						name: 'receivableinfo',
+						path: '/addcarrierbill',
+						name: 'addcarrierbill',
 						meta: {
-							title: '应收明细'
+							title: '添加承运单'
 						},
-						component: () => import ('../components/Settlemanage/Receivableinfo')
+						component: () => import ('../components/Carrierbill/Addcarrierbill'),
 					},
 					{
-						path: '/payablesum',
-						name: 'payablesum',
+						path: '/viewcarrierbill',
+						name: 'viewcarrierbill',
 						meta: {
-							title: '应付汇总'
+							title: '承运单详情'
 						},
-						component: () => import ('../components/Settlemanage/Payablesum')
+						component: () => import ('../components/Carrierbill/Viewcarrierbill')
 					},
 					{
-						path: '/payableinfo',
-						name: 'payableinfo',
+						path: '/controls',
+						name: 'controls',
 						meta: {
-							title: '应付明细'
+							title: '调度列表'
 						},
+						component: () => import ('../components/Carrierbill/Controls')
 					},
 					{
-						path: '/settleconfig',
-						name: 'settleconfig',
+						path: '/viewcontrols',
+						name: 'viewcontrols',
 						meta: {
-							title: '结算设置'
+							title: '调度详情'
 						},
+						component: () => import ('../components/Carrierbill/ViewControls')
 					}
 				]
 			},
