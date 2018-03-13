@@ -144,7 +144,7 @@
                 <el-col :span="12">
                     <el-form label-width="120px">
 						<el-form-item>
-							<el-button type="primary" @click="update">确定修改</el-button>
+							<el-button type="primary" @click="update">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-form>
@@ -216,7 +216,7 @@ export default {
             }
         },
         update() {
-            Message.success('修改成功！')
+            Message.success('保存成功！')
             this.$router.push({name: 'settleconfig'})
 		},
 		handleDistChange1(val) {

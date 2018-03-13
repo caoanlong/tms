@@ -152,6 +152,65 @@ let routerMap = [
 						component: () => import ('../components/Settlemanage/EditSettleConfig'),
 					},
 				]
+			},
+			{
+				path: '/cooperpartner',
+				name: 'cooperpartner',
+				meta: {
+					title: '合作伙伴'
+				},
+				component: () => import ('../components/CooperPartner'),
+				redirect: '/shipper',
+				children: [
+					{
+						path: '/shipper',
+						name: 'shipper',
+						meta: {
+							title: '托运人'
+						},
+						component: () => import ('../components/CooperPartner/Shipper'),
+					},
+					{
+						path: '/addshipper',
+						name: 'addshipper',
+						meta: {
+							title: '添加托运人'
+						},
+						component: () => import ('../components/CooperPartner/AddShipper'),
+					},
+					{
+						path: '/editshipper',
+						name: 'editshipper',
+						meta: {
+							title: '编辑托运人'
+						},
+						component: () => import ('../components/CooperPartner/EditShipper'),
+					},
+					{
+						path: '/recdeliverycomp',
+						name: 'recdeliverycomp',
+						meta: {
+							title: '收发货单位'
+						},
+						component: () => import ('../components/CooperPartner/RecDeliveryComp'),
+					},
+					{
+						path: '/addrecdeliverycomp',
+						name: 'addrecdeliverycomp',
+						meta: {
+							title: '添加收发货单位'
+						},
+						component: () => import ('../components/CooperPartner/AddRecDeliveryComp'),
+					},
+					{
+						path: '/editrecdeliverycomp',
+						name: 'editrecdeliverycomp',
+						meta: {
+							title: '编辑收发货单位'
+						},
+						component: () => import ('../components/CooperPartner/EditRecDeliveryComp'),
+					},
+				]
 			}
 		]
 	}

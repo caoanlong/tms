@@ -94,8 +94,8 @@ const menus = [
 		]
 	},
 	{
-		Target: 'collaborator',
-		Href: '/collaborator',
+		Target: 'cooperpartner',
+		Href: '/cooperpartner',
 		Name: '合作伙伴',
 		IsShow: '1',
 		Icon: 'home-icon',
@@ -107,8 +107,8 @@ const menus = [
 				IsShow: '1'
 			},
 			{
-				Target: 'recdeliverycom',
-				Href: '/recdeliverycom',
+				Target: 'recdeliverycomp',
+				Href: '/recdeliverycomp',
 				Name: '收发货单位',
 				IsShow: '1'
 			}
