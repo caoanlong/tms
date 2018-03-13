@@ -6,21 +6,26 @@
 			</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="司机姓名">
-						<el-input placeholder="请输入..." v-model="findDriver"></el-input>
+					<el-form-item label="发货单位">
+						<el-input placeholder="请输入..." v-model="findDeliveryer"></el-input>
 					</el-form-item>
-                    <el-form-item label="随车人员">
-						<el-input placeholder="请输入..." v-model="findFollower"></el-input>
+                    <el-form-item label="发货地">
+						<el-input placeholder="请输入..." v-model="findDeliveryArea"></el-input>
 					</el-form-item>
-                    <el-form-item label="发货日期">
-						<el-date-picker
-                            v-model="findConsignDate"
-                            type="daterange"
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
-                            @change="selectDateRange">
-                        </el-date-picker>
+                    <el-form-item label="收货单位">
+						<el-input placeholder="请输入..." v-model="findReceiver"></el-input>
+					</el-form-item>
+                    <el-form-item label="收货地">
+						<el-input placeholder="请输入..." v-model="findReceiveArea"></el-input>
+					</el-form-item>
+                    <el-form-item label="运距">
+						<el-input placeholder="请输入..." v-model="findDistance"></el-input>
+					</el-form-item>
+                    <el-form-item label="对内运价">
+						<el-input placeholder="请输入..." v-model="findInnerFreight"></el-input>
+					</el-form-item>
+                    <el-form-item label="对外运价">
+						<el-input placeholder="请输入..." v-model="findExternalFreight"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary">查询</el-button>
@@ -87,11 +92,13 @@
 	export default {
 		data() {
 			return {
-                findDriver: '',
-                findFollower: '',
-                findConsignDate: [],
-                startDate: '',
-                endDate: '',
+                findDeliveryer: '',
+                findDeliveryArea: '',
+                findReceiver: '',
+                findReceiveArea: '',
+                findDistance: '',
+                findInnerFreight: '',
+                findExternalFreight: '',
 				pageIndex: 1,
 				pageSize: 10,
                 count: 87,
@@ -136,18 +143,16 @@
 		},
 		methods: {
             reset() {
-                this.findDriver = ''
-                this.findFollower = ''
-                this.findConsignDate = []
-                this.startDate = ''
-                this.endDate = ''
+                this.findDeliveryer = ''
+                this.findDeliveryArea = ''
+                this.findReceiver = ''
+                this.findReceiveArea = ''
+                this.findDistance = ''
+                this.findInnerFreight = ''
+                this.findExternalFreight = ''
             },
 			pageChange(index) {
                 this.pageIndex = index
-            },
-            selectDateRange(date) {
-                this.startDate = new Date(date[0]).getTime()
-                this.endDate = new Date(date[1]).getTime()
             },
             handleTabSelected(tab) {
                 console.log(tab.$options.propsData.name)

@@ -32,7 +32,12 @@
                             <el-input placeholder="请输入..." v-model="templateFreight.consigneCompany"></el-input>
                         </el-form-item>
 						<el-form-item label="发货地" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.consigneArea"></el-input>
+							<el-cascader
+								style="width: 100%"
+								:options="distData"
+								v-model="selectedConsigneAreas"
+								@change="handleDistChange1">
+							</el-cascader>
 						</el-form-item>
 						<el-form-item label="详细地址" style="flex: 1">
 							<el-input placeholder="请输入..." v-model="templateFreight.consigneAddress"></el-input>
@@ -46,7 +51,12 @@
                             <el-input placeholder="请输入..." v-model="templateFreight.receiveCompany"></el-input>
                         </el-form-item>
 						<el-form-item label="收货地" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.receiveArea"></el-input>
+							<el-cascader
+								style="width: 100%"
+								:options="distData"
+								v-model="selectedReceiveAreas" 
+								@change="handleDistChange2">
+							</el-cascader>
 						</el-form-item>
 						<el-form-item label="详细地址" style="flex: 1">
 							<el-input placeholder="请输入..." v-model="templateFreight.receiveAddress"></el-input>
@@ -145,16 +155,20 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { regionData } from 'element-china-area-data'
 export default {
 	data() {
 		return {
+			distData: regionData,
+			selectedConsigneAreas: ['530000','530100','530102'],
+			selectedReceiveAreas: ['530000','532500','532503'],
 			templateFreight: {
                 consigner: '武藤兰',
 				consigneCompany: '安化',
-				consigneArea: '云南省昆明市',
+				consigneArea: '530000,530100,530102',
 				consigneAddress: '安化工厂',
 				receiveCompany: '红河厂',
-				receiveArea: '云南省红河州蒙自市',
+				receiveArea: '530000,532500,532503',
 				receiveAddress: '蒙自小东山',
 				innerDistance: '336',
 				innerTKM: '0.96',
@@ -204,9 +218,17 @@ export default {
         update() {
             Message.success('修改成功！')
             this.$router.push({name: 'settleconfig'})
-        },
+		},
+		handleDistChange1(val) {
+			console.log('active item:', val)
+			this.templateFreight.consigneArea = val.join(',')
+		},
+		handleDistChange2(val) {
+			console.log('active item:', val)
+			this.templateFreight.receiveArea = val.join(',')
+		},
 		back() {
-			this.$router.push({ name: 'usermanage' })
+			this.$router.go(-1)
 		}
 	}
 }
