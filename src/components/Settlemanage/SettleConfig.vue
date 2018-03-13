@@ -54,8 +54,8 @@
                     <el-table-column label="对外收款占比" prop="externalRecRatio" width="100"></el-table-column>
 					<el-table-column label="操作" align="center" width="230">
 						<template slot-scope="scope">
-                            <el-button size="mini" icon="el-icon-edit" @click="editInfo()">编辑查看</el-button>
-                            <el-button size="mini" icon="el-icon-delete" @click="deleteConfirm()">删除</el-button>
+                            <el-button size="mini" icon="el-icon-edit" @click="edit">编辑查看</el-button>
+                            <el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.$index)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -155,8 +155,27 @@
             add() {
                 this.$router.push({name: 'addsettleconfig'})
             },
-            editInfo() {
-                this.$router.push({name: 'addsettleconfig'})
+            edit() {
+                this.$router.push({name: 'editsettleconfig'})
+            },
+            deleteConfirm(i) {
+                console.log(i)
+                this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.tableData.splice(i, 1)
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    })
+                })
             }
 		}
 	}

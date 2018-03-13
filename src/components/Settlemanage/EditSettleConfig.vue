@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">
-				<span>添加运费模板</span>
+				<span>编辑运费模板</span>
 			</div>
             <el-row>
                 <div class="split-item">
@@ -62,8 +62,8 @@
 						<el-form-item label="对内TKM" style="flex: 1">
 							<el-input placeholder="请输入..." v-model="templateFreight.innerTKM"></el-input>
 						</el-form-item>
-						<el-form-item label="对内运费" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.innerFreight"></el-input>
+						<el-form-item placeholder="请输入..." label="对内运费" style="flex: 1">
+							<el-input v-model="templateFreight.innerFreight"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -73,11 +73,11 @@
                         <el-form-item label="对外运距" style="flex: 1">
                             <el-input placeholder="请输入..." v-model="templateFreight.externalDistance"></el-input>
                         </el-form-item>
-						<el-form-item label="对外TKM" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalTKM"></el-input>
+						<el-form-item placeholder="请输入..." label="对外TKM" style="flex: 1">
+							<el-input v-model="templateFreight.externalTKM"></el-input>
 						</el-form-item>
-						<el-form-item label="对外运费" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalFreight"></el-input>
+						<el-form-item placeholder="请输入..." label="对外运费" style="flex: 1">
+							<el-input v-model="templateFreight.externalFreight"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -134,7 +134,7 @@
                 <el-col :span="12">
                     <el-form label-width="120px">
 						<el-form-item>
-							<el-button type="primary" @click="add">立即创建</el-button>
+							<el-button type="primary" @click="update">确定修改</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-form>
@@ -149,29 +149,29 @@ export default {
 	data() {
 		return {
 			templateFreight: {
-                consigner: '',
-				consigneCompany: '',
-				consigneArea: '',
-				consigneAddress: '',
-				receiveCompany: '',
-				receiveArea: '',
-				receiveAddress: '',
-				innerDistance: '',
-				innerTKM: '',
-				innerFreight: '',
-				externalDistance: '',
-				externalTKM: '',
-				externalFreight: '',
-				payNow1: '',
-				payArrived1: '',
-				payReturn1: '',
-				settleMonth1: '',
-				payArrivedRec1: '',
-				payNow2: '',
-				payArrived2: '',
-				payReturn2: '',
-				settleMonth2: '',
-				payArrivedRec2: ''
+                consigner: '武藤兰',
+				consigneCompany: '安化',
+				consigneArea: '云南省昆明市',
+				consigneAddress: '安化工厂',
+				receiveCompany: '红河厂',
+				receiveArea: '云南省红河州蒙自市',
+				receiveAddress: '蒙自小东山',
+				innerDistance: '336',
+				innerTKM: '0.96',
+				innerFreight: '322.56',
+				externalDistance: '345',
+				externalTKM: '1.14',
+				externalFreight: '393',
+				payNow1: '10%',
+				payArrived1: '20%',
+				payReturn1: '15%',
+				settleMonth1: '15%',
+				payArrivedRec1: '40%',
+				payNow2: '30%',
+				payArrived2: '25%',
+				payReturn2: '5%',
+				settleMonth2: '20%',
+				payArrivedRec2: '20%'
 			},
             consignerResource: [
                 { "value": "武藤兰"},
@@ -201,8 +201,8 @@ export default {
                 return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
             }
         },
-        add() {
-            Message.success('添加成功！')
+        update() {
+            Message.success('修改成功！')
             this.$router.push({name: 'settleconfig'})
         },
 		back() {

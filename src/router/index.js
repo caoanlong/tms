@@ -143,6 +143,14 @@ let routerMap = [
 						},
 						component: () => import ('../components/Settlemanage/AddSettleConfig'),
 					},
+					{
+						path: '/editsettleconfig',
+						name: 'editsettleconfig',
+						meta: {
+							title: '编辑运费模板'
+						},
+						component: () => import ('../components/Settlemanage/EditSettleConfig'),
+					},
 				]
 			}
 		]
