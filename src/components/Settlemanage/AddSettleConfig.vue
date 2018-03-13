@@ -4,12 +4,12 @@
 			<div slot="header" class="clearfix">
 				<span>添加运费模板</span>
 			</div>
-			<el-row>
-				<div class="split-item">
-					<span class="num">1</span>
-					<span class="tit">配置运算项</span>
-				</div>
-			</el-row>
+            <el-row>
+                <div class="split-item">
+                    <span class="num">1</span>
+                    <span class="tit">配置运算项</span>
+                </div>
+            </el-row>
 			<el-row>
 				<el-col :span="8">
 					<el-form label-width="120px">
@@ -82,29 +82,29 @@
 					</el-form>
 				</el-col>
 			</el-row>
-			<el-row>
-				<div class="split-item">
-					<span class="num">2</span>
-					<span class="tit">配置收费方式</span>
-				</div>
-			</el-row>
-			<el-row>
-				<el-form label-width="120px">
-					<el-form-item label="角色权限">
-						<el-select style="width: 100%" v-model="user.sys_roles" multiple placeholder="请选择">
-							<el-option v-for="role in roles" :key="role.EnName" :label="role.Name" :value="role.Role_ID">
-							</el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="备注">
-						<el-input type="textarea" resize="none" v-model="user.Remark" :rows="5"></el-input>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click.native="addUser">立即创建</el-button>
-						<el-button @click.native="back">取消</el-button>
-					</el-form-item>
-				</el-form>
-			</el-row>
+            <el-row>
+                <div class="split-item">
+                    <span class="num">2</span>
+                    <span class="tit">配置收费方式</span>
+                </div>
+            </el-row>
+            <el-row>
+                <el-form label-width="120px">
+                    <el-form-item label="角色权限">
+                        <el-select style="width: 100%" v-model="user.sys_roles" multiple placeholder="请选择">
+                            <el-option v-for="role in roles" :key="role.EnName" :label="role.Name" :value="role.Role_ID">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="备注">
+                        <el-input type="textarea" resize="none" v-model="user.Remark" :rows="5"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click.native="addUser">立即创建</el-button>
+                        <el-button @click.native="back">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-row>
 		</el-card>
 	</div>
 </template>
