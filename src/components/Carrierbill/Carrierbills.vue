@@ -38,10 +38,14 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="AddCarrierbill">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-news">调度</el-button>
 				<el-button type="default" size="mini" icon="el-icon-refresh">刷新</el-button>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini">
+					<el-table-column type="selection" width="40" align="center">
+					</el-table-column>
 					<el-table-column label="处理状态"  prop="Status" width="110" align="center">
 					</el-table-column>
 					<el-table-column label="承运单号" prop="CarrierNum" width="110" align="center">
@@ -66,9 +70,10 @@
 					</el-table-column>
 					<el-table-column label="发货地" prop="Dispatch">
 					</el-table-column>
-					<el-table-column label="操作" width="110" align="center">
+					<el-table-column label="操作" width="160" align="center">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view">查看编辑</el-button>
+							<el-button type="default" size="mini" icon="el-icon-view" @click="ViewCarrierbill(scope.row.CarrierNum)">查看</el-button>
+							<el-button type="default" size="mini" icon="el-icon-delete" @click="ViewCarrierbill(scope.row.CarrierNum)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -331,8 +336,8 @@ export default {
 		AddCarrierbill() {
 			this.$router.push({ name: 'addcarrierbill' })
 		},
-		ViewCarrierbill(id) {
-			this.$router.push({ name: 'viewcarrierbill' , query: { id} })
+		ViewCarrierbill(CarrierNum) {
+			this.$router.push({ name: 'viewcarrierbill' , query: { CarrierNum } })
 		},
 		refresh() {
 			this.refreshing = true

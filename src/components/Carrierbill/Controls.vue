@@ -15,8 +15,8 @@
 					<el-form-item label="收货地">
 						<el-input placeholder="收货地"></el-input>
 					</el-form-item>
-					<el-form-item label="司机，随车员姓名">
-						<el-input placeholder="司机，随车员姓名"></el-input>
+					<el-form-item label="司机/随车员姓名">
+						<el-input placeholder="司机/随车员姓名"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" >搜索</el-button>
@@ -25,7 +25,6 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-refresh">刷新</el-button>
 			</div>
 			<div class="table">

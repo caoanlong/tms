@@ -61,6 +61,14 @@ let routerMap = [
 						component: () => import ('../components/Carrierbill/Controls')
 					},
 					{
+						path: '/addcontrol',
+						name: 'addcontrol',
+						meta: {
+							title: '新的调度'
+						},
+						component: () => import ('../components/Carrierbill/AddControl')
+					},
+					{
 						path: '/viewcontrols',
 						name: 'viewcontrols',
 						meta: {
