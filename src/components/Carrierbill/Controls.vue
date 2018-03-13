@@ -30,31 +30,31 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini">
-					<el-table-column label="调度单号" >
+					<el-table-column label="调度单号" prop="ControlsNum"  width="130" align="center">
 					</el-table-column>
-					<el-table-column label="车辆号牌">
+					<el-table-column label="车辆号牌" prop="VehicleNum"  width="110" align="center">
 					</el-table-column>
-					<el-table-column label="配载量">
+					<el-table-column label="配载量" prop="LoadingQuantity" align="center">
 					</el-table-column>
-					<el-table-column label="司机">
+					<el-table-column label="司机" prop="Driver"  width="100" align="center">
 					</el-table-column>
-					<el-table-column label="调度状态">
+					<el-table-column label="调度状态" prop="Status"  width="100" align="center">
 					</el-table-column>
-					<el-table-column label="随车人员">
+					<el-table-column label="随车人员" prop="ApplianceCrew"  width="120" align="center">
 					</el-table-column>
-					<el-table-column label="订单号">
+					<el-table-column label="订单号" prop="OrderNum"  width="130" align="center">
 					</el-table-column>
-					<el-table-column label="发货地">
+					<el-table-column label="发货地" prop="Dispatch">
 					</el-table-column>
-					<el-table-column label="收货地">
+					<el-table-column label="收货地" prop="Discharge">
 					</el-table-column>
-					<el-table-column label="到货时间">
+					<el-table-column label="到货时间" prop="ArrivalDate"  width="130" align="center">
 					</el-table-column>
-					<el-table-column label="货物规格/名称">
+					<el-table-column label="货物规格/名称" prop="CargoName">
 					</el-table-column>
-					<el-table-column label="操作" width="150">
+					<el-table-column label="操作" width="110" align="center">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view">查看</el-button>
+							<el-button type="default" size="mini" icon="el-icon-view">查看编辑</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -88,8 +88,74 @@ export default {
 		return {
 			pageNum: 1,
 			pageSize: 10,
-			count: 0,
-			tableData: [],
+			count: 5,
+			tableData: [
+				{
+					ControlsNum: '20180205001-1',
+					VehicleNum: '云AG3365',
+					LoadingQuantity: '9.76吨',
+					Driver: '李铁军',
+					Status: '待执行',
+					ApplianceCrew: '赵押运员',
+					OrderNum:'20180205001',
+					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
+					Discharge:'云南省昭通市镇远县城李家沟',
+					ArrivalDate: '2018:02:06 18:00',
+					CargoName:'R72/炸药'
+				},
+				{
+					ControlsNum: '20180205001-2',
+					VehicleNum: '云AG3365',
+					LoadingQuantity: '9.76吨',
+					Driver: '李铁军',
+					Status: '待执行',
+					ApplianceCrew: '赵押运员',
+					OrderNum:'20180205001',
+					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
+					Discharge:'云南省昭通市镇远县城李家沟',
+					ArrivalDate: '2018:02:06 18:00',
+					CargoName:'R72/炸药'
+				},
+				{
+					ControlsNum: '20180205001-3',
+					VehicleNum: '云AG3365',
+					LoadingQuantity: '9.76吨',
+					Driver: '李铁军',
+					Status: '已装运',
+					ApplianceCrew: '赵押运员',
+					OrderNum:'20180205001',
+					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
+					Discharge:'云南省昭通市镇远县城李家沟',
+					ArrivalDate: '2018:02:06 18:00',
+					CargoName:'R72/炸药'
+				},
+				{
+					ControlsNum: '20180205001-4',
+					VehicleNum: '云AG3365',
+					LoadingQuantity: '9.76吨',
+					Driver: '李铁军',
+					Status: '待执行',
+					ApplianceCrew: '赵押运员',
+					OrderNum:'20180205001',
+					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
+					Discharge:'云南省昭通市镇远县城李家沟',
+					ArrivalDate: '2018:02:06 18:00',
+					CargoName:'R72/炸药'
+				},
+				{
+					ControlsNum: '20180205001-5',
+					VehicleNum: '云AG3365',
+					LoadingQuantity: '9.76吨',
+					Driver: '李铁军',
+					Status: '已签收',
+					ApplianceCrew: '赵押运员',
+					OrderNum:'20180205001',
+					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
+					Discharge:'云南省昭通市镇远县城李家沟',
+					ArrivalDate: '2018:02:06 18:00',
+					CargoName:'R72/炸药'
+				}
+			],
 			refreshing: false
 		}
 	},
