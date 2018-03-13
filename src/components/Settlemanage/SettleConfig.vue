@@ -29,7 +29,7 @@
 				</el-form>
 			</div>
             <div class="tableControl">
-                <el-button type="default" size="mini" icon="el-icon-plus">添加</el-button>
+                <el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
                 <el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
 			</div>
 			<div class="table">
@@ -37,24 +37,24 @@
 					ref="recTable" 
 					:data="tableData" 
 					border style="width: 100%" size="mini">
-                    <el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="车辆牌号" prop="truckCode"></el-table-column>
-					<el-table-column label="驾驶员" prop="driver"></el-table-column>
-					<el-table-column label="总趟数" prop="totalNum" width="60"></el-table-column>
-                    <el-table-column label="总货量" prop="totalGoods"></el-table-column>
-                    <el-table-column label="运费" prop="freight" align="center" width="120"></el-table-column>
-                    <el-table-column label="绕路总里程" prop="roundWayTotalMile" align="center" width="120"></el-table-column>
-                    <el-table-column label="绕路费用" prop="roundWayFreight" align="center" width="120"></el-table-column>
-                    <el-table-column label="其他费用" prop="otherFreight" align="center" width="120"></el-table-column>
-					<el-table-column label="总计">
-                        <template slot-scope="scope">
-                            <span>{{scope.row.freight + scope.row.roundWayFreight}}</span>
-                        </template>
-                    </el-table-column>
+                    <el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
+					<el-table-column label="发货单位" prop="deliveryer"></el-table-column>
+					<el-table-column label="发货地" prop="deliveryArea"></el-table-column>
+					<el-table-column label="发货详细地址" prop="deliveryAdress"></el-table-column>
+					<el-table-column label="收货单位" prop="receiver"></el-table-column>
+					<el-table-column label="收货地" prop="receiveArea"></el-table-column>
+					<el-table-column label="收货详细地址" prop="receiveAdress"></el-table-column>
+					<el-table-column label="对内运距" prop="innerDistance"></el-table-column>
+					<el-table-column label="对内运价" prop="innerFreight"></el-table-column>
+					<el-table-column label="对内TKM" prop="innerTKM"></el-table-column>
+                    <el-table-column label="对外运距" prop="externalDistance"></el-table-column>
+                    <el-table-column label="对外运价" prop="externalFreight"></el-table-column>
+                    <el-table-column label="对外TKM" prop="externalTKM"></el-table-column>
+                    <el-table-column label="对内付款占比" prop="innerPayRatio" width="100"></el-table-column>
+                    <el-table-column label="对外收款占比" prop="externalRecRatio" width="100"></el-table-column>
 					<el-table-column label="操作" align="center" width="230">
 						<template slot-scope="scope">
-                            <el-button size="mini" icon="el-icon-view" @click="viewUser()">查看</el-button>
-                            <el-button size="mini" icon="el-icon-edit" @click="editUser()">编辑</el-button>
+                            <el-button size="mini" icon="el-icon-edit" @click="editInfo()">编辑查看</el-button>
                             <el-button size="mini" icon="el-icon-delete" @click="deleteConfirm()">删除</el-button>
 						</template>
 					</el-table-column>
@@ -98,37 +98,36 @@
                 tabSelected: 'driver',
                 tableData: [
                     {
-                        'truckCode': '云AG5836',
-                        'driver': '李金瑞',
-                        'totalNum': 11,
-                        'totalGoods': '107.52吨/10方/100件',
-                        'freight': 30302.09,
-                        'roundWayTotalMile': 1000,
-                        'roundWayFreight': 10000,
-                        'otherFreight': 0,
-                        'totalFreight': ''
+                        "deliveryer": "安化",
+                        "deliveryArea": "云南省昆明市",
+                        "deliveryAdress": "安化工厂",
+                        "receiver": "红河厂",
+                        "receiveArea": "云南省红河州蒙自市",
+                        "receiveAdress": "蒙自小东山",
+                        "innerDistance": "336",
+                        "innerFreight": 322.56,
+                        "innerTKM": "0.96",
+                        "externalDistance": "345",
+                        "externalFreight": 393,
+                        "externalTKM": "1.14",
+                        "innerPayRatio": "月结100%",
+                        "externalRecRatio": "回单付100%"
                     },
                     {
-                        'truckCode': '云AG5836',
-                        'driver': '李金瑞',
-                        'totalNum': 11,
-                        'totalGoods': '107.52吨/10方/100件',
-                        'freight': 30302.09,
-                        'roundWayTotalMile': 1000,
-                        'roundWayFreight': 10000,
-                        'otherFreight': 0,
-                        'totalFreight': ''
-                    },
-                    {
-                        'truckCode': '云AG5836',
-                        'driver': '李金瑞',
-                        'totalNum': 11,
-                        'totalGoods': '107.52吨/10方/100件',
-                        'freight': 30302.09,
-                        'roundWayTotalMile': 1000,
-                        'roundWayFreight': 10000,
-                        'otherFreight': 0,
-                        'totalFreight': ''
+                        "deliveryer": "安化",
+                        "deliveryArea": "云南省昆明市",
+                        "deliveryAdress": "安化工厂",
+                        "receiver": "云锡",
+                        "receiveArea": "云南省红河州个旧市",
+                        "receiveAdress": "个旧云锡",
+                        "innerDistance": "335",
+                        "innerFreight": 321.6,
+                        "innerTKM": "0.96",
+                        "externalDistance": "350",
+                        "externalFreight": 399,
+                        "externalTKM": "1.14",
+                        "innerPayRatio": "月结100%",
+                        "externalRecRatio": "回单付100%"
                     },
                 ]
 			}
@@ -153,8 +152,11 @@
             handleTabSelected(tab) {
                 console.log(tab.$options.propsData.name)
             },
-            viewinfo(type) {
-                this.$router.push({name: 'payableinfosimple', query: {type}})
+            add() {
+                this.$router.push({name: 'addsettleconfig'})
+            },
+            editInfo() {
+                this.$router.push({name: 'addsettleconfig'})
             }
 		}
 	}

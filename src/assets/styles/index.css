@@ -80,3 +80,20 @@ code a:hover{color:#20a0ff;}
 	padding: 6px 0;
 	vertical-align: middle
 }
+
+.split-item {
+	padding: 5px 0 20px 10px; 
+	color: #bfcbd9
+}
+.split-item .num {
+	display: inline-block; 
+	width: 20px; 
+	height: 20px; 
+	color: #fff; 
+	background-color: #bfcbd9; 
+	text-align: center; 
+	line-height: 20px
+}
+.split-item .tit {
+	padding-left: 5px
+}

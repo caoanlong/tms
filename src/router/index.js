@@ -135,6 +135,14 @@ let routerMap = [
 						},
 						component: () => import ('../components/Settlemanage/SettleConfig'),
 					},
+					{
+						path: '/addsettleconfig',
+						name: 'addsettleconfig',
+						meta: {
+							title: '添加运费模板'
+						},
+						component: () => import ('../components/Settlemanage/AddSettleConfig'),
+					},
 				]
 			}
 		]
