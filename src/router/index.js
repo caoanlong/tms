@@ -88,6 +88,14 @@ let routerMap = [
 						component: () => import ('../components/Settlemanage/Receivablesum'),
 					},
 					{
+						path: '/receivableinfosimple',
+						name: 'receivableinfosimple',
+						meta: {
+							title: '应收明细'
+						},
+						component: () => import ('../components/Settlemanage/ReceivableinfoSimple'),
+					},
+					{
 						path: '/receivableinfo',
 						name: 'receivableinfo',
 						meta: {
@@ -104,12 +112,29 @@ let routerMap = [
 						component: () => import ('../components/Settlemanage/Payablesum'),
 					},
 					{
+						path: '/payableinfosimple',
+						name: 'payableinfosimple',
+						meta: {
+							title: '应付明细'
+						},
+						component: () => import ('../components/Settlemanage/PayableinfoSimple'),
+					},
+					{
 						path: '/payableinfo',
 						name: 'payableinfo',
 						meta: {
 							title: '应付明细'
 						},
-					}
+						component: () => import ('../components/Settlemanage/Payableinfo'),
+					},
+					{
+						path: '/settleconfig',
+						name: 'settleconfig',
+						meta: {
+							title: '结算设置'
+						},
+						component: () => import ('../components/Settlemanage/SettleConfig'),
+					},
 				]
 			}
 		]

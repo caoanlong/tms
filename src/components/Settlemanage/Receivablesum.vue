@@ -32,14 +32,14 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus">添加</el-button>
                 <el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
 					ref="recTable" 
 					:data="tableData" 
+                    show-summary 
+                    :summary-method="getSummaries"
 					border style="width: 100%" size="mini">
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
 					<el-table-column label="发货单位" prop="deliveryer"></el-table-column>
@@ -55,19 +55,6 @@
 						</template>
 					</el-table-column>
 				</el-table>
-                <table class="total-table">
-                    <tr>
-                        <td width="60" align="center">合计</td>
-                        <td></td>
-                        <td></td>
-                        <td width="80"></td>
-                        <td width="120"></td>
-                        <td></td>
-                        <td></td>
-                        <td width="120" align="center">{{totalFreightNum}}</td>
-                        <td width="120"></td>
-                    </tr>
-                </table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
 						<span>总共 {{count}} 条记录每页显示</span>
@@ -145,15 +132,6 @@
                 ]
 			}
         },
-        computed: {
-            totalFreightNum() {
-                let total = 0
-                this.tableData.forEach(item => {
-                    total = total + item.totalFreight
-                })
-                return total.toFixed(2)
-            }
-        },
 		created() {
 		},
 		methods: {
@@ -173,7 +151,7 @@
                 this.endDate = new Date(date[1]).getTime()
             },
             viewinfo() {
-                this.$router.push({name: 'receivableinfo'})
+                this.$router.push({name: 'receivableinfosimple'})
             }
 		}
 	}

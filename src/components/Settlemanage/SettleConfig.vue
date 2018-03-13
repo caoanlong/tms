@@ -2,18 +2,14 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">
-				<span>应付汇总</span>
+				<span>运费模板</span>
 			</div>
-            <el-tabs v-model="tabSelected" type="card" @tab-click="handleTabSelected">
-                <el-tab-pane label="司机" name="driver"></el-tab-pane>
-                <el-tab-pane label="随车人员" name="follower"></el-tab-pane>
-            </el-tabs>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="司机姓名" v-show="tabSelected == 'driver'">
+					<el-form-item label="司机姓名">
 						<el-input placeholder="请输入..." v-model="findDriver"></el-input>
 					</el-form-item>
-                    <el-form-item label="随车人员" v-show="tabSelected == 'follower'">
+                    <el-form-item label="随车人员">
 						<el-input placeholder="请输入..." v-model="findFollower"></el-input>
 					</el-form-item>
                     <el-form-item label="发货日期">
@@ -32,16 +28,16 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<div class="tableControl">
-                <el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
+            <div class="tableControl">
+                <el-button type="default" size="mini" icon="el-icon-plus">添加</el-button>
+                <el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
-                    v-show="tabSelected == 'driver'"
 					ref="recTable" 
-					:data="driverData" 
+					:data="tableData" 
 					border style="width: 100%" size="mini">
-					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
+                    <el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="车辆牌号" prop="truckCode"></el-table-column>
 					<el-table-column label="驾驶员" prop="driver"></el-table-column>
 					<el-table-column label="总趟数" prop="totalNum" width="60"></el-table-column>
@@ -55,34 +51,11 @@
                             <span>{{scope.row.freight + scope.row.roundWayFreight}}</span>
                         </template>
                     </el-table-column>
-					<el-table-column label="操作" align="center" width="120">
+					<el-table-column label="操作" align="center" width="230">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="viewinfo('driver')">查看明细</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
-                <el-table 
-                    v-show="tabSelected == 'follower'"
-					ref="recTable" 
-					:data="followerData" 
-					border style="width: 100%" size="mini">
-					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="随车人员" prop="follower"></el-table-column>
-					<el-table-column label="总趟数" prop="totalNum" width="60"></el-table-column>
-                    <el-table-column label="总里程" prop="totalMile"></el-table-column>
-                    <el-table-column label="总货量" prop="totalGoods"></el-table-column>
-                    <el-table-column label="运费" prop="freight" align="center" width="120"></el-table-column>
-                    <el-table-column label="绕路总里程" prop="roundWayTotalMile" align="center" width="120"></el-table-column>
-                    <el-table-column label="绕路费用" prop="roundWayFreight" align="center" width="120"></el-table-column>
-                    <el-table-column label="其他费用" prop="otherFreight" align="center" width="120"></el-table-column>
-					<el-table-column label="总计">
-                        <template slot-scope="scope">
-                            <span>{{scope.row.freight + scope.row.roundWayFreight}}</span>
-                        </template>
-                    </el-table-column>
-					<el-table-column label="操作" align="center" width="120">
-						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="viewinfo('follower')">查看明细</el-button>
+                            <el-button size="mini" icon="el-icon-view" @click="viewUser()">查看</el-button>
+                            <el-button size="mini" icon="el-icon-edit" @click="editUser()">编辑</el-button>
+                            <el-button size="mini" icon="el-icon-delete" @click="deleteConfirm()">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -123,7 +96,7 @@
 				pageSize: 10,
                 count: 87,
                 tabSelected: 'driver',
-                driverData: [
+                tableData: [
                     {
                         'truckCode': '云AG5836',
                         'driver': '李金瑞',
@@ -157,32 +130,6 @@
                         'otherFreight': 0,
                         'totalFreight': ''
                     },
-                ],
-                followerData: [
-                    {
-                        'truckCode': '云AG5836',
-                        'follower': '李押运',
-                        'totalNum': 11,
-                        'totalMile': 3125,
-                        'totalGoods': '107.52吨/10方/100件',
-                        'freight': 30302.09,
-                        'roundWayTotalMile': 1000,
-                        'roundWayFreight': 10000,
-                        'otherFreight': 0,
-                        'totalFreight': ''
-                    },
-                    {
-                        'truckCode': '云AG5836',
-                        'follower': '李押运',
-                        'totalNum': 11,
-                        'totalMile': 3125,
-                        'totalGoods': '107.52吨/10方/100件',
-                        'freight': 30302.09,
-                        'roundWayTotalMile': 1000,
-                        'roundWayFreight': 10000,
-                        'otherFreight': 0,
-                        'totalFreight': ''
-                    }
                 ]
 			}
         },
