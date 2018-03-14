@@ -162,6 +162,41 @@ let routerMap = [
 				]
 			},
 			{
+				path: '/transteam',
+				name: 'transteam',
+				meta: {
+					title: '运输队'
+				},
+				component: () => import ('../components/TransTeam'),
+				redirect: '/truck',
+				children: [
+					{
+						path: '/truck',
+						name: 'truck',
+						meta: {
+							title: '车辆'
+						},
+						component: () => import ('../components/TransTeam/Truck'),
+					},
+					{
+						path: '/person',
+						name: 'person',
+						meta: {
+							title: '人员'
+						},
+						component: () => import ('../components/TransTeam/Person'),
+					},
+					{
+						path: '/transinfo',
+						name: 'transinfo',
+						meta: {
+							title: '运输档案'
+						},
+						component: () => import ('../components/TransTeam/TransInfo'),
+					},
+				]
+			},
+			{
 				path: '/cooperpartner',
 				name: 'cooperpartner',
 				meta: {
