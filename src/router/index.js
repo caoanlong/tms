@@ -179,6 +179,22 @@ let routerMap = [
 						component: () => import ('../components/TransTeam/Truck'),
 					},
 					{
+						path: '/addtruck',
+						name: 'addtruck',
+						meta: {
+							title: '添加车辆'
+						},
+						component: () => import ('../components/TransTeam/AddTruck'),
+					},
+					{
+						path: '/edittruck',
+						name: 'edittruck',
+						meta: {
+							title: '编辑车辆'
+						},
+						component: () => import ('../components/TransTeam/EditTruck'),
+					},
+					{
 						path: '/person',
 						name: 'person',
 						meta: {

@@ -100,8 +100,8 @@
                         <el-input type="textarea" resize="none" v-model="user.Remark" :rows="5"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click.native="addUser">立即创建</el-button>
-                        <el-button @click.native="back">取消</el-button>
+                        <el-button type="primary" @click="add">立即创建</el-button>
+                        <el-button @click="back">取消</el-button>
                     </el-form-item>
                 </el-form>
             </el-row>
@@ -145,8 +145,12 @@ export default {
 			console.log(res, file)
 			this.user.Photo = res.data
 		},
+		add() {
+            Message.success('保存成功！')
+            this.$router.push({name: 'settleconfig'})
+		},
 		back() {
-			this.$router.push({ name: 'usermanage' })
+			this.$router.go(-1)
 		}
 	}
 }
