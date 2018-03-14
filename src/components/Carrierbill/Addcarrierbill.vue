@@ -258,11 +258,11 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-// import { regionData } from 'element-china-area-data'
+import { regionData } from 'element-china-area-data'
 export default {
 	data() {
 		return {
-			// distData: regionData,
+			distData: regionData,
 			selectedAreas: [],
 			carrierbillInfo: {
 				Status: '',
