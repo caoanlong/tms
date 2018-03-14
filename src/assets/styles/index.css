@@ -67,18 +67,18 @@ code a:hover{color:#20a0ff;}
 	width: 30%
 }
 
-.total-table {
+.common-table {
 	width: 100%;
-	font-size: 12px;
-	color: #606266;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #333;
 	border-collapse: collapse
 }
-.total-table td {
-	border: 1px solid #ebeef5;
-	border-top: none;
-	height: 37px;
-	padding: 6px 0;
-	vertical-align: middle
+.common-table td {
+	border: 1px solid #999;
+	padding: 10px 10px;
+	vertical-align: middle;
+	text-align: center
 }
 
 .split-item {

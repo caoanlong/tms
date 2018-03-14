@@ -226,6 +226,30 @@ let routerMap = [
 						},
 						component: () => import ('../components/TransTeam/TransInfo'),
 					},
+					{
+						path: '/addtransinfo',
+						name: 'addtransinfo',
+						meta: {
+							title: '添加运输档案'
+						},
+						component: () => import ('../components/TransTeam/AddTransInfo'),
+					},
+					{
+						path: '/edittransinfo',
+						name: 'edittransinfo',
+						meta: {
+							title: '编辑运输档案'
+						},
+						component: () => import ('../components/TransTeam/EditTransInfo'),
+					},
+					{
+						path: '/viewtransinfo',
+						name: 'viewtransinfo',
+						meta: {
+							title: '查看运输档案'
+						},
+						component: () => import ('../components/TransTeam/ViewTransInfo'),
+					},
 				]
 			},
 			{

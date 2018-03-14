@@ -6,26 +6,24 @@
 			</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="发货单位">
-						<el-input placeholder="请输入..." v-model="findDeliveryer"></el-input>
+					<el-form-item label="姓名">
+						<el-input placeholder="请输入..." v-model="findName"></el-input>
 					</el-form-item>
-                    <el-form-item label="发货地">
-						<el-input placeholder="请输入..." v-model="findDeliveryArea"></el-input>
+                    <el-form-item label="车牌号">
+						<el-input placeholder="请输入..." v-model="findPlateNum"></el-input>
 					</el-form-item>
-                    <el-form-item label="收货单位">
-						<el-input placeholder="请输入..." v-model="findReceiver"></el-input>
+                    <el-form-item label="自编号">
+						<el-input placeholder="请输入..." v-model="findSelfNum"></el-input>
 					</el-form-item>
-                    <el-form-item label="收货地">
-						<el-input placeholder="请输入..." v-model="findReceiveArea"></el-input>
-					</el-form-item>
-                    <el-form-item label="运距">
-						<el-input placeholder="请输入..." v-model="findDistance"></el-input>
-					</el-form-item>
-                    <el-form-item label="对内运价">
-						<el-input placeholder="请输入..." v-model="findInnerFreight"></el-input>
-					</el-form-item>
-                    <el-form-item label="对外运价">
-						<el-input placeholder="请输入..." v-model="findExternalFreight"></el-input>
+                    <el-form-item label="创建时间">
+						<el-date-picker
+                            v-model="findDate"
+                            type="daterange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"
+                            @change="selectDateRange">
+                        </el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary">查询</el-button>
@@ -43,23 +41,21 @@
 					:data="tableData" 
 					border style="width: 100%" size="mini">
                     <el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="发货单位" prop="deliveryer"></el-table-column>
-					<el-table-column label="发货地" prop="deliveryArea"></el-table-column>
-					<el-table-column label="发货详细地址" prop="deliveryAdress"></el-table-column>
-					<el-table-column label="收货单位" prop="receiver"></el-table-column>
-					<el-table-column label="收货地" prop="receiveArea"></el-table-column>
-					<el-table-column label="收货详细地址" prop="receiveAdress"></el-table-column>
-					<el-table-column label="对内运距" prop="innerDistance"></el-table-column>
-					<el-table-column label="对内运价" prop="innerFreight"></el-table-column>
-					<el-table-column label="对内TKM" prop="innerTKM"></el-table-column>
-                    <el-table-column label="对外运距" prop="externalDistance"></el-table-column>
-                    <el-table-column label="对外运价" prop="externalFreight"></el-table-column>
-                    <el-table-column label="对外TKM" prop="externalTKM"></el-table-column>
-                    <el-table-column label="对内付款占比" prop="innerPayRatio" width="100"></el-table-column>
-                    <el-table-column label="对外收款占比" prop="externalRecRatio" width="100"></el-table-column>
+					<el-table-column label="姓名" prop="name"></el-table-column>
+					<el-table-column label="身份证号" prop="cardNum"></el-table-column>
+					<el-table-column label="联系电话" prop="mobile"></el-table-column>
+					<el-table-column label="从业资格证件号" prop="qualifCerNum"></el-table-column>
+					<el-table-column label="车牌号" prop="plateNum"></el-table-column>
+					<el-table-column label="自编号" prop="selfNum"></el-table-column>
+					<el-table-column label="道路运输证号" prop="roadTransNum"></el-table-column>
+					<el-table-column label="载重" prop="load"></el-table-column>
+					<el-table-column label="备注" prop="remark"></el-table-column>
+                    <el-table-column label="创建时间" prop="createTime"></el-table-column>
+					<el-table-column label="建档时间" prop="buildTime"></el-table-column>
 					<el-table-column label="操作" align="center" width="230">
 						<template slot-scope="scope">
-                            <el-button size="mini" icon="el-icon-edit" @click="edit">编辑查看</el-button>
+                            <el-button size="mini" icon="el-icon-edit" @click="view">查看</el-button>
+                            <el-button size="mini" icon="el-icon-edit" @click="edit">编辑</el-button>
                             <el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.$index)">删除</el-button>
 						</template>
 					</el-table-column>
@@ -92,49 +88,42 @@
 	export default {
 		data() {
 			return {
-                findDeliveryer: '',
-                findDeliveryArea: '',
-                findReceiver: '',
-                findReceiveArea: '',
-                findDistance: '',
-                findInnerFreight: '',
-                findExternalFreight: '',
+                findName: '',
+                findPlateNum: '',
+                findSelfNum: '',
+                findDate: [],
+                startDate: '',
+                endDate: '',
 				pageIndex: 1,
 				pageSize: 10,
                 count: 87,
                 tabSelected: 'driver',
                 tableData: [
                     {
-                        "deliveryer": "安化",
-                        "deliveryArea": "云南省昆明市",
-                        "deliveryAdress": "安化工厂",
-                        "receiver": "红河厂",
-                        "receiveArea": "云南省红河州蒙自市",
-                        "receiveAdress": "蒙自小东山",
-                        "innerDistance": "336",
-                        "innerFreight": 322.56,
-                        "innerTKM": "0.96",
-                        "externalDistance": "345",
-                        "externalFreight": 393,
-                        "externalTKM": "1.14",
-                        "innerPayRatio": "月结100%",
-                        "externalRecRatio": "回单付100%"
+                        "name": "李金锐",
+                        "cardNum": "532424197508031415",
+                        "mobile": "13700669154",
+                        "qualifCerNum": "532424197508031415",
+                        "plateNum": "云AG5836",
+                        "selfNum": "1",
+                        "roadTransNum": "530181031849",
+                        "load": "9990",
+                        "remark": "",
+                        "createTime": "2018-03-01",
+                        "buildTime": "2016-05-25"
                     },
                     {
-                        "deliveryer": "安化",
-                        "deliveryArea": "云南省昆明市",
-                        "deliveryAdress": "安化工厂",
-                        "receiver": "云锡",
-                        "receiveArea": "云南省红河州个旧市",
-                        "receiveAdress": "个旧云锡",
-                        "innerDistance": "335",
-                        "innerFreight": 321.6,
-                        "innerTKM": "0.96",
-                        "externalDistance": "350",
-                        "externalFreight": 399,
-                        "externalTKM": "1.14",
-                        "innerPayRatio": "月结100%",
-                        "externalRecRatio": "回单付100%"
+                        "name": "李金锐",
+                        "cardNum": "532424197508031415",
+                        "mobile": "13700669154",
+                        "qualifCerNum": "532424197508031415",
+                        "plateNum": "云AG5836",
+                        "selfNum": "1",
+                        "roadTransNum": "530181031849",
+                        "load": "9990",
+                        "remark": "",
+                        "createTime": "2018-03-01",
+                        "buildTime": "2016-05-25"
                     },
                 ]
 			}
@@ -143,13 +132,12 @@
 		},
 		methods: {
             reset() {
-                this.findDeliveryer = ''
-                this.findDeliveryArea = ''
-                this.findReceiver = ''
-                this.findReceiveArea = ''
-                this.findDistance = ''
-                this.findInnerFreight = ''
-                this.findExternalFreight = ''
+                this.findName = ''
+                this.findPlateNum = ''
+                this.findSelfNum = ''
+                this.findDate = []
+                this.startDate = ''
+                this.endDate = ''
             },
 			pageChange(index) {
                 this.pageIndex = index
@@ -158,10 +146,13 @@
                 console.log(tab.$options.propsData.name)
             },
             add() {
-                this.$router.push({name: 'addsettleconfig'})
+                this.$router.push({name: 'addtransinfo'})
             },
             edit() {
-                this.$router.push({name: 'editsettleconfig'})
+                this.$router.push({name: 'edittransinfo'})
+            },
+            view() {
+                this.$router.push({name: 'viewtransinfo'})
             },
             deleteConfirm(i) {
                 console.log(i)
