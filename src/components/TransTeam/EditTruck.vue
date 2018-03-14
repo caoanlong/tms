@@ -486,7 +486,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他照片">
-                            <ImageUpload :limitNum="9" @imgUrlBack="imgUrlBack"/>
+                            <ImageUpload :files="truck.otherImgs" :limitNum="9" @imgUrlBack="imgUrlBack"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -568,7 +568,12 @@ export default {
 				gpsInstallTime: '2018-6-30',
 				truckPhoto: 'http://f11.baidu.com/it/u=2588434687,3162842634&fm=72',
 				driverLicImg: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1684697538,1821191231&fm=27&gp=0.jpg',
-				roadTransImg: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=183636833,3673839069&fm=27&gp=0.jpg'
+                roadTransImg: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=183636833,3673839069&fm=27&gp=0.jpg',
+                otherImgs: [
+                    'http://img0.imgtn.bdimg.com/it/u=211127819,408382177&fm=200&gp=0.jpg',
+                    'http://img5.imgtn.bdimg.com/it/u=3769120177,158294962&fm=27&gp=0.jpg',
+                    'http://img5.imgtn.bdimg.com/it/u=1636995595,1602982972&fm=27&gp=0.jpg'
+                ]
 			}
 		}
 	},
@@ -586,6 +591,7 @@ export default {
         },
         imgUrlBack(files) {
             console.log(files)
+            this.truck.otherImgs = files
         },
         add() {
             Message.success('保存成功！')

@@ -7,7 +7,7 @@
 			<img :src="file">
 			<div class="controller">
 				<div class="controllerBtn">
-					<div class="perviewBtn" @click.stop="isShowImgModal = true"></div>
+					<div class="perviewBtn" @click.stop="showImgModal(file)"></div>
 					<div class="delBtn" @click.stop="delImg(i)"></div>
 				</div>
 			</div>
@@ -36,16 +36,19 @@
 			limitNum: {
 				type: Number,
 				default: 1
-			}
+            },
+            files: {
+                type: Array
+            }
 		},
 		data() {
 			return {
-				fileUrl: [],
+				fileUrl: this.files
 			}
-		},
+        },
 		computed: {
 			isLimit() {
-				if (this.fileUrl.length>this.limitNum-1) {
+				if (this.fileUrl.length > this.limitNum - 1) {
 					return false
 				}else {
 					return true
@@ -61,20 +64,21 @@
 				});
 				axios.post(url, params, headers).then(res => {
                     this.fileUrl.push('http://39.108.245.177:4000' + res.data.data)
-                    this.$emit('imgUrlBack',this.fileUrl)
+                    this.$emit('imgUrlBack', this.fileUrl)
                 }).catch(err => {
 					console.log('服务器异常' + err)
 				})
 			},
 			delImg(i) {
 				this.fileUrl.splice(i, 1)
-				this.$emit('imgUrlBack',this.fileUrl)
+				this.$emit('imgUrlBack', this.fileUrl)
 			},
-			showImgModal() {
-				this.modal({
-					title: '图片详情',
-					content: `<img :src="${file}">`
-				})
+			showImgModal(imgUrl) {
+                this.$alert(`<img style="width: 100%" src=${imgUrl} />`, '图片预览', {
+                    dangerouslyUseHTMLString: true,
+                    showConfirmButton: false,
+                    customClass: 'img-preview'
+                })
 			}
 		},
 	}

@@ -203,6 +203,22 @@ let routerMap = [
 						component: () => import ('../components/TransTeam/Person'),
 					},
 					{
+						path: '/addperson',
+						name: 'addperson',
+						meta: {
+							title: '添加人员'
+						},
+						component: () => import ('../components/TransTeam/AddPerson'),
+					},
+					{
+						path: '/editperson',
+						name: 'editperson',
+						meta: {
+							title: '添加人员'
+						},
+						component: () => import ('../components/TransTeam/EditPerson'),
+					},
+					{
 						path: '/transinfo',
 						name: 'transinfo',
 						meta: {

@@ -147,7 +147,6 @@
 				pageIndex: 1,
 				pageSize: 10,
                 count: 87,
-                tabSelected: 'driver',
                 tableData: [
                     {
                         "area": "安宁市",
@@ -244,9 +243,6 @@
             selectDateRange(date) {
                 this.startDate = new Date(date[0]).getTime()
                 this.endDate = new Date(date[1]).getTime()
-            },
-            handleTabSelected(tab) {
-                console.log(tab.$options.propsData.name)
             },
             add() {
                 this.$router.push({name: 'addtruck'})
