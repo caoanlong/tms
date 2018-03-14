@@ -162,6 +162,97 @@ let routerMap = [
 				]
 			},
 			{
+				path: '/transteam',
+				name: 'transteam',
+				meta: {
+					title: '运输队'
+				},
+				component: () => import ('../components/TransTeam'),
+				redirect: '/truck',
+				children: [
+					{
+						path: '/truck',
+						name: 'truck',
+						meta: {
+							title: '车辆'
+						},
+						component: () => import ('../components/TransTeam/Truck'),
+					},
+					{
+						path: '/addtruck',
+						name: 'addtruck',
+						meta: {
+							title: '添加车辆'
+						},
+						component: () => import ('../components/TransTeam/AddTruck'),
+					},
+					{
+						path: '/edittruck',
+						name: 'edittruck',
+						meta: {
+							title: '编辑车辆'
+						},
+						component: () => import ('../components/TransTeam/EditTruck'),
+					},
+					{
+						path: '/person',
+						name: 'person',
+						meta: {
+							title: '人员'
+						},
+						component: () => import ('../components/TransTeam/Person'),
+					},
+					{
+						path: '/addperson',
+						name: 'addperson',
+						meta: {
+							title: '添加人员'
+						},
+						component: () => import ('../components/TransTeam/AddPerson'),
+					},
+					{
+						path: '/editperson',
+						name: 'editperson',
+						meta: {
+							title: '添加人员'
+						},
+						component: () => import ('../components/TransTeam/EditPerson'),
+					},
+					{
+						path: '/transinfo',
+						name: 'transinfo',
+						meta: {
+							title: '运输档案'
+						},
+						component: () => import ('../components/TransTeam/TransInfo'),
+					},
+					{
+						path: '/addtransinfo',
+						name: 'addtransinfo',
+						meta: {
+							title: '添加运输档案'
+						},
+						component: () => import ('../components/TransTeam/AddTransInfo'),
+					},
+					{
+						path: '/edittransinfo',
+						name: 'edittransinfo',
+						meta: {
+							title: '编辑运输档案'
+						},
+						component: () => import ('../components/TransTeam/EditTransInfo'),
+					},
+					{
+						path: '/viewtransinfo',
+						name: 'viewtransinfo',
+						meta: {
+							title: '查看运输档案'
+						},
+						component: () => import ('../components/TransTeam/ViewTransInfo'),
+					},
+				]
+			},
+			{
 				path: '/cooperpartner',
 				name: 'cooperpartner',
 				meta: {
