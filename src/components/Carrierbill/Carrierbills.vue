@@ -51,9 +51,9 @@
 				<el-table :data="tableData" border style="width: 100%" size="mini">
 					<el-table-column type="selection" width="36" align="center" fixed>
 					</el-table-column>
-					<el-table-column label="处理状态"  prop="Status" width="110" align="center">
+					<el-table-column label="处理状态"  prop="Status" width="90" align="center">
 					</el-table-column>
-					<el-table-column label="承运单号" prop="CarrierNum" width="110" align="center">
+					<el-table-column label="承运单号" prop="CarrierNum" width="100" align="center">
 						<template slot-scope="scope">
 							<el-popover trigger="hover" placement="top" class="customerTablePop">
 								<p>发货单位：{{ scope.row.ConsignerCompany }}</p>
@@ -72,7 +72,7 @@
 					</el-table-column>
 					<el-table-column label="收货人" prop="Consignee">
 					</el-table-column>
-					<el-table-column label="到货时间" prop="ArrivalDate" width="140" align="center">
+					<el-table-column label="到货时间" prop="ArrivalDate" width="120" align="center">
 					</el-table-column>
 					<el-table-column label="货物规格/货物名称" prop="CargoName">
 					</el-table-column>
@@ -80,16 +80,16 @@
 					</el-table-column>
 					<el-table-column label="发货单位" prop="ConsignerCompany">
 					</el-table-column>
-					<el-table-column label="发货时间" prop="DeliveryDate" width="140" align="center">
+					<el-table-column label="发货时间" prop="DeliveryDate" width="120" align="center">
 					</el-table-column>
 					<el-table-column label="发货人" prop="Consigner">
 					</el-table-column>
 					<el-table-column label="发货地" prop="Dispatch">
 					</el-table-column>
-					<el-table-column label="操作" width="100" align="center" fixed="right">
+					<el-table-column label="操作" width="160" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="ViewCarrierbill(scope.row.CarrierNum)"></el-button>
-							<el-button type="default" size="mini" icon="el-icon-delete" @click="ViewCarrierbill(scope.row.CarrierNum)"></el-button>
+							<el-button type="default" size="mini" icon="el-icon-view" @click="ViewCarrierbill(scope.row.CarrierNum)">查看</el-button>
+							<el-button type="default" size="mini" icon="el-icon-delete" @click="ViewCarrierbill(scope.row.CarrierNum)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>

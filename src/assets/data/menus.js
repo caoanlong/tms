@@ -11,21 +11,21 @@ const menus = [
 		Href: '/carrierbill',
 		Name: '承运单',
 		IsShow: '1',
-		Icon: 'home-icon'
+		Icon: 'list-th-icon'
 	},
 	{
 		Target: 'dispatchbill',
 		Href: '/dispatchbill',
 		Name: '调度单',
 		IsShow: '1',
-		Icon: 'home-icon'
+		Icon: 'dispatchbill'
 	},
 	{
 		Target: 'settlemanage',
 		Href: '/settlemanage',
 		Name: '结算管理',
 		IsShow: '1',
-		Icon: 'home-icon',
+		Icon: 'Settlement',
 		children: [
 			{
 				Target: 'receivablesum',
@@ -64,7 +64,7 @@ const menus = [
 		Href: '/transteam',
 		Name: '运输队',
 		IsShow: '1',
-		Icon: 'home-icon',
+		Icon: 'truck-icon',
 		children: [
 			{
 				Target: 'truck',
@@ -91,7 +91,7 @@ const menus = [
 		Href: '/cooperpartner',
 		Name: '合作伙伴',
 		IsShow: '1',
-		Icon: 'home-icon',
+		Icon: 'Partner',
 		children: [
 			{
 				Target: 'shipper',
