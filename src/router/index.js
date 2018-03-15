@@ -51,30 +51,41 @@ let routerMap = [
 							title: '承运单详情'
 						},
 						component: () => import ('../components/Carrierbill/Viewcarrierbill')
+					}
+				]
+			},
+			{
+				path: '/dispatchbill',
+				name: 'dispatchbill',
+				meta: {
+					title: '调度单'
+				},
+				component: () => import ('../components/DispatchBill'),
+				redirect: '/dispatchbills',
+				children: [
+					{
+						path: '/dispatchbills',
+						name: 'dispatchbills',
+						meta: {
+							title: '调度单列表'
+						},
+						component: () => import ('../components/DispatchBill/DispatchBills'),
 					},
 					{
-						path: '/controls',
-						name: 'controls',
+						path: '/adddispatchbill',
+						name: 'adddispatchbill',
 						meta: {
-							title: '调度列表'
+							title: '添加调度单'
 						},
-						component: () => import ('../components/Carrierbill/Controls')
+						component: () => import ('../components/DispatchBill/AddDispatchBill'),
 					},
 					{
-						path: '/addcontrol',
-						name: 'addcontrol',
+						path: '/viewdispatchbill',
+						name: 'viewdispatchbill',
 						meta: {
-							title: '新的调度'
+							title: '调度单详情'
 						},
-						component: () => import ('../components/Carrierbill/AddControl')
-					},
-					{
-						path: '/viewcontrols',
-						name: 'viewcontrols',
-						meta: {
-							title: '调度详情'
-						},
-						component: () => import ('../components/Carrierbill/ViewControls')
+						component: () => import ('../components/DispatchBill/ViewDispatchBill')
 					}
 				]
 			},
