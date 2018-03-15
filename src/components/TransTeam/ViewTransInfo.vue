@@ -129,7 +129,7 @@
             </el-tabs>
         </el-card>
         <el-dialog title="收货地址" :visible.sync="isShowAddDialog">
-            <el-form label-width="120" label-position="left">
+            <el-form label-width="120px">
                 <el-form-item label="时间">
                     <el-date-picker
                         style="width: 100%" 
@@ -149,10 +149,10 @@
                     <el-input v-model="traffic.address"></el-input>
                 </el-form-item>
                 <el-form-item label="违法行为描述">
-                    <el-input type="textarea" v-model="traffic.description"></el-input>
+                    <el-input type="textarea" v-model="traffic.description" resize="none"></el-input>
                 </el-form-item>
                 <el-form-item label="处理情况">
-                    <el-input type="textarea" v-model="traffic.info"></el-input>
+                    <el-input type="textarea" v-model="traffic.info" resize="none"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
