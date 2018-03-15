@@ -29,7 +29,7 @@
                             <tr>
                                 <td>所有权归属</td>
                                 <td colspan="3">
-                                    <el-radio-group v-model="ownership">
+                                    <el-radio-group v-model="ownership" disabled>
                                         <el-radio :label="1">单位</el-radio>
                                         <el-radio :label="2">个人</el-radio>
                                         <el-radio :label="3">挂靠</el-radio>
@@ -37,7 +37,7 @@
                                 </td>
                                 <td>经营性质</td>
                                 <td>
-                                    <el-radio-group v-model="buisnessNature">
+                                    <el-radio-group v-model="buisnessNature" disabled>
                                         <el-radio :label="1">营运</el-radio>
                                         <el-radio :label="2">自用</el-radio>
                                     </el-radio-group>
@@ -110,7 +110,7 @@
                                 v-for="(traffic, i) in trafficList" 
                                 :key="traffic.time">
                                 <td>{{traffic.time}}</td>
-                                <td>{{traffic.position}}</td>
+                                <td>{{traffic.area + traffic.address}}</td>
                                 <td>{{traffic.driver}}</td>
                                 <td colspan="2">{{traffic.description}}</td>
                                 <td>{{traffic.info}}</td>
@@ -120,7 +120,7 @@
                     <el-row type="flex" justify="center" style="margin: 20px auto">
                         <el-col :span="8" :offset="6">
                             <el-button type="success" @click="add">添加记录</el-button>
-                            <el-button type="primary">修改记录</el-button>
+                            <el-button type="primary" @click="edit">修改记录</el-button>
                             <el-button @click="back">返回</el-button>
                         </el-col>
                     </el-row>
@@ -128,25 +128,31 @@
                 <el-tab-pane label="运输单位备案" name="second">运输单位备案</el-tab-pane>
             </el-tabs>
         </el-card>
-        <el-dialog title="收货地址" :visible.sync="isShowAddDialog">
+        <el-dialog title="添加记录" width="45%" :visible.sync="isShowAddDialog">
             <el-form label-width="120px">
                 <el-form-item label="时间">
                     <el-date-picker
                         style="width: 100%" 
-                        v-model="traffic.time"
+                        v-model="selectedDate"
                         type="date"
-                        placeholder="选择日期">
+                        placeholder="选择日期"
+                        @change="selectDate">
                     </el-date-picker>
                 </el-form-item>
                 <el-form-item label="地区">
                     <el-cascader
                         style="width: 100%"
-                        :options="distData"
-                        v-model="traffic.area">
+                        :options="distData" 
+                        :props="areaProps"
+                        v-model="selectedArea"
+                        @change="selectArea">
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="详细地址">
                     <el-input v-model="traffic.address"></el-input>
+                </el-form-item>
+                <el-form-item label="驾驶人">
+                    <el-input v-model="traffic.driver" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="违法行为描述">
                     <el-input type="textarea" v-model="traffic.description" resize="none"></el-input>
@@ -157,14 +163,35 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="isShowAddDialog = false">取 消</el-button>
-                <el-button type="primary" @click="isShowAddDialog = false">确 定</el-button>
+                <el-button type="primary" @click="addTraffic">确 定</el-button>
             </div>
+        </el-dialog>
+        <el-dialog title="修改记录" width="60%" :visible.sync="isShowEditDialog">
+            <el-table :data="trafficList">
+                <el-table-column property="time" label="时间" width="120"></el-table-column>
+                <el-table-column label="地点">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.area + scope.row.address}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column property="driver" label="驾驶人"></el-table-column>
+                <el-table-column property="description" label="交通违法行为或事故简要描述"></el-table-column>
+                <el-table-column property="info" label="处理情况"></el-table-column>
+                <el-table-column label="操作" align="center" width="230">
+                    <template slot-scope="scope">
+                        <el-button size="mini" icon="el-icon-edit" @click="update(scope.row)">编辑</el-button>
+                        <el-button size="mini" icon="el-icon-delete" @click="del(scope.$index)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
         </el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
+    import { Message } from 'element-ui'
     import { regionData } from 'element-china-area-data'
     import ImageUpload from '../CommonComponents/ImageUpload'
+    import { getdatefromtimestamp } from '../../common/utils'
 	export default {
         data() {
             return {
@@ -173,18 +200,25 @@
                 ownership: 1,
                 buisnessNature: 1,
                 isShowAddDialog: false,
+                isShowEditDialog: false,
+                selectedDate: '',
+                selectedArea: [],
+                areaProps: {
+                    label: 'label',
+                    value: 'label'
+                },
                 traffic: {
                     time: '',
                     area: '',
                     address: '',
-                    driver: '',
+                    driver: '王小川',
                     description: '',
                     info: ''
                 },
                 trafficList: [
                     {
                         time: '2017-08-09',
-                        area: '安化',
+                        area: '云南省-昆明市',
                         address: '人民大道',
                         driver: '王小川',
                         description: '逆向行驶',
@@ -192,7 +226,7 @@
                     },
                     {
                         time: '2017-08-10',
-                        area: '安化',
+                        area: '云南省-昆明市',
                         address: '人民大道',
                         driver: '王小川',
                         description: '逆向行驶',
@@ -202,8 +236,34 @@
             }
         },
 		methods: {
+            selectDate(data) {
+                this.traffic.time = getdatefromtimestamp(new Date(data).getTime(), true)
+            },
+            selectArea(data) {
+                this.traffic.area = data.join('-')
+            },
             add() {
+                this.traffic = {
+                    time: '',
+                    area: '',
+                    address: '',
+                    driver: '王小川',
+                    description: '',
+                    info: ''
+                }
                 this.isShowAddDialog = true
+            },
+            edit() {
+                this.isShowEditDialog = true
+            },
+            update(obj) {
+                this.traffic = obj
+                this.isShowAddDialog = true
+            },
+            addTraffic() {
+                this.trafficList.push(this.traffic)
+                Message.success('保存成功！')
+                this.isShowAddDialog = false
             },
             del(i) {
                 this.trafficList.splice(i, 1)
