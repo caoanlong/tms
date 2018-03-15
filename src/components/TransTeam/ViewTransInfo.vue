@@ -119,8 +119,8 @@
                     </div>
                     <el-row type="flex" justify="center" style="margin: 20px auto">
                         <el-col :span="8" :offset="6">
-                            <el-button type="success">添加记录</el-button>
-                            <!-- <el-button type="primary">打印表格</el-button> -->
+                            <el-button type="success" @click="add">添加记录</el-button>
+                            <el-button type="primary">修改记录</el-button>
                             <el-button @click="back">返回</el-button>
                         </el-col>
                     </el-row>
@@ -128,27 +128,72 @@
                 <el-tab-pane label="运输单位备案" name="second">运输单位备案</el-tab-pane>
             </el-tabs>
         </el-card>
+        <el-dialog title="收货地址" :visible.sync="isShowAddDialog">
+            <el-form label-width="120" label-position="left">
+                <el-form-item label="时间">
+                    <el-date-picker
+                        style="width: 100%" 
+                        v-model="traffic.time"
+                        type="date"
+                        placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="地区">
+                    <el-cascader
+                        style="width: 100%"
+                        :options="distData"
+                        v-model="traffic.area">
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item label="详细地址">
+                    <el-input v-model="traffic.address"></el-input>
+                </el-form-item>
+                <el-form-item label="违法行为描述">
+                    <el-input type="textarea" v-model="traffic.description"></el-input>
+                </el-form-item>
+                <el-form-item label="处理情况">
+                    <el-input type="textarea" v-model="traffic.info"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="isShowAddDialog = false">取 消</el-button>
+                <el-button type="primary" @click="isShowAddDialog = false">确 定</el-button>
+            </div>
+        </el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
+    import { regionData } from 'element-china-area-data'
     import ImageUpload from '../CommonComponents/ImageUpload'
 	export default {
         data() {
             return {
+                distData: regionData,
                 tabSelected: 'first',
                 ownership: 1,
                 buisnessNature: 1,
+                isShowAddDialog: false,
+                traffic: {
+                    time: '',
+                    area: '',
+                    address: '',
+                    driver: '',
+                    description: '',
+                    info: ''
+                },
                 trafficList: [
                     {
                         time: '2017-08-09',
-                        position: '安化',
+                        area: '安化',
+                        address: '人民大道',
                         driver: '王小川',
                         description: '逆向行驶',
                         info: '罚款500',
                     },
                     {
                         time: '2017-08-10',
-                        position: '安化',
+                        area: '安化',
+                        address: '人民大道',
                         driver: '王小川',
                         description: '逆向行驶',
                         info: '罚款500',
@@ -157,8 +202,14 @@
             }
         },
 		methods: {
+            add() {
+                this.isShowAddDialog = true
+            },
             del(i) {
                 this.trafficList.splice(i, 1)
+            },
+            back() {
+                this.$router.go(-1)
             }
         },
         components: {
