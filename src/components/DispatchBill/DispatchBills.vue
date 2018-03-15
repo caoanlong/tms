@@ -53,7 +53,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="110" align="center">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="ViewControls(scope.row.ControlsNum)">查看编辑</el-button>
+							<el-button type="default" size="mini" icon="el-icon-view" @click="ViewDispatchBill(scope.row.ControlsNum)">查看编辑</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -171,8 +171,8 @@ export default {
 		AddCargo() {
 			this.$router.push({ name: '' })
 		},
-		ViewControls(ControlsNum) {
-			this.$router.push({ name: 'viewcontrols' , query: { ControlsNum} })
+		ViewDispatchBill(ControlsNum) {
+			this.$router.push({ name: 'viewdispatchbill' , query: { ControlsNum} })
 		},
 		refresh() {
 			this.refreshing = true

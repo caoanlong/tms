@@ -141,9 +141,9 @@
 							<div class="cargoList">
 								<el-row :gutter="20">
 									<el-col :span="3">
-										<el-select v-model="value" placeholder="请选择">
-											<el-option>重货</el-option>
-											<el-option>轻货</el-option>
+										<el-select v-model="cargoType" placeholder="请选择">
+											<el-option label="重货" value="1">重货</el-option>
+											<el-option label="轻货" value="2">轻货</el-option>
 										</el-select>
 									</el-col>
 									<el-col :span="5">
@@ -252,7 +252,7 @@
 					<el-form label-width="0">
 						<el-form-item align="center">
 							<el-button type="primary">修改</el-button>
-							<el-button type="success" @click="AddConrol">调度</el-button>
+							<el-button type="success" @click="AddDispatchBill">调度</el-button>
 							<el-button type="danger">删除</el-button>
 							<el-button @click="back">返回</el-button>
 						</el-form-item>
@@ -264,12 +264,13 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-// import { regionData } from 'element-china-area-data'
+import { regionData } from 'element-china-area-data'
 export default {
 	data() {
 		return {
-			// distData: regionData,
+			distData: regionData,
 			selectedAreas: [],
+			cargoType:'',
 			carrierbillInfo: {
 				Status: '待执行',
 				Consignor: '安宁化工厂',
@@ -300,8 +301,8 @@ export default {
 
 	},
 	methods: {
-		AddConrol() {
-			this.$router.push({ name: 'addcontrol' , query: { CarrierNum: this.$route.query.CarrierNum } })
+		AddDispatchBill() {
+			this.$router.push({ name: 'adddispatchbill' , query: { CarrierNum: this.$route.query.CarrierNum } })
 		},
 		back() {
 			this.$router.go(-1)

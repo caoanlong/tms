@@ -11,21 +11,14 @@ const menus = [
 		Href: '/carrierbill',
 		Name: '承运单',
 		IsShow: '1',
-		Icon: 'home-icon',
-		children: [
-			{
-				Target: 'carrierbills',
-				Href: '/carrierbills',
-				Name: '承运单列表',
-				IsShow: '1'
-			},
-			{
-				Target: 'controls',
-				Href: '/controls',
-				Name: '调度列表',
-				IsShow: '1'
-			}
-		]
+		Icon: 'home-icon'
+	},
+	{
+		Target: 'dispatchbill',
+		Href: '/dispatchbill',
+		Name: '调度单',
+		IsShow: '1',
+		Icon: 'home-icon'
 	},
 	{
 		Target: 'settlemanage',
