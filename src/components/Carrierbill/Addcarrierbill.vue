@@ -303,7 +303,19 @@ export default {
 
 	},
 	methods: {
-
+		addItem() {
+			this.cargoInfo.push({
+				'type': '',
+				'name': '',
+				'rule': '',
+				'weight': '',
+				'volumn': '',
+				'num': ''
+			})
+		},
+		removeItem(index) {
+			this.cargoInfo.splice(index,1)
+		},
 		back() {
 			this.$router.go(-1)
 		}

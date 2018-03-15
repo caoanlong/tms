@@ -27,14 +27,14 @@
 		<div class="lineInfo inlineBlock">
 			从<span>云南</span>到<span>上海</span><span>炸药/R27 5吨</span><span>“收货单位”</span>
 		</div>
-		<svg-icon icon-class="select-icon" class="icon" :class="{selected:isSelected == index}"></svg-icon>
+		<svg-icon icon-class="select-icon" class="icon" :class="{selected:isDriverSelected == index}"></svg-icon>
 	</div>
 </template>
 
 <script>
 export default {
 	props: {
-		isSelected: {
+		isDriverSelected: {
 			type: Number
 		},
 		index: {

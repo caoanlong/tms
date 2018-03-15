@@ -84,7 +84,7 @@
 					</el-form>
 				</div>
 				<div class="list">
-					<DriverItem :isSelected="isSelected" :index="index" v-for="(item,index) in 4" :key="index" @click.native.stop="selectDriverItem(index)"></DriverItem>
+					<DriverItem :isDriverSelected="isDriverSelected" :index="index" v-for="(item,index) in 4" :key="index" @click.native.stop="selectDriverItem(index)"></DriverItem>
 				</div>
 				<el-row>
 					<div class="split-item">
@@ -103,7 +103,7 @@
 					</el-form>
 				</div>
 				<div class="list">
-					<EscortItem v-for="(item,index) in 4" :key="index"></EscortItem>
+					<EscortItem :isEscortSelected="isEscortSelected" :index="index" v-for="(item,index) in 4" :key="index" @click.native.stop="selectEscortItem(index)"></EscortItem>
 				</div>
 				<div class="step-footer">
 					<el-button @click="prevStep">上一步</el-button>
@@ -556,7 +556,8 @@ export default {
 			pageSize: 10,
 			stepActive: 0,
 			dialogTableVisible: false,
-			isSelected: -1,
+			isDriverSelected: -1,
+			isEscortSelected: -1,
 			controlStatus: '',
 			carrierbillInfo: [{
 				CarrierNum: '20180205001',
@@ -630,10 +631,13 @@ export default {
 
 		},
 		save() {
-			this.$router.push({ name: 'controls' })
+			this.$router.push({ name: 'dispatchbills' })
 		},
 		selectDriverItem(index) {
-			this.isSelected = index
+			this.isDriverSelected = index
+		},
+		selectEscortItem(index) {
+			this.isEscortSelected = index
 		}
 	},
 	components: {
