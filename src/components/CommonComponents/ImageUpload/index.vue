@@ -43,7 +43,7 @@
 		},
 		data() {
 			return {
-				fileUrl: this.files
+				fileUrl: this.files || []
 			}
         },
 		computed: {
