@@ -2,9 +2,9 @@
 * @Author: coolia
 * @Date:   2018-01-17 11:19:03
 * @Last Modified by:   coolia
-* @Last Modified time: 2018-03-16 12:22:59
+* @Last Modified time: 2018-03-16 14:50:04
 */
-#app .main-container{min-height:100%;-webkit-transition:margin-left 0.28s;-moz-transition:margin-left 0.28s;transition:margin-left 0.28s;margin-left:180px;}
+#app .main-container{min-height:100%;}
 #app .sidebar-container{-webkit-transition:width 0.28s;-moz-transition:width 0.28s;transition:width 0.28s;width:180px!important;height:100%;position:fixed;top:0;bottom:0;left:0;z-index:1001;}
 #app .sidebar-container a{display:inline-block;width:100%;}
 #app .sidebar-container .svg-icon{margin-right:5px;}

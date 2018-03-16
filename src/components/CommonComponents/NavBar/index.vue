@@ -94,8 +94,9 @@ export default {
 			height 50px
 			margin-right 30px
 			.avatar-wrapper
+				height 50px
 				cursor pointer
-				margin-top 5px
+				padding-top 5px
 				position relative
 				.user-avatar
 					width 40px
