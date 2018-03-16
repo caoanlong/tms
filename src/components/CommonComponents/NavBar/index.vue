@@ -67,16 +67,17 @@ export default {
 	height 50px
 	line-height 50px
 	border-radius 0px !important
-	display flex
 	.hamburger-container
+		float left
+		width 50px
 		line-height 58px
 		height 50px
 		padding 0 10px
-		flex 0 0 40px
 	.breadcrumb-container
-		flex 1
+		display inline-block
 	.right-menu
-		flex 0 0 350px
+		float right
+		width 200px
 		height 100%
 		&:focus
 		 outline none

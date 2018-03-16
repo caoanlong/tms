@@ -31,15 +31,5 @@
 	}
 </script>
 <style lang="stylus" scoped>
-	.app-wrapper
-		position relative
-		height 100%
-		.right-container
-			position relative
-			padding-top 80px
-			.top-bar
-				position fixed
-				top 0
-				width 100%
-				z-index 99
+	
 </style>
