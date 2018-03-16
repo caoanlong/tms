@@ -51,6 +51,14 @@ let routerMap = [
 							title: '承运单详情'
 						},
 						component: () => import ('../components/Carrierbill/Viewcarrierbill')
+					},
+					{
+						path: '/editcarrierbill',
+						name: 'editcarrierbill',
+						meta: {
+							title: '编辑承运单'
+						},
+						component: () => import ('../components/Carrierbill/Editcarrierbill')
 					}
 				]
 			},

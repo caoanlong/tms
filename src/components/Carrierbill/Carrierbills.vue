@@ -86,10 +86,11 @@
 					</el-table-column>
 					<el-table-column label="发货地" prop="Dispatch">
 					</el-table-column>
-					<el-table-column label="操作" width="160" align="center" fixed="right">
+					<el-table-column label="操作" width="225" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-button type="default" size="mini" icon="el-icon-view" @click="ViewCarrierbill(scope.row.CarrierNum)">查看</el-button>
-							<el-button type="default" size="mini" icon="el-icon-delete" @click="ViewCarrierbill(scope.row.CarrierNum)">删除</el-button>
+							<el-button type="default" size="mini" icon="el-icon-edit" @click="EditCarrierbill(scope.row.CarrierNum)">编辑</el-button>
+							<el-button type="default" size="mini" icon="el-icon-delete" >删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -359,6 +360,9 @@ export default {
 		},
 		ViewCarrierbill(CarrierNum) {
 			this.$router.push({ name: 'viewcarrierbill' , query: { CarrierNum } })
+		},
+		EditCarrierbill(CarrierNum) {
+			this.$router.push({ name: 'editcarrierbill' , query: { CarrierNum } })
 		},
 		refresh() {
 			this.refreshing = true
