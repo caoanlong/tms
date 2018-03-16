@@ -129,17 +129,23 @@
 					<span class="tit">货物信息</span>
 				</div>
 			</el-row>
-			<el-row>
-				<el-col :span="24">
-					<el-form label-width="120px">
-						<el-form-item label="货物信息">
-							<div class="cargoItem" v-for="(item,index) in cargoInfo">
-								<p>{{item.type}}</p>
-							</div>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
+			<div class="table">
+				<el-table :data="tableData" border style="width: 100%" size="mini">
+					<el-table-column type="index" label="货物序号" width="80" align="center"></el-table-column>
+					<el-table-column label="承运单编号" prop="CarrierNum"  width="110" align="center">
+					</el-table-column>
+					<el-table-column label="货物规格" prop="CargoName">
+					</el-table-column>
+					<el-table-column label="货物名称" prop="CargoName">
+					</el-table-column>
+					<el-table-column label="配载量" prop="CargoTotal" align="center">
+					</el-table-column>
+					<el-table-column label="运载量" prop=""  width="100" align="center">
+					</el-table-column>
+					<el-table-column label="签收量" prop=""  width="100" align="center">
+					</el-table-column>
+				</el-table>
+			</div>
 			<el-row>
 				<div class="split-item">
 					<span class="num">4</span>
@@ -201,7 +207,7 @@
 				<el-col :span="24">
 					<el-form label-width="0">
 						<el-form-item align="center">
-							<el-button type="primary">修改</el-button>
+							<el-button type="primary" @click="EditCarrierbill">修改</el-button>
 							<el-button type="success" @click="AddDispatchBill">调度</el-button>
 							<el-button type="danger">删除</el-button>
 							<el-button @click="back">返回</el-button>
@@ -299,6 +305,9 @@ export default {
 		AddDispatchBill() {
 			this.$router.push({ name: 'adddispatchbill', query: { CarrierNum: this.$route.query.CarrierNum } })
 		},
+		EditCarrierbill() {
+			this.$router.push({ name: 'editcarrierbill', query: { CarrierNum: this.$route.query.CarrierNum } })
+		},
 		addItem() {
 			this.cargoInfo.push({
 				'type': '',
@@ -360,5 +369,6 @@ export default {
 		font-size 12px
 		span
 			margin-right 10px
-
+.table
+	margin-bottom 20px
 </style>
