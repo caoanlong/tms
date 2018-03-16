@@ -35,7 +35,9 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="家庭地址">
-							<p>{{person.familyAddress}}</p>
+							<el-tooltip class="item" effect="dark" :content="person.familyAddress" placement="top">
+								<p>{{person.familyAddress}}</p>
+							</el-tooltip>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
