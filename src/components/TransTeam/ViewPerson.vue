@@ -79,17 +79,12 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="准驾车型">
-                            <p>{{person.quasiDrivingModel}}</p>
+                            <p>{{person.quasiDrivingModel.join(',')}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="合同有效期起">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="person.contractValidFrom"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{person.contractValidFrom}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -394,4 +389,7 @@ export default {
 		line-height 40px
 		color #999
 		font-size 12px
+        // overflow hidden
+        // white-space nowrap
+        // text-overflow ellipsis
 </style>
