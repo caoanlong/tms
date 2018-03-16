@@ -2,139 +2,84 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">
-				<span>编辑人员</span>
+				<span>查看人员</span>
 			</div>
-            <el-form label-width="155px" size="mini">
+            <el-form label-width="155px">
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="创建人">
-                            <el-input v-model="person.creater"></el-input>
+                            <p>{{person.creater}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="状态">
-                            <el-select style="width: 100%" v-model="person.status" placeholder="请选择">
-                                <el-option label="通过" value="通过"></el-option>
-                                <el-option label="未通过" value="未通过"></el-option>
-                                <el-option label="其他" value="其他"></el-option>
-                            </el-select>
+                            <p>{{person.status}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="审核人">
-                            <el-input v-model="person.auditor"></el-input>
+                            <p>{{person.auditor}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="审核日期">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="person.auditorDate"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{person.auditorDate}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="姓名">
-                            <el-input v-model="person.name"></el-input>
+                            <p>{{person.name}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="家庭地址">
-                            <el-input v-model="person.familyAddress"></el-input>
+                            <p>{{person.familyAddress}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="联系电话">
-                            <el-input v-model="person.mobile"></el-input>
+                            <p>{{person.mobile}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="性别">
-                            <el-select style="width: 100%" v-model="person.sex" placeholder="请选择">
-                                <el-option label="男" value="男"></el-option>
-                                <el-option label="女" value="女"></el-option>
-                            </el-select>
+                            <p>{{person.sex}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="初次发证时间">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="person.initCerDate"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{person.initCerDate}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="诚信考核等级">
-                            <el-select style="width: 100%" v-model="person.integrityLevel" placeholder="请选择">
-                                <el-option label="A" value="A"></el-option>
-                                <el-option label="AA" value="AA"></el-option>
-                                <el-option label="AAA" value="AAA"></el-option>
-                                <el-option label="AAAA" value="AAAA"></el-option>
-                                <el-option label="AAAAA" value="AAAAA"></el-option>
-                            </el-select>
+                            <p>{{person.integrityLevel}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="聘用岗位">
-                            <el-select style="width: 100%" v-model="person.post" placeholder="请选择">
-                                <el-option label="操作员" value="操作员"></el-option>
-                                <el-option label="操作员、驾驶员" value="操作员、驾驶员"></el-option>
-                                <el-option label="操作员、押运员" value="操作员、押运员"></el-option>
-                                <el-option label="驾驶员" value="驾驶员"></el-option>
-                                <el-option label="其他人员" value="其他人员"></el-option>
-                                <el-option label="押运员" value="押运员"></el-option>
-                                <el-option label="押运员、驾驶员" value="押运员、驾驶员"></el-option>
-                                <el-option label="专职安全员、操作员" value="专职安全员、操作员"></el-option>
-                                <el-option label="装卸管理人员" value="装卸管理人员"></el-option>
-                            </el-select>
+                            <p>{{person.post}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="诚信考核有效期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="person.integrityValidTo"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{person.integrityValidTo}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="身份证号">
-                            <el-input v-model="person.cardId"></el-input>
+                            <p>{{person.cardId}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="准驾车型">
-                            <el-select style="width: 100%" multiple v-model="person.quasiDrivingModel" placeholder="请选择">
-                                <el-option label="A1" value="A1"></el-option>
-                                <el-option label="A2" value="A2"></el-option>
-                                <el-option label="A3" value="A3"></el-option>
-                                <el-option label="B1" value="B1"></el-option>
-                                <el-option label="B2" value="B2"></el-option>
-                                <el-option label="C1" value="C1"></el-option>
-                                <el-option label="C2" value="C2"></el-option>
-                                <el-option label="C3" value="C3"></el-option>
-                                <el-option label="C4" value="C4"></el-option>
-                                <el-option label="C5" value="C5"></el-option>
-                                <el-option label="D" value="D"></el-option>
-                                <el-option label="E" value="E"></el-option>
-                                <el-option label="F" value="F"></el-option>
-                                <el-option label="M" value="M"></el-option>
-                                <el-option label="N" value="N"></el-option>
-                                <el-option label="P" value="P"></el-option>
-                            </el-select>
+                            <p>{{person.quasiDrivingModel}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -222,39 +167,88 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="头像">
-                            <ImageUpload :files="[person.avatar]" @imgUrlBack="handleAvatarSuccess"/>
+                            <el-upload 
+                                class="avatar-uploader" 
+                                action="http://39.108.245.177:3001/uploadImg" 
+                                :show-file-list="false" 
+                                :on-success="handleAvatarSuccess">
+								<img v-if="person.avatar" :src="person.avatar" class="avatar">
+								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="身份证正面">
-                            <ImageUpload :files="[person.cardFront]" @imgUrlBack="handleCardFrontSuccess"/>
+                            <el-upload 
+                                class="avatar-uploader" 
+                                action="http://39.108.245.177:3001/uploadImg" 
+                                :show-file-list="false" 
+                                :on-success="handleCardFrontSuccess">
+								<img v-if="person.cardFront" :src="person.cardFront" class="avatar">
+								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="身份证反面">
-                            <ImageUpload :files="[person.cardBack]" @imgUrlBack="handleCardBackSuccess"/>
+                            <el-upload 
+                                class="avatar-uploader" 
+                                action="http://39.108.245.177:3001/uploadImg" 
+                                :show-file-list="false" 
+                                :on-success="handleCardBackSuccess">
+								<img v-if="person.cardBack" :src="person.cardBack" class="avatar">
+								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="驾驶证正面">
-                            <ImageUpload :files="[person.driverFront]" @imgUrlBack="handleDriverFrontSuccess"/>
+                            <el-upload 
+                                class="avatar-uploader" 
+                                action="http://39.108.245.177:3001/uploadImg" 
+                                :show-file-list="false" 
+                                :on-success="handleDriverFrontSuccess">
+								<img v-if="person.driverFront" :src="person.driverFront" class="avatar">
+								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="驾驶证反面">
-                            <ImageUpload :files="[person.driverBack]" @imgUrlBack="handleDriverBackSuccess"/>
+                            <el-upload 
+                                class="avatar-uploader" 
+                                action="http://39.108.245.177:3001/uploadImg" 
+                                :show-file-list="false" 
+                                :on-success="handleDriverBackSuccess">
+								<img v-if="person.driverBack" :src="person.driverBack" class="avatar">
+								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="从业资格证正">
-                            <ImageUpload :files="[person.qualifCerFront]" @imgUrlBack="handleQualifCerFrontSuccess"/>
+                            <el-upload 
+                                class="avatar-uploader" 
+                                action="http://39.108.245.177:3001/uploadImg" 
+                                :show-file-list="false" 
+                                :on-success="handleQualifCerFrontSuccess">
+								<img v-if="person.qualifCerFront" :src="person.qualifCerFront" class="avatar">
+								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="从业资格证副">
-                            <ImageUpload :files="[person.qualifCerBack]" @imgUrlBack="handleQualifCerBackSuccess"/>
+                            <el-upload 
+                                class="avatar-uploader" 
+                                action="http://39.108.245.177:3001/uploadImg" 
+                                :show-file-list="false" 
+                                :on-success="handleQualifCerBackSuccess">
+								<img v-if="person.qualifCerBack" :src="person.qualifCerBack" class="avatar">
+								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -389,4 +383,15 @@ export default {
 		height 98px
 		display block
 		vertical-align top
+.el-form-item__content
+	p
+		margin 0
+		border 1px solid #fff
+		border-bottom-color #dcdfe6
+		padding 0 15px
+		height 40px
+		font-family 'sans-serif'
+		line-height 40px
+		color #999
+		font-size 12px
 </style>

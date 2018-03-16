@@ -8,11 +8,11 @@
 			<div class="controller">
 				<div class="controllerBtn">
 					<div class="perviewBtn" @click.stop="showImgModal(file)"></div>
-					<div class="delBtn" @click.stop="delImg(i)"></div>
+					<div class="delBtn" v-show="!isPreview" @click.stop="delImg(i)"></div>
 				</div>
 			</div>
 		</div>
-		<div class="addBtn" :style="{'width':width+'px','height':height+'px'}" v-show="isLimit">
+		<div class="addBtn" :style="{'width':width+'px','height':height+'px'}" v-show="isLimit && !isPreview">
 			<div class="addIcon">
                 <i style="font-size: 30px; position: relative; top: 10px" class="el-icon-plus avatar-uploader-icon"></i>
 			</div>
@@ -39,7 +39,11 @@
             },
             files: {
                 type: Array
-            }
+			},
+			isPreview: {
+				type: Boolean,
+				default: false
+			}
 		},
 		data() {
 			return {
@@ -111,8 +115,9 @@
 					width 80px
 					height 40px
 					cursor pointer
+					display flex
 					.perviewBtn
-						float left
+						flex 1
 						width 40px
 						height 40px
 						background-image url('../../../assets/imgs/perview.png')
@@ -120,7 +125,7 @@
 						background-size 26px
 						background-position center
 					.delBtn
-						float left
+						flex 1
 						width 40px
 						height 40px
 						background-image url('../../../assets/imgs/trush.png')

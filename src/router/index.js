@@ -178,6 +178,14 @@ let routerMap = [
 						},
 						component: () => import ('../components/Settlemanage/EditSettleConfig'),
 					},
+					{
+						path: '/viewsettleconfig',
+						name: 'viewsettleconfig',
+						meta: {
+							title: '查看运费模板'
+						},
+						component: () => import ('../components/Settlemanage/ViewSettleConfig'),
+					},
 				]
 			},
 			{
@@ -214,6 +222,14 @@ let routerMap = [
 						component: () => import ('../components/TransTeam/EditTruck'),
 					},
 					{
+						path: '/viewtruck',
+						name: 'viewtruck',
+						meta: {
+							title: '查看车辆'
+						},
+						component: () => import ('../components/TransTeam/ViewTruck'),
+					},
+					{
 						path: '/person',
 						name: 'person',
 						meta: {
@@ -233,9 +249,17 @@ let routerMap = [
 						path: '/editperson',
 						name: 'editperson',
 						meta: {
-							title: '添加人员'
+							title: '编辑人员'
 						},
 						component: () => import ('../components/TransTeam/EditPerson'),
+					},
+					{
+						path: '/viewperson',
+						name: 'viewperson',
+						meta: {
+							title: '查看人员'
+						},
+						component: () => import ('../components/TransTeam/ViewPerson'),
 					},
 					{
 						path: '/transinfo',

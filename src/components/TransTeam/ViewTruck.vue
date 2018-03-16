@@ -2,32 +2,23 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">
-				<span>编辑车辆</span>
+				<span>查看车辆</span>
 			</div>
-            <el-form label-width="155px" size="mini">
+            <el-form label-width="155px">
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="状态">
-                            <el-select style="width: 100%" v-model="truck.status" placeholder="请选择">
-                                <el-option label="通过" value="通过"></el-option>
-                                <el-option label="未通过" value="未通过"></el-option>
-                                <el-option label="其他" value="其他"></el-option>
-                            </el-select>
+                            <p>{{truck.status}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="审核人">
-                            <el-input v-model="truck.auditor"></el-input>
+                            <p>{{truck.auditor}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="审核日期">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.auditorDate"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.auditorDate}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -35,6 +26,7 @@
                     <el-col :span="6">
                         <el-form-item label="所属地区">
                             <el-cascader
+                                disabled
 								style="width: 100%"
 								:options="distData"
 								v-model="truck.area">
@@ -43,437 +35,320 @@
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="所属企业">
-                            <el-input v-model="truck.company"></el-input>
+                            <p>{{truck.company}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="自编号">
-                            <el-input v-model="truck.selfNum"></el-input>
+                            <p>{{truck.selfNum}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="车辆类别">
-                            <el-select style="width: 100%" v-model="truck.plateType" placeholder="请选择">
-                                <el-option label="挂车" value="挂车"></el-option>
-                                <el-option label="牵引车" value="牵引车"></el-option>
-                            </el-select>
+                            <p>{{truck.plateType}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车辆类型">
-                            <el-select style="width: 100%" v-model="truck.plateClass" placeholder="请选择">
-                                <el-option label="集装箱挂车" value="集装箱挂车"></el-option>
-                                <el-option label="厢式货车" value="厢式货车"></el-option>
-                                <el-option label="重型半挂牵引车" value="重型半挂牵引车"></el-option>
-                                <el-option label="重型厢式货车" value="重型厢式货车"></el-option>
-                                <el-option label="重型集装箱半挂车" value="重型集装箱半挂车"></el-option>
-                            </el-select>
+                            <p>{{truck.plateClass}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车牌颜色">
-                            <el-select style="width: 100%" v-model="truck.plateColor" placeholder="请选择">
-                                <el-option label="黄" value="黄"></el-option>
-                                <el-option label="蓝" value="蓝"></el-option>
-                            </el-select>
+                            <p>{{truck.plateColor}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车牌号">
-                            <el-input v-model="truck.plateNum"></el-input>
+                            <p>{{truck.plateNum}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="挂车车牌">
-                            <el-input v-model="truck.trailerPlate"></el-input>
+                            <p>{{truck.trailerPlate}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车长">
-                            <el-select style="width: 100%" v-model="truck.truckLength" placeholder="请选择">
-                                <el-option label="5米" value="5"></el-option>
-                                <el-option label="8米" value="8"></el-option>
-                                <el-option label="10米" value="10"></el-option>
-                                <el-option label="12米" value="12"></el-option>
-                                <el-option label="15米" value="15"></el-option>
-                            </el-select>
+                            <p>{{truck.truckLength + '米'}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车宽">
-                            <el-select style="width: 100%" v-model="truck.truckWidth" placeholder="请选择">
-                                <el-option label="2米" value="2"></el-option>
-                                <el-option label="3米" value="3"></el-option>
-                                <el-option label="4米" value="4"></el-option>
-                            </el-select>
+                            <p>{{truck.truckWidth + '米'}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车高">
-                            <el-select style="width: 100%" v-model="truck.truckHeight" placeholder="请选择">
-                                <el-option label="2米" value="2"></el-option>
-                                <el-option label="3米" value="3"></el-option>
-                                <el-option label="4米" value="4"></el-option>
-                            </el-select>
+                            <p>{{truck.truckHeight + '米'}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="载重">
-                            <el-input v-model="truck.load"></el-input>
+                            <p>{{truck.load}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="装载方数">
-                            <el-input v-model="truck.loadVolumn"></el-input>
+                            <p>{{truck.loadVolumn}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="牵引质量">
-                            <el-input v-model="truck.towMass"></el-input>
+                            <p>{{truck.towMass}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="罐体类型">
-                            <el-select style="width: 100%" v-model="truck.tankType" placeholder="请选择">
-                                <el-option label="椭圆形" value="椭圆形"></el-option>
-                                <el-option label="方圆形" value="方圆形"></el-option>
-                                <el-option label="圆形" value="圆形"></el-option>
-                            </el-select>
+                            <p>{{truck.tankType}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="罐体容积">
-                            <el-input v-model="truck.tankVolume"></el-input>
+                            <p>{{truck.tankVolume}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="罐体检测有效期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.tankTestValidTo"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.tankTestValidTo}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="安全阀检测有效期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.safetyTestValidTo"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.safetyTestValidTo}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="压力表检测有效期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.pressureTestValidTo"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.pressureTestValidTo}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="汽车生产厂家">
-                            <el-input v-model="truck.truckManufacturer"></el-input>
+                            <p>{{truck.truckManufacturer}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="品牌型号">
-                            <el-input v-model="truck.brandModel"></el-input>
+                            <p>{{truck.brandModel}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="发动机号">
-                            <el-input v-model="truck.engineNum"></el-input>
+                            <p>{{truck.engineNum}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车架号">
-                            <el-input v-model="truck.frameNum"></el-input>
+                            <p>{{truck.frameNum}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="核载人数">
-                            <el-select style="width: 100%" v-model="truck.loadPersonNum" placeholder="请选择">
-                                <el-option 
-                                v-for="i in 9" :key="i" 
-                                :label="i+1" :value="i+1"></el-option>
-                            </el-select>
+                            <p>{{truck.loadPersonNum}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车身颜色">
-                            <el-input v-model="truck.truckColor"></el-input>
+                            <p>{{truck.truckColor}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="是否喷涂警示标志">
-                            <el-select style="width: 100%" v-model="truck.isWarnLogo" placeholder="请选择">
-                                <el-option label="是" value="是"></el-option>
-                                <el-option label="否" value="否"></el-option>
-                            </el-select>
+                            <p>{{truck.isWarnLogo}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="行驶证注册日期">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.driverLicRgDate"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.driverLicRgDate}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="行驶证发证日期">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.driverLicAwDate"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.driverLicAwDate}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="行驶证审验效期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.driverLicTo"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.driverLicTo}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="道路运输证号">
-                            <el-input v-model="truck.roadTransNum"></el-input>
+                            <p>{{truck.roadTransNum}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="经营范围">
-                            <el-input v-model="truck.businessScope"></el-input>
+                            <p>{{truck.businessScope}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="道路运输证年审期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.roadTransYearTo"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.roadTransYearTo}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="所有人或单位">
-                            <el-input v-model="truck.owner"></el-input>
+                            <p>{{truck.owner}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="所有人联系电话">
-                            <el-input v-model="truck.ownerMobile"></el-input>
+                            <p>{{truck.ownerMobile}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="所有人登记地址">
-                            <el-input v-model="truck.ownerAddress"></el-input>
+                            <p>{{truck.ownerAddress}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="实际车主姓名">
-                            <el-input v-model="truck.truckOwnerName"></el-input>
+                            <p>{{truck.truckOwnerName}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="实际车主电话">
-                            <el-input v-model="truck.truckOwnerMobile"></el-input>
+                            <p>{{truck.truckOwnerMobile}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="实际车主现住址">
-                            <el-input v-model="truck.truckOwnerAddress"></el-input>
+                            <p>{{truck.truckOwnerAddress}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="所有权">
-                            <el-select style="width: 100%" v-model="truck.ownership" placeholder="请选择">
-                                <el-option label="单位" value="单位"></el-option>
-                                <el-option label="个人" value="个人"></el-option>
-                                <el-option label="挂靠" value="挂靠"></el-option>
-                            </el-select>
+                            <p>{{truck.ownership}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="经营证号">
-                            <el-input v-model="truck.businessLicNum"></el-input>
+                            <p>{{truck.businessLicNum}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="等级评定">
-                            <el-select style="width: 100%" v-model="truck.levelEval" placeholder="请选择">
-                                <el-option label="一级" value="一级"></el-option>
-                                <el-option label="二级" value="二级"></el-option>
-                                <el-option label="三级" value="三级"></el-option>
-                                <el-option label="未评定" value="未评定"></el-option>
-                            </el-select>
+                            <p>{{truck.levelEval}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="下次等评日期">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.nextLevelEvalDate"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.nextLevelEvalDate}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="二级维护日期">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.secondMaintainDate"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.secondMaintainDate}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="下次二级维护日期">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.nextSecondMaintainDate"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.nextSecondMaintainDate}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="承运人责任险有效期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.carrierValid"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.carrierValid}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="交强险有效期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.strongInsValid"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.strongInsValid}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="商业险有效期至">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.commercialInsValid"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.commercialInsValid}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="GPS类型">
-                            <el-input v-model="truck.gpsType"></el-input>
+                            <p>{{truck.gpsType}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="GPS入网号">
-                            <el-input v-model="truck.gpsNetNum"></el-input>
+                            <p>{{truck.gpsNetNum}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="GPS卡号">
-                            <el-input v-model="truck.gpsCardNum"></el-input>
+                            <p>{{truck.gpsCardNum}}</p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="GPS序列号">
-                            <el-input v-model="truck.gpsSerialNum"></el-input>
+                            <p>{{truck.gpsSerialNum}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="GPS安装时间">
-                            <el-date-picker
-                                style="width: 100%" 
-                                v-model="truck.gpsInstallTime"
-                                type="date"
-                                placeholder="选择日期">
-                            </el-date-picker>
+                            <p>{{truck.gpsInstallTime}}</p>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="车辆照片">
-                            <ImageUpload :files="[truck.truckPhoto]" @imgUrlBack="handleTruckPhotoSuccess"/>
+                            <ImageUpload :files="[truck.truckPhoto]" :isPreview="true"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="机动车行驶证">
-                            <ImageUpload :files="[truck.driverLicImg]" @imgUrlBack="handleDriverLicSuccess"/>
+                            <ImageUpload :files="[truck.driverLicImg]" :isPreview="true"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="道路运输许可证">
-                            <ImageUpload :files="[truck.roadTransImg]" @imgUrlBack="handleRoadTransSuccess"/>
+                            <ImageUpload :files="[truck.roadTransImg]" :isPreview="true"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他照片">
-                            <ImageUpload :files="truck.otherImgs" :limitNum="9" @imgUrlBack="imgUrlBack"/>
+                            <ImageUpload :files="truck.otherImgs" :isPreview="true" :limitNum="9" @imgUrlBack="imgUrlBack"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item>
-							<el-button type="primary" @click="add">立即保存</el-button>
-							<el-button @click="back">取消</el-button>
+							<el-button @click="back">返回</el-button>
 						</el-form-item>
                     </el-col>
                 </el-row>
@@ -608,4 +483,15 @@ export default {
 		height 98px
 		display block
 		vertical-align top
+.el-form-item__content
+	p
+		margin 0
+		border 1px solid #fff
+		border-bottom-color #dcdfe6
+		padding 0 15px
+		height 40px
+		font-family 'sans-serif'
+		line-height 40px
+		color #999
+		font-size 12px
 </style>

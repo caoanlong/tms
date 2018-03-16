@@ -87,7 +87,8 @@
                     <el-table-column label="添加时间" prop="createTime" width="140"></el-table-column>
 					<el-table-column label="操作" fixed="right" align="center" width="230">
 						<template slot-scope="scope">
-                            <el-button size="mini" icon="el-icon-edit" @click="edit">编辑查看</el-button>
+                            <el-button size="mini" icon="el-icon-view" @click="view">查看</el-button>
+                            <el-button size="mini" icon="el-icon-edit" @click="edit">编辑</el-button>
                             <el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.$index)">删除</el-button>
 						</template>
 					</el-table-column>
@@ -230,6 +231,9 @@
             },
             add() {
                 this.$router.push({name: 'addperson'})
+            },
+            view() {
+                this.$router.push({name: 'viewperson'})
             },
             edit() {
                 this.$router.push({name: 'editperson'})
