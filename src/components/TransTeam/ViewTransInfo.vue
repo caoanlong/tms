@@ -128,71 +128,172 @@
                     </el-row>
                 </el-tab-pane>
                 <el-tab-pane label="运输单位备案" name="second">
-                    <div id="transUnitList">
-                        <h3 class="text-center">危险物品运输单位备案（危险物品运输车辆基本信息表）</h3>
-                        <table class="common-table" style="font-size: 12px; width: 700px; margin: 0 auto">
-                            <tr>
-                                <td colspan="5">
-                                    <el-row style="font-weight: bold">
-                                        <el-col :span="10">车辆所有人：云南安化中达物流有限责任公司</el-col>
-                                        <el-col :span="7">公司经营证号：530181000690</el-col>
-                                        <el-col :span="6">建档日期：2016年5月25日</el-col>
-                                    </el-row>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="80">车牌号码</td>
-                                <td>云AF8532</td>
-                                <td width="80">核载质量</td>
-                                <td>9900kg</td>
-                                <td rowspan="6" colspan="2">
-                                    <img width="240" height="180" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
-                                    <!-- <ImageUpload :width="200" :height="160"/> -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>品牌型号</td>
-                                <td>程力威牌CLW516XQYD4</td>
-                                <td>总质量</td>
-                                <td>16000kg</td>
-                            </tr>
-                            <tr>
-                                <td>车架号</td>
-                                <td>LGAX2A131F1014903</td>
-                                <td>发动机号</td>
-                                <td>78206803</td>
-                            </tr>
-                            <tr>
-                                <td>注册日期</td>
-                                <td>2015年7月30日</td>
-                                <td>车辆类型</td>
-                                <td>重型厢式货车</td>
-                            </tr>
-                            <tr>
-                                <td>使用性质</td>
-                                <td>危化品运输</td>
-                                <td>经营类别</td>
-                                <td>危货运输（1类1项）</td>
-                            </tr>
-                            <tr>
-                                <td>道路运输证号</td>
-                                <td>安宁字530181014786</td>
-                                <td>有效期限</td>
-                                <td>2016年7月</td>
-                            </tr>
-                            <tr>
-                                <td colspan="5">
-                                    <el-row>
-                                        <el-col :span="12">
+                    <div id="transUnitList" style="min-width: 1360px">
+                        <el-row>
+                            <el-col>
+                                <h3 class="text-center">危险物品运输单位备案（危险物品运输车辆基本信息表）</h3>
+                                <table class="common-table" style="font-size: 12px; width: 640px; margin: 0 auto">
+                                    <tr>
+                                        <td colspan="5">
+                                            <el-row style="font-weight: bold">
+                                                <el-col :span="10">车辆所有人：云南安化中达物流有限责任公司</el-col>
+                                                <el-col :span="7">公司经营证号：530181000690</el-col>
+                                                <el-col :span="6">建档日期：2016年5月25日</el-col>
+                                            </el-row>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="80">车牌号码</td>
+                                        <td>云AF8532</td>
+                                        <td width="80">核载质量</td>
+                                        <td width="100">9900kg</td>
+                                        <td rowspan="6" colspan="2">
                                             <img width="240" height="180" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
-                                        </el-col>
-                                        <el-col :span="12">
-                                            <img width="240" height="180" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
-                                        </el-col>
-                                    </el-row>
-                                </td>
-                            </tr>
-                        </table>
+                                            <!-- <ImageUpload :width="200" :height="160"/> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>品牌型号</td>
+                                        <td>程力威牌CLW516XQYD4</td>
+                                        <td>总质量</td>
+                                        <td>16000kg</td>
+                                    </tr>
+                                    <tr>
+                                        <td>车架号</td>
+                                        <td>LGAX2A131F1014903</td>
+                                        <td>发动机号</td>
+                                        <td>78206803</td>
+                                    </tr>
+                                    <tr>
+                                        <td>注册日期</td>
+                                        <td>2015年7月30日</td>
+                                        <td>车辆类型</td>
+                                        <td>重型厢式货车</td>
+                                    </tr>
+                                    <tr>
+                                        <td>使用性质</td>
+                                        <td>危化品运输</td>
+                                        <td>经营类别</td>
+                                        <td>危货运输（1类1项）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>道路运输证号</td>
+                                        <td>安宁字530181014786</td>
+                                        <td>有效期限</td>
+                                        <td>2016年7月</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <img width="240" height="180" src="../../assets/imgs/QQ截图20180316100511.png"/>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <img width="240" height="180" src="../../assets/imgs/QQ截图20180316100522.png"/>
+                                                </el-col>
+                                            </el-row>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <el-row>
+                                                <el-col>
+                                                    <img src="../../assets/imgs/QQ截图20180316100532.png"/>
+                                                </el-col>
+                                            </el-row>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </el-col>
+                        </el-row>
+                        <el-row style="margin-top: 20px">
+                            <el-col>
+                                <h3 class="text-center">危险物品运输单位备案（危险物品运输驾驶员基本信息表）</h3>
+                                <table class="common-table" style="font-size: 12px; width: 640px; margin: 0 auto">
+                                    <tr>
+                                        <td colspan="7">
+                                            <el-row style="font-weight: bold">
+                                                <el-col :span="10">单位：云南安化中达物流有限责任公司</el-col>
+                                                <el-col :span="7">公司经营证号：530181000690</el-col>
+                                                <el-col :span="6">建档日期：2016年5月25日</el-col>
+                                            </el-row>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="100">姓名</td>
+                                        <td>张军</td>
+                                        <td width="80">性别</td>
+                                        <td>男</td>
+                                        <td>联系电话</td>
+                                        <td>13888129549</td>
+                                        <td>照片</td>
+                                    </tr>
+                                    <tr>
+                                        <td>身份证号</td>
+                                        <td colspan="3">530113197108260019</td>
+                                        <td>准驾车型</td>
+                                        <td>A1A2E</td>
+                                        <td rowspan="5">
+                                            <img width="120" height="150" src="../../assets/imgs/00.png"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>从业资格证号</td>
+                                        <td colspan="3">530113197108260019</td>
+                                        <td>资格证编号</td>
+                                        <td>NO.5300313469</td>
+                                    </tr>
+                                    <tr>
+                                        <td>从业资格类别</td>
+                                        <td colspan="5">道路危险物品运输驾驶员；道路危险物品运输押运人员；经营性道路货物运输驾驶员</td>
+                                    </tr>
+                                    <tr>
+                                        <td>从业资格证有效期至</td>
+                                        <td colspan="5">2021-06-03</td>
+                                    </tr>
+                                    <tr>
+                                        <td>居住地</td>
+                                        <td colspan="5">昆明市东川区新村路47号一栋一单元402室</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7">
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <img width="240" height="180" src="../../assets/imgs/01.png"/>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <img width="240" height="180" src="../../assets/imgs/02.png"/>
+                                                </el-col>
+                                            </el-row>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7">
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <img width="240" height="180" src="../../assets/imgs/03.png"/>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <img width="240" height="180" src="../../assets/imgs/04.png"/>
+                                                </el-col>
+                                            </el-row>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7">
+                                            <el-row>
+                                                <el-col :span="12">
+                                                    <img width="240" height="180" src="../../assets/imgs/05.png"/>
+                                                </el-col>
+                                                <el-col :span="12">
+                                                    <img width="240" height="180" src="../../assets/imgs/06.png"/>
+                                                </el-col>
+                                            </el-row>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </el-col>
+                        </el-row>
                     </div>
                 </el-tab-pane>
             </el-tabs>
