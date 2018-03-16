@@ -16,14 +16,14 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="托运人">
-							<p>{{carrierbillInfo.Consignor}}</p>
+							<el-input placeholder="托运人" v-model="carrierbillInfo.Consignor"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="承运人">
-							<p>{{carrierbillInfo.Carrier}}</p>
+							<el-input placeholder="承运人" v-model="carrierbillInfo.Carrier"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -38,41 +38,42 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="发货单位">
-							<p>{{carrierbillInfo.ConsignerCompany}}</p>
+							<el-input placeholder="发货单位" v-model="carrierbillInfo.ConsignerCompany"></el-input>
 						</el-form-item>
 						<el-form-item label="发货人">
-							<p>{{carrierbillInfo.Consigner}}</p>
+							<el-input placeholder="发货人" v-model="carrierbillInfo.Consigner"></el-input>
 						</el-form-item>
 						<el-form-item label="发货时间">
-							<p>{{carrierbillInfo.DeliveryDate}}</p>
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierbillInfo.DeliveryDate"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="委托时间">
-							<p>{{carrierbillInfo.CommissionDate}}</p>
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择委托时间" v-model="carrierbillInfo.CommissionDate"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="发货单号">
-							<p>{{carrierbillInfo.ConsignNum}}</p>
+							<el-input placeholder="发货单号" v-model="carrierbillInfo.ConsignNum"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="6">
 					<el-form label-width="120px">
 						<el-form-item label="发货地">
-							<p></p>
+							<el-cascader style="width: 100%" :options="distData" v-model="selectedAreas">
+							</el-cascader>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="10">
 					<el-form label-width="20px">
 						<el-form-item>
-							<p>{{carrierbillInfo.Dispatch}}</p>
+							<el-input placeholder="发货详细地址" v-model="carrierbillInfo.Dispatch"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -81,21 +82,21 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="收货单位">
-							<p>{{carrierbillInfo.Consigner}}</p>
+							<el-input placeholder="收货单位" v-model="carrierbillInfo.Consigner"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="收货人">
-							<p>{{carrierbillInfo.Consignee}}</p>
+							<el-input placeholder="收货人" v-model="carrierbillInfo.Consignee"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="到货时间">
-							<p>{{carrierbillInfo.ArrivalDate}}</p>
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择到货时间" v-model="carrierbillInfo.ArrivalDate"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -104,21 +105,24 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="运输方式">
-							<p>{{carrierbillInfo.transType}}</p>
+							<el-select v-model="transType" placeholder="请选择" style="width:100%">
+								<el-option v-for="op in transTypeOption" :key="op.value" :label="op.label" :value="op.value"></el-option>
+							</el-select>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="6">
 					<el-form label-width="120px">
 						<el-form-item label="卸货地">
-							<p></p>
+							<el-cascader style="width: 100%" :options="distData" v-model="selectedAreas">
+							</el-cascader>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="10">
 					<el-form label-width="20px">
 						<el-form-item>
-							<p>{{carrierbillInfo.Discharge}}</p>
+							<el-input placeholder="卸货详细地址" v-model="carrierbillInfo.Discharge"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -134,7 +138,17 @@
 					<el-form label-width="120px">
 						<el-form-item label="货物信息">
 							<div class="cargoItem" v-for="(item,index) in cargoInfo">
-								<p>{{item.type}}</p>
+								<el-select v-model="item.type" placeholder="请选择" style="width:100px">
+									<el-option label="重货" value="重货"></el-option>
+									<el-option label="轻货" value="轻货"></el-option>
+								</el-select>
+								<el-input placeholder="货物名称" style="width:150px"></el-input>
+								<el-input placeholder="货物规格" style="width:150px"></el-input>
+								<el-input placeholder="货物数量" style="width:150px"><span slot="suffix">吨</span></el-input>
+								<el-input placeholder="货物数量" style="width:150px"><span slot="suffix">方</span></el-input>
+								<el-input placeholder="货物数量" style="width:150px"><span slot="suffix">件</span></el-input>
+								<el-button type="text" icon="el-icon-plus" @click="addItem">添加</el-button>
+								<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="cargoInfo.length>1">删除</el-button>
 							</div>
 						</el-form-item>
 					</el-form>
@@ -150,49 +164,48 @@
 				<el-col :span="24">
 					<el-form label-width="120px">
 						<el-form-item label="承运单应收款">
+							<el-radio-group v-model="carrierbillInfo.Receivable">
+								<el-radio label="Y">按吨公里自动生成</el-radio>
+								<el-radio label="N">手动输入</el-radio>
+							</el-radio-group>
+							<div v-show="carrierbillInfo.Receivable=='Y'" class="tips">从“这个单的发货地”到卸货地对外运距为“50公里”总价为90909009？</div>
 							<div class="form-input">
-								<el-form-item label-width="40px" label="现付" style="width:180px;display:inline-block;vertical-align:top">
-									<p>11</p>
+								<el-form-item label="现付" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
+									<el-input placeholder="现付"></el-input>
 								</el-form-item>
-								<el-form-item label-width="40px" label="到付" style="width:180px;display:inline-block;vertical-align:top">
-									<p></p>
+								<el-form-item label="到付" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
+									<el-input placeholder="到付"></el-input>
 								</el-form-item>
-								<el-form-item label-width="60px" label="回单结" style="width:180px;display:inline-block;vertical-align:top">
-									<p></p>
+								<el-form-item label="回单结" label-width="60px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
+									<el-input placeholder="回单结"></el-input>
 								</el-form-item>
-								<el-form-item label-width="40px" label="月结" style="width:180px;display:inline-block;vertical-align:top">
-									<p></p>
+								<el-form-item label="月结" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
+									<el-input placeholder="月结"></el-input>
 								</el-form-item>
-								<el-form-item label-width="70px" label="收货方付" style="width:180px;display:inline-block;vertical-align:top">
-									<p></p>
+								<el-form-item label="收货方付" label-width="70px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
+									<el-input placeholder="收货方付"></el-input>
 								</el-form-item>
 							</div>
 						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
 						<el-form-item label="付款费用">
-							<p></p>
+							<el-radio-group v-model="carrierbillInfo.payable">
+								<el-radio label="Y">按吨公里自动生成</el-radio>
+								<el-radio label="N">手动输入</el-radio>
+							</el-radio-group>
+							<div v-show="carrierbillInfo.payable=='Y'" class="tips">从“这单的发货地”到卸货地对内运距为“50公里”?</div>
 						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
 						<el-form-item label="发票">
-							<p>{{carrierbillInfo.invoice=='Y'?'开发票':'不开发票'}}</p>
+							<el-radio-group v-model="carrierbillInfo.invoice">
+								<el-radio label="Y">开发票</el-radio>
+								<el-radio label="N">不开发票</el-radio>
+							</el-radio-group>
 						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
 						<el-form-item label="回单要求">
-							<p><span v-for="item in carrierbillInfo.receipt">
-								<span v-if="item==1">货物托运单</span>
-								<span v-else-if="item==2">发货单文件</span>
-								<span v-else>不需要回单</span>
-								</span>
-							</p>
+							<el-checkbox-group v-model="carrierbillInfo.receipt">
+								<el-checkbox label="1">货物托运单</el-checkbox>
+								<el-checkbox label="2">发货单文件</el-checkbox>
+								<el-checkbox label="3">不需要回单</el-checkbox>
+							</el-checkbox-group>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -201,7 +214,7 @@
 				<el-col :span="24">
 					<el-form label-width="0">
 						<el-form-item align="center">
-							<el-button type="primary">修改</el-button>
+							<el-button type="primary">保存</el-button>
 							<el-button type="success" @click="AddDispatchBill">调度</el-button>
 							<el-button type="danger">删除</el-button>
 							<el-button @click="back">返回</el-button>
@@ -241,8 +254,7 @@ export default {
 				invoice: 'Y',
 				receipt: ['1', '2'],
 				Receivable: 'N',
-				payable: 'N',
-				transType: '公路运输'
+				payable: 'N'
 			},
 			cargoInfo: [{
 				'type': '',
@@ -252,42 +264,43 @@ export default {
 				'volumn': '',
 				'num': ''
 			}],
-			transType: '',
-			transTypeOption: [{
-					label: '海上运输',
-					value: '海上运输'
+			transType:'',
+			transTypeOption:[
+				{
+					label:'海上运输',
+					value:'海上运输'
 				},
 				{
-					label: '铁路运输',
-					value: '铁路运输'
+					label:'铁路运输',
+					value:'铁路运输'
 				},
 				{
-					label: '公路运输',
-					value: '公路运输'
+					label:'公路运输',
+					value:'公路运输'
 				},
 				{
-					label: '航空运输',
-					value: '航空运输'
+					label:'航空运输',
+					value:'航空运输'
 				},
 				{
-					label: '邮件运输',
-					value: '邮件运输'
+					label:'邮件运输',
+					value:'邮件运输'
 				},
 				{
-					label: '多式联运',
-					value: '多式联运'
+					label:'多式联运',
+					value:'多式联运'
 				},
 				{
-					label: '固定设施运输',
-					value: '固定设施运输'
+					label:'固定设施运输',
+					value:'固定设施运输'
 				},
 				{
-					label: '内河运输',
-					value: '内河运输'
+					label:'内河运输',
+					value:'内河运输'
 				},
 				{
-					label: '其他',
-					value: '其他'
+					label:'其他',
+					value:'其他'
 				}
 			]
 		}
@@ -310,7 +323,7 @@ export default {
 			})
 		},
 		removeItem(index) {
-			this.cargoInfo.splice(index, 1)
+			this.cargoInfo.splice(index,1)
 		},
 		back() {
 			this.$router.go(-1)
@@ -347,18 +360,11 @@ export default {
 				background #909399
 .tips
 	color #909399
-.el-form-item__content
-	p
-		margin 0
-		border 1px solid #fff
-		border-bottom-color #dcdfe6
-		padding 0 15px
-		height 40px
-		font-family 'sans-serif'
-		line-height 40px
-		color #999
-		font-size 12px
-		span
-			margin-right 10px
-
+.cargoItem
+	padding-bottom 10px
+	margin-bottom 10px
+	border-bottom 1px solid #ebeef5
+	.el-select
+	.el-input
+		margin 0 10px 10px 0
 </style>
