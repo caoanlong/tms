@@ -91,176 +91,106 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="合同有效期至">
-							<el-date-picker
-								style="width: 100%" 
-								v-model="person.contractValidTo"
-								type="date"
-								placeholder="选择日期">
-							</el-date-picker>
+                            <p>{{person.contractValidTo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期起">
-							<el-date-picker
-								style="width: 100%" 
-								v-model="person.driverLicFrom"
-								type="date"
-								placeholder="选择日期">
-							</el-date-picker>
+                            <p>{{person.driverLicFrom}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期至">
-							<el-date-picker
-								style="width: 100%" 
-								v-model="person.driverLicTo"
-								type="date"
-								placeholder="选择日期">
-							</el-date-picker>
+                            <p>{{person.driverLicTo}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证档案编号">
-							<el-input v-model="person.driverNum"></el-input>
+                            <p>{{person.driverNum}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="职称或技术等级">
-							<el-input v-model="person.techLevel"></el-input>
+                            <p>{{person.techLevel}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="从业资格证件号">
-							<el-input v-model="person.qualifCerNum"></el-input>
+                            <p>{{person.qualifCerNum}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格类别">
-							<el-input v-model="person.qualifCerType"></el-input>
+                            <p>{{person.qualifCerNum}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证有效期至">
-							<el-date-picker
-								style="width: 100%" 
-								v-model="person.qualifCerValidTo"
-								type="date"
-								placeholder="选择日期">
-							</el-date-picker>
+                            <p>{{person.qualifCerValidTo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="备注说明">
-							<el-input type="textarea" v-model="person.remark"></el-input>
+							<el-input disabled type="textarea" v-model="person.remark"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="头像">
-							<el-upload 
-								class="avatar-uploader" 
-								action="http://39.108.245.177:3001/uploadImg" 
-								:show-file-list="false" 
-								:on-success="handleAvatarSuccess">
-								<img v-if="person.avatar" :src="person.avatar" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.avatar]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证正面">
-							<el-upload 
-								class="avatar-uploader" 
-								action="http://39.108.245.177:3001/uploadImg" 
-								:show-file-list="false" 
-								:on-success="handleCardFrontSuccess">
-								<img v-if="person.cardFront" :src="person.cardFront" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.cardFront]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证反面">
-							<el-upload 
-								class="avatar-uploader" 
-								action="http://39.108.245.177:3001/uploadImg" 
-								:show-file-list="false" 
-								:on-success="handleCardBackSuccess">
-								<img v-if="person.cardBack" :src="person.cardBack" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.cardBack]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证正面">
-							<el-upload 
-								class="avatar-uploader" 
-								action="http://39.108.245.177:3001/uploadImg" 
-								:show-file-list="false" 
-								:on-success="handleDriverFrontSuccess">
-								<img v-if="person.driverFront" :src="person.driverFront" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.driverFront]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证反面">
-							<el-upload 
-								class="avatar-uploader" 
-								action="http://39.108.245.177:3001/uploadImg" 
-								:show-file-list="false" 
-								:on-success="handleDriverBackSuccess">
-								<img v-if="person.driverBack" :src="person.driverBack" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.driverBack]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证正">
-							<el-upload 
-								class="avatar-uploader" 
-								action="http://39.108.245.177:3001/uploadImg" 
-								:show-file-list="false" 
-								:on-success="handleQualifCerFrontSuccess">
-								<img v-if="person.qualifCerFront" :src="person.qualifCerFront" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.qualifCerFront]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证副">
-							<el-upload 
-								class="avatar-uploader" 
-								action="http://39.108.245.177:3001/uploadImg" 
-								:show-file-list="false" 
-								:on-success="handleQualifCerBackSuccess">
-								<img v-if="person.qualifCerBack" :src="person.qualifCerBack" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.qualifCerBack]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="其他照片">
-							<ImageUpload :files="person.otherImgs" :limitNum="9" @imgUrlBack="imgUrlBack"/>
+							<ImageUpload :files="person.otherImgs" :limitNum="9" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item>
-							<el-button type="primary" @click="add">立即保存</el-button>
-							<el-button @click="back">取消</el-button>
+							<el-button @click="back">返回</el-button>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -319,35 +249,6 @@ export default {
 	created() {
 	},
 	methods: {
-		handleAvatarSuccess(res, file) {
-			this.person.avatar = 'http://39.108.245.177:4000' + res.data
-		},
-		handleCardFrontSuccess(res, file) {
-			this.person.cardFront = 'http://39.108.245.177:4000' + res.data
-		},
-		handleCardBackSuccess(res, file) {
-			this.person.cardBack = 'http://39.108.245.177:4000' + res.data
-		},
-		handleDriverFrontSuccess(res, file) {
-			this.person.driverFront = 'http://39.108.245.177:4000' + res.data
-		},
-		handleDriverBackSuccess(res, file) {
-			this.person.driverBack = 'http://39.108.245.177:4000' + res.data
-		},
-		handleQualifCerFrontSuccess(res, file) {
-			this.person.qualifCerFront = 'http://39.108.245.177:4000' + res.data
-		},
-		handleQualifCerBackSuccess(res, file) {
-			this.person.qualifCerBack = 'http://39.108.245.177:4000' + res.data
-		},
-		imgUrlBack(files) {
-			console.log(files)
-			this.person.otherImgs = files
-		},
-		add() {
-			Message.success('保存成功！')
-			this.$router.push({name: 'person'})
-		},
 		back() {
 			this.$router.go(-1)
 		}

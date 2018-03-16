@@ -3,7 +3,7 @@
 		<div class="imgLi" 
         :style="{'width': width+'px','height': height+'px'}" 
         v-for="(file,i) in fileUrl"
-        :key="i">
+        :key="i" v-if="file">
 			<img :src="file">
 			<div class="controller">
 				<div class="controllerBtn">
@@ -16,13 +16,31 @@
 			<div class="addIcon">
                 <i style="font-size: 30px; position: relative; top: 10px" class="el-icon-plus avatar-uploader-icon"></i>
 			</div>
-			<input type="file" name="" @change.stop="addImg()" ref="uploadFile"/>
+			<input type="file" name="" @change.stop="addImg" ref="uploadFile"/>
 		</div>
+		<el-dialog :fullscreen="true" title="裁剪图片" :visible.sync="isShowCropper">
+			<vueCropper
+				ref="cropper"
+				:autoCrop="true"
+				:autoCropWidth="200"
+				:autoCropHeight="200" 
+				:fixed="fixed" 
+				:fixedNumber="fixedNumber" 
+				:img="localImgUrl" 
+				:outputSize="1"
+				outputType="jpeg">
+			</vueCropper>
+			<div slot="footer" class="dialog-footer">
+                <el-button @click="isShowCropper = false">取 消</el-button>
+                <el-button type="primary" @click="upload">确 定</el-button>
+            </div>
+		</el-dialog>
 	</div>
 </template>
 <script>
-    import axios from 'axios'
+	import axios from 'axios'
 	import common from '../../../common/utils'
+	import VueCropper from 'vue-cropper'
 	export default {
 		props: {
 			width: {
@@ -43,11 +61,21 @@
 			isPreview: {
 				type: Boolean,
 				default: false
+			},
+			fixed: {
+				type: Boolean,
+				default: false
+			},
+			fixedNumber: {
+				type: Array,
+				default: () => [1,1]
 			}
 		},
 		data() {
 			return {
-				fileUrl: this.files || []
+				fileUrl: this.files[0] ? this.files : [],
+				localImgUrl: '',
+				isShowCropper: false
 			}
         },
 		computed: {
@@ -61,16 +89,23 @@
 		},
 		methods: {
 			addImg() {
-				var url = "http://39.108.245.177:3001/uploadImg"
-				var headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
-				var params = common.formDataReq({
-					"file": this.$refs.uploadFile.files[0]
-				});
-				axios.post(url, params, headers).then(res => {
-                    this.fileUrl.push('http://39.108.245.177:4000' + res.data.data)
-                    this.$emit('imgUrlBack', this.fileUrl)
-                }).catch(err => {
-					console.log('服务器异常' + err)
+				this.localImgUrl = window.URL.createObjectURL(this.$refs.uploadFile.files[0])
+				this.isShowCropper = true
+			},
+			upload() {
+				this.$refs.cropper.getCropBlob((data) => {
+					var url = "http://39.108.245.177:3001/uploadImg"
+					var headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
+					var params = common.formDataReq({
+						"file": data
+					});
+					axios.post(url, params, headers).then(res => {
+						this.fileUrl.push('http://39.108.245.177:4000' + res.data.data)
+						this.$emit('imgUrlBack', this.fileUrl)
+						this.isShowCropper = false
+					}).catch(err => {
+						console.log('服务器异常' + err)
+					})
 				})
 			},
 			delImg(i) {
@@ -85,9 +120,14 @@
                 })
 			}
 		},
+		components: {
+			VueCropper
+		}
 	}
 </script>
 <style lang="stylus" scoped>
+	.vue-cropper
+		height 600px
 	.imgUpload
 		.imgLi
 			float left

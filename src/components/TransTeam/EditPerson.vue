@@ -222,7 +222,7 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="头像">
-                            <ImageUpload :files="[person.avatar]" @imgUrlBack="handleAvatarSuccess"/>
+                            <ImageUpload :files="[person.avatar]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">

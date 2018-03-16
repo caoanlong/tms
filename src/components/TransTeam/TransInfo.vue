@@ -53,7 +53,7 @@
 					<el-table-column label="建档时间" prop="buildTime"></el-table-column>
 					<el-table-column label="操作" align="center" width="230">
 						<template slot-scope="scope">
-                            <el-button size="mini" icon="el-icon-edit" @click="view">查看</el-button>
+                            <el-button size="mini" icon="el-icon-view" @click="view">查看</el-button>
                             <el-button size="mini" icon="el-icon-edit" @click="edit">编辑</el-button>
                             <el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.$index)">删除</el-button>
 						</template>

@@ -222,88 +222,39 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="头像">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleAvatarSuccess">
-								<img v-if="person.avatar" :src="person.avatar" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.avatar]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="身份证正面">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleCardFrontSuccess">
-								<img v-if="person.cardFront" :src="person.cardFront" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.cardFront]" @imgUrlBack="handleCardFrontSuccess"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="身份证反面">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleCardBackSuccess">
-								<img v-if="person.cardBack" :src="person.cardBack" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.cardBack]" @imgUrlBack="handleCardBackSuccess"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="驾驶证正面">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleDriverFrontSuccess">
-								<img v-if="person.driverFront" :src="person.driverFront" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.driverFront]" @imgUrlBack="handleDriverFrontSuccess"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="驾驶证反面">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleDriverBackSuccess">
-								<img v-if="person.driverBack" :src="person.driverBack" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.driverBack]" @imgUrlBack="handleDriverBackSuccess"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="从业资格证正">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleQualifCerFrontSuccess">
-								<img v-if="person.qualifCerFront" :src="person.qualifCerFront" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.qualifCerFront]" @imgUrlBack="handleQualifCerFrontSuccess"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="从业资格证副">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleQualifCerBackSuccess">
-								<img v-if="person.qualifCerBack" :src="person.qualifCerBack" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[person.qualifCerBack]" @imgUrlBack="handleQualifCerBackSuccess"/>
                         </el-form-item>
                     </el-col>
                 </el-row>

@@ -448,45 +448,24 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="车辆照片">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleTruckPhotoSuccess">
-								<img v-if="truck.truckPhoto" :src="truck.truckPhoto" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[truck.truckPhoto]" @imgUrlBack="handleTruckPhotoSuccess"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="机动车行驶证">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleDriverLicSuccess">
-								<img v-if="truck.driverLicImg" :src="truck.driverLicImg" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[truck.driverLicImg]" @imgUrlBack="handleDriverLicSuccess"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="道路运输许可证">
-                            <el-upload 
-                                class="avatar-uploader" 
-                                action="http://39.108.245.177:3001/uploadImg" 
-                                :show-file-list="false" 
-                                :on-success="handleRoadTransSuccess">
-								<img v-if="truck.roadTransImg" :src="truck.roadTransImg" class="avatar">
-								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
-							</el-upload>
+                            <ImageUpload :files="[truck.roadTransImg]" @imgUrlBack="handleRoadTransSuccess"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他照片">
-                            <ImageUpload :limitNum="9" @imgUrlBack="imgUrlBack"/>
+                            <ImageUpload :files="truck.otherImgs" :limitNum="9" @imgUrlBack="imgUrlBack"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -568,7 +547,8 @@ export default {
 				gpsInstallTime: '',
 				truckPhoto: '',
 				driverLicImg: '',
-				roadTransImg: ''
+                roadTransImg: '',
+                otherImgs: []
 			}
 		}
 	},
