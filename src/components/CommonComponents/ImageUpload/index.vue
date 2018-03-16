@@ -1,9 +1,9 @@
 <template>
 	<div class="imgUpload clearfix">
 		<div class="imgLi" 
-        :style="{'width': width+'px','height': height+'px'}" 
-        v-for="(file,i) in fileUrl"
-        :key="i" v-if="file">
+		:style="{'width': width+'px','height': height+'px'}" 
+		v-for="(file,i) in fileUrl"
+		:key="i" v-if="file">
 			<img :src="file">
 			<div class="controller">
 				<div class="controllerBtn">
@@ -14,7 +14,7 @@
 		</div>
 		<div class="addBtn" :style="{'width':width+'px','height':height+'px'}" v-show="isLimit && !isPreview">
 			<div class="addIcon">
-                <i style="font-size: 30px; position: relative; top: 10px" class="el-icon-plus avatar-uploader-icon"></i>
+				<i style="font-size: 30px; position: relative; top: 10px" class="el-icon-plus avatar-uploader-icon"></i>
 			</div>
 			<input type="file" name="" @change.stop="addImg" ref="uploadFile"/>
 		</div>
@@ -31,9 +31,9 @@
 				outputType="jpeg">
 			</vueCropper>
 			<div slot="footer" class="dialog-footer">
-                <el-button @click="isShowCropper = false">取 消</el-button>
-                <el-button type="primary" @click="upload">确 定</el-button>
-            </div>
+				<el-button @click="isShowCropper = false">取 消</el-button>
+				<el-button type="primary" @click="upload">确 定</el-button>
+			</div>
 		</el-dialog>
 	</div>
 </template>
@@ -54,9 +54,9 @@
 			limitNum: {
 				type: Number,
 				default: 1
-            },
-            files: {
-                type: Array
+			},
+			files: {
+				type: Array
 			},
 			isPreview: {
 				type: Boolean,
@@ -77,7 +77,7 @@
 				localImgUrl: '',
 				isShowCropper: false
 			}
-        },
+		},
 		computed: {
 			isLimit() {
 				if (this.fileUrl.length > this.limitNum - 1) {
@@ -113,11 +113,11 @@
 				this.$emit('imgUrlBack', this.fileUrl)
 			},
 			showImgModal(imgUrl) {
-                this.$alert(`<img style="width: 100%" src=${imgUrl} />`, '图片预览', {
-                    dangerouslyUseHTMLString: true,
-                    showConfirmButton: false,
-                    customClass: 'img-preview'
-                })
+				this.$alert(`<img style="width: 100%" src=${imgUrl} />`, '图片预览', {
+					dangerouslyUseHTMLString: true,
+					showConfirmButton: false,
+					customClass: 'img-preview'
+				})
 			}
 		},
 		components: {
