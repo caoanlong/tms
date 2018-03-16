@@ -1,6 +1,7 @@
 <template>
 	<div class="app-wrapper clearfix" :class="{hideSidebar: !sidebar.opened}">
 		<sidebar class="sidebar-container"></sidebar>
+		
 		<div class="main-container right-container">
 			<div class="top-bar">
 				<navbar></navbar>
@@ -31,5 +32,22 @@
 	}
 </script>
 <style lang="stylus" scoped>
-	
+	.app-wrapper
+		position relative
+		height 100%
+		margin-left 180px
+		.right-container
+			position relative
+			padding-top 80px
+	.top-bar
+		position fixed
+		top 0
+		right 0
+		z-index 99
+		left 180px
+	#app
+		.hideSidebar
+			margin-left 36px
+			.top-bar
+				left 36px				
 </style>

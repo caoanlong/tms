@@ -102,7 +102,8 @@ export default {
 			this.visible = true
 			this.selectedTag = tag
 			this.left = e.clientX
-			this.top = e.clientY
+			this.top = 85
+			console.log(e)
 		},
 		closeMenu() {
 			this.visible = false
@@ -149,7 +150,7 @@ export default {
 		margin 0
 		background #fff
 		z-index 2
-		position absolute
+		position fixed
 		list-style-type none
 		padding 5px 0
 		border-radius 4px

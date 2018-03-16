@@ -1,7 +1,10 @@
 <template>
 	<div class="menu-wrapper">
 		<template v-for="item in routes" v-if="item.IsShow == '1'">
-			<el-menu-item v-if="!item.children || item.children.length == 0" :index="item.Target" :class="{'submenu-title-noDropdown':!isNest}">
+			<el-menu-item 
+				v-if="!item.children || item.children.length == 0" 
+				:index="item.Target" 
+				:class="{'submenu-title-noDropdown':!isNest}">
 				<svg-icon v-if="item.Icon" :icon-class="item.Icon"></svg-icon>
 				<span slot="title">{{item.Name}}</span>
 			</el-menu-item>
@@ -21,6 +24,7 @@
 		</template>
 	</div>
 </template>
+
 <script>
 export default {
 	name: 'SidebarItem',
@@ -34,5 +38,5 @@ export default {
 		}
 	}
 }
-
 </script>
+
