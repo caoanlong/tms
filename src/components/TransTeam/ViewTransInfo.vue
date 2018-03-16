@@ -95,7 +95,9 @@
                             <tr>
                                 <td><p style="width: 20px">车辆照片</p></td>
                                 <td colspan="6">
-                                    <ImageUpload :width="300" :height="200"/>
+                                    <!-- <ImageUpload :width="300" :height="200"/> -->
+                                    <img width="300" height="200" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
+                                    <img width="300" height="200" src="http://img0.imgtn.bdimg.com/it/u=211127819,408382177&fm=200&gp=0.jpg"/>
                                 </td>
                             </tr>
                             <tr>
@@ -107,7 +109,7 @@
                                 <td>处理情况</td>
                             </tr>
                             <tr 
-                                v-for="(traffic, i) in trafficList" 
+                                v-for="traffic in trafficList" 
                                 :key="traffic.time">
                                 <td>{{traffic.time}}</td>
                                 <td>{{traffic.area + traffic.address}}</td>
@@ -125,7 +127,74 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane label="运输单位备案" name="second">运输单位备案</el-tab-pane>
+                <el-tab-pane label="运输单位备案" name="second">
+                    <div id="transUnitList">
+                        <h3 class="text-center">危险物品运输单位备案（危险物品运输车辆基本信息表）</h3>
+                        <table class="common-table" style="font-size: 12px; width: 700px; margin: 0 auto">
+                            <tr>
+                                <td colspan="5">
+                                    <el-row style="font-weight: bold">
+                                        <el-col :span="10">车辆所有人：云南安化中达物流有限责任公司</el-col>
+                                        <el-col :span="7">公司经营证号：530181000690</el-col>
+                                        <el-col :span="6">建档日期：2016年5月25日</el-col>
+                                    </el-row>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="80">车牌号码</td>
+                                <td>云AF8532</td>
+                                <td width="80">核载质量</td>
+                                <td>9900kg</td>
+                                <td rowspan="6" colspan="2">
+                                    <img width="240" height="180" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
+                                    <!-- <ImageUpload :width="200" :height="160"/> -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>品牌型号</td>
+                                <td>程力威牌CLW516XQYD4</td>
+                                <td>总质量</td>
+                                <td>16000kg</td>
+                            </tr>
+                            <tr>
+                                <td>车架号</td>
+                                <td>LGAX2A131F1014903</td>
+                                <td>发动机号</td>
+                                <td>78206803</td>
+                            </tr>
+                            <tr>
+                                <td>注册日期</td>
+                                <td>2015年7月30日</td>
+                                <td>车辆类型</td>
+                                <td>重型厢式货车</td>
+                            </tr>
+                            <tr>
+                                <td>使用性质</td>
+                                <td>危化品运输</td>
+                                <td>经营类别</td>
+                                <td>危货运输（1类1项）</td>
+                            </tr>
+                            <tr>
+                                <td>道路运输证号</td>
+                                <td>安宁字530181014786</td>
+                                <td>有效期限</td>
+                                <td>2016年7月</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <el-row>
+                                        <el-col :span="12">
+                                            <img width="240" height="180" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
+                                        </el-col>
+                                        <el-col :span="12">
+                                            <img width="240" height="180" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
+                                        </el-col>
+                                    </el-row>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </el-tab-pane>
             </el-tabs>
         </el-card>
         <el-dialog title="添加记录" width="45%" :visible.sync="isShowAddDialog">
