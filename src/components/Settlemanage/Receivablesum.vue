@@ -96,7 +96,7 @@
                     {
                         'deliveryer': '安化',
                         'receiver': '安宁恒源爆破工程有限公司',
-                        'totalNum': 5,
+                        'totalNum': '5',
                         'area': '昆明市',
                         'address': '安宁',
                         'totalGoods': '9.792吨',
@@ -105,7 +105,7 @@
                     {
                         'deliveryer': '安化',
                         'receiver': '昆明市特里亚民爆器材专营公司晋宁分公司',
-                        'totalNum': 1,
+                        'totalNum': '1',
                         'area': '昆明市',
                         'address': '晋宁一中队',
                         'totalGoods': '48.96吨/28方/19930件',
@@ -114,7 +114,7 @@
                     {
                         'deliveryer': '安化',
                         'receiver': '昆明市特立亚石林分公司',
-                        'totalNum': 19,
+                        'totalNum': '19',
                         'area': '昆明市',
                         'address': '石林',
                         'totalGoods': '186.048吨',
@@ -123,7 +123,7 @@
                     {
                         'deliveryer': '安化',
                         'receiver': '昆明市特里阿拉善分公司',
-                        'totalNum': 3,
+                        'totalNum': '3',
                         'area': '昆明市',
                         'address': '海口',
                         'totalGoods': '34吨/25方/100件',
