@@ -6,9 +6,9 @@
 				<el-tab-pane label="危货运输登记表" name="first">
 					<div id="dangerObjList">
 						<h2 class="text-center">昆明市危货运输户籍化管理登记表</h2>
-						<table class="common-table" style="width: 800px; margin: 0 auto">
+						<table class="common-table">
 							<tr>
-								<td rowspan="8" width="50"><p style="width: 20px">车辆基础信息</p></td>
+								<td rowspan="8" width="50"><p style="width: 1em">车辆基础信息</p></td>
 								<td width="100">车牌号码</td>
 								<td>云AE0969</td>
 								<td>厂牌型号</td>
@@ -66,7 +66,7 @@
 								<td colspan="5">云南省昆明市安宁市太平镇安化生活区办公楼</td>
 							</tr>
 							<tr>
-								<td rowspan="4"><p style="width: 20px">驾驶人基础信息</p></td>
+								<td rowspan="4"><p style="width: 1em">驾驶人基础信息</p></td>
 								<td>驾驶人姓名</td>
 								<td>罗少成</td>
 								<td>性别</td>
@@ -91,7 +91,7 @@
 								<td colspan="5">云南省昆明市西山区海口镇东风村八栋一单元204号</td>
 							</tr>
 							<tr>
-								<td><p style="width: 20px">车辆照片</p></td>
+								<td><p style="width: 1em">车辆照片</p></td>
 								<td colspan="6">
 									<!-- <ImageUpload :width="300" :height="200"/> -->
 									<img width="300" height="200" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
@@ -117,27 +117,23 @@
 							</tr>
 						</table>
 					</div>
-					<el-row type="flex" justify="center" style="margin: 20px auto">
-						<el-col :span="8" :offset="6">
-							<el-button type="success" @click="add">添加记录</el-button>
-							<el-button type="primary" @click="edit">修改记录</el-button>
-							<el-button @click="back">返回</el-button>
-						</el-col>
-					</el-row>
+					<div class="common-table-footer">
+						<el-button type="success" @click="add">添加记录</el-button>
+						<el-button type="primary" @click="edit">修改记录</el-button>
+						<el-button @click="back">返回</el-button>
+					</div>
 				</el-tab-pane>
 				<el-tab-pane label="运输单位备案" name="second">
-					<div id="transUnitList" style="min-width: 1360px">
+					<div id="transUnitList">
 						<el-row>
 							<el-col>
 								<h3 class="text-center">危险物品运输单位备案（危险物品运输车辆基本信息表）</h3>
-								<table class="common-table" style="font-size: 12px; width: 640px; margin: 0 auto">
+								<table class="common-table">
 									<tr>
 										<td colspan="5">
-											<el-row style="font-weight: bold">
-												<el-col :span="10">车辆所有人：云南安化中达物流有限责任公司</el-col>
-												<el-col :span="7">公司经营证号：530181000690</el-col>
-												<el-col :span="6">建档日期：2016年5月25日</el-col>
-											</el-row>
+											<span class="tit">车辆所有人：云南安化中达物流有限责任公司</span>
+											<span class="tit">公司经营证号：530181000690</span>
+											<span class="tit">建档日期：2016年5月25日</span>
 										</td>
 									</tr>
 									<tr>
@@ -145,7 +141,7 @@
 										<td>云AF8532</td>
 										<td width="80">核载质量</td>
 										<td width="100">9900kg</td>
-										<td rowspan="6" colspan="2">
+										<td rowspan="6">
 											<img width="240" height="180" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
 											<!-- <ImageUpload :width="200" :height="160"/> -->
 										</td>
@@ -207,14 +203,12 @@
 						<el-row style="margin-top: 20px">
 							<el-col>
 								<h3 class="text-center">危险物品运输单位备案（危险物品运输驾驶员基本信息表）</h3>
-								<table class="common-table" style="font-size: 12px; width: 640px; margin: 0 auto">
+								<table class="common-table">
 									<tr>
 										<td colspan="7">
-											<el-row style="font-weight: bold">
-												<el-col :span="10">单位：云南安化中达物流有限责任公司</el-col>
-												<el-col :span="7">公司经营证号：530181000690</el-col>
-												<el-col :span="6">建档日期：2016年5月25日</el-col>
-											</el-row>
+											<span class="tit">单位：云南安化中达物流有限责任公司</span>
+											<span class="tit">公司经营证号：530181000690</span>
+											<span class="tit">建档日期：2016年5月25日</span>
 										</td>
 									</tr>
 									<tr>

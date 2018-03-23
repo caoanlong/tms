@@ -65,19 +65,26 @@ code a:hover{color:#20a0ff;}
 }
 
 .common-table {
-	width: 100%;
+	width: 760px;
 	font-size: 14px;
+	margin:0 auto;
 	line-height: 1.5;
 	color: #333;
-	border-collapse: collapse
+	border-collapse: separate;
+	background:#ddd;
+	border-spacing:1px;
+	color:#666
 }
 .common-table td {
-	border: 1px solid #999;
-	padding: 10px 10px;
+	background: #fff;
+	padding: 10px;
 	vertical-align: middle;
 	text-align: center
 }
-
+.common-table td .tit{font-weight: bold;}
+.common-table td .tit+.tit{margin-left: 10px}
+.common-table td p{margin:0 auto;}
+.common-table-footer{width: 800px;margin:20px auto 0;text-align: center}
 .split-item {
 	padding: 5px 0 20px 10px; 
 	color: #bfcbd9
