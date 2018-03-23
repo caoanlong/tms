@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>编辑托运人</span>
-			</div>
+		<div class="wf-card box-card">
+			<div  class="header clearfix">编辑托运人</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
@@ -19,7 +17,7 @@
 						<el-form-item label="联系人">
 							<el-input v-model="shipper.contacts"></el-input>
 						</el-form-item>
-                        <el-form-item label="联系方式">
+						<el-form-item label="联系方式">
 							<el-input v-model="shipper.contactMethod"></el-input>
 						</el-form-item>
 						<el-form-item>
@@ -29,7 +27,7 @@
 					</el-form>
 				</el-col>
 			</el-row>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
@@ -47,10 +45,10 @@
 			}
 		},
 		methods: {
-            add() {
-                Message.success('保存成功！')
-                this.$router.push({name: 'shipper'})
-            },
+			add() {
+				Message.success('保存成功！')
+				this.$router.push({name: 'shipper'})
+			},
 			back() {
 				this.$router.go(-1)
 			}

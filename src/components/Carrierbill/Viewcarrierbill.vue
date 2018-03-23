@@ -1,221 +1,144 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card hasTit">
-			<div slot="header" class="clearfix">承运单编号 <span class="CarrierNum">{{$route.query.CarrierNum}}</span><span>创建时间：{{carrierbillInfo.CreatedDate}}</span><span>发货单号：{{carrierbillInfo.ConsignNum}}</span><span>委托时间：{{carrierbillInfo.CommissionDate}}</span>
+		<div class="wf-card">
+			<div class="header clearfix">承运单编号：{{$route.query.CarrierNum}}<span>发货单号：{{carrierbillInfo.ConsignNum}}</span><span>创建时间：{{carrierbillInfo.CreatedDate}}</span><span>委托时间：{{carrierbillInfo.CommissionDate}}</span>
 				<span class="status status1" v-if="carrierbillInfo.Status =='待执行'">待执行</span>
 				<span class="status status2" v-else-if="carrierbillInfo.Status =='执行中'">执行中</span>
 				<span class="status status3" v-else-if="carrierbillInfo.Status =='已签收'">已签收</span>
 			</div>
-			<el-row>
-				<div class="split-item">
-					<span class="num">1</span>
-					<span class="tit">基本信息</span>
+			<table class="wf-table">
+				<caption>承运信息</caption>
+				<tr>
+					<td width="50%"><span class="justify">托运人</span>{{carrierbillInfo.Consignor}}</td>
+					<td width="50%"><span class="justify">承运人</span>{{carrierbillInfo.Carrier}}</td>
+				</tr>
+			</table>
+			<table class="wf-table">
+				<caption>收发货信息</caption>
+				<tr>
+					<td width="50%"><span class="justify">发货单位</span>{{carrierbillInfo.ConsignerCompany}}</td>
+					<td width="50%"><span class="justify">收货单位</span>{{carrierbillInfo.ConsigneeCompany}}</td>
+				</tr>
+				<tr>
+					<td><span class="justify">发货人</span>{{carrierbillInfo.Consigner}}</td>
+					<td><span class="justify">收货人</span>{{carrierbillInfo.Consignee}}</td>
+				</tr>
+				<tr>
+					<td><span class="justify">联系方式</span>{{carrierbillInfo.Consigner}}</td>
+					<td><span class="justify">联系方式</span>{{carrierbillInfo.Consignee}}</td>
+				</tr>
+				<tr>
+					<td><span class="justify">发货地</span>{{carrierbillInfo.Dispatch}}</td>
+					<td><span class="justify">收货地</span>{{carrierbillInfo.Discharge}}</td>
+				</tr>
+				<tr>
+					<td><span class="justify">发货时间</span>{{carrierbillInfo.DeliveryDate}}</td>
+					<td><span class="justify">到货时间</span>{{carrierbillInfo.ArrivalDate}}</td>
+				</tr>
+			</table>
+			<table class="wf-table">
+				<caption>货物信息</caption>
+				<tr>
+					<td colspan="6">
+						<span class="labels">货物类型：</span>重货
+						<span class="labels" style="margin-left:40px">运输方式：</span>{{carrierbillInfo.transType}}
+					</td>
+				</tr>
+				<tr>
+					<th>货物规格</th>
+					<th>货物名称</th>
+					<th>数量(件)</th>
+					<th>体积(方)</th>
+					<th>重量(吨)</th>
+					<th>剩余货量</th>
+				</tr>
+				<tr class="is-center">
+					<td>R72</td>
+					<td>炸药</td>
+					<td>0</td>
+					<td>3</td>
+					<td>9.76</td>
+					<td>9.76吨</td>
+				</tr>
+				<tr class="total is-center">
+					<td>合计</td>
+					<td></td>
+					<td>0</td>
+					<td>3</td>
+					<td>9.76</td>
+					<td>3方/9.76吨</td>
+				</tr>
+			</table>
+			<table class="wf-table">
+				<caption>应收款</caption>
+				<tr>
+					<th>现付</th>
+					<th>到付</th>
+					<th>回单付</th>
+					<th>月结</th>
+					<th>收方到货付</th>
+					<th>合计</th>
+					<th>其他</th>
+					<th>备注</th>
+				</tr>
+				<tr class="is-center">
+					<td></td>
+					<td>2000.00元</td>
+					<td></td>
+					<td>2000.00元</td>
+					<td></td>
+					<td>4000.00元</td>
+					<td></td>
+					<td>人民币</td>
+				</tr>
+				<tr>
+					<td colspan="8">
+						<span class="labels">发票：</span>{{carrierbillInfo.invoice=='Y'?'开发票':'不开发票'}}
+						<span class="labels" style="margin-left:40px">回单要求：</span>{{carrierbillInfo.receipt}}
+						<span class="labels fr">承运单应收总价：</span>
+					</td>
+				</tr>
+			</table>
+			<table class="wf-table">
+				<caption>调度单</caption>
+				<tr>
+					<th>调度单号</th>
+					<th>状态</th>
+					<th>车辆</th>
+					<th>货物规格/名称</th>
+					<th>数量(件)</th>
+					<th>体积(方)</th>
+					<th>重量(吨)</th>
+					<th>付款金额</th>
+				</tr>
+				<tr class="is-center">
+					<td>20180220001</td>
+					<td>已装运</td>
+					<td>云A-G3365</td>
+					<td>R72/炸药</td>
+					<td></td>
+					<td></td>
+					<td>9.76</td>
+					<td>月结1800.00元</td>
+				</tr>
+			</table>
+			<div class="wf-footer clearfix">
+				<div class="btn-group fl">
+					<button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
+						<svg-icon icon-class="edit"></svg-icon>修改</button>
+					<button type="button" class="wf-btn btn-primary" @click="AddDispatchBill">
+						<svg-icon icon-class="dispatchbill"></svg-icon>调度</button>
+					<button type="button" class="wf-btn btn-warning" @click="AddDispatchBill">
+						<svg-icon icon-class="money1"></svg-icon>调整应收款</button>
 				</div>
-			</el-row>
-			<el-row>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="托运人">
-							<p>{{carrierbillInfo.Consignor}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="承运人">
-							<p>{{carrierbillInfo.Carrier}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
-			<el-row>
-				<div class="split-item">
-					<span class="num">2</span>
-					<span class="tit">收发货信息</span>
+				<div class="btn-group fr">
+					<button type="button" class="wf-btn btn-danger plain">
+						<svg-icon icon-class="delete"></svg-icon>删除</button>
+					<button type="button" class="wf-btn btn-default" @click="back">
+						<svg-icon icon-class="back"></svg-icon>返回</button>
 				</div>
-			</el-row>
-			<el-row>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="发货单位">
-							<p>{{carrierbillInfo.ConsignerCompany}}</p>
-						</el-form-item>
-						<el-form-item label="发货人">
-							<p>{{carrierbillInfo.Consigner}}</p>
-						</el-form-item>
-						<el-form-item label="发货时间">
-							<p>{{carrierbillInfo.DeliveryDate}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="委托时间">
-							<p>{{carrierbillInfo.CommissionDate}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="发货单号">
-							<p>{{carrierbillInfo.ConsignNum}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="6">
-					<el-form label-width="120px">
-						<el-form-item label="发货地">
-							<p></p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="10">
-					<el-form label-width="20px">
-						<el-form-item>
-							<p>{{carrierbillInfo.Dispatch}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="收货单位">
-							<p>{{carrierbillInfo.Consigner}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="收货人">
-							<p>{{carrierbillInfo.Consignee}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="到货时间">
-							<p>{{carrierbillInfo.ArrivalDate}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="运输方式">
-							<p>{{carrierbillInfo.transType}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="6">
-					<el-form label-width="120px">
-						<el-form-item label="卸货地">
-							<p></p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="10">
-					<el-form label-width="20px">
-						<el-form-item>
-							<p>{{carrierbillInfo.Discharge}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
-			<el-row>
-				<div class="split-item">
-					<span class="num">3</span>
-					<span class="tit">货物信息</span>
-				</div>
-			</el-row>
-			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini">
-					<el-table-column type="index" label="货物序号" width="80" align="center"></el-table-column>
-					<el-table-column label="承运单编号" prop="CarrierNum"  width="110" align="center">
-					</el-table-column>
-					<el-table-column label="货物规格" prop="CargoName">
-					</el-table-column>
-					<el-table-column label="货物名称" prop="CargoName">
-					</el-table-column>
-					<el-table-column label="配载量" prop="CargoTotal" align="center">
-					</el-table-column>
-					<el-table-column label="运载量" prop=""  width="100" align="center">
-					</el-table-column>
-					<el-table-column label="签收量" prop=""  width="100" align="center">
-					</el-table-column>
-				</el-table>
 			</div>
-			<el-row>
-				<div class="split-item">
-					<span class="num">4</span>
-					<span class="tit">应款金额</span>
-				</div>
-			</el-row>
-			<el-row>
-				<el-col :span="24">
-					<el-form label-width="120px">
-						<el-form-item label="承运单应收款">
-							<div class="form-input">
-								<el-form-item label-width="40px" label="现付" style="width:180px;display:inline-block;vertical-align:top">
-									<p>11</p>
-								</el-form-item>
-								<el-form-item label-width="40px" label="到付" style="width:180px;display:inline-block;vertical-align:top">
-									<p></p>
-								</el-form-item>
-								<el-form-item label-width="60px" label="回单结" style="width:180px;display:inline-block;vertical-align:top">
-									<p></p>
-								</el-form-item>
-								<el-form-item label-width="40px" label="月结" style="width:180px;display:inline-block;vertical-align:top">
-									<p></p>
-								</el-form-item>
-								<el-form-item label-width="70px" label="收货方付" style="width:180px;display:inline-block;vertical-align:top">
-									<p></p>
-								</el-form-item>
-							</div>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="付款费用">
-							<p></p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="发票">
-							<p>{{carrierbillInfo.invoice=='Y'?'开发票':'不开发票'}}</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="回单要求">
-							<p><span v-for="item in carrierbillInfo.receipt">
-								<span v-if="item==1">货物托运单</span>
-								<span v-else-if="item==2">发货单文件</span>
-								<span v-else>不需要回单</span>
-								</span>
-							</p>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="24">
-					<el-form label-width="0">
-						<el-form-item align="center">
-							<el-button type="primary" @click="EditCarrierbill">修改</el-button>
-							<el-button type="success" @click="AddDispatchBill">调度</el-button>
-							<el-button type="danger">删除</el-button>
-							<el-button @click="back">返回</el-button>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
@@ -329,46 +252,47 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-.el-card__header
-	span
-		margin-right 40px
-		font-size 14px
-		color #909399
-		&.CarrierNum
-			font-weight bold
-			margin-left 20px
-		&.status
-			position absolute
-			margin-right 0
-			right 20px
-			top 15px
-			height 24px
-			line-height 24px
-			color #fff
-			padding 0 15px
-			font-size 12px
-			border-radius 4px
-			&.status1
-				background #F56C6C
-			&.status2
-				background #409EFF
-			&.status3
-				background #909399
-.tips
-	color #909399
-.el-form-item__content
-	p
-		margin 0
-		border 1px solid #fff
-		border-bottom-color #dcdfe6
-		padding 0 15px
-		height 40px
-		font-family 'sans-serif'
-		line-height 40px
-		color #999
-		font-size 12px
-		span
-			margin-right 10px
-.table
-	margin-bottom 20px
+.main-content
+	background #ebebeb
+	padding-top 20px
+	.wf-card
+		.header
+			span
+				font-size 12px
+				margin-left 40px
+				&.status
+					position absolute
+					margin-right 0
+					right 20px
+					top 15px
+					height 24px
+					line-height 24px
+					color #fff
+					padding 0 15px
+					font-size 12px
+					-moz-border-radius 4px
+					     border-radius 4px
+				&.status1
+					background #F56C6C
+				&.status2
+					background #409EFF
+				&.status3
+					background #909399
+		.wf-table
+			.justify
+				width 80px
+				height 24px
+				display inline-block
+				vertical-align top
+				padding-right 20px
+				color #3582d0
+				text-align justify
+				&:after
+					content '：'
+					position relative
+					top -24px
+					padding-left 100%
+					display inline-block
+					
+					
 </style>

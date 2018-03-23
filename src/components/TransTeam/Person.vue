@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>人员管理</span>
-			</div>
+		<div class="wf-card">
+			<div class="header clearfix">人员管理</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="姓名">
@@ -59,7 +57,7 @@
 				<el-table 
 					ref="recTable" 
 					:data="tableData" 
-					border style="width: 100%" size="mini">
+					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
 					<el-table-column label="姓名" prop="name"></el-table-column>
@@ -113,7 +111,7 @@
 					</el-col>
 				</el-row>
 			</div>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">

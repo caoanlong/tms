@@ -1,23 +1,15 @@
 /* @Author: coolia
 * @Date:   2018-01-17 11:19:03
 * @Last Modified by:   coolia
-* @Last Modified time: 2018-03-16 16:39:27
+* @Last Modified time: 2018-03-22 16:46:31
 */
+.logo{height:50px;line-height:50px;
+text-align: center;color:#ffcd07;font-size: 24px}
 #app .main-container{min-height:100%;}
-#app .sidebar-container{-webkit-transition:width 0.28s;-moz-transition:width 0.28s;transition:width 0.28s;width:180px!important;height:100%;position:fixed;top:0;bottom:0;left:0;z-index:1001;}
+#app .sidebar-container{width:180px!important;height:100%;position:fixed;top:0;bottom:0;left:0;z-index:1001;background: #4f4f4f}
 #app .sidebar-container a{display:inline-block;width:100%;}
 #app .sidebar-container .svg-icon{margin-right:5px;}
-#app .sidebar-container .el-menu{border:none;width:100%;}
-#app .hideSidebar .sidebar-container,#app .hideSidebar .sidebar-container .el-menu{width:36px!important;}
-#app .hideSidebar .submenu-title-noDropdown{padding-left:0px!important;position:relative;}
-#app .hideSidebar .submenu-title-noDropdown span{height:0;width:0;overflow:hidden;visibility:hidden;-webkit-transition:opacity 0.3s cubic-bezier(0.55,0,0.1,1);-moz-transition:opacity 0.3s cubic-bezier(0.55,0,0.1,1);transition:opacity 0.3s cubic-bezier(0.55,0,0.1,1);opacity:0;display:inline-block;}
-#app .hideSidebar .submenu-title-noDropdown:hover span{display:block;-moz-border-radius:3px;border-radius:3px;z-index:1002;width:140px;height:56px;visibility:visible;position:absolute;right:-145px;text-align:left;text-indent:20px;top:0px;background-color:#1f2d3d!important;opacity:1;}
-#app .hideSidebar .el-submenu > .el-submenu__title{padding-left:10px!important;}
-#app .hideSidebar .el-submenu > .el-submenu__title > span{display:none;}
-#app .hideSidebar .el-submenu > .el-submenu__title .el-submenu__icon-arrow{display:none;}
-#app .hideSidebar .el-submenu .nest-menu .el-submenu__icon-arrow{display:block!important;}
-#app .hideSidebar .el-submenu .nest-menu span{display:inline-block!important;}
-#app .nest-menu .el-submenu > .el-submenu__title,#app .el-submenu .el-menu-item{min-width:180px!important;background-color:#1f2d3d!important;}
-#app .nest-menu .el-submenu > .el-submenu__title:hover,#app .el-submenu .el-menu-item:hover{background-color:#001528!important;}
-#app .el-menu--collapse .el-menu .el-submenu{min-width:180px!important;}
-#app .hideSidebar .el-menu-item,#app .hideSidebar .el-menu-item .el-tooltip{padding-left:10px!important;}
+#app .sidebar-container .el-menu{border:none;width:100%;background: #4f4f4f;}
+#app .el-menu--collapse .el-menu .el-submenu,.el-submenu .el-menu-item{min-width:180px!important;}
+
+.el-menu-item.is-active{color: #fff;background: #409EFF}

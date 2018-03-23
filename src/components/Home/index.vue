@@ -2,8 +2,8 @@
 	<div class="main-content">
 		<el-row :gutter="20">
 			<el-col :span="12">
-				<el-card class="dashboardItem">
-					<div slot="header" class="clearfix">
+				<div class="wf-card dashboardItem">
+					<div class="header clearfix">
 						<el-badge :value="200" :max="99" class="item"><span>待处理运单</span></el-badge>
 						<router-link tag="a" class="more" :to="{name: 'carrierbills'}">查看更多</router-link>
 					</div>
@@ -36,11 +36,11 @@
 							</el-table-column>
 						</el-table>
 					</div>
-				</el-card>
+				</div>
 			</el-col>
 			<el-col :span="12">
-				<el-card class="dashboardItem">
-					<div slot="header" class="clearfix">
+				<div class="wf-card dashboardItem">
+					<div class="header clearfix">
 						<el-badge :value="200" :max="99" class="item"><span>运输中</span></el-badge>
 						<router-link tag="a" class="more" :to="{name: 'carrierbills'}">查看更多</router-link>
 					</div>
@@ -73,11 +73,11 @@
 							</el-table-column>
 						</el-table>
 					</div>
-				</el-card>
+				</div>
 			</el-col>
 			<el-col :span="12">
-				<el-card class="dashboardItem">
-					<div slot="header" class="clearfix">
+				<div class="wf-card dashboardItem">
+					<div class="header clearfix">
 						<el-badge :value="200" :max="99" class="item"><span>可用车辆</span></el-badge>
 						<router-link tag="a" class="more" :to="{name: 'truck'}">查看更多</router-link>
 					</div>
@@ -123,11 +123,11 @@
 							<el-table-column label="添加时间" prop="createTime" width="140"></el-table-column>
 						</el-table>
 					</div>
-				</el-card>
+				</div>
 			</el-col>
 			<el-col :span="12">
-				<el-card class="dashboardItem">
-					<div slot="header" class="clearfix">
+				<div class="wf-card dashboardItem">
+					<div class="header clearfix">
 						<el-badge :value="200" :max="99" class="item"><span>可用人员</span></el-badge>
 						<router-link tag="a" class="more" :to="{name: 'person'}">查看更多</router-link>
 					</div>
@@ -162,7 +162,7 @@
 							<el-table-column label="添加时间" prop="createTime" width="140"></el-table-column>
 						</el-table>
 					</div>
-				</el-card>
+				</div>
 			</el-col>
 		</el-row>
 	</div>
@@ -637,14 +637,14 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-.el-card__header
-	span
-		padding-right 15px
-	.more
-		float right
-		color #409EFF
-		font-size 12px
-		line-height 17px
+.wf-card
+	.header
+		.more
+			float right
+			color #409EFF
+			font-size 12px
+			line-height 20px
+			margin-top 15px
 .dashboardItem
 	margin-bottom 20px
 

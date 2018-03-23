@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>查看人员</span>
-			</div>
+		<div class="wf-card">
+			<div class="header clearfix">查看人员</div>
 			<el-form label-width="155px">
 				<el-row>
 					<el-col :span="6">
@@ -91,46 +89,46 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="合同有效期至">
-                            <p>{{person.contractValidTo}}</p>
+							<p>{{person.contractValidTo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期起">
-                            <p>{{person.driverLicFrom}}</p>
+							<p>{{person.driverLicFrom}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期至">
-                            <p>{{person.driverLicTo}}</p>
+							<p>{{person.driverLicTo}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证档案编号">
-                            <p>{{person.driverNum}}</p>
+							<p>{{person.driverNum}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="职称或技术等级">
-                            <p>{{person.techLevel}}</p>
+							<p>{{person.techLevel}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="从业资格证件号">
-                            <p>{{person.qualifCerNum}}</p>
+							<p>{{person.qualifCerNum}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格类别">
-                            <p>{{person.qualifCerNum}}</p>
+							<p>{{person.qualifCerNum}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证有效期至">
-                            <p>{{person.qualifCerValidTo}}</p>
+							<p>{{person.qualifCerValidTo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -144,39 +142,39 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="头像">
-                            <ImageUpload :files="[person.avatar]" :isPreview="true"/>
+							<ImageUpload :files="[person.avatar]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证正面">
-                            <ImageUpload :files="[person.cardFront]" :isPreview="true"/>
+							<ImageUpload :files="[person.cardFront]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证反面">
-                            <ImageUpload :files="[person.cardBack]" :isPreview="true"/>
+							<ImageUpload :files="[person.cardBack]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证正面">
-                            <ImageUpload :files="[person.driverFront]" :isPreview="true"/>
+							<ImageUpload :files="[person.driverFront]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证反面">
-                            <ImageUpload :files="[person.driverBack]" :isPreview="true"/>
+							<ImageUpload :files="[person.driverBack]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证正">
-                            <ImageUpload :files="[person.qualifCerFront]" :isPreview="true"/>
+							<ImageUpload :files="[person.qualifCerFront]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证副">
-                            <ImageUpload :files="[person.qualifCerBack]" :isPreview="true"/>
+							<ImageUpload :files="[person.qualifCerBack]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -195,7 +193,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">

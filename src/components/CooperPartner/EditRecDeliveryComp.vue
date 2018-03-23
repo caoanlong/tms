@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>编辑收发货单位</span>
-			</div>
+		<div class="wf-card box-card">
+			<div  class="header clearfix">编辑收发货单位</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
@@ -29,7 +27,7 @@
 					</el-form>
 				</el-col>
 			</el-row>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">

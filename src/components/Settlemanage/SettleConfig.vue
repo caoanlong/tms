@@ -1,30 +1,28 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>运费模板</span>
-			</div>
+		<div class="wf-card">
+			<div class="header clearfix">运费模板</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="发货单位">
 						<el-input placeholder="请输入..." v-model="findDeliveryer"></el-input>
 					</el-form-item>
-                    <el-form-item label="发货地">
+					<el-form-item label="发货地">
 						<el-input placeholder="请输入..." v-model="findDeliveryArea"></el-input>
 					</el-form-item>
-                    <el-form-item label="收货单位">
+					<el-form-item label="收货单位">
 						<el-input placeholder="请输入..." v-model="findReceiver"></el-input>
 					</el-form-item>
-                    <el-form-item label="收货地">
+					<el-form-item label="收货地">
 						<el-input placeholder="请输入..." v-model="findReceiveArea"></el-input>
 					</el-form-item>
-                    <el-form-item label="运距">
+					<el-form-item label="运距">
 						<el-input placeholder="请输入..." v-model="findDistance"></el-input>
 					</el-form-item>
-                    <el-form-item label="对内运价">
+					<el-form-item label="对内运价">
 						<el-input placeholder="请输入..." v-model="findInnerFreight"></el-input>
 					</el-form-item>
-                    <el-form-item label="对外运价">
+					<el-form-item label="对外运价">
 						<el-input placeholder="请输入..." v-model="findExternalFreight"></el-input>
 					</el-form-item>
 					<el-form-item>
@@ -33,16 +31,16 @@
 					</el-form-item>
 				</el-form>
 			</div>
-            <div class="tableControl">
-                <el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-                <el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
+			<div class="tableControl">
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
 					ref="recTable" 
 					:data="tableData" 
-					border style="width: 100%" size="mini">
-                    <el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
+					border style="width: 100%" size="mini" stripe>
+					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="发货单位" prop="deliveryer"></el-table-column>
 					<el-table-column label="发货地" prop="deliveryArea"></el-table-column>
 					<el-table-column label="发货详细地址" prop="deliveryAdress"></el-table-column>
@@ -52,16 +50,16 @@
 					<el-table-column label="对内运距" prop="innerDistance"></el-table-column>
 					<el-table-column label="对内运价" prop="innerFreight"></el-table-column>
 					<el-table-column label="对内TKM" prop="innerTKM"></el-table-column>
-                    <el-table-column label="对外运距" prop="externalDistance"></el-table-column>
-                    <el-table-column label="对外运价" prop="externalFreight"></el-table-column>
-                    <el-table-column label="对外TKM" prop="externalTKM"></el-table-column>
-                    <el-table-column label="对内付款占比" prop="innerPayRatio" width="100"></el-table-column>
-                    <el-table-column label="对外收款占比" prop="externalRecRatio" width="100"></el-table-column>
+					<el-table-column label="对外运距" prop="externalDistance"></el-table-column>
+					<el-table-column label="对外运价" prop="externalFreight"></el-table-column>
+					<el-table-column label="对外TKM" prop="externalTKM"></el-table-column>
+					<el-table-column label="对内付款占比" prop="innerPayRatio" width="100"></el-table-column>
+					<el-table-column label="对外收款占比" prop="externalRecRatio" width="100"></el-table-column>
 					<el-table-column label="操作" align="center" width="230">
 						<template slot-scope="scope">
-                            <el-button size="mini" icon="el-icon-view" @click="view">查看</el-button>
-                            <el-button size="mini" icon="el-icon-edit" @click="edit">编辑</el-button>
-                            <el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.$index)">删除</el-button>
+							<el-button size="mini" icon="el-icon-view" @click="view">查看</el-button>
+							<el-button size="mini" icon="el-icon-edit" @click="edit">编辑</el-button>
+							<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.$index)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -85,7 +83,7 @@
 					</el-col>
 				</el-row>
 			</div>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
@@ -93,99 +91,99 @@
 	export default {
 		data() {
 			return {
-                findDeliveryer: '',
-                findDeliveryArea: '',
-                findReceiver: '',
-                findReceiveArea: '',
-                findDistance: '',
-                findInnerFreight: '',
-                findExternalFreight: '',
+				findDeliveryer: '',
+				findDeliveryArea: '',
+				findReceiver: '',
+				findReceiveArea: '',
+				findDistance: '',
+				findInnerFreight: '',
+				findExternalFreight: '',
 				pageIndex: 1,
 				pageSize: 10,
-                count: 87,
-                tabSelected: 'driver',
-                tableData: [
-                    {
-                        "deliveryer": "安化",
-                        "deliveryArea": "云南省昆明市",
-                        "deliveryAdress": "安化工厂",
-                        "receiver": "红河厂",
-                        "receiveArea": "云南省红河州蒙自市",
-                        "receiveAdress": "蒙自小东山",
-                        "innerDistance": "336",
-                        "innerFreight": 322.56,
-                        "innerTKM": "0.96",
-                        "externalDistance": "345",
-                        "externalFreight": 393,
-                        "externalTKM": "1.14",
-                        "innerPayRatio": "月结100%",
-                        "externalRecRatio": "回单付100%"
-                    },
-                    {
-                        "deliveryer": "安化",
-                        "deliveryArea": "云南省昆明市",
-                        "deliveryAdress": "安化工厂",
-                        "receiver": "云锡",
-                        "receiveArea": "云南省红河州个旧市",
-                        "receiveAdress": "个旧云锡",
-                        "innerDistance": "335",
-                        "innerFreight": 321.6,
-                        "innerTKM": "0.96",
-                        "externalDistance": "350",
-                        "externalFreight": 399,
-                        "externalTKM": "1.14",
-                        "innerPayRatio": "月结100%",
-                        "externalRecRatio": "回单付100%"
-                    },
-                ]
+				count: 87,
+				tabSelected: 'driver',
+				tableData: [
+					{
+						"deliveryer": "安化",
+						"deliveryArea": "云南省昆明市",
+						"deliveryAdress": "安化工厂",
+						"receiver": "红河厂",
+						"receiveArea": "云南省红河州蒙自市",
+						"receiveAdress": "蒙自小东山",
+						"innerDistance": "336",
+						"innerFreight": 322.56,
+						"innerTKM": "0.96",
+						"externalDistance": "345",
+						"externalFreight": 393,
+						"externalTKM": "1.14",
+						"innerPayRatio": "月结100%",
+						"externalRecRatio": "回单付100%"
+					},
+					{
+						"deliveryer": "安化",
+						"deliveryArea": "云南省昆明市",
+						"deliveryAdress": "安化工厂",
+						"receiver": "云锡",
+						"receiveArea": "云南省红河州个旧市",
+						"receiveAdress": "个旧云锡",
+						"innerDistance": "335",
+						"innerFreight": 321.6,
+						"innerTKM": "0.96",
+						"externalDistance": "350",
+						"externalFreight": 399,
+						"externalTKM": "1.14",
+						"innerPayRatio": "月结100%",
+						"externalRecRatio": "回单付100%"
+					},
+				]
 			}
-        },
+		},
 		created() {
 		},
 		methods: {
-            reset() {
-                this.findDeliveryer = ''
-                this.findDeliveryArea = ''
-                this.findReceiver = ''
-                this.findReceiveArea = ''
-                this.findDistance = ''
-                this.findInnerFreight = ''
-                this.findExternalFreight = ''
-            },
+			reset() {
+				this.findDeliveryer = ''
+				this.findDeliveryArea = ''
+				this.findReceiver = ''
+				this.findReceiveArea = ''
+				this.findDistance = ''
+				this.findInnerFreight = ''
+				this.findExternalFreight = ''
+			},
 			pageChange(index) {
-                this.pageIndex = index
-            },
-            handleTabSelected(tab) {
-                console.log(tab.$options.propsData.name)
-            },
-            add() {
-                this.$router.push({name: 'addsettleconfig'})
-            },
-            view() {
-                this.$router.push({name: 'viewsettleconfig'})
-            },
-            edit() {
-                this.$router.push({name: 'editsettleconfig'})
-            },
-            deleteConfirm(i) {
-                console.log(i)
-                this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.tableData.splice(i, 1)
-                    this.$message({
-                        type: 'success',
-                        message: '删除成功!'
-                    })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    })
-                })
-            }
+				this.pageIndex = index
+			},
+			handleTabSelected(tab) {
+				console.log(tab.$options.propsData.name)
+			},
+			add() {
+				this.$router.push({name: 'addsettleconfig'})
+			},
+			view() {
+				this.$router.push({name: 'viewsettleconfig'})
+			},
+			edit() {
+				this.$router.push({name: 'editsettleconfig'})
+			},
+			deleteConfirm(i) {
+				console.log(i)
+				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.tableData.splice(i, 1)
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			}
 		}
 	}
 </script>

@@ -1,7 +1,6 @@
 <template>
 	<el-menu class="navbar" mode="horizontal">
-		<hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
-		<breadcrumb class="breadcrumb-container"></breadcrumb>
+		<div class="misName">运输管理后台</div>
 		<div class="right-menu">
 			<el-tooltip effect="dark" content="navbar.theme" placement="bottom"></el-tooltip>
 			<el-dropdown class="avatar-container right-menu-item">
@@ -28,8 +27,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Breadcrumb from '../Breadcrumb'
-import Hamburger from '../Hamburger'
+
 
 export default {
 	computed: {
@@ -53,10 +51,6 @@ export default {
 			e.target.src = require('../../../assets/imgs/avatar.gif')
 			e.target.onerror = null
 		}
-	},
-	components: {
-		Breadcrumb,
-		Hamburger
 	}
 }
 </script>
@@ -67,17 +61,14 @@ export default {
 	height 50px
 	line-height 50px
 	border-radius 0px !important
-	.hamburger-container
-		float left
-		width 50px
-		line-height 58px
-		height 50px
-		padding 0 10px
-	.breadcrumb-container
+	background #424242
+	.misName
 		display inline-block
+		color #ebebeb
+		margin-left 15px
+		font-size 18px
 	.right-menu
 		float right
-		width 200px
 		height 100%
 		&:focus
 		 outline none
@@ -96,19 +87,19 @@ export default {
 			.avatar-wrapper
 				height 50px
 				cursor pointer
-				padding-top 5px
 				position relative
 				.user-avatar
-					width 40px
-					height 40px
-					border-radius 20px
+					width 30px
+					height 30px
+					border-radius 15px
+					display inline-block
+					vertical-align middle
 				.user-text
-					position relative
-					top -15px
 					padding-left 5px
+					height 30px
+					line-height 30px
+					display inline-block
+					vertical-align middle
 				.el-icon-caret-bottom
-					position absolute
-					right -20px
-					top 15px
 					font-size 12px
 </style>

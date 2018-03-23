@@ -43,9 +43,10 @@ export default {
 	.el-breadcrumb
 		display inline-block
 		font-size 14px
-		line-height 50px
-		margin-left 10px
+		line-height 40px
+		margin-left 20px
 		.no-redirect 
-			color #97a8be
-			cursor text
+			color #666
+			font-weight normal
+			cursor Default
 </style>

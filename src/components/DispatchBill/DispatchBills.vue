@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>调度列表</span>
-			</div>
+		<div class="wf-card">
+			<div class="header clearfix">调度列表</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="调度单号">
@@ -28,7 +26,7 @@
 				<el-button type="default" size="mini" icon="el-icon-refresh">刷新</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini">
+				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="调度单号" prop="ControlsNum"  width="130" align="center">
 					</el-table-column>
 					<el-table-column label="车辆号牌" prop="VehicleNum"  width="110" align="center">
@@ -51,9 +49,9 @@
 					</el-table-column>
 					<el-table-column label="货物规格/名称" prop="CargoName">
 					</el-table-column>
-					<el-table-column label="操作" width="110" align="center">
+					<el-table-column label="操作" width="60" align="center">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="ViewDispatchBill(scope.row.ControlsNum)">查看编辑</el-button>
+							<el-button type="primary" size="mini" @click="ViewDispatchBill(scope.row.ControlsNum)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -77,7 +75,7 @@
 					</el-col>
 				</el-row>
 			</div>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">

@@ -1,23 +1,13 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>承运单列表</span>
-			</div>
+		<div class="wf-card box-card">
+			<div  class="header clearfix">承运单列表</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
-					<el-form-item label="承运单号" >
-						<el-input placeholder="承运单号" style="width:150px"></el-input>
+					<el-form-item label="关键字" >
+						<el-input placeholder="请输入关键字" style="width:150px"></el-input>
 					</el-form-item>
-					<el-form-item label="发货单号">
-						<el-input placeholder="发货单号" style="width:150px"></el-input>
-					</el-form-item>
-					<el-form-item label="收货单位">
-						<el-input placeholder="收货单位"></el-input>
-					</el-form-item>
-					<el-form-item label="发货单位">
-						<el-input placeholder="发货单位"></el-input>
-					</el-form-item>
+					
 					<el-form-item label="创建时间">
 						<el-date-picker v-model="carrierbills.CreatDate" type="date" placeholder="选择创建时间" style="width:140px"></el-date-picker>
 					</el-form-item>
@@ -48,7 +38,7 @@
 				<el-button type="default" size="mini" icon="el-icon-refresh">刷新</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini">
+				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
 					<el-table-column type="selection" width="36" align="center" fixed>
 					</el-table-column>
 					<el-table-column label="处理状态"  prop="Status" width="90" align="center">
@@ -86,11 +76,16 @@
 					</el-table-column>
 					<el-table-column label="发货地" prop="Dispatch">
 					</el-table-column>
-					<el-table-column label="操作" width="225" align="center" fixed="right">
+					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="ViewCarrierbill(scope.row.CarrierNum)">查看</el-button>
-							<el-button type="default" size="mini" icon="el-icon-edit" @click="EditCarrierbill(scope.row.CarrierNum)">编辑</el-button>
-							<el-button type="default" size="mini" icon="el-icon-delete" >删除</el-button>
+							<el-dropdown  @command="handleCommand"  trigger="click">
+								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item :command="{type: 'view', id: scope.row.CarrierNum}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.CarrierNum}">编辑</el-dropdown-item>
+									<el-dropdown-item>删除</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -114,7 +109,7 @@
 					</el-col>
 				</el-row>
 			</div>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
@@ -355,14 +350,15 @@ export default {
 		getCarrierbillList(){
 
 		},
+		handleCommand(command) {
+			if(command.type=='view'){
+				this.$router.push({ name: 'viewcarrierbill' , query: { CarrierNum:command.id } })
+			}else if(command.type=='edit'){
+				this.$router.push({ name: 'editcarrierbill' , query: {  CarrierNum:command.id } })
+			}
+		},
 		AddCarrierbill() {
 			this.$router.push({ name: 'addcarrierbill' })
-		},
-		ViewCarrierbill(CarrierNum) {
-			this.$router.push({ name: 'viewcarrierbill' , query: { CarrierNum } })
-		},
-		EditCarrierbill(CarrierNum) {
-			this.$router.push({ name: 'editcarrierbill' , query: { CarrierNum } })
 		},
 		refresh() {
 			this.refreshing = true

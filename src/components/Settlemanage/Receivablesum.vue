@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>应收汇总</span>
-			</div>
+		<div class="wf-card">
+			<div class="header clearfix">应收汇总</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="托运人">
@@ -40,7 +38,7 @@
 					:data="tableData" 
                     show-summary 
                     :summary-method="getSummaries"
-					border style="width: 100%" size="mini">
+					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
 					<el-table-column label="发货单位" prop="deliveryer"></el-table-column>
 					<el-table-column label="收货单位" prop="receiver"></el-table-column>
@@ -75,7 +73,7 @@
 					</el-col>
 				</el-row>
 			</div>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">

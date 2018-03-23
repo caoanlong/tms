@@ -4,7 +4,7 @@ body{
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-font-smoothing: antialiased;
 	text-rendering: optimizeLegibility;
-	font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Arial,sans-serif;
+	font-family:Microsoft YaHei,Arial,sans-serif, Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB;
 	-moz-user-select: none; /*火狐*/
     -webkit-user-select: none; /*webkit浏览器*/
     -ms-user-select: none; /*IE10*/ /*早期浏览器*/
@@ -50,14 +50,11 @@ code a:hover{color:#20a0ff;}
 /*refine vue-multiselect plugin*/
 .multiselect{line-height:16px;}
 .multiselect--active{z-index:1000!important;}
-.main-content{padding:20px}
+.main-content{padding:0 20px 20px}
 .main-content .tableControl{margin-bottom:10px}
 .main-content .pagination{margin-top:10px;text-align:center}
 
-.table .el-button--mini{padding:5px 10px}
-.table .el-button+.el-button {
-    margin-left: 5px;
-}
+.table .el-button--mini{padding:5px 7px}
 .table .el-table .cell{white-space: nowrap;}
 .text-input,.text-input .el-input__inner,.customerSelect .el-input__inner{vertical-align:top}
 
@@ -107,3 +104,5 @@ code a:hover{color:#20a0ff;}
 .step .el-form-item__label,.controlDetail .el-form-item__label{font-size:12px;color:#999;}
 
 .el-popover p{font-size: 12px;color:#666;}
+.wf-card .el-badge{vertical-align:top;padding-right:15px;}
+.wf-card .el-badge .el-badge__content.is-fixed{top:15px;}

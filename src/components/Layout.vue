@@ -1,12 +1,15 @@
 <template>
-	<div class="app-wrapper clearfix" :class="{hideSidebar: !sidebar.opened}">
-		<sidebar class="sidebar-container"></sidebar>
-		
-		<div class="main-container right-container">
+	<div class="app-wrapper clearfix">
+		<div class="header">
 			<div class="top-bar">
 				<navbar></navbar>
 				<tags-view></tags-view>
 			</div>
+		</div>
+		<sidebar class="sidebar-container"></sidebar>
+		
+		<div class="main-container right-container">
+			<breadcrumb class="breadcrumb-container"></breadcrumb>
 			<app-main></app-main>
 		</div>
 	</div>
@@ -16,6 +19,7 @@
 	import Navbar from './CommonComponents/NavBar'
 	import AppMain from './CommonComponents/AppMain'
 	import TagsView from './CommonComponents/TagsView'
+	import Breadcrumb from './CommonComponents/Breadcrumb'
 	export default {
 		name: 'layout',
 		computed: {
@@ -27,7 +31,8 @@
 			Navbar,
 			Sidebar,
 			AppMain,
-			TagsView
+			TagsView,
+			Breadcrumb
 		}
 	}
 </script>
@@ -35,19 +40,14 @@
 	.app-wrapper
 		position relative
 		height 100%
+		position relative
+		padding-top 88px
 		margin-left 180px
-		.right-container
-			position relative
-			padding-top 80px
-	.top-bar
+	.header
 		position fixed
 		top 0
-		right 0
-		z-index 99
 		left 180px
-	#app
-		.hideSidebar
-			margin-left 36px
-			.top-bar
-				left 36px				
+		right 0
+		height 88px
+		z-index 10			
 </style>
