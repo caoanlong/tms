@@ -237,12 +237,13 @@ export default {
 			}
 
 			this.timeGo()
-			let data = {
+			let params = {
 				mobile: this.register.mobile,
 			}
+			console.log(params)
 			request({
 				url: '/common/vcode',
-				data
+				params
 			}).then(res => {
 				console.log(res.data)
 				Message({
@@ -266,6 +267,13 @@ export default {
 				data
 			}).then(res => {
 				console.log(res.data)
+				if (res.data.code == 200) {
+					Message.success('成功！')
+					console.log(res.headers)
+					console.log(res.headers['authorization'])
+					this.$store.dispatch('login', res.headers['authorization'])
+					this.$router.push({name: 'home'})
+				}
 			})
 		},
 		/**
@@ -287,10 +295,12 @@ export default {
 				method: 'POST',
 				data
 			}).then(res => {
-				console.log(res.data)
 				if (res.data.code == 200) {
-					Message.success(res.data.msg)
-					this.loginOrRegister == 'login'
+					Message.success('成功！')
+					console.log(res.headers)
+					console.log(res.headers['authorization'])
+					this.$store.dispatch('register', res.headers['authorization'])
+					this.$router.push({name: 'home'})
 				}
 			})
 		},

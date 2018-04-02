@@ -373,24 +373,24 @@ const router = new Router({
 
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
-// router.beforeEach((to, from, next) => {
-// 	NProgress.start()
-// 	if (localStorage.getItem('token')) {
-// 		if (to.path === '/login') {
-// 			next({ path: '/' })
-// 			NProgress.done()
-// 		} else {
-// 			next()
-// 		}
-// 	} else {
-// 		/* has no token*/
-// 		if (to.path === '/login') {
-// 			next()
-// 		} else {
-// 			next('/login')
-// 		}
-// 		NProgress.done()
-// 	}
-// })
+router.beforeEach((to, from, next) => {
+	NProgress.start()
+	if (localStorage.getItem('token') && localStorage.getItem('token') != 'undefined') {
+		if (to.path === '/login') {
+			next({ path: '/' })
+		} else {
+			next()
+		}
+		NProgress.done()
+	} else {
+		/* has no token*/
+		if (to.path === '/login') {
+			next()
+		} else {
+			next('/login')
+		}
+		NProgress.done()
+	}
+})
 
 export default router
