@@ -48,10 +48,16 @@
 					<el-table-column label="联系人" prop="contacts" width="100"></el-table-column>
 					<el-table-column label="联系方式" prop="contactMethod" width="140"></el-table-column>
 					<el-table-column label="录入时间" prop="typeTime" width="140"></el-table-column>
-					<el-table-column label="操作" align="center" width="230">
+					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-button size="mini" icon="el-icon-edit" @click="edit">编辑查看</el-button>
-							<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.$index)">删除</el-button>
+							<el-dropdown  @command="handleCommand"  trigger="click">
+								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item :command="{type: 'view'}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit'}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete'}">删除</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
 						</template>
 					</el-table-column>
 				</el-table>

@@ -50,7 +50,7 @@
 						<svg-icon class="ico" icon-class="excel"></svg-icon>
 						<input type="text" name="company" placeholder="请输入公司名称" v-model="register.company">
 					</div>
-					<div class="ipt" style="background: none;border: none">
+					<div class="ipt" style="background: none;border: none;padding:5px 0">
 						<el-select 
 							class="sel" 
 							placeholder="请选择公司所在省份" 

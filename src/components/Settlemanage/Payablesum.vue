@@ -53,9 +53,9 @@
 							<span>{{scope.row.freight + scope.row.roundWayFreight}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="操作" align="center" width="120">
+					<el-table-column label="操作" align="center" width="60" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="viewinfo('driver')">查看明细</el-button>
+							<el-button type="primary" size="mini" @click="viewinfo('driver')">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
