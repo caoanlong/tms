@@ -5,20 +5,20 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="公司名称">
-						<el-input placeholder="请输入..." v-model="findCompany"></el-input>
+						<el-input placeholder="请输入..." v-model="findCompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="地址">
-						<el-input placeholder="请输入..." v-model="findAddress"></el-input>
+						<el-input placeholder="请输入..." v-model="findCompanyArea"></el-input>
 					</el-form-item>
 					<el-form-item label="联系人">
-						<el-input placeholder="请输入..." v-model="findContacts"></el-input>
+						<el-input placeholder="请输入..." v-model="findContactName"></el-input>
 					</el-form-item>
 					<el-form-item label="联系方式">
-						<el-input placeholder="请输入..." v-model="findContactMethod"></el-input>
+						<el-input placeholder="请输入..." v-model="findContactPhone"></el-input>
 					</el-form-item>
 					<el-form-item label="录入时间">
 						<el-date-picker
-							v-model="findConsignDate"
+							v-model="findRangeDate"
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
@@ -44,10 +44,10 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="公司名称" prop="companyName"></el-table-column>
-					<el-table-column label="地址" prop="address"></el-table-column>
-					<el-table-column label="联系人" prop="contacts" width="100"></el-table-column>
-					<el-table-column label="联系方式" prop="contactMethod" width="140"></el-table-column>
-					<el-table-column label="录入时间" prop="typeTime" width="140"></el-table-column>
+					<el-table-column label="地址" prop="companyArea"></el-table-column>
+					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>
+					<el-table-column label="联系方式" prop="contactPhone" width="140"></el-table-column>
+					<el-table-column label="录入时间" prop="createTime" width="140"></el-table-column>
 					<el-table-column label="操作" align="center" width="230">
 						<template slot-scope="scope">
 							<el-button size="mini" icon="el-icon-edit" @click="edit">编辑查看</el-button>
@@ -80,55 +80,81 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				findCompany: '',
-				findAddress: '',
-				findContacts: '',
-				findContactMethod: '',
-				findConsignDate: [],
-				startDate: '',
-				endDate: '',
+				findCompanyName: '',
+				findCompanyArea: '',
+				findContactName: '',
+				findContactPhone: '',
+				findRangeDate: [],
+				findCreateTimeBeginStr: '',
+				findCreateTimeEndStr: '',
 				pageIndex: 1,
 				pageSize: 10,
 				count: 87,
 				tableData: [
 					{
+						'customerID': '1',
 						'companyName': '安宁恒源爆破工程有限公司',
-						'address': '云南省红河州蒙自县',
-						'contacts': '王芳',
-						'contactMethod': '13049497395',
-						'typeTime': '2018-01-23'
+						'companyArea': '云南省红河州蒙自县',
+						'detailAddress': '大新街道',
+						'contactName': '王芳',
+						'contactPhone': '13049497395',
+						'createTime': '2018-01-23'
 					},
 					{
+						'customerID': '2',
 						'companyName': '安宁恒源爆破工程有限公司',
-						'address': '云南省红河州蒙自县',
-						'contacts': '王芳',
-						'contactMethod': '13049497395',
-						'typeTime': '2018-01-23'
+						'companyArea': '云南省红河州蒙自县',
+						'detailAddress': '南头街道',
+						'contactName': '王芳',
+						'contactPhone': '13049497395',
+						'createTime': '2018-01-23'
 					}
 				]
 			}
 		},
 		created() {
+			this.getList()
 		},
 		methods: {
 			reset() {
-				this.findCompany = ''
-				this.findAddress = ''
-				this.findContacts = ''
-				this.findContactMethod = ''
-				this.findConsignDate = []
-				this.startDate = ''
-				this.endDate = ''
+				this.findCompanyName = ''
+				this.findCompanyArea = ''
+				this.findContactName = ''
+				this.findContactPhone = ''
+				this.findRangeDate = []
+				this.findCreateTimeBeginStr = ''
+				this.findCreateTimeEndStr = ''
 			},
 			pageChange(index) {
 				this.pageIndex = index
 			},
 			selectDateRange(date) {
-				this.startDate = new Date(date[0]).getTime()
-				this.endDate = new Date(date[1]).getTime()
+				this.findCreateTimeBeginStr = new Date(date[0]).getTime()
+				this.findCreateTimeEndStr = new Date(date[1]).getTime()
+			},
+			getList(pageIndex) {
+				let data = {
+					current: pageIndex,
+					size: this.pageSize,
+					companyArea: this.findCompanyArea,
+					companyName: this.findCompanyName,
+					contactName: this.findContactName,
+					contactPhone: this.findContactPhone,
+					createTimeBeginStr: this.findCreateTimeBeginStr,
+					createTimeEndStr: this.findCreateTimeEndStr,
+					isConsignor: 'Y',
+				}
+				request({
+					url: '/customer/findList',
+					data
+				}).then(res => {
+					console.log(res.data)
+					this.tableData = res.data.data
+				})
 			},
 			add() {
 				this.$router.push({name: 'addshipper'})

@@ -114,6 +114,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import request from "../../common/request";
 export default {
 	data() {
 		return {
@@ -341,14 +342,18 @@ export default {
 		}
 	},
 	created() {
-		this.getCarrierbillList()
+		// this.getCarrierbillList()
 	},
 	methods: {
 		pageChange(index) {
 			
 		},
 		getCarrierbillList(){
-
+			request({
+				url: ''
+			}).then(res => {
+				
+			})
 		},
 		handleCommand(command) {
 			if(command.type=='view'){

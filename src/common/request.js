@@ -32,8 +32,12 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
 	response => {
 		if (response.data.code != 200) {
-			if (response.data.code == 10016) {
+			if (response.data.code == 100 // 用户未登录
+				|| response.data.code == 101 // 用户不存在
+				|| response.data.code == 5201 // Token验证失败, 请求重新登录!
+				|| response.data.code == 5202) { // 帐号已在其它地方登录!
 				localStorage.clear()
+				Message.error(response.data.msg)
 				window.location.href = '/#/login'
 				return Promise.reject('error')
 			}
@@ -44,9 +48,9 @@ service.interceptors.response.use(
 		}
 	},
 	error => {
-		console.log('err' + error)// for debug
+		console.log(error)// for debug
 		Message({
-			message: error.msg,
+			message: error,
 			type: 'error',
 			duration: 5 * 1000
 		})

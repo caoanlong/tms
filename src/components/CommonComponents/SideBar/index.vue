@@ -1,7 +1,15 @@
 <template>
 	<scroll-bar>
 		<div class="logo">AH 安化物流</div>
-		<el-menu mode="vertical"  background-color="#4f4f4f" text-color="#fff" active-text-color="#fff" @select="selectIndex" :unique-opened="true">
+		<el-menu 
+			mode="vertical"  
+			background-color="#4f4f4f" 
+			text-color="#fff" 
+			active-text-color="#fff" 
+			@select="selectIndex" 
+			:unique-opened="true" 
+			:default-active="$route.name"
+			:collapse="isCollapse">
 			<el-menu-item index="home">
 				<svg-icon icon-class="home-icon"></svg-icon>
 				<span slot="title">首页</span>

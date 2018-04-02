@@ -5,15 +5,19 @@
 			<div class="form">
 				<div class="tabs">
 					<div 
+						v-show="loginOrRegister != 'findpassword'"
 						class="tab-item" 
 						:class="{'active': loginOrRegister == 'login'}" 
 						@click="handleTabClick('login')">登录</div>
-					<div class="spit-line"></div>
+					<div class="spit-line" v-show="loginOrRegister != 'findpassword'"></div>
 					<div 
+						v-show="loginOrRegister != 'findpassword'"
 						class="tab-item" 
 						:class="{'active': loginOrRegister == 'register'}" 
 						@click="handleTabClick('register')">注册</div>
+					<div v-show="loginOrRegister == 'findpassword'" class="tab-item active">找回密码</div>
 				</div>
+				<!-- 登录 -->
 				<form class="login" v-show="loginOrRegister == 'login'">
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="customer"></svg-icon>
@@ -21,13 +25,15 @@
 					</div>
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="password"></svg-icon>
-						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="login.assword">
+						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="login.password">
 						<span class="ico show-pwd" @click="showPwd">
 							<svg-icon icon-class="eye"/>
 						</span>
 					</div>
+					<div class="txt-btn" @click="handleTabClick('findpassword')">忘记密码?</div>
 					<el-button class="login-btn" type="primary" @click="handLogin">登录</el-button>
 				</form>
+				<!-- 注册 -->
 				<form class="register" v-show="loginOrRegister == 'register'">
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="customer"></svg-icon>
@@ -81,6 +87,37 @@
 					</div>
 					<el-button class="login-btn" type="primary" @click="handRegister">注册</el-button>
 				</form>
+				<!-- 忘记密码 -->
+				<form class="findpassword" v-show="loginOrRegister == 'findpassword'">
+					<div class="ipt">
+						<svg-icon class="ico" icon-class="customer"></svg-icon>
+						<input type="text" name="mobile" placeholder="请输入手机号" v-model="findPassword.mobile">
+					</div>
+					<div class="ipt">
+						<svg-icon class="ico" icon-class="email"></svg-icon>
+						<input type="text" name="vcode" placeholder="请输入验证码" v-model="findPassword.vcode">
+						<el-button style="width: 100px" type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
+					</div>
+					<div class="ipt">
+						<svg-icon class="ico" icon-class="password"></svg-icon>
+						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="findPassword.password">
+						<span class="ico show-pwd" @click="showPwd">
+							<svg-icon icon-class="eye"/>
+						</span>
+					</div>
+					<div class="ipt">
+						<svg-icon class="ico" icon-class="password"></svg-icon>
+						<input :type="passwordType" name="confirmPassword" placeholder="请重复输入密码" v-model="findPassword.confirmPassword">
+						<span class="ico show-pwd" @click="showPwd">
+							<svg-icon icon-class="eye"/>
+						</span>
+					</div>
+					<div class="txt-btn">
+						<div class="lg-btn" @click="handleTabClick('login')">登录</div>
+						<div class="rg-btn" @click="handleTabClick('register')">注册</div>
+					</div>
+					<el-button class="login-btn" type="primary" @click="handFindPassword">提交</el-button>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -89,6 +126,7 @@
 import request from "../common/request"
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
+import { isPoneAvailable } from '../common/validators'
 export default {
 	name: 'App',
 	data() {
@@ -108,6 +146,13 @@ export default {
 				province: '',
 				city: '',
 				address: ''
+			},
+			// 找回提交的参数
+			findPassword: {
+				mobile: '',
+				vcode: '',
+				password: '',
+				confirmPassword: ''
 			},
 			// 控制显示与隐藏密码
 			passwordType: 'password',
@@ -170,6 +215,27 @@ export default {
 		 */
 		getVCode() {
 			if (this.isGetVCode) return
+
+			if (this.loginOrRegister == 'register') {
+				if (this.register.mobile == '') {
+					Message.error('手机号不能为空！')
+					return
+				}
+				if (!isPoneAvailable(this.register.mobile)) {
+					Message.error('请输入正确的手机号！')
+					return
+				}
+			} else if (this.loginOrRegister == 'findpassword') {
+				if (this.findPassword.mobile == '') {
+					Message.error('手机号不能为空！')
+					return
+				}
+				if (!isPoneAvailable(this.findPassword.mobile)) {
+					Message.error('请输入正确的手机号！')
+					return
+				}
+			}
+
 			this.timeGo()
 			let data = {
 				mobile: this.register.mobile,
@@ -179,6 +245,11 @@ export default {
 				data
 			}).then(res => {
 				console.log(res.data)
+				Message({
+					type: 'info',
+					message: res.data.data,
+					duration: 3 * 1000
+				})
 			})
 		},
 		/**
@@ -201,7 +272,49 @@ export default {
 		 * 	注册
 		 */
 		handRegister() {
-
+			let data = {
+				mobile: this.register.mobile,
+				vcode: this.register.vcode,
+				password: this.register.password,
+				contact: this.register.contact,
+				company: this.register.company,
+				province: this.register.province,
+				city: this.register.city,
+				address: this.register.address
+			}
+			request({
+				url: '/mem/register',
+				method: 'POST',
+				data
+			}).then(res => {
+				console.log(res.data)
+				if (res.data.code == 200) {
+					Message.success(res.data.msg)
+					this.loginOrRegister == 'login'
+				}
+			})
+		},
+		/**
+		 * 	找回密码
+		 */
+		handFindPassword() {
+			let data = {
+				mobile: this.findPassword.mobile,
+				vcode: this.findPassword.vcode,
+				password: this.findPassword.password,
+				confirmPassword: this.findPassword.confirmPassword
+			}
+			request({
+				url: '/mem/passwor/forget',
+				method: 'POST',
+				data
+			}).then(res => {
+				console.log(res.data)
+				if (res.data.code == 200) {
+					Message.success(res.data.msg)
+					this.loginOrRegister == 'login'
+				}
+			})
 		},
 		/**
 		 * 	倒计时
@@ -260,6 +373,28 @@ export default {
 						&.active
 							color #409EFF
 							border none
+				.login
+					.txt-btn
+						color #409EFF
+						text-align center
+						height 30px
+						line-height 30px
+						margin-top 10px
+						cursor pointer
+				.findpassword
+					.txt-btn
+						display flex
+						color #409EFF
+						height 30px
+						line-height 30px
+						margin-top 10px
+						cursor pointer
+					.lg-btn
+						flex 1
+						text-align left
+					.gg-btn
+						flex 1
+						text-align right
 				.ipt
 					display flex
 					align-items center
