@@ -8,16 +8,20 @@
 						<el-input placeholder="请输入..." v-model="findCompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="地址">
+
 						<el-input placeholder="请输入..." v-model="findCompanyArea"></el-input>
 					</el-form-item>
 					<el-form-item label="联系人">
+
 						<el-input placeholder="请输入..." v-model="findContactName"></el-input>
 					</el-form-item>
 					<el-form-item label="联系方式">
+
 						<el-input placeholder="请输入..." v-model="findContactPhone"></el-input>
 					</el-form-item>
 					<el-form-item label="录入时间">
 						<el-date-picker
+
 							v-model="findRangeDate"
 							type="daterange"
 							range-separator="至"
@@ -44,14 +48,23 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="公司名称" prop="companyName"></el-table-column>
+
 					<el-table-column label="地址" prop="companyArea"></el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>
 					<el-table-column label="联系方式" prop="contactPhone" width="140"></el-table-column>
 					<el-table-column label="录入时间" prop="createTime" width="140"></el-table-column>
-					<el-table-column label="操作" align="center" width="230">
+
+					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-button size="mini" icon="el-icon-edit" @click="edit">编辑查看</el-button>
-							<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.$index)">删除</el-button>
+
+							<el-dropdown  @command="handleCommand"  trigger="click">
+								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item :command="{type: 'view'}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit'}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete'}">删除</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -84,6 +97,7 @@
 	export default {
 		data() {
 			return {
+
 				findCompanyName: '',
 				findCompanyArea: '',
 				findContactName: '',
@@ -98,6 +112,7 @@
 					{
 						'customerID': '1',
 						'companyName': '安宁恒源爆破工程有限公司',
+
 						'companyArea': '云南省红河州蒙自县',
 						'detailAddress': '大新街道',
 						'contactName': '王芳',
@@ -107,6 +122,7 @@
 					{
 						'customerID': '2',
 						'companyName': '安宁恒源爆破工程有限公司',
+
 						'companyArea': '云南省红河州蒙自县',
 						'detailAddress': '南头街道',
 						'contactName': '王芳',
@@ -121,6 +137,7 @@
 		},
 		methods: {
 			reset() {
+
 				this.findCompanyName = ''
 				this.findCompanyArea = ''
 				this.findContactName = ''
@@ -133,6 +150,7 @@
 				this.pageIndex = index
 			},
 			selectDateRange(date) {
+
 				this.findCreateTimeBeginStr = new Date(date[0]).getTime()
 				this.findCreateTimeEndStr = new Date(date[1]).getTime()
 			},
