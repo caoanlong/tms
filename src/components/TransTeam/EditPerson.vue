@@ -83,16 +83,13 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="聘用岗位">
-							<el-select style="width: 100%" v-model="person.post" placeholder="请选择">
+							<el-select style="width: 100%" multiple v-model="person.post" placeholder="请选择">
 								<el-option label="操作员" value="操作员"></el-option>
-								<el-option label="操作员、驾驶员" value="操作员、驾驶员"></el-option>
-								<el-option label="操作员、押运员" value="操作员、押运员"></el-option>
 								<el-option label="驾驶员" value="驾驶员"></el-option>
-								<el-option label="其他人员" value="其他人员"></el-option>
 								<el-option label="押运员" value="押运员"></el-option>
-								<el-option label="押运员、驾驶员" value="押运员、驾驶员"></el-option>
-								<el-option label="专职安全员、操作员" value="专职安全员、操作员"></el-option>
+								<el-option label="专职安全员" value="专职安全员"></el-option>
 								<el-option label="装卸管理人员" value="装卸管理人员"></el-option>
+								<el-option label="其他人员" value="其他人员"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>

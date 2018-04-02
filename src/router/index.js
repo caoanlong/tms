@@ -1,12 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css'// progress bar style
 
 import Layout from '@/components/Layout'
-// import Login from '@/components/Login'
+import Login from '@/components/Login'
 
 Vue.use(Router)
 
 let routerMap = [
+	{
+		path: '/login',
+		name: 'login',
+		component: Login
+	},
 	{
 		path: '',
 		component: Layout,
@@ -362,6 +369,28 @@ const router = new Router({
 		y: 0
 	}),
 	routes: routerMap
+})
+
+NProgress.configure({ showSpinner: false })// NProgress Configuration
+
+router.beforeEach((to, from, next) => {
+	NProgress.start()
+	if (localStorage.getItem('token')) {
+		if (to.path === '/login') {
+			next({ path: '/' })
+			NProgress.done()
+		} else {
+			next()
+		}
+	} else {
+		/* has no token*/
+		if (to.path === '/login') {
+			next()
+		} else {
+			next('/login')
+		}
+		NProgress.done()
+	}
 })
 
 export default router

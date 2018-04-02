@@ -12,31 +12,23 @@ import './assets/styles/newUI.css'
 import App from './App'
 import router from './router'
 import store from './store'
+
+// global filters
+import * as filters from './filters'
+
+import globalConf from './common/globalConf'
 // icon
 import './assets/icons'
 
-Vue.use(Element)
-Vue.config.productionTip = false
+// register global utility filters.
+Object.keys(filters).forEach(key => {
+	Vue.filter(key, filters[key])
+})
 
-Vue.prototype.getSummaries = function (param) {
-	const { columns, data } = param
-	const sums = []
-	columns.forEach((column, index) => {
-		if (index === 0) {
-			sums[index] = '总计'
-			return
-		}
-		const values = data.map(item => item[column.property])
-		if (values.every(value => typeof value == 'number')) {
-			sums[index] = values.reduce((prev, curr) => {
-				return prev + curr
-			}, 0).toFixed(2)
-		} else {
-			sums[index] = ''
-		}
-	})
-	return sums
-}
+Vue.use(Element)
+Vue.use(globalConf)
+
+Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
