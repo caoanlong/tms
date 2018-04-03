@@ -100,34 +100,7 @@
 				pageSize: 10,
 				count: 87,
 				tabSelected: 'driver',
-				tableData: [
-					{
-						"name": "李金锐",
-						"cardNum": "532424197508031415",
-						"mobile": "13700669154",
-						"qualifCerNum": "532424197508031415",
-						"plateNum": "云AG5836",
-						"selfNum": "1",
-						"roadTransNum": "530181031849",
-						"load": "9990",
-						"remark": "",
-						"createTime": "2018-03-01",
-						"buildTime": "2016-05-25"
-					},
-					{
-						"name": "李金锐",
-						"cardNum": "532424197508031415",
-						"mobile": "13700669154",
-						"qualifCerNum": "532424197508031415",
-						"plateNum": "云AG5836",
-						"selfNum": "1",
-						"roadTransNum": "530181031849",
-						"load": "9990",
-						"remark": "",
-						"createTime": "2018-03-01",
-						"buildTime": "2016-05-25"
-					},
-				]
+				tableData: []
 			}
 		},
 		created() {
@@ -146,6 +119,27 @@
 			},
 			handleTabSelected(tab) {
 				console.log(tab.$options.propsData.name)
+			},
+			getList() {
+				let params = {
+					current: this.pageIndex,
+					size: this.pageSize,
+					mobile: this.findMobile,
+					position: this.findPost,
+					realName: this.findName,
+					integrityExamineGrade: this.findLevel,
+					createTimeBegin: this.startDate,
+					createTimeEnd: this.endDate
+				}
+				request({
+					url: '/staff/findList',
+					params
+				}).then(res => {
+					if (res.data.code == 200) {
+						this.tableData = res.data.data.records
+						this.count = res.data.data.total
+					}
+				})
 			},
 			add() {
 				this.$router.push({name: 'addtransinfo'})
