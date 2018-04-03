@@ -367,6 +367,14 @@ let routerMap = [
 						},
 						component: () => import ('../components/CooperPartner/EditRecDeliveryComp'),
 					},
+					{
+						path: '/viewrecdeliverycomp',
+						name: 'viewrecdeliverycomp',
+						meta: {
+							title: '收发货单位详情'
+						},
+						component: () => import ('../components/CooperPartner/ViewRecDeliveryComp'),
+					}
 				]
 			}
 		]

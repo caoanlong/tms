@@ -6,19 +6,19 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
 						<el-form-item label="公司名称">
-							<el-input v-model="recdeliverycomp.companyName"></el-input>
+							<el-input v-model="shipper.companyName"></el-input>
 						</el-form-item>
 						<el-form-item label="地址">
-							<el-input v-model="recdeliverycomp.area"></el-input>
+							<el-input v-model="shipper.companyArea"></el-input>
 						</el-form-item>
 						<el-form-item label="详细地址">
-							<el-input v-model="recdeliverycomp.address"></el-input>
+							<el-input v-model="shipper.detailAddress"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">
-							<el-input v-model="recdeliverycomp.contacts"></el-input>
+							<el-input v-model="shipper.contactName"></el-input>
 						</el-form-item>
-                        <el-form-item label="联系方式">
-							<el-input v-model="recdeliverycomp.contactMethod"></el-input>
+						<el-form-item label="联系方式">
+							<el-input v-model="shipper.contactPhone"></el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="add">立即保存</el-button>
@@ -32,23 +32,40 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				recdeliverycomp: {
+				shipper: {
+					companyArea: '',
 					companyName: '',
-					area: '',
-					address: '',
-					contacts: '',
-					contactMethod: ''
+					contactName: '',
+					contactPhone: '',
+					detailAddress: ''
 				}
 			}
 		},
 		methods: {
-            add() {
-                Message.success('保存成功！')
-                this.$router.push({name: 'recdeliverycomp'})
-            },
+			add() {
+				let data = {
+					companyArea: this.shipper.companyArea,
+					companyName: this.shipper.companyName,
+					contactName: this.shipper.contactName,
+					contactPhone: this.shipper.contactPhone,
+					detailAddress: this.shipper.detailAddress,
+					type: 'ShipperConsignee',
+				}
+				request({
+					url: '/customer/add',
+					method:'post',
+					data
+				}).then(res => {
+					Message.success('保存成功！')
+					this.$router.push({name: 'recdeliverycomp'})
+				})
+				
+				
+			},
 			back() {
 				this.$router.go(-1)
 			}
@@ -56,25 +73,5 @@
 	}
 </script>
 <style lang="stylus" scoped>
-.avatar-uploader
-	line-height 1
-	width 100px
-	height 100px
-	overflow hidden
-	border 1px dashed #d9d9d9
-	border-radius 6px
-	&:hover 
-		border-color #409eff
-	.avatar-uploader-icon
-		font-size 28px
-		color #8c939d
-		width 98px
-		height 98px
-		line-height 98px
-		text-align center
-	.avatar
-		width 98px
-		height 98px
-		display block
-		vertical-align top
+
 </style>

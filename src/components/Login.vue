@@ -34,7 +34,7 @@
 					<el-button class="login-btn" type="primary" @click="handLogin">登录</el-button>
 				</form>
 				<!-- 注册 -->
-				<form class="register" v-show="loginOrRegister == 'register'">
+				<form class="register" v-show="loginOrRegister == 'register'" autocomplete="off">
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="customer"></svg-icon>
 						<input type="text" name="username" placeholder="请输入手机号" v-model="register.mobile">
@@ -228,8 +228,7 @@ export default {
 					return
 				}
 				params = {
-					mobile: this.register.mobile,
-					type: 'forget'
+					mobile: this.register.mobile
 				}
 			} else if (this.loginOrRegister == 'findpassword') {
 				if (this.findPassword.mobile == '') {

@@ -5,28 +5,28 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="发货单位">
-						<el-input placeholder="请输入..." v-model="findDeliveryer"></el-input>
+						<el-input placeholder="请输入..." v-model="findshipperCompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="发货地">
-						<el-input placeholder="请输入..." v-model="findDeliveryArea"></el-input>
+						<el-input placeholder="请输入..." v-model="findshipperArea"></el-input>
 					</el-form-item>
 					<el-form-item label="收货单位">
-						<el-input placeholder="请输入..." v-model="findReceiver"></el-input>
+						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="收货地">
-						<el-input placeholder="请输入..." v-model="findReceiveArea"></el-input>
+						<el-input placeholder="请输入..." v-model="findconsigneeArea"></el-input>
 					</el-form-item>
-					<el-form-item label="运距">
-						<el-input placeholder="请输入..." v-model="findDistance"></el-input>
+					<el-form-item label="对外运距">
+						<el-input placeholder="请输入..." v-model="findexternalMileage"></el-input>
 					</el-form-item>
 					<el-form-item label="对内运价">
-						<el-input placeholder="请输入..." v-model="findInnerFreight"></el-input>
+						<el-input placeholder="请输入..." v-model="findinternalPrice"></el-input>
 					</el-form-item>
 					<el-form-item label="对外运价">
-						<el-input placeholder="请输入..." v-model="findExternalFreight"></el-input>
+						<el-input placeholder="请输入..." v-model="findexternalPrice"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">查询</el-button>
+						<el-button type="primary" @click="getList(1)">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -41,28 +41,34 @@
 					:data="tableData" 
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="发货单位" prop="deliveryer"></el-table-column>
-					<el-table-column label="发货地" prop="deliveryArea"></el-table-column>
-					<el-table-column label="发货详细地址" prop="deliveryAdress"></el-table-column>
-					<el-table-column label="收货单位" prop="receiver"></el-table-column>
-					<el-table-column label="收货地" prop="receiveArea"></el-table-column>
-					<el-table-column label="收货详细地址" prop="receiveAdress"></el-table-column>
-					<el-table-column label="对内运距" prop="innerDistance"></el-table-column>
-					<el-table-column label="对内运价" prop="innerFreight"></el-table-column>
-					<el-table-column label="对内TKM" prop="innerTKM"></el-table-column>
-					<el-table-column label="对外运距" prop="externalDistance"></el-table-column>
-					<el-table-column label="对外运价" prop="externalFreight"></el-table-column>
-					<el-table-column label="对外TKM" prop="externalTKM"></el-table-column>
-					<el-table-column label="对内付款占比" prop="innerPayRatio" width="100"></el-table-column>
-					<el-table-column label="对外收款占比" prop="externalRecRatio" width="100"></el-table-column>
+					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
+					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
+					<el-table-column label="发货详细地址" prop="shipperDetailAddress"></el-table-column>
+					<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
+					<el-table-column label="收货地" prop="consigneeArea"></el-table-column>
+					<el-table-column label="收货详细地址" prop="consigneeDetailAddress"></el-table-column>
+					<el-table-column label="对内运距" prop="mileage"></el-table-column>
+					<el-table-column label="对内运价" prop="internalPrice"></el-table-column>
+					<el-table-column label="对内TKM" prop="internalUnitPrice"></el-table-column>
+					<el-table-column label="对外运距" prop="externalMileage"></el-table-column>
+					<el-table-column label="对外运价" prop="externalPrice"></el-table-column>
+					<el-table-column label="对外TKM" prop="externalUnitPrice"></el-table-column>
+					<el-table-column label="对内月结比率" prop="internalAbschlussRate" width="100"></el-table-column>
+					<el-table-column label="对内现付比率" prop="internalCashRate" width="100"></el-table-column>
+					<el-table-column label="对内到付比率" prop="internalCodRate" width="100"></el-table-column>
+					<el-table-column label="对内收货方到付比率" prop="internalConsigneeCodRate" width="140"></el-table-column>
+					<el-table-column label="对外月结比率" prop="externalAbschlussRate" width="100"></el-table-column>
+					<el-table-column label="对外现付比率" prop="externalCashRate" width="100"></el-table-column>
+					<el-table-column label="对外到付比率" prop="externalCodRate" width="100"></el-table-column>
+					<el-table-column label="对外收货方到付比率" prop="externalConsigneeCodRate" width="140"></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view'}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit'}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete'}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id:scope.row.transporPriceID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id:scope.row.transporPriceID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id:scope.row.transporPriceID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -93,67 +99,100 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				findDeliveryer: '',
-				findDeliveryArea: '',
-				findReceiver: '',
-				findReceiveArea: '',
-				findDistance: '',
-				findInnerFreight: '',
-				findExternalFreight: '',
+				findconsigneeArea:'',
+				findconsigneeAreaID:'',
+				findconsigneeCompanyName:'',
+				findconsigneeDetailAddress:'',
+				findconsigneeID:'',
+				findconsignorID:'',
+				findconsignorName:'',
+				findexternalAbschlussRate:'',
+				findexternalCashRate:'',
+				findexternalCodRate:'',
+				findexternalConsigneeCodRate:'',
+				findexternalMileage:'',
+				findexternalPorRate:'',
+				findexternalPrice:'',
+				findexternalUnitPrice:'',
+				findinternalAbschlussRate:'',
+				findinternalCashRate:'',
+				findinternalCodRate:'',
+				findinternalConsigneeCodRate:'',
+				findinternalPorRate:'',
+				findinternalPrice:'',
+				findinternalUnitPrice:'',
+				findmileage:'',
+				findshipperArea:'',
+				findshipperAreaID:'',
+				findshipperCompanyName:'',
+				findshipperDetailAddress:'',
+				findshipperID:'',
+				findtransporPriceID:'',
 				pageIndex: 1,
 				pageSize: 10,
-				count: 87,
+				count: 0,
 				tabSelected: 'driver',
-				tableData: [
-					{
-						"deliveryer": "安化",
-						"deliveryArea": "云南省昆明市",
-						"deliveryAdress": "安化工厂",
-						"receiver": "红河厂",
-						"receiveArea": "云南省红河州蒙自市",
-						"receiveAdress": "蒙自小东山",
-						"innerDistance": "336",
-						"innerFreight": 322.56,
-						"innerTKM": "0.96",
-						"externalDistance": "345",
-						"externalFreight": 393,
-						"externalTKM": "1.14",
-						"innerPayRatio": "月结100%",
-						"externalRecRatio": "回单付100%"
-					},
-					{
-						"deliveryer": "安化",
-						"deliveryArea": "云南省昆明市",
-						"deliveryAdress": "安化工厂",
-						"receiver": "云锡",
-						"receiveArea": "云南省红河州个旧市",
-						"receiveAdress": "个旧云锡",
-						"innerDistance": "335",
-						"innerFreight": 321.6,
-						"innerTKM": "0.96",
-						"externalDistance": "350",
-						"externalFreight": 399,
-						"externalTKM": "1.14",
-						"innerPayRatio": "月结100%",
-						"externalRecRatio": "回单付100%"
-					},
-				]
+				tableData: []
 			}
 		},
 		created() {
+			this.getList()
 		},
 		methods: {
+			getList(pageIndex) {
+				let params = {
+					current: pageIndex || 1,
+					size: this.pageSize,
+					consigneeArea:this.findconsigneeArea,
+					consigneeAreaID:this.findconsigneeAreaID,
+					consigneeCompanyName:this.findconsigneeCompanyName,
+					consigneeDetailAddress:this.findconsigneeDetailAddress,
+					consigneeID:this.findconsigneeID,
+					consignorID:this.findconsignorID,
+					consignorName:this.findconsignorName,
+					externalAbschlussRate:this.findexternalAbschlussRate,
+					externalCashRate:this.findexternalCashRate,
+					externalCodRate:this.findexternalCodRate,
+					externalConsigneeCodRate:this.findexternalConsigneeCodRate,
+					externalMileage:this.findexternalMileage,
+					externalPorRate:this.findexternalPorRate,
+					externalPrice:this.findexternalPrice,
+					externalUnitPrice:this.findexternalUnitPrice,
+					internalAbschlussRate:this.findinternalAbschlussRate,
+					internalCashRate:this.findinternalCashRate,
+					internalCodRate:this.findinternalCodRate,
+					internalConsigneeCodRate:this.findinternalConsigneeCodRate,
+					internalPorRate:this.findinternalPorRate,
+					internalPrice:this.findinternalPrice,
+					internalUnitPrice:this.findinternalUnitPrice,
+					mileage:this.findmileage,
+					shipperArea:this.findshipperArea,
+					shipperAreaID:this.findshipperAreaID,
+					shipperCompanyName:this.findshipperCompanyName,
+					shipperDetailAddress:this.findshipperDetailAddress,
+					shipperID:this.findshipperID,
+					transporPriceID:this.findtransporPriceID
+				}
+				request({
+					url: '/transportPrice/findList',
+					params
+				}).then(res => {
+					console.log(res.data)
+					this.tableData = res.data.data.records
+					this.total= res.data.data.total
+				})
+			},
 			reset() {
-				this.findDeliveryer = ''
-				this.findDeliveryArea = ''
-				this.findReceiver = ''
-				this.findReceiveArea = ''
-				this.findDistance = ''
-				this.findInnerFreight = ''
-				this.findExternalFreight = ''
+				this.findconsigneeArea = "",
+				this.findconsigneeCompanyName = "",
+				this.findexternalPrice = "",
+				this.findinternalPrice = "",
+				this.findshipperArea = "",
+				this.findshipperCompanyName = ""
 			},
 			pageChange(index) {
 				this.pageIndex = index
@@ -161,14 +200,15 @@
 			handleTabSelected(tab) {
 				console.log(tab.$options.propsData.name)
 			},
+			handleCommand(command) {
+				if(command.type=='view'){
+					this.$router.push({name: 'viewsettleconfig', query: { transporPriceID:command.id }})
+				}else if(command.type=='edit'){
+					this.$router.push({ name: 'editsettleconfig' , query: {  transporPriceID:command.id } })
+				}
+			},
 			add() {
 				this.$router.push({name: 'addsettleconfig'})
-			},
-			view() {
-				this.$router.push({name: 'viewsettleconfig'})
-			},
-			edit() {
-				this.$router.push({name: 'editsettleconfig'})
 			},
 			deleteConfirm(i) {
 				console.log(i)
