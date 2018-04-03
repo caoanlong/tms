@@ -60,9 +60,9 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view'}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit'}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete'}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id: scope.row.customerID}}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerID}}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -112,7 +112,6 @@
 					{
 						'customerID': '1',
 						'companyName': '安宁恒源爆破工程有限公司',
-
 						'companyArea': '云南省红河州蒙自县',
 						'detailAddress': '大新街道',
 						'contactName': '王芳',
@@ -122,7 +121,6 @@
 					{
 						'customerID': '2',
 						'companyName': '安宁恒源爆破工程有限公司',
-
 						'companyArea': '云南省红河州蒙自县',
 						'detailAddress': '南头街道',
 						'contactName': '王芳',
@@ -150,7 +148,6 @@
 				this.pageIndex = index
 			},
 			selectDateRange(date) {
-
 				this.findCreateTimeBeginStr = new Date(date[0]).getTime()
 				this.findCreateTimeEndStr = new Date(date[1]).getTime()
 			},
@@ -177,8 +174,12 @@
 			add() {
 				this.$router.push({name: 'addshipper'})
 			},
-			edit() {
-				this.$router.push({name: 'editshipper'})
+			handleCommand(command) {
+				if(command.type=='view'){
+					this.$router.push({name: 'viewshipper', query: { customerID:command.id }})
+				}else if(command.type=='edit'){
+					this.$router.push({ name: 'editshipper' , query: {  customerID:command.id } })
+				}
 			},
 			deleteConfirm(i) {
 				console.log(i)
