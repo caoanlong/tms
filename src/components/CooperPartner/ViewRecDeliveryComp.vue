@@ -1,27 +1,27 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card box-card">
-			<div  class="header clearfix">托运人详情</div>
+			<div  class="header clearfix">收发货单位详情</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
 						<el-form-item label="公司名称">
-							<el-input v-model="shipper.companyName"></el-input>
+							<p>{{recdeliverycomp.companyName}}</p>
 						</el-form-item>
 						<el-form-item label="地址">
-							<el-input v-model="shipper.area"></el-input>
+							<p>{{recdeliverycomp.companyArea}}</p>
 						</el-form-item>
 						<el-form-item label="详细地址">
-							<el-input v-model="shipper.address"></el-input>
+							<p>{{recdeliverycomp.detailAddress}}</p>
 						</el-form-item>
 						<el-form-item label="联系人">
-							<el-input v-model="shipper.contacts"></el-input>
+							<p>{{recdeliverycomp.contactName}}</p>
 						</el-form-item>
 						<el-form-item label="联系方式">
-							<el-input v-model="shipper.contactMethod"></el-input>
+							<p>{{recdeliverycomp.contactPhone}}</p>
 						</el-form-item>
 						<el-form-item>
-							<el-button @click="back">取消</el-button>
+							<el-button @click="back">返回</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -35,13 +35,7 @@
 	export default {
 		data() {
 			return {
-				shipper: {
-					companyName: '',
-					area: '',
-					address: '',
-					contacts: '',
-					contactMethod: ''
-				}
+				recdeliverycomp: []
 			}
 		},
 		created() {
@@ -56,7 +50,8 @@
 					url: '/customer/findById',
 					params
 				}).then(res => {
-					console.log(res.data)
+					console.log(res.data.data)
+					this.recdeliverycomp =res.data.data
 				})
 			},
 			back() {
@@ -66,25 +61,16 @@
 	}
 </script>
 <style lang="stylus" scoped>
-.avatar-uploader
-	line-height 1
-	width 100px
-	height 100px
-	overflow hidden
-	border 1px dashed #d9d9d9
-	border-radius 6px
-	&:hover 
-		border-color #409eff
-	.avatar-uploader-icon
-		font-size 28px
-		color #8c939d
-		width 98px
-		height 98px
-		line-height 98px
-		text-align center
-	.avatar
-		width 98px
-		height 98px
-		display block
+.el-form-item__content
+	p
+		margin 0
+		border 1px solid #fff
+		border-bottom-color #dcdfe6
+		padding 0 15px
+		height 40px
+		font-family 'sans-serif'
+		line-height 40px
+		color #999
+	.el-input__inner
 		vertical-align top
 </style>

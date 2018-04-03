@@ -139,6 +139,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
+import request from '../../common/request'
 export default {
 	data() {
 		return {
@@ -196,12 +197,29 @@ export default {
 		},
 		add() {
 			let data = {
-				companyArea: this.shipper.companyArea,
-				companyName: this.shipper.companyName,
-				contactName: this.shipper.contactName,
-				contactPhone: this.shipper.contactPhone,
-				detailAddress: this.shipper.detailAddress,
-				isConsignor: 'Y',
+				consigner:this.templateFreight.consigner,
+				consigneCompany:this.templateFreight.consigneCompany,
+				consigneArea:this.templateFreight.consigneArea,
+				consigneAddress:this.templateFreight.consigneAddress,
+				receiveCompany:this.templateFreight.receiveCompany,
+				receiveArea:this.templateFreight.receiveArea,
+				receiveAddress:this.templateFreight.receiveAddress,
+				innerDistance:this.templateFreight.innerDistance,
+				innerTKM:this.templateFreight.innerTKM,
+				innerFreight:this.templateFreight.innerFreight,
+				externalDistance:this.templateFreight.externalDistance,
+				externalTKM:this.templateFreight.externalTKM,
+				externalFreight:this.templateFreight.externalFreight,
+				payNow1:this.templateFreight.payNow1,
+				payArrived1:this.templateFreight.payArrived1,
+				payReturn1:this.templateFreight.payReturn1,
+				settleMonth1:this.templateFreight.settleMonth1,
+				payArrivedRec1:this.templateFreight.payArrivedRec1,
+				payNow2:this.templateFreight.payNow2,
+				payArrived2:this.templateFreight.payArrived2,
+				payReturn2:this.templateFreight.payReturn2,
+				settleMonth2:this.templateFreight.settleMonth2,
+				payArrivedRec2:this.templateFreight.payArrivedRec2,
 			}
 			request({
 				url: '/transportPrice/add',

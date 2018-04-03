@@ -36,12 +36,13 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
 					ref="recTable" 
-					:data="tableData" 
+					:data="tableData"
+					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="公司名称" prop="companyName"></el-table-column>
@@ -60,7 +61,7 @@
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item :command="{type: 'view', id:scope.row.customerID}" icon="el-icon-view">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -105,7 +106,8 @@
 				pageIndex: 1,
 				pageSize: 10,
 				total:0,
-				tableData: []
+				tableData: [],
+				selectedList: []
 			}
 		},
 		created() {
@@ -130,6 +132,9 @@
 			selectDateRange(date) {
 				this.findcreateTimeBegin = date[0]
 				this.findcreateTimeEnd = date[1]
+			},
+			selectionChange(data) {
+				this.selectedList = data.map(item => item.customerID)
 			},
 			getList() {
 				console.log(this.pageIndex)
@@ -156,32 +161,35 @@
 			add() { 
 				this.$router.push({name: 'addshipper'})
 			},
-			handleCommand(command) {
-				if(command.type=='view'){
-					this.$router.push({name: 'viewshipper', query: { customerID:command.id }})
-				}else if(command.type=='edit'){
-					this.$router.push({ name: 'editshipper' , query: {  customerID:command.id } })
-				}else if(command.type=='delete'){
-
+			handleCommand(e) {
+				if(e.type=='view'){
+					this.$router.push({name: 'viewshipper', query: { customerID:e.id }})
+				}else if(e.type=='edit'){
+					this.$router.push({ name: 'editshipper' , query: {  customerID:e.id } })
+				}else if(e.type=='delete'){
+					this.deleteConfirm(e.id)
 				}
 			},
 			deleteConfirm(id) {
-				let ids = []
+				let ids = ''
 				if (id && typeof id == 'string') {
-					ids = [].concat(id)
+					ids = id
 				} else {
-					ids = this.selectedConfig
+					ids = this.selectedList.join(',')
+				}
+				if(!ids) {
+					Message({
+						type: 'warning',
+						message: '请选择'
+					})
+					return
 				}
 				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.delConfig(ids)
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
+					this.delItem(ids)
 				}).catch(() => {
 					this.$message({
 						type: 'info',
@@ -189,20 +197,21 @@
 					})
 				})
 			},
-			delConfig(ids) {
+			delItem(customerIDs) {
+				console.log(customerIDs)
 				let data = {
-					ids: ids
+					customerIDs
 				}
 				request({
-					url: ' /customer/deleteBatch',
+					url: '/customer/deleteBatch',
 					method: 'post',
 					data
 				}).then(res => {
-					if (res.data.code == 0) {
-						this.getList()
-					} else {
-						Message.error(res.data.msg)
-					}
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+					this.getList()
 				})
 			},
 		}
