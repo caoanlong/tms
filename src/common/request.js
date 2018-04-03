@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 
+export const baseURL = process.env.BASE_API
+
 // create an axios instance
 const service = axios.create({
-	baseURL: process.env.BASE_API, // api的base_url
+	baseURL: baseURL, // api的base_url
 	timeout: 5000, // request timeout
 	transformRequest: [function (data) {
 		// Do whatever you want to transform the data

@@ -6,29 +6,40 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="创建人">
-							<el-input v-model="person.creater"></el-input>
+							<el-select style="width: 100%" v-model="person.createBy" placeholder="请选择">
+								<el-option label="caoanlong" value="980762678237921281"></el-option>
+								<el-option label="nongxinkao" value="978991129679998978"></el-option>
+								<el-option label="nxk" value="979241449798569986"></el-option>
+								<el-option label="13800138000" value="980987179567521793"></el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="状态">
 							<el-select style="width: 100%" v-model="person.status" placeholder="请选择">
-								<el-option label="通过" value="通过"></el-option>
-								<el-option label="未通过" value="未通过"></el-option>
-								<el-option label="其他" value="其他"></el-option>
+								<el-option label="通过" value="pass"></el-option>
+								<el-option label="未通过" value="unpass"></el-option>
+								<el-option label="其他" value="other"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核人">
-							<el-input v-model="person.auditor"></el-input>
+							<el-select style="width: 100%" v-model="person.auditBy" placeholder="请选择">
+								<el-option label="caoanlong" value="980762678237921281"></el-option>
+								<el-option label="nongxinkao" value="978991129679998978"></el-option>
+								<el-option label="nxk" value="979241449798569986"></el-option>
+								<el-option label="13800138000" value="980987179567521793"></el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核日期">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.auditorDate"
+								v-model="person.auditTime"
 								type="date"
+								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
@@ -37,12 +48,12 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="姓名">
-							<el-input v-model="person.name"></el-input>
+							<el-input v-model="person.realName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="家庭地址">
-							<el-input v-model="person.familyAddress"></el-input>
+							<el-input v-model="person.homeAddress"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -53,8 +64,8 @@
 					<el-col :span="6">
 						<el-form-item label="性别">
 							<el-select style="width: 100%" v-model="person.sex" placeholder="请选择">
-								<el-option label="男" value="男"></el-option>
-								<el-option label="女" value="女"></el-option>
+								<el-option label="男" value="M"></el-option>
+								<el-option label="女" value="F"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -64,15 +75,16 @@
 						<el-form-item label="初次发证时间">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.initCerDate"
+								v-model="person.driverLicenseFirstTime"
 								type="date"
+								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="诚信考核等级">
-							<el-select style="width: 100%" v-model="person.integrityLevel" placeholder="请选择">
+							<el-select style="width: 100%" v-model="person.integrityExamineGrade" placeholder="请选择">
 								<el-option label="A" value="A"></el-option>
 								<el-option label="AA" value="AA"></el-option>
 								<el-option label="AAA" value="AAA"></el-option>
@@ -83,16 +95,13 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="聘用岗位">
-							<el-select style="width: 100%" v-model="person.post" placeholder="请选择">
+							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择">
 								<el-option label="操作员" value="操作员"></el-option>
-								<el-option label="操作员、驾驶员" value="操作员、驾驶员"></el-option>
-								<el-option label="操作员、押运员" value="操作员、押运员"></el-option>
 								<el-option label="驾驶员" value="驾驶员"></el-option>
-								<el-option label="其他人员" value="其他人员"></el-option>
 								<el-option label="押运员" value="押运员"></el-option>
-								<el-option label="押运员、驾驶员" value="押运员、驾驶员"></el-option>
-								<el-option label="专职安全员、操作员" value="专职安全员、操作员"></el-option>
+								<el-option label="专职安全员" value="专职安全员"></el-option>
 								<el-option label="装卸管理人员" value="装卸管理人员"></el-option>
+								<el-option label="其他人员" value="其他人员"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -100,8 +109,9 @@
 						<el-form-item label="诚信考核有效期至">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.integrityValidTo"
-								type="date"
+								v-model="person.integrityExamineEndTime"
+								type="date" 
+								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
@@ -110,12 +120,12 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="身份证号">
-							<el-input v-model="person.cardId"></el-input>
+							<el-input v-model="person.idCardNum"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="准驾车型">
-							<el-select style="width: 100%" multiple v-model="person.quasiDrivingModel" placeholder="请选择">
+							<el-select style="width: 100%" multiple v-model="quasiDrivingType" placeholder="请选择">
 								<el-option label="A1" value="A1"></el-option>
 								<el-option label="A2" value="A2"></el-option>
 								<el-option label="A3" value="A3"></el-option>
@@ -139,8 +149,9 @@
 						<el-form-item label="合同有效期起">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.contractValidFrom"
-								type="date"
+								v-model="person.laborContractBeginTime"
+								type="date" 
+								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
@@ -149,8 +160,9 @@
 						<el-form-item label="合同有效期至">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.contractValidTo"
-								type="date"
+								v-model="person.laborContractEndTime"
+								type="date" 
+								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
@@ -161,8 +173,9 @@
 						<el-form-item label="驾驶证审验有效期起">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.driverLicFrom"
-								type="date"
+								v-model="person.driverLicExamineBeginTime"
+								type="date" 
+								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
@@ -171,40 +184,42 @@
 						<el-form-item label="驾驶证审验有效期至">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.driverLicTo"
-								type="date"
+								v-model="person.driverLicExamineEndTime"
+								type="date" 
+								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证档案编号">
-							<el-input v-model="person.driverNum"></el-input>
+							<el-input v-model="person.driverLicenseCode"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="职称或技术等级">
-							<el-input v-model="person.techLevel"></el-input>
+							<el-input v-model="person.titleLever"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="从业资格证件号">
-							<el-input v-model="person.qualifCerNum"></el-input>
+							<el-input v-model="person.qualificationCode"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格类别">
-							<el-input v-model="person.qualifCerType"></el-input>
+							<el-input v-model="person.qualificationType"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证有效期至">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.qualifCerValidTo"
-								type="date"
+								v-model="person.qualificationExpirationTime"
+								type="date" 
+								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
@@ -220,53 +235,53 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="头像">
-							<ImageUpload :files="[person.avatar]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
+							<ImageUpload :files="[person.headPic]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证正面">
-							<ImageUpload :files="[person.cardFront]" @imgUrlBack="handleCardFrontSuccess"/>
+							<ImageUpload :files="[person.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证反面">
-							<ImageUpload :files="[person.cardBack]" @imgUrlBack="handleCardBackSuccess"/>
+							<ImageUpload :files="[person.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证正面">
-							<ImageUpload :files="[person.driverFront]" @imgUrlBack="handleDriverFrontSuccess"/>
+							<ImageUpload :files="[person.driverLicFrontUrl]" @imgUrlBack="handleDriverFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证反面">
-							<ImageUpload :files="[person.driverBack]" @imgUrlBack="handleDriverBackSuccess"/>
+							<ImageUpload :files="[person.driverLicBackUrl]" @imgUrlBack="handleDriverBackSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证正">
-							<ImageUpload :files="[person.qualifCerFront]" @imgUrlBack="handleQualifCerFrontSuccess"/>
+							<ImageUpload :files="[person.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证副">
-							<ImageUpload :files="[person.qualifCerBack]" @imgUrlBack="handleQualifCerBackSuccess"/>
+							<ImageUpload :files="[person.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="其他照片">
-							<ImageUpload :files="person.otherImgs" :limitNum="9" @imgUrlBack="imgUrlBack"/>
+							<ImageUpload :files="otherImgs" :limitNum="5" @imgUrlBack="imgUrlBack"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item>
-							<el-button type="primary" @click="add">立即保存</el-button>
+							<el-button type="primary" @click="createItem">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-col>
@@ -278,78 +293,99 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
+import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {
 			distData: regionData,
 			person: {
-				creater: '',
+				createBy: '',
 				status: '',
-				auditor: '',
-				auditorDate: '',
-				name: '',
-				familyAddress: '',
+				auditBy: '',
+				auditTime: '',
+				realName: '',
+				homeAddress: '',
 				mobile: '',
 				sex: '',
-				initCerDate: '',
-				integrityLevel: '',
-				post: '',
-				integrityValidTo: '',
-				cardId: '',
-				quasiDrivingModel: [],
-				contractValidFrom: '',
-				contractValidTo: '',
-				driverLicFrom: '',
-				driverLicTo: '',
-				driverNum: '',
-				techLevel: '',
-				qualifCerNum: '',
-				qualifCerType: '',
-				qualifCerValidTo: '',
+				driverLicenseFirstTime: '',
+				integrityExamineGrade: '',
+				position: '',
+				integrityExamineEndTime: '',
+				idCardNum: '',
+				quasiDrivingType: '',
+				laborContractBeginTime: '',
+				laborContractEndTime: '',
+				driverLicExamineBeginTime: '',
+				driverLicExamineEndTime: '',
+				driverLicenseCode: '',
+				titleLever: '',
+				qualificationCode: '',
+				qualificationType: '',
+				qualificationExpirationTime: '',
 				remark: '',
-				avatar: '',
-				cardFront: '',
-				cardBack: '',
-				driverFront: '',
-				driverBack: '',
-				qualifCerFront: '',
-				qualifCerBack: '',
-				otherImgs: []
-			}
+				headPic: '',
+				idCardFrontUrl: '',
+				idCardBackUrl: '',
+				driverLicFrontUrl: '',
+				driverLicBackUrl: '',
+				qualificationFirstPage: '',
+				qualificationSecondPage: '',
+				otherStaffPic1: '',
+				otherStaffPic2: '',
+				otherStaffPic3: '',
+				otherStaffPic4: '',
+				otherStaffPic5: ''
+			},
+			quasiDrivingType: [],
+			position: [],
+			otherImgs: []
 		}
 	},
 	created() {
 	},
 	methods: {
-		handleAvatarSuccess(res, file) {
-			this.person.avatar = 'http://39.108.245.177:4000' + res.data
+		handleAvatarSuccess(res) {
+			this.person.headPic = res[0]
 		},
-		handleCardFrontSuccess(res, file) {
-			this.person.cardFront = 'http://39.108.245.177:4000' + res.data
+		handleCardFrontSuccess(res) {
+			this.person.idCardFrontUrl = res[0]
 		},
-		handleCardBackSuccess(res, file) {
-			this.person.cardBack = 'http://39.108.245.177:4000' + res.data
+		handleCardBackSuccess(res) {
+			this.person.idCardBackUrl = res[0]
 		},
-		handleDriverFrontSuccess(res, file) {
-			this.person.driverFront = 'http://39.108.245.177:4000' + res.data
+		handleDriverFrontSuccess(res) {
+			this.person.driverLicFrontUrl = res[0]
 		},
-		handleDriverBackSuccess(res, file) {
-			this.person.driverBack = 'http://39.108.245.177:4000' + res.data
+		handleDriverBackSuccess(res) {
+			this.person.driverLicBackUrl = res[0]
 		},
-		handleQualifCerFrontSuccess(res, file) {
-			this.person.qualifCerFront = 'http://39.108.245.177:4000' + res.data
+		handleQualifCerFrontSuccess(res) {
+			this.person.qualificationFirstPage = res[0]
 		},
-		handleQualifCerBackSuccess(res, file) {
-			this.person.qualifCerBack = 'http://39.108.245.177:4000' + res.data
+		handleQualifCerBackSuccess(res) {
+			this.person.qualificationSecondPage = res[0]
 		},
 		imgUrlBack(files) {
-			console.log(files)
-			this.person.otherImgs = files
+			this.otherImgs = files
+			for (let i = 0; i < files.length; i++) {
+				this.person['otherStaffPic' + (i + 1)] = files[i]
+			}
 		},
-		add() {
-			Message.success('保存成功！')
-			this.$router.push({name: 'person'})
+		createItem() {
+			let data = this.person
+			data.position = this.position.join(',')
+			data.quasiDrivingType = this.quasiDrivingType.join(',')
+			console.log(data)
+			request({
+				url: '/staff/add',
+				method: 'post',
+				data
+			}).then(res => {
+				console.log(res.data)
+				Message.success(res.data.msg)
+				this.$router.push({name: 'person'})
+			})
 		},
 		back() {
 			this.$router.go(-1)

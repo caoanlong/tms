@@ -1,5 +1,8 @@
 export default function install(Vue) {
+	// 图片地址
 	Vue.prototype.imgUrl = process.env.IMG_API
+
+	// 求和
 	Vue.prototype.getSummaries = function (param) {
 		const { columns, data } = param
 		const sums = []

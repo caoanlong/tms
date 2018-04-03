@@ -22,14 +22,11 @@
 					<el-form-item label="岗位">
 						<el-select v-model="findPost" placeholder="请选择">
 							<el-option label="操作员" value="操作员"></el-option>
-							<el-option label="操作员、驾驶员" value="操作员、驾驶员"></el-option>
-							<el-option label="操作员、押运员" value="操作员、押运员"></el-option>
 							<el-option label="驾驶员" value="驾驶员"></el-option>
-							<el-option label="其他人员" value="其他人员"></el-option>
 							<el-option label="押运员" value="押运员"></el-option>
-							<el-option label="押运员、驾驶员" value="押运员、驾驶员"></el-option>
-							<el-option label="专职安全员、操作员" value="专职安全员、操作员"></el-option>
+							<el-option label="专职安全员" value="专职安全员"></el-option>
 							<el-option label="装卸管理人员" value="装卸管理人员"></el-option>
+							<el-option label="其他人员" value="其他人员"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="时间">
@@ -39,11 +36,12 @@
 							range-separator="至"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
+							value-format="timestamp" 
 							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">查询</el-button>
+						<el-button type="primary" @click="getList">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -51,46 +49,89 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-plus">导入</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
 					ref="recTable" 
 					:data="tableData" 
+					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="姓名" prop="name"></el-table-column>
-					<el-table-column label="性别" prop="sex"></el-table-column>
-					<el-table-column label="聘用岗位" prop="post" width="100"></el-table-column>
-					<el-table-column label="身份证号" prop="cardId" width="160"></el-table-column>
-					<el-table-column label="创建人" prop="creater"></el-table-column>
-					<el-table-column label="状态" prop="status"></el-table-column>
-					<el-table-column label="审核人" prop="auditor"></el-table-column>
-					<el-table-column label="审核日期" prop="auditDate" width="140"></el-table-column>
-					<el-table-column label="准驾车型" prop="quasiDrivingModel"></el-table-column>
-					<el-table-column label="驾驶证审验有效期至" prop="driverLicTo" width="140"></el-table-column>
-					<el-table-column label="从业资格证件号" prop="qualifCerNum" width="160"></el-table-column>
-					<el-table-column label="从业资格类别" prop="qualifCerType" width="150"></el-table-column>
-					<el-table-column label="从业资格证有效期至" prop="qualifCerValidTo" width="140"></el-table-column>
-					<el-table-column label="初次发证件时间" prop="initCerDate" width="140"></el-table-column>
-					<el-table-column label="诚信考核等级" prop="integrityLevel" width="100"></el-table-column>
-					<el-table-column label="诚信考核有效期至" prop="integrityValidTo" width="140"></el-table-column>
-					<el-table-column label="合同有效期起" prop="contractValidFrom" width="140"></el-table-column>
-					<el-table-column label="合同有效期至" prop="contractValidTo" width="140"></el-table-column>
-					<el-table-column label="职称或技术等级" prop="techLevel" width="120"></el-table-column>
+					<el-table-column label="姓名" prop="realName"></el-table-column>
+					<el-table-column label="性别">
+						<template slot-scope="scope">
+							<span >{{scope.row.sex == 'M' ? '男' : '女'}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="聘用岗位" prop="position"></el-table-column>
+					<el-table-column label="身份证号" prop="idCardNum" width="160"></el-table-column>
+					<el-table-column label="创建人" prop="createByRealName" width="100"></el-table-column>
+					<el-table-column label="状态">
+						<template slot-scope="scope">
+							<span v-if="scope.row.status == 'pass'">通过</span>
+							<span v-else-if="scope.row.status == 'unpass'">不通过</span>
+							<span v-else>其他</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="审核人" prop="auditByRealName" width="100"></el-table-column>
+					<el-table-column label="审核日期" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.auditTime">{{scope.row.auditTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="准驾车型" prop="quasiDrivingType"></el-table-column>
+					<el-table-column label="驾驶证审验有效期至" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.driverLicExamineEndTime">{{scope.row.driverLicExamineEndTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="从业资格证件号" prop="qualificationCode" width="160"></el-table-column>
+					<el-table-column label="从业资格类别" prop="qualificationType" width="100"></el-table-column>
+					<el-table-column label="从业资格证有效期至" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.qualificationExpirationTime">{{scope.row.qualificationExpirationTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="初次发证件时间" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.driverLicenseFirstTime">{{scope.row.driverLicenseFirstTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="诚信考核等级" prop="integrityExamineGrade" width="100"></el-table-column>
+					<el-table-column label="诚信考核有效期至" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.integrityExamineEndTime">{{scope.row.integrityExamineEndTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="合同有效期起" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.laborContractBeginTime">{{scope.row.laborContractBeginTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="合同有效期至" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.laborContractEndTime">{{scope.row.laborContractEndTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="职称或技术等级" prop="titleLever" width="120"></el-table-column>
 					<el-table-column label="联系电话" prop="mobile" width="100"></el-table-column>
-					<el-table-column label="家庭地址" prop="familyAddress" width="140"></el-table-column>
+					<el-table-column label="家庭地址" prop="homeAddress" width="140"></el-table-column>
 					<el-table-column label="备注说明" prop="remark" width="140"></el-table-column>
-					<el-table-column label="添加时间" prop="createTime" width="140"></el-table-column>
-					<el-table-column width="80" align="center" fixed="right">
+					<el-table-column label="添加时间" width="140">
+						<template slot-scope="scope">
+							<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp()}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="操作" width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view'}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit'}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete'}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id: scope.row.staffID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.staffID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.staffID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -121,6 +162,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
@@ -133,87 +175,13 @@
 				endDate: '',
 				pageIndex: 1,
 				pageSize: 10,
-				count: 87,
-				tableData: [
-					{
-						"name": "刘贵权",
-						"sex": "男",
-						"post": "押运员",
-						"cardId": "530128197203081814",
-						"creater": "胡大江",
-						"status": "审核通过",
-						"auditor": "李华",
-						"auditDate": "2017-04-27 10:20:25",
-						"quasiDrivingModel": "A2",
-						"driverLicTo": "2018-05-31 00:00:00",
-						"qualifCerNum": "530128197203081814",
-						"qualifCerType": "道路危险货物运输押运人员;爆炸品道路运输押运员",
-						"qualifCerValidTo": "2022-07-20 00:00:00",
-						"initCerDate": "2014-12-24 00:00:00",
-						"integrityLevel": "AA级",
-						"integrityValidTo": "2018-04-30 00:00:00",
-						"contractValidFrom": "2015-01-16 00:00:00",
-						"contractValidTo": "2018-12-31 00:00:00",
-						"techLevel": "无",
-						"mobile": "13700631861",
-						"familyAddress": "安宁市太平镇西仪村",
-						"remark": "7液硝",
-						"createTime": "2018-03-01 17:41"
-					},
-					{
-						"name": "陈宇",
-						"sex": "男",
-						"post": "操作员;押运员",
-						"cardId": "530128197203081814",
-						"creater": "胡大江",
-						"status": "审核通过",
-						"auditor": "李华",
-						"auditDate": "2017-04-27 10:20:25",
-						"quasiDrivingModel": "A2",
-						"driverLicTo": "2018-05-31 00:00:00",
-						"qualifCerNum": "530128197203081814",
-						"qualifCerType": "道路危险货物运输押运人员;爆炸品道路运输押运员",
-						"qualifCerValidTo": "2022-07-20 00:00:00",
-						"initCerDate": "2014-12-24 00:00:00",
-						"integrityLevel": "AA级",
-						"integrityValidTo": "2018-04-30 00:00:00",
-						"contractValidFrom": "2015-01-16 00:00:00",
-						"contractValidTo": "2018-12-31 00:00:00",
-						"techLevel": "无",
-						"mobile": "13700631861",
-						"familyAddress": "安宁市太平镇西仪村",
-						"remark": "7液硝",
-						"createTime": "2018-03-01 17:41"
-					},
-					{
-						"name": "郜培志",
-						"sex": "男",
-						"post": "驾驶员",
-						"cardId": "530128197203081814",
-						"creater": "张金元",
-						"status": "审核通过",
-						"auditor": "李华",
-						"auditDate": "2017-04-27 10:20:25",
-						"quasiDrivingModel": "A2",
-						"driverLicTo": "2018-05-31 00:00:00",
-						"qualifCerNum": "530128197203081814",
-						"qualifCerType": "道路危险货物运输押运人员;爆炸品道路运输押运员",
-						"qualifCerValidTo": "2022-07-20 00:00:00",
-						"initCerDate": "2014-12-24 00:00:00",
-						"integrityLevel": "AA级",
-						"integrityValidTo": "2018-04-30 00:00:00",
-						"contractValidFrom": "2015-01-16 00:00:00",
-						"contractValidTo": "2018-12-31 00:00:00",
-						"techLevel": "无",
-						"mobile": "13700631861",
-						"familyAddress": "安宁市太平镇西仪村",
-						"remark": "7液硝",
-						"createTime": "2018-03-01 17:41"
-					}
-				]
+				count: 0,
+				selectedList: [],
+				tableData: []
 			}
 		},
 		created() {
+			this.getList()
 		},
 		methods: {
 			reset() {
@@ -228,9 +196,43 @@
 			pageChange(index) {
 				this.pageIndex = index
 			},
+			selectionChange(data) {
+				this.selectedList = data.map(item => item.staffID)
+			},
 			selectDateRange(date) {
-				this.startDate = new Date(date[0]).getTime()
-				this.endDate = new Date(date[1]).getTime()
+				this.startDate = date[0]
+				this.endDate = date[1]
+			},
+			getList() {
+				let params = {
+					current: this.pageIndex,
+					size: this.pageSize,
+					mobile: this.findMobile,
+					position: this.findPost,
+					realName: this.findName,
+					integrityExamineGrade: this.findLevel,
+					createTimeBegin: this.startDate,
+					createTimeEnd: this.endDate
+				}
+				request({
+					url: '/staff/findList',
+					params
+				}).then(res => {
+					if (res.data.code == 200) {
+						this.tableData = res.data.data.records
+						this.count = res.data.data.total
+					}
+				})
+			},
+			handleCommand(e) {
+				console.log(e)
+				if (e.type == 'view') {
+					this.$router.push({name: 'viewperson', query: {staffID: e.id}})
+				} else if (e.type == 'edit') {
+					this.$router.push({name: 'editperson', query: {staffID: e.id}})
+				} else if (e.type == 'delete') {
+					this.deleteConfirm(e.id)
+				}
 			},
 			add() {
 				this.$router.push({name: 'addperson'})
@@ -241,25 +243,43 @@
 			edit() {
 				this.$router.push({name: 'editperson'})
 			},
-			deleteConfirm(i) {
-				console.log(i)
+			deleteConfirm(id) {
+				let ids = ''
+				if (id && typeof id == 'string') {
+					ids = id
+				} else {
+					ids = this.selectedList.join(',')
+				}
 				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.tableData.splice(i, 1)
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
+					this.delItem(ids)
 				}).catch(() => {
 					this.$message({
 						type: 'info',
 						message: '已取消删除'
 					})
 				})
-			}
+			},
+			delItem(staffIDs) {
+				console.log(staffIDs)
+				let data = {
+					staffIDs
+				}
+				request({
+					url: '/staff/deleteBatch',
+					method: 'post',
+					data
+				}).then(res => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+					this.getList()
+				})
+			},
 		}
 	}
 </script>

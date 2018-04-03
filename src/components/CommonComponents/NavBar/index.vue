@@ -6,16 +6,16 @@
 			<el-dropdown class="avatar-container right-menu-item">
 				<div class="avatar-wrapper">
 					<img class="user-avatar" src="Photo" @error="errorImg">
-					<span class="user-text">你好！{{'Name'}}</span>
+					<span class="user-text">你好！{{JSON.parse(userInfo).userName}}</span>
 					<i class="el-icon-caret-bottom"></i>
 				</div>
 				<el-dropdown-menu slot="dropdown">
-					<router-link to="{name:'userprofile'}">
+					<router-link :to="{name:'userprofile'}">
 						<el-dropdown-item>个人资料</el-dropdown-item>
 					</router-link>
-					<router-link to="/">
+					<!-- <router-link to="/">
 						<el-dropdown-item>通讯录</el-dropdown-item>
-					</router-link>
+					</router-link> -->
 					<el-dropdown-item divided>
 						<span @click="logout" style="display:block;">退出</span>
 					</el-dropdown-item>
@@ -33,9 +33,11 @@ export default {
 	computed: {
 		...mapGetters([
 			'sidebar',
-			'Name',
-			'Photo'
+			'userInfo'
 		])
+	},
+	created() {
+		console.log(this.userInfo)
 	},
 	methods: {
 		toggleSideBar() {

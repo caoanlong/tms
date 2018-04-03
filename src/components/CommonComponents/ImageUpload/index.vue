@@ -4,7 +4,7 @@
 		:style="{'width': width+'px','height': height+'px'}" 
 		v-for="(file,i) in fileUrl"
 		:key="i" v-if="file">
-			<img :src="file">
+			<img :src="imgUrl + file">
 			<div class="controller">
 				<div class="controllerBtn">
 					<div class="perviewBtn" @click.stop="showImgModal(file)"></div>
@@ -39,6 +39,7 @@
 </template>
 <script>
 	import axios from 'axios'
+	import { baseURL } from '../../../common/request'
 	import common from '../../../common/utils'
 	import VueCropper from 'vue-cropper'
 	export default {
@@ -87,6 +88,13 @@
 				}
 			}
 		},
+		watch: {
+			files(newval) {
+				if (newval.length > 0 && newval[0]) {
+					this.fileUrl = this.files
+				}
+			}
+		},
 		methods: {
 			addImg() {
 				this.localImgUrl = window.URL.createObjectURL(this.$refs.uploadFile.files[0])
@@ -94,13 +102,14 @@
 			},
 			upload() {
 				this.$refs.cropper.getCropBlob((data) => {
-					var url = "http://39.108.245.177:3001/uploadImg"
-					var headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
-					var params = common.formDataReq({
+					let url = baseURL + "/sys/picture/upload"
+					let headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
+					let params = common.formDataReq({
 						"file": data
-					});
+					})
+					axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 					axios.post(url, params, headers).then(res => {
-						this.fileUrl.push('http://39.108.245.177:4000' + res.data.data)
+						this.fileUrl.push(res.data.data)
 						this.$emit('imgUrlBack', this.fileUrl)
 						this.isShowCropper = false
 					}).catch(err => {
@@ -112,8 +121,8 @@
 				this.fileUrl.splice(i, 1)
 				this.$emit('imgUrlBack', this.fileUrl)
 			},
-			showImgModal(imgUrl) {
-				this.$alert(`<img style="width: 100%" src=${imgUrl} />`, '图片预览', {
+			showImgModal(url) {
+				this.$alert(`<img style="width: 100%" src=${this.imgUrl + url} />`, '图片预览', {
 					dangerouslyUseHTMLString: true,
 					showConfirmButton: false,
 					customClass: 'img-preview'

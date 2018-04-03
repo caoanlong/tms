@@ -8,6 +8,7 @@ const user = {
 	mutations: {
 		SET_USERINFO: (state, userInfo) => {
 			state.userInfo = userInfo
+			localStorage.setItem('userInfo', JSON.stringify(userInfo))
 		},
 		SET_TOKEN: (state, token) => {
 			state.token = token
@@ -33,21 +34,9 @@ const user = {
 		getUserInfo({ commit }) {
 			return new Promise((resolve, reject) => {
 				request({
-					url: '/user/info'
+					url: '/mem/info'
 				}).then(res => {
-
-				})
-				getUserInfo().then(response => {
-					const data = response.data
-					commit('SET_LOGIN_NAME', data.data.LoginName)
-					commit('SET_NAME', data.data.Name)
-					commit('SET_PHOTO', data.data.Photo)
-					localStorage.setItem('LoginName', data.data.LoginName)
-					localStorage.setItem('Name', data.data.Name)
-					localStorage.setItem('Photo', data.data.Photo)
-					resolve(data)
-				}).catch(error => {
-					reject(error)
+					commit('SET_USERINFO', res.data.data)
 				})
 			})
 		}

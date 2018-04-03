@@ -272,12 +272,10 @@ export default {
 				method: 'POST',
 				data
 			}).then(res => {
-				console.log(res.data)
 				if (res.data.code == 200) {
 					Message.success('成功！')
-					console.log(res.headers)
-					console.log(res.headers['authorization'])
 					this.$store.dispatch('login', res.headers['authorization'])
+					this.$store.dispatch('getUserInfo')
 					this.$router.push({name: 'home'})
 				}
 			})

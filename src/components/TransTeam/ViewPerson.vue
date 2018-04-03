@@ -6,35 +6,37 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="创建人">
-							<p>{{person.creater}}</p>
+							<p>{{person.createBy}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="状态">
-							<p>{{person.status}}</p>
+							<p v-if="person.status == 'pass'">通过</p>
+							<p v-else-if="person.status == 'unpass'">不通过</p>
+							<p v-else>其他</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核人">
-							<p>{{person.auditor}}</p>
+							<p>{{person.auditBy}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核日期">
-							<p>{{person.auditorDate}}</p>
+							<p>{{person.auditTime | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="姓名">
-							<p>{{person.name}}</p>
+							<p>{{person.realName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="家庭地址">
-							<el-tooltip class="item" effect="dark" :content="person.familyAddress" placement="top">
-								<p>{{person.familyAddress}}</p>
+							<el-tooltip class="item" effect="dark" :content="person.comStaffIdentification.homeAddress" placement="top">
+								<p>{{person.comStaffIdentification.homeAddress}}</p>
 							</el-tooltip>
 						</el-form-item>
 					</el-col>
@@ -45,90 +47,90 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="性别">
-							<p>{{person.sex}}</p>
+							<p>{{person.comStaffIdentification.sex == 'M' ? '男' : '女'}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="初次发证时间">
-							<p>{{person.initCerDate}}</p>
+							<p>{{person.comStaffIdentification.driverLicenseFirstTime | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="诚信考核等级">
-							<p>{{person.integrityLevel}}</p>
+							<p>{{person.comStaffIdentification.integrityExamineGrade}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="聘用岗位">
-							<p>{{person.post}}</p>
+							<p>{{person.position}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="诚信考核有效期至">
-							<p>{{person.integrityValidTo}}</p>
+							<p>{{person.comStaffIdentification.integrityExamineEndTime  | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="身份证号">
-							<p>{{person.cardId}}</p>
+							<p>{{person.comStaffIdentification.idCardNum}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="准驾车型">
-							<p>{{person.quasiDrivingModel.join(',')}}</p>
+							<p>{{person.comStaffIdentification.quasiDrivingType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="合同有效期起">
-							<p>{{person.contractValidFrom}}</p>
+							<p>{{person.comStaffIdentification.laborContractBeginTime  | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="合同有效期至">
-							<p>{{person.contractValidTo}}</p>
+							<p>{{person.comStaffIdentification.laborContractEndTime  | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期起">
-							<p>{{person.driverLicFrom}}</p>
+							<p>{{person.comStaffIdentification.driverLicExamineBeginTime  | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期至">
-							<p>{{person.driverLicTo}}</p>
+							<p>{{person.comStaffIdentification.driverLicExamineEndTime  | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证档案编号">
-							<p>{{person.driverNum}}</p>
+							<p>{{person.comStaffIdentification.driverLicenseCode}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="职称或技术等级">
-							<p>{{person.techLevel}}</p>
+							<p>{{person.comStaffIdentification.titleLever}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="从业资格证件号">
-							<p>{{person.qualifCerNum}}</p>
+							<p>{{person.comStaffIdentification.qualificationCode}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格类别">
-							<p>{{person.qualifCerNum}}</p>
+							<p>{{person.comStaffIdentification.qualificationType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证有效期至">
-							<p>{{person.qualifCerValidTo}}</p>
+							<p>{{person.comStaffIdentification.qualificationExpirationTime  | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -142,46 +144,46 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="头像">
-							<ImageUpload :files="[person.avatar]" :isPreview="true"/>
+							<ImageUpload :files="[person.headPic]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证正面">
-							<ImageUpload :files="[person.cardFront]" :isPreview="true"/>
+							<ImageUpload :files="[person.comStaffPic.idCardFrontUrl]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证反面">
-							<ImageUpload :files="[person.cardBack]" :isPreview="true"/>
+							<ImageUpload :files="[person.comStaffPic.idCardBackUrl]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证正面">
-							<ImageUpload :files="[person.driverFront]" :isPreview="true"/>
+							<ImageUpload :files="[person.comStaffPic.driverLicFrontUrl]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证反面">
-							<ImageUpload :files="[person.driverBack]" :isPreview="true"/>
+							<ImageUpload :files="[person.comStaffPic.driverLicBackUrl]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证正">
-							<ImageUpload :files="[person.qualifCerFront]" :isPreview="true"/>
+							<ImageUpload :files="[person.comStaffPic.qualificationFirstPage]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证副">
-							<ImageUpload :files="[person.qualifCerBack]" :isPreview="true"/>
+							<ImageUpload :files="[person.comStaffPic.qualificationSecondPage]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="其他照片">
-							<ImageUpload :files="person.otherImgs" :limitNum="9" :isPreview="true"/>
+							<ImageUpload :files="otherImgs" :limitNum="9" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -199,54 +201,41 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
+import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {
 			distData: regionData,
 			person: {
-				creater: '王小川',
-				status: '通过',
-				auditor: '李华',
-				auditorDate: '2018-02-12',
-				name: '刘贵权',
-				familyAddress: '昆明安宁市太平镇太平南路安化小区49幢2单元8号',
-				mobile: '13700698494',
-				sex: '男',
-				initCerDate: '2016-07-19',
-				integrityLevel: 'AA',
-				post: '操作员',
-				integrityValidTo: '2018-02-12',
-				cardId: '530128197203081814',
-				quasiDrivingModel: ['A2','C1','B1'],
-				contractValidFrom: '2018-02-12',
-				contractValidTo: '2018-02-12',
-				driverLicFrom: '2018-02-12',
-				driverLicTo: '2018-02-12',
-				driverNum: '81972030818',
-				techLevel: '3',
-				qualifCerNum: '81972030818',
-				qualifCerType: '',
-				qualifCerValidTo: '2018-02-12',
-				remark: '技术娴熟',
-				avatar: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1228597946,2213646161&fm=27&gp=0.jpg',
-				cardFront: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=487786100,3325501203&fm=27&gp=0.jpg',
-				cardBack: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1501101382,1888955963&fm=200&gp=0.jpg',
-				driverFront: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2026613133,3896773094&fm=27&gp=0.jpg',
-				driverBack: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2312140842,1360670990&fm=27&gp=0.jpg',
-				qualifCerFront: 'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=4247498801,2121138548&fm=27&gp=0.jpg',
-				qualifCerBack: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2657127002,3761086305&fm=27&gp=0.jpg',
-				otherImgs: [
-					'http://img0.imgtn.bdimg.com/it/u=211127819,408382177&fm=200&gp=0.jpg',
-					'http://img5.imgtn.bdimg.com/it/u=3769120177,158294962&fm=27&gp=0.jpg',
-					'http://img5.imgtn.bdimg.com/it/u=1636995595,1602982972&fm=27&gp=0.jpg'
-				]
-			}
+				comStaffIdentification: {},
+				comStaffPic: {}
+			},
+			otherImgs: []
 		}
 	},
 	created() {
+		this.getInfo()
 	},
 	methods: {
+		getInfo() {
+			let params = {
+				staffID: this.$route.query.staffID
+			}
+			request({
+				url: '/staff/findById',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				this.person = res.data.data
+				let resDataComStaffPic = res.data.data.comStaffPic
+				let i = 1
+				while (i < 6) {
+					this.otherImgs.push(resDataComStaffPic['otherStaffPic' + i])
+					i++
+				}
+			})
+		},
 		back() {
 			this.$router.go(-1)
 		}
