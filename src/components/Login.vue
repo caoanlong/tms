@@ -18,14 +18,14 @@
 					<div v-show="loginOrRegister == 'findpassword'" class="tab-item active">找回密码</div>
 				</div>
 				<!-- 登录 -->
-				<form class="login" v-show="loginOrRegister == 'login'">
+				<form class="login" v-show="loginOrRegister == 'login'" autocomplete="off">
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="customer"></svg-icon>
-						<input type="text" name="username" placeholder="请输入用户名" v-model="login.username">
+						<input autocomplete="off" type="text" name="username" placeholder="请输入用户名" v-model="login.username">
 					</div>
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="password"></svg-icon>
-						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="login.password">
+						<input autocomplete="off" :type="passwordType" name="password" placeholder="请输入密码" v-model="login.password">
 						<span class="ico show-pwd" @click="showPwd">
 							<svg-icon icon-class="eye"/>
 						</span>
@@ -216,6 +216,8 @@ export default {
 		getVCode() {
 			if (this.isGetVCode) return
 
+			let params = {}
+
 			if (this.loginOrRegister == 'register') {
 				if (this.register.mobile == '') {
 					Message.error('手机号不能为空！')
@@ -224,6 +226,10 @@ export default {
 				if (!isPoneAvailable(this.register.mobile)) {
 					Message.error('请输入正确的手机号！')
 					return
+				}
+				params = {
+					mobile: this.register.mobile,
+					type: 'forget'
 				}
 			} else if (this.loginOrRegister == 'findpassword') {
 				if (this.findPassword.mobile == '') {
@@ -234,15 +240,17 @@ export default {
 					Message.error('请输入正确的手机号！')
 					return
 				}
+				params = {
+					mobile: this.findPassword.mobile,
+					type: 'forget'
+				}
 			}
 
 			this.timeGo()
-			let data = {
-				mobile: this.register.mobile,
-			}
+			console.log(params)
 			request({
 				url: '/common/vcode',
-				data
+				params
 			}).then(res => {
 				console.log(res.data)
 				Message({
@@ -266,6 +274,13 @@ export default {
 				data
 			}).then(res => {
 				console.log(res.data)
+				if (res.data.code == 200) {
+					Message.success('成功！')
+					console.log(res.headers)
+					console.log(res.headers['authorization'])
+					this.$store.dispatch('login', res.headers['authorization'])
+					this.$router.push({name: 'home'})
+				}
 			})
 		},
 		/**
@@ -287,10 +302,12 @@ export default {
 				method: 'POST',
 				data
 			}).then(res => {
-				console.log(res.data)
 				if (res.data.code == 200) {
-					Message.success(res.data.msg)
-					this.loginOrRegister == 'login'
+					Message.success('成功！')
+					console.log(res.headers)
+					console.log(res.headers['authorization'])
+					this.$store.dispatch('register', res.headers['authorization'])
+					this.$router.push({name: 'home'})
 				}
 			})
 		},
@@ -311,8 +328,12 @@ export default {
 			}).then(res => {
 				console.log(res.data)
 				if (res.data.code == 200) {
-					Message.success(res.data.msg)
-					this.loginOrRegister == 'login'
+					Message.success('成功！')
+					this.loginOrRegister = 'login'
+					this.login = {
+						username: '',
+						password: ''
+					}
 				}
 			})
 		},
