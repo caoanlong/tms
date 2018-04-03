@@ -336,6 +336,14 @@ let routerMap = [
 						component: () => import ('../components/CooperPartner/EditShipper'),
 					},
 					{
+						path: '/viewshipper',
+						name: 'viewshipper',
+						meta: {
+							title: '托运人详情'
+						},
+						component: () => import ('../components/CooperPartner/ViewShipper'),
+					},
+					{
 						path: '/recdeliverycomp',
 						name: 'recdeliverycomp',
 						meta: {
