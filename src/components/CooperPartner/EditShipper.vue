@@ -9,19 +9,19 @@
 							<el-input v-model="shipper.companyName"></el-input>
 						</el-form-item>
 						<el-form-item label="地址">
-							<el-input v-model="shipper.area"></el-input>
+							<el-input v-model="shipper.companyArea"></el-input>
 						</el-form-item>
 						<el-form-item label="详细地址">
-							<el-input v-model="shipper.address"></el-input>
+							<el-input v-model="shipper.detailAddress"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">
-							<el-input v-model="shipper.contacts"></el-input>
+							<el-input v-model="shipper.contactName"></el-input>
 						</el-form-item>
 						<el-form-item label="联系方式">
-							<el-input v-model="shipper.contactMethod"></el-input>
+							<el-input v-model="shipper.contactPhone"></el-input>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click="add">立即保存</el-button>
+							<el-button type="primary" @click="edit">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-form>
@@ -32,22 +32,47 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				shipper: {
-					companyName: '安宁恒源爆破工程有限公司',
-					area: '云南省红河州',
-					address: '蒙自县',
-					contacts: '王芳',
-					contactMethod: '13049497395'
-				}
+				shipper: []
 			}
 		},
+		created() {
+			this.getDetail()
+		},
 		methods: {
-			add() {
-				Message.success('保存成功！')
-				this.$router.push({name: 'shipper'})
+			getDetail() {
+				let params = {
+					customerID:this.$route.query.customerID
+				}
+				request({
+					url: '/customer/findById',
+					params
+				}).then(res => {
+					console.log(res.data.data)
+					this.shipper =res.data.data
+				})
+			},
+			edit() {
+				let data = {
+					companyArea: this.shipper.companyArea,
+					companyName: this.shipper.companyName,
+					contactName: this.shipper.contactName,
+					contactPhone: this.shipper.contactPhone,
+					detailAddress: this.shipper.detailAddress,
+					customerID:this.$route.query.customerID
+				}
+				request({
+					url: '/customer/update',
+					method:'post',
+					data
+				}).then(res => {
+					console.log(res.data)
+					Message.success('保存成功！')
+					this.$router.push({name: 'shipper'})
+				})
 			},
 			back() {
 				this.$router.go(-1)
@@ -56,25 +81,5 @@
 	}
 </script>
 <style lang="stylus" scoped>
-.avatar-uploader
-	line-height 1
-	width 100px
-	height 100px
-	overflow hidden
-	border 1px dashed #d9d9d9
-	border-radius 6px
-	&:hover 
-		border-color #409eff
-	.avatar-uploader-icon
-		font-size 28px
-		color #8c939d
-		width 98px
-		height 98px
-		line-height 98px
-		text-align center
-	.avatar
-		width 98px
-		height 98px
-		display block
-		vertical-align top
+
 </style>

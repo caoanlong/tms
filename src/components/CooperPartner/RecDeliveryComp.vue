@@ -5,29 +5,30 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="公司名称">
-						<el-input placeholder="请输入..." v-model="findCompany"></el-input>
+						<el-input placeholder="请输入..." v-model="findcompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="地址">
-						<el-input placeholder="请输入..." v-model="findAddress"></el-input>
+						<el-input placeholder="请输入..." v-model="findcompanyArea"></el-input>
 					</el-form-item>
 					<el-form-item label="联系人">
-						<el-input placeholder="请输入..." v-model="findContacts"></el-input>
+						<el-input placeholder="请输入..." v-model="findcontactName"></el-input>
 					</el-form-item>
 					<el-form-item label="联系方式">
-						<el-input placeholder="请输入..." v-model="findContactMethod"></el-input>
+						<el-input placeholder="请输入..." v-model="findcontactPhone"></el-input>
 					</el-form-item>
 					<el-form-item label="录入时间">
 						<el-date-picker
-							v-model="findConsignDate"
+							v-model="findRangeDate"
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
+							value-format="timestamp"
 							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">查询</el-button>
+						<el-button type="primary" @click="getList(1)">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -44,18 +45,22 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="公司名称" prop="companyName"></el-table-column>
-					<el-table-column label="地址" prop="address"></el-table-column>
-					<el-table-column label="联系人" prop="contacts" width="100"></el-table-column>
-					<el-table-column label="联系方式" prop="contactMethod" width="140"></el-table-column>
-					<el-table-column label="录入时间" prop="typeTime" width="140"></el-table-column>
+					<el-table-column label="地址" prop="companyArea"></el-table-column>
+					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>
+					<el-table-column label="联系方式" prop="contactPhone" width="140"></el-table-column>
+					<el-table-column label="录入时间" prop="createTime" width="140">
+						<template slot-scope="scope">
+							<span>{{scope.row.createTime | getdatefromtimestamp() }}</span>
+						</template>
+					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view'}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit'}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete'}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id:scope.row.customerID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -63,7 +68,7 @@
 				</el-table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{count}} 条记录每页显示</span>
+						<span>总共 {{total}} 条记录每页显示</span>
 						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize">
 							<el-option label="10" value="10"></el-option>
 							<el-option label="20" value="20"></el-option>
@@ -76,7 +81,7 @@
 					</el-col>
 					<el-col :span="12">
 						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="count" @current-change="pageChange"></el-pagination>
+							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="total" @current-change="pageChange"></el-pagination>
 						</div>
 					</el-col>
 				</el-row>
@@ -86,61 +91,76 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				findCompany: '',
-				findAddress: '',
-				findContacts: '',
-				findContactMethod: '',
-				findConsignDate: [],
-				startDate: '',
-				endDate: '',
+				findcompanyName: '',
+				findcompanyArea: '',
+				findcontactName: '',
+				findcontactPhone: '',
+				findRangeDate: [],
+				findcreateTimeBeginStr: '',
+				findcreateTimeEndStr: '',
 				pageIndex: 1,
 				pageSize: 10,
-				count: 87,
-				tableData: [
-					{
-						'companyName': '安宁恒源爆破工程有限公司',
-						'address': '云南省红河州蒙自县',
-						'contacts': '王芳',
-						'contactMethod': '13049497395',
-						'typeTime': '2018-01-23'
-					},
-					{
-						'companyName': '安宁恒源爆破工程有限公司',
-						'address': '云南省红河州蒙自县',
-						'contacts': '王芳',
-						'contactMethod': '13049497395',
-						'typeTime': '2018-01-23'
-					}
-				]
+				total:0,
+				tableData: []
 			}
 		},
 		created() {
+			this.getList()
 		},
 		methods: {
 			reset() {
-				this.findCompany = ''
-				this.findAddress = ''
-				this.findContacts = ''
-				this.findContactMethod = ''
-				this.findConsignDate = []
-				this.startDate = ''
-				this.endDate = ''
+				this.findcompanyArea='',
+				this.findcompanyName='',
+				this.findcontactName='',
+				this.findcontactPhone='',
+				this.findcreateTimeBegin='',
+				this.findcreateTimeEnd='',
+				this.findRangeDate = [],
+				this.pageIndex=1,
+				this.getList()
 			},
 			pageChange(index) {
 				this.pageIndex = index
+				this.getList()
 			},
 			selectDateRange(date) {
-				this.startDate = new Date(date[0]).getTime()
-				this.endDate = new Date(date[1]).getTime()
+				this.findcreateTimeBegin = date[0]
+				this.findcreateTimeEnd = date[1]
 			},
-			add() {
+			getList() {
+				let params = {
+					current: this.pageIndex,
+					size: this.pageSize,
+					companyArea:this.findcompanyArea,
+					companyName:this.findcompanyName,
+					contactName:this.findcontactName,
+					contactPhone:this.findcontactPhone,
+					createTimeBegin:this.findcreateTimeBegin,
+					createTimeEnd:this.findcreateTimeEnd,
+					type: 'ShipperConsignee',
+				}
+				request({
+					url: '/customer/findList',
+					params
+				}).then(res => {
+					console.log(res.data)
+					this.tableData = res.data.data.records
+					this.total= res.data.data.total
+				})
+			},
+			add() { 
 				this.$router.push({name: 'addrecdeliverycomp'})
 			},
-			edit() {
-				this.$router.push({name: 'editrecdeliverycomp'})
+			handleCommand(command) {
+				if(command.type=='view'){
+					this.$router.push({name: 'viewshipper', query: { customerID:command.id }})
+				}else if(command.type=='edit'){
+					this.$router.push({ name: 'editrecdeliverycomp' , query: {  customerID:command.id } })
+				}
 			},
 			deleteConfirm(i) {
 				console.log(i)
