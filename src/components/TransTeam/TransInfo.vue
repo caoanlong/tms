@@ -132,7 +132,7 @@
 					createTimeEnd: this.endDate
 				}
 				request({
-					url: '/staff/findList',
+					url: '/transportRecord/findList',
 					params
 				}).then(res => {
 					if (res.data.code == 200) {
