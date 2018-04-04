@@ -1,10 +1,13 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card hasTit">
-			<div slot="header" class="clearfix">承运单编号 <span class="CarrierNum">{{$route.query.CarrierNum}}</span><span>创建时间：{{carrierbillInfo.CreatedDate}}</span><span>发货单号：{{carrierbillInfo.ConsignNum}}</span><span>委托时间：{{carrierbillInfo.CommissionDate}}</span>
-				<span class="status status1" v-if="carrierbillInfo.Status =='待执行'">待执行</span>
-				<span class="status status2" v-else-if="carrierbillInfo.Status =='执行中'">执行中</span>
-				<span class="status status3" v-else-if="carrierbillInfo.Status =='已签收'">已签收</span>
+		<div class="wf-card hasTit">
+			
+			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderID}}<span>发货单号：{{carrierOrder.shipperNo}}</span><span>创建时间：{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span>委托时间：接口无此参数</span>
+				<span class="status status1" v-if="carrierOrder.status=='Commited'">待执行</span>
+				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
+				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
+				<span class="status status1" v-else-if="carrierOrder.status=='Closed'">关闭</span>
+				<span class="status status1" v-else-if="carrierOrder.status=='Canceled'">作废</span>
 			</div>
 			<el-row>
 				<div class="split-item">
@@ -16,14 +19,14 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="托运人">
-							<el-input placeholder="托运人" v-model="carrierbillInfo.Consignor"></el-input>
+							<el-input placeholder="托运人"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="承运人">
-							<el-input placeholder="承运人" v-model="carrierbillInfo.Carrier"></el-input>
+							<el-input placeholder="承运人" v-model="carrierOrder.carrierrName"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -38,27 +41,27 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="发货单位">
-							<el-input placeholder="发货单位" v-model="carrierbillInfo.ConsignerCompany"></el-input>
+							<el-input placeholder="发货单位" v-model="carrierOrder.shipperCompanyName"></el-input>
 						</el-form-item>
 						<el-form-item label="发货人">
-							<el-input placeholder="发货人" v-model="carrierbillInfo.Consigner"></el-input>
+							<el-input placeholder="发货人" v-model="carrierOrder.shipperName"></el-input>
 						</el-form-item>
 						<el-form-item label="发货时间">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierbillInfo.DeliveryDate"></el-date-picker>
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierOrder.shipperDate"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="委托时间">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择委托时间" v-model="carrierbillInfo.CommissionDate"></el-date-picker>
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择委托时间(接口无参)" ></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="发货单号">
-							<el-input placeholder="发货单号" v-model="carrierbillInfo.ConsignNum"></el-input>
+							<el-input placeholder="发货单号" v-model="carrierOrder.shipperNo"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -73,7 +76,7 @@
 				<el-col :span="10">
 					<el-form label-width="20px">
 						<el-form-item>
-							<el-input placeholder="发货详细地址" v-model="carrierbillInfo.Dispatch"></el-input>
+							<el-input placeholder="发货详细地址" v-model="carrierOrder.shipperDetailAddress"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -82,21 +85,21 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="收货单位">
-							<el-input placeholder="收货单位" v-model="carrierbillInfo.Consigner"></el-input>
+							<el-input placeholder="收货单位" v-model="carrierOrder.consigneeCompanyName"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="收货人">
-							<el-input placeholder="收货人" v-model="carrierbillInfo.Consignee"></el-input>
+							<el-input placeholder="收货人" v-model="carrierOrder.consigneeName"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="到货时间">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择到货时间" v-model="carrierbillInfo.ArrivalDate"></el-date-picker>
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择到货时间" v-model="carrierOrder.consigneeDate"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -222,17 +225,20 @@
 					</el-form>
 				</el-col>
 			</el-row>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
+import request from "../../common/request"
 export default {
 	data() {
 		return {
 			distData: regionData,
 			selectedAreas: [],
+			carrierOrder:[],
+			carrierCargo:[],
 			carrierbillInfo: {
 				Status: '待执行',
 				Consignor: '安宁化工厂',
@@ -306,9 +312,22 @@ export default {
 		}
 	},
 	created() {
-
+		this.getDetail()
 	},
 	methods: {
+		getDetail() {
+			let params = {
+				carrierOrderID:this.$route.query.carrierOrderID
+			}
+			request({
+				url: '/biz/carrierOrder/detail',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				this.carrierOrder = res.data.data
+				this.carrierCargo = res.data.data.carrierCargo
+			})
+		},
 		AddDispatchBill() {
 			this.$router.push({ name: 'adddispatchbill', query: { CarrierNum: this.$route.query.CarrierNum } })
 		},
@@ -333,25 +352,23 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-.el-card__header
-	span
-		margin-right 40px
-		font-size 14px
-		color #909399
-		&.CarrierNum
-			font-weight bold
-			margin-left 20px
-		&.status
-			position absolute
-			margin-right 0
-			right 20px
-			top 15px
-			height 24px
-			line-height 24px
-			color #fff
-			padding 0 15px
+.wf-card
+	.header
+		span
 			font-size 12px
-			border-radius 4px
+			margin-left 40px
+			&.status
+				position absolute
+				margin-right 0
+				right 20px
+				top 15px
+				height 24px
+				line-height 24px
+				color #fff
+				padding 0 15px
+				font-size 12px
+				-moz-border-radius 4px
+				     border-radius 4px
 			&.status1
 				background #F56C6C
 			&.status2

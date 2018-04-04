@@ -1,50 +1,52 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">承运单编号：{{$route.query.CarrierNum}}<span>发货单号：{{carrierbillInfo.ConsignNum}}</span><span>创建时间：{{carrierbillInfo.CreatedDate}}</span><span>委托时间：{{carrierbillInfo.CommissionDate}}</span>
-				<span class="status status1" v-if="carrierbillInfo.Status =='待执行'">待执行</span>
-				<span class="status status2" v-else-if="carrierbillInfo.Status =='执行中'">执行中</span>
-				<span class="status status3" v-else-if="carrierbillInfo.Status =='已签收'">已签收</span>
+			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderID}}<span>发货单号：{{carrierOrder.shipperNo}}</span><span>创建时间：{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span>委托时间：接口无此参数</span>
+				<span class="status status1" v-if="carrierOrder.status=='Commited'">待执行</span>
+				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
+				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
+				<span class="status status1" v-else-if="carrierOrder.status=='Closed'">关闭</span>
+				<span class="status status1" v-else-if="carrierOrder.status=='Canceled'">作废</span>
 			</div>
 			<table class="wf-table">
 				<caption>承运信息</caption>
 				<tr>
-					<td width="50%"><span class="justify">托运人</span>{{carrierbillInfo.Consignor}}</td>
-					<td width="50%"><span class="justify">承运人</span>{{carrierbillInfo.Carrier}}</td>
+					<td width="50%"><span class="justify">托运人</span>接口无此参数</td>
+					<td width="50%"><span class="justify">承运人</span>{{carrierOrder.carrierrName}}</td>
 				</tr>
 			</table>
 			<table class="wf-table">
 				<caption>收发货信息</caption>
 				<tr>
-					<td width="50%"><span class="justify">发货单位</span>{{carrierbillInfo.ConsignerCompany}}</td>
-					<td width="50%"><span class="justify">收货单位</span>{{carrierbillInfo.ConsigneeCompany}}</td>
+					<td width="50%"><span class="justify">发货单位</span>{{carrierOrder.shipperCompanyName}}</td>
+					<td width="50%"><span class="justify">收货单位</span>{{carrierOrder.consigneeCompanyName}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货人</span>{{carrierbillInfo.Consigner}}</td>
-					<td><span class="justify">收货人</span>{{carrierbillInfo.Consignee}}</td>
+					<td><span class="justify">发货人</span>{{carrierOrder.shipperName}}</td>
+					<td><span class="justify">收货人</span>{{carrierOrder.consigneeName}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">联系方式</span>{{carrierbillInfo.Consigner}}</td>
-					<td><span class="justify">联系方式</span>{{carrierbillInfo.Consignee}}</td>
+					<td><span class="justify">联系方式</span>{{carrierOrder.shipperPhone}}</td>
+					<td><span class="justify">联系方式</span>{{carrierOrder.consigneePhone}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货地</span>{{carrierbillInfo.Dispatch}}</td>
-					<td><span class="justify">收货地</span>{{carrierbillInfo.Discharge}}</td>
+					<td><span class="justify">发货地</span>{{carrierOrder.shipperArea}}{{carrierOrder.shipperDetailAddress}}</td>
+					<td><span class="justify">收货地</span>{{carrierOrder.consigneeArea}}{{carrierOrder.consigneeDetailAddress}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货时间</span>{{carrierbillInfo.DeliveryDate}}</td>
-					<td><span class="justify">到货时间</span>{{carrierbillInfo.ArrivalDate}}</td>
+					<td><span class="justify">发货时间</span>{{carrierOrder.shipperDate | getdatefromtimestamp()}}</td>
+					<td><span class="justify">到货时间</span>{{carrierOrder.consigneeDate | getdatefromtimestamp()}}</td>
 				</tr>
 			</table>
 			<table class="wf-table">
 				<caption>货物信息</caption>
 				<tr>
-					<td colspan="6">
-						<span class="labels">货物类型：</span>重货
-						<span class="labels" style="margin-left:40px">运输方式：</span>{{carrierbillInfo.transType}}
+					<td colspan="7">
+						<span class="labels">运输方式：</span>接口无此参数，是否删除？
 					</td>
 				</tr>
 				<tr>
+					<th>货物类型</th>
 					<th>货物规格</th>
 					<th>货物名称</th>
 					<th>数量(件)</th>
@@ -52,21 +54,31 @@
 					<th>重量(吨)</th>
 					<th>剩余货量</th>
 				</tr>
-				<tr class="is-center">
-					<td>R72</td>
-					<td>炸药</td>
-					<td>0</td>
-					<td>3</td>
-					<td>9.76</td>
-					<td>9.76吨</td>
+				<tr class="is-center" v-for="item in carrierCargo" :key="item.carrierCargoID">
+					<td>
+						<span v-if="item.weightType=='Heavy'">重货</span>
+						<span v-else-if="item.weightType=='Light'">轻货</span>
+						<span v-else-if="item.weightType=='HeavyAndLight'">重轻货</span>
+					</td>
+					<td>{{item.cargoType}}</td>
+					<td>{{item.cargoName}}</td>
+					<td>{{item.cargoNum}}</td>
+					<td>{{item.cargoVolume}}</td>
+					<td>{{item.cargoWeight}}</td>
+					<td>{{item.remainingCargoNum?item.remainingCargoNum+'件/':''}}{{item.remainingCargoVolume?item.remainingCargoVolume+'方/':''}}{{item.remainingCargoWeight?item.remainingCargoWeight+'吨':''}}</td>
 				</tr>
 				<tr class="total is-center">
 					<td>合计</td>
 					<td></td>
-					<td>0</td>
-					<td>3</td>
-					<td>9.76</td>
-					<td>3方/9.76吨</td>
+					<td></td>
+					<td>{{sum('cargoNum')}}</td>
+					<td>{{sum('cargoVolume')}}</td>
+					<td>{{sum('cargoWeight')}}</td>
+					<td>
+						<span v-if="sum('cargoNum')>0">{{sum('cargoNum')}}件/</span>
+						<span v-else-if="sum('cargoVolume')>0">{{sum('cargoVolume')}}方/</span>
+						<span v-else-if="sum('cargoWeight')>0">{{sum('cargoWeight')}}吨</span>	
+					</td>
 				</tr>
 			</table>
 			<table class="wf-table">
@@ -144,11 +156,13 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
+import request from "../../common/request"
 export default {
 	data() {
 		return {
 			distData: regionData,
 			selectedAreas: [],
+			carrierOrder:[],
 			carrierbillInfo: {
 				Status: '待执行',
 				Consignor: '安宁化工厂',
@@ -173,14 +187,7 @@ export default {
 				payable: 'N',
 				transType: '公路运输'
 			},
-			cargoInfo: [{
-				'type': '',
-				'name': '',
-				'rule': '',
-				'weight': '',
-				'volumn': '',
-				'num': ''
-			}],
+			carrierCargo: [],
 			transType: '',
 			transTypeOption: [{
 					label: '海上运输',
@@ -222,14 +229,34 @@ export default {
 		}
 	},
 	created() {
-
+		this.getDetail()
 	},
 	methods: {
+		sum(o) {
+			let sum = 0
+			for (let i = this.carrierCargo.length - 1; i >= 0; i--) {
+				sum += this.carrierCargo[i][o]
+			}
+			return sum
+		},
+		getDetail() {
+			let params = {
+				carrierOrderID:this.$route.query.carrierOrderID
+			}
+			request({
+				url: '/biz/carrierOrder/detail',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				this.carrierOrder = res.data.data
+				this.carrierCargo = res.data.data.carrierCargo
+			})
+		},
 		AddDispatchBill() {
-			this.$router.push({ name: 'adddispatchbill', query: { CarrierNum: this.$route.query.CarrierNum } })
+			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
 		},
 		EditCarrierbill() {
-			this.$router.push({ name: 'editcarrierbill', query: { CarrierNum: this.$route.query.CarrierNum } })
+			this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
 		},
 		addItem() {
 			this.cargoInfo.push({
