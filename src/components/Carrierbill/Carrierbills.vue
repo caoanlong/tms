@@ -5,33 +5,38 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="关键字" >
-						<el-input placeholder="请输入关键字" style="width:150px"></el-input>
-					</el-form-item>
-					<el-form-item label="创建时间">
-						<el-date-picker v-model="carrierbills.CreatDate" type="date" placeholder="选择创建时间" style="width:140px"></el-date-picker>
+						<el-input placeholder="请输入关键字" style="width:150px" v-model="findsearchInfo"></el-input>
 					</el-form-item>
 					<el-form-item label="发货时间">
-						<el-date-picker v-model="carrierbills.DeliveryDate" type="date" placeholder="选择发货时间" style="width:140px"></el-date-picker>
-					</el-form-item>
-					<el-form-item label="到货时间">
-						<el-date-picker v-model="carrierbills.ArrivalDate" type="date" placeholder="选择到货时间" style="width:140px"></el-date-picker>
+						<el-date-picker
+							v-model="findRangeDate"
+							type="daterange"
+							range-separator="至"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							value-format="timestamp"
+							:clearable="false"
+							@change="selectDateRange">
+						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="运单状态" class="customerSelect">
-						<el-select v-model="carrierbills.Status" placeholder="运单状态" style="width:140px">
-							<el-option value="0" label="全部订单">全部订单</el-option>
-							<el-option value="1" label="待执行">待执行</el-option>
-							<el-option value="2" label="执行中">执行中</el-option>
-							<el-option value="3" label="已签收">已签收</el-option>
+						<el-select v-model="findStatus" placeholder="运单状态" style="width:140px">
+							<el-option value="" label="全部订单">全部订单</el-option>
+							<el-option value="Commited" label="待执行">待执行</el-option>
+							<el-option value="Running" label="执行中">执行中</el-option>
+							<el-option value="Signed" label="到达签收">到达签收</el-option>
+							<el-option value="Closed" label="关闭">关闭</el-option>
+							<el-option value="Canceled" label="作废">作废</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" >搜索</el-button>
-						<el-button type="default" >重置</el-button>
+						<el-button type="primary" @click="getList">搜索</el-button>
+						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="AddCarrierbill">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
 				<el-button type="default" size="mini" icon="el-icon-news">调度</el-button>
 				<el-button type="default" size="mini" icon="el-icon-refresh">刷新</el-button>
@@ -88,14 +93,14 @@
 					</el-table-column>
 					<el-table-column label="发货地" prop="shipperDetailAddress">
 					</el-table-column>
-					<el-table-column width="80" align="center" fixed="right">
+					<el-table-column label="操作" width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id: scope.row.CarrierNum}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.CarrierNum}">编辑</el-dropdown-item>
-									<el-dropdown-item>删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -104,7 +109,7 @@
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
 						<span>总共 {{total}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getCargoList()">
+						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList()">
 							<el-option label="10" value="10"></el-option>
 							<el-option label="20" value="20"></el-option>
 							<el-option label="30" value="30"></el-option>
@@ -126,7 +131,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from "../../common/request";
+import request from "../../common/request"
 export default {
 	data() {
 		return {
@@ -135,11 +140,11 @@ export default {
 			total:0,
 			tableData: [],
 			selectedList: [],
-			carrierbills:{
-				Status:'',
-				CreatDate:'',
-				DeliveryDate:''
-			},
+			findsearchInfo:'',
+			findRangeDate: [],
+			findshipperBeginDate: '',
+			findshipperEndDate: '',
+			findStatus:'',
 			refreshing: false
 		}
 	},
@@ -147,14 +152,33 @@ export default {
 		this.getList()
 	},
 	methods: {
+		reset() {
+			this.findsearchInfo='',
+			this.findshipperBeginDate='',
+			this.findshipperEndDate='',
+			this.findRangeDate = [],
+			this.findStatus='',
+			this.pageIndex=1,
+			this.getList()
+		},
+		selectDateRange(date) {
+			this.findshipperBeginDate = date[0]
+			this.findshipperEndDate = date[1]
+		},
+		selectionChange(data) {
+			this.selectedList = data.map(item => item.carrierOrderID)
+		},
 		pageChange(index) {
-			
+			this.pageIndex = index
 		},
 		getList() {
 				console.log(this.pageIndex)
 				let params = {
 					current: this.pageIndex,
-					size: this.pageSize
+					size: this.pageSize,
+					shipperBeginDate: this.findshipperBeginDate,
+					shipperEndDate: this.findshipperEndDate,
+					searchInfo: this.findsearchInfo
 				}
 				request({
 					url: '/biz/carrierOrder/list',
@@ -164,14 +188,16 @@ export default {
 					this.total= res.data.data.total
 				})
 			},
-		handleCommand(command) {
-			if(command.type=='view'){
-				this.$router.push({ name: 'viewcarrierbill' , query: { CarrierNum:command.id } })
-			}else if(command.type=='edit'){
-				this.$router.push({ name: 'editcarrierbill' , query: {  CarrierNum:command.id } })
+		handleCommand(e) {
+			if (e.type == 'view') {
+				this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID: e.id}})
+			} else if (e.type == 'edit') {
+				this.$router.push({name: 'editcarrierbill', query: {carrierOrderID: e.id}})
+			} else if (e.type == 'delete') {
+				this.deleteConfirm(e.id)
 			}
 		},
-		AddCarrierbill() {
+		add() {
 			this.$router.push({ name: 'addcarrierbill' })
 		},
 		refresh() {
@@ -181,6 +207,43 @@ export default {
 				this.refreshing = false
 			}, 500)
 		},
+		deleteConfirm(id) {
+				let ids = ''
+				if (id && typeof id == 'string') {
+					ids = id
+				} else {
+					ids = this.selectedList.join(',')
+				}
+				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.delItem(ids)
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			delItem(carrierOrderIDs) {
+				console.log(carrierOrderIDs)
+				let data = {
+					carrierOrderIDs
+				}
+				request({
+					url: '/biz/carrierOrder/delete',
+					method: 'post',
+					data
+				}).then(res => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+					this.getList()
+				})
+			},
 	}
 }
 

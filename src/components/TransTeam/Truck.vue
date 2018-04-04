@@ -41,6 +41,7 @@
 							v-model="findDate"
 							type="daterange"
 							range-separator="至"
+							value-format="timestamp"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
 							@change="selectDateRange">
@@ -245,8 +246,8 @@
 				this.pageIndex = index
 			},
 			selectDateRange(date) {
-				this.startDate = new Date(date[0]).getTime()
-				this.endDate = new Date(date[1]).getTime()
+				this.startDate = date[0]
+				this.endDate = date[1]
 			},
 			handleCommand(e) {
 				if(e.type == 'view'){
