@@ -33,12 +33,13 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
 					ref="recTable" 
 					:data="tableData" 
+					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
@@ -113,7 +114,7 @@
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
-				tabSelected: 'driver',
+				selectedList: [],
 				tableData: []
 			}
 		},
@@ -131,9 +132,7 @@
 					shipperCompanyName: this.findShipperCompanyName,
 					mileage: this.findMileage,
 					externalPrice: this.findExternalPrice,
-					internalPrice: this.findInternalPrice,
-					createTimeBegin: this.startDate,
-					createTimeEnd: this.endDate
+					internalPrice: this.findInternalPrice
 				}
 				request({
 					url: '/transportPrice/findList',
@@ -145,15 +144,19 @@
 				})
 			},
 			reset() {
-				this.findconsigneeArea = "",
-				this.findconsigneeCompanyName = "",
-				this.findexternalPrice = "",
-				this.findinternalPrice = "",
-				this.findshipperArea = "",
-				this.findshipperCompanyName = ""
+				this.findConsigneeArea = ''
+				this.findConsigneeCompanyName = ''
+				this.findShipperArea = ''
+				this.findShipperCompanyName = ''
+				this.findMileage = ''
+				this.findExternalPrice = ''
+				this.findInternalPrice = ''
 			},
 			pageChange(index) {
 				this.pageIndex = index
+			},
+			selectionChange(data) {
+				this.selectedList = data.map(item => item.transporPriceID)
 			},
 			handleCommand(e) {
 				if(e.type == 'view'){
@@ -187,13 +190,12 @@
 					})
 				})
 			},
-			delItem(staffIDs) {
-				console.log(staffIDs)
+			delItem(transporPriceIDs) {
 				let data = {
-					staffIDs
+					transporPriceIDs
 				}
 				request({
-					url: '/staff/deleteBatch',
+					url: '/transportPrice/deleteBatch',
 					method: 'post',
 					data
 				}).then(res => {
