@@ -25,7 +25,7 @@
 						</el-form-item>
 						<el-form-item label="发货地" style="flex: 1">
 							<el-cascader style="width: 100%" :options="distData" v-model="selectedConsigneAreas"
-								@change="handleDistChange1">
+								@change="handleDistChange1" separator="">
 							</el-cascader>
 						</el-form-item>
 						<el-form-item label="详细地址" style="flex: 1">
