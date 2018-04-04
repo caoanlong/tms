@@ -248,14 +248,17 @@
 				this.startDate = new Date(date[0]).getTime()
 				this.endDate = new Date(date[1]).getTime()
 			},
+			handleCommand(e) {
+				if(e.type == 'view'){
+					this.$router.push({name: 'viewtruck', query: { transporPriceID: e.id }})
+				} else if(e.type == 'edit'){
+					this.$router.push({ name: 'edittruck' , query: { transporPriceID: e.id }})
+				} else if (e.type == 'delete') {
+					this.deleteConfirm(e.id)
+				}
+			},
 			add() {
 				this.$router.push({name: 'addtruck'})
-			},
-			view() {
-				this.$router.push({name: 'viewtruck'})
-			},
-			edit() {
-				this.$router.push({name: 'edittruck'})
 			},
 			deleteConfirm(i) {
 				console.log(i)

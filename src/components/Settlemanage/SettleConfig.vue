@@ -5,28 +5,28 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="发货单位">
-						<el-input placeholder="请输入..." v-model="findshipperCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findShipperCompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="发货地">
-						<el-input placeholder="请输入..." v-model="findshipperArea"></el-input>
+						<el-input placeholder="请输入..." v-model="findShipperArea"></el-input>
 					</el-form-item>
 					<el-form-item label="收货单位">
-						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findConsigneeCompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="收货地">
-						<el-input placeholder="请输入..." v-model="findconsigneeArea"></el-input>
+						<el-input placeholder="请输入..." v-model="findConsigneeArea"></el-input>
 					</el-form-item>
 					<el-form-item label="对外运距">
-						<el-input placeholder="请输入..." v-model="findexternalMileage"></el-input>
+						<el-input placeholder="请输入..." v-model="findMileage"></el-input>
 					</el-form-item>
 					<el-form-item label="对内运价">
-						<el-input placeholder="请输入..." v-model="findinternalPrice"></el-input>
+						<el-input placeholder="请输入..." v-model="findInternalPrice"></el-input>
 					</el-form-item>
 					<el-form-item label="对外运价">
-						<el-input placeholder="请输入..." v-model="findexternalPrice"></el-input>
+						<el-input placeholder="请输入..." v-model="findExternalPrice"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList(1)">查询</el-button>
+						<el-button type="primary" @click="getList">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -42,11 +42,11 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
-					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
-					<el-table-column label="发货详细地址" prop="shipperDetailAddress"></el-table-column>
+					<el-table-column label="发货地" prop="shipperArea" width="100"></el-table-column>
+					<el-table-column label="发货详细地址" prop="shipperDetailAddress" width="100"></el-table-column>
 					<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
-					<el-table-column label="收货地" prop="consigneeArea"></el-table-column>
-					<el-table-column label="收货详细地址" prop="consigneeDetailAddress"></el-table-column>
+					<el-table-column label="收货地" prop="consigneeArea" width="100"></el-table-column>
+					<el-table-column label="收货详细地址" prop="consigneeDetailAddress" width="100"></el-table-column>
 					<el-table-column label="对内运距" prop="mileage"></el-table-column>
 					<el-table-column label="对内运价" prop="internalPrice"></el-table-column>
 					<el-table-column label="对内TKM" prop="internalUnitPrice"></el-table-column>
@@ -66,9 +66,9 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id:scope.row.transporPriceID}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id:scope.row.transporPriceID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id:scope.row.transporPriceID}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id: scope.row.transporPriceID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.transporPriceID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.transporPriceID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -103,35 +103,13 @@
 	export default {
 		data() {
 			return {
-				findconsigneeArea:'',
-				findconsigneeAreaID:'',
-				findconsigneeCompanyName:'',
-				findconsigneeDetailAddress:'',
-				findconsigneeID:'',
-				findconsignorID:'',
-				findconsignorName:'',
-				findexternalAbschlussRate:'',
-				findexternalCashRate:'',
-				findexternalCodRate:'',
-				findexternalConsigneeCodRate:'',
-				findexternalMileage:'',
-				findexternalPorRate:'',
-				findexternalPrice:'',
-				findexternalUnitPrice:'',
-				findinternalAbschlussRate:'',
-				findinternalCashRate:'',
-				findinternalCodRate:'',
-				findinternalConsigneeCodRate:'',
-				findinternalPorRate:'',
-				findinternalPrice:'',
-				findinternalUnitPrice:'',
-				findmileage:'',
-				findshipperArea:'',
-				findshipperAreaID:'',
-				findshipperCompanyName:'',
-				findshipperDetailAddress:'',
-				findshipperID:'',
-				findtransporPriceID:'',
+				findConsigneeArea: '',
+				findConsigneeCompanyName: '',
+				findShipperArea: '',
+				findShipperCompanyName: '',
+				findMileage: '',
+				findExternalPrice: '',
+				findInternalPrice: '',
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
@@ -143,47 +121,27 @@
 			this.getList()
 		},
 		methods: {
-			getList(pageIndex) {
+			getList() {
 				let params = {
-					current: pageIndex || 1,
+					current: this.pageIndex,
 					size: this.pageSize,
-					consigneeArea:this.findconsigneeArea,
-					consigneeAreaID:this.findconsigneeAreaID,
-					consigneeCompanyName:this.findconsigneeCompanyName,
-					consigneeDetailAddress:this.findconsigneeDetailAddress,
-					consigneeID:this.findconsigneeID,
-					consignorID:this.findconsignorID,
-					consignorName:this.findconsignorName,
-					externalAbschlussRate:this.findexternalAbschlussRate,
-					externalCashRate:this.findexternalCashRate,
-					externalCodRate:this.findexternalCodRate,
-					externalConsigneeCodRate:this.findexternalConsigneeCodRate,
-					externalMileage:this.findexternalMileage,
-					externalPorRate:this.findexternalPorRate,
-					externalPrice:this.findexternalPrice,
-					externalUnitPrice:this.findexternalUnitPrice,
-					internalAbschlussRate:this.findinternalAbschlussRate,
-					internalCashRate:this.findinternalCashRate,
-					internalCodRate:this.findinternalCodRate,
-					internalConsigneeCodRate:this.findinternalConsigneeCodRate,
-					internalPorRate:this.findinternalPorRate,
-					internalPrice:this.findinternalPrice,
-					internalUnitPrice:this.findinternalUnitPrice,
-					mileage:this.findmileage,
-					shipperArea:this.findshipperArea,
-					shipperAreaID:this.findshipperAreaID,
-					shipperCompanyName:this.findshipperCompanyName,
-					shipperDetailAddress:this.findshipperDetailAddress,
-					shipperID:this.findshipperID,
-					transporPriceID:this.findtransporPriceID
+					consigneeArea: this.findConsigneeArea,
+					consigneeCompanyName: this.findConsigneeCompanyName,
+					shipperArea: this.findShipperArea,
+					shipperCompanyName: this.findShipperCompanyName,
+					mileage: this.findMileage,
+					externalPrice: this.findExternalPrice,
+					internalPrice: this.findInternalPrice,
+					createTimeBegin: this.startDate,
+					createTimeEnd: this.endDate
 				}
 				request({
 					url: '/transportPrice/findList',
 					params
 				}).then(res => {
-					console.log(res.data)
+					console.log(res.data.data)
 					this.tableData = res.data.data.records
-					this.total= res.data.data.total
+					this.count = res.data.data.total
 				})
 			},
 			reset() {
@@ -197,36 +155,53 @@
 			pageChange(index) {
 				this.pageIndex = index
 			},
-			handleTabSelected(tab) {
-				console.log(tab.$options.propsData.name)
-			},
-			handleCommand(command) {
-				if(command.type=='view'){
-					this.$router.push({name: 'viewsettleconfig', query: { transporPriceID:command.id }})
-				}else if(command.type=='edit'){
-					this.$router.push({ name: 'editsettleconfig' , query: {  transporPriceID:command.id } })
+			handleCommand(e) {
+				if(e.type == 'view'){
+					this.$router.push({name: 'viewsettleconfig', query: { transporPriceID: e.id }})
+				} else if(e.type == 'edit'){
+					this.$router.push({ name: 'editsettleconfig' , query: { transporPriceID: e.id }})
+				} else if (e.type == 'delete') {
+					this.deleteConfirm(e.id)
 				}
 			},
 			add() {
 				this.$router.push({name: 'addsettleconfig'})
 			},
-			deleteConfirm(i) {
-				console.log(i)
+			deleteConfirm(id) {
+				let ids = ''
+				if (id && typeof id == 'string') {
+					ids = id
+				} else {
+					ids = this.selectedList.join(',')
+				}
 				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.tableData.splice(i, 1)
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
+					this.delItem(ids)
 				}).catch(() => {
 					this.$message({
 						type: 'info',
 						message: '已取消删除'
 					})
+				})
+			},
+			delItem(staffIDs) {
+				console.log(staffIDs)
+				let data = {
+					staffIDs
+				}
+				request({
+					url: '/staff/deleteBatch',
+					method: 'post',
+					data
+				}).then(res => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+					this.getList()
 				})
 			}
 		}

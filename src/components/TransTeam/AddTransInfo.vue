@@ -7,43 +7,70 @@
 					<el-col :span="14" :offset="5">
 						<el-form label-width="120px">
 							<el-form-item label="姓名">
-								<el-autocomplete
-									style="width: 100%"
-									v-model="transInfo.name"
-									:fetch-suggestions="getPerson"
-									placeholder="请输入..."
-								></el-autocomplete>
+								<el-select
+									style="width: 100%" 
+									v-model="transInfo.staffID"
+									filterable
+									remote
+									placeholder="请输入关键词"
+									:remote-method="getStaffs"
+									:loading="loading">
+									<el-option
+										v-for="item in staffs"
+										:key="item.staffID"
+										:label="item.realName"
+										:value="item.staffID">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-form>
 					</el-col>
 					<el-col :span="14" :offset="5">
 						<el-form label-width="120px">
 							<el-form-item label="车牌号">
-								<el-autocomplete
-									style="width: 100%"
-									v-model="transInfo.plateNum"
-									:fetch-suggestions="getPlateNum"
-									placeholder="请输入..."
-								></el-autocomplete>
+								<el-select
+									style="width: 100%" 
+									v-model="transInfo.truckID"
+									filterable
+									remote
+									placeholder="请输入关键词"
+									:remote-method="getTrucks"
+									:loading="loading">
+									<el-option
+										v-for="item in trucks"
+										:key="item.truckID"
+										:label="item.plateNo"
+										:value="item.truckID">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-form>
 					</el-col>
 					<el-col :span="14" :offset="5">
 						<el-form label-width="120px">
 							<el-form-item label="挂车牌">
-								<el-autocomplete
-									style="width: 100%"
-									v-model="transInfo.trailerPlate"
-									:fetch-suggestions="getTrailerPlate"
-									placeholder="请输入..."
-								></el-autocomplete>
+								<el-select
+									style="width: 100%" 
+									v-model="transInfo.trailerID"
+									filterable
+									remote
+									placeholder="请输入关键词"
+									:remote-method="getTrailers"
+									:loading="loading">
+									<el-option
+										v-for="item in trailers"
+										:key="item.trailerID"
+										:label="item.trailerPlateNo"
+										:value="item.trailerID">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-form>
 					</el-col>
 					<el-col :span="14" :offset="5">
 						<el-form label-width="120px">
 							<el-form-item label="自编号">
-								<el-input v-model="transInfo.selfNum"></el-input>
+								<el-input v-model="transInfo.code"></el-input>
 							</el-form-item>
 						</el-form>
 					</el-col>
@@ -52,8 +79,9 @@
 							<el-form-item label="建档时间">
 								<el-date-picker
 									style="width: 100%" 
-									v-model="transInfo.buildTime"
+									v-model="transInfo.archiveTime"
 									type="date"
+									value-format="timestamp"
 									placeholder="选择日期">
 								</el-date-picker>
 							</el-form-item>
@@ -63,7 +91,7 @@
 				<el-row>
 					<el-col :span="14" :offset="5">
 						<el-form-item>
-							<el-button type="primary" @click="add">立即保存</el-button>
+							<el-button type="primary" @click="createItem">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-col>
@@ -74,72 +102,92 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import request from '../../common/request'
 export default {
 	data() {
 		return {
+			loading: false,
 			transInfo: {
-				name: '',
-				plateNum: '',
-				trailerPlate: '',
-				selfNum: '',
-				buildTime: ''
+				archiveTime: '',
+				code: '',
+				staffID: '',
+				trailerID: '',
+				truckID: ''
 			},
-			personResource: [
-				{ "value": "李金锐"},
-				{ "value": "武藤兰"},
-				{ "value": "泷泽萝拉"},
-				{ "value": "佐伯奈"},
-				{ "value": "苍井空"},
-				{ "value": "波多野结衣"}
-			],
-			plateNumResource: [
-				{ "value": "云AG5836"},
-				{ "value": "云BN8744"},
-				{ "value": "云IJ8565"},
-				{ "value": "云LP7562"},
-				{ "value": "云FG5623"}
-			],
-			trailerPlateResource: [
-				{ "value": "云JK5621"},
-				{ "value": "云TG4124"},
-				{ "value": "云RG3324"},
-				{ "value": "云KJ2136"},
-				{ "value": "云FG5545"}
-			]
+			staffID: '',
+			staffs: [],
+			trailerID: '',
+			trailers: [],
+			truckID: '',
+			trucks: []
 		}
 	},
 	created() {
 	},
 	methods: {
-		getPerson(queryString, cb) {
-			let results = queryString ? this.personResource.filter(this.createStateFilter(queryString)) : this.personResource
-			clearTimeout(this.timeout)
-			this.timeout = setTimeout(() => {
-				cb(results)
-			}, 1000 * Math.random())
-		},
-		getPlateNum(queryString, cb) {
-			let results = queryString ? this.plateNumResource.filter(this.createStateFilter(queryString)) : this.plateNumResource
-			clearTimeout(this.timeout)
-			this.timeout = setTimeout(() => {
-				cb(results)
-			}, 1000 * Math.random())
-		},
-		getTrailerPlate(queryString, cb) {
-			let results = queryString ? this.trailerPlateResource.filter(this.createStateFilter(queryString)) : this.trailerPlateResource
-			clearTimeout(this.timeout)
-			this.timeout = setTimeout(() => {
-				cb(results)
-			}, 1000 * Math.random())
-		},
-		createStateFilter(queryString) {
-			return (state) => {
-				return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+		getStaffs(realName) {
+			if (realName !== '') {
+				this.loading = true
+				let params = {
+					realName
+				}
+				request({
+					url: '/staff/driver/suggest',
+					params
+				}).then(res => {
+					this.loading = false
+					this.staffs = res.data.data
+				})
+			} else {
+				this.staffs = []
 			}
 		},
-		add() {
-			Message.success('保存成功！')
-			this.$router.push({name: 'transinfo'})
+		getTrucks(plateNo) {
+			if (plateNo !== '') {
+				this.loading = true
+				let params = {
+					plateNo
+				}
+				request({
+					url: '/truck/plateNo/suggest',
+					params
+				}).then(res => {
+					this.loading = false
+					this.trucks = res.data.data
+				})
+			} else {
+				this.trucks = []
+			}
+		},
+		getTrailers(trailerPlateNo, cb) {
+			if (trailerPlateNo !== '') {
+				this.loading = true
+				let params = {
+					trailerPlateNo
+				}
+				request({
+					url: '/truck/trailerPlateNo/suggest',
+					params
+				}).then(res => {
+					this.loading = false
+					this.trailers = res.data.data
+				})
+			} else {
+				this.trailers = []
+			}
+		},
+		createItem() {
+			let data = this.transInfo
+			console.log(data)
+			request({
+				url: '/transportRecord/add',
+				method: 'post',
+				data
+			}).then(res => {
+				console.log(res.data)
+				Message.success(res.data.msg)
+				this.$router.push({name: 'transinfo'})
+			})
 		},
 		back() {
 			this.$router.go(-1)

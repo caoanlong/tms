@@ -195,6 +195,7 @@
 			},
 			pageChange(index) {
 				this.pageIndex = index
+				this.getList()
 			},
 			selectionChange(data) {
 				this.selectedList = data.map(item => item.staffID)
@@ -233,6 +234,9 @@
 				} else if (e.type == 'delete') {
 					this.deleteConfirm(e.id)
 				}
+			},
+			add() {
+				this.$router.push({name: 'addperson'})
 			},
 			deleteConfirm(id) {
 				let ids = ''
