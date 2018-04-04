@@ -25,26 +25,32 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">查询</el-button>
+						<el-button type="primary" @click="getList">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
 					ref="recTable" 
 					:data="tableData" 
+					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="姓名" prop="realName"></el-table-column>
 					<el-table-column label="身份证号" prop="idCardNum"></el-table-column>
 					<el-table-column label="联系电话" prop="mobile"></el-table-column>
 					<el-table-column label="从业资格证件号" prop="qualificationCode" width="120"></el-table-column>
-					<el-table-column label="车牌号" prop="plateNo"></el-table-column>
+					<el-table-column label="车牌号" width="120">
+						<template slot-scope="scope">
+							<span>{{scope.row.plateNo}}</span>
+							<span v-if="scope.row.trailerPlateNo">{{'/' + scope.row.trailerPlateNo}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="自编号" prop="code"></el-table-column>
 					<el-table-column label="道路运输证号" prop="transportLicenceCode" width="120"></el-table-column>
 					<el-table-column label="载重" prop="loads" width="100"></el-table-column>
@@ -110,6 +116,7 @@
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
+				selectedList:[],
 				tableData: []
 			}
 		},
@@ -127,6 +134,10 @@
 			},
 			pageChange(index) {
 				this.pageIndex = index
+				this.getList()
+			},
+			selectionChange(data) {
+				this.selectedList = data.map(item => item.transportRecordID)
 			},
 			selectDateRange(date) {
 				this.startDate = date[0]
@@ -162,23 +173,41 @@
 			add() {
 				this.$router.push({name: 'addtransinfo'})
 			},
-			deleteConfirm(i) {
-				console.log(i)
+			deleteConfirm(id) {
+				let ids = ''
+				if (id && typeof id == 'string') {
+					ids = id
+				} else {
+					ids = this.selectedList.join(',')
+				}
 				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.tableData.splice(i, 1)
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
+					this.delItem(ids)
 				}).catch(() => {
 					this.$message({
 						type: 'info',
 						message: '已取消删除'
 					})
+				})
+			},
+			delItem(transportRecordIDs) {
+				console.log(transportRecordIDs)
+				let data = {
+					transportRecordIDs
+				}
+				request({
+					url: '/transportRecord/deleteBatch',
+					method: 'post',
+					data
+				}).then(res => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+					this.getList()
 				})
 			}
 		}

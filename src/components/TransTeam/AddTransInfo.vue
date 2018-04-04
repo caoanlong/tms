@@ -7,45 +7,63 @@
 					<el-col :span="14" :offset="5">
 						<el-form label-width="120px">
 							<el-form-item label="姓名">
-								<el-autocomplete
+								<el-select
 									style="width: 100%" 
-									value-key="realName" 
-									label="realName" 
-									v-model="staffID"
-									:fetch-suggestions="getDrivers"
-									placeholder="请输入..." 
-									@select="handleSelect"
-								></el-autocomplete>
+									v-model="transInfo.staffID"
+									filterable
+									remote
+									placeholder="请输入关键词"
+									:remote-method="getStaffs"
+									:loading="loading">
+									<el-option
+										v-for="item in staffs"
+										:key="item.staffID"
+										:label="item.realName"
+										:value="item.staffID">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-form>
 					</el-col>
 					<el-col :span="14" :offset="5">
 						<el-form label-width="120px">
 							<el-form-item label="车牌号">
-								<el-autocomplete
+								<el-select
 									style="width: 100%" 
-									value-key="plateNo" 
-									label="plateNo" 
-									v-model="truckID"
-									:fetch-suggestions="getTrucks"
-									placeholder="请输入..." 
-									@select="handleSelect"
-								></el-autocomplete>
+									v-model="transInfo.truckID"
+									filterable
+									remote
+									placeholder="请输入关键词"
+									:remote-method="getTrucks"
+									:loading="loading">
+									<el-option
+										v-for="item in trucks"
+										:key="item.truckID"
+										:label="item.plateNo"
+										:value="item.truckID">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-form>
 					</el-col>
 					<el-col :span="14" :offset="5">
 						<el-form label-width="120px">
 							<el-form-item label="挂车牌">
-								<el-autocomplete
+								<el-select
 									style="width: 100%" 
-									value-key="trailerPlateNo" 
-									label="trailerPlateNo" 
-									v-model="trailerID"
-									:fetch-suggestions="getTrailers"
-									placeholder="请输入..." 
-									@select="handleSelect"
-								></el-autocomplete>
+									v-model="transInfo.trailerID"
+									filterable
+									remote
+									placeholder="请输入关键词"
+									:remote-method="getTrailers"
+									:loading="loading">
+									<el-option
+										v-for="item in trailers"
+										:key="item.trailerID"
+										:label="item.trailerPlateNo"
+										:value="item.trailerID">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-form>
 					</el-col>
@@ -88,6 +106,7 @@ import request from '../../common/request'
 export default {
 	data() {
 		return {
+			loading: false,
 			transInfo: {
 				archiveTime: '',
 				code: '',
@@ -96,56 +115,65 @@ export default {
 				truckID: ''
 			},
 			staffID: '',
+			staffs: [],
 			trailerID: '',
-			truckID: ''
+			trailers: [],
+			truckID: '',
+			trucks: []
 		}
 	},
 	created() {
 	},
 	methods: {
-		getDrivers(realName, cb) {
-			if (!realName.trim()) return
-			let params = {
-				realName
+		getStaffs(realName) {
+			if (realName !== '') {
+				this.loading = true
+				let params = {
+					realName
+				}
+				request({
+					url: '/staff/driver/suggest',
+					params
+				}).then(res => {
+					this.loading = false
+					this.staffs = res.data.data
+				})
+			} else {
+				this.staffs = []
 			}
-			request({
-				url: '/staff/driver/suggest',
-				params
-			}).then(res => {
-				cb(res.data.data)
-			})
 		},
-		getTrucks(plateNo, cb) {
-			if (!plateNo.trim()) return
-			let params = {
-				plateNo
+		getTrucks(plateNo) {
+			if (plateNo !== '') {
+				this.loading = true
+				let params = {
+					plateNo
+				}
+				request({
+					url: '/truck/plateNo/suggest',
+					params
+				}).then(res => {
+					this.loading = false
+					this.trucks = res.data.data
+				})
+			} else {
+				this.trucks = []
 			}
-			request({
-				url: '/truck/plateNo/suggest',
-				params
-			}).then(res => {
-				cb(res.data.data)
-			})
 		},
 		getTrailers(trailerPlateNo, cb) {
-			if (!trailerPlateNo.trim()) return
-			let params = {
-				trailerPlateNo
-			}
-			request({
-				url: '/truck/trailerPlateNo/suggest',
-				params
-			}).then(res => {
-				cb(res.data.data)
-			})
-		},
-		handleSelect(item) {
-			if (item.staffID) {
-				this.transInfo.staffID = item.staffID
-			} else if (item.truckID) {
-				this.transInfo.truckID = item.truckID
-			} else if (item.trailerID) {
-				this.transInfo.trailerID = item.trailerID
+			if (trailerPlateNo !== '') {
+				this.loading = true
+				let params = {
+					trailerPlateNo
+				}
+				request({
+					url: '/truck/trailerPlateNo/suggest',
+					params
+				}).then(res => {
+					this.loading = false
+					this.trailers = res.data.data
+				})
+			} else {
+				this.trailers = []
 			}
 		},
 		createItem() {
