@@ -274,9 +274,13 @@ export default {
 			}).then(res => {
 				if (res.data.code == 200) {
 					Message.success('成功！')
-					this.$store.dispatch('login', res.headers['authorization'])
-					this.$store.dispatch('getUserInfo')
-					this.$router.push({name: 'home'})
+					new Promise((resolve, reject) => {
+						this.$store.dispatch('login', res.headers['authorization'])
+						resolve()
+					}).then(() => {
+						this.$store.dispatch('getUserInfo')
+						this.$router.push({name: 'home'})
+					})
 				}
 			})
 		},
@@ -301,10 +305,13 @@ export default {
 			}).then(res => {
 				if (res.data.code == 200) {
 					Message.success('成功！')
-					console.log(res.headers)
-					console.log(res.headers['authorization'])
-					this.$store.dispatch('register', res.headers['authorization'])
-					this.$router.push({name: 'home'})
+					new Promise((resolve, reject) => {
+						this.$store.dispatch('register', res.headers['authorization'])
+						resolve()
+					}).then(() => {
+						this.$store.dispatch('getUserInfo')
+						this.$router.push({name: 'home'})
+					})
 				}
 			})
 		},

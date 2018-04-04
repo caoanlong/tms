@@ -318,9 +318,14 @@ export default {
 			}).then(res => {
 				console.log(res.data.data)
 				this.templateFreight = res.data.data
+
 				this.selectConsignor = res.data.data.consignorName
 				this.selectShipper = res.data.data.shipperCompanyName
 				this.selectConsignee = res.data.data.consigneeCompanyName
+				let shipperAreaID = res.data.data.shipperAreaID.toString()
+				let consigneeAreaID = res.data.data.consigneeAreaID.toString()
+				this.selectShipperArea = [(shipperAreaID.substr(0,2) + '0000'), (shipperAreaID.substr(0,4) + '00'), shipperAreaID]
+				this.selectConsigneeArea = [(consigneeAreaID.substr(0,2) + '0000'), (consigneeAreaID.substr(0,4) + '00'), consigneeAreaID]
 			})
 		},
 		update() {
