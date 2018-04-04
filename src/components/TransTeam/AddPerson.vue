@@ -292,13 +292,11 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {
-			distData: regionData,
 			person: {
 				createBy: '',
 				status: '',

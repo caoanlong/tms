@@ -27,12 +27,14 @@
 							<el-option label="2米" value="2"></el-option>
 							<el-option label="3米" value="3"></el-option>
 							<el-option label="4米" value="4"></el-option>
+							<el-option label="5米" value="5"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="车高">
 						<el-select v-model="findHigh" placeholder="请选择">
 							<el-option label="2米" value="2"></el-option>
 							<el-option label="3米" value="3"></el-option>
+							<el-option label="3.5米" value="3.5"></el-option>
 							<el-option label="4米" value="4"></el-option>
 						</el-select>
 					</el-form-item>
@@ -48,7 +50,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">查询</el-button>
+						<el-button type="primary" @click="getList">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -75,15 +77,40 @@
 					<el-table-column label="车辆类型" prop="truckType"></el-table-column>
 					<el-table-column label="道路运输证号" prop="roadTransportNo" width="120"></el-table-column>
 					<el-table-column label="经营范围" prop="businessScope"></el-table-column>
-					<el-table-column label="道路运输证年审期至" prop="roadTransYearTo" width="140"></el-table-column>
-					<el-table-column label="行驶证审验效期至" prop="driverLicTo" width="140"></el-table-column>
-					<el-table-column label="承运人责任险有效期至" prop="carrierValid" width="150"></el-table-column>
-					<el-table-column label="等级评定" prop="levelEval" width="100"></el-table-column>
-					<el-table-column label="下次等评日期" prop="nextLevelEvalDate" width="100"></el-table-column>
-					<el-table-column label="二级维护日期" prop="secondMaintainDate" width="100"></el-table-column>
-					<el-table-column label="下次二级维护日期" prop="nextSecondMaintainDate" width="140"></el-table-column>
+					<el-table-column label="道路运输证年审期至" width="130">
+						<template slot-scope="scope">
+							<span v-if="scope.row.roadTransportLicAnnualPeriod">{{scope.row.roadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="行驶证审验效期至" prop="driverLicExamineExpires" width="120">
+						<template slot-scope="scope">
+							<span v-if="scope.row.driverLicExamineExpires">{{scope.row.driverLicExamineExpires | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="承运人责任险有效期至" width="150">
+						<template slot-scope="scope">
+							<span v-if="scope.row.carrierRiskInsuranceExpires">{{scope.row.carrierRiskInsuranceExpires | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="等级评定" prop="rank" width="100"></el-table-column>
+					<el-table-column label="下次等评日期" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.nextRankEvaluteTime">{{scope.row.nextRankEvaluteTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="二级维护日期" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.secondaMaintainTime">{{scope.row.secondaMaintainTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					</el-table-column>
+					<el-table-column label="下次二级维护日期" width="120">
+						<template slot-scope="scope">
+							<span v-if="scope.row.nextSecondLevel">{{scope.row.nextSecondLevel | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="载重" prop="loads" width="100"></el-table-column>
-					<el-table-column label="罐体类型" prop="tankType" width="100"></el-table-column>
+					<el-table-column label="罐体类型" prop="cannedType" width="100"></el-table-column>
 					<el-table-column label="罐体容积" prop="tankVolume" width="100"></el-table-column>
 					<el-table-column label="罐体检测有效期至" width="120">
 						<template slot-scope="scope">
@@ -101,16 +128,24 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="挂车车牌" prop="trailerPlateNo" width="100"></el-table-column>
-					<el-table-column label="汽车生产厂家" prop="truckManufacturer" width="100"></el-table-column>
-					<el-table-column label="品牌型号" prop="brandModel" width="100"></el-table-column>
+					<el-table-column label="汽车生产厂家" prop="manufacturer" width="100"></el-table-column>
+					<el-table-column label="品牌型号" prop="carBrandModel" width="100"></el-table-column>
 					<el-table-column label="发动机号" prop="engineNO" width="100"></el-table-column>
-					<el-table-column label="车架号" prop="frameNum" width="100"></el-table-column>
-					<el-table-column label="行驶证注册日期" prop="driverLicRgDate" width="120"></el-table-column>
-					<el-table-column label="行驶证发证日期" prop="driverLicAwDate" width="120"></el-table-column>
-					<el-table-column label="牵引质量" prop="towMass" width="100"></el-table-column>
-					<el-table-column label="车长" prop="truckLength" width="100"></el-table-column>
-					<el-table-column label="车宽" prop="truckWidth" width="100"></el-table-column>
-					<el-table-column label="车高" prop="truckHeight" width="100"></el-table-column>
+					<el-table-column label="车架号" prop="vehicleFrameNO" width="100"></el-table-column>
+					<el-table-column label="行驶证注册日期" width="120">
+						<template slot-scope="scope">
+							<span v-if="scope.row.driverLicRegisterTime">{{scope.row.driverLicRegisterTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="行驶证发证日期" width="120">
+						<template slot-scope="scope">
+							<span v-if="scope.row.driverLicIssueTime">{{scope.row.driverLicIssueTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="牵引质量" prop="tractiveTonnage" width="100"></el-table-column>
+					<el-table-column label="车长" prop="length" width="100"></el-table-column>
+					<el-table-column label="车宽" prop="width" width="100"></el-table-column>
+					<el-table-column label="车高" prop="high" width="100"></el-table-column>
 					<el-table-column label="添加时间" width="140">
 						<template slot-scope="scope">
 							<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp()}}</span>
@@ -121,9 +156,9 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view'}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit'}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete'}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id: scope.row.truckID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.truckID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.truckID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -224,9 +259,9 @@
 			},
 			handleCommand(e) {
 				if(e.type == 'view'){
-					this.$router.push({name: 'viewtruck', query: { transporPriceID: e.id }})
+					this.$router.push({name: 'viewtruck', query: { truckID: e.id }})
 				} else if(e.type == 'edit'){
-					this.$router.push({ name: 'edittruck' , query: { transporPriceID: e.id }})
+					this.$router.push({ name: 'edittruck' , query: { truckID: e.id }})
 				} else if (e.type == 'delete') {
 					this.deleteConfirm(e.id)
 				}

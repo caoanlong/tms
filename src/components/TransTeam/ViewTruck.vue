@@ -23,168 +23,163 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="所属地区">
-							<el-cascader
-								disabled
-								style="width: 100%"
-								:options="distData"
-								v-model="truck.area">
-							</el-cascader>
+							<p>{{truck.comTruckRegisterInfo.area}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="所属企业">
-							<p>{{truck.company}}</p>
+							<p>{{truck.comTruckRegisterInfo.companyName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="自编号">
-							<p>{{truck.selfNum}}</p>
+							<p>{{truck.comTruck.code}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="车辆类别">
-							<p>{{truck.plateType}}</p>
+							<p>{{truck.comTruck.truckCategory}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车辆类型">
-							<p>{{truck.plateClass}}</p>
+							<p>{{truck.comTruck.truckType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车牌颜色">
-							<p>{{truck.plateColor}}</p>
+							<p>{{truck.comTruck.plateNoColor}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车牌号">
-							<p>{{truck.plateNum}}</p>
+							<p>{{truck.comTruck.plateNo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="挂车车牌">
-							<p>{{truck.trailerPlate}}</p>
+							<p>{{truck.comTruck.trailerPlateNo}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车长">
-							<p>{{truck.truckLength + '米'}}</p>
+							<p>{{truck.comTruck.length + '米'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车宽">
-							<p>{{truck.truckWidth + '米'}}</p>
+							<p>{{truck.comTruck.width + '米'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车高">
-							<p>{{truck.truckHeight + '米'}}</p>
+							<p>{{truck.comTruck.high + '米'}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="载重">
-							<p>{{truck.load}}</p>
+							<p>{{truck.comTruck.loads}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="装载方数">
-							<p>{{truck.loadVolumn}}</p>
+							<p>{{truck.comTruck.loadVolume}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="牵引质量">
-							<p>{{truck.towMass}}</p>
+							<p>{{truck.comTruck.tractiveTonnage}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="罐体类型">
-							<p>{{truck.tankType}}</p>
+							<p>{{truck.comTruck.cannedType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="罐体容积">
-							<p>{{truck.tankVolume}}</p>
+							<p>{{truck.comTruck.tankVolume}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="罐体检测有效期至">
-							<p>{{truck.tankTestValidTo}}</p>
+							<p>{{truck.comTruckRegisterInfo.tankQCExpires | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="安全阀检测有效期至">
-							<p>{{truck.safetyTestValidTo}}</p>
+							<p>{{truck.comTruckRegisterInfo.safetyValvesQCExpires | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="压力表检测有效期至">
-							<p>{{truck.pressureTestValidTo}}</p>
+							<p>{{truck.comTruckRegisterInfo.pressureGaugeQCExpires | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="汽车生产厂家">
-							<p>{{truck.truckManufacturer}}</p>
+							<p>{{truck.comTruckRegisterInfo.manufacturer}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="品牌型号">
-							<p>{{truck.brandModel}}</p>
+							<p>{{truck.comTruckRegisterInfo.carBrandModel}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="发动机号">
-							<p>{{truck.engineNum}}</p>
+							<p>{{truck.comTruckRegisterInfo.engineNO}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车架号">
-							<p>{{truck.frameNum}}</p>
+							<p>{{truck.comTruckRegisterInfo.vehicleFrameNO}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="核载人数">
-							<p>{{truck.loadPersonNum}}</p>
+							<p>{{truck.comTruckRegisterInfo.personsCapacity}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车身颜色">
-							<p>{{truck.truckColor}}</p>
+							<p>{{truck.comTruckRegisterInfo.carBodyColor}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="是否喷涂警示标志">
-							<p>{{truck.isWarnLogo}}</p>
+							<p>{{truck.comTruckRegisterInfo.hasWarnMark == 'Y' ? '是' : '否'}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="行驶证注册日期">
-							<p>{{truck.driverLicRgDate}}</p>
+							<p>{{truck.comTruckRegisterInfo.driverLicRegisterTime | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="行驶证发证日期">
-							<p>{{truck.driverLicAwDate}}</p>
+							<p>{{truck.comTruckRegisterInfo.driverLicIssueTime | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="行驶证审验效期至">
-							<p>{{truck.driverLicTo}}</p>
+							<p>{{truck.comTruckRegisterInfo.driverLicExamineExpires | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -358,96 +353,35 @@
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
 import ImageUpload from '../CommonComponents/ImageUpload'
+import request from '../../common/request'
 export default {
 	data() {
 		return {
 			distData: regionData,
-			truck: {
-				status: '通过',
-				auditor: '王小川',
-				auditorDate: '2018-02-21',
-				area: ['530000','530100','530102'],
-				company: '云南安化中达物流有限责任公司',
-				selfNum: '6-1',
-				plateType: '牵引车',
-				plateClass: '重型半挂牵引车',
-				plateColor: '黄',
-				plateNum: '云AD3875',
-				trailerPlate: '云A3229挂',
-				truckLength: '4',
-				truckWidth: '3',
-				truckHeight: '3700',
-				load: '40000.000',
-				loadVolumn: '30',
-				towMass: '25000',
-				tankType: '',
-				tankVolume: '',
-				tankTestValidTo: '',
-				safetyTestValidTo: '',
-				pressureTestValidTo: '',
-				truckManufacturer: '东风汽车有限公司',
-				brandModel: '东风牌DFL4251A10',
-				engineNum: '',
-				frameNum: '',
-				loadPersonNum: '4',
-				truckColor: '蓝',
-				isWarnLogo: '是',
-				driverLicRgDate: '2012-8-7',
-				driverLicAwDate: '2012-8-7',
-				driverLicTo: '2018-8-31',
-				roadTransNum: '530181012183',
-				businessScope: '危险货物运输(5类1项)',
-				roadTransYearTo: '2018-6-30',
-				owner: '王大锤',
-				ownerMobile: '13045968532',
-				ownerAddress: '云南省红河州蒙自市',
-				truckOwnerName: '张三',
-				truckOwnerMobile: '15089859632',
-				truckOwnerAddress: '云南省红河州蒙自市',
-				ownership: '个人',
-				businessLicNum: '57643546544',
-				levelEval: '二级',
-				nextLevelEvalDate: '2018-6-30',
-				secondMaintainDate: '2018-6-30',
-				nextSecondMaintainDate: '2018-6-30',
-				carrierValid: '2018-6-30',
-				strongInsValid: '2018-6-30',
-				commercialInsValid: '2018-6-30',
-				gpsType: '',
-				gpsNetNum: '',
-				gpsCardNum: '',
-				gpsSerialNum: '',
-				gpsInstallTime: '2018-6-30',
-				truckPhoto: 'http://f11.baidu.com/it/u=2588434687,3162842634&fm=72',
-				driverLicImg: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1684697538,1821191231&fm=27&gp=0.jpg',
-				roadTransImg: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=183636833,3673839069&fm=27&gp=0.jpg',
-				otherImgs: [
-					'http://img0.imgtn.bdimg.com/it/u=211127819,408382177&fm=200&gp=0.jpg',
-					'http://img5.imgtn.bdimg.com/it/u=3769120177,158294962&fm=27&gp=0.jpg',
-					'http://img5.imgtn.bdimg.com/it/u=1636995595,1602982972&fm=27&gp=0.jpg'
-				]
-			}
+			truck: {}
 		}
 	},
 	created() {
+		this.getInfo()
 	},
 	methods: {
-		handleTruckPhotoSuccess(res, file) {
-			this.truck.truckPhoto = 'http://39.108.245.177:4000' + res.data
-		},
-		handleDriverLicSuccess(res, file) {
-			this.truck.driverLicImg = 'http://39.108.245.177:4000' + res.data
-		},
-		handleRoadTransSuccess(res, file) {
-			this.truck.roadTransImg = 'http://39.108.245.177:4000' + res.data
-		},
-		imgUrlBack(files) {
-			console.log(files)
-			this.truck.otherImgs = files
-		},
-		add() {
-			Message.success('保存成功！')
-			this.$router.push({name: 'truck'})
+		getInfo() {
+			let params = {
+				truckID: this.$route.query.truckID
+			}
+			request({
+				url: '/truck/info',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				this.truck = res.data.data
+				// let resDataComStaffPic = res.data.data.comStaffPic
+				// let i = 1
+				// while (i < 6) {
+				// 	this.otherImgs.push(resDataComStaffPic['otherStaffPic' + i])
+				// 	i++
+				// }
+			})
 		},
 		back() {
 			this.$router.go(-1)
