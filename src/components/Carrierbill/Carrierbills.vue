@@ -7,7 +7,6 @@
 					<el-form-item label="关键字" >
 						<el-input placeholder="请输入关键字" style="width:150px"></el-input>
 					</el-form-item>
-					
 					<el-form-item label="创建时间">
 						<el-date-picker v-model="carrierbills.CreatDate" type="date" placeholder="选择创建时间" style="width:140px"></el-date-picker>
 					</el-form-item>
@@ -41,40 +40,53 @@
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
 					<el-table-column type="selection" width="36" align="center" fixed>
 					</el-table-column>
-					<el-table-column label="处理状态"  prop="Status" width="90" align="center">
+					<el-table-column label="处理状态"  prop="status" width="90" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.status=='Commited'">待执行</span>
+							<span v-else-if="scope.row.status=='Running'">执行中</span>
+							<span v-else-if="scope.row.status=='Signed'">到达签收</span>
+							<span v-else-if="scope.row.status=='Closed'">关闭</span>
+							<span v-else-if="scope.row.status=='Canceled'">作废</span>
+						</template>
 					</el-table-column>
-					<el-table-column label="承运单号" prop="CarrierNum" width="100" align="center">
+					<el-table-column label="承运单号" prop="carrierOrderNo" width="100" align="center">
 						<template slot-scope="scope">
 							<el-popover trigger="hover" placement="top" class="customerTablePop">
-								<p>发货单位：{{ scope.row.ConsignerCompany }}</p>
-								<p>发货地：{{ scope.row.Dispatch }}</p>
-								<p>收货单位：{{ scope.row.ConsigneeCompany }}</p>
-								<p>卸货地：{{ scope.row.Discharge }}</p>
+								<p>发货单位：{{ scope.row.shipperCompanyName }}</p>
+								<p>发货地：{{ scope.row.shipperDetailAddress }}</p>
+								<p>收货单位：{{ scope.row.consigneeCompanyName }}</p>
+								<p>卸货地：{{ scope.row.consigneeDetailAddress }}</p>
 								<div slot="reference" class="name-wrapper">
-									<span style="color:#409EFF">{{ scope.row.CarrierNum}}</span>
+									<span style="color:#409EFF">{{ scope.row.carrierOrderNo}}</span>
 								</div>
 							</el-popover>
 						</template>
 					</el-table-column>
-					<el-table-column label="收货单位" prop="ConsigneeCompany">
+					<el-table-column label="收货单位" prop="consigneeCompanyName">
 					</el-table-column>
-					<el-table-column label="卸货地" prop="Discharge">
+					<el-table-column label="卸货地" prop="consigneeDetailAddress">
 					</el-table-column>
-					<el-table-column label="收货人" prop="Consignee">
+					<el-table-column label="收货人" prop="consigneeName">
 					</el-table-column>
-					<el-table-column label="到货时间" prop="ArrivalDate" width="120" align="center">
+					<el-table-column label="到货时间" prop="consigneeDate" width="140" align="center">
+						<template slot-scope="scope">
+							<span>{{scope.row.consigneeDate | getdatefromtimestamp() }}</span>
+						</template>
 					</el-table-column>
 					<el-table-column label="货物规格/货物名称" prop="CargoName">
 					</el-table-column>
 					<el-table-column label="货物总量" prop="CargoTotal">
 					</el-table-column>
-					<el-table-column label="发货单位" prop="ConsignerCompany">
+					<el-table-column label="发货单位" prop="shipperCompanyName">
 					</el-table-column>
-					<el-table-column label="发货时间" prop="DeliveryDate" width="120" align="center">
+					<el-table-column label="发货时间" prop="shipperDate" width="140" align="center">
+						<template slot-scope="scope">
+							<span>{{scope.row.shipperDate | getdatefromtimestamp() }}</span>
+						</template>
 					</el-table-column>
-					<el-table-column label="发货人" prop="Consigner">
+					<el-table-column label="发货人" prop="shipperName">
 					</el-table-column>
-					<el-table-column label="发货地" prop="Dispatch">
+					<el-table-column label="发货地" prop="shipperDetailAddress">
 					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
@@ -91,7 +103,7 @@
 				</el-table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{count}} 条记录每页显示</span>
+						<span>总共 {{total}} 条记录每页显示</span>
 						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getCargoList()">
 							<el-option label="10" value="10"></el-option>
 							<el-option label="20" value="20"></el-option>
@@ -104,7 +116,7 @@
 					</el-col>
 					<el-col :span="12">
 						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="count" @current-change="pageChange"></el-pagination>
+							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="total" @current-change="pageChange"></el-pagination>
 						</div>
 					</el-col>
 				</el-row>
@@ -118,243 +130,40 @@ import request from "../../common/request";
 export default {
 	data() {
 		return {
-			pageNum: 1,
+			pageIndex: 1,
 			pageSize: 10,
-			count: 15,
+			total:0,
+			tableData: [],
+			selectedList: [],
 			carrierbills:{
 				Status:'',
 				CreatDate:'',
 				DeliveryDate:''
 			},
-			tableData: [
-				{
-					Status: '待执行',
-					CarrierNum: '20180205001',
-					ConsigneeCompany: '云南磷化',
-					Discharge: '云南省昭通市镇远县城李家沟',
-					Consignee: '磷化',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9.76吨/10方',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018-02-06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R72/炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205002',
-					ConsigneeCompany: '四川铁建',
-					Discharge: '云南省红河州个旧市金湖广场',
-					Consignee: '铁建',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R11炸药、R33硝酸'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205003',
-					ConsigneeCompany: '昆钢鑫龙',
-					Discharge: '尖山',
-					Consignee: '刘备',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '330吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205004',
-					ConsigneeCompany: '云南磷化',
-					Discharge: '云南省昭通市镇远县城李家沟',
-					Consignee: '磷化',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9.76吨/10方',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018-02-06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R72/炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205005',
-					ConsigneeCompany: '四川铁建',
-					Discharge: '云南省红河州个旧市金湖广场',
-					Consignee: '铁建',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R11炸药、R33硝酸'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205006',
-					ConsigneeCompany: '昆钢鑫龙',
-					Discharge: '尖山',
-					Consignee: '刘备',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '330吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205007',
-					ConsigneeCompany: '云南磷化',
-					Discharge: '云南省昭通市镇远县城李家沟',
-					Consignee: '磷化',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9.76吨/10方',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018-02-06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R72/炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205008',
-					ConsigneeCompany: '四川铁建',
-					Discharge: '云南省红河州个旧市金湖广场',
-					Consignee: '铁建',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R11炸药、R33硝酸'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205009',
-					ConsigneeCompany: '昆钢鑫龙',
-					Discharge: '尖山',
-					Consignee: '刘备',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '330吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205010',
-					ConsigneeCompany: '云南磷化',
-					Discharge: '云南省昭通市镇远县城李家沟',
-					Consignee: '磷化',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9.76吨/10方',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018-02-06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R72/炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205011',
-					ConsigneeCompany: '四川铁建',
-					Discharge: '云南省红河州个旧市金湖广场',
-					Consignee: '铁建',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R11炸药、R33硝酸'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205012',
-					ConsigneeCompany: '昆钢鑫龙',
-					Discharge: '尖山',
-					Consignee: '刘备',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '330吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205013',
-					ConsigneeCompany: '云南磷化',
-					Discharge: '云南省昭通市镇远县城李家沟',
-					Consignee: '磷化',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9.76吨/10方',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018-02-06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R72/炸药'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205014',
-					ConsigneeCompany: '四川铁建',
-					Discharge: '云南省红河州个旧市金湖广场',
-					Consignee: '铁建',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '9吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'R11炸药、R33硝酸'
-				},
-				{
-					Status: '待执行',
-					CarrierNum: '20180205015',
-					ConsigneeCompany: '昆钢鑫龙',
-					Discharge: '尖山',
-					Consignee: '刘备',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoTotal: '330吨',
-					ConsignerCompany: '安宁~~化工厂',
-					DeliveryDate: '2018:02:06 18:00',
-					Consigner: '李铁军',
-					Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-					CargoName:'炸药'
-				}
-			],
 			refreshing: false
 		}
 	},
 	created() {
-		// this.getCarrierbillList()
+		this.getList()
 	},
 	methods: {
 		pageChange(index) {
 			
 		},
-		getCarrierbillList(){
-			request({
-				url: ''
-			}).then(res => {
-				
-			})
-		},
+		getList() {
+				console.log(this.pageIndex)
+				let params = {
+					current: this.pageIndex,
+					size: this.pageSize
+				}
+				request({
+					url: '/biz/carrierOrder/list',
+					params
+				}).then(res => {
+					this.tableData = res.data.data.records
+					this.total= res.data.data.total
+				})
+			},
 		handleCommand(command) {
 			if(command.type=='view'){
 				this.$router.push({ name: 'viewcarrierbill' , query: { CarrierNum:command.id } })
