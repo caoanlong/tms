@@ -234,15 +234,6 @@
 					this.deleteConfirm(e.id)
 				}
 			},
-			add() {
-				this.$router.push({name: 'addperson'})
-			},
-			view() {
-				this.$router.push({name: 'viewperson'})
-			},
-			edit() {
-				this.$router.push({name: 'editperson'})
-			},
 			deleteConfirm(id) {
 				let ids = ''
 				if (id && typeof id == 'string') {

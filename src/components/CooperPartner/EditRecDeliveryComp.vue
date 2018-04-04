@@ -9,19 +9,19 @@
 							<el-input v-model="recdeliverycomp.companyName"></el-input>
 						</el-form-item>
 						<el-form-item label="地址">
-							<el-input v-model="recdeliverycomp.area"></el-input>
+							<el-input v-model="recdeliverycomp.companyArea"></el-input>
 						</el-form-item>
 						<el-form-item label="详细地址">
-							<el-input v-model="recdeliverycomp.address"></el-input>
+							<el-input v-model="recdeliverycomp.detailAddress"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">
-							<el-input v-model="recdeliverycomp.contacts"></el-input>
+							<el-input v-model="recdeliverycomp.contactName"></el-input>
 						</el-form-item>
-                        <el-form-item label="联系方式">
-							<el-input v-model="recdeliverycomp.contactMethod"></el-input>
+						<el-form-item label="联系方式">
+							<el-input v-model="recdeliverycomp.contactPhone"></el-input>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click="add">立即保存</el-button>
+							<el-button type="primary" @click="edit">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-form>
@@ -32,23 +32,48 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				recdeliverycomp: {
-					companyName: '安宁恒源爆破工程有限公司',
-					area: '云南省红河州',
-					address: '蒙自县',
-					contacts: '王芳',
-					contactMethod: '13049497395'
-				}
+				recdeliverycomp:[]
 			}
 		},
+		created() {
+			this.getDetail()
+		},
 		methods: {
-            add() {
-                Message.success('保存成功！')
-                this.$router.push({name: 'recdeliverycomp'})
-            },
+			getDetail() {
+				let params = {
+					customerID:this.$route.query.customerID
+				}
+				request({
+					url: '/customer/findById',
+					params
+				}).then(res => {
+					console.log(res.data.data)
+					this.recdeliverycomp =res.data.data
+				})
+			},
+			edit() {
+				let data = {
+					companyArea: this.recdeliverycomp.companyArea,
+					companyName: this.recdeliverycomp.companyName,
+					contactName: this.recdeliverycomp.contactName,
+					contactPhone: this.recdeliverycomp.contactPhone,
+					detailAddress: this.recdeliverycomp.detailAddress,
+					customerID:this.$route.query.customerID
+				}
+				request({
+					url: '/customer/update',
+					method:'post',
+					data
+				}).then(res => {
+					console.log(res.data)
+					Message.success('保存成功！')
+					this.$router.push({name: 'recdeliverycomp'})
+				})
+			},
 			back() {
 				this.$router.go(-1)
 			}
