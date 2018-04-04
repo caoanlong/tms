@@ -19,7 +19,9 @@
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
-							end-placeholder="结束日期">
+							end-placeholder="结束日期"
+							value-format="timestamp" 
+							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -38,25 +40,33 @@
 					:data="tableData" 
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="姓名" prop="name"></el-table-column>
-					<el-table-column label="身份证号" prop="cardNum"></el-table-column>
+					<el-table-column label="姓名" prop="realName"></el-table-column>
+					<el-table-column label="身份证号" prop="idCardNum"></el-table-column>
 					<el-table-column label="联系电话" prop="mobile"></el-table-column>
-					<el-table-column label="从业资格证件号" prop="qualifCerNum"></el-table-column>
-					<el-table-column label="车牌号" prop="plateNum"></el-table-column>
-					<el-table-column label="自编号" prop="selfNum"></el-table-column>
-					<el-table-column label="道路运输证号" prop="roadTransNum"></el-table-column>
-					<el-table-column label="载重" prop="load"></el-table-column>
+					<el-table-column label="从业资格证件号" prop="qualificationCode" width="120"></el-table-column>
+					<el-table-column label="车牌号" prop="plateNo"></el-table-column>
+					<el-table-column label="自编号" prop="code"></el-table-column>
+					<el-table-column label="道路运输证号" prop="transportLicenceCode" width="120"></el-table-column>
+					<el-table-column label="载重" prop="loads" width="100"></el-table-column>
 					<el-table-column label="备注" prop="remark"></el-table-column>
-					<el-table-column label="创建时间" prop="createTime"></el-table-column>
-					<el-table-column label="建档时间" prop="buildTime"></el-table-column>
+					<el-table-column label="创建时间" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="建档时间" width="100">
+						<template slot-scope="scope">
+							<span v-if="scope.row.archiveTime">{{scope.row.archiveTime | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view'}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit'}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete'}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id: scope.row.transportRecordID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.transportRecordID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.transportRecordID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -87,6 +97,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
@@ -98,12 +109,12 @@
 				endDate: '',
 				pageIndex: 1,
 				pageSize: 10,
-				count: 87,
-				tabSelected: 'driver',
+				count: 0,
 				tableData: []
 			}
 		},
 		created() {
+			this.getList()
 		},
 		methods: {
 			reset() {
@@ -117,17 +128,17 @@
 			pageChange(index) {
 				this.pageIndex = index
 			},
-			handleTabSelected(tab) {
-				console.log(tab.$options.propsData.name)
+			selectDateRange(date) {
+				this.startDate = date[0]
+				this.endDate = date[1]
 			},
 			getList() {
 				let params = {
 					current: this.pageIndex,
 					size: this.pageSize,
-					mobile: this.findMobile,
-					position: this.findPost,
+					code: this.findSelfNum,
 					realName: this.findName,
-					integrityExamineGrade: this.findLevel,
+					plateNo: this.findPlateNum,
 					createTimeBegin: this.startDate,
 					createTimeEnd: this.endDate
 				}
@@ -135,20 +146,21 @@
 					url: '/transportRecord/findList',
 					params
 				}).then(res => {
-					if (res.data.code == 200) {
-						this.tableData = res.data.data.records
-						this.count = res.data.data.total
-					}
+					this.tableData = res.data.data.records
+					this.count = res.data.data.total
 				})
+			},
+			handleCommand(e) {
+				if (e.type == 'view') {
+					this.$router.push({name: 'viewtransinfo', query: {transportRecordID: e.id}})
+				} else if (e.type == 'edit') {
+					this.$router.push({name: 'edittransinfo', query: {transportRecordID: e.id}})
+				} else if (e.type == 'delete') {
+					this.deleteConfirm(e.id)
+				}
 			},
 			add() {
 				this.$router.push({name: 'addtransinfo'})
-			},
-			edit() {
-				this.$router.push({name: 'edittransinfo'})
-			},
-			view() {
-				this.$router.push({name: 'viewtransinfo'})
 			},
 			deleteConfirm(i) {
 				console.log(i)

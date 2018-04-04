@@ -8,10 +8,13 @@
 						<el-form label-width="120px">
 							<el-form-item label="姓名">
 								<el-autocomplete
-									style="width: 100%"
-									v-model="transInfo.name"
-									:fetch-suggestions="getPerson"
-									placeholder="请输入..."
+									style="width: 100%" 
+									value-key="realName" 
+									label="realName" 
+									v-model="staffID"
+									:fetch-suggestions="getDrivers"
+									placeholder="请输入..." 
+									@select="handleSelect"
 								></el-autocomplete>
 							</el-form-item>
 						</el-form>
@@ -20,10 +23,13 @@
 						<el-form label-width="120px">
 							<el-form-item label="车牌号">
 								<el-autocomplete
-									style="width: 100%"
-									v-model="transInfo.plateNum"
-									:fetch-suggestions="getPlateNum"
-									placeholder="请输入..."
+									style="width: 100%" 
+									value-key="plateNo" 
+									label="plateNo" 
+									v-model="truckID"
+									:fetch-suggestions="getTrucks"
+									placeholder="请输入..." 
+									@select="handleSelect"
 								></el-autocomplete>
 							</el-form-item>
 						</el-form>
@@ -32,10 +38,13 @@
 						<el-form label-width="120px">
 							<el-form-item label="挂车牌">
 								<el-autocomplete
-									style="width: 100%"
-									v-model="transInfo.trailerPlate"
-									:fetch-suggestions="getTrailerPlate"
-									placeholder="请输入..."
+									style="width: 100%" 
+									value-key="trailerPlateNo" 
+									label="trailerPlateNo" 
+									v-model="trailerID"
+									:fetch-suggestions="getTrailers"
+									placeholder="请输入..." 
+									@select="handleSelect"
 								></el-autocomplete>
 							</el-form-item>
 						</el-form>
@@ -43,7 +52,7 @@
 					<el-col :span="14" :offset="5">
 						<el-form label-width="120px">
 							<el-form-item label="自编号">
-								<el-input v-model="transInfo.selfNum"></el-input>
+								<el-input v-model="transInfo.code"></el-input>
 							</el-form-item>
 						</el-form>
 					</el-col>
@@ -52,8 +61,9 @@
 							<el-form-item label="建档时间">
 								<el-date-picker
 									style="width: 100%" 
-									v-model="transInfo.buildTime"
+									v-model="transInfo.archiveTime"
 									type="date"
+									value-format="timestamp"
 									placeholder="选择日期">
 								</el-date-picker>
 							</el-form-item>
@@ -63,7 +73,7 @@
 				<el-row>
 					<el-col :span="14" :offset="5">
 						<el-form-item>
-							<el-button type="primary" @click="add">立即保存</el-button>
+							<el-button type="primary" @click="createItem">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-col>
@@ -74,72 +84,82 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import request from '../../common/request'
 export default {
 	data() {
 		return {
 			transInfo: {
-				name: '',
-				plateNum: '',
-				trailerPlate: '',
-				selfNum: '',
-				buildTime: ''
+				archiveTime: '',
+				code: '',
+				staffID: '',
+				trailerID: '',
+				truckID: ''
 			},
-			personResource: [
-				{ "value": "李金锐"},
-				{ "value": "武藤兰"},
-				{ "value": "泷泽萝拉"},
-				{ "value": "佐伯奈"},
-				{ "value": "苍井空"},
-				{ "value": "波多野结衣"}
-			],
-			plateNumResource: [
-				{ "value": "云AG5836"},
-				{ "value": "云BN8744"},
-				{ "value": "云IJ8565"},
-				{ "value": "云LP7562"},
-				{ "value": "云FG5623"}
-			],
-			trailerPlateResource: [
-				{ "value": "云JK5621"},
-				{ "value": "云TG4124"},
-				{ "value": "云RG3324"},
-				{ "value": "云KJ2136"},
-				{ "value": "云FG5545"}
-			]
+			staffID: '',
+			trailerID: '',
+			truckID: ''
 		}
 	},
 	created() {
 	},
 	methods: {
-		getPerson(queryString, cb) {
-			let results = queryString ? this.personResource.filter(this.createStateFilter(queryString)) : this.personResource
-			clearTimeout(this.timeout)
-			this.timeout = setTimeout(() => {
-				cb(results)
-			}, 1000 * Math.random())
+		getDrivers(realName, cb) {
+			if (!realName.trim()) return
+			let params = {
+				realName
+			}
+			request({
+				url: '/staff/driver/suggest',
+				params
+			}).then(res => {
+				cb(res.data.data)
+			})
 		},
-		getPlateNum(queryString, cb) {
-			let results = queryString ? this.plateNumResource.filter(this.createStateFilter(queryString)) : this.plateNumResource
-			clearTimeout(this.timeout)
-			this.timeout = setTimeout(() => {
-				cb(results)
-			}, 1000 * Math.random())
+		getTrucks(plateNo, cb) {
+			if (!plateNo.trim()) return
+			let params = {
+				plateNo
+			}
+			request({
+				url: '/truck/plateNo/suggest',
+				params
+			}).then(res => {
+				cb(res.data.data)
+			})
 		},
-		getTrailerPlate(queryString, cb) {
-			let results = queryString ? this.trailerPlateResource.filter(this.createStateFilter(queryString)) : this.trailerPlateResource
-			clearTimeout(this.timeout)
-			this.timeout = setTimeout(() => {
-				cb(results)
-			}, 1000 * Math.random())
+		getTrailers(trailerPlateNo, cb) {
+			if (!trailerPlateNo.trim()) return
+			let params = {
+				trailerPlateNo
+			}
+			request({
+				url: '/truck/trailerPlateNo/suggest',
+				params
+			}).then(res => {
+				cb(res.data.data)
+			})
 		},
-		createStateFilter(queryString) {
-			return (state) => {
-				return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+		handleSelect(item) {
+			if (item.staffID) {
+				this.transInfo.staffID = item.staffID
+			} else if (item.truckID) {
+				this.transInfo.truckID = item.truckID
+			} else if (item.trailerID) {
+				this.transInfo.trailerID = item.trailerID
 			}
 		},
-		add() {
-			Message.success('保存成功！')
-			this.$router.push({name: 'transinfo'})
+		createItem() {
+			let data = this.transInfo
+			console.log(data)
+			request({
+				url: '/transportRecord/add',
+				method: 'post',
+				data
+			}).then(res => {
+				console.log(res.data)
+				Message.success(res.data.msg)
+				this.$router.push({name: 'transinfo'})
+			})
 		},
 		back() {
 			this.$router.go(-1)
