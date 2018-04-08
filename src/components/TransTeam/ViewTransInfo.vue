@@ -141,52 +141,53 @@
 									</tr>
 									<tr>
 										<td width="80">车牌号码</td>
-										<td>云AF8532</td>
+										<td>{{transportRecordDetail2.truck.plateNo}}</td>
 										<td width="80">核载质量</td>
-										<td width="100">9900kg</td>
+										<td width="100">{{transportRecordDetail2.truck.tractiveTonnage}}</td>
 										<td rowspan="6">
-											<img width="240" height="180" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
-											<!-- <ImageUpload :width="200" :height="160"/> -->
+											<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.truckFrontPic"/>
 										</td>
 									</tr>
 									<tr>
 										<td>品牌型号</td>
-										<td>程力威牌CLW516XQYD4</td>
+										<td>{{transportRecordDetail2.truck.carBrandModel}}</td>
 										<td>总质量</td>
-										<td>16000kg</td>
+										<!-- 缺少 -->
+										<td>16000kg</td> 
 									</tr>
 									<tr>
 										<td>车架号</td>
-										<td>LGAX2A131F1014903</td>
+										<td>{{transportRecordDetail2.truck.vehicleFrameNO}}</td>
 										<td>发动机号</td>
-										<td>78206803</td>
+										<td>{{transportRecordDetail2.truck.engineNO}}</td>
 									</tr>
 									<tr>
 										<td>注册日期</td>
-										<td>2015年7月30日</td>
+										<td>{{transportRecordDetail2.truck.driverLicRegisterTime | getdatefromtimestamp(true)}}</td>
 										<td>车辆类型</td>
-										<td>重型厢式货车</td>
+										<td>{{transportRecordDetail2.truck.TruckType}}</td>
 									</tr>
 									<tr>
 										<td>使用性质</td>
+										<!-- 缺少 -->
 										<td>危化品运输</td>
 										<td>经营类别</td>
-										<td>危货运输（1类1项）</td>
+										<td>{{transportRecordDetail2.truck.businessScope}}</td>
 									</tr>
 									<tr>
 										<td>道路运输证号</td>
-										<td>安宁字530181014786</td>
+										<td>{{transportRecordDetail2.truck.roadTransportNo}}</td>
 										<td>有效期限</td>
-										<td>2016年7月</td>
+										<td>{{transportRecordDetail2.truck.roadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</td>
 									</tr>
 									<tr>
 										<td colspan="5">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" src="../../assets/imgs/QQ截图20180316100511.png"/>
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.driverLicPic"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" src="../../assets/imgs/QQ截图20180316100522.png"/>
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.driverLicSidePic"/>
 												</el-col>
 											</el-row>
 										</td>
@@ -194,8 +195,11 @@
 									<tr>
 										<td colspan="5">
 											<el-row>
-												<el-col>
-													<img src="../../assets/imgs/QQ截图20180316100532.png"/>
+												<el-col :span="12">
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.roadTransportPic"/>
+												</el-col>
+												<el-col :span="12">
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.roadTransportSidePic"/>
 												</el-col>
 											</el-row>
 										</td>
@@ -209,55 +213,55 @@
 								<table class="common-table">
 									<tr>
 										<td colspan="7">
-											<span class="tit">单位：云南安化中达物流有限责任公司</span>
-											<span class="tit">公司经营证号：530181000690</span>
-											<span class="tit">建档日期：2016年5月25日</span>
+											<span class="tit">单位：{{transportRecordDetail2.staff.companyName}}</span>
+											<span class="tit">公司经营证号：{{transportRecordDetail2.staff.businessLicNo}}</span>
+											<span class="tit">建档日期：{{transportRecordDetail2.staff.archiveTime | getdatefromtimestamp(true)}}</span>
 										</td>
 									</tr>
 									<tr>
 										<td width="100">姓名</td>
-										<td>张军</td>
+										<td>{{transportRecordDetail2.staff.realName}}</td>
 										<td width="80">性别</td>
-										<td>男</td>
+										<td>{{transportRecordDetail2.staff.sex}}</td>
 										<td>联系电话</td>
-										<td>13888129549</td>
+										<td>{{transportRecordDetail2.staff.mobile}}</td>
 										<td>照片</td>
 									</tr>
 									<tr>
 										<td>身份证号</td>
-										<td colspan="3">530113197108260019</td>
+										<td colspan="3">{{transportRecordDetail2.staff.idCardNum}}</td>
 										<td>准驾车型</td>
-										<td>A1A2E</td>
+										<td>{{transportRecordDetail2.staff.quasiDrivingType}}</td>
 										<td rowspan="5">
-											<img width="120" height="150" src="../../assets/imgs/00.png"/>
+											<img width="120" height="150" :src="imgUrl + transportRecordDetail2.staff.headPic"/>
 										</td>
 									</tr>
 									<tr>
 										<td>从业资格证号</td>
-										<td colspan="3">530113197108260019</td>
+										<td colspan="3">{{transportRecordDetail2.staff.qualificationCode}}</td>
 										<td>资格证编号</td>
-										<td>NO.5300313469</td>
+										<td>{{transportRecordDetail2.staff.qualificationNum}}</td>
 									</tr>
 									<tr>
 										<td>从业资格类别</td>
-										<td colspan="5">道路危险物品运输驾驶员；道路危险物品运输押运人员；经营性道路货物运输驾驶员</td>
+										<td colspan="5">{{transportRecordDetail2.staff.qualificationType}}</td>
 									</tr>
 									<tr>
 										<td>从业资格证有效期至</td>
-										<td colspan="5">2021-06-03</td>
+										<td colspan="5">{{transportRecordDetail2.staff.qualificationExpirationTime | getdatefromtimestamp(true)}}</td>
 									</tr>
 									<tr>
 										<td>居住地</td>
-										<td colspan="5">昆明市东川区新村路47号一栋一单元402室</td>
+										<td colspan="5">{{transportRecordDetail2.staff.homeAddress}}</td>
 									</tr>
 									<tr>
 										<td colspan="7">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" src="../../assets/imgs/01.png"/>
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.driverLicFrontUrl"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" src="../../assets/imgs/02.png"/>
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.driverLicBackUrl"/>
 												</el-col>
 											</el-row>
 										</td>
@@ -266,10 +270,10 @@
 										<td colspan="7">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" src="../../assets/imgs/03.png"/>
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.idCardFrontUrl"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" src="../../assets/imgs/04.png"/>
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.idCardBackUrl"/>
 												</el-col>
 											</el-row>
 										</td>
@@ -278,10 +282,10 @@
 										<td colspan="7">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" src="../../assets/imgs/05.png"/>
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.qualificationFirstPage"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" src="../../assets/imgs/06.png"/>
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.qualificationSecondPage"/>
 												</el-col>
 											</el-row>
 										</td>
@@ -289,6 +293,9 @@
 								</table>
 							</el-col>
 						</el-row>
+					</div>
+					<div class="common-table-footer">
+						<el-button @click="back">返回</el-button>
 					</div>
 				</el-tab-pane>
 			</el-tabs>
@@ -404,7 +411,12 @@
 					label: 'label',
 					value: 'label'
 				},
-				transportRecordDetail:[],
+				transportRecordDetail: {},
+				transportRecordDetail2: {
+					staff: {},
+					trailer: {},
+					truck: {}
+				},
 				traffic: {
 					occurredTime: '',
 					areaID: '',
@@ -416,13 +428,15 @@
 			}
 		},
 		created() {
-			this.getDetail(),
+			this.getDetail()
 			this.getTrafficList()
+			this.getRecordDetail()
 		},
 		methods: {
+			// 获取运输登记表
 			getDetail() {
 				let params = {
-					transportRecordID:this.$route.query.transportRecordID
+					transportRecordID: this.$route.query.transportRecordID
 				}
 				request({
 					url: '/transportRecord/detail',
@@ -498,7 +512,6 @@
 					endorseDesc: this.traffic.endorseDesc,
 					handleResult: this.traffic.handleResult
 				}
-				console.log(this.traffic)
 				request({
 					url: '/truck/endorsement/update',
 					data,
@@ -525,7 +538,6 @@
 				})
 			},
 			delItem(endorsementIDs) {
-				console.log(endorsementIDs)
 				let data = {
 					endorsementIDs
 				}
@@ -543,6 +555,20 @@
 					this.getTrafficList()
 				})
 			},
+			// 获取运输单位备案
+			getRecordDetail() {
+				let params = {
+					transportRecordID: this.$route.query.transportRecordID
+				}
+				request({
+					url: '/transportRecord/recordDetail',
+					params
+				}).then(res => {
+					console.log(res.data.data)
+					this.transportRecordDetail2 = res.data.data
+				})
+			},
+
 			back() {
 				this.$router.go(-1)
 			}

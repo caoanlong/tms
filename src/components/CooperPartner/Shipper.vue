@@ -35,6 +35,19 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
+				<el-upload 
+					class="upload-File" 
+					name="excelFile" 
+					:data="{'type': 'Consignor'}" 
+					:action="importFileUrl" 
+					:auto-upload="true" 
+					:onError="uploadError" 
+					:onSuccess="uploadSuccess" 
+					:beforeUpload="beforeFileUpload" 
+					:headers="uploadHeaders" 
+					:show-file-list="false">
+					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
+				</el-upload>
 				<el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
@@ -96,7 +109,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import request from '../../common/request'
+	import request, { baseURL } from '../../common/request'
 	export default {
 		data() {
 			return {
@@ -111,7 +124,9 @@
 				pageSize: 10,
 				total:0,
 				tableData: [],
-				selectedList: []
+				selectedList: [],
+				importFileUrl: baseURL + '/customer/upload',
+				uploadHeaders: {'Authorization': localStorage.getItem('token')}
 			}
 		},
 		created() {
@@ -139,6 +154,29 @@
 			},
 			selectionChange(data) {
 				this.selectedList = data.map(item => item.customerID)
+			},
+			// 导入
+			uploadSuccess (response) {
+				console.log(response)
+				Message.success(response.data)
+				this.getList()
+			},
+			// 上传错误
+			uploadError (response) {
+				console.log(response)
+				// Message.error(response)
+			},
+			beforeFileUpload (file) {
+				const extension = file.name.split('.')[1] === 'xls'
+				const extension2 = file.name.split('.')[1] === 'xlsx'
+				const isLt2M = file.size / 1024 / 1024 < 10
+				if (!extension && !extension2) {
+					Message.error('上传模板只能是 xls、xlsx格式!')
+				}
+				if (!isLt2M) {
+					Message.error('上传模板大小不能超过 10MB!')
+				}
+				return extension || extension2 && isLt2M
 			},
 			getList() {
 				console.log(this.pageIndex)
@@ -222,5 +260,7 @@
 	}
 </script>
 <style lang="stylus" scoped>
-
+.upload-File
+	display inline-block
+	margin 0 10px
 </style>
