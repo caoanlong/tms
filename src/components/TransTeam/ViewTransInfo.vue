@@ -111,7 +111,7 @@
 							</tr>
 							<tr v-for="traffic in trafficList" :key="traffic.occurredTime">
 								<td>{{traffic.occurredTime | getdatefromtimestamp(true)}}</td>
-								<td>{{traffic.areaID + traffic.detailAddress}}</td>
+								<td>{{traffic.areaName + traffic.detailAddress}}</td>
 								<td>{{transportRecordDetail.realName}}</td>
 								<td colspan="2">{{traffic.endorseDesc}}</td>
 								<td>{{traffic.handleResult}}</td>
@@ -301,7 +301,7 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="地区">
-					<el-cascader style="width: 100%" :options="distData" :props="areaProps" v-model="selectedArea">
+					<el-cascader style="width: 100%" :options="distData" v-model="selectedArea" @change="handleSelectedArea">
 					</el-cascader>
 				</el-form-item>
 				<el-form-item label="详细地址">
@@ -322,17 +322,49 @@
 				<el-button type="primary" @click="addTraffic">确 定</el-button>
 			</div>
 		</el-dialog>
-		<el-dialog title="修改记录" width="60%" :visible.sync="isShowEditDialog">
+		<el-dialog title="修改记录" width="45%" :visible.sync="isShowEditDialog">
+			<el-form label-width="120px">
+				<el-form-item label="时间">
+					<el-date-picker style="width: 100%"  v-model="traffic.occurredTime" value-format="timestamp" type="date" placeholder="选择日期">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item label="地区">
+					<el-cascader style="width: 100%" :options="distData" v-model="selectedArea" @change="handleSelectedArea">
+					</el-cascader>
+				</el-form-item>
+				<el-form-item label="详细地址">
+					<el-input v-model="traffic.detailAddress"></el-input>
+				</el-form-item>
+				<el-form-item label="驾驶人">
+					<el-input v-model="transportRecordDetail.realName" disabled></el-input>
+				</el-form-item>
+				<el-form-item label="违法行为描述">
+					<el-input type="textarea" v-model="traffic.endorseDesc" resize="none"></el-input>
+				</el-form-item>
+				<el-form-item label="处理情况">
+					<el-input type="textarea" v-model="traffic.handleResult" resize="none"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="isShowEditDialog = false">取 消</el-button>
+				<el-button type="primary" @click="updataTraffic">确 定</el-button>
+			</div>
+		</el-dialog>
+		<el-dialog title="记录列表" width="60%" :visible.sync="isShowListDialog">
 			<el-table :data="trafficList">
-				<el-table-column property="occurredTime" label="时间" width="120"></el-table-column>
-				<el-table-column label="地点">
+				<el-table-column property="occurredTime" label="时间" width="120">
 					<template slot-scope="scope">
-						<span>{{scope.row.area + scope.row.detailAddress}}</span>
+						<span>{{scope.row.occurredTime | getdatefromtimestamp(true)}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column property="driver" label="驾驶人"></el-table-column>
-				<el-table-column property="description" label="交通违法行为或事故简要描述"></el-table-column>
-				<el-table-column property="info" label="处理情况"></el-table-column>
+				<el-table-column label="地点">
+					<template slot-scope="scope">
+						<span>{{scope.row.areaName + scope.row.detailAddress}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column property="transportRecordDetail.realName" label="驾驶人"></el-table-column>
+				<el-table-column property="transportRecordDetail.endorseDesc" label="交通违法行为或事故简要描述"></el-table-column>
+				<el-table-column property="transportRecordDetail.handleResult" label="处理情况"></el-table-column>
 				<el-table-column label="操作" align="center" width="230">
 					<template slot-scope="scope">
 						<el-button size="mini" icon="el-icon-edit" @click="update(scope.row)">编辑</el-button>
@@ -357,8 +389,9 @@
 				ownership: 1,
 				buisnessNature: 1,
 				isShowAddDialog: false,
+				isShowListDialog: false,
 				isShowEditDialog: false,
-				selectedArea:[],
+				selectedArea: [],
 				selectedDate: '',
 				areaProps: {
 					label: 'label',
@@ -401,11 +434,13 @@
 					params
 				}).then(res => {
 					console.log(res.data.data)
+					let areaID = String(res.data.data.areaID)
+					this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
 					this.trafficList = res.data.data
 				})
 			},
-			selectArea(data) {
-				this.traffic.area = data.join('-')
+			handleSelectedArea(data) {
+				this.traffic.areaID = data[data.length-1]
 			},
 			add() {
 				this.traffic = {
@@ -418,11 +453,11 @@
 				this.isShowAddDialog = true
 			},
 			edit() {
-				this.isShowEditDialog = true
+				this.isShowListDialog = true
 			},
 			update(obj) {
 				this.traffic = obj
-				this.isShowAddDialog = true
+				this.isShowEditDialog = true
 			},
 			addTraffic() {
 				let data = {
@@ -442,9 +477,27 @@
 					Message.success('添加记录成功！')
 					this.isShowAddDialog = false
 					this.getTrafficList()
-				})
-				
-				
+				})			
+			},
+			updataTraffic() {
+				let data = {
+					transportRecordID:this.$route.query.transportRecordID,
+					occurredTime:this.traffic.occurredTime,
+					areaID:this.traffic.areaID,
+					detailAddress:this.traffic.detailAddress,
+					endorseDesc:this.traffic.endorseDesc,
+					handleResult:this.traffic.handleResult
+				}
+				console.log(data)
+				request({
+					url: '/truck/endorsement/update',
+					data,
+					method: 'post',
+				}).then(res => {
+					Message.success('修改记录成功！')
+					this.isShowEditDialog = false
+					this.getTrafficList()
+				})			
 			},
 			del(i) {
 				this.trafficList.splice(i, 1)
