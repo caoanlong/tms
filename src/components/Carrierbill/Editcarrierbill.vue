@@ -1,7 +1,6 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card hasTit">
-			
 			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderID}}<span>发货单号：{{carrierOrder.shipperNo}}</span><span>创建时间：{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span>委托时间：接口无此参数</span>
 				<span class="status status1" v-if="carrierOrder.status=='Commited'">待执行</span>
 				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
@@ -134,6 +133,7 @@
 				<div class="split-item">
 					<span class="num">3</span>
 					<span class="tit">货物信息</span>
+					<el-button type="text" icon="el-icon-plus" @click="addItem" class="fr">添加货物</el-button>
 				</div>
 			</el-row>
 			<el-row>
@@ -151,7 +151,6 @@
 								<el-input placeholder="货物重量" style="width:150px" v-model="item.cargoWeight"><span slot="suffix">吨</span></el-input>
 								<el-input placeholder="货物体积" style="width:150px" v-model="item.cargoVolume"><span slot="suffix">方</span></el-input>
 								<el-input placeholder="货物数量" style="width:150px" v-model="item.cargoNum"><span slot="suffix">件</span></el-input>
-								<el-button type="text" icon="el-icon-plus" @click="addItem">添加</el-button>
 								<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="carrierCargo.length>1">删除</el-button>
 							</div>
 						</el-form-item>
@@ -249,29 +248,6 @@ export default {
 					'cargoNum': ''
 				}
 			],
-			carrierbillInfo: {
-				Status: '待执行',
-				Consignor: '安宁化工厂',
-				Carrier: '安化物流',
-				CarrierNum: '20180205001',
-				ConsignNum: '20180205001',
-				ConsigneeCompany: '云南磷化',
-				Discharge: '云南省昭通市镇远县城李家沟',
-				Consignee: '磷化',
-				ArrivalDate: '2018:02:06 18:00',
-				CargoTotal: '9.76吨/10方',
-				ConsignerCompany: '安宁~~化工厂',
-				DeliveryDate: '2018-02-06 18:00',
-				Consigner: '李铁军',
-				Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-				CargoName: 'R72/炸药',
-				CreatedDate: '2018:02:06 18:00',
-				CommissionDate: '2018:02:06 18:00',
-				invoice: 'Y',
-				receipt: ['1', '2'],
-				Receivable: 'N',
-				payable: 'N'
-			},
 			transType:'',
 			transTypeOption:[
 				{
