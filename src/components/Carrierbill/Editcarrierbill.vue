@@ -117,7 +117,7 @@
 				<el-col :span="6">
 					<el-form label-width="120px">
 						<el-form-item label="卸货地">
-							<el-cascader style="width: 100%" :options="distData" v-model="selectedAreas">
+							<el-cascader style="width: 100%" :options="distData">
 							</el-cascader>
 						</el-form-item>
 					</el-form>
@@ -125,7 +125,7 @@
 				<el-col :span="10">
 					<el-form label-width="20px">
 						<el-form-item>
-							<el-input placeholder="卸货详细地址" v-model="carrierbillInfo.Discharge"></el-input>
+							<el-input placeholder="卸货详细地址" v-model="carrierOrder.consigneeDetailAddress"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -140,18 +140,19 @@
 				<el-col :span="24">
 					<el-form label-width="120px">
 						<el-form-item label="货物信息">
-							<div class="cargoItem" v-for="(item,index) in cargoInfo">
-								<el-select v-model="item.type" placeholder="请选择" style="width:100px">
-									<el-option label="重货" value="重货"></el-option>
-									<el-option label="轻货" value="轻货"></el-option>
+							<div class="cargoItem" v-for="(item,index) in carrierCargo">
+								<el-select v-model="item.weightType" placeholder="请选择" style="width:100px">
+									<el-option label="重货" value="Heavy"></el-option>
+									<el-option label="轻货" value="Light"></el-option>
+									<el-option label="轻货" value="HeavyAndLight"></el-option>
 								</el-select>
-								<el-input placeholder="货物名称" style="width:150px"></el-input>
-								<el-input placeholder="货物规格" style="width:150px"></el-input>
-								<el-input placeholder="货物数量" style="width:150px"><span slot="suffix">吨</span></el-input>
-								<el-input placeholder="货物数量" style="width:150px"><span slot="suffix">方</span></el-input>
-								<el-input placeholder="货物数量" style="width:150px"><span slot="suffix">件</span></el-input>
+								<el-input placeholder="货物名称" style="width:150px" v-model="item.cargoName"></el-input>
+								<el-input placeholder="货物规格" style="width:150px" v-model="item.cargoType"></el-input>
+								<el-input placeholder="货物重量" style="width:150px" v-model="item.cargoWeight"><span slot="suffix">吨</span></el-input>
+								<el-input placeholder="货物体积" style="width:150px" v-model="item.cargoVolume"><span slot="suffix">方</span></el-input>
+								<el-input placeholder="货物数量" style="width:150px" v-model="item.cargoNum"><span slot="suffix">件</span></el-input>
 								<el-button type="text" icon="el-icon-plus" @click="addItem">添加</el-button>
-								<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="cargoInfo.length>1">删除</el-button>
+								<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="carrierCargo.length>1">删除</el-button>
 							</div>
 						</el-form-item>
 					</el-form>
@@ -238,7 +239,16 @@ export default {
 			distData: regionData,
 			selectedAreas: [],
 			carrierOrder:[],
-			carrierCargo:[],
+			carrierCargo:[
+				{
+					'weightType': '',
+					'cargoName': '',
+					'cargoType': '',
+					'cargoWeight': '',
+					'cargoVolume': '',
+					'cargoNum': ''
+				}
+			],
 			carrierbillInfo: {
 				Status: '待执行',
 				Consignor: '安宁化工厂',
@@ -262,14 +272,6 @@ export default {
 				Receivable: 'N',
 				payable: 'N'
 			},
-			cargoInfo: [{
-				'type': '',
-				'name': '',
-				'rule': '',
-				'weight': '',
-				'volumn': '',
-				'num': ''
-			}],
 			transType:'',
 			transTypeOption:[
 				{
@@ -332,7 +334,7 @@ export default {
 			this.$router.push({ name: 'adddispatchbill', query: { CarrierNum: this.$route.query.CarrierNum } })
 		},
 		addItem() {
-			this.cargoInfo.push({
+			this.carrierCargo.push({
 				'type': '',
 				'name': '',
 				'rule': '',
@@ -342,7 +344,7 @@ export default {
 			})
 		},
 		removeItem(index) {
-			this.cargoInfo.splice(index,1)
+			this.carrierCargo.splice(index,1)
 		},
 		back() {
 			this.$router.go(-1)
