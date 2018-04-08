@@ -4,11 +4,11 @@
 			<div  class="header clearfix">编辑收发货单位</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px">
-						<el-form-item label="公司名称">
+					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm">
+						<el-form-item label="公司名称" prop="companyName">
 							<el-input v-model="recdeliverycomp.companyName"></el-input>
 						</el-form-item>
-						<el-form-item label="地址">
+						<el-form-item label="地址" prop="companyAreaID">
 							<el-cascader 
 								style="width: 100%" 
 								:options="distData" 
@@ -16,7 +16,7 @@
 								@change="handleSelectedArea">
 							</el-cascader>
 						</el-form-item>
-						<el-form-item label="详细地址">
+						<el-form-item label="详细地址" prop="detailAddress">
 							<el-input v-model="recdeliverycomp.detailAddress"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">
@@ -51,6 +51,17 @@
 					detailAddress: ''
 				},
 				selectedArea: [],
+				rules: {
+					companyName: [
+						{required: true, message: '请输入名称', trigger: 'blur'}
+					],
+					companyAreaID: [
+						{ required: true, message: '请选择区域', trigger: 'change' }
+					],
+					detailAddress: [
+						{required: true, message: '请输入详细地址', trigger: 'blur'}
+					]
+				}
 			}
 		},
 		created() {
@@ -74,22 +85,28 @@
 				})
 			},
 			edit() {
-				let data = {
-					companyAreaID: this.recdeliverycomp.companyAreaID,
-					companyName: this.recdeliverycomp.companyName,
-					contactName: this.recdeliverycomp.contactName,
-					contactPhone: this.recdeliverycomp.contactPhone,
-					detailAddress: this.recdeliverycomp.detailAddress,
-					customerID: this.$route.query.customerID
-				}
-				request({
-					url: '/customer/update',
-					method:'post',
-					data
-				}).then(res => {
-					console.log(res.data)
-					Message.success('保存成功！')
-					this.$router.push({name: 'recdeliverycomp'})
+				this.$refs['ruleForm'].validate(valid => {
+					if (valid) {
+						let data = {
+							companyAreaID: this.recdeliverycomp.companyAreaID,
+							companyName: this.recdeliverycomp.companyName,
+							contactName: this.recdeliverycomp.contactName,
+							contactPhone: this.recdeliverycomp.contactPhone,
+							detailAddress: this.recdeliverycomp.detailAddress,
+							customerID: this.$route.query.customerID
+						}
+						request({
+							url: '/customer/update',
+							method:'post',
+							data
+						}).then(res => {
+							console.log(res.data)
+							Message.success('保存成功！')
+							this.$router.push({name: 'recdeliverycomp'})
+						})
+					} else {
+						return
+					}
 				})
 			},
 			back() {
