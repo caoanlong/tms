@@ -10,24 +10,26 @@
 							<tr>
 								<td rowspan="8" width="50"><p style="width: 1em">车辆基础信息</p></td>
 								<td width="100">车牌号码</td>
-								<td>云AE0969</td>
+								<td>{{transportRecordDetail.plateNo}}</td>
 								<td>厂牌型号</td>
-								<td width="120">希尔牌ZZT5166XQY</td>
+								<td width="120"><p>{{transportRecordDetail.manufacturer}}</p><p>{{transportRecordDetail.carBrandModel}}</p>
+
+								</td>
 								<td width="50">核载人数</td>
-								<td>3人</td>
+								<td>{{transportRecordDetail.personsCapacity}}人</td>
 							</tr>
 							<tr>
 								<td>注册登记日期</td>
-								<td>2013-03-22</td>
+								<td>{{transportRecordDetail.driverLicRegisterTime | getdatefromtimestamp(true) }}</td>
 								<td>检验有效期止</td>
-								<td>2016-03-21</td>
+								<td>{{transportRecordDetail.driverLicExamineExpires | getdatefromtimestamp(true) }}</td>
 								<td>车身颜色</td>
-								<td>蓝/白</td>
+								<td>{{transportRecordDetail.carBodyColor}}</td>
 							</tr>
 							<tr>
 								<td>所有权归属</td>
 								<td colspan="3">
-									<el-radio-group v-model="ownership" disabled>
+									<el-radio-group v-model="transportRecordDetail.propertyType" disabled>
 										<el-radio :label="1">单位</el-radio>
 										<el-radio :label="2">个人</el-radio>
 										<el-radio :label="3">挂靠</el-radio>
@@ -35,7 +37,7 @@
 								</td>
 								<td>经营性质</td>
 								<td>
-									<el-radio-group v-model="buisnessNature" disabled>
+									<el-radio-group v-model="transportRecordDetail.businessNature" disabled>
 										<el-radio :label="1">营运</el-radio>
 										<el-radio :label="2">自用</el-radio>
 									</el-radio-group>
@@ -43,61 +45,62 @@
 							</tr>
 							<tr>
 								<td>车辆所有人姓名或单位名称</td>
-								<td colspan="3">云南安化中达物流有限责任公司</td>
+								<td colspan="3">{{transportRecordDetail.carOwnerName}}</td>
 								<td>联系电话</td>
-								<td>13888209635</td>
+								<td>{{transportRecordDetail.carOwnerMobile}}</td>
 							</tr>
 							<tr>
 								<td>实际车主姓名</td>
-								<td colspan="3">云南安化中达物流有限责任公司</td>
+								<td colspan="3">{{transportRecordDetail.curDriverName}}</td>
 								<td>联系电话</td>
-								<td>13888209635</td>
+								<td>{{transportRecordDetail.curDriverMobile}}</td>
 							</tr>
 							<tr>
 								<td colspan="5">是否喷涂“严禁超员，核载X人”</td>
-								<td>是</td>
+								<td>{{transportRecordDetail.hasWarnMark=='Y'?'是':'否'}}</td>
 							</tr>
 							<tr>
 								<td>登记地址</td>
-								<td colspan="5">云南省昆明市安宁市太平镇安化生活区办公楼</td>
+								<td colspan="5">{{transportRecordDetail.carOwnerAddress}}</td>
 							</tr>
 							<tr>
 								<td>现住址</td>
-								<td colspan="5">云南省昆明市安宁市太平镇安化生活区办公楼</td>
+								<td colspan="5">{{transportRecordDetail.curDriverAddress}}</td>
 							</tr>
 							<tr>
 								<td rowspan="4"><p style="width: 1em">驾驶人基础信息</p></td>
 								<td>驾驶人姓名</td>
-								<td>罗少成</td>
+								<td>{{transportRecordDetail.realName}}</td>
 								<td>性别</td>
-								<td>男</td>
+								<td>{{transportRecordDetail.sex=="M"?'男':'女'}}</td>
 								<td>准驾车型</td>
-								<td>A2</td>
+								<td>{{transportRecordDetail.quasiDrivingType}}</td>
 							</tr>
 							<tr>
 								<td>身份证号</td>
-								<td colspan="3">530123196808133019</td>
+								<td colspan="3">{{transportRecordDetail.idCardNum}}</td>
 								<td>档案编号</td>
-								<td>530100356058</td>
+								<td>{{transportRecordDetail.driverLicenseCode}}</td>
 							</tr>
 							<tr>
 								<td>驾驶证审验有效起止</td>
-								<td colspan="3">2011-07-13至2021-07-13</td>
+								<td colspan="3">{{transportRecordDetail.driverLicExamineBeginTime | getdatefromtimestamp(true) }}--{{transportRecordDetail.driverLicExamineEndTime | getdatefromtimestamp(true) }}</td>
 								<td>联系电话</td>
-								<td>13708443225</td>
+								<td>{{transportRecordDetail.mobile}}</td>
 							</tr>
 							<tr>
 								<td>现住址</td>
-								<td colspan="5">云南省昆明市西山区海口镇东风村八栋一单元204号</td>
+								<td colspan="5">{{transportRecordDetail.homeAddress}}</td>
 							</tr>
 							<tr>
 								<td><p style="width: 1em">车辆照片</p></td>
 								<td colspan="6">
-									<!-- <ImageUpload :width="300" :height="200"/> -->
-									<img width="300" height="200" src="http://f11.baidu.com/it/u=2588434687,3162842634&fm=72"/>
-									<img width="300" height="200" src="http://img0.imgtn.bdimg.com/it/u=211127819,408382177&fm=200&gp=0.jpg"/>
+									<img width="200" height="150" :src="transportRecordDetail.truckFrontPic"/>
+									<img width="200" height="150" :src="transportRecordDetail.truckSidePic1"/>
+									<img width="200" height="150" :src="transportRecordDetail.truckSidePic2"/>
 								</td>
 							</tr>
+							<!-- <tr v-if="trafficList.length>1"> -->
 							<tr>
 								<td :rowspan="trafficList.length + 1">车辆交通违法及事故情况</td>
 								<td>时间</td>
@@ -106,20 +109,21 @@
 								<td colspan="2">交通违法行为或事故简要描述</td>
 								<td>处理情况</td>
 							</tr>
-							<tr 
-								v-for="traffic in trafficList" 
-								:key="traffic.time">
-								<td>{{traffic.time}}</td>
-								<td>{{traffic.area + traffic.address}}</td>
-								<td>{{traffic.driver}}</td>
-								<td colspan="2">{{traffic.description}}</td>
-								<td>{{traffic.info}}</td>
+							<tr v-for="traffic in trafficList" :key="traffic.occurredTime">
+								<td>{{traffic.occurredTime | getdatefromtimestamp(true)}}</td>
+								<td>{{traffic.areaID + traffic.detailAddress}}</td>
+								<td>{{transportRecordDetail.realName}}</td>
+								<td colspan="2">{{traffic.endorseDesc}}</td>
+								<td>{{traffic.handleResult}}</td>
+							</tr>
+							<tr v-if="trafficList.length<1">
+								<td colspan="6">暂无记录</td>
 							</tr>
 						</table>
 					</div>
 					<div class="common-table-footer">
 						<el-button type="success" @click="add">添加记录</el-button>
-						<el-button type="primary" @click="edit">修改记录</el-button>
+						<el-button type="primary" @click="edit" v-if="trafficList.length>1">修改记录</el-button>
 						<el-button @click="back">返回</el-button>
 					</div>
 				</el-tab-pane>
@@ -293,34 +297,24 @@
 		<el-dialog title="添加记录" width="45%" :visible.sync="isShowAddDialog">
 			<el-form label-width="120px">
 				<el-form-item label="时间">
-					<el-date-picker
-						style="width: 100%" 
-						v-model="selectedDate"
-						type="date"
-						placeholder="选择日期"
-						@change="selectDate">
+					<el-date-picker style="width: 100%"  v-model="traffic.occurredTime" value-format="timestamp" type="date" placeholder="选择日期">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="地区">
-					<el-cascader
-						style="width: 100%"
-						:options="distData" 
-						:props="areaProps"
-						v-model="selectedArea"
-						@change="selectArea">
+					<el-cascader style="width: 100%" :options="distData" :props="areaProps" v-model="selectedArea">
 					</el-cascader>
 				</el-form-item>
 				<el-form-item label="详细地址">
-					<el-input v-model="traffic.address"></el-input>
+					<el-input v-model="traffic.detailAddress"></el-input>
 				</el-form-item>
 				<el-form-item label="驾驶人">
-					<el-input v-model="traffic.driver" disabled></el-input>
+					<el-input v-model="transportRecordDetail.realName" disabled></el-input>
 				</el-form-item>
 				<el-form-item label="违法行为描述">
-					<el-input type="textarea" v-model="traffic.description" resize="none"></el-input>
+					<el-input type="textarea" v-model="traffic.endorseDesc" resize="none"></el-input>
 				</el-form-item>
 				<el-form-item label="处理情况">
-					<el-input type="textarea" v-model="traffic.info" resize="none"></el-input>
+					<el-input type="textarea" v-model="traffic.handleResult" resize="none"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -330,10 +324,10 @@
 		</el-dialog>
 		<el-dialog title="修改记录" width="60%" :visible.sync="isShowEditDialog">
 			<el-table :data="trafficList">
-				<el-table-column property="time" label="时间" width="120"></el-table-column>
+				<el-table-column property="occurredTime" label="时间" width="120"></el-table-column>
 				<el-table-column label="地点">
 					<template slot-scope="scope">
-						<span>{{scope.row.area + scope.row.address}}</span>
+						<span>{{scope.row.area + scope.row.detailAddress}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column property="driver" label="驾驶人"></el-table-column>
@@ -354,6 +348,7 @@
 	import { regionData } from 'element-china-area-data'
 	import ImageUpload from '../CommonComponents/ImageUpload'
 	import { getdatefromtimestamp } from '../../common/utils'
+	import request from "../../common/request"
 	export default {
 		data() {
 			return {
@@ -363,55 +358,62 @@
 				buisnessNature: 1,
 				isShowAddDialog: false,
 				isShowEditDialog: false,
+				selectedArea:[],
 				selectedDate: '',
-				selectedArea: [],
 				areaProps: {
 					label: 'label',
 					value: 'label'
 				},
+				transportRecordDetail:[],
 				traffic: {
-					time: '',
-					area: '',
-					address: '',
-					driver: '王小川',
-					description: '',
-					info: ''
+					occurredTime: '',
+					areaID: '',
+					detailAddress: '',
+					endorseDesc: '',
+					handleResult: ''
 				},
-				trafficList: [
-					{
-						time: '2017-08-09',
-						area: '云南省-昆明市',
-						address: '人民大道',
-						driver: '王小川',
-						description: '逆向行驶',
-						info: '罚款500',
-					},
-					{
-						time: '2017-08-10',
-						area: '云南省-昆明市',
-						address: '人民大道',
-						driver: '王小川',
-						description: '逆向行驶',
-						info: '罚款500',
-					}
-				]
+				trafficList: []
 			}
 		},
+		created() {
+			this.getDetail(),
+			this.getTrafficList()
+		},
 		methods: {
-			selectDate(data) {
-				this.traffic.time = getdatefromtimestamp(new Date(data).getTime(), true)
+			getDetail() {
+				let params = {
+					transportRecordID:this.$route.query.transportRecordID
+				}
+				request({
+					url: '/transportRecord/detail',
+					params
+				}).then(res => {
+					console.log(res.data.data)
+					this.transportRecordDetail = res.data.data
+				})
+			},
+			getTrafficList(){
+				let params = {
+					transportRecordID:this.$route.query.transportRecordID
+				}
+				request({
+					url: '/truck/endorsement/findList',
+					params
+				}).then(res => {
+					console.log(res.data.data)
+					this.trafficList = res.data.data
+				})
 			},
 			selectArea(data) {
 				this.traffic.area = data.join('-')
 			},
 			add() {
 				this.traffic = {
-					time: '',
-					area: '',
-					address: '',
-					driver: '王小川',
-					description: '',
-					info: ''
+					occurredTime: '',
+					areaID: '',
+					detailAddress: '',
+					endorseDesc: '',
+					handleResult: ''
 				}
 				this.isShowAddDialog = true
 			},
@@ -423,9 +425,26 @@
 				this.isShowAddDialog = true
 			},
 			addTraffic() {
-				this.trafficList.push(this.traffic)
-				Message.success('保存成功！')
-				this.isShowAddDialog = false
+				let data = {
+					transportRecordID:this.$route.query.transportRecordID,
+					occurredTime:this.traffic.occurredTime,
+					areaID:this.traffic.areaID,
+					detailAddress:this.traffic.detailAddress,
+					endorseDesc:this.traffic.endorseDesc,
+					handleResult:this.traffic.handleResult
+				}
+				console.log(data)
+				request({
+					url: '/truck/endorsement/add',
+					data,
+					method: 'post',
+				}).then(res => {
+					Message.success('添加记录成功！')
+					this.isShowAddDialog = false
+					this.getTrafficList()
+				})
+				
+				
 			},
 			del(i) {
 				this.trafficList.splice(i, 1)
