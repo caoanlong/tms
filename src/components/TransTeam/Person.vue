@@ -274,7 +274,7 @@
 					})
 					this.getList()
 				})
-			},
+			}
 		}
 	}
 </script>

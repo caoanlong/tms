@@ -102,7 +102,7 @@
 							</tr>
 							<!-- <tr v-if="trafficList.length>1"> -->
 							<tr>
-								<td :rowspan="trafficList.length + 1">车辆交通违法及事故情况</td>
+								<td :rowspan="trafficList.length + 2">车辆交通违法及事故情况</td>
 								<td>时间</td>
 								<td>地点</td>
 								<td>驾驶人</td>
