@@ -100,9 +100,8 @@
 									<img width="200" height="150" :src="transportRecordDetail.truckSidePic2"/>
 								</td>
 							</tr>
-							<!-- <tr v-if="trafficList.length>1"> -->
 							<tr>
-								<td :rowspan="trafficList.length + 2">车辆交通违法及事故情况</td>
+								<td :rowspan="trafficList.length > 0 ? (trafficList.length + 1) : (trafficList.length + 2)">车辆交通违法及事故情况</td>
 								<td>时间</td>
 								<td>地点</td>
 								<td>驾驶人</td>
@@ -123,7 +122,7 @@
 					</div>
 					<div class="common-table-footer">
 						<el-button type="success" @click="add">添加记录</el-button>
-						<el-button type="primary" @click="edit" v-if="trafficList.length>1">修改记录</el-button>
+						<el-button type="primary" @click="edit" v-if="trafficList.length > 0">修改记录</el-button>
 						<el-button @click="back">返回</el-button>
 					</div>
 				</el-tab-pane>
@@ -459,6 +458,7 @@
 				this.traffic = obj
 				this.isShowEditDialog = true
 			},
+			// 添加记录
 			addTraffic() {
 				let data = {
 					transportRecordID:this.$route.query.transportRecordID,
