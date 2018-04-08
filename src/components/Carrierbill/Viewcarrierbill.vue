@@ -69,15 +69,14 @@
 				</tr>
 				<tr class="total is-center">
 					<td>合计</td>
-					<td></td>
-					<td></td>
+					<td colspan="2"></td>
 					<td>{{sum('cargoNum')}}</td>
 					<td>{{sum('cargoVolume')}}</td>
 					<td>{{sum('cargoWeight')}}</td>
 					<td>
 						<span v-if="sum('cargoNum')>0">{{sum('cargoNum')}}件/</span>
-						<span v-else-if="sum('cargoVolume')>0">{{sum('cargoVolume')}}方/</span>
-						<span v-else-if="sum('cargoWeight')>0">{{sum('cargoWeight')}}吨</span>	
+						<span v-if="sum('cargoVolume')>0">{{sum('cargoVolume')}}方/</span>
+						<span v-if="sum('cargoWeight')>0">{{sum('cargoWeight')}}吨</span>	
 					</td>
 				</tr>
 			</table>
@@ -94,20 +93,20 @@
 					<th>备注</th>
 				</tr>
 				<tr class="is-center">
-					<td></td>
-					<td>2000.00元</td>
-					<td></td>
-					<td>2000.00元</td>
-					<td></td>
-					<td>4000.00元</td>
-					<td></td>
+					<td>{{carrierOrder.cashAmount}}元</td>
+					<td>{{carrierOrder.codAmount}}元</td>
+					<td>{{carrierOrder.porAmount}}元</td>
+					<td>{{carrierOrder.monthlyAmount}}元</td>
+					<td>{{carrierOrder.consigneeAmount}}元</td>
+					<td>{{carrierOrder.cashAmount + carrierOrder.codAmount + carrierOrder.porAmount + carrierOrder.monthlyAmount + carrierOrder.consigneeAmount}}元</td>
+					<td>无参数</td>
 					<td>人民币</td>
 				</tr>
 				<tr>
 					<td colspan="8">
 						<span class="labels">发票：</span>{{carrierbillInfo.invoice=='Y'?'开发票':'不开发票'}}
-						<span class="labels" style="margin-left:40px">回单要求：</span>{{carrierbillInfo.receipt}}
-						<span class="labels fr">承运单应收总价：</span>
+						<span class="labels" style="margin-left:40px">回单要求：</span>无参数
+						<span class="labels fr">承运单应收总价：{{carrierOrder.cashAmount + carrierOrder.codAmount + carrierOrder.porAmount + carrierOrder.monthlyAmount + carrierOrder.consigneeAmount}}元</span>
 					</td>
 				</tr>
 			</table>
@@ -124,14 +123,15 @@
 					<th>付款金额</th>
 				</tr>
 				<tr class="is-center">
-					<td>20180220001</td>
+					<!-- <td>20180220001</td>
 					<td>已装运</td>
 					<td>云A-G3365</td>
 					<td>R72/炸药</td>
 					<td></td>
 					<td></td>
 					<td>9.76</td>
-					<td>月结1800.00元</td>
+					<td>月结1800.00元</td> -->
+					<td colspan="8">无参数</td>
 				</tr>
 			</table>
 			<div class="wf-footer clearfix">
