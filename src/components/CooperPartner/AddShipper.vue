@@ -9,7 +9,12 @@
 							<el-input v-model="shipper.companyName"></el-input>
 						</el-form-item>
 						<el-form-item label="地址">
-							<el-input v-model="shipper.companyArea"></el-input>
+							<el-cascader 
+								style="width: 100%" 
+								:options="distData" 
+								v-model="selectedArea"
+								@change="handleSelectedArea">
+							</el-cascader>
 						</el-form-item>
 						<el-form-item label="详细地址">
 							<el-input v-model="shipper.detailAddress"></el-input>
@@ -31,24 +36,30 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import { regionData } from 'element-china-area-data'
 	import { Message } from 'element-ui'
 	import request from '../../common/request'
 	export default {
 		data() {
 			return {
+				distData: regionData,
 				shipper: {
-					companyArea: '',
+					companyAreaID: '',
 					companyName: '',
 					contactName: '',
 					contactPhone: '',
 					detailAddress: ''
-				}
+				},
+				selectedArea: [],
 			}
 		},
 		methods: {
+			handleSelectedArea(data) {
+				this.shipper.companyAreaID = data[data.length-1]
+			},
 			add() {
 				let data = {
-					companyArea: this.shipper.companyArea,
+					companyAreaID: this.shipper.companyAreaID,
 					companyName: this.shipper.companyName,
 					contactName: this.shipper.contactName,
 					contactPhone: this.shipper.contactPhone,
