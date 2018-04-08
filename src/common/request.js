@@ -40,7 +40,12 @@ service.interceptors.response.use(
 				|| response.data.code == 5202) { // 帐号已在其它地方登录!
 				localStorage.clear()
 				Message.error(response.data.msg)
-				window.location.href = '/#/login'
+				if (process.env == 'production') {
+					window.location.href = '/#/login'
+				} else {
+					window.location.href = '/tms/#/login'
+				}
+
 				return Promise.reject('error')
 			}
 			Message.error(response.data.msg)

@@ -6,19 +6,24 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
 						<el-form-item label="公司名称">
-							<el-input v-model="shipper.companyName"></el-input>
+							<el-input v-model="recdeliverycomp.companyName"></el-input>
 						</el-form-item>
 						<el-form-item label="地址">
-							<el-input v-model="shipper.companyArea"></el-input>
+							<el-cascader 
+								style="width: 100%" 
+								:options="distData" 
+								v-model="selectedArea"
+								@change="handleSelectedArea">
+							</el-cascader>
 						</el-form-item>
 						<el-form-item label="详细地址">
-							<el-input v-model="shipper.detailAddress"></el-input>
+							<el-input v-model="recdeliverycomp.detailAddress"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">
-							<el-input v-model="shipper.contactName"></el-input>
+							<el-input v-model="recdeliverycomp.contactName"></el-input>
 						</el-form-item>
 						<el-form-item label="联系方式">
-							<el-input v-model="shipper.contactPhone"></el-input>
+							<el-input v-model="recdeliverycomp.contactPhone"></el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="add">立即保存</el-button>
@@ -31,28 +36,34 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import { regionData } from 'element-china-area-data'
 	import { Message } from 'element-ui'
 	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				shipper: {
-					companyArea: '',
+				distData: regionData,
+				recdeliverycomp: {
+					companyAreaID: '',
 					companyName: '',
 					contactName: '',
 					contactPhone: '',
 					detailAddress: ''
-				}
+				},
+				selectedArea: [],
 			}
 		},
 		methods: {
+			handleSelectedArea(data) {
+				this.recdeliverycomp.companyAreaID = data[data.length-1]
+			},
 			add() {
 				let data = {
-					companyArea: this.shipper.companyArea,
-					companyName: this.shipper.companyName,
-					contactName: this.shipper.contactName,
-					contactPhone: this.shipper.contactPhone,
-					detailAddress: this.shipper.detailAddress,
+					companyAreaID: this.recdeliverycomp.companyAreaID,
+					companyName: this.recdeliverycomp.companyName,
+					contactName: this.recdeliverycomp.contactName,
+					contactPhone: this.recdeliverycomp.contactPhone,
+					detailAddress: this.recdeliverycomp.detailAddress,
 					type: 'ShipperConsignee',
 				}
 				request({

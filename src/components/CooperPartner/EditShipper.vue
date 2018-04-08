@@ -9,7 +9,12 @@
 							<el-input v-model="shipper.companyName"></el-input>
 						</el-form-item>
 						<el-form-item label="地址">
-							<el-input v-model="shipper.companyArea"></el-input>
+							<el-cascader 
+								style="width: 100%" 
+								:options="distData" 
+								v-model="selectedArea"
+								@change="handleSelectedArea">
+							</el-cascader>
 						</el-form-item>
 						<el-form-item label="详细地址">
 							<el-input v-model="shipper.detailAddress"></el-input>
@@ -31,18 +36,30 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import { regionData } from 'element-china-area-data'
 	import { Message } from 'element-ui'
 	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				shipper: []
+				distData: regionData,
+				shipper: {
+					companyAreaID: '',
+					companyName: '',
+					contactName: '',
+					contactPhone: '',
+					detailAddress: ''
+				},
+				selectedArea: [],
 			}
 		},
 		created() {
 			this.getDetail()
 		},
 		methods: {
+			handleSelectedArea(data) {
+				this.shipper.companyAreaID = data[data.length-1]
+			},
 			getDetail() {
 				let params = {
 					customerID:this.$route.query.customerID
@@ -51,18 +68,19 @@
 					url: '/customer/findById',
 					params
 				}).then(res => {
-					console.log(res.data.data)
-					this.shipper =res.data.data
+					this.shipper = res.data.data
+					let areaID = String(res.data.data.companyAreaID)
+					this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
 				})
 			},
 			edit() {
 				let data = {
-					companyArea: this.shipper.companyArea,
+					companyAreaID: this.shipper.companyAreaID,
 					companyName: this.shipper.companyName,
 					contactName: this.shipper.contactName,
 					contactPhone: this.shipper.contactPhone,
 					detailAddress: this.shipper.detailAddress,
-					customerID:this.$route.query.customerID
+					customerID: this.$route.query.customerID
 				}
 				request({
 					url: '/customer/update',

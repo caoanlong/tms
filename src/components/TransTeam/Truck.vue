@@ -58,7 +58,7 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-plus">导入</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -68,7 +68,11 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="所属地区" prop="area"></el-table-column>
+					<el-table-column label="所属地区" prop="area" width="140">
+						<template slot-scope="scope">
+							<span v-if="scope.row.areaID">{{scope.row.areaID | searchAreaByKey()}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="所属企业" prop="companyName"></el-table-column>
 					<el-table-column label="自编号" prop="code"></el-table-column>
 					<el-table-column label="车牌号" prop="plateNo"></el-table-column>
@@ -228,7 +232,7 @@
 				this.getList()
 			},
 			selectionChange(data) {
-				this.selectedList = data.map(item => item.staffID)
+				this.selectedList = data.map(item => item.truckID)
 			},
 			selectDateRange(date) {
 				this.startDate = date[0]
@@ -268,6 +272,43 @@
 			},
 			add() {
 				this.$router.push({name: 'addtruck'})
+			},
+			deleteConfirm(id) {
+				let ids = ''
+				if (id && typeof id == 'string') {
+					ids = id
+				} else {
+					ids = this.selectedList.join(',')
+				}
+				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.delItem(ids)
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			delItem(truckIDs) {
+				console.log(truckIDs)
+				let data = {
+					truckIDs
+				}
+				request({
+					url: '/truck/del',
+					method: 'post',
+					data
+				}).then(res => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+					this.getList()
+				})
 			}
 		}
 	}
