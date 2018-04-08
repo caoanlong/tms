@@ -11,182 +11,190 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核人">
-							<p>{{truck.auditor}}</p>
+							<p>{{truck.auditBy}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核日期">
-							<p>{{truck.auditorDate}}</p>
+							<p v-if="truck.auditTime">{{truck.auditTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="所属地区">
-							<p>{{truck.comTruckRegisterInfo.area}}</p>
+							<p v-if="truck.areaID">{{truck.areaID | searchAreaByKey()}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="所属企业">
-							<p>{{truck.comTruckRegisterInfo.companyName}}</p>
+							<p>{{truck.companyName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="自编号">
-							<p>{{truck.comTruck.code}}</p>
+							<p>{{truck.code}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="车辆类别">
-							<p>{{truck.comTruck.truckCategory}}</p>
+							<p>{{truck.truckCategory}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车辆类型">
-							<p>{{truck.comTruck.truckType}}</p>
+							<p>{{truck.truckType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车牌颜色">
-							<p>{{truck.comTruck.plateNoColor}}</p>
+							<p>{{truck.plateNoColor}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车牌号">
-							<p>{{truck.comTruck.plateNo}}</p>
+							<p>{{truck.plateNo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="挂车车牌">
-							<p>{{truck.comTruck.trailerPlateNo}}</p>
+							<p>{{truck.trailerPlateNo}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车长">
-							<p>{{truck.comTruck.length + '米'}}</p>
+							<p>{{truck.length + '米'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车宽">
-							<p>{{truck.comTruck.width + '米'}}</p>
+							<p>{{truck.width + '米'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车高">
-							<p>{{truck.comTruck.high + '米'}}</p>
+							<p>{{truck.high + '米'}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="载重">
-							<p>{{truck.comTruck.loads}}</p>
+							<p>{{truck.loads}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="装载方数">
-							<p>{{truck.comTruck.loadVolume}}</p>
+							<p>{{truck.loadVolume}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="牵引质量">
-							<p>{{truck.comTruck.tractiveTonnage}}</p>
+							<p>{{truck.tractiveTonnage}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="罐体类型">
-							<p>{{truck.comTruck.cannedType}}</p>
+							<p>{{truck.cannedType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="罐体容积">
-							<p>{{truck.comTruck.tankVolume}}</p>
+							<p>{{truck.tankVolume}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="罐体检测有效期至">
-							<p>{{truck.comTruckRegisterInfo.tankQCExpires | getdatefromtimestamp(true)}}</p>
+							<p v-if="truck.tankQCExpires">{{truck.tankQCExpires | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="安全阀检测有效期至">
-							<p>{{truck.comTruckRegisterInfo.safetyValvesQCExpires | getdatefromtimestamp(true)}}</p>
+							<p v-if="truck.safetyValvesQCExpires">{{truck.safetyValvesQCExpires | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="压力表检测有效期至">
-							<p>{{truck.comTruckRegisterInfo.pressureGaugeQCExpires | getdatefromtimestamp(true)}}</p>
+							<p v-if="truck.pressureGaugeQCExpires">{{truck.pressureGaugeQCExpires | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="汽车生产厂家">
-							<p>{{truck.comTruckRegisterInfo.manufacturer}}</p>
+							<p>{{truck.manufacturer}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="品牌型号">
-							<p>{{truck.comTruckRegisterInfo.carBrandModel}}</p>
+							<p>{{truck.carBrandModel}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="发动机号">
-							<p>{{truck.comTruckRegisterInfo.engineNO}}</p>
+							<p>{{truck.engineNO}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车架号">
-							<p>{{truck.comTruckRegisterInfo.vehicleFrameNO}}</p>
+							<p>{{truck.vehicleFrameNO}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="核载人数">
-							<p>{{truck.comTruckRegisterInfo.personsCapacity}}</p>
+							<p>{{truck.personsCapacity}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车身颜色">
-							<p>{{truck.comTruckRegisterInfo.carBodyColor}}</p>
+							<p>{{truck.carBodyColor}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="是否喷涂警示标志">
-							<p>{{truck.comTruckRegisterInfo.hasWarnMark == 'Y' ? '是' : '否'}}</p>
+							<p>{{truck.hasWarnMark == 'Y' ? '是' : '否'}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="行驶证注册日期">
-							<p>{{truck.comTruckRegisterInfo.driverLicRegisterTime | getdatefromtimestamp(true)}}</p>
+							<p v-if="truck.driverLicRegisterTime">{{truck.driverLicRegisterTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="行驶证发证日期">
-							<p>{{truck.comTruckRegisterInfo.driverLicIssueTime | getdatefromtimestamp(true)}}</p>
+							<p v-if="truck.driverLicIssueTime">{{truck.driverLicIssueTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="行驶证审验效期至">
-							<p>{{truck.comTruckRegisterInfo.driverLicExamineExpires | getdatefromtimestamp(true)}}</p>
+							<p v-if="truck.driverLicExamineExpires">{{truck.driverLicExamineExpires | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="道路运输证号">
-							<p>{{truck.roadTransNum}}</p>
+							<p>{{truck.roadTransportNo}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -196,145 +204,175 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="道路运输证年审期至">
-							<p>{{truck.roadTransYearTo}}</p>
+							<p v-if="truck.roadTransportLicAnnualPeriod">{{truck.roadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="所有人或单位">
-							<p>{{truck.owner}}</p>
+							<p>{{truck.carOwnerName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="所有人联系电话">
-							<p>{{truck.ownerMobile}}</p>
+							<p>{{truck.carOwnerMobile}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="所有人登记地址">
-							<p>{{truck.ownerAddress}}</p>
+							<p>{{truck.carOwnerAddress}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="实际车主姓名">
-							<p>{{truck.truckOwnerName}}</p>
+							<p>{{truck.curDriverName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="实际车主电话">
-							<p>{{truck.truckOwnerMobile}}</p>
+							<p>{{truck.curDriverMobile}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="实际车主现住址">
-							<p>{{truck.truckOwnerAddress}}</p>
+							<p>{{truck.curDriverAddress}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="所有权">
-							<p>{{truck.ownership}}</p>
+							<p>{{truck.propertyType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="经营证号">
-							<p>{{truck.businessLicNum}}</p>
+							<p>{{truck.businessLicenseNo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="等级评定">
-							<p>{{truck.levelEval}}</p>
+							<p>{{truck.rank}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="下次等评日期">
-							<p>{{truck.nextLevelEvalDate}}</p>
+							<p v-if="truck.nextRankEvaluteTime">{{truck.nextRankEvaluteTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="二级维护日期">
-							<p>{{truck.secondMaintainDate}}</p>
+							<p v-if="truck.secondaMaintainTime">{{truck.secondaMaintainTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="下次二级维护日期">
-							<p>{{truck.nextSecondMaintainDate}}</p>
+							<p v-if="truck.nextSecondLevel">{{truck.nextSecondLevel | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="承运人责任险有效期至">
-							<p>{{truck.carrierValid}}</p>
+							<p v-if="truck.carrierRiskInsuranceExpires">{{truck.carrierRiskInsuranceExpires | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="交强险有效期至">
-							<p>{{truck.strongInsValid}}</p>
+							<p v-if="truck.saLIInsuranceExpires">{{truck.saLIInsuranceExpires | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="商业险有效期至">
-							<p>{{truck.commercialInsValid}}</p>
+							<p v-if="truck.bizInsuranceExpires">{{truck.bizInsuranceExpires | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="GPS类型">
-							<p>{{truck.gpsType}}</p>
+							<p>{{truck.gpSType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="GPS入网号">
-							<p>{{truck.gpsNetNum}}</p>
+							<p>{{truck.gpSNetworkNo}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="GPS卡号">
-							<p>{{truck.gpsCardNum}}</p>
+							<p>{{truck.gpSCardNo}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="GPS序列号">
-							<p>{{truck.gpsSerialNum}}</p>
+							<p>{{truck.gpSSerialNumber}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="GPS安装时间">
-							<p>{{truck.gpsInstallTime}}</p>
+							<p v-if="truck.gpSSetupTime">{{truck.gpSSetupTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="车辆照片">
-							<ImageUpload :files="[truck.truckPhoto]" :isPreview="true"/>
+						<el-form-item label="车辆照片(正面)">
+							<ImageUpload :files="[truck.truckFrontPic]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="机动车行驶证">
-							<ImageUpload :files="[truck.driverLicImg]" :isPreview="true"/>
+						<el-form-item label="车辆照片(侧面1)">
+							<ImageUpload :files="[truck.truckSidePic1]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="道路运输许可证">
-							<ImageUpload :files="[truck.roadTransImg]" :isPreview="true"/>
+						<el-form-item label="车辆照片(侧面2)">
+							<ImageUpload :files="[truck.truckSidePic2]" :isPreview="true"/>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="6">
+						<el-form-item label="机动车行驶证(正)">
+							<ImageUpload :files="[truck.driverLicPic]" :isPreview="true"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="机动车行驶证(副)">
+							<ImageUpload :files="[truck.driverLicSidePic]" :isPreview="true"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="道路运输许可证(正)">
+							<ImageUpload :files="[truck.roadTransportPic]" :isPreview="true"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="道路运输许可证(副)">
+							<ImageUpload :files="[truck.roadTransportSidePic]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="其他照片">
-							<ImageUpload :files="truck.otherImgs" :isPreview="true" :limitNum="9" @imgUrlBack="imgUrlBack"/>
+							<ImageUpload :files="otherImgs" :isPreview="true" :limitNum="5"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -358,7 +396,8 @@ export default {
 	data() {
 		return {
 			distData: regionData,
-			truck: {}
+			truck: {},
+			otherImgs: []
 		}
 	},
 	created() {
@@ -375,12 +414,12 @@ export default {
 			}).then(res => {
 				console.log(res.data.data)
 				this.truck = res.data.data
-				// let resDataComStaffPic = res.data.data.comStaffPic
-				// let i = 1
-				// while (i < 6) {
-				// 	this.otherImgs.push(resDataComStaffPic['otherStaffPic' + i])
-				// 	i++
-				// }
+				let resDataComStaffPic = res.data.data
+				let i = 1
+				while (i < 6) {
+					this.otherImgs.push(resDataComStaffPic['otherTruckPic' + i])
+					i++
+				}
 			})
 		},
 		back() {

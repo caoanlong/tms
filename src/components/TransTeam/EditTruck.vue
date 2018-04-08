@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">添加车辆</div>
+			<div class="header clearfix">编辑车辆</div>
 			<el-form label-width="155px" size="mini">
 				<el-row>
 					<el-col :span="6">
@@ -41,7 +41,7 @@
 							<el-cascader 
 								style="width: 100%" 
 								:options="distData" 
-								v-model="selectedArea"
+								v-model="selectedArea" 
 								@change="handleSelectedArea">
 							</el-cascader>
 						</el-form-item>
@@ -509,7 +509,7 @@
 				<el-row>
 					<el-col :span="24">
 						<el-form-item>
-							<el-button type="primary" @click="createItem">立即保存</el-button>
+							<el-button type="primary" @click="updateItem">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-col>
@@ -611,8 +611,29 @@ export default {
 		}
 	},
 	created() {
+		this.getInfo()
 	},
 	methods: {
+		getInfo() {
+			let params = {
+				truckID: this.$route.query.truckID
+			}
+			request({
+				url: '/truck/info',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				this.truck = res.data.data
+				let areaID = res.data.data.areaID
+				this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+				let resDataComStaffPic = res.data.data
+				let i = 1
+				while (i < 6) {
+					this.otherImgs.push(resDataComStaffPic['otherTruckPic' + i])
+					i++
+				}
+			})
+		},
 		// 车辆照片(正)
 		handleTruckFrontPicSuccess(res) {
 			this.truck.truckFrontPic = res[0]
@@ -650,11 +671,11 @@ export default {
 		handleSelectedArea(data) {
 			this.truck.areaID = data[data.length-1]
 		},
-		createItem() {
+		updateItem() {
 			let data = this.truck
 			console.log(data)
 			request({
-				url: '/truck/add',
+				url: '/truck/update',
 				method: 'post',
 				data
 			}).then(res => {

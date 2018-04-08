@@ -40,7 +40,7 @@
 <script>
 	import axios from 'axios'
 	import { baseURL } from '../../../common/request'
-	import common from '../../../common/utils'
+	import { formDataReq } from '../../../common/utils'
 	import VueCropper from 'vue-cropper'
 	export default {
 		props: {
@@ -57,7 +57,8 @@
 				default: 1
 			},
 			files: {
-				type: Array
+				type: Array,
+				default: () => []
 			},
 			isPreview: {
 				type: Boolean,
@@ -104,7 +105,7 @@
 				this.$refs.cropper.getCropBlob((data) => {
 					let url = baseURL + "/sys/picture/upload"
 					let headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
-					let params = common.formDataReq({
+					let params = formDataReq({
 						"file": data
 					})
 					axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
