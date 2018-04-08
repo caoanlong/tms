@@ -108,7 +108,7 @@
 								<td colspan="2">交通违法行为或事故简要描述</td>
 								<td>处理情况</td>
 							</tr>
-							<tr v-for="traffic in trafficList" :key="traffic.occurredTime">
+							<tr v-for="traffic in trafficList" :key="traffic.endorsementID">
 								<td>{{traffic.occurredTime | getdatefromtimestamp(true)}}</td>
 								<td>{{traffic.areaName + traffic.detailAddress}}</td>
 								<td>{{transportRecordDetail.realName}}</td>
@@ -328,7 +328,11 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="地区">
-					<el-cascader style="width: 100%" :options="distData" v-model="selectedArea" @change="handleSelectedArea">
+					<el-cascader 
+						style="width: 100%" 
+						:options="distData" 
+						v-model="selectedArea" 
+						@change="handleSelectedArea">
 					</el-cascader>
 				</el-form-item>
 				<el-form-item label="详细地址">
@@ -361,13 +365,17 @@
 						<span>{{scope.row.areaName + scope.row.detailAddress}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column property="transportRecordDetail.realName" label="驾驶人"></el-table-column>
-				<el-table-column property="transportRecordDetail.endorseDesc" label="交通违法行为或事故简要描述"></el-table-column>
-				<el-table-column property="transportRecordDetail.handleResult" label="处理情况"></el-table-column>
+				<el-table-column label="驾驶人">
+					<template slot-scope="scope">
+						<span>{{transportRecordDetail.realName}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="交通违法行为或事故简要描述" prop="endorseDesc"></el-table-column>
+				<el-table-column label="处理情况" prop="handleResult"></el-table-column>
 				<el-table-column label="操作" align="center" width="230">
 					<template slot-scope="scope">
 						<el-button size="mini" icon="el-icon-edit" @click="update(scope.row)">编辑</el-button>
-						<el-button size="mini" icon="el-icon-delete" @click="del(scope.$index)">删除</el-button>
+						<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.row.endorsementID)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -456,6 +464,7 @@
 			},
 			update(obj) {
 				this.traffic = obj
+				this.selectedArea = [(String(obj.areaID).substr(0,2) + '0000'), (String(obj.areaID).substr(0,4) + '00'), obj.areaID]
 				this.isShowEditDialog = true
 			},
 			// 添加记录
@@ -481,14 +490,15 @@
 			},
 			updataTraffic() {
 				let data = {
-					transportRecordID:this.$route.query.transportRecordID,
-					occurredTime:this.traffic.occurredTime,
-					areaID:this.traffic.areaID,
-					detailAddress:this.traffic.detailAddress,
-					endorseDesc:this.traffic.endorseDesc,
-					handleResult:this.traffic.handleResult
+					endorsementID: this.traffic.endorsementID,
+					transportRecordID: this.$route.query.transportRecordID,
+					occurredTime: this.traffic.occurredTime,
+					areaID: this.traffic.areaID,
+					detailAddress: this.traffic.detailAddress,
+					endorseDesc: this.traffic.endorseDesc,
+					handleResult: this.traffic.handleResult
 				}
-				console.log(data)
+				console.log(this.traffic)
 				request({
 					url: '/truck/endorsement/update',
 					data,
@@ -496,11 +506,42 @@
 				}).then(res => {
 					Message.success('修改记录成功！')
 					this.isShowEditDialog = false
+					this.isShowListDialog = false
 					this.getTrafficList()
 				})			
 			},
-			del(i) {
-				this.trafficList.splice(i, 1)
+			deleteConfirm(id) {
+				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.delItem(id)
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			delItem(endorsementIDs) {
+				console.log(endorsementIDs)
+				let data = {
+					endorsementIDs
+				}
+				request({
+					url: '/truck/endorsement/deleteBatch',
+					method: 'post',
+					data
+				}).then(res => {
+					this.$message({
+						type: 'success',
+						message: '删除成功!'
+					})
+					this.isShowEditDialog = false
+					this.isShowListDialog = false
+					this.getTrafficList()
+				})
 			},
 			back() {
 				this.$router.go(-1)
