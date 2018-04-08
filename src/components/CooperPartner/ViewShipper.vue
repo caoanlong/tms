@@ -9,7 +9,7 @@
 							<p>{{shipper.companyName}}</p>
 						</el-form-item>
 						<el-form-item label="地址">
-							<p>{{shipper.companyArea}}</p>
+							<p>{{String(shipper.companyAreaID) | searchAreaByKey}}</p>
 						</el-form-item>
 						<el-form-item label="详细地址">
 							<p>{{shipper.detailAddress}}</p>
@@ -35,7 +35,7 @@
 	export default {
 		data() {
 			return {
-				shipper: []
+				shipper: {}
 			}
 		},
 		created() {

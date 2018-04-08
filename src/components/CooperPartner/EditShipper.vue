@@ -4,11 +4,11 @@
 			<div  class="header clearfix">编辑托运人</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px" :model="shipper" :rules="rules" ref="ruleForm">
-						<el-form-item label="公司名称" prop="companyName">
+					<el-form label-width="120px">
+						<el-form-item label="公司名称">
 							<el-input v-model="shipper.companyName"></el-input>
 						</el-form-item>
-						<el-form-item label="地址" prop="companyAreaID">
+						<el-form-item label="地址">
 							<el-cascader 
 								style="width: 100%" 
 								:options="distData" 
@@ -16,7 +16,7 @@
 								@change="handleSelectedArea">
 							</el-cascader>
 						</el-form-item>
-						<el-form-item label="详细地址" prop="detailAddress">
+						<el-form-item label="详细地址">
 							<el-input v-model="shipper.detailAddress"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">
@@ -51,17 +51,6 @@
 					detailAddress: ''
 				},
 				selectedArea: [],
-				rules: {
-					companyName: [
-						{required: true, message: '请输入名称', trigger: 'blur'}
-					],
-					companyAreaID: [
-						{ required: true, message: '请选择区域', trigger: 'change' }
-					],
-					detailAddress: [
-						{required: true, message: '请输入详细地址', trigger: 'blur'}
-					]
-				}
 			}
 		},
 		created() {
@@ -85,28 +74,22 @@
 				})
 			},
 			edit() {
-				this.$refs['ruleForm'].validate(valid => {
-					if (valid) {
-						let data = {
-							companyAreaID: this.shipper.companyAreaID,
-							companyName: this.shipper.companyName,
-							contactName: this.shipper.contactName,
-							contactPhone: this.shipper.contactPhone,
-							detailAddress: this.shipper.detailAddress,
-							customerID: this.$route.query.customerID
-						}
-						request({
-							url: '/customer/update',
-							method:'post',
-							data
-						}).then(res => {
-							console.log(res.data)
-							Message.success('保存成功！')
-							this.$router.push({name: 'shipper'})
-						})
-					} else {
-						return
-					}
+				let data = {
+					companyAreaID: this.shipper.companyAreaID,
+					companyName: this.shipper.companyName,
+					contactName: this.shipper.contactName,
+					contactPhone: this.shipper.contactPhone,
+					detailAddress: this.shipper.detailAddress,
+					customerID: this.$route.query.customerID
+				}
+				request({
+					url: '/customer/update',
+					method:'post',
+					data
+				}).then(res => {
+					console.log(res.data)
+					Message.success('保存成功！')
+					this.$router.push({name: 'shipper'})
 				})
 			},
 			back() {
