@@ -80,6 +80,7 @@
 								v-model="selectedArea"
 								@change="handleSelectedArea" separator="" disabled>
 							</el-cascader>
+							<!-- <el-input disabled placeholder="发货地" v-model="shipperDetail.companyArea"></el-input> -->
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -453,10 +454,11 @@ export default {
 				carrierrName:this.carrierbillInfo.carrierrName,
 				cashAmount:this.carrierbillInfo.cashAmount,
 				codAmount:this.carrierbillInfo.codAmount,
-				consigneeAddressID:this.carrierbillInfo.consigneeAddressID,
+				consigneeAddressID: '',
+				// consigneeAddressID:this.carrierbillInfo.consigneeAddressID,
 				consigneeAmount:this.carrierbillInfo.consigneeAmount,
 				consigneeArea:this.ConsigneeDetail.companyArea,
-				consigneeAreaID:this.selectedArea.join(','),
+				consigneeAreaID:this.selectedArea[this.selectedArea.length-1],
 				consigneeCompanyName:this.carrierbillInfo.consigneeCompanyName,
 				consigneeDate:this.carrierbillInfo.consigneeDate,
 				consigneeDetailAddress:this.ConsigneeDetail.detailAddress,
@@ -468,8 +470,10 @@ export default {
 				paymentMethod:this.carrierbillInfo.paymentMethod,
 				porAmount:this.carrierbillInfo.porAmount,
 				receiptMethod:this.carrierbillInfo.receiptMethod,	
-				shipperAddressID:this.shipperDetail.detailAddress,
+				shipperAddressID: '',
+				// shipperAddressID:this.shipperDetail.detailAddress,
 				shipperArea:this.shipperDetail.companyArea,
+				shipperAreaID:this.selectedArea1[this.selectedArea1.length-1],
 				shipperCompanyName:this.carrierbillInfo.shipperCompanyName,
 				shipperDate:this.carrierbillInfo.shipperDate,
 				shipperDetailAddress:this.shipperDetail.detailAddress,
