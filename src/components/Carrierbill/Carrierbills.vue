@@ -37,7 +37,7 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 				<el-button type="default" size="mini" icon="el-icon-news">调度</el-button>
 				<el-button type="default" size="mini" icon="el-icon-refresh">刷新</el-button>
 			</div>
@@ -231,8 +231,6 @@ export default {
 				let data = {
 					carrierOrderIDs
 				}
-				console.log(data)
-				return
 				request({
 					url: '/biz/carrierOrder/delete',
 					method: 'post',
