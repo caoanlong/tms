@@ -95,9 +95,9 @@
 							<tr>
 								<td><p style="width: 1em">车辆照片</p></td>
 								<td colspan="6">
-									<img width="200" height="150" :src="transportRecordDetail.truckFrontPic"/>
-									<img width="200" height="150" :src="transportRecordDetail.truckSidePic1"/>
-									<img width="200" height="150" :src="transportRecordDetail.truckSidePic2"/>
+									<img width="200" height="150" :src="imgUrl + transportRecordDetail.truckFrontPic"/>
+									<img width="200" height="150" :src="imgUrl + transportRecordDetail.truckSidePic1"/>
+									<img width="200" height="150" :src="imgUrl + transportRecordDetail.truckSidePic2"/>
 								</td>
 							</tr>
 							<tr>
@@ -134,9 +134,9 @@
 								<table class="common-table">
 									<tr>
 										<td colspan="5">
-											<span class="tit">车辆所有人：云南安化中达物流有限责任公司</span>
-											<span class="tit">公司经营证号：530181000690</span>
-											<span class="tit">建档日期：2016年5月25日</span>
+											<span class="tit">车辆所有人：{{transportRecordDetail2.truck.carOwnerName}}</span>
+											<span class="tit">公司经营证号：{{transportRecordDetail2.truck.businessLicenseNo}}</span>
+											<span class="tit">建档日期：{{transportRecordDetail2.truck.archiveTime | getdatefromtimestamp(true)}}</span>
 										</td>
 									</tr>
 									<tr>
@@ -152,8 +152,7 @@
 										<td>品牌型号</td>
 										<td>{{transportRecordDetail2.truck.carBrandModel}}</td>
 										<td>总质量</td>
-										<!-- 缺少 -->
-										<td>16000kg</td> 
+										<td>{{transportRecordDetail2.truck.totalWeight}}</td> 
 									</tr>
 									<tr>
 										<td>车架号</td>
@@ -165,12 +164,11 @@
 										<td>注册日期</td>
 										<td>{{transportRecordDetail2.truck.driverLicRegisterTime | getdatefromtimestamp(true)}}</td>
 										<td>车辆类型</td>
-										<td>{{transportRecordDetail2.truck.TruckType}}</td>
+										<td>{{transportRecordDetail2.truck.truckType}}</td>
 									</tr>
 									<tr>
 										<td>使用性质</td>
-										<!-- 缺少 -->
-										<td>危化品运输</td>
+										<td>{{transportRecordDetail2.truck.businessNature}}</td>
 										<td>经营类别</td>
 										<td>{{transportRecordDetail2.truck.businessScope}}</td>
 									</tr>
