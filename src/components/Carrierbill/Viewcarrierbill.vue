@@ -98,7 +98,7 @@
 					<td>{{carrierOrder.porAmount}}元</td>
 					<td>{{carrierOrder.monthlyAmount}}元</td>
 					<td>{{carrierOrder.consigneeAmount}}元</td>
-					<td>{{carrierOrder.cashAmount + carrierOrder.codAmount + carrierOrder.porAmount + carrierOrder.monthlyAmount + carrierOrder.consigneeAmount}}元</td>
+					<td>{{carrierOrderTotal}}元</td>
 					<td>无参数</td>
 					<td>人民币</td>
 				</tr>
@@ -106,7 +106,7 @@
 					<td colspan="8">
 						<span class="labels">发票：</span>{{carrierbillInfo.invoice=='Y'?'开发票':'不开发票'}}
 						<span class="labels" style="margin-left:40px">回单要求：</span>无参数
-						<span class="labels fr">承运单应收总价：{{carrierOrder.cashAmount + carrierOrder.codAmount + carrierOrder.porAmount + carrierOrder.monthlyAmount + carrierOrder.consigneeAmount}}元</span>
+						<span class="labels fr">承运单应收总价：{{carrierOrderTotal}}元</span>
 					</td>
 				</tr>
 			</table>
@@ -136,7 +136,9 @@
 			</table>
 			<div class="wf-footer clearfix">
 				<div class="btn-group fl">
-					<button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
+					<!-- <button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
+						<svg-icon icon-class="edit"></svg-icon>修改</button> -->
+					<button type="button" class="wf-btn btn-success" @click="Edit">
 						<svg-icon icon-class="edit"></svg-icon>修改</button>
 					<button type="button" class="wf-btn btn-primary" @click="AddDispatchBill">
 						<svg-icon icon-class="dispatchbill"></svg-icon>调度</button>
@@ -151,6 +153,35 @@
 				</div>
 			</div>
 		</div>
+		<el-dialog title="修改应收款" :visible.sync="dialogFormVisible" width="60%">
+			<table class="wf-table">
+				<tr>
+					<th>现付</th>
+					<th>到付</th>
+					<th>回单付</th>
+					<th>月结</th>
+					<th>收方到货付</th>
+					<th>合计</th>
+					<th>其他</th>
+					<th>备注</th>
+				</tr>
+				<tr class="is-center">
+					<td><el-input size="mini" v-model="carrierOrder.cashAmount"><span slot="suffix">元</span></el-input></td>
+					<td><el-input size="mini" v-model="carrierOrder.codAmount"><span slot="suffix">元</span></el-input></td>
+					<td><el-input size="mini" v-model="carrierOrder.porAmount"><span slot="suffix">元</span></el-input></td>
+					<td><el-input size="mini" v-model="carrierOrder.monthlyAmount"><span slot="suffix">元</span></el-input></td>
+					<td><el-input size="mini" v-model="carrierOrder.consigneeAmount"><span slot="suffix">元</span></el-input></td>
+					<td><el-input size="mini" v-model="carrierOrderTotal" disabled><span slot="suffix">元</span></el-input></td>
+					<td><el-input size="mini" type="textarea" resize="none" :rows="1"></el-input></td>
+					<td><el-input size="mini" type="textarea" resize="none" :rows="1"></el-input></td>
+				</tr>
+			</table>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click="dialogFormVisible = false">取 消</el-button>
+				<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+			</div>
+		</el-dialog>
+
 	</div>
 </template>
 <script type="text/javascript">
@@ -187,6 +218,7 @@ export default {
 				payable: 'N',
 				transType: '公路运输'
 			},
+			dialogFormVisible:false,
 			carrierCargo: [],
 			transType: '',
 			transTypeOption: [{
@@ -228,6 +260,12 @@ export default {
 			]
 		}
 	},
+	computed:{
+		carrierOrderTotal:function(){
+			return parseInt(this.carrierOrder.cashAmount) + parseInt(this.carrierOrder.codAmount) + parseInt(this.carrierOrder.porAmount) + parseInt(this.carrierOrder.monthlyAmount) + parseInt(this.carrierOrder.consigneeAmount)
+		}
+		
+	},
 	created() {
 		this.getDetail()
 	},
@@ -257,6 +295,9 @@ export default {
 		},
 		EditCarrierbill() {
 			this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
+		},
+		Edit(){
+			this.dialogFormVisible = true
 		},
 		addItem() {
 			this.cargoInfo.push({
