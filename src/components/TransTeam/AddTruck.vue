@@ -81,17 +81,15 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="车牌号">
+						<el-form-item label="车牌号" v-if="truck.truckCategory == '牵引车'">
 							<el-input v-model="truck.plateNo"></el-input>
+						</el-form-item>
+						<el-form-item label="挂车车牌" v-else>
+							<el-input v-model="truck.trailerPlateNo"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
-						<el-form-item label="挂车车牌">
-							<el-input v-model="truck.trailerPlateNo"></el-input>
-						</el-form-item>
-					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车长">
 							<el-select style="width: 100%" v-model="truck.length" placeholder="请选择">
@@ -591,7 +589,7 @@ export default {
 				tractiveTonnage: '',		// string	@mock=12
 				trailerPlateNo: '',		// string 挂车牌号
 				truckBrand: '',		// string	@mock=1
-				truckCategory: '',		// string 车辆类别
+				truckCategory: '牵引车',		// string 车辆类别
 				truckFrontPic: '',		// string 车辆正面照
 				truckSidePic1: '',		// string 车辆侧面照1
 				truckSidePic2: '',		// string 车辆侧面照2
@@ -601,7 +599,7 @@ export default {
 				workStatus: ''		// string 运输状态
 			},
 			otherImgs: [],
-			selectedArea: [],
+			selectedArea: []
 		}
 	},
 	created() {
