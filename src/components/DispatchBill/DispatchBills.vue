@@ -5,15 +5,15 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="调度单号">
-						<el-input placeholder="调度单号"></el-input>
+						<el-input placeholder="调度单号" v-model="findDispatchOrderID"></el-input>
 					</el-form-item>
 					<el-form-item label="发货地">
-						<el-input placeholder="发货地"></el-input>
+						<el-input placeholder="发货地" v-model="findShipperAddress"></el-input>
 					</el-form-item>
 					<el-form-item label="收货地">
-						<el-input placeholder="收货地"></el-input>
+						<el-input placeholder="收货地" v-model="findConsigneeAddress"></el-input>
 					</el-form-item>
-					<el-form-item label="司机/随车员姓名">
+					<el-form-item label="司机/随车员姓名" v-model="findName">
 						<el-input placeholder="司机/随车员姓名"></el-input>
 					</el-form-item>
 					<el-form-item>
@@ -24,11 +24,10 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-refresh">刷新</el-button>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="调度单号" prop="ControlsNum"  width="130" align="center">
+					<el-table-column label="调度单号" prop="dispatchOrderNo"  width="130" align="center">
 					</el-table-column>
 					<el-table-column label="车辆号牌" prop="VehicleNum"  width="110" align="center">
 					</el-table-column>
@@ -52,7 +51,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="60" align="center">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="ViewDispatchBill(scope.row.ControlsNum)">查看</el-button>
+							<el-button type="primary" size="mini" @click="viewDispatchBill(scope.row.dispatchOrderID)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -81,105 +80,53 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import request from '../../common/request'
 export default {
 	data() {
 		return {
-			pageNum: 1,
+			findDispatchOrderID: '',
+			findShipperAddress: '',
+			findConsigneeAddress: '',
+			findName: '',
+			pageIndex: 1,
 			pageSize: 10,
-			count: 5,
-			tableData: [
-				{
-					ControlsNum: '20180205001-1',
-					VehicleNum: '云AG3365',
-					LoadingQuantity: '9.76吨',
-					Driver: '李铁军',
-					Status: '待执行',
-					ApplianceCrew: '赵押运员',
-					OrderNum:'20180205001',
-					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
-					Discharge:'云南省昭通市镇远县城李家沟',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoName:'R72/炸药'
-				},
-				{
-					ControlsNum: '20180205001-2',
-					VehicleNum: '云AG3365',
-					LoadingQuantity: '9.76吨',
-					Driver: '李铁军',
-					Status: '待执行',
-					ApplianceCrew: '赵押运员',
-					OrderNum:'20180205001',
-					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
-					Discharge:'云南省昭通市镇远县城李家沟',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoName:'R72/炸药'
-				},
-				{
-					ControlsNum: '20180205001-3',
-					VehicleNum: '云AG3365',
-					LoadingQuantity: '9.76吨',
-					Driver: '李铁军',
-					Status: '已装运',
-					ApplianceCrew: '赵押运员',
-					OrderNum:'20180205001',
-					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
-					Discharge:'云南省昭通市镇远县城李家沟',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoName:'R72/炸药'
-				},
-				{
-					ControlsNum: '20180205001-4',
-					VehicleNum: '云AG3365',
-					LoadingQuantity: '9.76吨',
-					Driver: '李铁军',
-					Status: '待执行',
-					ApplianceCrew: '赵押运员',
-					OrderNum:'20180205001',
-					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
-					Discharge:'云南省昭通市镇远县城李家沟',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoName:'R72/炸药'
-				},
-				{
-					ControlsNum: '20180205001-5',
-					VehicleNum: '云AG3365',
-					LoadingQuantity: '9.76吨',
-					Driver: '李铁军',
-					Status: '已签收',
-					ApplianceCrew: '赵押运员',
-					OrderNum:'20180205001',
-					Dispatch:'云南省昆明市安宁市区山顶上化工厂',
-					Discharge:'云南省昭通市镇远县城李家沟',
-					ArrivalDate: '2018:02:06 18:00',
-					CargoName:'R72/炸药'
-				}
-			],
-			refreshing: false
+			count: 0,
+			tableData: []
 		}
 	},
 	created() {
 		this.getList()
 	},
 	methods: {
+		reset() {
+			this.findDispatchOrderID = ''
+			this.findShipperAddress = ''
+			this.findConsigneeAddress = ''
+			this.findName = ''
+		},
 		pageChange(index) {
-			
+			this.pageIndex = index
+			this.getList()
 		},
 		getList(){
-
+			let params = {
+				current: this.pageIndex,
+				size: this.pageSize
+			}
+			request({
+				url: '/biz/dispatchOrder/list',
+				params
+			}).then(res => {
+				this.tableData = res.data.data.records
+				this.count = res.data.data.total
+			})
 		},
 		add() {
 			this.$router.push({ name: 'adddispatchbill' })
 		},
-		ViewDispatchBill(ControlsNum) {
-			this.$router.push({ name: 'viewdispatchbill' , query: { ControlsNum} })
-		},
-		refresh() {
-			this.refreshing = true
-			this.getList()
-			setTimeout(() => {
-				this.refreshing = false
-			}, 500)
-		},
+		viewDispatchBill(dispatchOrderID) {
+			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID} })
+		}
 	}
 }
 
