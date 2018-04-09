@@ -228,10 +228,11 @@ export default {
 				})
 			},
 			delItem(carrierOrderIDs) {
-				console.log(carrierOrderIDs)
 				let data = {
 					carrierOrderIDs
 				}
+				console.log(data)
+				return
 				request({
 					url: '/biz/carrierOrder/delete',
 					method: 'post',
