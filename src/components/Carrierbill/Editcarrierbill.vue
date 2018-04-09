@@ -18,7 +18,7 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="托运人">
-							<el-input placeholder="托运人"></el-input>
+							<el-input placeholder="承运人" v-model="Consignor.companyName"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -42,18 +42,13 @@
 						<el-form-item label="发货单位">
 							<el-input placeholder="发货单位" v-model="carrierOrder.shipperCompanyName"></el-input>
 						</el-form-item>
-						<el-form-item label="发货人">
-							<el-input placeholder="发货人" v-model="carrierOrder.shipperName"></el-input>
-						</el-form-item>
-						<el-form-item label="发货时间">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierOrder.shipperDate"></el-date-picker>
-						</el-form-item>
+						
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="120px">
-						<el-form-item label="委托时间">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择委托时间(接口无参)" ></el-date-picker>
+						<el-form-item label="发货时间">
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierOrder.shipperDate"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -64,15 +59,24 @@
 						</el-form-item>
 					</el-form>
 				</el-col>
-				<el-col :span="6">
+			</el-row>
+			<el-row>
+				<el-col :span="8">
+					<el-form label-width="120px">
+						<el-form-item label="发货人">
+							<el-input placeholder="发货人" v-model="carrierOrder.shipperName"></el-input>
+						</el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="发货地">
-							<el-cascader style="width: 100%" :options="distData" v-model="selectedAreas">
+							<el-cascader style="width: 100%" :options="distData">
 							</el-cascader>
 						</el-form-item>
 					</el-form>
 				</el-col>
-				<el-col :span="10">
+				<el-col :span="8">
 					<el-form label-width="20px">
 						<el-form-item>
 							<el-input placeholder="发货详细地址" v-model="carrierOrder.shipperDetailAddress"></el-input>
@@ -107,9 +111,7 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="运输方式">
-							<el-select v-model="transType" placeholder="请选择" style="width:100%">
-								<el-option v-for="op in transTypeOption" :key="op.value" :label="op.label" :value="op.value"></el-option>
-							</el-select>
+							无参
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -235,64 +237,23 @@ import request from "../../common/request"
 export default {
 	data() {
 		return {
+			loading: false,
 			distData: regionData,
-			selectedAreas: [],
-			carrierOrder:[],
-			carrierCargo:[
-				{
-					'weightType': '',
-					'cargoName': '',
-					'cargoType': '',
-					'cargoWeight': '',
-					'cargoVolume': '',
-					'cargoNum': ''
-				}
-			],
-			transType:'',
-			transTypeOption:[
-				{
-					label:'海上运输',
-					value:'海上运输'
-				},
-				{
-					label:'铁路运输',
-					value:'铁路运输'
-				},
-				{
-					label:'公路运输',
-					value:'公路运输'
-				},
-				{
-					label:'航空运输',
-					value:'航空运输'
-				},
-				{
-					label:'邮件运输',
-					value:'邮件运输'
-				},
-				{
-					label:'多式联运',
-					value:'多式联运'
-				},
-				{
-					label:'固定设施运输',
-					value:'固定设施运输'
-				},
-				{
-					label:'内河运输',
-					value:'内河运输'
-				},
-				{
-					label:'其他',
-					value:'其他'
-				}
-			]
+			carrierOrder:{},
+			consignorID:'',
+			carrierCargo:[],
+			selectedArea: [],
+			carrierbillInfo:{},
+			Consignor:{
+				companyName:''
+			}
 		}
 	},
 	created() {
 		this.getDetail()
 	},
 	methods: {
+		
 		getDetail() {
 			let params = {
 				carrierOrderID:this.$route.query.carrierOrderID
@@ -304,6 +265,20 @@ export default {
 				console.log(res.data.data)
 				this.carrierOrder = res.data.data
 				this.carrierCargo = res.data.data.carrierCargo
+				this.consignorID= res.data.data.consignorID
+				this.getConsignor()
+			})
+		},
+		// 获取托运人
+		getConsignor() {
+			let params = {
+				customerID: this.consignorID
+			}
+			request({
+				url: '/customer/findById',
+				params
+			}).then(res => {
+				this.Consignor.companyName = res.data.data.companyName
 			})
 		},
 		AddDispatchBill() {
