@@ -207,9 +207,11 @@
 						</el-form-item> -->
 						
 						<el-form-item label="回单要求" class="receipt">
-							<span @click="selectReceipt(1)"><svg-icon icon-class="ic_checkbox_false"></svg-icon>货物托运单</span>
-							<span @click="selectReceipt(2)"><svg-icon icon-class="ic_checkbox_false"></svg-icon>发货单文件</span>
-							<span @click="selectReceipt(3)"><svg-icon icon-class="ic_checkbox_false"></svg-icon>不需要回单</span>
+							<!-- <span @click="selectReceipt" v-for="item in carrierbillInfo.receipt"><svg-icon icon-class="ic_checkbox_false"></svg-icon>{{item=='1'? '货物托运单' : (item == '2' ? '发货单文件' : '不需要回单')}}</span> -->
+							<span class="wf-checkbox" @click="selectReceipt('1')" :class="{'select': carrierbillInfo.receipt.includes('1')}"><svg-icon :icon-class="carrierbillInfo.receipt.includes('1') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>货物托运单</span>
+							<span class="wf-checkbox" @click="selectReceipt('2')" :class="{'select': carrierbillInfo.receipt.includes('2')}"><svg-icon :icon-class="carrierbillInfo.receipt.includes('2') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>发货单文件</span>
+
+							<span class="wf-checkbox" @click="selectReceipt('3')" :class="{'select': carrierbillInfo.receipt.includes('3')}"><svg-icon :icon-class="carrierbillInfo.receipt.includes('3') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>不需要回单</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -348,11 +350,13 @@ export default {
 			} else {
 				this.carrierbillInfo.receipt.push(e)
 			}
-			// if(e==3){
-			// 	this.carrierbillInfo.receipt = ['3']
-			// } else {
-			// 	this.carrierbillInfo.receipt.splice(this.carrierbillInfo.receipt.indexOf('3'), 1)
-			// }
+			console.log(this.carrierbillInfo.receipt)
+			if(e == '3'){
+				this.carrierbillInfo.receipt = ['3']
+			} else {
+				this.carrierbillInfo.receipt.includes('3') && this.carrierbillInfo.receipt.splice(this.carrierbillInfo.receipt.indexOf('3'), 1)
+			}
+			console.log(this.carrierbillInfo.receipt)
 		},
 		back() {
 			this.$router.go(-1)
@@ -396,4 +400,17 @@ export default {
 	.el-select
 	.el-input
 		margin 0 10px 10px 0
+.wf-checkbox
+	margin-right 30px
+	cursor pointer
+	&:last-child
+		margin-right 0
+	.svg-icon
+		color #dcdfe6
+		font-size 14px
+		margin-right 10px
+	&.select
+		color #409EFF
+		.svg-icon
+			color #409EFF
 </style>
