@@ -81,17 +81,15 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="车牌号">
+						<el-form-item label="车牌号" v-if="truck.truckCategory == '牵引车'">
 							<el-input v-model="truck.plateNo"></el-input>
+						</el-form-item>
+						<el-form-item label="挂车车牌" v-else>
+							<el-input v-model="truck.trailerPlateNo"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
-						<el-form-item label="挂车车牌">
-							<el-input v-model="truck.trailerPlateNo"></el-input>
-						</el-form-item>
-					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车长">
 							<el-select style="width: 100%" v-model="truck.length" placeholder="请选择">
