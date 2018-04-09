@@ -23,6 +23,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-refresh">刷新</el-button>
 			</div>
 			<div class="table">
@@ -166,8 +167,8 @@ export default {
 		getList(){
 
 		},
-		AddCargo() {
-			this.$router.push({ name: '' })
+		add() {
+			this.$router.push({ name: 'adddispatchbill' })
 		},
 		ViewDispatchBill(ControlsNum) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { ControlsNum} })

@@ -36,14 +36,9 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="12">
 						<el-form-item label="所属地区">
-							<el-cascader 
-								style="width: 100%" 
-								:options="distData" 
-								v-model="selectedArea"
-								@change="handleSelectedArea">
-							</el-cascader>
+							<DistPicker @selectChange="handleSelectedArea"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -520,14 +515,13 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
+import DistPicker from '../CommonComponents/DistPicker'
 export default {
 	data() {
 		return {
 			loading: true,
-			distData: regionData,
 			truck: {
 				auditBy: '',
 				auditTime: '',
@@ -648,7 +642,7 @@ export default {
 			}
 		},
 		handleSelectedArea(data) {
-			this.truck.areaID = data[data.length-1]
+			this.truck.areaID = data
 		},
 		createItem() {
 			let data = this.truck
@@ -668,7 +662,8 @@ export default {
 		}
 	},
 	components: {
-		ImageUpload
+		ImageUpload,
+		DistPicker
 	}
 }
 
