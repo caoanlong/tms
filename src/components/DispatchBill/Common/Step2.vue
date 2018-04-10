@@ -109,11 +109,19 @@
 					Message.error('该车辆已经满载！')
 					return
 				}
+				if (this.selectedDriver == data.truckID) {
+					this.selectedDriver = ''
+					return
+				}
 				this.selectedDriver = data.truckID
 			},
 			selectEscortItem(data) {
 				if (data.workStatus == 'Working') {
 					Message.error('该人员已经在工作了！')
+					return
+				}
+				if (this.selectedEscort == data.staffID) {
+					this.selectedEscort = ''
 					return
 				}
 				this.selectedEscort = data.staffID
