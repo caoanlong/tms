@@ -38,12 +38,12 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
-				<el-button type="default" size="mini" icon="el-icon-news">调度</el-button>
+				<el-button type="default" size="mini" icon="el-icon-news" @click="AddDispatchBill">调度</el-button>
 				<el-button type="default" size="mini" icon="el-icon-refresh" :loading="refreshing" @click="refresh">刷新</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column type="selection" width="36" align="center" fixed>
+				<el-table :data="tableData" border style="width: 100%" size="mini" stripe @selection-change="selectionChange" >
+					<el-table-column type="selection" width="36" align="center" fixed >
 					</el-table-column>
 					<el-table-column label="处理状态"  prop="status" width="90" align="center">
 						<template slot-scope="scope">
@@ -167,6 +167,11 @@ export default {
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.carrierOrderID)
+			console.log(this.selectedList)
+		},
+		AddDispatchBill() {
+			console.log(this.selectedList)
+			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.selectedList.join(',') } })
 		},
 		pageChange(index) {
 			this.pageIndex = index
