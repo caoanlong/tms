@@ -142,6 +142,7 @@ export default {
 			],
 			selectedCarrierBills: [],  // 选择的承运单
 			selectedCarrierCargos: [],  // 选择的货物
+			selectedCarrierCargos2: [],  // 选择的货物
 			selectedTruck: {},
 			selectedPerson: {},
 			payInfo: {},
@@ -157,7 +158,8 @@ export default {
 	methods: {
 		nextStep(x, data, data1) {
 			if (x == 1) {
-				this.selectedCarrierCargos = data.map(item => {
+				this.selectedCarrierCargos = data
+				this.selectedCarrierCargos2 = data.map(item => {
 					return {
 						cargoNum: item.cargoNum,
 						cargoType: item.cargoType,
@@ -169,11 +171,11 @@ export default {
 					}
 				})
 				this.totalList = data1
-				// console.log(data)
+				console.log(data)
 			} else if (x == 2) {
 				this.selectedTruck = data
 				this.selectedPerson = data1
-				// console.log(data1)
+				console.log(data)
 			} else if (x == 3) {
 				this.payInfo = data
 			}
@@ -203,30 +205,29 @@ export default {
 		},
 		save(){
 			let data ={
-				dispatchCargoInfo: JSON.stringify(this.selectedCarrierCargos),	//调度货物信息
-				dispatchOrderNo: '',	//调度单号	string	
-				loadStatus: '',	//车辆满载状态	string	满载：Full， 未满载：NotFull，空载：Empty
+				dispatchCargoInfo: JSON.stringify(this.selectedCarrierCargos2),	//调度货物信息
+				// dispatchOrderNo: '',	//调度单号	string	
+				loadStatus: this.selectedTruck.loadStatus,	//车辆满载状态	string	满载：Full， 未满载：NotFull，空载：Empty
 				driverCashAmount: this.payInfo.driverCashAmount,	//司机现付金额		
 				driverCodAmount: this.payInfo.driverCodAmount,	//司机到付金额		
 				driverCosigneeAmount: this.payInfo.driverCosigneeAmount,	//司机收货方到付金额		
 				driverMonthlyAmont: this.payInfo.driverMonthlyAmont,	//司机月结金额		
-				driverDetoursAmount: '',	//司机绕路费		
-				driverDetoursMileage: '',	//司机绕路里程		
-				driverOtherAmount: '',	//司机其他费用		
+				driverDetoursAmount: 0,	//司机绕路费		
+				driverDetoursMileage: 0,	//司机绕路里程		
+				driverOtherAmount: 0,	//司机其他费用		
 				driverPorAmount: this.payInfo.driverPorAmount,	//司机回单金额		
 				superCargoCashAmount: this.payInfo.superCargoCashAmount,	//押运人现付金额		
 				superCargoCodAmount: this.payInfo.superCargoCodAmount,	//押运人到付金额		
 				superCargoCorAmount: this.payInfo.superCargoCorAmount,	//押运人回单金额		
 				superCargoMonthlyAmount: this.payInfo.superCargoMonthlyAmount,	//押运人月结金额		
 				superCosigneeAmount: this.payInfo.superCosigneeAmount,	//押运人收货方到付金额		
-				superCargoDetoursAmount: '',	//押运人绕路费		
-				superCargoDetoursMileage: '',	//押运人绕路里程		
-				superCargoOtherAmount: '',	//押运人其他费用		
-				superCargoID: '',	//押运员ID		
-				transportRecordID: '',	//运输记录ID
+				superCargoDetoursAmount: 0,	//押运人绕路费		
+				superCargoDetoursMileage: 0,	//押运人绕路里程		
+				superCargoOtherAmount: 0,	//押运人其他费用		
+				superCargoID: this.selectedPerson.staffID,	//押运员ID		
+				transportRecordID: '982817947700695043',	//运输记录ID
 			}
 			console.log(data)
-			return
 			request({
 				url: '/biz/dispatchOrder/add',
 				method: 'post',

@@ -33,22 +33,24 @@
 				</el-table-column>
 				<el-table-column label="待配载量">
 					<template slot-scope="scope">
-						{{scope.row.remainingCargoWeight ? scope.row.remainingCargoWeight : '' }} {{scope.row.remainingCargoVolume?' / ' + scope.row.remainingCargoVolume :''}} {{scope.row.remainingCargoNum ? ' / '+scope.row.remainingCargoNum : ''}}
+						{{scope.row.remainingCargoWeight ? scope.row.remainingCargoWeight : scope.row.cargoWeight }} 
+						/{{scope.row.remainingCargoVolume ? scope.row.remainingCargoVolume : scope.row.cargoVolume}} 
+						/{{scope.row.remainingCargoNum ? scope.row.remainingCargoNum : scope.row.cargoNum}}
 					</template>
 				</el-table-column>
 				<el-table-column label="配载重量" width="180">
 					<template slot-scope="scope">
-						<el-input :placeholder="'配载重量不大于' + scope.row.remainingCargoWeight" size="mini" v-model="scope.row.cargoWeightNew"></el-input>
+						<el-input placeholder="'配载重量'" size="mini" v-model="scope.row.cargoWeightNew"></el-input>
 					</template>
 				</el-table-column>
 				<el-table-column label="配载体积" width="180">
 					<template slot-scope="scope">
-						<el-input :placeholder="'配载体积不大于' + scope.row.remainingCargoVolume" size="mini" v-model="scope.row.cargoVolumeNew"></el-input>
+						<el-input placeholder="'配载体积'" size="mini" v-model="scope.row.cargoVolumeNew"></el-input>
 					</template>
 				</el-table-column>
 				<el-table-column label="配载件数" width="180">
 					<template slot-scope="scope">
-						<el-input :placeholder="'配载件数不大于' + scope.row.remainingCargoNum" size="mini" v-model="scope.row.cargoNumNew"></el-input>
+						<el-input placeholder="'配载件数'" size="mini" v-model="scope.row.cargoNumNew"></el-input>
 					</template>
 				</el-table-column>
 			</el-table>
