@@ -27,15 +27,21 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="调度单号" prop="dispatchOrderNo"  width="130" align="center">
+					<el-table-column label="调度单号" prop="dispatchOrderNo" width="130" align="center">
 					</el-table-column>
-					<el-table-column label="车辆号牌" prop="VehicleNum"  width="110" align="center">
+					<el-table-column label="车辆号牌" prop="VehicleNum" width="110" align="center">
 					</el-table-column>
 					<el-table-column label="配载量" prop="LoadingQuantity" align="center">
 					</el-table-column>
-					<el-table-column label="司机" prop="Driver"  width="100" align="center">
+					<el-table-column label="司机" prop="Driver" width="100" align="center">
 					</el-table-column>
-					<el-table-column label="调度状态" prop="Status"  width="100" align="center">
+					<el-table-column label="调度状态" width="100" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.status == 'Committed'">待执行</span>
+							<span v-else-if="scope.row.status == 'Loaded'">已装运</span>
+							<span v-else-if="scope.row.status == 'Signed'">已签收</span>
+							<span v-else-if="scope.row.status == 'Canceled'">作废</span>
+						</template>
 					</el-table-column>
 					<el-table-column label="随车人员" prop="ApplianceCrew"  width="120" align="center">
 					</el-table-column>
@@ -47,9 +53,9 @@
 					</el-table-column>
 					<el-table-column label="到货时间" prop="ArrivalDate"  width="130" align="center">
 					</el-table-column>
-					<el-table-column label="货物规格/名称" prop="CargoName">
+					<el-table-column label="货物规格/名称" prop="CargoName" width="130" >
 					</el-table-column>
-					<el-table-column label="操作" width="60" align="center">
+					<el-table-column label="操作" width="60" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-button type="primary" size="mini" @click="viewDispatchBill(scope.row.dispatchOrderID)">查看</el-button>
 						</template>

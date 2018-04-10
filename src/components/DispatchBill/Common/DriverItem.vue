@@ -1,15 +1,17 @@
 <template>
 	<div class="listItem" >
-		<div class="driverNum inlineBlock" ><span>766666</span></div>
+		<div class="driverNum inlineBlock" ><span>{{truck.code}}</span></div>
 		<div class="pic inlineBlock" >
 			<img src="../../../assets/imgs/avatar.gif" >
-			<p class="status">空载</p>
+			<p class="status" v-if="truck.loadStatus == 'Empty'">空载</p>
+			<p class="status" v-else-if="truck.loadStatus == 'NotFull'">未满载</p>
+			<p class="status" v-else-if="truck.loadStatus == 'Full'">满载</p>
 		</div>
 		<div class="info inlineBlock">
-			<p class="driverName">李司机</p>
-			<p class="vehicleNo">云AG17885</p>
-			<p class="trailerNo">云AG28937挂</p>
-			<p class="vehicleType">7.2米重型集装箱半挂车</p>
+			<p class="driverName">{{truck.curDriverName}}</p>
+			<p class="vehicleNo">{{truck.plateNo}}</p>
+			<p class="trailerNo">{{truck.trailerPlateNo}}</p>
+			<p class="vehicleType">{{truck.length}}米{{truck.truckType}}{{truck.truckCategory}}</p>
 		</div>
 		<div class="statusInfo inlineBlock">
 			<div class="control">
@@ -27,25 +29,27 @@
 		<div class="lineInfo inlineBlock">
 			从<span>云南</span>到<span>上海</span><span>炸药/R27 5吨</span><span>“收货单位”</span>
 		</div>
-		<svg-icon icon-class="select-icon" class="icon" :class="{selected:isDriverSelected == index}"></svg-icon>
+		<svg-icon icon-class="select-icon" class="icon" :class="{selected: isSelected}"></svg-icon>
 	</div>
 </template>
 
 <script>
 export default {
 	props: {
-		isDriverSelected: {
-			type: Number
+		isSelected: {
+			type: Boolean,
+			default: false
 		},
 		index: {
 			type: Number
+		},
+		truck: {
+			type: Object,
+			default: () => {}
 		}
 	},
 	data(){
 		return {
-			weight:0,
-			volume:0,
-			quantity:0
 		}
 	},
 	methods:{
