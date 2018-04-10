@@ -250,11 +250,6 @@ export default {
 			selectedCarrierBills: []  // 选择的承运单
 		}
 	},
-	// watch: {
-	// 	$route: function(newVal, gg) {
-	// 		console.log(newVal)
-	// 	}
-	// },
 	created() {
 		let carrierOrderID = this.$route.query.carrierOrderID
 		if (carrierOrderID) {
@@ -262,9 +257,11 @@ export default {
 		}
 	},
 	methods: {
-		nextStep(x, data) {
+		nextStep(x, data, data1) {
 			if (x == 1) {
 				console.log(data)
+			} else if (x == 2) {
+				console.log(data, data1)
 			}
 			this.stepActive = x
 		},
