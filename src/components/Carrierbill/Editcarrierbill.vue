@@ -204,9 +204,9 @@
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="回单要求" class="receipt">
-							<!-- <span class="wf-checkbox" @click="selectReceipt('ConsigneePor')" :class="{'select': carrierOrder.porRequire.includes('ConsigneePor')}"><svg-icon :icon-class="carrierOrder.porRequire.includes('ConsigneePor') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>货物托运单</span>
-							<span class="wf-checkbox" @click="selectReceipt('ShipperPor')" :class="{'select': carrierOrder.porRequire.includes('ShipperPor')}"><svg-icon :icon-class="carrierOrder.porRequire.includes('ShipperPor') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>发货单文件</span>
-							<span class="wf-checkbox" @click="selectReceipt('NotRequired')" :class="{'select': carrierOrder.porRequire.includes('NotRequired')}"><svg-icon :icon-class="carrierOrder.porRequire.includes('NotRequired') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>不需要回单</span> -->
+							<span class="wf-checkbox" @click="selectReceipt('ConsigneePor')" :class="{'select': porRequire.includes('ConsigneePor')}"><svg-icon :icon-class="porRequire.includes('ConsigneePor') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>货物托运单</span>
+							<span class="wf-checkbox" @click="selectReceipt('ShipperPor')" :class="{'select': porRequire.includes('ShipperPor')}"><svg-icon :icon-class="porRequire.includes('ShipperPor') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>发货单文件</span>
+							<span class="wf-checkbox" @click="selectReceipt('NotRequired')" :class="{'select': porRequire.includes('NotRequired')}"><svg-icon :icon-class="porRequire.includes('NotRequired') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>不需要回单</span>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -236,6 +236,7 @@ export default {
 			loading: false,
 			carrierOrder:{},
 			consignorID:'',
+			porRequire:[],
 			carrierCargo:[
 				{
 					'cargoType': '',
@@ -271,11 +272,13 @@ export default {
 				this.carrierOrder = res.data.data
 				this.carrierCargo = res.data.data.carrierCargo
 				this.consignorID= res.data.data.consignorID
+				this.porRequire = res.data.data.porRequire.split(',')
 				let shipperAreaID = res.data.data.shipperAreaID
 				this.selectedArea = [(shipperAreaID.substr(0, 2) + '0000'), (shipperAreaID.substr(0, 4) + '00'), shipperAreaID]
 				let consigneeAreaID = res.data.data.consigneeAreaID
 				this.selectedArea1 = [(consigneeAreaID.substr(0, 2) + '0000'), (consigneeAreaID.substr(0, 4) + '00'), consigneeAreaID]
 				this.getConsignor()
+				console.log(res.data.data.porRequire)
 			})
 		},
 		// 获取托运人
@@ -315,7 +318,7 @@ export default {
 				consigneeAmount:this.carrierOrder.consigneeAmount,
 				paymentMethod:this.carrierOrder.paymentMethod,
 				status:this.carrierOrder.status,
-				porRequire:this.carrierOrder.porRequire
+				porRequire:this.porRequire
 				// porRequire:'ShipperPor,ConsigneePor'
 			}
 			request({
@@ -341,15 +344,15 @@ export default {
 			})
 		},
 		selectReceipt(e){
-			if (this.carrierOrder.porRequire.includes(e)) {
-				this.carrierOrder.porRequire.splice(this.carrierOrder.porRequire.indexOf(e), 1)
+			if (this.porRequire.includes(e)) {
+				this.porRequire.splice(this.porRequire.indexOf(e), 1)
 			} else {
-				this.carrierOrder.porRequire.push(e)
+				this.porRequire.push(e)
 			}
 			if(e == 'NotRequired'){
-				this.carrierOrder.porRequire = ['NotRequired']
+				this.porRequire = ['NotRequired']
 			} else {
-				this.carrierOrder.porRequire.includes('NotRequired') && this.carrierOrder.porRequire.splice(this.carrierOrder.porRequire.indexOf('NotRequired'), 1)
+				this.porRequire.includes('NotRequired') && this.porRequire.splice(this.porRequire.indexOf('NotRequired'), 1)
 			}
 		},
 		removeItem(index) {
