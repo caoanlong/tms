@@ -102,7 +102,7 @@
 				this.$emit('prevStep', 0)
 			},
 			nextStep() {
-				this.$emit('nextStep', 2)
+				this.$emit('nextStep', 2, this.selectedDriver, this.selectedEscort)
 			},
 			selectDriverItem(data) {
 				if (data.loadStatus == 'Full') {
