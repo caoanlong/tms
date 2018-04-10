@@ -175,7 +175,9 @@ export default {
 		},
 		pageChange(index) {
 			this.pageIndex = index
+			this.getList() 
 		},
+
 		getList() {
 				console.log(this.pageIndex)
 				let params = {

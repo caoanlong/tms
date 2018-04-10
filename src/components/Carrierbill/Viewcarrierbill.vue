@@ -106,8 +106,10 @@
 					<td colspan="8">
 						<span class="labels">发票：</span>{{carrierOrder.invoice=='Y'?'开发票':'不开发票'}}
 						<span class="labels" style="margin-left:40px">回单要求：</span>
-						<span v-for="item in carrierOrder.porRequire">
-							{{(item=="NotRequired")?'不需要回单':''}}
+						<span v-for="item in porRequire" class="porRequire">
+							<span v-if="item=='ConsigneePor'">货物托运单</span>
+							<span v-else-if="item=='ShipperPor'">发货单文件</span>
+							<span v-else>不需要回单</span>
 						</span>
 						<span class="labels fr">承运单应收总价：{{carrierOrderTotal}}元</span>
 					</td>
@@ -227,6 +229,7 @@ export default {
 			consignor:'',
 			dialogFormVisible:false,
 			carrierCargo: [],
+			porRequire:[]
 		}
 	},
 	computed:{
@@ -259,6 +262,7 @@ export default {
 				this.carrierOrder = res.data.data
 				this.carrierCargo = res.data.data.carrierCargo
 				this.consignorID = res.data.data.consignorID
+				this.porRequire = res.data.data.porRequire.split(',')
 				this.getConsignor()
 			})
 		},
@@ -373,5 +377,7 @@ export default {
 					padding-left 100%
 					display inline-block
 					
-					
+.porRequire
+	span
+		margin-right 20px				
 </style>

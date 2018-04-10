@@ -67,7 +67,7 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="发货地">
-							<DistPicker @selectChange="handleSelectedArea" class="normal"/>
+							<DistPicker @selectChange="handleSelectedArea" class="normal" :selected="selectedArea"/>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -116,7 +116,7 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="卸货地">
-							<DistPicker @selectChange="handleSelectedArea1" class="normal"/>
+							<DistPicker @selectChange="handleSelectedArea1" class="normal" :selected="selectedArea1"/>
 						</el-form-item>
 					</el-form>
 				</el-col>
