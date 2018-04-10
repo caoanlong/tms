@@ -104,8 +104,11 @@
 				</tr>
 				<tr>
 					<td colspan="8">
-						<span class="labels">发票：</span>{{carrierbillInfo.invoice=='Y'?'开发票':'不开发票'}}
-						<span class="labels" style="margin-left:40px">回单要求：</span>无参数
+						<span class="labels">发票：</span>{{carrierOrder.invoice=='Y'?'开发票':'不开发票'}}
+						<span class="labels" style="margin-left:40px">回单要求：</span>
+						<span v-for="item in carrierOrder.porRequire">
+							{{(item=="NotRequired")?'不需要回单':''}}
+						</span>
 						<span class="labels fr">承运单应收总价：{{carrierOrderTotal}}元</span>
 					</td>
 				</tr>
@@ -215,80 +218,15 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
 import request from "../../common/request"
 export default {
 	data() {
 		return {
-			distData: regionData,
-			selectedAreas: [],
-			carrierOrder:[],
+			carrierOrder:{},
 			consignorID:'',
 			consignor:'',
-			carrierbillInfo: {
-				Status: '待执行',
-				Consignor: '安宁化工厂',
-				Carrier: '安化物流',
-				CarrierNum: '20180205001',
-				ConsignNum: '20180205001',
-				ConsigneeCompany: '云南磷化',
-				Discharge: '云南省昭通市镇远县城李家沟',
-				Consignee: '磷化',
-				ArrivalDate: '2018:02:06 18:00',
-				CargoTotal: '9.76吨/10方',
-				ConsignerCompany: '安宁~~化工厂',
-				DeliveryDate: '2018-02-06 18:00',
-				Consigner: '李铁军',
-				Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-				CargoName: 'R72/炸药',
-				CreatedDate: '2018:02:06 18:00',
-				CommissionDate: '2018:02:06 18:00',
-				invoice: 'Y',
-				receipt: ['1', '2'],
-				Receivable: 'N',
-				payable: 'N',
-				transType: '公路运输'
-			},
 			dialogFormVisible:false,
 			carrierCargo: [],
-			transType: '',
-			transTypeOption: [{
-					label: '海上运输',
-					value: '海上运输'
-				},
-				{
-					label: '铁路运输',
-					value: '铁路运输'
-				},
-				{
-					label: '公路运输',
-					value: '公路运输'
-				},
-				{
-					label: '航空运输',
-					value: '航空运输'
-				},
-				{
-					label: '邮件运输',
-					value: '邮件运输'
-				},
-				{
-					label: '多式联运',
-					value: '多式联运'
-				},
-				{
-					label: '固定设施运输',
-					value: '固定设施运输'
-				},
-				{
-					label: '内河运输',
-					value: '内河运输'
-				},
-				{
-					label: '其他',
-					value: '其他'
-				}
-			]
 		}
 	},
 	computed:{
@@ -345,19 +283,6 @@ export default {
 		},
 		Edit(){
 			this.dialogFormVisible = true
-		},
-		addItem() {
-			this.cargoInfo.push({
-				'type': '',
-				'name': '',
-				'rule': '',
-				'weight': '',
-				'volumn': '',
-				'num': ''
-			})
-		},
-		removeItem(index) {
-			this.cargoInfo.splice(index, 1)
 		},
 		back() {
 			this.$router.go(-1)
