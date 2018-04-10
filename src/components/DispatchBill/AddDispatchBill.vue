@@ -20,85 +20,11 @@
 						<span class="tit">收发货信息</span>
 					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form label-width="120px">
-							<el-form-item label="发货人">
-								<p></p>
-							</el-form-item>
-							<el-form-item label="发货时间">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="8">
-						<el-form label-width="120px">
-							<el-form-item label="委托时间">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="8">
-						<el-form label-width="120px">
-							<el-form-item label="发货单号">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="6">
-						<el-form label-width="120px">
-							<el-form-item label="发货地">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="10">
-						<el-form label-width="20px">
-							<el-form-item>
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form label-width="120px">
-							<el-form-item label="收货人">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="8">
-						<el-form label-width="120px">
-							<el-form-item label="到货时间">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form label-width="120px">
-							<el-form-item label="运输方式">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="6">
-						<el-form label-width="120px">
-							<el-form-item label="卸货地">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="10">
-						<el-form label-width="20px">
-							<el-form-item>
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-				</el-row>
+				<CarrierInfo 
+					v-for="item in selectedCarrierBills" 
+					:key="item.carrierOrderID" 
+					:carrierBill="item" 
+					:isOnly="selectedCarrierBills.length == 1"/>
 				<el-row>
 					<div class="split-item">
 						<span class="num">2</span>
@@ -106,26 +32,30 @@
 					</div>
 				</el-row>
 				<div class="table">
-					<el-table :data="tableData" border style="width: 100%" size="mini">
+					<el-table :data="selectedCarrierCargos" border style="width: 100%" size="mini">
 						<el-table-column type="index" label="货物序号" width="80" align="center"></el-table-column>
-						<el-table-column label="承运单编号" prop="CarrierNum"  width="110" align="center">
+						<el-table-column label="承运单编号" width="110" align="center">
+							<template slot-scope="scope">
+								<span>{{scope.row.carrierOrder.carrierOrderNo}}</span>
+							</template>
 						</el-table-column>
-						<el-table-column label="货物规格" prop="CargoName">
+						<el-table-column label="货物规格" prop="cargoType"></el-table-column>
+						<el-table-column label="货物名称" prop="cargoName"></el-table-column>
+						<el-table-column label="配载量" align="center">
+							<template slot-scope="scope">
+								<span>{{scope.row.cargoWeight + '吨'}}/{{scope.row.cargoVolume + '方'}}/{{scope.row.cargoNum + '件'}}</span>
+							</template>
 						</el-table-column>
-						<el-table-column label="货物名称" prop="CargoName">
+						<el-table-column label="运载量" prop="" width="100" align="center">
 						</el-table-column>
-						<el-table-column label="配载量" prop="CargoTotal" align="center">
-						</el-table-column>
-						<el-table-column label="运载量" prop=""  width="100" align="center">
-						</el-table-column>
-						<el-table-column label="签收量" prop=""  width="100" align="center">
+						<el-table-column label="签收量" prop="" width="100" align="center">
 						</el-table-column>
 					</el-table>
 				</div>
 				<div class="controlInfo">
-					<p>司机：李司机 13529005327</p>
-					<p>载具：云AG33652  6.2米厢式  10吨21方</p>
-					<p>随车人员：赵押运员  13566778899</p>
+					<p>司机：{{selectedTruck.curDriverName}}&nbsp;&nbsp;{{selectedTruck.carOwnerMobile}}</p>
+					<p>载具：{{selectedTruck.plateNo}}&nbsp;&nbsp;{{selectedTruck.length}}米{{selectedTruck.truckType}}&nbsp;&nbsp;{{selectedTruck.loads}}吨{{selectedTruck.loadVolume}}方</p>
+					<p>随车人员：{{selectedPerson.realName}}&nbsp;&nbsp;{{selectedPerson.mobile}}</p>
 				</div>
 				<el-row>
 					<div class="split-item">
@@ -153,25 +83,25 @@
 					<tbody>
 						<tr>
 							<td class="txt-r">司机</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
+							<td>{{payInfo.driverCashAmount}}</td>
+							<td>{{payInfo.driverCodAmount}}</td>
+							<td>{{payInfo.driverPorAmount}}</td>
+							<td>{{payInfo.driverMonthlyAmont}}</td>
+							<td>{{payInfo.driverCosigneeAmount}}</td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 						<tr>
 							<td class="txt-r">随车人员</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
-							<td>111</td>
+							<td>{{payInfo.superCargoCashAmount}}</td>
+							<td>{{payInfo.superCargoCodAmount}}</td>
+							<td>{{payInfo.superCargoCorAmount}}</td>
+							<td>{{payInfo.superCargoMonthlyAmount}}</td>
+							<td>{{payInfo.superCosigneeAmount}}</td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</tbody>
 					<tfoot>
@@ -197,6 +127,7 @@ import Step1 from './Common/Step1'
 import Step2 from './Common/Step2'
 import Step3 from './Common/Step3'
 import AddCarrierBillDialog from './Common/AddCarrierBillDialog'
+import CarrierInfo from './Common/CarrierInfo'
 export default {
 	data() {
 		return {
@@ -213,6 +144,7 @@ export default {
 			selectedCarrierCargos: [],  // 选择的货物
 			selectedTruck: {},
 			selectedPerson: {},
+			payInfo: {},
 			totalList: []
 		}
 	},
@@ -225,20 +157,30 @@ export default {
 	methods: {
 		nextStep(x, data, data1) {
 			if (x == 1) {
-				this.selectedCarrierCargos = data
+				this.selectedCarrierCargos = data.map(item => {
+					return {
+						cargoNum: item.cargoNum,
+						cargoType: item.cargoType,
+						cargoName: item.cargoName,
+						cargoVolume: item.cargoVolume,
+						cargoWeight: item.cargoWeight,
+						carrierCargoID: item.carrierCargoID,
+						carrierOrderID: item.carrierOrderID
+					}
+				})
 				this.totalList = data1
-				console.log(data)
+				// console.log(data)
 			} else if (x == 2) {
 				this.selectedTruck = data
 				this.selectedPerson = data1
+				// console.log(data1)
+			} else if (x == 3) {
+				this.payInfo = data
 			}
 			this.stepActive = x
 		},
 		prevStep(x) {
 			this.stepActive = x
-		},
-		save() {
-			this.$router.push({ name: 'dispatchbills' })
 		},
 		handSelectCarrierBills(data, bool) {
 			this.dialogTableVisible = bool
@@ -259,6 +201,41 @@ export default {
 				this.selectedCarrierBills.push(res.data.data)
 			})
 		},
+		save(){
+			let data ={
+				dispatchCargoInfo: JSON.stringify(this.selectedCarrierCargos),	//调度货物信息
+				dispatchOrderNo: '',	//调度单号	string	
+				loadStatus: '',	//车辆满载状态	string	满载：Full， 未满载：NotFull，空载：Empty
+				driverCashAmount: this.payInfo.driverCashAmount,	//司机现付金额		
+				driverCodAmount: this.payInfo.driverCodAmount,	//司机到付金额		
+				driverCosigneeAmount: this.payInfo.driverCosigneeAmount,	//司机收货方到付金额		
+				driverMonthlyAmont: this.payInfo.driverMonthlyAmont,	//司机月结金额		
+				driverDetoursAmount: '',	//司机绕路费		
+				driverDetoursMileage: '',	//司机绕路里程		
+				driverOtherAmount: '',	//司机其他费用		
+				driverPorAmount: this.payInfo.driverPorAmount,	//司机回单金额		
+				superCargoCashAmount: this.payInfo.superCargoCashAmount,	//押运人现付金额		
+				superCargoCodAmount: this.payInfo.superCargoCodAmount,	//押运人到付金额		
+				superCargoCorAmount: this.payInfo.superCargoCorAmount,	//押运人回单金额		
+				superCargoMonthlyAmount: this.payInfo.superCargoMonthlyAmount,	//押运人月结金额		
+				superCosigneeAmount: this.payInfo.superCosigneeAmount,	//押运人收货方到付金额		
+				superCargoDetoursAmount: '',	//押运人绕路费		
+				superCargoDetoursMileage: '',	//押运人绕路里程		
+				superCargoOtherAmount: '',	//押运人其他费用		
+				superCargoID: '',	//押运员ID		
+				transportRecordID: '',	//运输记录ID
+			}
+			console.log(data)
+			return
+			request({
+				url: '/biz/dispatchOrder/add',
+				method: 'post',
+				data
+			}).then(res => {
+				Message.success('成功！')
+				this.$router.push({ name: 'dispatchbills'})
+			})
+		},
 		back() {
 			this.$router.go(-1)
 		},
@@ -267,7 +244,8 @@ export default {
 		Step1,
 		Step2,
 		Step3,
-		AddCarrierBillDialog
+		AddCarrierBillDialog,
+		CarrierInfo
 	}
 
 }

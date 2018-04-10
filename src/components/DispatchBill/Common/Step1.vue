@@ -120,13 +120,16 @@
 							return
 						}
 					}
+					let carrierBill = this.carrierBills.filter(item => item.carrierOrderID == this.selectedCargoList[i].carrierOrderID)
 					list.push({
 						cargoNum: Number(this.selectedCargoList[i].cargoNumNew),
 						cargoType: this.selectedCargoList[i].cargoType,
+						cargoName: this.selectedCargoList[i].cargoName,
 						cargoVolume: Number(this.selectedCargoList[i].cargoVolumeNew),
 						cargoWeight: Number(this.selectedCargoList[i].cargoWeightNew),
 						carrierCargoID: this.selectedCargoList[i].carrierCargoID,
-						carrierOrderID: this.selectedCargoList[i].carrierOrderID
+						carrierOrderID: this.selectedCargoList[i].carrierOrderID,
+						carrierOrder: carrierBill[0] ? carrierBill[0] : ''
 					})
 				}
 				console.log([this.totalWeight, this.totalVolume, this.totalNum])

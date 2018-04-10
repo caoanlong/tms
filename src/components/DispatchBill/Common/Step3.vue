@@ -215,7 +215,7 @@
 				this.$emit('prevStep', 1)
 			},
 			nextStep() {
-				this.$emit('nextStep', 3)
+				this.$emit('nextStep', 3, this.payMethods)
 			},
 		}
 	}
