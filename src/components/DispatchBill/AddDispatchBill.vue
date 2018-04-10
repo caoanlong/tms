@@ -250,9 +250,15 @@ export default {
 			selectedCarrierBills: []  // 选择的承运单
 		}
 	},
+	// watch: {
+	// 	$route: function(newVal, gg) {
+	// 		console.log(newVal)
+	// 	}
+	// },
 	created() {
-		if (this.$router.query.carrierOrderID) {
-			this.handSelectCarrierBills(this.$router.query.carrierOrderID.split(','))
+		let carrierOrderID = this.$route.query.carrierOrderID
+		if (carrierOrderID) {
+			this.handSelectCarrierBills(carrierOrderID.split(','))
 		}
 	},
 	methods: {
