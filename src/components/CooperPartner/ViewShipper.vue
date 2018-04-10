@@ -9,7 +9,8 @@
 							<p>{{shipper.companyName}}</p>
 						</el-form-item>
 						<el-form-item label="地址">
-							<p>{{String(shipper.companyAreaID) | searchAreaByKey}}</p>
+							<p>{{shipper.companyArea}}</p>
+							<!-- <p>{{String(shipper.companyArea) | searchAreaByKey}}</p> -->
 						</el-form-item>
 						<el-form-item label="详细地址">
 							<p>{{shipper.detailAddress}}</p>
