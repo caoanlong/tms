@@ -6,12 +6,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="创建人">
-							<el-select style="width: 100%" v-model="person.createBy" placeholder="请选择">
-								<el-option label="caoanlong" value="980762678237921281"></el-option>
-								<el-option label="nongxinkao" value="978991129679998978"></el-option>
-								<el-option label="nxk" value="979241449798569986"></el-option>
-								<el-option label="13800138000" value="980987179567521793"></el-option>
-							</el-select>
+							<el-input v-model="person.createName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -25,12 +20,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核人">
-							<el-select style="width: 100%" v-model="person.auditBy" placeholder="请选择">
-								<el-option label="caoanlong" value="980762678237921281"></el-option>
-								<el-option label="nongxinkao" value="978991129679998978"></el-option>
-								<el-option label="nxk" value="979241449798569986"></el-option>
-								<el-option label="13800138000" value="980987179567521793"></el-option>
-							</el-select>
+							<el-input v-model="person.auditName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -96,12 +86,12 @@
 					<el-col :span="6">
 						<el-form-item label="聘用岗位">
 							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择">
-								<el-option label="操作员" value="操作员"></el-option>
-								<el-option label="驾驶员" value="驾驶员"></el-option>
-								<el-option label="押运员" value="押运员"></el-option>
-								<el-option label="专职安全员" value="专职安全员"></el-option>
-								<el-option label="装卸管理人员" value="装卸管理人员"></el-option>
-								<el-option label="其他人员" value="其他人员"></el-option>
+								<el-option label="操作员" value="Operator"></el-option>
+								<el-option label="驾驶员" value="Driver"></el-option>
+								<el-option label="押运员" value="Supercargo"></el-option>
+								<el-option label="专职安全员" value="SafetyOfficer"></el-option>
+								<el-option label="装卸管理人员" value="Stevedore"></el-option>
+								<el-option label="其他人员" value="Other"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>

@@ -9,10 +9,10 @@
 			<el-row :gutter="30">
 				<el-col :span="6" style="border-right:1px solid #ebeef5">
 					<div class="base-info inlineBlock">
-						<p class="driverName">李司机</p>
-						<p class="vehicleNo">云AG17885</p>
-						<p class="trailerNo">云AG28937挂</p>
-						<p class="vehicleType">7.2米重型集装箱半挂车</p>
+						<p class="driverName">{{truck.curDriverName}}</p>
+						<p class="vehicleNo">{{truck.plateNo}}</p>
+						<p class="trailerNo">{{truck.trailerPlateNo}}</p>
+						<p class="vehicleType">{{truck.length}}米{{truck.truckType}}{{truck.truckCategory}}</p>
 					</div>
 				</el-col>
 				<el-col :span="18">
@@ -37,7 +37,7 @@
 						<el-col :span="8">
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
-									<el-input size="mini">
+									<el-input size="mini" v-model="totalWeight">
 										<template slot="suffix">吨</template>
 									</el-input>
 								</el-form-item>
@@ -46,7 +46,7 @@
 						<el-col :span="8">
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
-									<el-input size="mini">
+									<el-input size="mini" v-model="totalVol">
 										<template slot="suffix">方</template>
 									</el-input>
 								</el-form-item>
@@ -55,15 +55,15 @@
 						<el-col :span="8">
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
-									<el-input size="mini">
+									<el-input size="mini" v-model="totalNum">
 										<template slot="suffix">件</template>
 									</el-input>
 								</el-form-item>
 							</el-form>
 						</el-col>
 						<el-col :span="24" class="controlStatus">
-							<el-radio v-model="controlStatus" label="1">满载</el-radio>
-							<el-radio v-model="controlStatus" label="2">未满载</el-radio>
+							<el-radio v-model="loadStatus" label="Full">满载</el-radio>
+							<el-radio v-model="loadStatus" label="NotFull">未满载</el-radio>
 						</el-col>
 					</el-row>
 				</el-col>
@@ -90,43 +90,43 @@
 				<tr>
 					<td class="txt-r">司机</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.driverCashAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.driverCodAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.driverPorAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.driverMonthlyAmont"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.driverCosigneeAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input disabled size="mini" :value="totalDriver"></el-input>
 					</td>
 				</tr>
 				<tr>
 					<td class="txt-r">随车人员</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCashAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCodAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCorAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoMonthlyAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" v-model="payMethods.superCosigneeAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini"></el-input>
+						<el-input size="mini" :value="totalSuperCargo"></el-input>
 					</td>
 				</tr>
 			</tbody>
@@ -144,10 +144,71 @@
 </template>
 <script type="text/javascript">
 	export default {
+		props: {
+			truck: {
+				type: Object,
+				default: () => {}
+			},
+			person: {
+				type: Object,
+				default: () => {}
+			},
+			carrierCargos: {
+				type: Array,
+				default: () => []
+			},
+			totalList: {
+				type: Array,
+				default: () => []
+			}
+		},
+		computed: {
+			totalDriver() {
+				return Number(this.payMethods.driverCashAmount ? this.payMethods.driverCashAmount : 0) + Number(this.payMethods.driverCodAmount  ? this.payMethods.driverCodAmount : 0) + Number(this.payMethods.driverPorAmount  ? this.payMethods.driverPorAmount : 0) + Number(this.payMethods.driverMonthlyAmont  ? this.payMethods.driverMonthlyAmont : 0) + Number(this.payMethods.driverCosigneeAmount  ? this.payMethods.driverCosigneeAmount : 0)
+			},
+			totalSuperCargo() {
+				return Number(this.payMethods.superCargoCashAmount ? this.payMethods.superCargoCashAmount : 0) + Number(this.payMethods.superCargoCodAmount  ? this.payMethods.superCargoCodAmount : 0) + Number(this.payMethods.superCargoCorAmount  ? this.payMethods.superCargoCorAmount : 0) + Number(this.payMethods.superCargoMonthlyAmount  ? this.payMethods.superCargoMonthlyAmount : 0) + Number(this.payMethods.superCosigneeAmount  ? this.payMethods.superCosigneeAmount : 0)
+			},
+		},
+		watch: {
+			totalList: {
+				handler: function(newVal) {
+					console.log(newVal[2])
+					this.totalWeight = newVal[0]
+					this.totalVol = newVal[1]
+					this.totalNum = newVal[2]
+				},
+				deep: true
+			}
+		},
 		data() {
 			return {
-				controlStatus: '',
+				payMethods: {
+					driverCashAmount: '', // 司机现付金额
+					driverCodAmount: '', // 司机到付金额
+					driverPorAmount: '', // 司机回单金额
+					driverMonthlyAmont: '', // 司机月结金额
+					driverCosigneeAmount: '', // 司机收货方到付金额
+					superCargoCashAmount: '', // 押运人现付金额
+					superCargoCodAmount: '', // 押运人到付金额
+					superCargoCorAmount: '', // 押运人回单金额
+					superCargoMonthlyAmount: '', // 押运人月结金额
+					superCosigneeAmount: '', // 押运人收货方到付金额
+				},
+				loadStatus: 'NotFull',
+				totalWeight: 0,
+				totalVol: 0,
+				totalNum: 0,
 			}
+		},
+		created() {
+			// let t = this.totalList
+			// console.log(t)
+			// if (t && t.length == 3) {
+			// 	this.totalWeight = t[0]
+			// 	this.totalVol = t[1]
+			// 	this.totalNum = t[2]
+			// }
 		},
 		methods: {
 			prevStep() {

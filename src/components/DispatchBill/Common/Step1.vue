@@ -23,7 +23,7 @@
 			</el-table>
 			<el-table 
 				:data="carrierBill.carrierCargo" 
-				@selection-change="selectionChange"
+				@selection-change="selectionChange($event, carrierBill.carrierOrderID)"
 				border style="width: 100%;margin-top:-1px" size="mini" resizable="false">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
 				<el-table-column label="货物规格/货物名称" prop="cargoName">
@@ -129,10 +129,27 @@
 						carrierOrderID: this.selectedCargoList[i].carrierOrderID
 					})
 				}
-				this.$emit('nextStep', 1, list)
+				console.log([this.totalWeight, this.totalVolume, this.totalNum])
+				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
-			selectionChange(data) {
-				this.selectedCargoList.push(...data)
+			selectionChange(data, orderID) {
+				console.log(orderID)
+				let carrierCargoIDs = this.selectedCargoList.map(item => item.carrierCargoID)
+
+				for (let i = 0; i < this.selectedCargoList.length; i++) {
+					if (orderID == this.selectedCargoList[i].carrierOrderID) {
+						console.log('删除')
+						this.selectedCargoList.splice(i, 1)
+					}
+				}
+
+				data.forEach(item => {
+					if (!carrierCargoIDs.includes(item.carrierCargoID)) {
+						console.log('添加')
+						this.selectedCargoList.push(item)
+					}
+				})
+				console.log(data)
 				console.log(this.selectedCargoList)
 			},
 			back() {

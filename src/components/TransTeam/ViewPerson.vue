@@ -6,7 +6,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="创建人">
-							<p>{{person.createBy}}</p>
+							<p>{{person.createName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -18,7 +18,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核人">
-							<p>{{person.auditBy}}</p>
+							<p>{{person.auditName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">

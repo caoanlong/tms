@@ -27,7 +27,7 @@
 		</div>
 		<div class="list">
 			<DriverItem 
-				:isSelected="selectedDriver == item.truckID" 
+				:isSelected="selectedDriver.truckID == item.truckID" 
 				:index="index" 
 				v-for="(item, index) in truckList" 
 				:key="index" 
@@ -52,7 +52,7 @@
 		</div>
 		<div class="list">
 			<EscortItem 
-				:isSelected="selectedEscort == item.staffID" 
+				:isSelected="selectedEscort.staffID == item.staffID" 
 				:index="index" 
 				v-for="(item,index) in personList" 
 				:key="index" 
@@ -79,8 +79,8 @@
 		},
 		data() {
 			return {
-				selectedDriver: '',
-				selectedEscort: '',
+				selectedDriver: {},
+				selectedEscort: {},
 				truckPageIndex: 1,
 				truckPageSize: 10,
 				truckCount: 0,
@@ -109,22 +109,22 @@
 					Message.error('该车辆已经满载！')
 					return
 				}
-				if (this.selectedDriver == data.truckID) {
-					this.selectedDriver = ''
+				if (this.selectedDriver.truckID == data.truckID) {
+					this.selectedDriver = {}
 					return
 				}
-				this.selectedDriver = data.truckID
+				this.selectedDriver = data
 			},
 			selectEscortItem(data) {
 				if (data.workStatus == 'Working') {
 					Message.error('该人员已经在工作了！')
 					return
 				}
-				if (this.selectedEscort == data.staffID) {
-					this.selectedEscort = ''
+				if (this.selectedEscort.staffID == data.staffID) {
+					this.selectedEscort = {}
 					return
 				}
-				this.selectedEscort = data.staffID
+				this.selectedEscort = data
 			},
 			getTruckList() {
 				let params = {

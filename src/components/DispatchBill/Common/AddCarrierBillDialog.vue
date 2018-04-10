@@ -147,7 +147,7 @@
 			add() {
 				if (this.selectedList.length > 0) {
 					this.isVisible = false
-					this.$emit('selectCarrierBills', this.selectedList)
+					this.$emit('selectCarrierBills', this.selectedList, false)
 				} else {
 					Message.error('请选择！')
 				}

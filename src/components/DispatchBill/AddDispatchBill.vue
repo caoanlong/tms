@@ -12,42 +12,17 @@
 			</el-steps>
 			<Step1 v-show="stepActive == 0" :carrierBills="selectedCarrierBills" @nextStep="nextStep"/>
 			<Step2 v-show="stepActive == 1" :startLoad="stepActive == 1" @nextStep="nextStep" @prevStep="prevStep"/>
-			<Step3 v-show="stepActive == 2" @nextStep="nextStep" @prevStep="prevStep"/>
+			<Step3 v-show="stepActive == 2" :totalList="totalList" :carrierCargos="selectedCarrierCargos" :truck="selectedTruck" :person="selectedPerson" @nextStep="nextStep" @prevStep="prevStep"/>
 			<div v-show="stepActive == 3" class="step step4">
 				<el-row>
 					<div class="split-item">
 						<span class="num">1</span>
-						<span class="tit">基本信息</span>
-					</div>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form label-width="120px">
-							<el-form-item label="托运人">
-								<p>{{carrierbillInfo.Consignor}}</p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="8">
-						<el-form label-width="120px">
-							<el-form-item label="承运人">
-								<p>{{carrierbillInfo.Carrier}}</p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-				</el-row>
-				<el-row>
-					<div class="split-item">
-						<span class="num">2</span>
 						<span class="tit">收发货信息</span>
 					</div>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form label-width="120px">
-							<el-form-item label="发货单位">
-								<p></p>
-							</el-form-item>
 							<el-form-item label="发货人">
 								<p></p>
 							</el-form-item>
@@ -88,13 +63,6 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form label-width="120px">
-							<el-form-item label="收货单位">
-								<p></p>
-							</el-form-item>
-						</el-form>
-					</el-col>
-					<el-col :span="8">
-						<el-form label-width="120px">
 							<el-form-item label="收货人">
 								<p></p>
 							</el-form-item>
@@ -133,7 +101,7 @@
 				</el-row>
 				<el-row>
 					<div class="split-item">
-						<span class="num">3</span>
+						<span class="num">2</span>
 						<span class="tit">货物信息</span>
 					</div>
 				</el-row>
@@ -161,7 +129,7 @@
 				</div>
 				<el-row>
 					<div class="split-item">
-						<span class="num">4</span>
+						<span class="num">3</span>
 						<span class="tit">付款信息</span>
 					</div>
 				</el-row>
@@ -234,12 +202,6 @@ export default {
 		return {
 			stepActive: 0,
 			dialogTableVisible: false,
-			carrierbillInfo: [{
-				CarrierNum: '20180205001',
-				Discharge: '云南省昭通市镇远县城李家沟',
-				ArrivalDate: '2018:02:06 18:00',
-				Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-			}],
 			tableData: [
 				{
 					CarrierNum: '20180205001',
@@ -247,7 +209,11 @@ export default {
 					CargoName:'R72/炸药'
 				}
 			],
-			selectedCarrierBills: []  // 选择的承运单
+			selectedCarrierBills: [],  // 选择的承运单
+			selectedCarrierCargos: [],  // 选择的货物
+			selectedTruck: {},
+			selectedPerson: {},
+			totalList: []
 		}
 	},
 	created() {
@@ -259,9 +225,12 @@ export default {
 	methods: {
 		nextStep(x, data, data1) {
 			if (x == 1) {
+				this.selectedCarrierCargos = data
+				this.totalList = data1
 				console.log(data)
 			} else if (x == 2) {
-				console.log(data, data1)
+				this.selectedTruck = data
+				this.selectedPerson = data1
 			}
 			this.stepActive = x
 		},
@@ -271,7 +240,8 @@ export default {
 		save() {
 			this.$router.push({ name: 'dispatchbills' })
 		},
-		handSelectCarrierBills(data) {
+		handSelectCarrierBills(data, bool) {
+			this.dialogTableVisible = bool
 			let selectedCarrierBillIDs = data
 			for (let i = 0; i < data.length; i++) {
 				this.getDetail(data[i])

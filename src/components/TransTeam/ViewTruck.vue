@@ -11,7 +11,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核人">
-							<p>{{truck.auditBy}}</p>
+							<p>{{truck.auditName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">

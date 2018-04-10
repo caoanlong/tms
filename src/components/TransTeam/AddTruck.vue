@@ -15,12 +15,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核人">
-							<el-select style="width: 100%" v-model="truck.auditBy" placeholder="请选择">
-								<el-option label="caoanlong" value="980762678237921281"></el-option>
-								<el-option label="nongxinkao" value="978991129679998978"></el-option>
-								<el-option label="nxk" value="979241449798569986"></el-option>
-								<el-option label="13800138000" value="980987179567521793"></el-option>
-							</el-select>
+							<el-input v-model="truck.auditName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">

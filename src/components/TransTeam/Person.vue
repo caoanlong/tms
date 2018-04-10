@@ -21,12 +21,12 @@
 					</el-form-item>
 					<el-form-item label="岗位">
 						<el-select v-model="findPost" placeholder="请选择">
-							<el-option label="操作员" value="操作员"></el-option>
-							<el-option label="驾驶员" value="驾驶员"></el-option>
-							<el-option label="押运员" value="押运员"></el-option>
-							<el-option label="专职安全员" value="专职安全员"></el-option>
-							<el-option label="装卸管理人员" value="装卸管理人员"></el-option>
-							<el-option label="其他人员" value="其他人员"></el-option>
+							<el-option label="操作员" value="Operator"></el-option>
+							<el-option label="驾驶员" value="Driver"></el-option>
+							<el-option label="押运员" value="Supercargo"></el-option>
+							<el-option label="专职安全员" value="SafetyOfficer"></el-option>
+							<el-option label="装卸管理人员" value="Stevedore"></el-option>
+							<el-option label="其他人员" value="Other"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="时间">
