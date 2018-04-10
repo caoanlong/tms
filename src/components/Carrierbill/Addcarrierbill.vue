@@ -26,13 +26,6 @@
 						</el-form-item>
 					</el-form>
 				</el-col>
-				<el-col :span="8">
-					<el-form label-width="100px">
-						<el-form-item label="承运单号">
-							<el-input placeholder="请输入承运单号" v-model="carrierbillInfo.carrierOrderNo"></el-input>
-						</el-form-item>
-					</el-form>
-				</el-col>
 			</el-row>
 			<el-row>
 				<div class="split-item">
@@ -74,13 +67,7 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="发货地">
-							<el-cascader 
-								style="width: 100%" 
-								:options="distData" 
-								v-model="selectedArea"
-								@change="handleSelectedArea" separator="" disabled>
-							</el-cascader>
-							<!-- <el-input disabled placeholder="发货地" v-model="shipperDetail.companyArea"></el-input> -->
+							<DistPicker @selectChange="handleSelectedArea" class="normal"/>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -129,12 +116,7 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="卸货地">
-							<el-cascader 
-								style="width: 100%" 
-								:options="distData" 
-								v-model="selectedArea1"
-								@change="handleSelectedArea1" separator="" disabled>
-							</el-cascader>
+							<DistPicker @selectChange="handleSelectedArea1" class="normal"/>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -243,12 +225,12 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
+import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
+
 export default {
 	data() {
 		return {
-			distData: regionData,
 			selectedArea: [],
 			selectedArea1: [],
 			loading: false,
@@ -527,6 +509,9 @@ export default {
 		handleSelectedArea1(data) {
 			this.carrierbillInfo.consigneeAreaID = data[data.length-1]
 		},
+	},
+	components: {
+		DistPicker
 	}
 }
 
@@ -578,4 +563,6 @@ export default {
 		color #409EFF
 		.svg-icon
 			color #409EFF
+
+
 </style>

@@ -48,7 +48,7 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="发货时间">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierOrder.shipperDate"></el-date-picker>
+							<el-date-picker style="width:100%" placeholder="选择发货时间" v-model="carrierOrder.shipperDate"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -71,8 +71,7 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="发货地">
-							<el-cascader style="width: 100%" :options="distData">
-							</el-cascader>
+							<DistPicker @selectChange="handleSelectedArea" class="normal" :selected="selectedArea"/>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -102,7 +101,7 @@
 				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="到货时间">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择到货时间" v-model="carrierOrder.consigneeDate"></el-date-picker>
+							<el-date-picker style="width:100%" placeholder="选择到货时间" v-model="carrierOrder.consigneeDate"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -115,15 +114,14 @@
 						</el-form-item>
 					</el-form>
 				</el-col>
-				<el-col :span="6">
+				<el-col :span="8">
 					<el-form label-width="120px">
 						<el-form-item label="卸货地">
-							<el-cascader style="width: 100%" :options="distData">
-							</el-cascader>
+							<DistPicker @selectChange="handleSelectedArea1" class="normal" :selected="selectedArea1"/>
 						</el-form-item>
 					</el-form>
 				</el-col>
-				<el-col :span="10">
+				<el-col :span="8">
 					<el-form label-width="20px">
 						<el-form-item>
 							<el-input placeholder="卸货详细地址" v-model="carrierOrder.consigneeDetailAddress"></el-input>
@@ -169,48 +167,46 @@
 				<el-col :span="24">
 					<el-form label-width="120px">
 						<el-form-item label="承运单应收款">
-							<el-radio-group v-model="carrierbillInfo.Receivable">
-								<el-radio label="Y">按吨公里自动生成</el-radio>
-								<el-radio label="N">手动输入</el-radio>
+							<el-radio-group v-model="carrierOrder.receiptMethod">
+								<el-radio label="TKM">按吨公里自动生成</el-radio>
+								<el-radio label="Manual">手动输入</el-radio>
 							</el-radio-group>
-							<div v-show="carrierbillInfo.Receivable=='Y'" class="tips">从“这个单的发货地”到卸货地对外运距为“50公里”总价为90909009？</div>
+							<div v-show="carrierOrder.Receivable=='Y'" class="tips">从“这个单的发货地”到卸货地对外运距为“50公里”总价为90909009？</div>
 							<div class="form-input">
 								<el-form-item label="现付" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="现付"></el-input>
+									<el-input placeholder="现付" v-model="carrierOrder.cashAmount"></el-input>
 								</el-form-item>
 								<el-form-item label="到付" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="到付"></el-input>
+									<el-input placeholder="到付" v-model="carrierOrder.codAmount"></el-input>
 								</el-form-item>
 								<el-form-item label="回单结" label-width="60px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="回单结"></el-input>
+									<el-input placeholder="回单结" v-model="carrierOrder.porAmount"></el-input>
 								</el-form-item>
 								<el-form-item label="月结" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="月结"></el-input>
+									<el-input placeholder="月结" v-model="carrierOrder.monthlyAmount"></el-input>
 								</el-form-item>
 								<el-form-item label="收货方付" label-width="70px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="收货方付"></el-input>
+									<el-input placeholder="收货方付" v-model="carrierOrder.consigneeAmount"></el-input>
 								</el-form-item>
 							</div>
 						</el-form-item>
 						<el-form-item label="付款费用">
-							<el-radio-group v-model="carrierbillInfo.payable">
-								<el-radio label="Y">按吨公里自动生成</el-radio>
-								<el-radio label="N">手动输入</el-radio>
+							<el-radio-group v-model="carrierOrder.paymentMethod">
+								<el-radio label="TKM">按吨公里自动生成</el-radio>
+								<el-radio label="Manual">手动输入</el-radio>
 							</el-radio-group>
-							<div v-show="carrierbillInfo.payable=='Y'" class="tips">从“这单的发货地”到卸货地对内运距为“50公里”?</div>
+							<div v-show="carrierOrder.paymentMethod=='TKM'" class="tips">从“这单的发货地”到卸货地对内运距为“50公里”?</div>
 						</el-form-item>
 						<el-form-item label="发票">
-							<el-radio-group v-model="carrierbillInfo.invoice">
+							<el-radio-group v-model="carrierOrder.Invoice">
 								<el-radio label="Y">开发票</el-radio>
 								<el-radio label="N">不开发票</el-radio>
 							</el-radio-group>
 						</el-form-item>
-						<el-form-item label="回单要求">
-							<el-checkbox-group v-model="carrierbillInfo.receipt">
-								<el-checkbox label="1">货物托运单</el-checkbox>
-								<el-checkbox label="2">发货单文件</el-checkbox>
-								<el-checkbox label="3">不需要回单</el-checkbox>
-							</el-checkbox-group>
+						<el-form-item label="回单要求" class="receipt">
+							<!-- <span class="wf-checkbox" @click="selectReceipt('ConsigneePor')" :class="{'select': carrierOrder.porRequire.includes('ConsigneePor')}"><svg-icon :icon-class="carrierOrder.porRequire.includes('ConsigneePor') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>货物托运单</span>
+							<span class="wf-checkbox" @click="selectReceipt('ShipperPor')" :class="{'select': carrierOrder.porRequire.includes('ShipperPor')}"><svg-icon :icon-class="carrierOrder.porRequire.includes('ShipperPor') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>发货单文件</span>
+							<span class="wf-checkbox" @click="selectReceipt('NotRequired')" :class="{'select': carrierOrder.porRequire.includes('NotRequired')}"><svg-icon :icon-class="carrierOrder.porRequire.includes('NotRequired') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>不需要回单</span> -->
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -219,7 +215,7 @@
 				<el-col :span="24">
 					<el-form label-width="0">
 						<el-form-item align="center">
-							<el-button type="primary">保存</el-button>
+							<el-button type="primary" @click="save">保存</el-button>
 							<el-button type="success" @click="AddDispatchBill">调度</el-button>
 							<el-button type="danger">删除</el-button>
 							<el-button @click="back">返回</el-button>
@@ -232,18 +228,28 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
+import DistPicker from '../CommonComponents/DistPicker'
 import request from "../../common/request"
 export default {
 	data() {
 		return {
 			loading: false,
-			distData: regionData,
-			carrierOrder:{},
+			carrierOrder:{
+				porRequire:['']
+			},
 			consignorID:'',
-			carrierCargo:[],
+			carrierCargo:[
+				{
+					'cargoType': '',
+					'cargoName': '',
+					'weightType': '',
+					'cargoWeight': '',
+					'cargoVolume': '',
+					'cargoNum': ''
+				}
+			],
 			selectedArea: [],
-			carrierbillInfo:{},
+			selectedArea1: [],
 			Consignor:{
 				companyName:''
 			}
@@ -264,8 +270,14 @@ export default {
 			}).then(res => {
 				console.log(res.data.data)
 				this.carrierOrder = res.data.data
+				console.log(this.carrierOrder.porRequire)
 				this.carrierCargo = res.data.data.carrierCargo
 				this.consignorID= res.data.data.consignorID
+				let shipperAreaID = res.data.data.shipperAreaID
+
+				this.selectedArea = [(shipperAreaID.substr(0, 2) + '0000'), (shipperAreaID.substr(0, 4) + '00'), shipperAreaID]
+				let consigneeAreaID = res.data.data.consigneeAreaID
+				this.selectedArea1 = [(consigneeAreaID.substr(0, 2) + '0000'), (consigneeAreaID.substr(0, 4) + '00'), consigneeAreaID]
 				this.getConsignor()
 			})
 		},
@@ -281,25 +293,82 @@ export default {
 				this.Consignor.companyName = res.data.data.companyName
 			})
 		},
+		save(){
+			let data ={
+				carrierOrderID:this.$route.query.carrierOrderID,
+				consignorID:this.consignorID,
+				carrierrName:this.carrierOrder.carrierrName,
+				shipperCompanyName:this.carrierOrder.shipperCompanyName,
+				shipperDate:this.carrierOrder.shipperDate,
+				shipperDate:this.carrierOrder.shipperNo,
+				shipperName:this.carrierOrder.shipperName,
+				shipperAreaID:this.carrierOrder.shipperAreaID,
+				shipperDetailAddress:this.carrierOrder.shipperDetailAddress,
+				consigneeCompanyName:this.carrierOrder.consigneeCompanyName,
+				consigneeName:this.carrierOrder.consigneeName,
+				consigneeDate:this.carrierOrder.consigneeDate,
+				consigneeAreaID:this.carrierOrder.consigneeAreaID,
+				consigneeDetailAddress:this.carrierOrder.consigneeDetailAddress,
+				carrierCargoInfo:JSON.stringify(this.carrierCargo),
+				receiptMethod:this.carrierOrder.receiptMethod,
+				cashAmount:this.carrierOrder.cashAmount,
+				codAmount:this.carrierOrder.codAmount,
+				porAmount:this.carrierOrder.porAmount,
+				monthlyAmount:this.carrierOrder.monthlyAmount,
+				consigneeAmount:this.carrierOrder.consigneeAmount,
+				paymentMethod:this.carrierOrder.paymentMethod
+			}
+			console.log(data.carrierCargoInfo)
+			// return
+			request({
+				url: '/biz/carrierOrder/modify',
+				method: 'post',
+				data
+			}).then(res => {
+				Message.success('编辑成功！')
+				this.$router.go(-1)
+			})
+		},
 		AddDispatchBill() {
 			this.$router.push({ name: 'adddispatchbill', query: { CarrierNum: this.$route.query.CarrierNum } })
 		},
 		addItem() {
 			this.carrierCargo.push({
-				'type': '',
-				'name': '',
-				'rule': '',
-				'weight': '',
-				'volumn': '',
-				'num': ''
+				'cargoType': '',
+				'cargoName': '',
+				'weightType': '',
+				'cargoWeight': '',
+				'cargoVolume': '',
+				'cargoNum': ''
 			})
 		},
+		selectReceipt(e){
+			if (this.carrierOrder.porRequire.includes(e)) {
+				this.carrierOrder.porRequire.splice(this.carrierOrder.porRequire.indexOf(e), 1)
+			} else {
+				this.carrierOrder.porRequire.push(e)
+			}
+			if(e == 'NotRequired'){
+				this.carrierOrder.porRequire = ['NotRequired']
+			} else {
+				this.carrierOrder.porRequire.includes('NotRequired') && this.carrierOrder.porRequire.splice(this.carrierOrder.porRequire.indexOf('NotRequired'), 1)
+			}
+		},
 		removeItem(index) {
-			this.carrierCargo.splice(index,1)
+			this.carrierCargo.splice(index, 1)
 		},
 		back() {
 			this.$router.go(-1)
-		}
+		},
+		handleSelectedArea(data) {
+			this.carrierOrder.shipperAreaID = data
+		},
+		handleSelectedArea1(data) {
+			this.carrierOrder.consigneeAreaID = data
+		},
+	},
+	components: {
+		DistPicker
 	}
 }
 

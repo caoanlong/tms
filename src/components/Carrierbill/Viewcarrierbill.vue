@@ -11,7 +11,7 @@
 			<table class="wf-table">
 				<caption>承运信息</caption>
 				<tr>
-					<td width="50%"><span class="justify">托运人</span>接口无此参数</td>
+					<td width="50%"><span class="justify">托运人</span>{{consignor.companyName}}</td>
 					<td width="50%"><span class="justify">承运人</span>{{carrierOrder.carrierrName}}</td>
 				</tr>
 			</table>
@@ -34,8 +34,8 @@
 					<td><span class="justify">收货地</span>{{carrierOrder.consigneeArea}}{{carrierOrder.consigneeDetailAddress}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货时间</span>{{carrierOrder.shipperDate | getdatefromtimestamp()}}</td>
-					<td><span class="justify">到货时间</span>{{carrierOrder.consigneeDate | getdatefromtimestamp()}}</td>
+					<td><span class="justify">发货时间</span>{{carrierOrder.shipperDate | getdatefromtimestamp(true)}}</td>
+					<td><span class="justify">到货时间</span>{{carrierOrder.consigneeDate | getdatefromtimestamp(true)}}</td>
 				</tr>
 			</table>
 			<table class="wf-table">
@@ -138,47 +138,76 @@
 				<div class="btn-group fl">
 					<!-- <button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
 						<svg-icon icon-class="edit"></svg-icon>修改</button> -->
-					<button type="button" class="wf-btn btn-success" @click="Edit">
+					<button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
 						<svg-icon icon-class="edit"></svg-icon>修改</button>
 					<button type="button" class="wf-btn btn-primary" @click="AddDispatchBill">
 						<svg-icon icon-class="dispatchbill"></svg-icon>调度</button>
-					<button type="button" class="wf-btn btn-warning" @click="AddDispatchBill">
+					<button type="button" class="wf-btn btn-warning" @click="Edit">
 						<svg-icon icon-class="money1"></svg-icon>调整应收款</button>
 				</div>
 				<div class="btn-group fr">
-					<button type="button" class="wf-btn btn-danger plain">
-						<svg-icon icon-class="delete"></svg-icon>删除</button>
+					<button type="button" class="wf-btn btn-danger plain" @click="deleteCarrierOrder">
+						<svg-icon icon-class="delete" ></svg-icon>删除</button>
 					<button type="button" class="wf-btn btn-default" @click="back">
 						<svg-icon icon-class="back"></svg-icon>返回</button>
 				</div>
 			</div>
 		</div>
-		<el-dialog title="修改应收款" :visible.sync="dialogFormVisible" width="60%">
-			<table class="wf-table">
-				<tr>
-					<th>现付</th>
-					<th>到付</th>
-					<th>回单付</th>
-					<th>月结</th>
-					<th>收方到货付</th>
-					<th>合计</th>
-					<th>其他</th>
-					<th>备注</th>
-				</tr>
-				<tr class="is-center">
-					<td><el-input size="mini" v-model="carrierOrder.cashAmount"><span slot="suffix">元</span></el-input></td>
-					<td><el-input size="mini" v-model="carrierOrder.codAmount"><span slot="suffix">元</span></el-input></td>
-					<td><el-input size="mini" v-model="carrierOrder.porAmount"><span slot="suffix">元</span></el-input></td>
-					<td><el-input size="mini" v-model="carrierOrder.monthlyAmount"><span slot="suffix">元</span></el-input></td>
-					<td><el-input size="mini" v-model="carrierOrder.consigneeAmount"><span slot="suffix">元</span></el-input></td>
-					<td><el-input size="mini" v-model="carrierOrderTotal" disabled><span slot="suffix">元</span></el-input></td>
-					<td><el-input size="mini" type="textarea" resize="none" :rows="1"></el-input></td>
-					<td><el-input size="mini" type="textarea" resize="none" :rows="1"></el-input></td>
-				</tr>
-			</table>
+		<el-dialog title="调整应收款" :visible.sync="dialogFormVisible" width="80%">
+			<el-row>
+				<el-col :span="8">
+					<el-form label-width="100px">
+						<el-form-item label="发货单号">
+							<el-input v-model="carrierOrder.shipperNo"></el-input>
+						</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="8">
+					<el-form label-width="100px">
+						<el-form-item label="现付">
+							<el-input v-model="carrierOrder.cashAmount"><span slot="suffix">元</span></el-input>
+						</el-form-item>
+						<el-form-item label="月结">
+							<el-input v-model="carrierOrder.monthlyAmount"><span slot="suffix">元</span></el-input>
+						</el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="8">
+					<el-form label-width="100px">
+						<el-form-item label="到付">
+							<el-input v-model="carrierOrder.codAmount"><span slot="suffix">元</span></el-input>
+						</el-form-item>
+						<el-form-item label="收方到货付">
+							<el-input v-model="carrierOrder.consigneeAmount"><span slot="suffix">元</span></el-input>
+						</el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="8">
+					<el-form label-width="100px">
+						<el-form-item label="回单付">
+							<el-input v-model="carrierOrder.porAmount"><span slot="suffix">元</span></el-input>
+						</el-form-item>
+						<el-form-item label="合计">
+							<el-input v-model="carrierOrderTotal" disabled><span slot="suffix">元</span></el-input>
+						</el-form-item>
+					</el-form>
+				</el-col>
+				<el-col :span="24">
+					<el-form label-width="100px">
+						<el-form-item label="其它">
+							<el-input></el-input>
+						</el-form-item>
+						<el-form-item label="备注">
+							<el-input type="textarea" resize="none" :rows="3"></el-input>
+						</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+				<el-button type="primary" @click="adjustSum">确 定</el-button>
 			</div>
 		</el-dialog>
 
@@ -194,6 +223,8 @@ export default {
 			distData: regionData,
 			selectedAreas: [],
 			carrierOrder:[],
+			consignorID:'',
+			consignor:'',
 			carrierbillInfo: {
 				Status: '待执行',
 				Consignor: '安宁化工厂',
@@ -268,6 +299,7 @@ export default {
 	},
 	created() {
 		this.getDetail()
+		// this.getConsignor()
 	},
 	methods: {
 		sum(o) {
@@ -288,7 +320,22 @@ export default {
 				console.log(res.data.data)
 				this.carrierOrder = res.data.data
 				this.carrierCargo = res.data.data.carrierCargo
+				this.consignorID = res.data.data.consignorID
+				this.getConsignor()
 			})
+		},
+		getConsignor(){
+			let params = {
+				customerID:this.consignorID
+			}
+			request({
+				url: '/customer/findById',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				this.consignor = res.data.data
+			})
+
 		},
 		AddDispatchBill() {
 			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
@@ -314,6 +361,45 @@ export default {
 		},
 		back() {
 			this.$router.go(-1)
+		},
+		deleteCarrierOrder() {
+			let data = {
+				carrierOrderIDs:this.$route.query.carrierOrderID
+			}
+			request({
+				url: '/biz/carrierOrder/delete',
+				method: 'post',
+				data
+			}).then(res => {
+				this.$message({
+					type: 'success',
+					message: '删除成功!'
+				})
+				this.$router.push({ name: 'carrierbills'})
+			})
+		},
+		adjustSum(){
+			let data = {
+				carrierOrderID:this.$route.query.carrierOrderID,
+				shipperNo:this.carrierOrder.shipperNo,
+				cashAmount:this.carrierOrder.cashAmount,
+				monthlyAmount:this.carrierOrder.monthlyAmount,
+				codAmount:this.carrierOrder.codAmount,
+				consigneeAmount:this.carrierOrder.consigneeAmount,
+				porAmount:this.carrierOrder.porAmount
+			}
+			request({
+				url: '/biz/carrierOrder/modify',
+				method: 'post',
+				data
+			}).then(res => {
+				this.$message({
+					type: 'success',
+					message: '调整成功!'
+				})
+				this.dialogFormVisible = false
+			})
+			
 		}
 	}
 }

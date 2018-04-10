@@ -77,6 +77,8 @@
 				height 28px
 				border 1px solid #dcdfe6
 				border-radius 4px
+				outline none
+				padding-left 5px
 			&.level2
 				margin 0 10px
 </style>
