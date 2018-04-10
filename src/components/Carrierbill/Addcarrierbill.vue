@@ -462,7 +462,8 @@ export default {
 				shipperID:this.shipperDetail.customerID,
 				shipperName:this.shipperDetail.contactName,
 				shipperNo:this.carrierbillInfo.shipperNo,
-				shipperPhone:this.shipperDetail.contactPhone
+				shipperPhone:this.shipperDetail.contactPhone,
+				porRequire:this.carrierbillInfo.porRequire
 			}
 			console.log(data)
 			request({
@@ -470,7 +471,6 @@ export default {
 				method: 'post',
 				data
 			}).then(res => {
-				console.log(res.data)
 				Message.success(res.data.msg)
 				this.$router.push({name: 'carrierbills'})
 			})

@@ -234,9 +234,7 @@ export default {
 	data() {
 		return {
 			loading: false,
-			carrierOrder:{
-				porRequire:['']
-			},
+			carrierOrder:{},
 			consignorID:'',
 			carrierCargo:[
 				{
@@ -245,7 +243,8 @@ export default {
 					'weightType': '',
 					'cargoWeight': '',
 					'cargoVolume': '',
-					'cargoNum': ''
+					'cargoNum': '',
+					'carrierCargoID':''
 				}
 			],
 			selectedArea: [],
@@ -268,13 +267,11 @@ export default {
 				url: '/biz/carrierOrder/detail',
 				params
 			}).then(res => {
-				console.log(res.data.data)
+				// console.log(res.data.data)
 				this.carrierOrder = res.data.data
-				console.log(this.carrierOrder.porRequire)
 				this.carrierCargo = res.data.data.carrierCargo
 				this.consignorID= res.data.data.consignorID
 				let shipperAreaID = res.data.data.shipperAreaID
-
 				this.selectedArea = [(shipperAreaID.substr(0, 2) + '0000'), (shipperAreaID.substr(0, 4) + '00'), shipperAreaID]
 				let consigneeAreaID = res.data.data.consigneeAreaID
 				this.selectedArea1 = [(consigneeAreaID.substr(0, 2) + '0000'), (consigneeAreaID.substr(0, 4) + '00'), consigneeAreaID]
@@ -316,10 +313,11 @@ export default {
 				porAmount:this.carrierOrder.porAmount,
 				monthlyAmount:this.carrierOrder.monthlyAmount,
 				consigneeAmount:this.carrierOrder.consigneeAmount,
-				paymentMethod:this.carrierOrder.paymentMethod
+				paymentMethod:this.carrierOrder.paymentMethod,
+				status:this.carrierOrder.status,
+				porRequire:this.carrierOrder.porRequire
+				// porRequire:'ShipperPor,ConsigneePor'
 			}
-			console.log(data.carrierCargoInfo)
-			// return
 			request({
 				url: '/biz/carrierOrder/modify',
 				method: 'post',
@@ -406,4 +404,18 @@ export default {
 	.el-select
 	.el-input
 		margin 0 10px 10px 0
+.wf-checkbox
+	margin-right 30px
+	cursor pointer
+	&:last-child
+		margin-right 0
+	.svg-icon
+		color #dcdfe6
+		font-size 14px
+		margin-right 10px
+	&.select
+		color #409EFF
+		.svg-icon
+			color #409EFF
+
 </style>
