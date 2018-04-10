@@ -1,6 +1,6 @@
 <template>
 	<div class="main-content">
-		<el-row :gutter="20">
+		<!-- <el-row :gutter="20">
 			<el-col :span="12">
 				<div class="wf-card dashboardItem">
 					<div class="header clearfix">
@@ -164,7 +164,7 @@
 					</div>
 				</div>
 			</el-col>
-		</el-row>
+		</el-row> -->
 	</div>
 </template>
 <script type="text/javascript">

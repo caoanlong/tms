@@ -1,40 +1,41 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">调度单编号：{{$route.query.ControlsNum}}
-				<span>创建时间：{{carrierbillInfo.CreatedDate}}</span>
-				<span class="status status1" v-if="carrierbillInfo.Status =='待执行'">待执行</span>
-				<span class="status status2" v-else-if="carrierbillInfo.Status =='执行中'">执行中</span>
-				<span class="status status3" v-else-if="carrierbillInfo.Status =='已签收'">已签收</span>
+			<div class="header clearfix">调度单编号：{{dispatchBill.dispatchOrderNo}}
+				<span>创建时间：{{dispatchBill.createTime}}</span>
+				<span class="status status1" v-if="dispatchBill.status == 'Committed'">待执行</span>
+				<span class="status status2" v-else-if="dispatchBill.status == 'Loaded'">已装运</span>
+				<span class="status status3" v-else-if="dispatchBill.status == 'Signed'">已签收</span>
+				<span class="status status3" v-else-if="dispatchBill.status == 'Canceled'">作废</span>
 			</div>
 			<table class="wf-table">
 				<caption>承运信息</caption>
 				<tr>
-					<td width="50%"><span class="justify">托运人</span>{{carrierbillInfo.Consignor}}</td>
-					<td width="50%"><span class="justify">承运人</span>{{carrierbillInfo.Carrier}}</td>
+					<td width="50%"><span class="justify">托运人</span>{{dispatchBill.Consignor}}</td>
+					<td width="50%"><span class="justify">承运人</span>{{dispatchBill.Carrier}}</td>
 				</tr>
 			</table>
 			<table class="wf-table">
 				<caption>收发货信息</caption>
 				<tr>
-					<td width="50%"><span class="justify">发货单位</span>{{carrierbillInfo.ConsignerCompany}}</td>
-					<td width="50%"><span class="justify">收货单位</span>{{carrierbillInfo.ConsigneeCompany}}</td>
+					<td width="50%"><span class="justify">发货单位</span>{{dispatchBill.ConsignerCompany}}</td>
+					<td width="50%"><span class="justify">收货单位</span>{{dispatchBill.ConsigneeCompany}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货人</span>{{carrierbillInfo.Consigner}}</td>
-					<td><span class="justify">收货人</span>{{carrierbillInfo.Consignee}}</td>
+					<td><span class="justify">发货人</span>{{dispatchBill.Consigner}}</td>
+					<td><span class="justify">收货人</span>{{dispatchBill.Consignee}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">联系方式</span>{{carrierbillInfo.Consigner}}</td>
-					<td><span class="justify">联系方式</span>{{carrierbillInfo.Consignee}}</td>
+					<td><span class="justify">联系方式</span>{{dispatchBill.Consigner}}</td>
+					<td><span class="justify">联系方式</span>{{dispatchBill.Consignee}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货地</span>{{carrierbillInfo.Dispatch}}</td>
-					<td><span class="justify">收货地</span>{{carrierbillInfo.Discharge}}</td>
+					<td><span class="justify">发货地</span>{{dispatchBill.Dispatch}}</td>
+					<td><span class="justify">收货地</span>{{dispatchBill.Discharge}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货时间</span>{{carrierbillInfo.DeliveryDate}}</td>
-					<td><span class="justify">到货时间</span>{{carrierbillInfo.ArrivalDate}}</td>
+					<td><span class="justify">发货时间</span>{{dispatchBill.DeliveryDate}}</td>
+					<td><span class="justify">到货时间</span>{{dispatchBill.ArrivalDate}}</td>
 				</tr>
 			</table>
 			<table class="wf-table">
@@ -125,8 +126,10 @@
 				</tr>
 			</table>
 			<div class="wf-footer clearfix is-center">
-				<button type="button" class="wf-btn btn-primary">装车</button>
-				<button type="button" class="wf-btn btn-danger">作废</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Committed'">装车</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Loaded'">签收</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Signed'">修改运费</button>
+				<button type="button" class="wf-btn btn-danger" v-if="dispatchBill.status != 'Signed' && dispatchBill.status != 'Canceled'">作废</button>
 				<button type="button" class="wf-btn btn-default" @click="back">返回</button>
 			</div>
 		</div>
@@ -134,10 +137,11 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import request from '../../common/request'
 export default {
 	data() {
 		return {
-			carrierbillInfo: {
+			dispatchBill: {
 				Status: '待执行',
 				Consignor: '安宁化工厂',
 				Carrier: '安化物流',
@@ -159,20 +163,25 @@ export default {
 				receipt: ['1', '2'],
 				Receivable: 'N',
 				payable: 'N'
-			},
-			tableData: [
-				{
-					CarrierNum: '20180205001',
-					CargoTotal: '9.76吨/10方',
-					CargoName:'R72/炸药'
-				}
-			]
+			}
 		}
 	},
 	created() {
-
+		this.getInfo()
 	},
 	methods: {
+		getInfo(){
+			let params = {
+				dispatchOrderID: this.$route.query.dispatchOrderID,
+			}
+			request({
+				url: '/biz/dispatchOrder/detail',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				this.dispatchBill = res.data.data
+			})
+		},
 		back() {
 			this.$router.go(-1)
 		}
