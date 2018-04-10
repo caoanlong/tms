@@ -288,9 +288,9 @@ export default {
 	data() {
 		return {
 			person: {
-				createBy: '',
+				createName: '',
 				status: '',
-				auditBy: '',
+				auditName: '',
 				auditTime: '',
 				realName: '',
 				homeAddress: '',

@@ -353,9 +353,9 @@ export default {
 		},
 		updateItem() {
 			let data = {
-				createBy: this.person.createBy,
+				createName: this.person.createName,
 				status: this.person.status,
-				auditBy: this.person.auditBy,
+				auditName: this.person.auditName,
 				auditTime: this.person.auditTime,
 				realName: this.person.realName,
 				homeAddress: this.person.comStaffIdentification.homeAddress,
