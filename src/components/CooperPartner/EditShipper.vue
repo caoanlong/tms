@@ -9,12 +9,7 @@
 							<el-input v-model="shipper.companyName"></el-input>
 						</el-form-item>
 						<el-form-item label="地址">
-							<el-cascader 
-								style="width: 100%" 
-								:options="distData" 
-								v-model="selectedArea"
-								@change="handleSelectedArea">
-							</el-cascader>
+							<DistPicker :selected="selectedArea" @selectChange="handleSelectedArea"/>
 						</el-form-item>
 						<el-form-item label="详细地址">
 							<el-input v-model="shipper.detailAddress"></el-input>
@@ -36,13 +31,12 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { regionData } from 'element-china-area-data'
 	import { Message } from 'element-ui'
 	import request from '../../common/request'
+	import DistPicker from '../CommonComponents/DistPicker'
 	export default {
 		data() {
 			return {
-				distData: regionData,
 				shipper: {
 					companyAreaID: '',
 					companyName: '',
@@ -58,7 +52,7 @@
 		},
 		methods: {
 			handleSelectedArea(data) {
-				this.shipper.companyAreaID = data[data.length-1]
+				this.shipper.companyAreaID = data
 			},
 			getDetail() {
 				let params = {
@@ -95,6 +89,9 @@
 			back() {
 				this.$router.go(-1)
 			}
+		},
+		components: {
+			DistPicker
 		}
 	}
 </script>
