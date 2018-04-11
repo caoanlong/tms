@@ -8,9 +8,9 @@
 					<span class="tit">基本信息</span>
 				</div>
 			</el-row>
-			<el-form label-width="100px">
+			<el-form label-width="100px" size="mini">
 				<el-row>
-					<el-col :span="8">
+					<el-col :span="6">
 						<el-form-item label="托运人">
 							<el-select style="width: 100%" v-model="Shippers.consignorID" filterable remote placeholder="请输入托运人关键词" :remote-method="getShippers" :loading="loading" @change="getConsignorDetail">
 								<el-option v-for="item in Shippers" :key="item.Shippers" :label="item.companyName" :value="item.customerID">
@@ -18,7 +18,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="6">
 						<el-form-item label="承运人">
 							<el-input placeholder="请输入承运人" v-model="carrierbillInfo.carrierrName"></el-input>
 						</el-form-item>

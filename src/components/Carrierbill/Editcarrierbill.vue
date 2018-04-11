@@ -259,7 +259,6 @@ export default {
 		this.getDetail()
 	},
 	methods: {
-		
 		getDetail() {
 			let params = {
 				carrierOrderID:this.$route.query.carrierOrderID
@@ -319,7 +318,6 @@ export default {
 				paymentMethod:this.carrierOrder.paymentMethod,
 				status:this.carrierOrder.status,
 				porRequire:this.porRequire
-				// porRequire:'ShipperPor,ConsigneePor'
 			}
 			request({
 				url: '/biz/carrierOrder/modify',
@@ -362,6 +360,7 @@ export default {
 			this.$router.go(-1)
 		},
 		handleSelectedArea(data) {
+			console.log(data)
 			this.carrierOrder.shipperAreaID = data
 		},
 		handleSelectedArea1(data) {
