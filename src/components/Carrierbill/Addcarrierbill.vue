@@ -83,7 +83,7 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="收货单位">
-							<el-select style="width: 100%"  v-model="carrierbillInfo.consigneeCompanyName" filterable remote placeholder="请输入托运人关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="getConsigneeDetail">
+							<el-select style="width: 100%"  v-model="carrierbillInfo.consigneeCompanyName" filterable remote placeholder="请输入收货单位关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="getConsigneeDetail">
 								<el-option v-for="item in Recdeliverycomp" :key="item.Recdeliverycomp" :label="item.companyName" :value="item.companyName">
 								</el-option>
 							</el-select>
