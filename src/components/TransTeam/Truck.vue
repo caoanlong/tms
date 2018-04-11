@@ -7,7 +7,7 @@
 					<el-form-item label="车牌号">
 						<el-input placeholder="请输入..." v-model="findPlateNo"></el-input>
 					</el-form-item>
-					<el-form-item label="车辆编号">
+					<el-form-item label="自编号">
 						<el-input placeholder="请输入..." v-model="findCode"></el-input>
 					</el-form-item>
 					<el-form-item label="牵引质量">
@@ -38,7 +38,7 @@
 							<el-option label="4米" value="4"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="日期">
+					<el-form-item label="创建日期">
 						<el-date-picker
 							v-model="findDate"
 							type="daterange"
