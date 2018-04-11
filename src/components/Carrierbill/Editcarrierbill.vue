@@ -244,7 +244,50 @@ export default {
 			selectedArea1: [],
 			Consignor:{
 				companyName:''
-			}
+			},
+			transType:'',
+			transTypeOption:[
+				{
+					label:'后台现在没参数',
+					value:'海上运输'
+				},
+				// {
+				// 	label:'海上运输',
+				// 	value:'海上运输'
+				// },
+				// {
+				// 	label:'铁路运输',
+				// 	value:'铁路运输'
+				// },
+				// {
+				// 	label:'公路运输',
+				// 	value:'公路运输'
+				// },
+				// {
+				// 	label:'航空运输',
+				// 	value:'航空运输'
+				// },
+				// {
+				// 	label:'邮件运输',
+				// 	value:'邮件运输'
+				// },
+				// {
+				// 	label:'多式联运',
+				// 	value:'多式联运'
+				// },
+				// {
+				// 	label:'固定设施运输',
+				// 	value:'固定设施运输'
+				// },
+				// {
+				// 	label:'内河运输',
+				// 	value:'内河运输'
+				// },
+				// {
+				// 	label:'其他',
+				// 	value:'其他'
+				// }
+			]
 		}
 	},
 	created() {
