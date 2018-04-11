@@ -380,7 +380,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="承运人责任险有效期至" prop="carrierRiskInsuranceExpires">
+						<el-form-item label="承运人责任险有效期" prop="carrierRiskInsuranceExpires">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.carrierRiskInsuranceExpires"
@@ -604,112 +604,112 @@ export default {
 					{required: true, message: '请输入审核人', trigger: 'blur'}
 				],
 				auditTime: [
-					{required: true, message: '请输入创建人', trigger: 'blur'}
+					{required: true, message: '请选择审核日期', trigger: 'change'}
 				],
 				areaID: [
-					{ required: true, message: '请选择姓名', trigger: 'change' }
+					{ required: true, message: '请选择地区', trigger: 'change' }
 				],
 				companyName: [
-					{required: true, message: '请输入家庭地址', trigger: 'blur'}
+					{required: true, message: '请输入企业', trigger: 'blur'}
 				],
 				truckCategory: [
-					{required: true, message: '请选择岗位', trigger: 'change'},
+					{required: true, message: '请选择车辆类别', trigger: 'change'},
 				],
 				truckType: [
-					{ required: true, message: '请选择性别', trigger: 'change' }
+					{ required: true, message: '请选择车辆类型', trigger: 'change' }
 				],
 				plateNoColor: [
-					{required: true, message: '请选择岗位', trigger: 'change'}
+					{required: true, message: '请选择车牌颜色', trigger: 'change'}
 				],
 				length: [
-					{required: true, message: '请选择岗位', trigger: 'change'}
+					{required: true, message: '请选择车长', trigger: 'change'}
 				],
 				width: [
-					{ required: true, message: '请选择状态', trigger: 'change' }
+					{ required: true, message: '请选择车宽', trigger: 'change' }
 				],
 				high: [
-					{required: true, message: '请输入审核人', trigger: 'blur'}
+					{required: true, message: '请输入车高', trigger: 'blur'}
 				],
 				loads: [
-					{required: true, message: '请输入创建人', trigger: 'blur'}
+					{required: true, message: '请输入载重', trigger: 'blur'}
 				],
 				loadVolume: [
-					{ required: true, message: '请选择姓名', trigger: 'change' }
+					{ required: true, message: '请选择装载方数', trigger: 'change' }
 				],
 				manufacturer: [
-					{required: true, message: '请输入家庭地址', trigger: 'blur'}
+					{required: true, message: '请输入生产厂家', trigger: 'blur'}
 				],
 				carBrandModel: [
-					{required: true, message: '请选择岗位', trigger: 'blur'},
+					{required: true, message: '请输入品牌型号', trigger: 'blur'},
 				],
 				personsCapacity: [
-					{ required: true, message: '请选择性别', trigger: 'change' }
+					{ required: true, message: '请选择核载人数', trigger: 'change' }
 				],
 				carBodyColor: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请输入车身颜色', trigger: 'blur'}
 				],
 				hasWarnMark: [
-					{required: true, message: '请选择岗位', trigger: 'change'}
+					{required: true, message: '请选择是否喷涂警示', trigger: 'change'}
 				],
 				driverLicRegisterTime: [
-					{required: true, message: '请输入创建人', trigger: 'change'}
+					{required: true, message: '请选择行驶证注册日期', trigger: 'change'}
 				],
 				driverLicIssueTime: [
-					{ required: true, message: '请选择姓名', trigger: 'change' }
+					{ required: true, message: '请选择行驶证发证日期', trigger: 'change' }
 				],
 				driverLicExamineExpires: [
-					{required: true, message: '请输入家庭地址', trigger: 'change'}
+					{required: true, message: '请选择行驶证审验日', trigger: 'change'}
 				],
 				roadTransportNo: [
-					{required: true, message: '请选择岗位', trigger: 'blur'},
+					{required: true, message: '请输入道路运输号', trigger: 'blur'},
 				],
 				businessScope: [
-					{ required: true, message: '请选择性别', trigger: 'blur' }
+					{ required: true, message: '请输入经营范围', trigger: 'blur' }
 				],
 				roadTransportLicAnnualPeriod: [
-					{required: true, message: '请选择岗位', trigger: 'change'}
+					{required: true, message: '请输入道路运输年审日', trigger: 'change'}
 				],
 				carOwnerName: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请输入所有人/单位', trigger: 'blur'}
 				],
 				carOwnerMobile: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请输入所有人电话', trigger: 'blur'}
 				],
 				carOwnerAddress: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请输入所有人地址', trigger: 'blur'}
 				],
 				curDriverName: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请输入车主姓名', trigger: 'blur'}
 				],
 				curDriverMobile: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请输入车主电话', trigger: 'blur'}
 				],
 				curDriverAddress: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请输入车主住址', trigger: 'blur'}
 				],
 				propertyType: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请选择所有权', trigger: 'change'}
 				],
 				businessLicenseNo: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请输入经营证号', trigger: 'blur'}
 				],
 				rank: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请选择等级评定', trigger: 'blur'}
 				],
 				nextRankEvaluteTime: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请选择下次等评日期', trigger: 'blur'}
 				],
 				secondaMaintainTime: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请选择二次维护日期', trigger: 'blur'}
 				],
 				nextSecondLevel: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请选择下次二次维护日期', trigger: 'blur'}
 				],
 				carrierRiskInsuranceExpires: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请选择承运人责任险有效期', trigger: 'blur'}
 				],
 				saLIInsuranceExpires: [
-					{required: true, message: '请选择岗位', trigger: 'blur'}
+					{required: true, message: '请选择交强险有效期', trigger: 'blur'}
 				],
 			}
 		}
