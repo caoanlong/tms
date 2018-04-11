@@ -457,6 +457,33 @@ export default {
 			data.staffID = this.$route.query.staffID
 			data.position = this.position.join(',')
 			data.quasiDrivingType = this.quasiDrivingType.join(',')
+			if(!data.integrityExamineEndTime) {
+				data.integrityExamineEndTime = ''
+			}
+			if(!data.driverLicenseFirstTime) {
+				data.driverLicenseFirstTime = ''
+			}
+			if(!data.laborContractBeginTime) {
+				data.laborContractBeginTime = ''
+			}
+			if(!data.laborContractEndTime) {
+				data.laborContractEndTime = ''
+			}
+			if(!data.laborContractBeginTime) {
+				data.laborContractBeginTime = ''
+			}
+			if(!data.laborContractEndTime) {
+				data.laborContractEndTime = ''
+			}
+			if(!data.driverLicExamineBeginTime) {
+				data.driverLicExamineBeginTime = ''
+			}
+			if(!data.driverLicExamineEndTime) {
+				data.driverLicExamineEndTime = ''
+			}
+			if(!data.qualificationExpirationTime) {
+				data.qualificationExpirationTime = ''
+			}
 			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
