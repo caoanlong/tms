@@ -120,14 +120,16 @@
 				</tr>
 			</table>
 			<div class="wf-footer clearfix is-center">
-				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Committed'" @click="load">装车</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Committed'" @click="isLoadVisible = true">装车</button>
 				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Loaded'" @click="confirm">签收</button>
-				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Signed'" @click="isVisible = true">修改运费</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Signed'" @click="isModifyVisible = true">修改运费</button>
 				<button type="button" class="wf-btn btn-danger" v-if="dispatchBill.status != 'Signed' && dispatchBill.status != 'Canceled'" @click="cancel">作废</button>
 				<button type="button" class="wf-btn btn-default" @click="back">返回</button>
 			</div>
 		</div>
-		<ModifyPayInfo :isVisible="isVisible" :payInfo="payMethods" @control="handModifyPayInfo"/>
+		<ModifyPayInfo :isVisible="isModifyVisible" :payInfo="payMethods" @control="handModifyPayInfo"/>
+		<LoadSend :isVisible="isLoadVisible" :cargoInfo="dispatchBill.cargoInfos" @control="handLoadSend"/>
+		<ConfirmCargo :isVisible="isConfirmVisible" :cargoInfo="dispatchBill.cargoInfos" :payInfo="payMethods" @control="handConfirm"/>
 	</div>
 </template>
 <script type="text/javascript">
@@ -135,10 +137,13 @@ import { Message } from 'element-ui'
 import request from '../../common/request'
 import ModifyPayInfo from './Common/ModifyPayInfo'
 import LoadSend from './Common/LoadSend'
+import ConfirmCargo from './Common/ConfirmCargo'
 export default {
 	data() {
 		return {
-			isVisible: false,
+			isModifyVisible: true,
+			isLoadVisible: false,
+			isConfirmVisible: false,
 			dispatchBill: {},
 			payMethods: {
 				driverCashAmount: '', // 司机现付金额
@@ -167,12 +172,32 @@ export default {
 				params
 			}).then(res => {
 				this.dispatchBill = res.data.data
+				this.payMethods = {
+					driverCashAmount: this.dispatchBill.driverCashAmount, // 司机现付金额
+					driverCodAmount: this.dispatchBill.driverCodAmount, // 司机到付金额
+					driverPorAmount: this.dispatchBill.driverPorAmount, // 司机回单金额
+					driverMonthlyAmont: this.dispatchBill.driverMonthlyAmont, // 司机月结金额
+					driverCosigneeAmount: this.dispatchBill.driverCosigneeAmount, // 司机收货方到付金额
+					driverDetoursMileage: this.dispatchBill.driverDetoursMileage, // 司机收货方到付金额
+					driverDetoursAmount: this.dispatchBill.driverDetoursAmount, // 司机收货方到付金额
+					driverOtherAmount: this.dispatchBill.driverOtherAmount, // 司机收货方到付金额
+					superCargoCashAmount: this.dispatchBill.superCargoCashAmount, // 押运人现付金额
+					superCargoCodAmount: this.dispatchBill.superCargoCodAmount, // 押运人到付金额
+					superCargoCorAmount: this.dispatchBill.superCargoCorAmount, // 押运人回单金额
+					superCargoMonthlyAmount: this.dispatchBill.superCargoMonthlyAmount, // 押运人月结金额
+					superCosigneeAmount: this.dispatchBill.superCosigneeAmount, // 押运人收货方到付金额
+					superCargoDetoursMileage: this.dispatchBill.superCargoDetoursMileage, // 押运人收货方到付金额
+					superCargoDetoursAmount: this.dispatchBill.superCargoDetoursAmount, // 押运人收货方到付金额
+					superCargoOtherAmount: this.dispatchBill.superCargoOtherAmount // 押运人收货方到付金额
+				}
 			})
 		},
-		load() {
+		load(cargoInfo) {
 			let data = {
 				dispatchOrderID: this.$route.query.dispatchOrderID,
+				loadCargoInfo: JSON.stringify(cargoInfo)
 			}
+			console.log(data)
 			request({
 				url: '/biz/dispatchOrder/load',
 				method: 'post',
@@ -182,9 +207,39 @@ export default {
 				this.getInfo()
 			})
 		},
-		confirm() {
+		confirm(cargoInfo,payInfo) {
 			let data = {
 				dispatchOrderID: this.$route.query.dispatchOrderID,
+				confirmCargoInfo: JSON.stringify(cargoInfo),
+				driverCashAmount: payInfo.driverCashAmount, //	司机现付金	
+				driverCodAmount: payInfo.driverCodAmount, //	司机到付金	
+				driverCosigneeAmount: payInfo.driverCosigneeAmount, //	司机收货方到付金	
+				driverDetoursAmount: payInfo.driverDetoursAmount, //	司机绕路	
+				driverDetoursMileage: payInfo.driverDetoursMileage, //	司机绕路里	
+				driverMonthlyAmont: payInfo.driverMonthlyAmont, //	司机月结金	
+				driverOtherAmount: payInfo.driverOtherAmount, //	司机其他费	
+				driverPorAmount: payInfo.driverPorAmount //	司机回单金额
+			}
+			request({
+				url: '/biz/dispatchOrder/confirm',
+				method: 'post',
+				data
+			}).then(res => {
+				Message.success('成功！')
+				this.getInfo()
+			})
+		},
+		modify(payInfo) {
+			let data = {
+				dispatchOrderID: this.$route.query.dispatchOrderID,
+				driverCashAmount: payInfo.driverCashAmount, //	司机现付金	
+				driverCodAmount: payInfo.driverCodAmount, //	司机到付金	
+				driverCosigneeAmount: payInfo.driverCosigneeAmount, //	司机收货方到付金	
+				driverDetoursAmount: payInfo.driverDetoursAmount, //	司机绕路	
+				driverDetoursMileage: payInfo.driverDetoursMileage, //	司机绕路里	
+				driverMonthlyAmont: payInfo.driverMonthlyAmont, //	司机月结金	
+				driverOtherAmount: payInfo.driverOtherAmount, //	司机其他费	
+				driverPorAmount: payInfo.driverPorAmount //	司机回单金额
 			}
 			request({
 				url: '/biz/dispatchOrder/confirm',
@@ -208,8 +263,36 @@ export default {
 				this.getInfo()
 			})
 		},
-		handModifyPayInfo(bool) {
-			this.isVisible = bool
+		handModifyPayInfo(bool, data) {
+			console.log(data)
+			return
+			this.modify(data)
+			this.isModifyVisible = bool
+		},
+		handLoadSend(bool, data) {
+			console.log(data)
+			let cargoInfo = data.map(item => {
+				return {
+					"dispatchCargoID": item.dispatchCargoID,
+					"loadWeight": item.loadWeight,
+					"loadVolume": item.loadVolume, 
+					"loadNum": item.loadNum
+				}
+			})
+			this.load(cargoInfo)
+			this.isLoadVisible = bool
+		},
+		handConfirm(bool, data1, data2) {
+			let cargoInfo = data1.map(item => {
+				return {
+					"dispatchCargoID": item.dispatchCargoID,
+					"signWeight": item.signWeight,
+					"signVolume": item.signVolume, 
+					"signNum": item.signNum
+				}
+			})
+			this.confirm(cargoInfo, data2)
+			this.isConfirmVisible = bool
 		},
 		back() {
 			this.$router.go(-1)
@@ -217,7 +300,8 @@ export default {
 	},
 	components: {
 		ModifyPayInfo,
-		LoadSend
+		LoadSend,
+		ConfirmCargo
 	}
 }
 

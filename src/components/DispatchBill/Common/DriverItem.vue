@@ -21,9 +21,6 @@
 				<div class="sliderSelect">
 					<span class="labels">配载体积</span><el-progress :percentage="70" style="margin-top:13px"></el-progress><span class="surplus">剩</span>
 				</div>
-				<div class="sliderSelect">
-					<span class="labels">配载件数</span><el-progress :percentage="70" style="margin-top:13px"></el-progress><span class="surplus">剩</span>
-				</div>
 			</div>
 		</div>
 		<div class="lineInfo inlineBlock">
