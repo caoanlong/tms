@@ -8,42 +8,31 @@
 				<span class="status status3" v-else-if="dispatchBill.status == 'Signed'">已签收</span>
 				<span class="status status3" v-else-if="dispatchBill.status == 'Canceled'">作废</span>
 			</div>
-			<table class="wf-table">
-				<caption>承运信息</caption>
+			<table class="wf-table" v-for="(item, index) in dispatchBill.transceiveInfos">
+				<caption>收发货信息{{index+1}}</caption>
 				<tr>
-					<td width="50%"><span class="justify">托运人</span>{{dispatchBill.Consignor}}</td>
-					<td width="50%"><span class="justify">承运人</span>{{dispatchBill.Carrier}}</td>
-				</tr>
-			</table>
-			<table class="wf-table">
-				<caption>收发货信息</caption>
-				<tr>
-					<td width="50%"><span class="justify">发货单位</span>{{dispatchBill.ConsignerCompany}}</td>
-					<td width="50%"><span class="justify">收货单位</span>{{dispatchBill.ConsigneeCompany}}</td>
+					<td><span class="justify">发货人</span>{{item.shipperName}}</td>
+					<td><span class="justify">收货人</span>{{item.consigneeName}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货人</span>{{dispatchBill.Consigner}}</td>
-					<td><span class="justify">收货人</span>{{dispatchBill.Consignee}}</td>
+					<td><span class="justify">联系方式</span>{{item.shipperPhone}}</td>
+					<td><span class="justify">联系方式</span>{{item.consigneePhone}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">联系方式</span>{{dispatchBill.Consigner}}</td>
-					<td><span class="justify">联系方式</span>{{dispatchBill.Consignee}}</td>
+					<td><span class="justify">发货地</span>{{item.shipperDetailAddress}}</td>
+					<td><span class="justify">收货地</span>{{item.consigneeDetailAddress}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货地</span>{{dispatchBill.Dispatch}}</td>
-					<td><span class="justify">收货地</span>{{dispatchBill.Discharge}}</td>
-				</tr>
-				<tr>
-					<td><span class="justify">发货时间</span>{{dispatchBill.DeliveryDate}}</td>
-					<td><span class="justify">到货时间</span>{{dispatchBill.ArrivalDate}}</td>
+					<td><span class="justify">发货时间</span>{{item.shipperDate | getdatefromtimestamp(true)}}</td>
+					<td><span class="justify">到货时间</span>{{item.consigneeDate | getdatefromtimestamp(true)}}</td>
 				</tr>
 			</table>
 			<table class="wf-table">
 				<caption>货物信息</caption>
 				<tr>
 					<td colspan="6">
-						<span class="labels">货物类型：</span>重货
-						<span class="labels" style="margin-left:40px">运输方式：</span>公路运输
+						<span class="labels">实际发货时间：</span>{{dispatchBill.loadDate | getdatefromtimestamp(true)}}
+						<span class="labels" style="margin-left:40px">实际到货时间：</span>{{dispatchBill.signTime | getdatefromtimestamp(true)}}
 					</td>
 				</tr>
 				<tr>
@@ -54,27 +43,20 @@
 					<th>运载量</th>
 					<th>签收量</th>
 				</tr>
-				<tr class="is-center">
-					<td>1</td>
-					<td>20180202001</td>
-					<td>R72/炸药</td>
-					<td>9.76吨/10方</td>
-					<td></td>
-					<td></td>
-				</tr>
-				<tr class="is-center">
-					<td>2</td>
-					<td>20180214401</td>
-					<td>R72/炸药</td>
-					<td>9.76吨/10方</td>
+				<tr class="is-center" v-for="(item, index) in dispatchBill.cargoInfos">
+					<td>{{index+1}}</td>
+					<td>{{item.carrierOrderNo}}</td>
+					<td>{{item.cargoType}}/{{item.cargoName}}</td>
+					<td>{{item.cargoWeight + '吨'}}/{{item.cargoVolume + '方'}}/{{item.cargoNum + '件'}}</td>
 					<td></td>
 					<td></td>
 				</tr>
 				<tr>
 					<td colspan="6">
-						<span class="labels">司机：</span>李司机 13529005327
-						<span class="labels" style="margin-left:40px">载具：</span>云AG33652 6.2米厢式 10吨21方
-						<span class="labels" style="margin-left:40px">随车人员：</span>赵押运员 13566778899
+						<span class="labels">司机：</span>{{dispatchBill.driverName}} 13529005327
+						<span class="labels" style="margin-left:40px">载具：</span>
+						{{dispatchBill.plateNo}} 6.2米{{dispatchBill.truckType}} {{dispatchBill.loads}}吨{{dispatchBill.loadVolume}}方
+						<span class="labels" style="margin-left:40px">随车人员：</span>{{dispatchBill.superCargoName}} {{dispatchBill.superCargoMobile}}
 					</td>
 				</tr>
 			</table>
@@ -93,36 +75,48 @@
 				</tr>
 				<tr class="is-center">
 					<td>司机</td>
-					<td></td>
-					<td>2000.00元</td>
-					<td></td>
-					<td>2000.00元</td>
-					<td></td>
-					<td>4000.00元</td>
-					<td></td>
-					<td></td>
+					<td>{{dispatchBill.driverCashAmount}}</td>
+					<td>{{dispatchBill.driverCodAmount}}</td>
+					<td>{{dispatchBill.driverPorAmount}}</td>
+					<td>{{dispatchBill.driverMonthlyAmont}}</td>
+					<td>{{dispatchBill.driverCosigneeAmount}}</td>
+					<td>{{dispatchBill.driverDetoursMileage}}</td>
+					<td>{{dispatchBill.driverDetoursAmount}}</td>
+					<td>{{dispatchBill.driverOtherAmount}}</td>
 				</tr>
 				<tr class="is-center">
 					<td>随车人员</td>
-					<td></td>
-					<td>2000.00元</td>
-					<td></td>
-					<td>2000.00元</td>
-					<td></td>
-					<td>4000.00元</td>
-					<td></td>
-					<td></td>
+					<td>{{dispatchBill.superCargoCashAmount}}</td>
+					<td>{{dispatchBill.superCargoCodAmount}}</td>
+					<td>{{dispatchBill.superCargoCorAmount}}</td>
+					<td>{{dispatchBill.superCargoMonthlyAmount}}</td>
+					<td>{{dispatchBill.superCosigneeAmount}}</td>
+					<td>{{dispatchBill.superCargoDetoursMileage}}</td>
+					<td>{{dispatchBill.superCargoDetoursAmount}}</td>
+					<td>{{dispatchBill.superCargoOtherAmount}}</td>
 				</tr>
 				<tr class="is-center">
 					<td>合计：</td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td colspan="8">
+						{{
+							Number(dispatchBill.driverCashAmount) 
+							+ Number(dispatchBill.driverCodAmount)
+							+ Number(dispatchBill.driverPorAmount)
+							+ Number(dispatchBill.driverMonthlyAmont)
+							+ Number(dispatchBill.driverCosigneeAmount)
+							+ Number(dispatchBill.driverDetoursMileage)
+							+ Number(dispatchBill.driverDetoursAmount)
+							+ Number(dispatchBill.driverOtherAmount)
+							+ Number(dispatchBill.superCargoCashAmount)
+							+ Number(dispatchBill.superCargoCodAmount)
+							+ Number(dispatchBill.superCargoCorAmount)
+							+ Number(dispatchBill.superCargoMonthlyAmount)
+							+ Number(dispatchBill.superCosigneeAmount)
+							+ Number(dispatchBill.superCargoDetoursMileage)
+							+ Number(dispatchBill.superCargoDetoursAmount)
+							+ Number(dispatchBill.superCargoOtherAmount)
+						}}
+					</td>
 				</tr>
 			</table>
 			<div class="wf-footer clearfix is-center">
@@ -145,29 +139,7 @@ export default {
 	data() {
 		return {
 			isVisible: false,
-			dispatchBill: {
-				Status: '待执行',
-				Consignor: '安宁化工厂',
-				Carrier: '安化物流',
-				CarrierNum: '20180205001',
-				ConsignNum: '20180205001',
-				ConsigneeCompany: '云南磷化',
-				Discharge: '云南省昭通市镇远县城李家沟',
-				Consignee: '磷化',
-				ArrivalDate: '2018:02:06 18:00',
-				CargoTotal: '9.76吨/10方',
-				ConsignerCompany: '安宁~~化工厂',
-				DeliveryDate: '2018-02-06 18:00',
-				Consigner: '李铁军',
-				Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-				CargoName: 'R72/炸药',
-				CreatedDate: '2018:02:06 18:00',
-				CommissionDate: '2018:02:06 18:00',
-				invoice: 'Y',
-				receipt: ['1', '2'],
-				Receivable: 'N',
-				payable: 'N'
-			},
+			dispatchBill: {},
 			payMethods: {
 				driverCashAmount: '', // 司机现付金额
 				driverCodAmount: '', // 司机到付金额
@@ -182,14 +154,6 @@ export default {
 			},
 		}
 	},
-	// computed: {
-	// 	totalDriver() {
-	// 		return Number(this.payMethods.driverCashAmount ? this.payMethods.driverCashAmount : 0) + Number(this.payMethods.driverCodAmount  ? this.payMethods.driverCodAmount : 0) + Number(this.payMethods.driverPorAmount  ? this.payMethods.driverPorAmount : 0) + Number(this.payMethods.driverMonthlyAmont  ? this.payMethods.driverMonthlyAmont : 0) + Number(this.payMethods.driverCosigneeAmount  ? this.payMethods.driverCosigneeAmount : 0)
-	// 	},
-	// 	totalSuperCargo() {
-	// 		return Number(this.payMethods.superCargoCashAmount ? this.payMethods.superCargoCashAmount : 0) + Number(this.payMethods.superCargoCodAmount  ? this.payMethods.superCargoCodAmount : 0) + Number(this.payMethods.superCargoCorAmount  ? this.payMethods.superCargoCorAmount : 0) + Number(this.payMethods.superCargoMonthlyAmount  ? this.payMethods.superCargoMonthlyAmount : 0) + Number(this.payMethods.superCosigneeAmount  ? this.payMethods.superCosigneeAmount : 0)
-	// 	},
-	// },
 	created() {
 		this.getInfo()
 	},
@@ -202,7 +166,6 @@ export default {
 				url: '/biz/dispatchOrder/detail',
 				params
 			}).then(res => {
-				console.log(res.data.data)
 				this.dispatchBill = res.data.data
 			})
 		},

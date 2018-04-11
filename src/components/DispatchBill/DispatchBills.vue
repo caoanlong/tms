@@ -52,15 +52,21 @@
 					</el-table-column>
 					<el-table-column label="随车人员" prop="superCargoName"  width="120" align="center">
 					</el-table-column>
-					<el-table-column label="订单号" prop="OrderNum"  width="130" align="center">
+					<el-table-column label="订单号" prop="carrierOrderNo"  width="130" align="center">
 					</el-table-column>
-					<el-table-column label="发货地" prop="Dispatch">
+					<el-table-column label="发货地" prop="shipperAddress">
 					</el-table-column>
-					<el-table-column label="收货地" prop="Discharge">
+					<el-table-column label="收货地" prop="consigneeAddress">
 					</el-table-column>
-					<el-table-column label="到货时间" prop="ArrivalDate"  width="130" align="center">
+					<el-table-column label="到货时间" width="130" align="center">
+						<template slot-scope="scope">
+							<span>{{scope.row.consigneeDate | getdatefromtimestamp(true)}}</span>
+						</template>
 					</el-table-column>
-					<el-table-column label="货物规格/名称" prop="CargoName" width="130" >
+					<el-table-column label="货物规格/名称" width="130" >
+						<template slot-scope="scope">
+							<span>{{scope.row.cargoType}}/{{scope.row.cargoName}}</span>
+						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="60" align="center" fixed="right">
 						<template slot-scope="scope">
