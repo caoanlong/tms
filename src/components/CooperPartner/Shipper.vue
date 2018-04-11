@@ -61,7 +61,8 @@
 					<el-table-column label="公司名称" prop="companyName"></el-table-column>
 					<el-table-column label="地区">
 						<template slot-scope="scope">
-							<span>{{String(scope.row.companyAreaID) | searchAreaByKey() }}</span>
+							<span>{{scope.row.companyArea}}{{scope.row.detailAddress}}</span>
+							<!-- <span>{{String(scope.row.companyAreaID) | searchAreaByKey() }}</span> -->
 						</template>
 					</el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>

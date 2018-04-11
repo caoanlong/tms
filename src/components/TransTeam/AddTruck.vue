@@ -511,6 +511,7 @@ import { Message } from 'element-ui'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
+import {searchAreaByKey} from '../../common/utils'
 export default {
 	data() {
 		return {
@@ -636,6 +637,8 @@ export default {
 		},
 		handleSelectedArea(data) {
 			this.truck.areaID = data
+			this.truck.area = searchAreaByKey(data)
+			console.log(this.truck.area)
 		},
 		createItem() {
 			let data = this.truck

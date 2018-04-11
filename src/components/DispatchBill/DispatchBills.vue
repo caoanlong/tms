@@ -17,8 +17,8 @@
 						<el-input placeholder="司机/随车员姓名"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" >搜索</el-button>
-						<el-button type="default" >重置</el-button>
+						<el-button type="primary" @click="getList">搜索</el-button>
+						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -29,11 +29,18 @@
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="调度单号" prop="dispatchOrderNo" width="130" align="center">
 					</el-table-column>
-					<el-table-column label="车辆号牌" prop="VehicleNum" width="110" align="center">
+					<el-table-column label="车辆号牌" prop="plateNo" width="110" align="center">
 					</el-table-column>
-					<el-table-column label="配载量" prop="LoadingQuantity" align="center">
+					<el-table-column label="配载量" prop="LoadingQuantity" width="100" align="center">
+						<template slot-scope="scope">
+							<span>
+								{{(scope.row.totalCargoWeight ? scope.row.totalCargoWeight : 0) + '吨'}}
+								/{{scope.row.totalCargoVolume ? scope.row.totalCargoVolume : 0 + '方'}}
+								/{{scope.row.totalCargoNum ? scope.row.totalCargoNum : 0 + '件'}}
+							</span>
+						</template>
 					</el-table-column>
-					<el-table-column label="司机" prop="Driver" width="100" align="center">
+					<el-table-column label="司机" prop="driverName" width="100" align="center">
 					</el-table-column>
 					<el-table-column label="调度状态" width="100" align="center">
 						<template slot-scope="scope">
@@ -43,7 +50,7 @@
 							<span v-else-if="scope.row.status == 'Canceled'">作废</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="随车人员" prop="ApplianceCrew"  width="120" align="center">
+					<el-table-column label="随车人员" prop="superCargoName"  width="120" align="center">
 					</el-table-column>
 					<el-table-column label="订单号" prop="OrderNum"  width="130" align="center">
 					</el-table-column>
@@ -117,7 +124,11 @@ export default {
 		getList(){
 			let params = {
 				current: this.pageIndex,
-				size: this.pageSize
+				size: this.pageSize,
+				consigneeAddress: this.findConsigneeAddress,  //	收货地址
+				dispatchOrderID: this.findDispatchOrderID,  //	调度单号
+				name: this.findName,  //	司机或随车人员姓名
+				shipperAddress: this.findShipperAddress,  //发货地址
 			}
 			request({
 				url: '/biz/dispatchOrder/list',
