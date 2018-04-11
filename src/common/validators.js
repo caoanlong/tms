@@ -11,7 +11,7 @@ export const checkMobile = (rule, value, callback) => {
 	if (!value) {
 		callback(new Error('手机号不能为空'))
 	}
-	let regMobile = /^[1][3,4,5,7,8][0-9]{9}$/
+	let regMobile = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
 	if (!regMobile.test(value)) {  
 		callback(new Error('请输入正确的手机号'))
 	} else {  
