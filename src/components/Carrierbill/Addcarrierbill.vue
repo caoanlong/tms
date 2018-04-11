@@ -43,7 +43,7 @@
 							</el-select>
 						</el-form-item>
 						<el-form-item label="发货人">
-							<el-input placeholder="发货人" v-model="shipperDetail.contactName" disabled></el-input>
+							<el-input placeholder="发货人" v-model="shipperDetail.contactName"></el-input>
 						</el-form-item>
 						<el-form-item label="发货时间">
 							<el-date-picker style="width:100%" placeholder="选择发货时间" v-model="carrierbillInfo.shipperDate" value-format="timestamp" ></el-date-picker>
@@ -53,7 +53,7 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="委托时间">
-							无参数
+							<el-date-picker style="width:100%" placeholder="后台现在没参数" value-format="timestamp"></el-date-picker>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -69,12 +69,15 @@
 						<el-form-item label="发货地">
 							<DistPicker @selectChange="handleSelectedArea" class="normal" :selected="selectedArea"/>
 						</el-form-item>
+						<el-form-item label="发货人电话">
+							<el-input placeholder="发货人电话" v-model="shipperDetail.contactPhone"></el-input>
+						</el-form-item>
 					</el-form>
 				</el-col>
 				<el-col :span="8">
 					<el-form label-width="20px">
 						<el-form-item>
-							<el-input placeholder="发货详细地址" v-model="shipperDetail.detailAddress" disabled></el-input>
+							<el-input placeholder="发货详细地址" v-model="shipperDetail.detailAddress"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -93,7 +96,7 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="收货人">
-							<el-input placeholder="收货人" v-model="ConsigneeDetail.contactName" disabled></el-input>
+							<el-input placeholder="收货人" v-model="ConsigneeDetail.contactName"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -109,7 +112,12 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="运输方式">
-							无参数
+							<el-select v-model="transType" placeholder="请选择" style="width:100%">
+								<el-option v-for="op in transTypeOption" :key="op.value" :label="op.label" :value="op.value"></el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="收货人电话">
+							<el-input placeholder="收货人电话" v-model="ConsigneeDetail.contactPhone"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -123,7 +131,7 @@
 				<el-col :span="8">
 					<el-form label-width="20px">
 						<el-form-item>
-							<el-input placeholder="卸货详细地址" v-model="ConsigneeDetail.detailAddress" disabled></el-input>
+							<el-input placeholder="卸货详细地址" v-model="ConsigneeDetail.detailAddress"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -305,41 +313,45 @@ export default {
 			transType:'',
 			transTypeOption:[
 				{
-					label:'海上运输',
+					label:'后台现在没参数',
 					value:'海上运输'
 				},
-				{
-					label:'铁路运输',
-					value:'铁路运输'
-				},
-				{
-					label:'公路运输',
-					value:'公路运输'
-				},
-				{
-					label:'航空运输',
-					value:'航空运输'
-				},
-				{
-					label:'邮件运输',
-					value:'邮件运输'
-				},
-				{
-					label:'多式联运',
-					value:'多式联运'
-				},
-				{
-					label:'固定设施运输',
-					value:'固定设施运输'
-				},
-				{
-					label:'内河运输',
-					value:'内河运输'
-				},
-				{
-					label:'其他',
-					value:'其他'
-				}
+				// {
+				// 	label:'海上运输',
+				// 	value:'海上运输'
+				// },
+				// {
+				// 	label:'铁路运输',
+				// 	value:'铁路运输'
+				// },
+				// {
+				// 	label:'公路运输',
+				// 	value:'公路运输'
+				// },
+				// {
+				// 	label:'航空运输',
+				// 	value:'航空运输'
+				// },
+				// {
+				// 	label:'邮件运输',
+				// 	value:'邮件运输'
+				// },
+				// {
+				// 	label:'多式联运',
+				// 	value:'多式联运'
+				// },
+				// {
+				// 	label:'固定设施运输',
+				// 	value:'固定设施运输'
+				// },
+				// {
+				// 	label:'内河运输',
+				// 	value:'内河运输'
+				// },
+				// {
+				// 	label:'其他',
+				// 	value:'其他'
+				// }
 			]
 		}
 	},
