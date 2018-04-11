@@ -29,7 +29,7 @@
 							<el-option label="其他人员" value="Other"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="时间">
+					<el-form-item label="创建时间">
 						<el-date-picker
 							v-model="findDate"
 							type="daterange"

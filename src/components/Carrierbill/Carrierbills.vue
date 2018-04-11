@@ -47,14 +47,14 @@
 					</el-table-column>
 					<el-table-column label="处理状态"  prop="status" width="90" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.status=='Commited'">待执行</span>
+							<span v-if="scope.row.status=='Committed'">待执行</span>
 							<span v-else-if="scope.row.status=='Running'">执行中</span>
 							<span v-else-if="scope.row.status=='Signed'">到达签收</span>
 							<span v-else-if="scope.row.status=='Closed'">关闭</span>
 							<span v-else-if="scope.row.status=='Canceled'">作废</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="承运单号" prop="carrierOrderNo" width="100" align="center">
+					<el-table-column label="承运单号" prop="carrierOrderNo" width="150" align="center">
 						<template slot-scope="scope">
 							<el-popover trigger="hover" placement="top" class="customerTablePop">
 								<p>发货单位：{{ scope.row.shipperCompanyName }}</p>
@@ -62,7 +62,7 @@
 								<p>收货单位：{{ scope.row.consigneeCompanyName }}</p>
 								<p>卸货地：{{ scope.row.consigneeDetailAddress }}</p>
 								<div slot="reference" class="name-wrapper">
-									<span style="color:#409EFF">{{ scope.row.carrierOrderNo}}</span>
+									<span style="color:#409EFF">{{ scope.row.carrierOrderID}}</span>
 								</div>
 							</el-popover>
 						</template>
@@ -77,10 +77,6 @@
 						<template slot-scope="scope">
 							<span>{{scope.row.consigneeDate | getdatefromtimestamp(true) }}</span>
 						</template>
-					</el-table-column>
-					<el-table-column label="货物规格/货物名称" prop="CargoName">
-					</el-table-column>
-					<el-table-column label="货物总量" prop="CargoTotal">
 					</el-table-column>
 					<el-table-column label="发货单位" prop="shipperCompanyName">
 					</el-table-column>
@@ -220,6 +216,14 @@ export default {
 				if (id && typeof id == 'string') {
 					ids = id
 				} else {
+					if(this.selectedList.length<1){
+						this.$message({
+							type: 'warning',
+							message: '请选择要删除的项!',
+							
+						})
+						return
+					}
 					ids = this.selectedList.join(',')
 				}
 				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
