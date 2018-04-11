@@ -126,13 +126,95 @@
 				</tr>
 			</table>
 			<div class="wf-footer clearfix is-center">
-				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Committed'">装车</button>
-				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Loaded'">签收</button>
-				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Signed'">修改运费</button>
-				<button type="button" class="wf-btn btn-danger" v-if="dispatchBill.status != 'Signed' && dispatchBill.status != 'Canceled'">作废</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Committed'" @click="load">装车</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Loaded'" @click="confirm">签收</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Signed'" @click="isVisible = true">修改运费</button>
+				<button type="button" class="wf-btn btn-danger" v-if="dispatchBill.status != 'Signed' && dispatchBill.status != 'Canceled'" @click="cancel">作废</button>
 				<button type="button" class="wf-btn btn-default" @click="back">返回</button>
 			</div>
 		</div>
+		<el-dialog title="修改运费" :visible.sync="isVisible" custom-class="table" width="70%">
+			<table class="customertable">
+				<thead>
+					<tr>
+						<th width="100"></th>
+						<th>现付</th>
+						<th>到付</th>
+						<th>回单付</th>
+						<th>月结</th>
+						<th>收方到货付</th>
+						<th>绕路里程</th>
+						<th>绕路费用</th>
+						<th>其他费用</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="txt-r">司机</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.driverCashAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.driverCodAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.driverPorAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.driverMonthlyAmont"></el-input>
+						</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.driverCosigneeAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini"></el-input>
+						</td>
+						<td>
+							<el-input size="mini"></el-input>
+						</td>
+						<td>
+							<el-input size="mini"></el-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="txt-r">随车人员</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.superCargoCashAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.superCargoCodAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.superCargoCorAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.superCargoMonthlyAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini" v-model="payMethods.superCosigneeAmount"></el-input>
+						</td>
+						<td>
+							<el-input size="mini"></el-input>
+						</td>
+						<td>
+							<el-input size="mini"></el-input>
+						</td>
+						<td>
+							<el-input size="mini"></el-input>
+						</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="7" class="txt-r">合计</td>
+					</tr>
+				</tfoot>
+			</table>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="isVisible = false">取消</el-button>
+				<el-button type="primary" @click="updatePayInfo">确认</el-button>
+			</span>
+		</el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
@@ -141,6 +223,7 @@ import request from '../../common/request'
 export default {
 	data() {
 		return {
+			isVisible: false,
 			dispatchBill: {
 				Status: '待执行',
 				Consignor: '安宁化工厂',
@@ -163,9 +246,29 @@ export default {
 				receipt: ['1', '2'],
 				Receivable: 'N',
 				payable: 'N'
-			}
+			},
+			payMethods: {
+				driverCashAmount: '', // 司机现付金额
+				driverCodAmount: '', // 司机到付金额
+				driverPorAmount: '', // 司机回单金额
+				driverMonthlyAmont: '', // 司机月结金额
+				driverCosigneeAmount: '', // 司机收货方到付金额
+				superCargoCashAmount: '', // 押运人现付金额
+				superCargoCodAmount: '', // 押运人到付金额
+				superCargoCorAmount: '', // 押运人回单金额
+				superCargoMonthlyAmount: '', // 押运人月结金额
+				superCosigneeAmount: '', // 押运人收货方到付金额
+			},
 		}
 	},
+	// computed: {
+	// 	totalDriver() {
+	// 		return Number(this.payMethods.driverCashAmount ? this.payMethods.driverCashAmount : 0) + Number(this.payMethods.driverCodAmount  ? this.payMethods.driverCodAmount : 0) + Number(this.payMethods.driverPorAmount  ? this.payMethods.driverPorAmount : 0) + Number(this.payMethods.driverMonthlyAmont  ? this.payMethods.driverMonthlyAmont : 0) + Number(this.payMethods.driverCosigneeAmount  ? this.payMethods.driverCosigneeAmount : 0)
+	// 	},
+	// 	totalSuperCargo() {
+	// 		return Number(this.payMethods.superCargoCashAmount ? this.payMethods.superCargoCashAmount : 0) + Number(this.payMethods.superCargoCodAmount  ? this.payMethods.superCargoCodAmount : 0) + Number(this.payMethods.superCargoCorAmount  ? this.payMethods.superCargoCorAmount : 0) + Number(this.payMethods.superCargoMonthlyAmount  ? this.payMethods.superCargoMonthlyAmount : 0) + Number(this.payMethods.superCosigneeAmount  ? this.payMethods.superCosigneeAmount : 0)
+	// 	},
+	// },
 	created() {
 		this.getInfo()
 	},
@@ -181,6 +284,48 @@ export default {
 				console.log(res.data.data)
 				this.dispatchBill = res.data.data
 			})
+		},
+		load() {
+			let data = {
+				dispatchOrderID: this.$route.query.dispatchOrderID,
+			}
+			request({
+				url: '/biz/dispatchOrder/load',
+				method: 'post',
+				data
+			}).then(res => {
+				Message.success('成功！')
+				this.getInfo()
+			})
+		},
+		confirm() {
+			let data = {
+				dispatchOrderID: this.$route.query.dispatchOrderID,
+			}
+			request({
+				url: '/biz/dispatchOrder/confirm',
+				method: 'post',
+				data
+			}).then(res => {
+				Message.success('成功！')
+				this.getInfo()
+			})
+		},
+		cancel() {
+			let data = {
+				dispatchOrderID: this.$route.query.dispatchOrderID,
+			}
+			request({
+				url: '/biz/dispatchOrder/cancel',
+				method: 'post',
+				data
+			}).then(res => {
+				Message.success('成功！')
+				this.getInfo()
+			})
+		},
+		updatePayInfo() {
+
 		},
 		back() {
 			this.$router.go(-1)

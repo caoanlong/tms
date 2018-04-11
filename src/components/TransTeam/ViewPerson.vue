@@ -64,7 +64,9 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="聘用岗位">
-							<p>{{person.position}}</p>
+							<p>
+								<span v-for="item in (person.position ? person.position.split(',') : 0)">{{postMap[item]}},</span>
+							</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -211,7 +213,15 @@ export default {
 				comStaffIdentification: {},
 				comStaffPic: {}
 			},
-			otherImgs: []
+			otherImgs: [],
+			postMap: {
+				"Operator": "操作员",
+				"Driver": "驾驶员",
+				"Supercargo": "押运员",
+				"SafetyOfficer": "专职安全员",
+				"Stevedore": "装卸管理人员",
+				"Other": "其他人员"
+			}
 		}
 	},
 	created() {

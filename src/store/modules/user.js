@@ -3,12 +3,16 @@ import request from '../../common/request'
 const user = {
 	state: {
 		userInfo: localStorage.getItem('userInfo'),
+		name: localStorage.getItem('name'),
 		token: localStorage.getItem('token')
 	},
 	mutations: {
 		SET_USERINFO: (state, userInfo) => {
 			state.userInfo = userInfo
 			localStorage.setItem('userInfo', JSON.stringify(userInfo))
+		},
+		SET_NAME: (state, name) => {
+			state.name = name
 		},
 		SET_TOKEN: (state, token) => {
 			state.token = token
@@ -37,6 +41,7 @@ const user = {
 					url: '/mem/info'
 				}).then(res => {
 					commit('SET_USERINFO', res.data.data)
+					commit('SET_NAME', res.data.data.userName)
 				})
 			})
 		}
