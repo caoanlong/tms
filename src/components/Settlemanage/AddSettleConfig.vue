@@ -12,7 +12,7 @@
 				<el-col :span="8">
 					<el-form label-width="100px">
 						<el-form-item label="托运人">
-							<el-select style="width: 100%"  v-model="Shippers.consignorID" filterable remote placeholder="请输入托运人关键词" :remote-method="getShippers" :loading="loading">
+							<el-select style="width: 100%"  v-model="Shippers.consignorID" filterable remote placeholder="请输入托运人关键词" :remote-method="getShippers" :loading="loading" @change="getConsignorDetail">
 								<el-option v-for="item in Shippers" :key="item.Shippers" :label="item.companyName" :value="item.customerID">
 								</el-option>
 							</el-select>
@@ -29,7 +29,7 @@
 							</el-select>
 						</el-form-item>
 						<el-form-item label="发货地" style="flex: 1">
-							<DistPicker @selectChange="handleSelectedArea" class="normal" :selected="selectedArea"/>
+							<el-input placeholder="发货详细地址" v-model="selectedArea" disabled></el-input>
 						</el-form-item>
 						<el-form-item label="详细地址" style="flex: 1">
 							<el-input placeholder="发货详细地址" v-model="shipperDetail.detailAddress" disabled></el-input>
@@ -40,13 +40,13 @@
 					<p class="divided"><svg-icon icon-class="list-tag" ></svg-icon>到哪</p>
 					<el-form label-width="100px" style="display: flex">
 						<el-form-item label="收货单位" style="flex: 1">
-							<el-select style="width: 100%"  v-model="ConsigneeDetail.consigneeCompanyName" filterable remote placeholder="请输入收货单位关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="getConsigneeDetail">
+							<el-select style="width: 100%"  v-model="ConsigneeDetail.CompanyName" filterable remote placeholder="请输入收货单位关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="getConsigneeDetail">
 								<el-option v-for="item in Recdeliverycomp" :key="item.Recdeliverycomp" :label="item.companyName" :value="item.companyName">
 								</el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="收货地" style="flex: 1">
-							<DistPicker @selectChange="handleSelectedArea1" class="normal" :selected="selectedArea1"/>
+							<el-input placeholder="收货地" v-model="selectedArea1" disabled></el-input>
 						</el-form-item>
 						<el-form-item label="详细地址" style="flex: 1">
 							<el-input placeholder="收货详细地址" v-model="ConsigneeDetail.detailAddress" disabled></el-input>
@@ -141,19 +141,18 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
+import { searchAreaByKey } from '../../common/utils'
 export default {
 	data() {
 		return {
 			loading: false,
+			//托运人
 			Shippers:{
-				companyArea:'',
 				companyName:'',
-				contactName:'',
-				contactPhone:'',
 				customerID:'',
-				detailAddress:''
 			},
 			Recdeliverycomp:{},
+			// 发货人
 			shipperDetail: {
 				companyName:'',
 				contactName:'',
@@ -162,6 +161,7 @@ export default {
 				companyID:'',
 				customerID:''
 			},
+			// 收货人
 			ConsigneeDetail: {
 				companyName:'',
 				contactName:'',
@@ -170,15 +170,9 @@ export default {
 				companyID:'',
 				customerID:''
 			},
-			selectedArea: [], //发货地id
-			selectedArea1: [],  // 收货地id
+			selectedArea: '', //发货地id
+			selectedArea1: '',  // 收货地id
 			templateFreight: {
-				consigneeArea:'', //收货地
-				consigneeCompanyName:'', //收货公司名称
-				consigneeDetailAddress:'', //收货详细地址
-				consigneeID:'', //收货单位id
-				consignorID:'', //托运人id
-				consignorName:'', //托运人名称
 				externalAbschlussRate:'', //对外月结比率
 				externalCashRate:'', //对外现付比率
 				externalCodRate:'', //对外到付比率
@@ -194,11 +188,7 @@ export default {
 				internalPorRate:'', //对内回单比率
 				internalPrice:'', //对内运价
 				internalUnitPrice:'', //对内TKM
-				mileage:'', //对内运距
-				shipperArea:'', //发货地
-				shipperCompanyName:'', //发货公司名称
-				shipperDetailAddress:'', //发货详细地址
-				shipperID:'' //发货单位id
+				mileage:'' //对内运距
 			}
 		}
 	},
@@ -218,13 +208,24 @@ export default {
 				this.Shippers = res.data.data.records
 				let arr = this.Shippers.filter(item => {
 					return item.companyName == e
+					
 				})
-				this.Shippers.contactName = arr[0].contactName
-				this.Shippers.companyArea = arr[0].companyArea
-				this.Shippers.detailAddress = arr[0].detailAddress
-				this.Shippers.companyID = arr[0].companyID
-				this.Shippers.customerID = arr[0].customerID
+				
 			})
+		},
+		// 获取托运人详情
+		getConsignorDetail(e){
+			let arr = this.Shippers.filter(item => {
+				return item.customerID == e
+			})
+			console.log('托运人详情')
+			console.log(arr[0])
+			this.Shippers.companyArea = arr[0].companyArea
+			this.Shippers.companyName = arr[0].companyName
+			this.Shippers.contactName = arr[0].contactName
+			this.Shippers.contactPhone = arr[0].contactPhone
+			this.Shippers.customerID = arr[0].customerID
+			this.Shippers.detailAddress = arr[0].detailAddress
 		},
 		getRecdeliverycomp() {
 			let params = {
@@ -250,11 +251,11 @@ export default {
 			this.shipperDetail.companyArea = arr[0].companyArea
 			this.shipperDetail.detailAddress = arr[0].detailAddress
 			this.shipperDetail.companyID = arr[0].companyID
+			this.shipperDetail.companyName =arr[0].companyName
 			this.shipperDetail.customerID = arr[0].customerID
 			let areaID = String(arr[0].companyAreaID)
-
-			this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
-			console.log(this.selectedArea)
+			this.templateFreight.shipperAreaID =areaID
+			this.selectedArea = searchAreaByKey(areaID)
 		},
 		getConsigneeDetail(e){
 			let arr = this.Recdeliverycomp.filter(item => {
@@ -268,18 +269,22 @@ export default {
 			this.ConsigneeDetail.detailAddress = arr[0].detailAddress
 			this.ConsigneeDetail.companyID = arr[0].companyID
 			this.ConsigneeDetail.customerID = arr[0].customerID
+			this.ConsigneeDetail.companyName = arr[0].companyName
 			let areaID = String(arr[0].companyAreaID)
-			this.selectedArea1 = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+			this.templateFreight.consigneeAreaID =areaID
+			this.selectedArea1 = searchAreaByKey(areaID)
 		},
 		add() {
 			let data = {
-				consigneeArea:this.templateFreight.consigneeArea,  //收货地
-				consigneeAreaID:this.selectedArea1,  //收货地id
-				consigneeCompanyName:this.templateFreight.consigneeCompanyName,  //收货公司名称
-				consigneeDetailAddress:this.templateFreight.consigneeDetailAddress,  //收货详细地址
-				consigneeID:this.templateFreight.consigneeID,  //收货单位id
-				consignorID:this.templateFreight.consignorID,  //托运人id
-				consignorName:this.templateFreight.consignorName,  //托运人名称
+				// consigneeArea:this.templateFreight.consigneeArea, //收货地
+				consigneeAreaID:this.templateFreight.consigneeAreaID,  //收货地id
+				consigneeCompanyName:this.ConsigneeDetail.companyName,  //收货公司名称
+				consigneeDetailAddress:this.ConsigneeDetail.detailAddress,  //收货详细地址
+				consigneeID:this.ConsigneeDetail.customerID,  //收货单位id
+
+				consignorID:this.Shippers.customerID,  //托运人id
+				consignorName:this.Shippers.companyName,  //托运人名称
+
 				externalAbschlussRate:this.templateFreight.externalAbschlussRate,  //对外月结比率
 				externalCashRate:this.templateFreight.externalCashRate,  //对外现付比率
 				externalCodRate:this.templateFreight.externalCodRate,  //对外到付比率
@@ -288,6 +293,7 @@ export default {
 				externalPorRate:this.templateFreight.externalPorRate,  //对外回单比率
 				externalPrice:this.templateFreight.externalPrice,  //对外运价
 				externalUnitPrice:this.templateFreight.externalUnitPrice,  //对外TKM
+
 				internalAbschlussRate:this.templateFreight.internalAbschlussRate,  //对内月结比率
 				internalCashRate:this.templateFreight.internalCashRate,  //对内现付比率
 				internalCodRate:this.templateFreight.internalCodRate,  //对内到付比率
@@ -296,11 +302,12 @@ export default {
 				internalPrice:this.templateFreight.internalPrice,  //对内运价
 				internalUnitPrice:this.templateFreight.internalUnitPrice,  //对内TKM
 				mileage:this.templateFreight.mileage,  //对内运距
-				shipperArea:this.templateFreight.shipperArea,  //发货地
-				shipperAreaID:this.selectedArea,  //发货地id
-				shipperCompanyName:this.templateFreight.shipperCompanyName,  //发货公司名称
-				shipperDetailAddress:this.templateFreight.shipperDetailAddress,  //发货详细地址
-				shipperID:this.templateFreight.shipperID  //发货单位id
+
+				// shipperArea:this.templateFreight.shipperArea,  //发货地
+				shipperAreaID:this.templateFreight.shipperAreaID,  //发货地id
+				shipperCompanyName:this.shipperDetail.companyName,  //发货公司名称
+				shipperDetailAddress:this.shipperDetail.detailAddress,  //发货详细地址
+				shipperID:this.shipperDetail.customerID  //发货单位id
 			}
 			console.log(data)
 			// return
