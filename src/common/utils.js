@@ -1,28 +1,20 @@
 import { regionData } from 'element-china-area-data'
+import ChineseDistricts from '../assets/data/distpicker.data'
 
 export const searchAreaByKey = function (areaKey) {
-	if (areaKey && typeof areaKey === 'string') {
-		let area = ''
-		let level = 0
-		let keys = []
-		keys[0] = areaKey.substr(0, 2) + '0000'
-		keys[1] = areaKey.substr(0, 4) + '00'
-		keys[2] = areaKey
-		walk(regionData)
-		return area
-		function walk(list) {
-			for (let i in list) {
-				if (list[i].value === keys[level]) {
-					area += list[i].label
-					level++
-					if (list[i].children && list[i].children.length > 0) {
-						walk(list[i].children)
-					} 
-				}
-			}
-		}
+	let area = String(areaKey)
+	// 如果是省
+	if (area.indexOf('0000') > -1) {
+		let areaVal = ChineseDistricts[0][area]
+		return areaVal
+	// 如果是区
+	} else if (area.indexOf('00') == -1) {
+		let areaVal = ChineseDistricts[0][area.substr(0,2) + '0000'] + ChineseDistricts[area.substr(0,2) + '0000'][area.substr(0,4) + '00'] + ChineseDistricts[area.substr(0,4) + '00'][area]
+		return areaVal
+	// 如果是市
 	} else {
-		throw new Error('The type of areaKey must be string!')
+		let areaVal = ChineseDistricts[0][area.substr(0,2) + '0000'] + ChineseDistricts[area.substr(0,2) + '0000'][area.substr(0,4) + '00']
+		return areaVal
 	}
 }
 
