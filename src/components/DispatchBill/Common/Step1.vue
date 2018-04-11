@@ -33,9 +33,9 @@
 				</el-table-column>
 				<el-table-column label="待配载量">
 					<template slot-scope="scope">
-						{{scope.row.remainingCargoWeight ? scope.row.remainingCargoWeight : scope.row.cargoWeight }} 
-						/{{scope.row.remainingCargoVolume ? scope.row.remainingCargoVolume : scope.row.cargoVolume}} 
-						/{{scope.row.remainingCargoNum ? scope.row.remainingCargoNum : scope.row.cargoNum}}
+						{{scope.row.remainingCargoWeight}} 
+						/{{scope.row.remainingCargoVolume}} 
+						/{{scope.row.remainingCargoNum}}
 					</template>
 				</el-table-column>
 				<el-table-column label="配载重量" width="180">
