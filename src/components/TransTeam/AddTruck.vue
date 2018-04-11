@@ -711,6 +711,9 @@ export default {
 				saLIInsuranceExpires: [
 					{required: true, message: '请选择交强险有效期', trigger: 'blur'}
 				],
+				bizInsuranceExpires: [
+					{required: true, message: '请选择商业险有效期', trigger: 'blur'}
+				]
 			}
 		}
 	},
@@ -758,6 +761,18 @@ export default {
 		},
 		createItem() {
 			let data = this.truck
+			if (!data.tankQCExpires) {
+				data.tankQCExpires = ''
+			}
+			if (!data.safetyValvesQCExpires) {
+				data.safetyValvesQCExpires = ''
+			}
+			if (!data.pressureGaugeQCExpires) {
+				data.pressureGaugeQCExpires = ''
+			}
+			if (!data.gpSSetupTime) {
+				data.gpSSetupTime = ''
+			}
 			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
