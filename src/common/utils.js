@@ -1,4 +1,3 @@
-import { regionData } from 'element-china-area-data'
 import ChineseDistricts from '../assets/data/distpicker.data'
 
 export const searchAreaByKey = function (areaKey) {
