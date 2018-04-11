@@ -23,7 +23,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核日期">
-							<p>{{person.auditTime | getdatefromtimestamp(true)}}</p>
+							<p v-if="person.auditTime">{{person.auditTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>

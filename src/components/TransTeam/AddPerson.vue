@@ -2,15 +2,15 @@
 	<div class="main-content">
 		<div class="wf-card">
 			<div class="header clearfix">添加人员</div>
-			<el-form label-width="155px" size="mini">
+			<el-form label-width="155px" size="mini" :model="person" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="创建人">
+						<el-form-item label="创建人" prop="createName">
 							<el-input v-model="person.createName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="状态">
+						<el-form-item label="状态" prop="status">
 							<el-select style="width: 100%" v-model="person.status" placeholder="请选择">
 								<el-option label="通过" value="pass"></el-option>
 								<el-option label="未通过" value="unpass"></el-option>
@@ -19,12 +19,12 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="审核人">
+						<el-form-item label="审核人" prop="auditName">
 							<el-input v-model="person.auditName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="审核日期">
+						<el-form-item label="审核日期" prop="auditTime">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="person.auditTime"
@@ -37,22 +37,22 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="姓名">
+						<el-form-item label="姓名" prop="realName">
 							<el-input v-model="person.realName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="家庭地址">
+						<el-form-item label="家庭地址" prop="homeAddress">
 							<el-input v-model="person.homeAddress"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="联系电话">
+						<el-form-item label="联系电话" prop="mobile">
 							<el-input v-model="person.mobile"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="性别">
+						<el-form-item label="性别" prop="sex">
 							<el-select style="width: 100%" v-model="person.sex" placeholder="请选择">
 								<el-option label="男" value="M"></el-option>
 								<el-option label="女" value="F"></el-option>
@@ -84,7 +84,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="聘用岗位">
+						<el-form-item label="聘用岗位" prop="position">
 							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择">
 								<el-option label="操作员" value="Operator"></el-option>
 								<el-option label="驾驶员" value="Driver"></el-option>
@@ -109,7 +109,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="身份证号">
+						<el-form-item label="身份证号" prop="idCardNum">
 							<el-input v-model="person.idCardNum"></el-input>
 						</el-form-item>
 					</el-col>
@@ -284,6 +284,7 @@
 import { Message } from 'element-ui'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
+import { checkMobile, checkIDCard } from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -327,7 +328,39 @@ export default {
 			},
 			quasiDrivingType: [],
 			position: [],
-			otherImgs: []
+			otherImgs: [],
+			rules: {
+				createName: [
+					{required: true, message: '请输入创建人', trigger: 'blur'}
+				],
+				status: [
+					{ required: true, message: '请选择状态', trigger: 'change' }
+				],
+				auditName: [
+					{required: true, message: '请输入审核人', trigger: 'blur'}
+				],
+				auditTime: [
+					{required: true, message: '请输入创建人', trigger: 'blur'}
+				],
+				realName: [
+					{ required: true, message: '请选择姓名', trigger: 'blur' }
+				],
+				homeAddress: [
+					{required: true, message: '请输入家庭地址', trigger: 'blur'}
+				],
+				mobile: [
+					{required: true, validator: checkMobile, trigger: 'blur'},
+				],
+				sex: [
+					{ required: true, message: '请选择性别', trigger: 'change' }
+				],
+				position: [
+					{required: true, message: '请选择岗位', trigger: 'change'}
+				],
+				idCardNum: [
+					{required: true, validator: checkIDCard, trigger: 'blur'}
+				]
+			}
 		}
 	},
 	created() {
@@ -365,14 +398,18 @@ export default {
 			data.position = this.position.join(',')
 			data.quasiDrivingType = this.quasiDrivingType.join(',')
 			console.log(data)
-			request({
-				url: '/staff/add',
-				method: 'post',
-				data
-			}).then(res => {
-				console.log(res.data)
-				Message.success(res.data.msg)
-				this.$router.push({name: 'person'})
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					request({
+						url: '/staff/add',
+						method: 'post',
+						data
+					}).then(res => {
+						console.log(res.data)
+						Message.success(res.data.msg)
+						this.$router.push({name: 'person'})
+					})
+				}
 			})
 		},
 		back() {
