@@ -756,7 +756,7 @@ export default {
 		},
 		handleSelectedArea(data) {
 			this.truck.areaID = data
-			this.truck.area = searchAreaByKey(data)
+			this.truck.area = data ? searchAreaByKey(data) : ''
 			console.log(this.truck.area)
 		},
 		createItem() {
