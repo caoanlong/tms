@@ -357,18 +357,10 @@ export default {
 			}).then(res => {
 				console.log('托运人')
 				console.log(res.data)
-				
 				this.Shippers = res.data.data.records
 				let arr = this.Shippers.filter(item => {
 					return item.companyName == e
 				})
-				console.log(e)
-				return
-				this.Shippers.contactName = arr[0].contactName
-				this.Shippers.companyArea = arr[0].companyArea
-				this.Shippers.detailAddress = arr[0].detailAddress
-				this.Shippers.companyID = arr[0].companyID
-				this.Shippers.customerID = arr[0].customerID
 			})
 		},
 		// 获取托运人详情
