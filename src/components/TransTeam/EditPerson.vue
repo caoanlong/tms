@@ -43,7 +43,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="家庭地址" prop="homeAddress">
-							<el-input v-model="person.comStaffIdentification.homeAddress"></el-input>
+							<el-input v-model="person.homeAddress"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -53,7 +53,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="性别" prop="sex">
-							<el-select style="width: 100%" v-model="person.comStaffIdentification.sex" placeholder="请选择">
+							<el-select style="width: 100%" v-model="person.sex" placeholder="请选择">
 								<el-option label="男" value="M"></el-option>
 								<el-option label="女" value="F"></el-option>
 							</el-select>
@@ -65,7 +65,7 @@
 						<el-form-item label="初次发证时间">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.comStaffIdentification.driverLicenseFirstTime"
+								v-model="person.driverLicenseFirstTime"
 								type="date" 
 								value-format="timestamp"
 								placeholder="选择日期">
@@ -74,7 +74,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="诚信考核等级">
-							<el-select style="width: 100%" v-model="person.comStaffIdentification.integrityExamineGrade" placeholder="请选择">
+							<el-select style="width: 100%" v-model="person.integrityExamineGrade" placeholder="请选择">
 								<el-option label="A" value="A"></el-option>
 								<el-option label="AA" value="AA"></el-option>
 								<el-option label="AAA" value="AAA"></el-option>
@@ -99,7 +99,7 @@
 						<el-form-item label="诚信考核有效期至">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.comStaffIdentification.integrityExamineEndTime"
+								v-model="person.integrityExamineEndTime"
 								type="date" 
 								value-format="timestamp"
 								placeholder="选择日期">
@@ -110,7 +110,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="身份证号" prop="idCardNum">
-							<el-input v-model="person.comStaffIdentification.idCardNum"></el-input>
+							<el-input v-model="person.idCardNum"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -139,7 +139,7 @@
 						<el-form-item label="合同有效期起">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.comStaffIdentification.laborContractBeginTime"
+								v-model="person.laborContractBeginTime"
 								type="date" 
 								value-format="timestamp"
 								placeholder="选择日期">
@@ -150,7 +150,7 @@
 						<el-form-item label="合同有效期至">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.comStaffIdentification.laborContractEndTime"
+								v-model="person.laborContractEndTime"
 								type="date" 
 								value-format="timestamp"
 								placeholder="选择日期">
@@ -163,7 +163,7 @@
 						<el-form-item label="驾驶证审验有效期起">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.comStaffIdentification.driverLicExamineBeginTime"
+								v-model="person.driverLicExamineBeginTime"
 								type="date" 
 								value-format="timestamp"
 								placeholder="选择日期">
@@ -174,7 +174,7 @@
 						<el-form-item label="驾驶证审验有效期至">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.comStaffIdentification.driverLicExamineEndTime"
+								v-model="person.driverLicExamineEndTime"
 								type="date" 
 								value-format="timestamp"
 								placeholder="选择日期">
@@ -183,31 +183,31 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证档案编号">
-							<el-input v-model="person.comStaffIdentification.driverLicenseCode"></el-input>
+							<el-input v-model="person.driverLicenseCode"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="职称或技术等级">
-							<el-input v-model="person.comStaffIdentification.titleLever"></el-input>
+							<el-input v-model="person.titleLever"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="从业资格证件号">
-							<el-input v-model="person.comStaffIdentification.qualificationCode"></el-input>
+							<el-input v-model="person.qualificationCode"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格类别">
-							<el-input v-model="person.comStaffIdentification.qualificationType"></el-input>
+							<el-input v-model="person.qualificationType"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证有效期至">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="person.comStaffIdentification.qualificationExpirationTime"
+								v-model="person.qualificationExpirationTime"
 								type="date" 
 								value-format="timestamp"
 								placeholder="选择日期">
@@ -230,34 +230,34 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证正面">
-							<ImageUpload :files="[person.comStaffPic.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
+							<ImageUpload :files="[person.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="身份证反面">
-							<ImageUpload :files="[person.comStaffPic.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
+							<ImageUpload :files="[person.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证正面">
-							<ImageUpload :files="[person.comStaffPic.driverLicFrontUrl]" @imgUrlBack="handleDriverFrontSuccess"/>
+							<ImageUpload :files="[person.driverLicFrontUrl]" @imgUrlBack="handleDriverFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证反面">
-							<ImageUpload :files="[person.comStaffPic.driverLicBackUrl]" @imgUrlBack="handleDriverBackSuccess"/>
+							<ImageUpload :files="[person.driverLicBackUrl]" @imgUrlBack="handleDriverBackSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证正">
-							<ImageUpload :files="[person.comStaffPic.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
+							<ImageUpload :files="[person.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证副">
-							<ImageUpload :files="[person.comStaffPic.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
+							<ImageUpload :files="[person.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -282,19 +282,49 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import { checkMobile, checkIDCard } from '../../common/validators'
 export default {
 	data() {
 		return {
-			distData: regionData,
 			person: {
-				comStaffIdentification: {
-					homeAddress: ''
-				},
-				comStaffPic: {}
+				createName: '',
+				status: '',
+				auditName: '',
+				auditTime: '',
+				realName: '',
+				homeAddress: '',
+				mobile: '',
+				sex: '',
+				driverLicenseFirstTime: '',
+				integrityExamineGrade: '',
+				position: '',
+				integrityExamineEndTime: '',
+				idCardNum: '',
+				quasiDrivingType: '',
+				laborContractBeginTime: '',
+				laborContractEndTime: '',
+				driverLicExamineBeginTime: '',
+				driverLicExamineEndTime: '',
+				driverLicenseCode: '',
+				titleLever: '',
+				qualificationCode: '',
+				qualificationType: '',
+				qualificationExpirationTime: '',
+				remark: '',
+				headPic: '',
+				idCardFrontUrl: '',
+				idCardBackUrl: '',
+				driverLicFrontUrl: '',
+				driverLicBackUrl: '',
+				qualificationFirstPage: '',
+				qualificationSecondPage: '',
+				otherStaffPic1: '',
+				otherStaffPic2: '',
+				otherStaffPic3: '',
+				otherStaffPic4: '',
+				otherStaffPic5: ''
 			},
 			position: [],
 			quasiDrivingType: [],
@@ -372,11 +402,49 @@ export default {
 				url: '/staff/findById',
 				params
 			}).then(res => {
-				console.log(res)
-				this.person = res.data.data
-				this.position = res.data.data.position.split(',')
-				this.quasiDrivingType = res.data.data.comStaffIdentification.quasiDrivingType.split(',')
-				let resDataComStaffPic = res.data.data.comStaffPic
+				console.log(res.data.data)
+				let data = res.data.data
+				this.person = {
+					createName: data.createName,
+					status: data.status,
+					auditName: data.auditName,
+					auditTime: data.auditTime,
+					realName: data.realName,
+					homeAddress: data.comStaffIdentification.homeAddress,
+					mobile: data.mobile,
+					sex: data.comStaffIdentification.sex,
+					driverLicenseFirstTime: data.comStaffIdentification.driverLicenseFirstTime,
+					integrityExamineGrade: data.comStaffIdentification.integrityExamineGrade,
+					position: data.position,
+					integrityExamineEndTime: data.comStaffIdentification.integrityExamineEndTime,
+					idCardNum: data.comStaffIdentification.idCardNum,
+					quasiDrivingType: data.quasiDrivingType,
+					laborContractBeginTime: data.comStaffIdentification.laborContractBeginTime,
+					laborContractEndTime: data.comStaffIdentification.laborContractEndTime,
+					driverLicExamineBeginTime: data.comStaffIdentification.driverLicExamineBeginTime,
+					driverLicExamineEndTime: data.comStaffIdentification.driverLicExamineEndTime,
+					driverLicenseCode: data.comStaffIdentification.driverLicenseCode,
+					titleLever: data.comStaffIdentification.titleLever,
+					qualificationCode: data.comStaffIdentification.qualificationCode,
+					qualificationType: data.comStaffIdentification.qualificationType,
+					qualificationExpirationTime: data.comStaffIdentification.qualificationExpirationTime,
+					remark: data.remark,
+					headPic: data.headPic,
+					idCardFrontUrl: data.comStaffPic.idCardFrontUrl,
+					idCardBackUrl: data.comStaffPic.idCardBackUrl,
+					driverLicFrontUrl: data.comStaffPic.driverLicFrontUrl,
+					driverLicBackUrl: data.comStaffPic.driverLicBackUrl,
+					qualificationFirstPage: data.comStaffPic.qualificationFirstPage,
+					qualificationSecondPage: data.comStaffPic.qualificationSecondPage,
+					otherStaffPic1: data.comStaffPic.otherStaffPic1,
+					otherStaffPic2: data.comStaffPic.otherStaffPic2,
+					otherStaffPic3: data.comStaffPic.otherStaffPic3,
+					otherStaffPic4: data.comStaffPic.otherStaffPic4,
+					otherStaffPic5: data.comStaffPic.otherStaffPic5
+				}
+				this.position = data.position.split(',')
+				this.quasiDrivingType = data.comStaffIdentification.quasiDrivingType.split(',')
+				let resDataComStaffPic = data.comStaffPic
 				let i = 1
 				while (i < 6) {
 					this.otherImgs.push(resDataComStaffPic['otherStaffPic' + i])
@@ -385,44 +453,7 @@ export default {
 			})
 		},
 		updateItem() {
-			let data = {
-				createName: this.person.createName,
-				status: this.person.status,
-				auditName: this.person.auditName,
-				auditTime: this.person.auditTime,
-				realName: this.person.realName,
-				homeAddress: this.person.comStaffIdentification.homeAddress,
-				mobile: this.person.mobile,
-				sex: this.person.comStaffIdentification.sex,
-				driverLicenseFirstTime: this.person.comStaffIdentification.driverLicenseFirstTime || '',
-				integrityExamineGrade: this.person.comStaffIdentification.integrityExamineGrade,
-				position: this.person.position,
-				integrityExamineEndTime: this.person.comStaffIdentification.integrityExamineEndTime || '',
-				idCardNum: this.person.comStaffIdentification.idCardNum,
-				quasiDrivingType: this.person.comStaffIdentification.quasiDrivingType,
-				laborContractBeginTime: this.person.comStaffIdentification.laborContractBeginTime || '',
-				laborContractEndTime: this.person.comStaffIdentification.laborContractEndTime || '',
-				driverLicExamineBeginTime: this.person.comStaffIdentification.driverLicExamineBeginTime || '',
-				driverLicExamineEndTime: this.person.comStaffIdentification.driverLicExamineEndTime || '',
-				driverLicenseCode: this.person.comStaffIdentification.driverLicenseCode,
-				titleLever: this.person.comStaffIdentification.titleLever,
-				qualificationCode: this.person.comStaffIdentification.qualificationCode,
-				qualificationType: this.person.comStaffIdentification.qualificationType,
-				qualificationExpirationTime: this.person.comStaffIdentification.qualificationExpirationTime || '',
-				remark: this.person.remark,
-				headPic: this.person.headPic,
-				idCardFrontUrl: this.person.comStaffPic.idCardFrontUrl,
-				idCardBackUrl: this.person.comStaffPic.idCardBackUrl,
-				driverLicFrontUrl: this.person.comStaffPic.driverLicFrontUrl,
-				driverLicBackUrl: this.person.comStaffPic.driverLicBackUrl,
-				qualificationFirstPage: this.person.comStaffPic.qualificationFirstPage,
-				qualificationSecondPage: this.person.comStaffPic.qualificationSecondPage,
-				otherStaffPic1: this.person.comStaffPic.otherStaffPic1,
-				otherStaffPic2: this.person.comStaffPic.otherStaffPic2,
-				otherStaffPic3: this.person.comStaffPic.otherStaffPic3,
-				otherStaffPic4: this.person.comStaffPic.otherStaffPic4,
-				otherStaffPic5: this.person.comStaffPic.otherStaffPic5
-			}
+			let data = this.person
 			data.staffID = this.$route.query.staffID
 			data.position = this.position.join(',')
 			data.quasiDrivingType = this.quasiDrivingType.join(',')
