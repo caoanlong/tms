@@ -13,6 +13,7 @@ const user = {
 		},
 		SET_NAME: (state, name) => {
 			state.name = name
+			localStorage.setItem('name', name)
 		},
 		SET_TOKEN: (state, token) => {
 			state.token = token
