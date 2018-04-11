@@ -42,12 +42,13 @@
 		},
 		watch: {
 			selected: function (newVal) {
-				if (!this.watchOne) {
+				// console.log(newVal)
+				// if (!this.watchOne) {
 					this.selectedList = newVal
 					this.level2 = ChineseDistricts[newVal[0]]
 					this.level3 = ChineseDistricts[newVal[1]]
-					this.watchOne = true
-				}
+					// this.watchOne = true
+				// }
 			}
 		},
 		created() {
