@@ -31,12 +31,12 @@
 					</el-table-column>
 					<el-table-column label="车辆号牌" prop="plateNo" width="110" align="center">
 					</el-table-column>
-					<el-table-column label="配载量" prop="LoadingQuantity" width="100" align="center">
+					<el-table-column label="配载量" prop="LoadingQuantity" width="180" align="center">
 						<template slot-scope="scope">
 							<span>
 								{{(scope.row.totalCargoWeight ? scope.row.totalCargoWeight : 0) + '吨'}}
-								/{{scope.row.totalCargoVolume ? scope.row.totalCargoVolume : 0 + '方'}}
-								/{{scope.row.totalCargoNum ? scope.row.totalCargoNum : 0 + '件'}}
+								/{{(scope.row.totalCargoVolume ? scope.row.totalCargoVolume : 0) + '方'}}
+								/{{(scope.row.totalCargoNum ? scope.row.totalCargoNum : 0) + '件'}}
 							</span>
 						</template>
 					</el-table-column>

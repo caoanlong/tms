@@ -55,15 +55,39 @@
 		},
 		methods: {
 			selectChange(e, x) {
-				console.log(e.target.value)
+				console.log(e.target.value, x)
 				if (x == 1) {
-					this.selectedList[0] = e.target.value
-					this.level2 = ChineseDistricts[e.target.value]
+					if (e.target.value == '请选择') {
+						this.selectedList = []
+						this.level2 = {}
+						this.$emit('selectChange', '')
+					} else {
+						this.selectedList[0] = e.target.value
+						this.level2 = ChineseDistricts[e.target.value]
+						this.$emit('selectChange', e.target.value)
+					}
 				} else if (x == 2) {
-					this.selectedList[1] = e.target.value
-					this.level3 = ChineseDistricts[e.target.value]
+					if (e.target.value == '请选择') {
+						let t = this.selectedList[0]
+						this.selectedList = [t]
+						this.level3 = {}
+						this.$emit('selectChange', t)
+					} else {
+						this.selectedList[1] = e.target.value
+						this.level3 = ChineseDistricts[e.target.value]
+						this.$emit('selectChange', e.target.value)
+					}
+				} else if (x == 3) {
+					if (e.target.value == '请选择') {
+						let t1 = this.selectedList[0]
+						let t2 = this.selectedList[1]
+						this.selectedList = [t1, t2]
+						this.$emit('selectChange', t2)
+					} else {
+						this.selectedList[2] = e.target.value
+						this.$emit('selectChange', e.target.value)
+					}
 				}
-				this.$emit('selectChange', e.target.value)
 			}
 		}
 	}
