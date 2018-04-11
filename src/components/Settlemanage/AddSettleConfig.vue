@@ -158,7 +158,7 @@ export default {
 				innerTKM: '',
 				innerFreight: '',
 				externalDistance: '',
-				externalTKM: '1',
+				externalTKM: '',
 				externalFreight: '',
 				payNow1: '',
 				payArrived1: '',
