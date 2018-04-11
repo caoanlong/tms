@@ -22,7 +22,7 @@
 						<el-form-item label="审核日期" prop="auditTime">
 							<el-date-picker
 								style="width: 100%" 
-								v-model="truck.auditTime"
+								v-model="truck.auditTime" 
 								type="date" 
 								value-format="timestamp"
 								placeholder="选择日期">
