@@ -6,16 +6,13 @@
 			<el-dropdown class="avatar-container right-menu-item">
 				<div class="avatar-wrapper">
 					<img class="user-avatar" src="Photo" @error="errorImg">
-					<span class="user-text">你好！{{JSON.parse(userInfo).userName}}</span>
+					<span class="user-text">你好！{{name}}</span>
 					<i class="el-icon-caret-bottom"></i>
 				</div>
 				<el-dropdown-menu slot="dropdown">
-					<router-link :to="{name:'userprofile'}">
+					<router-link :to="{name: 'userprofile'}">
 						<el-dropdown-item>个人资料</el-dropdown-item>
 					</router-link>
-					<!-- <router-link to="/">
-						<el-dropdown-item>通讯录</el-dropdown-item>
-					</router-link> -->
 					<el-dropdown-item divided>
 						<span @click="logout" style="display:block;">退出</span>
 					</el-dropdown-item>
@@ -28,21 +25,15 @@
 <script>
 import { mapGetters } from 'vuex'
 
-
 export default {
 	computed: {
 		...mapGetters([
-			'sidebar',
-			'userInfo'
+			'name'
 		])
 	},
 	created() {
-		console.log(this.userInfo)
 	},
 	methods: {
-		toggleSideBar() {
-			this.$store.dispatch('toggleSideBar')
-		},
 		logout() {
 			this.$store.dispatch('loginOut').then(() => {
 				location.reload()

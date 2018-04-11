@@ -76,7 +76,11 @@
 							<span >{{scope.row.sex == 'M' ? '男' : '女'}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="聘用岗位" prop="position"></el-table-column>
+					<el-table-column label="聘用岗位" width="100">
+						<template slot-scope="scope">
+							<span v-for="item in scope.row.position.split(',')">{{postMap[item]}},</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="身份证号" prop="idCardNum" width="160"></el-table-column>
 					<el-table-column label="创建人" prop="createByRealName" width="100"></el-table-column>
 					<el-table-column label="状态">
@@ -190,7 +194,15 @@
 				selectedList: [],
 				tableData: [],
 				importFileUrl: baseURL + '/staff/upload',
-				uploadHeaders: {'Authorization': localStorage.getItem('token')}
+				uploadHeaders: {'Authorization': localStorage.getItem('token')},
+				postMap: {
+					"Operator": "操作员",
+					"Driver": "驾驶员",
+					"Supercargo": "押运员",
+					"SafetyOfficer": "专职安全员",
+					"Stevedore": "装卸管理人员",
+					"Other": "其他人员"
+				}
 			}
 		},
 		created() {
