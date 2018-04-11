@@ -376,6 +376,25 @@ let routerMap = [
 						component: () => import ('../components/CooperPartner/ViewRecDeliveryComp'),
 					}
 				]
+			},
+			{
+				path: '/user',
+				name: 'user',
+				meta: {
+					title: '个人资料'
+				},
+				component: () => import('../components/User'),
+				redirect: '/userprofile',
+				children: [
+					{
+						path: '/userprofile',
+						name: 'userprofile',
+						meta: {
+							title: '用户信息'
+						},
+						component: () => import('../components/User/UserProfile')
+					}
+				]
 			}
 		]
 	}

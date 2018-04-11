@@ -221,6 +221,8 @@ export default {
 				settleMonth2:this.templateFreight.settleMonth2,
 				payArrivedRec2:this.templateFreight.payArrivedRec2,
 			}
+			console.log(data)
+			// return
 			request({
 				url: '/transportPrice/add',
 				method:'post',

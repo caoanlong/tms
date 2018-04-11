@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card box-card">
-			<div  class="header clearfix">承运单列表</div>
+			<div class="header clearfix">承运单列表</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="关键字" >
