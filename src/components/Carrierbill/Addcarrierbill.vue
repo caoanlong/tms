@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card hasTit">
-			<div slot="header" class="clearfix">添加承运单</div>
+		<div class="wf-card hasTit">
+			<div class="header clearfix">添加承运单</div>
 			<el-row>
 				<div class="split-item">
 					<span class="num">1</span>
@@ -208,7 +208,7 @@
 				</el-col>
 			</el-row>
 			</el-form>
-		</el-card>
+		</div>
 	</div>
 </template>
 
@@ -530,8 +530,11 @@ export default {
 	.tips
 		color #909399
 .cargoItem
-	margin-bottom 10px
-	border-bottom 1px solid #ebeef5
+	padding-top 10px
+	border-top 1px solid #ebeef5
+	&:first-child
+		border-top none
+		padding-top 0
 	.el-select
 	.el-input
 		margin 0 10px 10px 0
