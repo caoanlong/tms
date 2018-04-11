@@ -2,24 +2,24 @@
 	<div class="main-content">
 		<div class="wf-card">
 			<div class="header clearfix">添加车辆</div>
-			<el-form label-width="155px" size="mini">
+			<el-form label-width="155px" size="mini" :model="truck" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="状态">
+						<el-form-item label="状态" prop="status">
 							<el-select style="width: 100%" v-model="truck.status" placeholder="请选择">
-								<el-option label="通过" value="pass"></el-option>
-								<el-option label="未通过" value="unpass"></el-option>
-								<el-option label="其他" value="other"></el-option>
+								<el-option label="通过" value="通过"></el-option>
+								<el-option label="未通过" value="未通过"></el-option>
+								<el-option label="其他" value="其他"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="审核人">
+						<el-form-item label="审核人" prop="auditName">
 							<el-input v-model="truck.auditName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="审核日期">
+						<el-form-item label="审核日期" prop="auditTime">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.auditTime"
@@ -32,12 +32,12 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="所属地区">
+						<el-form-item label="所属地区" prop="areaID">
 							<DistPicker @selectChange="handleSelectedArea"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="所属企业">
+						<el-form-item label="所属企业" prop="companyName">
 							<el-input v-model="truck.companyName"></el-input>
 						</el-form-item>
 					</el-col>
@@ -49,7 +49,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="车辆类别">
+						<el-form-item label="车辆类别" prop="truckCategory">
 							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
 								<el-option label="挂车" value="挂车"></el-option>
 								<el-option label="牵引车" value="牵引车"></el-option>
@@ -57,7 +57,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="车辆类型">
+						<el-form-item label="车辆类型" prop="truckType">
 							<el-select style="width: 100%" v-model="truck.truckType" placeholder="请选择">
 								<el-option label="集装箱挂车" value="集装箱挂车"></el-option>
 								<el-option label="厢式货车" value="厢式货车"></el-option>
@@ -68,7 +68,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="车牌颜色">
+						<el-form-item label="车牌颜色" prop="plateNoColor">
 							<el-select style="width: 100%" v-model="truck.plateNoColor" placeholder="请选择">
 								<el-option label="黄" value="黄"></el-option>
 								<el-option label="蓝" value="蓝"></el-option>
@@ -86,7 +86,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="车长">
+						<el-form-item label="车长" prop="length">
 							<el-select style="width: 100%" v-model="truck.length" placeholder="请选择">
 								<el-option label="5米" value="5"></el-option>
 								<el-option label="8米" value="8"></el-option>
@@ -97,7 +97,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="车宽">
+						<el-form-item label="车宽" prop="width">
 							<el-select style="width: 100%" v-model="truck.width" placeholder="请选择">
 								<el-option label="2米" value="2"></el-option>
 								<el-option label="3米" value="3"></el-option>
@@ -106,19 +106,19 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="车高">
+						<el-form-item label="车高" prop="high">
 							<el-input v-model="truck.high"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="载重">
+						<el-form-item label="载重" prop="loads">
 							<el-input v-model="truck.loads"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="装载方数">
+						<el-form-item label="装载方数" prop="loadVolume">
 							<el-input v-model="truck.loadVolume"></el-input>
 						</el-form-item>
 					</el-col>
@@ -181,12 +181,12 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="汽车生产厂家">
+						<el-form-item label="汽车生产厂家" prop="manufacturer">
 							<el-input v-model="truck.manufacturer"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="品牌型号">
+						<el-form-item label="品牌型号" prop="carBrandModel">
 							<el-input v-model="truck.carBrandModel"></el-input>
 						</el-form-item>
 					</el-col>
@@ -203,7 +203,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="核载人数">
+						<el-form-item label="核载人数" prop="personsCapacity">
 							<el-select style="width: 100%" v-model="truck.personsCapacity" placeholder="请选择">
 								<el-option 
 								v-for="i in 9" :key="i" 
@@ -212,12 +212,12 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="车身颜色">
+						<el-form-item label="车身颜色" prop="carBodyColor">
 							<el-input v-model="truck.carBodyColor"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="是否喷涂警示标志">
+						<el-form-item label="是否喷涂警示标志" prop="hasWarnMark">
 							<el-select style="width: 100%" v-model="truck.hasWarnMark" placeholder="请选择">
 								<el-option label="是" value="是"></el-option>
 								<el-option label="否" value="否"></el-option>
@@ -227,7 +227,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="行驶证注册日期">
+						<el-form-item label="行驶证注册日期" prop="driverLicRegisterTime">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.driverLicRegisterTime"
@@ -238,7 +238,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="行驶证发证日期">
+						<el-form-item label="行驶证发证日期" prop="driverLicIssueTime">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.driverLicIssueTime"
@@ -249,7 +249,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="行驶证审验效期至">
+						<el-form-item label="行驶证审验效期至" prop="driverLicExamineExpires">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.driverLicExamineExpires"
@@ -262,17 +262,17 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="道路运输证号">
+						<el-form-item label="道路运输证号" prop="roadTransportNo">
 							<el-input v-model="truck.roadTransportNo"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="经营范围">
+						<el-form-item label="经营范围" prop="businessScope">
 							<el-input v-model="truck.businessScope"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="道路运输证年审期至">
+						<el-form-item label="道路运输证年审期至" prop="roadTransportLicAnnualPeriod">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.roadTransportLicAnnualPeriod"
@@ -285,41 +285,41 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="所有人或单位">
+						<el-form-item label="所有人或单位" prop="carOwnerName">
 							<el-input v-model="truck.carOwnerName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="所有人联系电话">
+						<el-form-item label="所有人联系电话" prop="carOwnerMobile">
 							<el-input v-model="truck.carOwnerMobile"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="所有人登记地址">
+						<el-form-item label="所有人登记地址" prop="carOwnerAddress">
 							<el-input v-model="truck.carOwnerAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="实际车主姓名">
+						<el-form-item label="实际车主姓名" prop="curDriverName">
 							<el-input v-model="truck.curDriverName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="实际车主电话">
+						<el-form-item label="实际车主电话" prop="curDriverMobile">
 							<el-input v-model="truck.curDriverMobile"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="实际车主现住址">
+						<el-form-item label="实际车主现住址" prop="curDriverAddress">
 							<el-input v-model="truck.curDriverAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="所有权">
+						<el-form-item label="所有权" prop="propertyType">
 							<el-select style="width: 100%" v-model="truck.propertyType" placeholder="请选择">
 								<el-option label="单位" value="单位"></el-option>
 								<el-option label="个人" value="个人"></el-option>
@@ -328,14 +328,14 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="经营证号">
+						<el-form-item label="经营证号" prop="businessLicenseNo">
 							<el-input v-model="truck.businessLicenseNo"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="等级评定">
+						<el-form-item label="等级评定" prop="rank">
 							<el-select style="width: 100%" v-model="truck.rank" placeholder="请选择">
 								<el-option label="一级" value="一级"></el-option>
 								<el-option label="二级" value="二级"></el-option>
@@ -345,7 +345,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="下次等评日期">
+						<el-form-item label="下次等评日期" prop="nextRankEvaluteTime">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.nextRankEvaluteTime"
@@ -356,7 +356,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="二级维护日期">
+						<el-form-item label="二级维护日期" prop="secondaMaintainTime">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.secondaMaintainTime"
@@ -367,7 +367,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="下次二级维护日期">
+						<el-form-item label="下次二级维护日期" prop="nextSecondLevel">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.nextSecondLevel"
@@ -380,7 +380,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="承运人责任险有效期至">
+						<el-form-item label="承运人责任险有效期至" prop="carrierRiskInsuranceExpires">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.carrierRiskInsuranceExpires"
@@ -391,7 +391,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="交强险有效期至">
+						<el-form-item label="交强险有效期至" prop="saLIInsuranceExpires">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.saLIInsuranceExpires"
@@ -402,7 +402,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="商业险有效期至">
+						<el-form-item label="商业险有效期至" prop="bizInsuranceExpires">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.bizInsuranceExpires"
@@ -595,7 +595,123 @@ export default {
 				workStatus: ''		// string 运输状态
 			},
 			otherImgs: [],
-			selectedArea: []
+			selectedArea: [],
+			rules: {
+				status: [
+					{ required: true, message: '请选择状态', trigger: 'change' }
+				],
+				auditName: [
+					{required: true, message: '请输入审核人', trigger: 'blur'}
+				],
+				auditTime: [
+					{required: true, message: '请输入创建人', trigger: 'blur'}
+				],
+				areaID: [
+					{ required: true, message: '请选择姓名', trigger: 'change' }
+				],
+				companyName: [
+					{required: true, message: '请输入家庭地址', trigger: 'blur'}
+				],
+				truckCategory: [
+					{required: true, message: '请选择岗位', trigger: 'change'},
+				],
+				truckType: [
+					{ required: true, message: '请选择性别', trigger: 'change' }
+				],
+				plateNoColor: [
+					{required: true, message: '请选择岗位', trigger: 'change'}
+				],
+				length: [
+					{required: true, message: '请选择岗位', trigger: 'change'}
+				],
+				width: [
+					{ required: true, message: '请选择状态', trigger: 'change' }
+				],
+				high: [
+					{required: true, message: '请输入审核人', trigger: 'blur'}
+				],
+				loads: [
+					{required: true, message: '请输入创建人', trigger: 'blur'}
+				],
+				loadVolume: [
+					{ required: true, message: '请选择姓名', trigger: 'change' }
+				],
+				manufacturer: [
+					{required: true, message: '请输入家庭地址', trigger: 'blur'}
+				],
+				carBrandModel: [
+					{required: true, message: '请选择岗位', trigger: 'blur'},
+				],
+				personsCapacity: [
+					{ required: true, message: '请选择性别', trigger: 'change' }
+				],
+				carBodyColor: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				hasWarnMark: [
+					{required: true, message: '请选择岗位', trigger: 'change'}
+				],
+				driverLicRegisterTime: [
+					{required: true, message: '请输入创建人', trigger: 'change'}
+				],
+				driverLicIssueTime: [
+					{ required: true, message: '请选择姓名', trigger: 'change' }
+				],
+				driverLicExamineExpires: [
+					{required: true, message: '请输入家庭地址', trigger: 'change'}
+				],
+				roadTransportNo: [
+					{required: true, message: '请选择岗位', trigger: 'blur'},
+				],
+				businessScope: [
+					{ required: true, message: '请选择性别', trigger: 'blur' }
+				],
+				roadTransportLicAnnualPeriod: [
+					{required: true, message: '请选择岗位', trigger: 'change'}
+				],
+				carOwnerName: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				carOwnerMobile: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				carOwnerAddress: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				curDriverName: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				curDriverMobile: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				curDriverAddress: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				propertyType: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				businessLicenseNo: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				rank: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				nextRankEvaluteTime: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				secondaMaintainTime: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				nextSecondLevel: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				carrierRiskInsuranceExpires: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+				saLIInsuranceExpires: [
+					{required: true, message: '请选择岗位', trigger: 'blur'}
+				],
+			}
 		}
 	},
 	created() {
@@ -643,14 +759,18 @@ export default {
 		createItem() {
 			let data = this.truck
 			console.log(data)
-			request({
-				url: '/truck/add',
-				method: 'post',
-				data
-			}).then(res => {
-				console.log(res.data)
-				Message.success(res.data.msg)
-				this.$router.push({name: 'truck'})
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					request({
+						url: '/truck/add',
+						method: 'post',
+						data
+					}).then(res => {
+						console.log(res.data)
+						Message.success(res.data.msg)
+						this.$router.push({name: 'truck'})
+					})
+				}
 			})
 		},
 		back() {

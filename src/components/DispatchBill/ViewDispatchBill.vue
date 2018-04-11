@@ -133,93 +133,14 @@
 				<button type="button" class="wf-btn btn-default" @click="back">返回</button>
 			</div>
 		</div>
-		<el-dialog title="修改运费" :visible.sync="isVisible" custom-class="table" width="70%">
-			<table class="customertable">
-				<thead>
-					<tr>
-						<th width="100"></th>
-						<th>现付</th>
-						<th>到付</th>
-						<th>回单付</th>
-						<th>月结</th>
-						<th>收方到货付</th>
-						<th>绕路里程</th>
-						<th>绕路费用</th>
-						<th>其他费用</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="txt-r">司机</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.driverCashAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.driverCodAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.driverPorAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.driverMonthlyAmont"></el-input>
-						</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.driverCosigneeAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini"></el-input>
-						</td>
-						<td>
-							<el-input size="mini"></el-input>
-						</td>
-						<td>
-							<el-input size="mini"></el-input>
-						</td>
-					</tr>
-					<tr>
-						<td class="txt-r">随车人员</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.superCargoCashAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.superCargoCodAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.superCargoCorAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.superCargoMonthlyAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini" v-model="payMethods.superCosigneeAmount"></el-input>
-						</td>
-						<td>
-							<el-input size="mini"></el-input>
-						</td>
-						<td>
-							<el-input size="mini"></el-input>
-						</td>
-						<td>
-							<el-input size="mini"></el-input>
-						</td>
-					</tr>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td colspan="7" class="txt-r">合计</td>
-					</tr>
-				</tfoot>
-			</table>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="isVisible = false">取消</el-button>
-				<el-button type="primary" @click="updatePayInfo">确认</el-button>
-			</span>
-		</el-dialog>
+		<ModifyPayInfo :isVisible="isVisible" :payInfo="payMethods" @control="handModifyPayInfo"/>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
+import ModifyPayInfo from './Common/ModifyPayInfo'
+import LoadSend from './Common/LoadSend'
 export default {
 	data() {
 		return {
@@ -324,12 +245,16 @@ export default {
 				this.getInfo()
 			})
 		},
-		updatePayInfo() {
-
+		handModifyPayInfo(bool) {
+			this.isVisible = bool
 		},
 		back() {
 			this.$router.go(-1)
 		}
+	},
+	components: {
+		ModifyPayInfo,
+		LoadSend
 	}
 }
 

@@ -340,7 +340,7 @@ export default {
 					{required: true, message: '请输入审核人', trigger: 'blur'}
 				],
 				auditTime: [
-					{required: true, message: '请输入创建人', trigger: 'blur'}
+					{required: true, message: '请输入审核时间', trigger: 'blur'}
 				],
 				realName: [
 					{ required: true, message: '请选择姓名', trigger: 'blur' }
