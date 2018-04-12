@@ -507,6 +507,7 @@ export default {
 			}
 
 			console.log(data)
+			// return
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					request({
