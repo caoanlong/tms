@@ -619,6 +619,9 @@ export default {
 			]
 		}
 	},
+	created() {
+		this.$store.dispatch('getUserInfo')
+	},
 	methods: {
 		ViewCarrierbill(CarrierNum) {
 			this.$router.push({ name: 'viewcarrierbill', query: { CarrierNum } })

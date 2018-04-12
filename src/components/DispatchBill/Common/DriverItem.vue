@@ -2,7 +2,7 @@
 	<div class="listItem" >
 		<div class="driverNum inlineBlock" ><span>{{truck.code}}</span></div>
 		<div class="pic inlineBlock" >
-			<img src="../../../assets/imgs/avatar.gif" >
+			<img src="../../../assets/imgs/avatar.gif">
 			<p class="status" v-if="truck.loadStatus == 'Empty'">空载</p>
 			<p class="status" v-else-if="truck.loadStatus == 'NotFull'">未满载</p>
 			<p class="status" v-else-if="truck.loadStatus == 'Full'">满载</p>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 
 export const baseURL = process.env.BASE_API
 
@@ -48,6 +48,28 @@ service.interceptors.response.use(
 				}
 
 				return Promise.reject('error')
+			}
+			if (response.data.code == 104) {
+				MessageBox({
+					title: '温馨提示！',
+					customClass: 'msg-info',
+					message: `
+					<div style="text-align: center;">
+						<p style="margin-top: 50px">
+							您已提交申请，请等待审核！
+						</p>
+						<p style="margin-top: 50px;color: #aaa">
+							一般客户处理时间为24小时内；客服联系电话，400-6688-999
+						</p>
+					</div>
+					`,
+					dangerouslyUseHTMLString: true,
+					closeOnPressEscape: false,
+					showClose: false,
+					closeOnClickModal: false,
+					showConfirmButton: false
+				})
+				return
 			}
 			Message.error(response.data.msg)
 			return Promise.reject('error')

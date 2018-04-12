@@ -8,20 +8,20 @@
 		<div class="search">
 			<el-form :inline="true" class="demo-form-inline" size="small">
 				<el-form-item label="编号">
-					<el-input placeholder="编号"></el-input>
+					<el-input placeholder="编号" v-model="findTruckSelfNum"></el-input>
 				</el-form-item>
 				<el-form-item label="司机姓名">
-					<el-input placeholder="司机姓名"></el-input>
+					<el-input placeholder="司机姓名" v-model="findTruckName"></el-input>
 				</el-form-item>
 				<el-form-item label="车牌号">
-					<el-input placeholder="车牌号"></el-input>
+					<el-input placeholder="车牌号" v-model="findTruckPlateNum"></el-input>
 				</el-form-item>
 				<el-form-item label="车型">
-					<el-input placeholder="车型"></el-input>
+					<el-input placeholder="车型" v-model="findTruckType"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary">搜索</el-button>
-					<el-button type="default">重置</el-button>
+					<el-button type="primary" @click="getTruckList">搜索</el-button>
+					<el-button type="default" @click="resetTruck">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
@@ -45,7 +45,7 @@
 		<div class="search">
 			<el-form :inline="true" class="demo-form-inline" size="small">
 				<el-form-item label="姓名">
-					<el-input placeholder="姓名"></el-input>
+					<el-input placeholder="姓名" v-model="findPersonName"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary">搜索</el-button>
@@ -87,10 +87,15 @@
 			return {
 				selectedDriver: {},
 				selectedEscort: {},
+				findTruckSelfNum: '',
+				findTruckName: '',
+				findTruckPlateNum: '',
+				findTruckType: '',
 				truckPageIndex: 1,
 				truckPageSize: 10,
 				truckCount: 0,
 				truckList: [],
+				findPersonName: '',
 				personPageIndex: 1,
 				personPageSize: 10,
 				personCount: 0,
@@ -104,8 +109,8 @@
 			}
 		},
 		created() {
-			this.getTruckList()
-			this.getPersonList()
+			// this.getTruckList()
+			// this.getPersonList()
 		},
 		methods: {
 			prevStep() {
@@ -121,6 +126,15 @@
 			pagePersonChange(index) {
 				this.personPageIndex = index
 				this.getPersonList()
+			},
+			resetTruck() {
+				this.findTruckSelfNum = ''
+				this.findTruckName = ''
+				this.findTruckPlateNum = ''
+				this.findTruckType = ''
+			},
+			resetPerson() {
+				this.findPersonName = ''
 			},
 			selectDriverItem(data) {
 				if (data.loadStatus == 'Full') {
@@ -148,6 +162,10 @@
 				let params = {
 					current: this.truckPageIndex,
 					size: this.truckPageSize,
+					code: this.findTruckSelfNum,
+					realName: this.findTruckName,
+					plateNo: this.findTruckPlateNum,
+					truckType: this.findTruckType
 				}
 				request({
 					url: '/transportRecord/findList',
@@ -163,6 +181,7 @@
 				let params = {
 					current: this.personPageIndex,
 					size: this.personPageSize,
+					realName: this.findPersonName
 				}
 				request({
 					url: '/staff/findList',
