@@ -268,7 +268,7 @@ export default {
 		},
 		getConsignor(){
 			let params = {
-				customerID:this.consignorID
+				customerID: this.consignorID
 			}
 			request({
 				url: '/customer/findById',

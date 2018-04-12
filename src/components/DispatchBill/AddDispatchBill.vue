@@ -131,7 +131,7 @@ import CarrierInfo from './Common/CarrierInfo'
 export default {
 	data() {
 		return {
-			stepActive: 0,
+			stepActive: 1,
 			dialogTableVisible: false,
 			tableData: [
 				{

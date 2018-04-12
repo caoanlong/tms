@@ -42,8 +42,8 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="姓名" prop="realName"></el-table-column>
-					<el-table-column label="身份证号" prop="idCardNum"></el-table-column>
-					<el-table-column label="联系电话" prop="mobile"></el-table-column>
+					<el-table-column label="身份证号" prop="idCardNum" width="150"></el-table-column>
+					<el-table-column label="联系电话" prop="mobile" width="100"></el-table-column>
 					<el-table-column label="从业资格证件号" prop="qualificationCode" width="120"></el-table-column>
 					<el-table-column label="车牌号" width="120">
 						<template slot-scope="scope">

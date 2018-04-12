@@ -8,18 +8,22 @@
 			<p class="status" v-else-if="truck.loadStatus == 'Full'">满载</p>
 		</div>
 		<div class="info inlineBlock">
-			<p class="driverName">{{truck.curDriverName}}</p>
+			<p class="driverName">{{truck.realName}}</p>
 			<p class="vehicleNo">{{truck.plateNo}}</p>
 			<p class="trailerNo">{{truck.trailerPlateNo}}</p>
-			<p class="vehicleType">{{truck.length}}米{{truck.truckType}}{{truck.truckCategory}}</p>
+			<p class="vehicleType">{{truck.length ? (truck.length + '米') : ''}}{{truck.truckType}}{{truck.truckCategory}}</p>
 		</div>
 		<div class="statusInfo inlineBlock">
 			<div class="control">
 				<div class="sliderSelect">
-					<span class="labels">配载重量</span><el-progress :percentage="70" style="margin-top:13px"></el-progress><span class="surplus">剩</span>
+					<span class="labels">配载重量</span>
+					<el-progress :percentage="truck.loadedCargoWeight/Number(truck.loads)" style="margin-top:13px"></el-progress>
+					<span class="surplus">剩{{Number(truck.loads) - truck.loadedCargoWeight}}</span>
 				</div>
 				<div class="sliderSelect">
-					<span class="labels">配载体积</span><el-progress :percentage="70" style="margin-top:13px"></el-progress><span class="surplus">剩</span>
+					<span class="labels">配载体积</span>
+					<el-progress :percentage="truck.loadedCargoVolume/Number(truck.loadVolume)" style="margin-top:13px"></el-progress>
+					<span class="surplus">剩{{Number(truck.loadVolume) - truck.loadedCargoVolume}}</span>
 				</div>
 			</div>
 		</div>

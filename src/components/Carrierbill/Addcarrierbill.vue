@@ -8,7 +8,7 @@
 					<span class="tit">基本信息</span>
 				</div>
 			</el-row>
-			<el-form label-width="100px" size="mini">
+			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="托运人">
@@ -302,48 +302,41 @@ export default {
 				{
 					label:'后台现在没参数',
 					value:'海上运输'
-				},
-				// {
-				// 	label:'海上运输',
-				// 	value:'海上运输'
-				// },
-				// {
-				// 	label:'铁路运输',
-				// 	value:'铁路运输'
-				// },
-				// {
-				// 	label:'公路运输',
-				// 	value:'公路运输'
-				// },
-				// {
-				// 	label:'航空运输',
-				// 	value:'航空运输'
-				// },
-				// {
-				// 	label:'邮件运输',
-				// 	value:'邮件运输'
-				// },
-				// {
-				// 	label:'多式联运',
-				// 	value:'多式联运'
-				// },
-				// {
-				// 	label:'固定设施运输',
-				// 	value:'固定设施运输'
-				// },
-				// {
-				// 	label:'内河运输',
-				// 	value:'内河运输'
-				// },
-				// {
-				// 	label:'其他',
-				// 	value:'其他'
-				// }
-			]
+				}
+			],
+			rules: {
+				createName: [
+					{required: true, message: '请输入创建人', trigger: 'blur'}
+				],
+				status: [
+					{ required: true, message: '请选择状态', trigger: 'change' }
+				],
+				auditName: [
+					{required: true, message: '请输入审核人', trigger: 'blur'}
+				],
+				auditTime: [
+					{required: true, message: '请输入审核时间', trigger: 'blur'}
+				],
+				realName: [
+					{ required: true, message: '请选择姓名', trigger: 'blur' }
+				],
+				homeAddress: [
+					{required: true, message: '请输入家庭地址', trigger: 'blur'}
+				],
+				// mobile: [
+				// 	{required: true, validator: checkMobile, trigger: 'blur'},
+				// ],
+				sex: [
+					{ required: true, message: '请选择性别', trigger: 'change' }
+				],
+				position: [
+					{required: true, message: '请选择岗位', trigger: 'change'}
+				],
+				// idCardNum: [
+				// 	{required: true, validator: checkIDCard, trigger: 'blur'}
+				// ]
+			}
 		}
-	},
-	created() {
-
 	},
 	methods: {
 		getShippers(e) {
