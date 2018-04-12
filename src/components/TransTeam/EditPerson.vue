@@ -443,7 +443,12 @@ export default {
 					otherStaffPic5: data.comStaffPic.otherStaffPic5
 				}
 				this.position = data.position.split(',')
-				this.quasiDrivingType = data.comStaffIdentification.quasiDrivingType.split(',')
+				if(data.comStaffIdentification.quasiDrivingType.length<1){
+					this.quasiDrivingType
+				}else{
+					this.quasiDrivingType = data.comStaffIdentification.quasiDrivingType.split(',')
+				}
+				
 				let resDataComStaffPic = data.comStaffPic
 				let i = 1
 				while (i < 6) {
