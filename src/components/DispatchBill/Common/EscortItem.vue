@@ -1,7 +1,7 @@
 <template>
 	<div class="EscortItem">
 		<div class="pic inlineBlock">
-			<img src="../../../assets/imgs/avatar.gif" >
+			<img :src="imgUrl + person.headPic" >
 		</div>
 		<div class="status" v-if="person.workStatus == 'Free'">空闲中</div>
 		<div class="status" v-else-if="person.workStatus == 'Working'">工作中</div>

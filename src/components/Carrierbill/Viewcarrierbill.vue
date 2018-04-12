@@ -30,8 +30,16 @@
 					<td><span class="justify">联系方式</span>{{carrierOrder.consigneePhone}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货地</span>{{carrierOrder.shipperArea}}{{carrierOrder.shipperDetailAddress}}</td>
-					<td><span class="justify">收货地</span>{{carrierOrder.consigneeArea}}{{carrierOrder.consigneeDetailAddress}}</td>
+					<td>
+						<span class="justify">发货地</span>
+						{{carrierOrder.shipperArea ? carrierOrder.shipperArea : ''}}
+						{{carrierOrder.shipperDetailAddress ? carrierOrder.shipperDetailAddress : ''}}
+					</td>
+					<td>
+						<span class="justify">收货地</span>
+						{{carrierOrder.consigneeArea ? carrierOrder.consigneeArea : ''}}
+						{{carrierOrder.consigneeDetailAddress ? carrierOrder.consigneeDetailAddress : ''}}
+					</td>
 				</tr>
 				<tr>
 					<td><span class="justify">发货时间</span>{{carrierOrder.shipperDate | getdatefromtimestamp(true)}}</td>
@@ -42,7 +50,7 @@
 				<caption>货物信息</caption>
 				<tr>
 					<td colspan="7">
-						<span class="labels">运输方式：</span>接口无此参数，是否删除？
+						<span class="labels">运输方式：</span>{{''}}
 					</td>
 				</tr>
 				<tr>
