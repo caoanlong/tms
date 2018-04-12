@@ -167,6 +167,14 @@ export default {
 		},
 		AddDispatchBill() {
 			console.log(this.selectedList)
+			if(this.selectedList.length<1){
+				this.$message({
+					type: 'warning',
+					message: '请选择承运单!',
+					
+				})
+				return
+			}
 			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.selectedList.join(',') } })
 		},
 		pageChange(index) {
