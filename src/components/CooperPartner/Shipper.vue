@@ -161,7 +161,7 @@
 			// 上传错误
 			uploadError (response) {
 				console.log(response)
-				// Message.error(response)
+				Message.error(response.msg)
 			},
 			beforeFileUpload (file) {
 				const extension = file.name.split('.')[1] === 'xls'

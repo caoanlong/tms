@@ -7,6 +7,17 @@ export function isPoneAvailable(str) {
 	}  
 }
 
+export function isVerCodeAvailable(str) {  
+	let myreg=/^-?\\d+$/
+	if (!myreg.test(str)) {  
+		return false
+	} else {  
+		return true
+	}  
+}
+
+
+
 export const checkMobile = (rule, value, callback) => {
 	if (!value) {
 		callback(new Error('手机号不能为空'))
