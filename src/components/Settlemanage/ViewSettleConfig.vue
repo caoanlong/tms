@@ -86,19 +86,19 @@
 					<p style="text-align: center; color: #bfcbd9;">------ 对内付款方式占比 ------</p>
 					<el-form label-width="120px" style="display: flex">
 						<el-form-item label="现付" style="flex: 1">
-							<p>{{templateFreight.internalCashRate}}</p>
+							<p>{{templateFreight.internalCashRate}}%</p>
 						</el-form-item>
 						<el-form-item label="到付" style="flex: 1">
-							<p>{{templateFreight.internalCodRate}}</p>
+							<p>{{templateFreight.internalCodRate}}%</p>
 						</el-form-item>
 						<el-form-item label="回单付" style="flex: 1">
-							<p>{{templateFreight.internalPorRate}}</p>
+							<p>{{templateFreight.internalPorRate}}%</p>
 						</el-form-item>
 						<el-form-item label="月结" style="flex: 1">
-							<p>{{templateFreight.internalAbschlussRate}}</p>
+							<p>{{templateFreight.internalAbschlussRate}}%</p>
 						</el-form-item>
 						<el-form-item label="收方到货付" style="flex: 1">
-							<p>{{templateFreight.internalConsigneeCodRate}}</p>
+							<p>{{templateFreight.internalConsigneeCodRate}}%</p>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -106,19 +106,19 @@
 					<p style="text-align: center; color: #bfcbd9;">------ 对外收款方式占比 ------</p>
 					<el-form label-width="120px" style="display: flex">
 						<el-form-item label="现付" style="flex: 1">
-							<p>{{templateFreight.externalCashRate}}</p>
+							<p>{{templateFreight.externalCashRate}}%</p>
 						</el-form-item>
 						<el-form-item label="到付" style="flex: 1">
-							<p>{{templateFreight.externalCodRate}}</p>
+							<p>{{templateFreight.externalCodRate}}%</p>
 						</el-form-item>
 						<el-form-item label="回单付" style="flex: 1">
-							<p>{{templateFreight.externalPorRate}}</p>
+							<p>{{templateFreight.externalPorRate}}%</p>
 						</el-form-item>
 						<el-form-item label="月结" style="flex: 1">
-							<p>{{templateFreight.externalAbschlussRate}}</p>
+							<p>{{templateFreight.externalAbschlussRate}}%</p>
 						</el-form-item>
 						<el-form-item label="收方到货付" style="flex: 1">
-							<p>{{templateFreight.externalConsigneeCodRate}}</p>
+							<p>{{templateFreight.externalConsigneeCodRate}}%</p>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -197,5 +197,5 @@ export default {
 		font-family 'sans-serif'
 		line-height 40px
 		color #999
-		font-size 12px
+		font-size 14px
 </style>
