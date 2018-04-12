@@ -59,7 +59,11 @@
 		},
 		methods: {
 			control(bool) {
-				this.$emit('control', false, this.cargoInfo)
+				if (bool) {
+					this.$emit('control', false, this.cargoInfo)
+				} else {
+					this.$emit('control', false)
+				}
 			}
 		}
 	}

@@ -36,6 +36,7 @@ service.interceptors.response.use(
 		if (response.data.code != 200) {
 			if (response.data.code == 100 // 用户未登录
 				|| response.data.code == 101 // 用户不存在
+				|| response.data.code == 403 // 拒绝访问
 				|| response.data.code == 5201 // Token验证失败, 请求重新登录!
 				|| response.data.code == 5202) { // 帐号已在其它地方登录!
 				localStorage.clear()

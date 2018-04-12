@@ -98,9 +98,12 @@
 			}
 		},
 		methods: {
-			addImg() {
-				this.localImgUrl = window.URL.createObjectURL(this.$refs.uploadFile.files[0])
-				this.isShowCropper = true
+			addImg(e) {
+				if (this.$refs.uploadFile.value != '') {
+					this.localImgUrl = window.URL.createObjectURL(this.$refs.uploadFile.files[0])
+					this.isShowCropper = true
+					this.$refs.uploadFile.value = ''
+				}
 			},
 			upload() {
 				this.$refs.cropper.getCropBlob((data) => {

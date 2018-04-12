@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="调度单号">
-						<el-input placeholder="调度单号" v-model="findDispatchOrderID"></el-input>
+						<el-input placeholder="调度单号" v-model="findDispatchOrderNo"></el-input>
 					</el-form-item>
 					<el-form-item label="发货地">
 						<el-input placeholder="发货地" v-model="findShipperAddress"></el-input>
@@ -13,8 +13,8 @@
 					<el-form-item label="收货地">
 						<el-input placeholder="收货地" v-model="findConsigneeAddress"></el-input>
 					</el-form-item>
-					<el-form-item label="司机/随车员姓名" v-model="findName">
-						<el-input placeholder="司机/随车员姓名"></el-input>
+					<el-form-item label="司机/随车员姓名">
+						<el-input placeholder="司机/随车员姓名" v-model="findName"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList">搜索</el-button>
@@ -52,20 +52,20 @@
 					</el-table-column>
 					<el-table-column label="随车人员" prop="superCargoName"  width="120" align="center">
 					</el-table-column>
-					<el-table-column label="订单号" prop="carrierOrderNo"  width="130" align="center">
+					<el-table-column label="订单号" prop="carrierOrder.carrierOrderNo"  width="130" align="center">
 					</el-table-column>
-					<el-table-column label="发货地" prop="shipperAddress">
+					<el-table-column label="发货地" prop="dispatchOrderCargo.shipperArea" width="120">
 					</el-table-column>
-					<el-table-column label="收货地" prop="consigneeAddress">
+					<el-table-column label="收货地" prop="dispatchOrderCargo.consigneeArea" width="120">
 					</el-table-column>
 					<el-table-column label="到货时间" width="130" align="center">
 						<template slot-scope="scope">
-							<span>{{scope.row.consigneeDate | getdatefromtimestamp(true)}}</span>
+							<span>{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="货物规格/名称" width="130" >
 						<template slot-scope="scope">
-							<span>{{scope.row.cargoType}}/{{scope.row.cargoName}}</span>
+							<span>{{scope.row.dispatchOrderCargo.cargoType}}/{{scope.row.dispatchOrderCargo.cargoName}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="60" align="center" fixed="right">
@@ -103,7 +103,7 @@ import request from '../../common/request'
 export default {
 	data() {
 		return {
-			findDispatchOrderID: '',
+			findDispatchOrderNo: '',
 			findShipperAddress: '',
 			findConsigneeAddress: '',
 			findName: '',
@@ -118,7 +118,7 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.findDispatchOrderID = ''
+			this.findDispatchOrderNo = ''
 			this.findShipperAddress = ''
 			this.findConsigneeAddress = ''
 			this.findName = ''
@@ -132,7 +132,7 @@ export default {
 				current: this.pageIndex,
 				size: this.pageSize,
 				consigneeAddress: this.findConsigneeAddress,  //	收货地址
-				dispatchOrderID: this.findDispatchOrderID,  //	调度单号
+				dispatchOrderNo: this.findDispatchOrderNo,  //	调度单号
 				name: this.findName,  //	司机或随车人员姓名
 				shipperAddress: this.findShipperAddress,  //发货地址
 			}
