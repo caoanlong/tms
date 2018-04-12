@@ -58,7 +58,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发货时间">
-							<el-date-picker style="width:100%" placeholder="选择发货时间" v-model="carrierOrder.shipperDate"></el-date-picker>
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierOrder.shipperDate"  value-format="timestamp"></el-date-picker>
 						</el-form-item>
 					</el-col>
 
@@ -94,7 +94,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="到货时间">
-							<el-date-picker style="width:100%" placeholder="选择到货时间" v-model="carrierOrder.consigneeDate"></el-date-picker>
+							<el-date-picker type="datetime" style="width:100%" placeholder="选择到货时间" v-model="carrierOrder.consigneeDate"  value-format="timestamp"></el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>

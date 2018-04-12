@@ -83,7 +83,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="身份证号" prop="idCardNum" width="160"></el-table-column>
-					<!-- <el-table-column label="创建人" prop="createByRealName" width="100"></el-table-column> -->
+					<el-table-column label="创建人" prop="createName" width="100"></el-table-column>
 					<el-table-column label="状态">
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 'pass'">通过</span>
@@ -91,7 +91,7 @@
 							<span v-else>其他</span>
 						</template>
 					</el-table-column>
-					<!-- <el-table-column label="审核人" prop="auditByRealName" width="100"></el-table-column> -->
+					<el-table-column label="审核人" prop="auditName" width="100"></el-table-column>
 					<el-table-column label="审核日期" width="100">
 						<template slot-scope="scope">
 							<span v-if="scope.row.auditTime">{{scope.row.auditTime | getdatefromtimestamp(true)}}</span>
