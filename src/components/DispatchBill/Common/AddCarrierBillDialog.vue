@@ -55,8 +55,6 @@
 					<span>{{scope.row.consigneeDate | getdatefromtimestamp() }}</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="货物规格/货物名称" prop="CargoName" width="140"></el-table-column>
-			<el-table-column label="货物总量" prop="CargoTotal"></el-table-column>
 			<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
 			<el-table-column label="发货时间" width="140" align="center">
 				<template slot-scope="scope">
