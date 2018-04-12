@@ -121,7 +121,7 @@
 			</table>
 			<div class="wf-footer clearfix is-center">
 				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Committed'" @click="isLoadVisible = true">装车</button>
-				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Loaded'" @click="confirm">签收</button>
+				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Loaded'" @click="isConfirmVisible = true">签收</button>
 				<button type="button" class="wf-btn btn-primary" v-if="dispatchBill.status == 'Signed'" @click="isModifyVisible = true">修改运费</button>
 				<button type="button" class="wf-btn btn-danger" v-if="dispatchBill.status != 'Signed' && dispatchBill.status != 'Canceled'" @click="cancel">作废</button>
 				<button type="button" class="wf-btn btn-default" @click="back">返回</button>

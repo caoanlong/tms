@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog title="修改运费" :visible.sync="isVisible" custom-class="table" width="70%">
+		<el-dialog title="修改运费" :visible="isVisible" :show-close="false" custom-class="table" width="70%">
 			<table class="customertable">
 				<thead>
 					<tr>

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog title="签收" :visible.sync="isVisible" custom-class="table" width="70%">
+		<el-dialog title="签收" :visible="isVisible" :show-close="false" custom-class="table" width="70%">
 			<table class="wf-table">
 				<tr>
 					<th width="60">序号</th>
@@ -15,7 +15,7 @@
 					<td>{{index+1}}</td>
 					<td>{{item.carrierOrderNo}}</td>
 					<td>{{item.cargoType}}/{{item.cargoName}}</td>
-					<td>{{item.cargoWeight + '吨'}}</td>
+					<td>{{item.cargoWeight + '吨'}}/{{item.cargoVolume + '方'}}/{{item.cargoNum + '件'}}</td>
 					<td>
 						<el-input size="mini" v-model="item.signWeight"></el-input>
 					</td>
