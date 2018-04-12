@@ -177,19 +177,19 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="行驶证注册日期">
 							<p v-if="truck.driverLicRegisterTime">{{truck.driverLicRegisterTime | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="行驶证发证日期">
 							<p v-if="truck.driverLicIssueTime">{{truck.driverLicIssueTime | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="行驶证审验效期至">
 							<p v-if="truck.driverLicExamineExpires">{{truck.driverLicExamineExpires | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>

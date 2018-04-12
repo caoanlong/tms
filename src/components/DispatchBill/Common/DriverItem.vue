@@ -2,7 +2,7 @@
 	<div class="listItem" >
 		<div class="driverNum inlineBlock" ><span>{{truck.code}}</span></div>
 		<div class="pic inlineBlock" >
-			<img src="../../../assets/imgs/avatar.gif">
+			<img :src="imgUrl + truck.truckFrontPic">
 			<p class="status" v-if="truck.loadStatus == 'Empty'">空载</p>
 			<p class="status" v-else-if="truck.loadStatus == 'NotFull'">未满载</p>
 			<p class="status" v-else-if="truck.loadStatus == 'Full'">满载</p>
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div class="lineInfo inlineBlock">
-			从<span>云南</span>到<span>上海</span><span>炸药/R27 5吨</span><span>“收货单位”</span>
+			<p v-for="item in truck.runInfo">{{item.info}}</p>
 		</div>
 		<svg-icon icon-class="select-icon" class="icon" :class="{selected: isSelected}"></svg-icon>
 	</div>
