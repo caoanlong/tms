@@ -19,6 +19,19 @@ export const checkMobile = (rule, value, callback) => {
 	} 
 }
 
+export const checkTel = (rule, value, callback) => {
+	if (!value) {
+		callback(new Error('电话不能为空'))
+	}
+	let regTel = /^([0-9]{3,4}-)?[0-9]{7,8}$/
+	let regMobile = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
+	if (!regMobile.test(value) && !regTel.test(value)) {  
+		callback(new Error('请输入正确的电话'))
+	} else {  
+		callback()
+	} 
+}
+
 export const checkIDCard = (rule, value, callback) => {
 	if (!value) {
 		callback(new Error('身份证号不能为空'))
@@ -49,7 +62,17 @@ export const checkFloat = (rule, value, callback) => {
 	if (!value) {
 		callback(new Error('值不能为空'))
 	}
-	let r = /^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
+	let r = /^\d+(\.\d+)?$/
+	if (r.test(value) || value == 0) {
+		callback()
+	} else {
+		callback(new Error('请输入正确的数字'))
+	}
+}
+
+// 验证非负浮点数（正浮点数 + 0） 非必填
+export const checkFloat2 = (rule, value, callback) => {
+	let r = /^\d+(\.\d+)?$/
 	if (r.test(value) || value == 0) {
 		callback()
 	} else {

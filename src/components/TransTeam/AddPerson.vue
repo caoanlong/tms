@@ -75,6 +75,7 @@
 					<el-col :span="6">
 						<el-form-item label="诚信考核等级">
 							<el-select style="width: 100%" v-model="person.integrityExamineGrade" placeholder="请选择">
+								<el-option label="无" value=""></el-option>
 								<el-option label="A" value="A"></el-option>
 								<el-option label="AA" value="AA"></el-option>
 								<el-option label="AAA" value="AAA"></el-option>

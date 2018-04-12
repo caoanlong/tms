@@ -6,12 +6,12 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm">
 						<el-form-item label="公司名称" prop="companyName">
-							<el-input v-model="recdeliverycomp.companyName"></el-input>
+							<el-input v-model="recdeliverycomp.companyName" :maxlength="100"></el-input>
 						</el-form-item>
 						<el-form-item label="地址" prop="companyAreaID">
 							<DistPicker @selectChange="handleSelectedArea"/>
 						</el-form-item>
-						<el-form-item label="详细地址" prop="detailAddress">
+						<el-form-item label="详细地址" prop="detailAddress" :maxlength="100">
 							<el-input v-model="recdeliverycomp.detailAddress"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">

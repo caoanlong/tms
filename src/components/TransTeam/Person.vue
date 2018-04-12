@@ -12,6 +12,7 @@
 					</el-form-item>
 					<el-form-item label="评级">
 						<el-select v-model="findLevel" placeholder="请选择">
+							<el-option label="无" value=""></el-option>
 							<el-option label="A" value="A"></el-option>
 							<el-option label="AA" value="AA"></el-option>
 							<el-option label="AAA" value="AAA"></el-option>
@@ -29,7 +30,7 @@
 							<el-option label="其他人员" value="Other"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="创建时间">
+					<el-form-item label="添加时间">
 						<el-date-picker
 							v-model="findDate"
 							type="daterange"
@@ -82,7 +83,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="身份证号" prop="idCardNum" width="160"></el-table-column>
-					<el-table-column label="创建人" prop="createByRealName" width="100"></el-table-column>
+					<!-- <el-table-column label="创建人" prop="createByRealName" width="100"></el-table-column> -->
 					<el-table-column label="状态">
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 'pass'">通过</span>
@@ -90,7 +91,7 @@
 							<span v-else>其他</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="审核人" prop="auditByRealName" width="100"></el-table-column>
+					<!-- <el-table-column label="审核人" prop="auditByRealName" width="100"></el-table-column> -->
 					<el-table-column label="审核日期" width="100">
 						<template slot-scope="scope">
 							<span v-if="scope.row.auditTime">{{scope.row.auditTime | getdatefromtimestamp(true)}}</span>
@@ -111,7 +112,7 @@
 					</el-table-column>
 					<el-table-column label="初次发证件时间" width="100">
 						<template slot-scope="scope">
-							<span v-if="scope.row.driverLicenseFirstTime">{{scope.row.driverLicenseFirstTime | getdatefromtimestamp(true)}}</span>
+							<span v-if="scope.row.qualificationFirstTime">{{scope.row.qualificationFirstTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="诚信考核等级" prop="integrityExamineGrade" width="100"></el-table-column>

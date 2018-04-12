@@ -110,17 +110,23 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="载重" prop="loads">
-							<el-input v-model="truck.loads"></el-input>
+							<el-input v-model="truck.loads">
+								<template slot="append">千克</template>
+							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="装载方数" prop="loadVolume">
-							<el-input v-model="truck.loadVolume"></el-input>
+							<el-input v-model="truck.loadVolume">
+								<template slot="append">立方米</template>
+							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="牵引质量">
-							<el-input v-model="truck.tractiveTonnage"></el-input>
+						<el-form-item label="牵引质量" prop="tractiveTonnage">
+							<el-input v-model="truck.tractiveTonnage">
+								<template slot="append">千克</template>
+							</el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -135,8 +141,10 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="罐体容积">
-							<el-input v-model="truck.tankVolume"></el-input>
+						<el-form-item label="罐体容积" prop="tankVolume">
+							<el-input v-model="truck.tankVolume">
+								<template slot="append">立方米</template>
+							</el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -508,7 +516,7 @@ import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
 import {searchAreaByKey} from '../../common/utils'
-import { checkInt, checkFloat } from '../../common/validators'
+import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -633,6 +641,12 @@ export default {
 				loadVolume: [
 					{ required: true, validator: checkFloat, trigger: 'change' }
 				],
+				tractiveTonnage: [
+					{ validator: checkFloat2, trigger: 'change' }
+				],
+				tankVolume: [
+					{ validator: checkFloat2, trigger: 'change' }
+				],
 				manufacturer: [
 					{required: true, message: '请输入生产厂家', trigger: 'blur'}
 				],
@@ -670,7 +684,7 @@ export default {
 					{required: true, message: '请输入所有人/单位', trigger: 'blur'}
 				],
 				carOwnerMobile: [
-					{required: true, message: '请输入所有人电话', trigger: 'blur'}
+					{required: true, validator: checkTel, trigger: 'blur'}
 				],
 				carOwnerAddress: [
 					{required: true, message: '请输入所有人地址', trigger: 'blur'}
@@ -679,7 +693,7 @@ export default {
 					{required: true, message: '请输入车主姓名', trigger: 'blur'}
 				],
 				curDriverMobile: [
-					{required: true, message: '请输入车主电话', trigger: 'blur'}
+					{required: true, validator: checkTel, trigger: 'blur'}
 				],
 				curDriverAddress: [
 					{required: true, message: '请输入车主住址', trigger: 'blur'}

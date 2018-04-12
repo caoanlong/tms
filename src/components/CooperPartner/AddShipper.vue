@@ -6,13 +6,13 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="shipper" :rules="rules" ref="ruleForm">
 						<el-form-item label="公司名称" prop="companyName">
-							<el-input v-model="shipper.companyName"></el-input>
+							<el-input v-model="shipper.companyName" :maxlength="100"></el-input>
 						</el-form-item>
 						<el-form-item label="地址" prop="companyAreaID">
 							<DistPicker @selectChange="handleSelectedArea"/>
 						</el-form-item>
 						<el-form-item label="详细地址" prop="detailAddress">
-							<el-input v-model="shipper.detailAddress"></el-input>
+							<el-input v-model="shipper.detailAddress" :maxlength="100"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">
 							<el-input v-model="shipper.contactName"></el-input>

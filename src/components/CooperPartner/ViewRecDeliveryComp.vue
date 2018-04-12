@@ -9,7 +9,8 @@
 							<p>{{recdeliverycomp.companyName}}</p>
 						</el-form-item>
 						<el-form-item label="地址">
-							<p>{{recdeliverycomp.companyArea}}</p>
+							<p v-if="recdeliverycomp.companyArea">{{recdeliverycomp.companyArea}}</p>
+							<p v-else-if="recdeliverycomp.companyAreaID">{{recdeliverycomp.companyAreaID | searchAreaByKey}}</p>
 						</el-form-item>
 						<el-form-item label="详细地址">
 							<p>{{recdeliverycomp.detailAddress}}</p>
