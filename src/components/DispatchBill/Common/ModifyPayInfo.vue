@@ -98,7 +98,7 @@
 				</tfoot>
 			</table>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="control(true)">取消</el-button>
+				<el-button @click="control(false)">取消</el-button>
 				<el-button type="primary" @click="control(true)">确认</el-button>
 			</span>
 		</el-dialog>
@@ -118,7 +118,11 @@
 		},
 		methods: {
 			control(bool) {
-				this.$emit('control', false, this.payInfo)
+				if (bool) {
+					this.$emit('control', false, this.payInfo)
+				} else {
+					this.$emit('control', false)
+				}
 			}
 		}
 	}

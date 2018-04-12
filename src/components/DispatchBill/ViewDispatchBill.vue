@@ -265,33 +265,38 @@ export default {
 		},
 		handModifyPayInfo(bool, data) {
 			console.log(data)
-			return
-			this.modify(data)
+			if (data) {
+				this.modify(data)
+			}
 			this.isModifyVisible = bool
 		},
 		handLoadSend(bool, data) {
 			console.log(data)
-			let cargoInfo = data.map(item => {
-				return {
-					"dispatchCargoID": item.dispatchCargoID,
-					"loadWeight": item.loadWeight,
-					"loadVolume": item.loadVolume, 
-					"loadNum": item.loadNum
-				}
-			})
-			this.load(cargoInfo)
+			if (data) {
+				let cargoInfo = data.map(item => {
+					return {
+						"dispatchCargoID": item.dispatchCargoID,
+						"loadWeight": item.loadWeight,
+						"loadVolume": item.loadVolume, 
+						"loadNum": item.loadNum
+					}
+				})
+				this.load(cargoInfo)
+			}
 			this.isLoadVisible = bool
 		},
 		handConfirm(bool, data1, data2) {
-			let cargoInfo = data1.map(item => {
-				return {
-					"dispatchCargoID": item.dispatchCargoID,
-					"signWeight": item.signWeight,
-					"signVolume": item.signVolume, 
-					"signNum": item.signNum
-				}
-			})
-			this.confirm(cargoInfo, data2)
+			if (data1 && data2) {
+				let cargoInfo = data1.map(item => {
+					return {
+						"dispatchCargoID": item.dispatchCargoID,
+						"signWeight": item.signWeight,
+						"signVolume": item.signVolume, 
+						"signNum": item.signNum
+					}
+				})
+				this.confirm(cargoInfo, data2)
+			}
 			this.isConfirmVisible = bool
 		},
 		back() {

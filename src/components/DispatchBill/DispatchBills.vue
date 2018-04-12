@@ -13,8 +13,8 @@
 					<el-form-item label="收货地">
 						<el-input placeholder="收货地" v-model="findConsigneeAddress"></el-input>
 					</el-form-item>
-					<el-form-item label="司机/随车员姓名" v-model="findName">
-						<el-input placeholder="司机/随车员姓名"></el-input>
+					<el-form-item label="司机/随车员姓名">
+						<el-input placeholder="司机/随车员姓名" v-model="findName"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList">搜索</el-button>
