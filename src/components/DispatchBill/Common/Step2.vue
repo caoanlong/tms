@@ -97,6 +97,9 @@
 				newVal && this.getPersonList()
 			}
 		},
+		created() {
+			this.getTruckList()
+		},
 		methods: {
 			prevStep() {
 				this.$emit('prevStep', 0)
@@ -132,7 +135,7 @@
 					size: this.truckPageSize,
 				}
 				request({
-					url: '/truck/findList',
+					url: '/transportRecord/findList',
 					params
 				}).then(res => {
 					if (res.data.code == 200) {

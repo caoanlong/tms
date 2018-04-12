@@ -26,15 +26,15 @@
 						<el-input size="mini" v-model="item.signNum"></el-input>
 					</td>
 				</tr>
-				<!-- <tr>
+				<tr>
 					<td>合计</td>
 					<td></td>
 					<td></td>
 					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr> -->
+					<td>{{totalSignWeight}}</td>
+					<td>{{totalSignVolume}}</td>
+					<td>{{totalSignNum}}</td>
+				</tr>
 			</table>
 			<table class="customertable">
 				<thead>
@@ -156,6 +156,26 @@
 				type: Object,
 				default: () => {}
 			}
+		},
+		computed: {
+			totalSignWeight() {
+				let values = this.cargoInfo.map(item => Number(item.signWeight))
+				return values.reduce((prev, next) => {
+					return prev + next
+				}, 0)
+			},
+			totalSignVolume() {
+				let values = this.cargoInfo.map(item => Number(item.signVolume))
+				return values.reduce((prev, next) => {
+					return prev + next
+				}, 0)
+			},
+			totalSignNum() {
+				let values = this.cargoInfo.map(item => Number(item.signNum))
+				return values.reduce((prev, next) => {
+					return prev + next
+				}, 0)
+			},
 		},
 		methods: {
 			control(bool) {
