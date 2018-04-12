@@ -32,7 +32,10 @@
 				v-for="(item, index) in truckList" 
 				:key="index" 
 				:truck="item" 
-				@click.native.stop="selectDriverItem(item)" />
+				@click.native.stop="selectDriverItem(item)"/>
+		</div>
+		<div class="pagination">
+			<el-pagination :page-size="truckPageSize" align="right" background layout="prev, pager, next" :total="truckCount" @current-change="pageTruckChange"></el-pagination>
 		</div>
 		<el-row>
 			<div class="split-item">
@@ -58,6 +61,9 @@
 				:key="index" 
 				:person="item"
 				@click.native.stop="selectEscortItem(item)" />
+		</div>
+		<div class="pagination">
+			<el-pagination :page-size="personPageSize" align="right" background layout="prev, pager, next" :total="personCount" @current-change="pagePersonChange"></el-pagination>
 		</div>
 		<div class="step-footer">
 			<el-button @click="prevStep">上一步</el-button>
@@ -99,6 +105,7 @@
 		},
 		created() {
 			this.getTruckList()
+			this.getPersonList()
 		},
 		methods: {
 			prevStep() {
@@ -106,6 +113,14 @@
 			},
 			nextStep() {
 				this.$emit('nextStep', 2, this.selectedDriver, this.selectedEscort)
+			},
+			pageTruckChange(index) {
+				this.truckPageIndex = index
+				this.getTruckList()
+			},
+			pagePersonChange(index) {
+				this.personPageIndex = index
+				this.getPersonList()
 			},
 			selectDriverItem(data) {
 				if (data.loadStatus == 'Full') {
