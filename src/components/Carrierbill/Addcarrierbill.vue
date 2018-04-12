@@ -193,8 +193,8 @@
 						</el-form-item>
 						<el-form-item label="发票">
 							<el-radio-group v-model="carrierbillInfo.invoice">
-								<el-radio label="Y">开发票</el-radio>
-								<el-radio label="N">不开发票</el-radio>
+								<el-radio label="Y" value="Y">开发票</el-radio>
+								<el-radio label="N" value="N">不开发票</el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="回单要求" class="receipt">
