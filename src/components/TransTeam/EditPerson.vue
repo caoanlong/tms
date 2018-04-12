@@ -86,7 +86,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="聘用岗位" prop="position">
-							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择">
+							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择" @change="changePost">
 								<el-option label="操作员" value="Operator"></el-option>
 								<el-option label="驾驶员" value="Driver"></el-option>
 								<el-option label="押运员" value="Supercargo"></el-option>
@@ -394,6 +394,9 @@ export default {
 				this.person['otherStaffPic' + (i + 1)] = files[i]
 			}
 		},
+		changePost(e) {
+			this.person.position = e.join(',')
+		},
 		getInfo() {
 			let params = {
 				staffID: this.$route.query.staffID
@@ -455,7 +458,6 @@ export default {
 		updateItem() {
 			let data = this.person
 			data.staffID = this.$route.query.staffID
-			data.position = this.position.join(',')
 			if(!data.integrityExamineEndTime) {
 				data.integrityExamineEndTime = ''
 			}
