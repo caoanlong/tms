@@ -59,11 +59,8 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="公司名称" prop="companyName"></el-table-column>
-					<el-table-column label="地区">
-						<template slot-scope="scope">
-							<span>{{scope.row.companyArea}}{{scope.row.detailAddress}}</span>
-							<!-- <span>{{String(scope.row.companyAreaID) | searchAreaByKey() }}</span> -->
-						</template>
+					<el-table-column label="地区" prop="companyArea"></el-table-column>
+					<el-table-column label="详细地址" prop="detailAddress">
 					</el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>
 					<el-table-column label="联系方式" prop="contactPhone" width="140"></el-table-column>

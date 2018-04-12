@@ -8,7 +8,7 @@
 				<span class="status status1" v-else-if="carrierOrder.status=='Closed'">关闭</span>
 				<span class="status status1" v-else-if="carrierOrder.status=='Canceled'">作废</span>
 			</div>
-			<el-form label-width="100px">
+			<el-form label-width="100px" size="mini"> 
 				<el-row>
 					<div class="split-item">
 						<span class="num">1</span>
@@ -62,13 +62,13 @@
 						</el-form-item>
 					</el-col>
 
-					<el-col :span="8">
+					<el-col :span="12">
 						<el-form-item label="发货地">
-							<DistPicker @selectChange="handleSelectedArea" class="normal" :selected="selectedArea" />
+							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea" />
 						</el-form-item>
 					</el-col>
 					
-					<el-col :span="8">
+					<el-col :span="12">
 						<el-form-item label-width="20px">
 							<el-input placeholder="发货详细地址" v-model="carrierOrder.shipperDetailAddress"></el-input>
 						</el-form-item>
@@ -99,12 +99,12 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="8">
+					<el-col :span="12">
 						<el-form-item label="卸货地">
-							<DistPicker @selectChange="handleSelectedArea1" class="normal" :selected="selectedArea1" />
+							<DistPicker @selectChange="handleSelectedArea1" :selected="selectedArea1" />
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="12">
 						<el-form-item label-width="20px">
 							<el-input placeholder="卸货详细地址" v-model="carrierOrder.consigneeDetailAddress"></el-input>
 						</el-form-item>
