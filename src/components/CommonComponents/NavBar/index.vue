@@ -10,10 +10,14 @@
 					<i class="el-icon-caret-bottom"></i>
 				</div>
 				<el-dropdown-menu slot="dropdown">
-					<router-link :to="{name: 'userprofile'}">
+					<!-- <router-link :to="{name: 'userprofile'}">
 						<el-dropdown-item>个人资料</el-dropdown-item>
 					</router-link>
 					<el-dropdown-item divided>
+						<span @click="logout" style="display:block;">退出</span>
+					</el-dropdown-item> -->
+
+					<el-dropdown-item>
 						<span @click="logout" style="display:block;">退出</span>
 					</el-dropdown-item>
 				</el-dropdown-menu>
