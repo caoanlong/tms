@@ -61,7 +61,7 @@
 								<p>收货单位：{{ scope.row.consigneeCompanyName }}</p>
 								<p>卸货地：{{ scope.row.consigneeDetailAddress }}</p>
 								<div slot="reference" class="name-wrapper">
-									<span style="color:#409EFF">{{ scope.row.carrierOrderID}}</span>
+									<span style="color:#409EFF">{{ scope.row.carrierOrderNo}}</span>
 								</div>
 							</el-popover>
 						</template>

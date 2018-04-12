@@ -47,7 +47,7 @@
 					<span v-else-if="scope.row.status=='Canceled'">作废</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="承运单号" prop="carrierOrderID" width="150" align="center"></el-table-column>
+			<el-table-column label="承运单号" prop="carrierOrderNo" width="150" align="center"></el-table-column>
 			<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
 			<el-table-column label="卸货地" prop="consigneeDetailAddress" width="120"></el-table-column>
 			<el-table-column label="收货人" prop="consigneeName"></el-table-column>
