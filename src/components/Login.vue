@@ -46,7 +46,10 @@
 					</div>
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="password"></svg-icon>
-						<input type="text" name="password" placeholder="请输入密码" v-model="register.password">
+						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="register.password">
+						<span class="ico show-pwd" @click="showPwd">
+							<svg-icon icon-class="eye"/>
+						</span>
 					</div>
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="peoples"></svg-icon>
@@ -126,7 +129,7 @@
 import request from "../common/request"
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
-import { isPoneAvailable } from '../common/validators'
+import { isPoneAvailable, isVerCodeAvailable } from '../common/validators'
 export default {
 	name: 'App',
 	data() {
@@ -288,6 +291,26 @@ export default {
 		 * 	注册
 		 */
 		handRegister() {
+			if (!isVerCodeAvailable(this.register.vcode)) {
+				Message.error('请输入正确长度的验证码！')
+				return
+			}
+			if (this.register.password.length > 32) {
+				Message.error('密码过长！')
+				return
+			}
+			if (this.register.contact.length > 50) {
+				Message.error('联系人过长！')
+				return
+			}
+			if (this.register.company.length > 100) {
+				Message.error('公司名过长！')
+				return
+			}
+			if (this.register.address.length > 100) {
+				Message.error('地址过长！')
+				return
+			}
 			let data = {
 				mobile: this.register.mobile,
 				vcode: this.register.vcode,

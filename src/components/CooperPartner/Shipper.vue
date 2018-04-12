@@ -59,8 +59,7 @@
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="公司名称" prop="companyName"></el-table-column>
 					<el-table-column label="地区" prop="companyArea"></el-table-column>
-					<el-table-column label="详细地址" prop="detailAddress">
-					</el-table-column>
+					<el-table-column label="详细地址" prop="detailAddress"></el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>
 					<el-table-column label="联系方式" prop="contactPhone" width="140"></el-table-column>
 					<el-table-column label="录入时间" prop="createTime" width="140">
@@ -161,7 +160,7 @@
 			// 上传错误
 			uploadError (response) {
 				console.log(response)
-				// Message.error(response)
+				Message.error(response.msg)
 			},
 			beforeFileUpload (file) {
 				const extension = file.name.split('.')[1] === 'xls'

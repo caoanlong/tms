@@ -6,7 +6,7 @@ export const baseURL = process.env.BASE_API
 // create an axios instance
 const service = axios.create({
 	baseURL: baseURL, // api的base_url
-	timeout: 5000, // request timeout
+	timeout: 50000, // request timeout
 	transformRequest: [function (data) {
 		// Do whatever you want to transform the data
 		let ret = ''

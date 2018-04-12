@@ -14,31 +14,15 @@
 						<el-input placeholder="请输入..." v-model="findTractiveTonnage"></el-input>
 					</el-form-item>
 					<el-form-item label="车长">
-						<el-select v-model="findLength" placeholder="请选择">
-							<el-option label="5米" value="5"></el-option>
-							<el-option label="8米" value="8"></el-option>
-							<el-option label="10米" value="10"></el-option>
-							<el-option label="12米" value="12"></el-option>
-							<el-option label="15米" value="15"></el-option>
-						</el-select>
+						<el-input placeholder="请输入..." v-model="findLength"></el-input>
 					</el-form-item>
 					<el-form-item label="车宽">
-						<el-select v-model="findWidth" placeholder="请选择">
-							<el-option label="2米" value="2"></el-option>
-							<el-option label="3米" value="3"></el-option>
-							<el-option label="4米" value="4"></el-option>
-							<el-option label="5米" value="5"></el-option>
-						</el-select>
+						<el-input placeholder="请输入..." v-model="findWidth"></el-input>
 					</el-form-item>
 					<el-form-item label="车高">
-						<el-select v-model="findHigh" placeholder="请选择">
-							<el-option label="2米" value="2"></el-option>
-							<el-option label="3米" value="3"></el-option>
-							<el-option label="3.5米" value="3.5"></el-option>
-							<el-option label="4米" value="4"></el-option>
-						</el-select>
+						<el-input placeholder="请输入..." v-model="findHigh"></el-input>
 					</el-form-item>
-					<el-form-item label="创建日期">
+					<el-form-item label="添加时间">
 						<el-date-picker
 							v-model="findDate"
 							type="daterange"
@@ -261,7 +245,7 @@
 			// 上传错误
 			uploadError (response) {
 				console.log(response)
-				// Message.error(response)
+				Message.error(response.msg)
 			},
 			beforeFileUpload (file) {
 				const extension = file.name.split('.')[1] === 'xls'

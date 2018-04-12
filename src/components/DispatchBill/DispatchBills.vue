@@ -31,7 +31,7 @@
 					</el-table-column>
 					<el-table-column label="车辆号牌" prop="plateNo" width="110" align="center">
 					</el-table-column>
-					<el-table-column label="配载量" prop="LoadingQuantity" width="180" align="center">
+					<el-table-column label="配载量" width="180" align="center">
 						<template slot-scope="scope">
 							<span>
 								{{(scope.row.totalCargoWeight ? scope.row.totalCargoWeight : 0) + '吨'}}

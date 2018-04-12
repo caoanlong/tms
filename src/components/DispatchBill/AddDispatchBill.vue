@@ -190,6 +190,7 @@ export default {
 			for (let i = 0; i < data.length; i++) {
 				this.getDetail(data[i])
 			}
+			this.dialogTableVisible = false
 		},
 		// 单个承运单详情
 		getDetail(carrierOrderID) {

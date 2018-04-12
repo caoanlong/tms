@@ -172,7 +172,7 @@
 					truckType: this.findTruckType
 				}
 				request({
-					url: '/transportRecord/findList',
+					url: '/transportRecord/selectDriver',
 					params
 				}).then(res => {
 					if (res.data.code == 200) {
