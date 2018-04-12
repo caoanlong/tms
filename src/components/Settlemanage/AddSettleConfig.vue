@@ -34,7 +34,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<!-- <el-col :span="8">
 						<el-form-item label="发货人">
 							<el-input placeholder="发货人" v-model="shipperDetail.contactName"></el-input>
 						</el-form-item>
@@ -43,7 +43,7 @@
 						<el-form-item label="联系电话">
 							<el-input placeholder="联系电话" v-model="shipperDetail.contactPhone"></el-input>
 						</el-form-item>
-					</el-col>
+					</el-col> -->
 					<el-col :span="12">
 						<el-form-item label="发货地">
 							<el-input placeholder="发货地" v-model="selectedArea"></el-input>
@@ -70,7 +70,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<!-- <el-col :span="8">
 						<el-form-item label="收货人">
 							<el-input placeholder="收货人" v-model="ConsigneeDetail.contactName"></el-input>
 						</el-form-item>
@@ -79,7 +79,7 @@
 						<el-form-item label="联系电话">
 							<el-input placeholder="联系电话" v-model="ConsigneeDetail.contactPhone"></el-input>
 						</el-form-item>
-					</el-col>
+					</el-col> -->
 				</el-row>
 				<el-row>
 					<el-col :span="12">
@@ -153,19 +153,29 @@
 					</el-col>
 					<el-col :span="24" style="display:flex">
 						<el-form-item style="flex:1" label="现付">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalCashRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.internalCashRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 						<el-form-item style="flex:1" label="到付">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalCodRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.internalCodRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 						<el-form-item style="flex:1" label="回单付">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalPorRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.internalPorRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 						<el-form-item style="flex:1" label="月结">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalAbschlussRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.internalAbschlussRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 						<el-form-item style="flex:1" label="收方到货付">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalConsigneeCodRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.internalConsigneeCodRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="24">
@@ -173,19 +183,29 @@
 					</el-col>
 					<el-col :span="24" style="display:flex">
 						<el-form-item style="flex:1" label="现付">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalCashRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.externalCashRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 						<el-form-item style="flex:1" label="到付">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalCodRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.externalCodRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 						<el-form-item style="flex:1" label="回单付">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalPorRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.externalPorRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 						<el-form-item style="flex:1" label="月结">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalAbschlussRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.externalAbschlussRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 						<el-form-item style="flex:1" label="收方到货付">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalConsigneeCodRate"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.externalConsigneeCodRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
