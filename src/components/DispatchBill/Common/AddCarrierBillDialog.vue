@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="添加承运单" :visible.sync="isVisible" custom-class="table" width="80%">
+	<el-dialog title="添加承运单" :visible="isVisible" :show-close="false" custom-class="table" width="80%">
 		<div class="search">
 			<el-form :inline="true" class="demo-form-inline" size="small">
 				<el-form-item label="承运单号">
@@ -152,6 +152,7 @@
 			},
 			cancel() {
 				this.isVisible = false
+				this.$emit('selectCarrierBills')
 			},
 		}
 	}
