@@ -28,14 +28,14 @@
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
 				<el-table-column label="货物规格/货物名称" prop="cargoName">
 					<template slot-scope="scope">
-						<span>{{scope.row.cargoType}}/{{scope.row.cargoName}}</span>
+						<span>{{scope.row.cargoType}}{{scope.row.cargoName ? '/' + scope.row.cargoName : ''}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="待配载量">
 					<template slot-scope="scope">
-						{{scope.row.remainingCargoWeight}} 
-						/{{scope.row.remainingCargoVolume}} 
-						/{{scope.row.remainingCargoNum}}
+						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}} 
+						{{scope.row.remainingCargoVolume ? ('/' + scope.row.remainingCargoVolume + '方') : ''}} 
+						{{scope.row.remainingCargoNum ? ('/' + scope.row.remainingCargoNum + '件') : ''}}
 					</template>
 				</el-table-column>
 				<el-table-column label="配载重量" width="180">

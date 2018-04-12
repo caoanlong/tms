@@ -44,6 +44,8 @@
 							<el-input placeholder="联系电话" v-model="shipperDetail.contactPhone"></el-input>
 						</el-form-item>
 					</el-col> -->
+				</el-row>
+				<el-row>
 					<el-col :span="12">
 						<el-form-item label="发货地">
 							<el-input placeholder="发货地" v-model="selectedArea"></el-input>
@@ -217,9 +219,6 @@
 		</div>
 	</div>
 </template>
-
-
-
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'

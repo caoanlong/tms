@@ -266,8 +266,16 @@ export default {
 		 * 	登录
 		 */
 		handLogin() {
+			if (!this.login.username.trim()) {
+				Message.error('用户名不能为空！')
+				return
+			}
 			if (this.login.username.length > 50) {
 				Message.error('用户名过长！')
+				return
+			}
+			if (!this.login.password.trim()) {
+				Message.error('用户名不能为空！')
 				return
 			}
 			if (this.login.password.length > 32) {
@@ -299,20 +307,48 @@ export default {
 		 * 	注册
 		 */
 		handRegister() {
-			if (!isVerCodeAvailable(this.register.vcode)) {
+			if (!this.register.mobile.trim()) {
+				Message.error('手机号不能为空！')
+				return
+			}
+			if (!isPoneAvailable(this.register.mobile)) {
+				Message.error('请输入正确的手机号！')
+				return
+			}
+			if (!this.register.vcode.trim()) {
+				Message.error('验证码不能为空！')
+				return
+			}
+			if (this.register.vcode.length != 6) {
 				Message.error('请输入正确长度的验证码！')
+				return
+			}
+			if (!this.register.password.trim()) {
+				Message.error('密码不能为空！')
 				return
 			}
 			if (this.register.password.length > 32) {
 				Message.error('密码过长！')
 				return
 			}
-			if (this.register.contact.length > 50) {
-				Message.error('联系人过长！')
+			if (!this.register.contact.trim()) {
+				Message.error('联系人不能为空！')
+				return
+			}
+			if (!this.register.company.trim()) {
+				Message.error('公司不能为空！')
 				return
 			}
 			if (this.register.company.length > 100) {
 				Message.error('公司名过长！')
+				return
+			}
+			if (!this.register.province.trim() && !this.register.city.trim()) {
+				Message.error('省份和城市必选一项！')
+				return
+			}
+			if (!this.register.address.trim()) {
+				Message.error('详细地址不能为空！')
 				return
 			}
 			if (this.register.address.length > 100) {
@@ -350,6 +386,34 @@ export default {
 		 * 	找回密码
 		 */
 		handFindPassword() {
+			if (!this.findPassword.mobile.trim()) {
+				Message.error('手机号不能为空！')
+				return
+			}
+			if (!isPoneAvailable(this.findPassword.mobile)) {
+				Message.error('请输入正确的手机号！')
+				return
+			}
+			if (!this.findPassword.vcode.trim()) {
+				Message.error('验证码不能为空！')
+				return
+			}
+			if (this.findPassword.vcode.length != 6) {
+				Message.error('请输入正确长度的验证码！')
+				return
+			}
+			if (!this.findPassword.password.trim()) {
+				Message.error('密码不能为空！')
+				return
+			}
+			if (this.findPassword.password.length > 32) {
+				Message.error('密码过长！')
+				return
+			}
+			if (this.findPassword.password != this.findPassword.confirmPassword) {
+				Message.error('重复输入密码不一致！')
+				return
+			}
 			let data = {
 				mobile: this.findPassword.mobile,
 				vcode: this.findPassword.vcode,
