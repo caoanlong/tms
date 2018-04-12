@@ -30,3 +30,29 @@ export const checkIDCard = (rule, value, callback) => {
 		callback()
 	}
 }
+
+// 验证正整数 + 0
+export const checkInt = (rule, value, callback) => {
+	if (!value) {
+		callback(new Error('值不能为空'))
+	}
+	let r = /^\+?[1-9][0-9]*$/
+	if (r.test(value) || value == 0) {
+		callback()
+	} else {
+		callback(new Error('请输入正确的数字'))
+	}
+}
+
+// 验证非负浮点数（正浮点数 + 0）
+export const checkFloat = (rule, value, callback) => {
+	if (!value) {
+		callback(new Error('值不能为空'))
+	}
+	let r = /^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
+	if (r.test(value) || value == 0) {
+		callback()
+	} else {
+		callback(new Error('请输入正确的数字'))
+	}
+}
