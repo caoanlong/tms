@@ -293,9 +293,23 @@ export default {
 		handRegister() {
 			if (!isVerCodeAvailable(this.register.vcode)) {
 				Message.error('请输入正确长度的验证码！')
+				return
 			}
 			if (this.register.password.length > 32) {
 				Message.error('密码过长！')
+				return
+			}
+			if (this.register.contact.length > 50) {
+				Message.error('联系人过长！')
+				return
+			}
+			if (this.register.company.length > 100) {
+				Message.error('公司名过长！')
+				return
+			}
+			if (this.register.address.length > 100) {
+				Message.error('地址过长！')
+				return
 			}
 			let data = {
 				mobile: this.register.mobile,
