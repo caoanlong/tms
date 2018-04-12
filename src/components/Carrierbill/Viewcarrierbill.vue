@@ -262,8 +262,8 @@ export default {
 				this.carrierOrder = res.data.data
 				this.carrierCargo = res.data.data.carrierCargo
 				this.consignorID = res.data.data.consignorID
-				this.porRequire = res.data.data.porRequire.split(',')
 				this.getConsignor()
+				this.porRequire = res.data.data.porRequire.split(',')
 			})
 		},
 		getConsignor(){

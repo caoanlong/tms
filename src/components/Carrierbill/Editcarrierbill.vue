@@ -190,7 +190,7 @@
 							<div v-show="carrierOrder.paymentMethod=='TKM'" class="tips">从“这单的发货地”到卸货地对内运距为“50公里”?</div>
 						</el-form-item>
 						<el-form-item label="发票">
-							<el-radio-group v-model="carrierOrder.Invoice">
+							<el-radio-group v-model="carrierOrder.invoice">
 								<el-radio label="Y">开发票</el-radio>
 								<el-radio label="N">不开发票</el-radio>
 							</el-radio-group>
@@ -311,7 +311,7 @@ export default {
 				let consigneeAreaID = res.data.data.consigneeAreaID
 				this.selectedArea1 = [(consigneeAreaID.substr(0, 2) + '0000'), (consigneeAreaID.substr(0, 4) + '00'), consigneeAreaID]
 				this.getConsignor()
-				console.log(res.data.data.porRequire)
+				console.log(res.data.data)
 			})
 		},
 		// 获取托运人
@@ -351,6 +351,7 @@ export default {
 				consigneeAmount: this.carrierOrder.consigneeAmount,
 				paymentMethod: this.carrierOrder.paymentMethod,
 				status: this.carrierOrder.status,
+				invoice: this.carrierOrder.invoice,
 				porRequire: this.porRequire
 			}
 			request({
