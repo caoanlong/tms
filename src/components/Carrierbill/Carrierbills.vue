@@ -72,16 +72,16 @@
 					</el-table-column>
 					<el-table-column label="收货人" prop="consigneeName">
 					</el-table-column>
-					<el-table-column label="到货时间" prop="consigneeDate" width="100" align="center">
+					<el-table-column label="到货时间" prop="consigneeDate" width="140" align="center">
 						<template slot-scope="scope">
-							<span>{{scope.row.consigneeDate | getdatefromtimestamp(true) }}</span>
+							<span>{{scope.row.consigneeDate | getdatefromtimestamp() }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="发货单位" prop="shipperCompanyName">
 					</el-table-column>
-					<el-table-column label="发货时间" prop="shipperDate" width="100" align="center">
+					<el-table-column label="发货时间" prop="shipperDate" width="140" align="center">
 						<template slot-scope="scope">
-							<span>{{scope.row.shipperDate | getdatefromtimestamp(true) }}</span>
+							<span>{{scope.row.shipperDate | getdatefromtimestamp() }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="发货人" prop="shipperName">

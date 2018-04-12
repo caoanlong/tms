@@ -206,7 +206,7 @@
 					<el-col :span="24">
 						<el-form-item align="center" label-width="0">
 							<el-button type="primary" @click="save">保存</el-button>
-							<el-button type="success" @click="AddDispatchBill">调度</el-button>
+							<!-- <el-button type="success" @click="AddDispatchBill">调度</el-button> -->
 							<el-button @click="back">返回</el-button>
 						</el-form-item>
 					</el-col>
@@ -363,9 +363,9 @@ export default {
 				this.$router.go(-1)
 			})
 		},
-		AddDispatchBill() {
-			this.$router.push({ name: 'adddispatchbill', query: { CarrierNum: this.$route.query.CarrierNum } })
-		},
+		// AddDispatchBill() {
+		// 	this.$router.push({ name: 'adddispatchbill', query: { CarrierNum: this.$route.query.CarrierNum } })
+		// },
 		addItem() {
 			this.carrierCargo.push({
 				'cargoType': '',

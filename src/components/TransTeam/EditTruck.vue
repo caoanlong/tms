@@ -85,21 +85,21 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="车长" prop="length">
 							<el-input v-model="truck.length">
 								<template slot="append">毫米</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="车宽" prop="width">
 							<el-input v-model="truck.width">
 								<template slot="append">毫米</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="车高" prop="high">
 							<el-input v-model="truck.high">
 								<template slot="append">毫米</template>
@@ -108,42 +108,44 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="载重" prop="loads">
 							<el-input v-model="truck.loads">
 								<template slot="append">千克</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="装载方数" prop="loadVolume">
 							<el-input v-model="truck.loadVolume">
 								<template slot="append">立方米</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="牵引质量" prop="tractiveTonnage">
 							<el-input v-model="truck.tractiveTonnage">
 								<template slot="append">千克</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="总质量" prop="totalWeight">
 							<el-input v-model="truck.totalWeight">
 								<template slot="append">千克</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="准载类型">
 							<el-input v-model="truck.accurateLoadType"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="罐体类型">
 							<el-select style="width: 100%" v-model="truck.cannedType" placeholder="请选择">
 								<el-option label="椭圆形" value="椭圆形"></el-option>
@@ -152,7 +154,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="罐体容积" prop="tankVolume">
 							<el-input v-model="truck.tankVolume">
 								<template slot="append">立方米</template>

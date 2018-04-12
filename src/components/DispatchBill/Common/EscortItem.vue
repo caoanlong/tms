@@ -8,7 +8,7 @@
 		<div class="driverName">{{person.realName}}</div>
 		<div class="phone">{{person.mobile}}</div>
 		<div class="lineInfo inlineBlock">
-			<p>从<span>云南</span>到<span>上海</span><span>炸药/R27 5吨</span><span>“收货单位”</span></p>
+			<p v-for="item in person.runInfo">{{item.info}}</p>
 		</div>
 		<svg-icon icon-class="select-icon" class="icon" :class="{selected: isSelected}"></svg-icon>
 	</div>
