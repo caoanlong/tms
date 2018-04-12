@@ -116,7 +116,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="准驾车型">
-							<el-select style="width: 100%" multiple v-model="quasiDrivingType" placeholder="请选择">
+							<el-select style="width: 100%" v-model="person.quasiDrivingType" placeholder="请选择">
 								<el-option label="A1" value="A1"></el-option>
 								<el-option label="A2" value="A2"></el-option>
 								<el-option label="A3" value="A3"></el-option>
@@ -328,7 +328,6 @@ export default {
 				otherStaffPic5: ''
 			},
 			position: [],
-			quasiDrivingType: [],
 			otherImgs: [],
 			rules: {
 				createName: [
@@ -444,11 +443,6 @@ export default {
 					otherStaffPic5: data.comStaffPic.otherStaffPic5
 				}
 				this.position = data.position.split(',')
-				if(data.comStaffIdentification.quasiDrivingType.length<1){
-					this.quasiDrivingType
-				}else{
-					this.quasiDrivingType = data.comStaffIdentification.quasiDrivingType.split(',')
-				}
 				
 				let resDataComStaffPic = data.comStaffPic
 				let i = 1
@@ -462,7 +456,6 @@ export default {
 			let data = this.person
 			data.staffID = this.$route.query.staffID
 			data.position = this.position.join(',')
-			data.quasiDrivingType = this.quasiDrivingType.join(',')
 			if(!data.integrityExamineEndTime) {
 				data.integrityExamineEndTime = ''
 			}

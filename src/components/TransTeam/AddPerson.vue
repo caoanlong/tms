@@ -116,7 +116,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="准驾车型">
-							<el-select style="width: 100%" multiple v-model="quasiDrivingType" placeholder="请选择">
+							<el-select style="width: 100%" v-model="person.quasiDrivingType" placeholder="请选择">
 								<el-option label="A1" value="A1"></el-option>
 								<el-option label="A2" value="A2"></el-option>
 								<el-option label="A3" value="A3"></el-option>
@@ -397,7 +397,6 @@ export default {
 		createItem() {
 			let data = this.person
 			data.position = this.position.join(',')
-			data.quasiDrivingType = this.quasiDrivingType.join(',')
 			if(!data.integrityExamineEndTime) {
 				data.integrityExamineEndTime = ''
 			}
