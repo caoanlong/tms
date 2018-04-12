@@ -153,13 +153,15 @@
 			},
 			// 导入
 			uploadSuccess (response) {
-				console.log(response)
-				Message.success(response.data)
-				this.getList()
+				if (response.code != 200) {
+					Message.error(response.msg)
+				} else {
+					Message.success(msg)
+					this.getList()
+				}
 			},
 			// 上传错误
 			uploadError (response) {
-				console.log(response)
 				Message.error(response.msg)
 			},
 			beforeFileUpload (file) {

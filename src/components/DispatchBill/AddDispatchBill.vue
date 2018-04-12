@@ -185,10 +185,11 @@ export default {
 			this.stepActive = x
 		},
 		handSelectCarrierBills(data, bool) {
-			this.dialogTableVisible = bool
-			let selectedCarrierBillIDs = data
-			for (let i = 0; i < data.length; i++) {
-				this.getDetail(data[i])
+			if (data) {
+				let selectedCarrierBillIDs = data
+				for (let i = 0; i < data.length; i++) {
+					this.getDetail(data[i])
+				}
 			}
 			this.dialogTableVisible = false
 		},
