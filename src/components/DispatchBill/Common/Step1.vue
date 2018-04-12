@@ -40,17 +40,17 @@
 				</el-table-column>
 				<el-table-column label="配载重量" width="180">
 					<template slot-scope="scope">
-						<el-input placeholder="'配载重量'" size="mini" v-model="scope.row.cargoWeightNew"></el-input>
+						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew"></el-input>
 					</template>
 				</el-table-column>
 				<el-table-column label="配载体积" width="180">
 					<template slot-scope="scope">
-						<el-input placeholder="'配载体积'" size="mini" v-model="scope.row.cargoVolumeNew"></el-input>
+						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew"></el-input>
 					</template>
 				</el-table-column>
 				<el-table-column label="配载件数" width="180">
 					<template slot-scope="scope">
-						<el-input placeholder="'配载件数'" size="mini" v-model="scope.row.cargoNumNew"></el-input>
+						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew"></el-input>
 					</template>
 				</el-table-column>
 			</el-table>

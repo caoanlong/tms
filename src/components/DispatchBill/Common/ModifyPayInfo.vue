@@ -71,14 +71,34 @@
 						</td>
 					</tr>
 				</tbody>
-				<!-- <tfoot>
+				<tfoot>
 					<tr>
-						<td colspan="7" class="txt-r">合计</td>
+						<td class="txt-r">合计</td>
+						<td colspan="6">
+							{{
+								Number(payInfo.driverCashAmount) 
+								+ Number(payInfo.driverCodAmount)
+								+ Number(payInfo.driverPorAmount)
+								+ Number(payInfo.driverMonthlyAmont)
+								+ Number(payInfo.driverCosigneeAmount)
+								+ Number(payInfo.driverDetoursMileage)
+								+ Number(payInfo.driverDetoursAmount)
+								+ Number(payInfo.driverOtherAmount)
+								+ Number(payInfo.superCargoCashAmount)
+								+ Number(payInfo.superCargoCodAmount)
+								+ Number(payInfo.superCargoCorAmount)
+								+ Number(payInfo.superCargoMonthlyAmount)
+								+ Number(payInfo.superCosigneeAmount)
+								+ Number(payInfo.superCargoDetoursMileage)
+								+ Number(payInfo.superCargoDetoursAmount)
+								+ Number(payInfo.superCargoOtherAmount)
+							}}
+						</td>
 					</tr>
-				</tfoot> -->
+				</tfoot>
 			</table>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="control(false)">取消</el-button>
+				<el-button @click="control(true)">取消</el-button>
 				<el-button type="primary" @click="control(true)">确认</el-button>
 			</span>
 		</el-dialog>

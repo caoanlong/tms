@@ -126,7 +126,7 @@
 						<el-input size="mini" v-model="payMethods.superCosigneeAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini" :value="totalSuperCargo"></el-input>
+						<el-input disabled size="mini" :value="totalSuperCargo"></el-input>
 					</td>
 				</tr>
 			</tbody>

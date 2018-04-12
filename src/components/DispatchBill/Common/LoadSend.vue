@@ -39,7 +39,7 @@
 			<!-- <p>备注</p>
 			<el-input type="textarea" placeholder="请输入..."></el-input> -->
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="control(false)">取消</el-button>
+				<el-button @click="control(true)">取消</el-button>
 				<el-button type="primary" @click="control(true)">确认</el-button>
 			</span>
 		</el-dialog>

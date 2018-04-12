@@ -53,7 +53,7 @@
 				</tr>
 				<tr>
 					<td colspan="6">
-						<span class="labels">司机：</span>{{dispatchBill.driverName}} 13529005327
+						<span class="labels">司机：</span>{{dispatchBill.driverName}} {{dispatchBill.driverMobile}}
 						<span class="labels" style="margin-left:40px">载具：</span>
 						{{dispatchBill.plateNo}} 6.2米{{dispatchBill.truckType}} {{dispatchBill.loads}}吨{{dispatchBill.loadVolume}}方
 						<span class="labels" style="margin-left:40px">随车人员：</span>{{dispatchBill.superCargoName}} {{dispatchBill.superCargoMobile}}
@@ -141,7 +141,7 @@ import ConfirmCargo from './Common/ConfirmCargo'
 export default {
 	data() {
 		return {
-			isModifyVisible: true,
+			isModifyVisible: false,
 			isLoadVisible: false,
 			isConfirmVisible: false,
 			dispatchBill: {},
@@ -207,7 +207,7 @@ export default {
 				this.getInfo()
 			})
 		},
-		confirm(cargoInfo,payInfo) {
+		confirm(cargoInfo, payInfo) {
 			let data = {
 				dispatchOrderID: this.$route.query.dispatchOrderID,
 				confirmCargoInfo: JSON.stringify(cargoInfo),
@@ -233,7 +233,7 @@ export default {
 			let data = {
 				dispatchOrderID: this.$route.query.dispatchOrderID,
 				driverCashAmount: payInfo.driverCashAmount, //	司机现付金	
-				driverCodAmount: payInfo.driverCodAmount, //	司机到付金	
+				driverCodAmount: payInfo.driverCodAmount, //  司机到付金	
 				driverCosigneeAmount: payInfo.driverCosigneeAmount, //	司机收货方到付金	
 				driverDetoursAmount: payInfo.driverDetoursAmount, //	司机绕路	
 				driverDetoursMileage: payInfo.driverDetoursMileage, //	司机绕路里	
