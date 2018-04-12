@@ -266,6 +266,14 @@ export default {
 		 * 	登录
 		 */
 		handLogin() {
+			if (this.login.username.length > 50) {
+				Message.error('用户名过长！')
+				return
+			}
+			if (this.login.password.length > 32) {
+				Message.error('密码过长！')
+				return
+			}
 			let data = {
 				username: this.login.username,
 				password: this.login.password

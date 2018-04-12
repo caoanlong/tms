@@ -39,7 +39,7 @@
 			<el-table-column type="selection" width="40" align="center" fixed></el-table-column>
 			<el-table-column label="处理状态" width="90" align="center">
 				<template slot-scope="scope">
-					<span v-if="scope.row.status=='Commited'">待执行</span>
+					<span v-if="scope.row.status=='Committed'">待执行</span>
 					<span v-else-if="scope.row.status=='Running'">执行中</span>
 					<span v-else-if="scope.row.status=='Signed'">到达签收</span>
 					<span v-else-if="scope.row.status=='Closed'">关闭</span>

@@ -181,22 +181,22 @@ export default {
 		},
 
 		getList() {
-				console.log(this.pageIndex)
-				let params = {
-					current: this.pageIndex,
-					size: this.pageSize,
-					shipperBeginDate: this.findshipperBeginDate,
-					shipperEndDate: this.findshipperEndDate,
-					searchInfo: this.findsearchInfo
-				}
-				request({
-					url: '/biz/carrierOrder/list',
-					params
-				}).then(res => {
-					this.tableData = res.data.data.records
-					this.total= res.data.data.total
-				})
-			},
+			console.log(this.pageIndex)
+			let params = {
+				current: this.pageIndex,
+				size: this.pageSize,
+				shipperBeginDate: this.findshipperBeginDate,
+				shipperEndDate: this.findshipperEndDate,
+				searchInfo: this.findsearchInfo
+			}
+			request({
+				url: '/biz/carrierOrder/list',
+				params
+			}).then(res => {
+				this.tableData = res.data.data.records
+				this.total= res.data.data.total
+			})
+		},
 		handleCommand(e) {
 			if (e.type == 'view') {
 				this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID: e.id}})

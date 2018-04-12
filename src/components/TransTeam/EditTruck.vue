@@ -129,6 +129,11 @@
 							</el-input>
 						</el-form-item>
 					</el-col>
+					<el-col :span="6">
+						<el-form-item label="准载类型">
+							<el-input v-model="truck.accurateLoadType"></el-input>
+						</el-form-item>
+					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
