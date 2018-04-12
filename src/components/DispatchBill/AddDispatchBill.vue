@@ -227,7 +227,7 @@ export default {
 				superCargoDetoursMileage: 0,	//押运人绕路里程		
 				superCargoOtherAmount: 0,	//押运人其他费用		
 				superCargoID: this.selectedPerson.staffID,	//押运员ID		
-				transportRecordID: '982817947700695043',	//运输记录ID
+				transportRecordID: this.selectedTruck.transportRecordID,	//运输记录ID
 			}
 			console.log(data)
 			request({
