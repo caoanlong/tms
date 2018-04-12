@@ -39,7 +39,6 @@
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 				<el-button type="default" size="mini" icon="el-icon-news" @click="AddDispatchBill">调度</el-button>
-				<el-button type="default" size="mini" icon="el-icon-refresh" :loading="refreshing" @click="refresh">刷新</el-button>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe @selection-change="selectionChange" >
@@ -140,8 +139,7 @@ export default {
 			findRangeDate: [],
 			findshipperBeginDate: '',
 			findshipperEndDate: '',
-			findStatus:'',
-			refreshing: false
+			findStatus:''
 		}
 	},
 	created() {
@@ -210,13 +208,6 @@ export default {
 		},
 		add() {
 			this.$router.push({ name: 'addcarrierbill' })
-		},
-		refresh() {
-			this.refreshing = true
-			this.getList()
-			setTimeout(() => {
-				this.refreshing = false
-			}, 500)
 		},
 		deleteConfirm(id) {
 				console.log(id)

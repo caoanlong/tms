@@ -88,7 +88,9 @@
 					<el-table-column label="自编号" prop="code"></el-table-column>
 					<el-table-column label="车牌号" prop="plateNo"></el-table-column>
 					<el-table-column label="车牌颜色" prop="plateNoColor"></el-table-column>
-					<el-table-column label="车牌类别" prop="plateNoType"></el-table-column>
+					<el-table-column label="车牌类别" prop="truckCategory">
+						
+					</el-table-column>
 					<el-table-column label="车辆类型" prop="truckType"></el-table-column>
 					<el-table-column label="道路运输证号" prop="roadTransportNo" width="120"></el-table-column>
 					<el-table-column label="经营范围" prop="businessScope"></el-table-column>
