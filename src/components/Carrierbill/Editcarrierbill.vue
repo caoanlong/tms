@@ -333,7 +333,7 @@ export default {
 				carrierrName: this.carrierOrder.carrierrName,
 				shipperCompanyName: this.carrierOrder.shipperCompanyName,
 				shipperDate: this.carrierOrder.shipperDate,
-				shipperDate: this.carrierOrder.shipperNo,
+				shipperNo: this.carrierOrder.shipperNo,
 				shipperName: this.carrierOrder.shipperName,
 				shipperAreaID: this.carrierOrder.shipperAreaID,
 				shipperDetailAddress: this.carrierOrder.shipperDetailAddress,
