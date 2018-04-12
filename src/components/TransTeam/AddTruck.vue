@@ -130,12 +130,19 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="准载类型">
-							<el-input v-model="truck.accurateLoadType"></el-input>
+						<el-form-item label="总质量" prop="totalWeight">
+							<el-input v-model="truck.totalWeight">
+								<template slot="append">千克</template>
+							</el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
+					<el-col :span="6">
+						<el-form-item label="准载类型">
+							<el-input v-model="truck.accurateLoadType"></el-input>
+						</el-form-item>
+					</el-col>
 					<el-col :span="6">
 						<el-form-item label="罐体类型">
 							<el-select style="width: 100%" v-model="truck.cannedType" placeholder="请选择">
@@ -339,6 +346,14 @@
 					<el-col :span="6">
 						<el-form-item label="经营证号" prop="businessLicenseNo">
 							<el-input v-model="truck.businessLicenseNo"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="经营性质">
+							<el-select style="width: 100%" v-model="truck.businessNature" placeholder="请选择">
+								<el-option label="营运" value="营运"></el-option>
+								<el-option label="自用" value="自用"></el-option>
+							</el-select>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -644,13 +659,16 @@ export default {
 					{required: true, validator: checkFloat, trigger: 'blur'}
 				],
 				loadVolume: [
-					{ required: true, validator: checkFloat, trigger: 'change' }
+					{ required: true, validator: checkFloat, trigger: 'blur' }
 				],
 				tractiveTonnage: [
-					{ validator: checkFloat2, trigger: 'change' }
+					{ validator: checkFloat2, trigger: 'blur' }
+				],
+				totalWeight: [
+					{ required: true, validator: checkFloat, trigger: 'blur' }
 				],
 				tankVolume: [
-					{ validator: checkFloat2, trigger: 'change' }
+					{ validator: checkFloat2, trigger: 'blur' }
 				],
 				manufacturer: [
 					{required: true, message: '请输入生产厂家', trigger: 'blur'}

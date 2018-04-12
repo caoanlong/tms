@@ -50,20 +50,16 @@
 							<span v-else-if="scope.row.status == 'Canceled'">作废</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="随车人员" prop="superCargoName"  width="120" align="center">
-					</el-table-column>
-					<el-table-column label="订单号" prop="carrierOrder.carrierOrderNo"  width="130" align="center">
-					</el-table-column>
-					<el-table-column label="发货地" prop="dispatchOrderCargo.shipperArea" width="120">
-					</el-table-column>
-					<el-table-column label="收货地" prop="dispatchOrderCargo.consigneeArea" width="120">
-					</el-table-column>
-					<el-table-column label="到货时间" width="130" align="center">
+					<el-table-column label="随车人员" prop="superCargoName"  width="120"></el-table-column>
+					<el-table-column label="订单号" prop="carrierOrder.carrierOrderNo"></el-table-column>
+					<el-table-column label="发货地" prop="dispatchOrderCargo.shipperArea" width="120"></el-table-column>
+					<el-table-column label="收货地" prop="dispatchOrderCargo.consigneeArea" width="120"></el-table-column>
+					<el-table-column label="到货时间" width="130">
 						<template slot-scope="scope">
 							<span>{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="货物规格/名称" width="130" >
+					<el-table-column label="货物规格/名称">
 						<template slot-scope="scope">
 							<span>{{scope.row.dispatchOrderCargo.cargoType}}/{{scope.row.dispatchOrderCargo.cargoName}}</span>
 						</template>
@@ -122,6 +118,7 @@ export default {
 			this.findShipperAddress = ''
 			this.findConsigneeAddress = ''
 			this.findName = ''
+			this.getList()
 		},
 		pageChange(index) {
 			this.pageIndex = index

@@ -48,8 +48,7 @@
 				<el-row>
 					<el-col :span="12">
 						<el-form-item label="发货地">
-							<el-cascader style="width: 100%" :options="distData" v-model="selectShipperArea" @change="handShiperAreaSelect">
-							</el-cascader>
+							<DistPicker @selectChange="handleSelectedArea" :selected="templateFreight.shipperAreaID" />
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
@@ -73,16 +72,6 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<!-- <el-col :span="8">
-						<el-form-item label="收货人">
-							<el-input placeholder="收货人" v-model="templateFreight.contactName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="联系电话">
-							<el-input placeholder="联系电话" v-model="templateFreight.contactPhone"></el-input>
-						</el-form-item>
-					</el-col> -->
 				</el-row>
 				<el-row>
 					<el-col :span="12">

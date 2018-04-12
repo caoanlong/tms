@@ -191,8 +191,8 @@
 						</el-form-item>
 						<el-form-item label="发票">
 							<el-radio-group v-model="carrierOrder.invoice">
-								<el-radio label="Y">开发票</el-radio>
-								<el-radio label="N">不开发票</el-radio>
+								<el-radio label="Y" value="Y">开发票</el-radio>
+								<el-radio label="N" value="N">不开发票</el-radio>
 							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="回单要求" class="receipt">
@@ -333,7 +333,7 @@ export default {
 				carrierrName: this.carrierOrder.carrierrName,
 				shipperCompanyName: this.carrierOrder.shipperCompanyName,
 				shipperDate: this.carrierOrder.shipperDate,
-				shipperDate: this.carrierOrder.shipperNo,
+				shipperNo: this.carrierOrder.shipperNo,
 				shipperName: this.carrierOrder.shipperName,
 				shipperAreaID: this.carrierOrder.shipperAreaID,
 				shipperDetailAddress: this.carrierOrder.shipperDetailAddress,

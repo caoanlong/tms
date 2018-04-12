@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<div class="wf-card">
 			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}<span>发货单号：{{carrierOrder.shipperNo}}</span><span>创建时间：{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span>委托时间：接口无此参数</span>
-				<span class="status status1" v-if="carrierOrder.status=='Commited'">待执行</span>
+				<span class="status status1" v-if="carrierOrder.status=='Committed'">待执行</span>
 				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
 				<span class="status status1" v-else-if="carrierOrder.status=='Closed'">关闭</span>
@@ -89,7 +89,9 @@
 				</tr>
 			</table>
 			<table class="wf-table">
-				<caption>应收款</caption>
+				<caption>应收款&nbsp;&nbsp;
+					<svg-icon icon-class="eye" @click.native="isShow = true" v-if="!isShow"/>
+					<i class="el-icon-view" @click="isShow = false" v-if="isShow"></i></caption>
 				<tr>
 					<th>现付</th>
 					<th>到付</th>
@@ -101,12 +103,12 @@
 					<th>备注</th>
 				</tr>
 				<tr class="is-center">
-					<td>{{carrierOrder.cashAmount}}元</td>
-					<td>{{carrierOrder.codAmount}}元</td>
-					<td>{{carrierOrder.porAmount}}元</td>
-					<td>{{carrierOrder.monthlyAmount}}元</td>
-					<td>{{carrierOrder.consigneeAmount}}元</td>
-					<td>{{carrierOrderTotal}}元</td>
+					<td>{{isShow ? carrierOrder.cashAmount : '**'}}元</td>
+					<td>{{isShow ? carrierOrder.codAmount : '**'}}元</td>
+					<td>{{isShow ? carrierOrder.porAmount : '**'}}元</td>
+					<td>{{isShow ? carrierOrder.monthlyAmount : '**'}}元</td>
+					<td>{{isShow ? carrierOrder.consigneeAmount : '**'}}元</td>
+					<td>{{isShow ? carrierOrderTotal : '**'}}元</td>
 					<td>无参数</td>
 					<td>人民币</td>
 				</tr>
@@ -155,7 +157,7 @@
 						<svg-icon icon-class="edit"></svg-icon>修改</button>
 					<button type="button" class="wf-btn btn-primary" @click="AddDispatchBill">
 						<svg-icon icon-class="dispatchbill"></svg-icon>调度</button>
-					<button type="button" class="wf-btn btn-warning" @click="Edit">
+					<button type="button" class="wf-btn btn-warning" @click="Edit" v-if="carrierOrder.status!='Committed'">
 						<svg-icon icon-class="money1"></svg-icon>调整应收款</button>
 				</div>
 				<div class="btn-group fr">
@@ -232,6 +234,7 @@ import request from "../../common/request"
 export default {
 	data() {
 		return {
+			isShow: false,
 			carrierOrder:{},
 			consignorID:'',
 			consignor:'',

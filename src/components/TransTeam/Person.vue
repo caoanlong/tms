@@ -97,7 +97,11 @@
 							<span v-if="scope.row.auditTime">{{scope.row.auditTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="准驾车型" prop="quasiDrivingType"></el-table-column>
+					<el-table-column label="准驾车型">
+						<template slot-scope="scope">
+							<span v-if="scope.row.quasiDrivingType">{{scope.row.quasiDrivingType}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="驾驶证审验有效期至" width="100">
 						<template slot-scope="scope">
 							<span v-if="scope.row.driverLicExamineEndTime">{{scope.row.driverLicExamineEndTime | getdatefromtimestamp(true)}}</span>

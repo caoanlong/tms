@@ -69,34 +69,39 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="车长">
-							<p>{{truck.length + '米'}}</p>
+							<p>{{truck.length + '毫米'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车宽">
-							<p>{{truck.width + '米'}}</p>
+							<p>{{truck.width + '毫米'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车高">
-							<p>{{truck.high + '米'}}</p>
+							<p>{{truck.high + '毫米'}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="载重">
-							<p>{{truck.loads}}</p>
+							<p>{{truck.loads + '千克'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="装载方数">
-							<p>{{truck.loadVolume}}</p>
+							<p>{{truck.loadVolume + '平方米'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="牵引质量">
-							<p>{{truck.tractiveTonnage}}</p>
+							<p>{{truck.tractiveTonnage ? (truck.tractiveTonnage + '千克') : ''}}</p>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="总质量">
+							<p>{{truck.totalWeight ? (truck.totalWeight + '千克') : ''}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -108,7 +113,7 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="罐体容积">
-							<p>{{truck.tankVolume}}</p>
+							<p>{{truck.tankVolume + '平方米'}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -252,6 +257,11 @@
 					<el-col :span="6">
 						<el-form-item label="经营证号">
 							<p>{{truck.businessLicenseNo}}</p>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="经营性质">
+							<p>{{truck.businessNature}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
