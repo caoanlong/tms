@@ -50,21 +50,27 @@
 						<el-form-item label="发货人">
 							<el-input placeholder="发货人" v-model="shipperDetail.contactName"></el-input>
 						</el-form-item>
-						<el-form-item label="发货地">
-							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea" />
-						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发货人电话">
 							<el-input placeholder="发货人电话" v-model="shipperDetail.contactPhone"></el-input>
 						</el-form-item>
-						<el-form-item label-width="20px">
-							<el-input placeholder="发货详细地址" v-model="shipperDetail.detailAddress"></el-input>
-						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发货时间">
 							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierbillInfo.shipperDate" value-format="timestamp"></el-date-picker>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="12">
+						<el-form-item label="发货地">
+							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea" />
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item label-width="20px">
+							<el-input placeholder="发货详细地址" v-model="shipperDetail.detailAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -96,12 +102,12 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="8">
+					<el-col :span="12">
 						<el-form-item label="卸货地">
 							<DistPicker @selectChange="handleSelectedArea1" :selected="selectedArea1" />
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="12">
 						<el-form-item label-width="20px">
 							<el-input placeholder="卸货详细地址" v-model="ConsigneeDetail.detailAddress"></el-input>
 						</el-form-item>
