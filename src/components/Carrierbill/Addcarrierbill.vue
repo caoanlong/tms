@@ -192,7 +192,7 @@
 							<div v-show="carrierbillInfo.paymentMethod=='TKM'" class="tips">从“这单的发货地”到卸货地对内运距为“50公里”?</div>
 						</el-form-item>
 						<el-form-item label="发票">
-							<el-radio-group v-model="carrierbillInfo.Invoice">
+							<el-radio-group v-model="carrierbillInfo.invoice">
 								<el-radio label="Y">开发票</el-radio>
 								<el-radio label="N">不开发票</el-radio>
 							</el-radio-group>
@@ -294,7 +294,7 @@ export default {
 				shipperName:'',
 				shipperNo:'',
 				shipperPhone:'',
-				Invoice:'N',
+				invoice:'N',
 				porRequire: ['NotRequired'],
 			},
 			transType:'',
@@ -454,7 +454,8 @@ export default {
 				shipperName:this.shipperDetail.contactName,
 				shipperNo:this.carrierbillInfo.shipperNo,
 				shipperPhone:this.shipperDetail.contactPhone,
-				porRequire:this.carrierbillInfo.porRequire
+				porRequire:this.carrierbillInfo.porRequire,
+				invoice:this.carrierbillInfo.invoice
 			}
 			console.log(data)
 			request({
