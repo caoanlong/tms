@@ -484,6 +484,28 @@ export default {
 			if(!data.qualificationExpirationTime) {
 				data.qualificationExpirationTime = ''
 			}
+			if(!data.headPic) {
+				data.headPic = ''
+			}
+			if(!data.idCardFrontUrl) {
+				data.idCardFrontUrl = ''
+			}
+			if(!data.idCardBackUrl) {
+				data.idCardBackUrl = ''
+			}
+			if(!data.driverLicFrontUrl) {
+				data.driverLicFrontUrl = ''
+			}
+			if(!data.driverLicBackUrl) {
+				data.driverLicBackUrl = ''
+			}
+			if(!data.qualificationFirstPage) {
+				data.qualificationFirstPage = ''
+			}
+			if(!data.qualificationSecondPage) {
+				data.qualificationSecondPage = ''
+			}
+
 			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
