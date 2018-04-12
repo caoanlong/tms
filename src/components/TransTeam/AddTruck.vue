@@ -50,7 +50,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="车辆类别" prop="truckCategory">
-							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
+							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择" @change="changeTruckType">
 								<el-option label="挂车" value="挂车"></el-option>
 								<el-option label="牵引车" value="牵引车"></el-option>
 							</el-select>
@@ -87,27 +87,23 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="车长" prop="length">
-							<el-select style="width: 100%" v-model="truck.length" placeholder="请选择">
-								<el-option label="5米" value="5"></el-option>
-								<el-option label="8米" value="8"></el-option>
-								<el-option label="10米" value="10"></el-option>
-								<el-option label="12米" value="12"></el-option>
-								<el-option label="15米" value="15"></el-option>
-							</el-select>
+							<el-input v-model="truck.length">
+								<template slot="append">毫米</template>
+							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车宽" prop="width">
-							<el-select style="width: 100%" v-model="truck.width" placeholder="请选择">
-								<el-option label="2米" value="2"></el-option>
-								<el-option label="3米" value="3"></el-option>
-								<el-option label="4米" value="4"></el-option>
-							</el-select>
+							<el-input v-model="truck.width">
+								<template slot="append">毫米</template>
+							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="车高" prop="high">
-							<el-input v-model="truck.high"></el-input>
+							<el-input v-model="truck.high">
+								<template slot="append">毫米</template>
+							</el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -512,6 +508,7 @@ import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
 import {searchAreaByKey} from '../../common/utils'
+import { checkInt, checkFloat } from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -622,19 +619,19 @@ export default {
 					{required: true, message: '请选择车牌颜色', trigger: 'change'}
 				],
 				length: [
-					{required: true, message: '请选择车长', trigger: 'change'}
+					{required: true, validator: checkInt, trigger: 'blur'}
 				],
 				width: [
-					{ required: true, message: '请选择车宽', trigger: 'change' }
+					{ required: true, validator: checkInt,trigger: 'blur' }
 				],
 				high: [
-					{required: true, message: '请输入车高', trigger: 'blur'}
+					{required: true, validator: checkInt, trigger: 'blur'}
 				],
 				loads: [
-					{required: true, message: '请输入载重', trigger: 'blur'}
+					{required: true, validator: checkFloat, trigger: 'blur'}
 				],
 				loadVolume: [
-					{ required: true, message: '请选择装载方数', trigger: 'change' }
+					{ required: true, validator: checkFloat, trigger: 'change' }
 				],
 				manufacturer: [
 					{required: true, message: '请输入生产厂家', trigger: 'blur'}
@@ -758,6 +755,13 @@ export default {
 			this.truck.areaID = data
 			this.truck.area = data ? searchAreaByKey(data) : ''
 			console.log(this.truck.area)
+		},
+		changeTruckType(e) {
+			if (e == '牵引车') {
+				this.truck.trailerPlateNo = ''
+			} else {
+				this.truck.plateNo = ''
+			}
 		},
 		createItem() {
 			let data = this.truck

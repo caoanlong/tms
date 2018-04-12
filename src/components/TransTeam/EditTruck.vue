@@ -50,7 +50,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="车辆类别" prop="truckCategory">
-							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
+							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择" @change="changeTruckType">
 								<el-option label="挂车" value="挂车"></el-option>
 								<el-option label="牵引车" value="牵引车"></el-option>
 							</el-select>
@@ -778,6 +778,13 @@ export default {
 		},
 		handleSelectedArea(data) {
 			this.truck.areaID = data
+		},
+		changeTruckType(e) {
+			if (e == '牵引车') {
+				this.truck.trailerPlateNo = ''
+			} else {
+				this.truck.plateNo = ''
+			}
 		},
 		updateItem() {
 			let data = this.truck
