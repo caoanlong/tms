@@ -7,7 +7,7 @@
 					<el-form-item label="车牌号">
 						<el-input placeholder="请输入..." v-model="findPlateNo"></el-input>
 					</el-form-item>
-					<el-form-item label="车辆编号">
+					<el-form-item label="自编号">
 						<el-input placeholder="请输入..." v-model="findCode"></el-input>
 					</el-form-item>
 					<el-form-item label="牵引质量">
@@ -38,7 +38,7 @@
 							<el-option label="4米" value="4"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="日期">
+					<el-form-item label="创建日期">
 						<el-date-picker
 							v-model="findDate"
 							type="daterange"
@@ -182,7 +182,7 @@
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
 						<span>总共 {{count}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize">
+						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
 							<el-option label="10" value="10"></el-option>
 							<el-option label="20" value="20"></el-option>
 							<el-option label="30" value="30"></el-option>

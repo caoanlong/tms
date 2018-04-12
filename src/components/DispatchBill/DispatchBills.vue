@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="调度单号">
-						<el-input placeholder="调度单号" v-model="findDispatchOrderID"></el-input>
+						<el-input placeholder="调度单号" v-model="findDispatchOrderNo"></el-input>
 					</el-form-item>
 					<el-form-item label="发货地">
 						<el-input placeholder="发货地" v-model="findShipperAddress"></el-input>
@@ -103,7 +103,7 @@ import request from '../../common/request'
 export default {
 	data() {
 		return {
-			findDispatchOrderID: '',
+			findDispatchOrderNo: '',
 			findShipperAddress: '',
 			findConsigneeAddress: '',
 			findName: '',
@@ -118,7 +118,7 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.findDispatchOrderID = ''
+			this.findDispatchOrderNo = ''
 			this.findShipperAddress = ''
 			this.findConsigneeAddress = ''
 			this.findName = ''
@@ -132,7 +132,7 @@ export default {
 				current: this.pageIndex,
 				size: this.pageSize,
 				consigneeAddress: this.findConsigneeAddress,  //	收货地址
-				dispatchOrderID: this.findDispatchOrderID,  //	调度单号
+				dispatchOrderNo: this.findDispatchOrderNo,  //	调度单号
 				name: this.findName,  //	司机或随车人员姓名
 				shipperAddress: this.findShipperAddress,  //发货地址
 			}
