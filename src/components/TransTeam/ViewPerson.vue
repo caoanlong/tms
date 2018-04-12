@@ -55,7 +55,8 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="初次发证时间">
-							<p>{{person.comStaffIdentification.driverLicenseFirstTime | getdatefromtimestamp(true)}}</p>
+							<p v-if="person.comStaffIdentification.driverLicenseFirstTime">{{person.comStaffIdentification.driverLicenseFirstTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -72,7 +73,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="诚信考核有效期至">
-							<p>{{person.comStaffIdentification.integrityExamineEndTime  | getdatefromtimestamp(true)}}</p>
+							<p v-if="person.comStaffIdentification.integrityExamineEndTime">{{person.comStaffIdentification.integrityExamineEndTime  | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -89,24 +91,28 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="合同有效期起">
-							<p>{{person.comStaffIdentification.laborContractBeginTime  | getdatefromtimestamp(true)}}</p>
+							<p v-if="person.comStaffIdentification.laborContractBeginTime">{{person.comStaffIdentification.laborContractBeginTime  | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="合同有效期至">
-							<p>{{person.comStaffIdentification.laborContractEndTime  | getdatefromtimestamp(true)}}</p>
+							<p v-if="person.comStaffIdentification.laborContractEndTime">{{person.comStaffIdentification.laborContractEndTime  | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期起">
-							<p>{{person.comStaffIdentification.driverLicExamineBeginTime  | getdatefromtimestamp(true)}}</p>
+							<p v-if="person.comStaffIdentification.driverLicExamineBeginTime">{{person.comStaffIdentification.driverLicExamineBeginTime  | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期至">
-							<p>{{person.comStaffIdentification.driverLicExamineEndTime  | getdatefromtimestamp(true)}}</p>
+							<p v-if="person.comStaffIdentification.driverLicExamineEndTime">{{person.comStaffIdentification.driverLicExamineEndTime  | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -133,14 +139,15 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证有效期至">
-							<p>{{person.comStaffIdentification.qualificationExpirationTime  | getdatefromtimestamp(true)}}</p>
+							<p v-if="person.comStaffIdentification.qualificationExpirationTime">{{person.comStaffIdentification.qualificationExpirationTime  | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="备注说明">
-							<el-input disabled type="textarea" v-model="person.remark"></el-input>
+							<el-input disabled type="textarea" v-model="person.remark" resize="none"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
