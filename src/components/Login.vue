@@ -343,8 +343,8 @@ export default {
 				Message.error('公司名过长！')
 				return
 			}
-			if (!this.register.province.trim() && !this.register.city.trim()) {
-				Message.error('省份和城市必选一项！')
+			if (!this.register.province.trim() || !this.register.city.trim()) {
+				Message.error('省份和城市必选！')
 				return
 			}
 			if (!this.register.address.trim()) {
