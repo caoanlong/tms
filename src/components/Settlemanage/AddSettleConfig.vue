@@ -34,7 +34,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<!-- <el-col :span="8">
 						<el-form-item label="发货人">
 							<el-input placeholder="发货人" v-model="shipperDetail.contactName"></el-input>
 						</el-form-item>
@@ -43,7 +43,7 @@
 						<el-form-item label="联系电话">
 							<el-input placeholder="联系电话" v-model="shipperDetail.contactPhone"></el-input>
 						</el-form-item>
-					</el-col>
+					</el-col> -->
 					<el-col :span="12">
 						<el-form-item label="发货地">
 							<el-input placeholder="发货地" v-model="selectedArea"></el-input>
@@ -70,7 +70,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<!-- <el-col :span="8">
 						<el-form-item label="收货人">
 							<el-input placeholder="收货人" v-model="ConsigneeDetail.contactName"></el-input>
 						</el-form-item>
@@ -79,7 +79,7 @@
 						<el-form-item label="联系电话">
 							<el-input placeholder="联系电话" v-model="ConsigneeDetail.contactPhone"></el-input>
 						</el-form-item>
-					</el-col>
+					</el-col> -->
 				</el-row>
 				<el-row>
 					<el-col :span="12">
