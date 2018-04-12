@@ -26,15 +26,15 @@
 						<el-input size="mini" v-model="item.loadNum"></el-input>
 					</td>
 				</tr>
-				<!-- <tr>
+				<tr>
 					<td>合计</td>
 					<td></td>
 					<td></td>
 					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr> -->
+					<td>{{totalLoadWeight}}</td>
+					<td>{{totalLoadVolume}}</td>
+					<td>{{totalLoadNum}}</td>
+				</tr>
 			</table>
 			<!-- <p>备注</p>
 			<el-input type="textarea" placeholder="请输入..."></el-input> -->
@@ -56,6 +56,26 @@
 				type: Array,
 				default: () => []
 			}
+		},
+		computed: {
+			totalLoadWeight() {
+				let values = this.cargoInfo.map(item => Number(item.loadWeight))
+				return values.reduce((prev, next) => {
+					return prev + next
+				}, 0)
+			},
+			totalLoadVolume() {
+				let values = this.cargoInfo.map(item => Number(item.loadVolume))
+				return values.reduce((prev, next) => {
+					return prev + next
+				}, 0)
+			},
+			totalLoadNum() {
+				let values = this.cargoInfo.map(item => Number(item.loadNum))
+				return values.reduce((prev, next) => {
+					return prev + next
+				}, 0)
+			},
 		},
 		methods: {
 			control(bool) {

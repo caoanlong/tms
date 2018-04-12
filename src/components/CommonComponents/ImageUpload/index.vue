@@ -18,7 +18,7 @@
 			</div>
 			<input type="file" name="" @change.stop="addImg" ref="uploadFile"/>
 		</div>
-		<el-dialog :fullscreen="true" title="裁剪图片" :visible.sync="isShowCropper">
+		<el-dialog title="裁剪图片" :visible.sync="isShowCropper">
 			<vueCropper
 				style="height: 600px" 
 				ref="cropper"
