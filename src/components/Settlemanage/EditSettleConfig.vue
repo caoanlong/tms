@@ -12,8 +12,8 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="托运人">
-							<el-select style="width: 100%" v-model="selectConsignor" filterable remote placeholder="请输入关键词" :remote-method="getConsigners" :loading="loading" @change="handConsignorSelect">
-								<el-option v-for="item in consigners" :key="item.customerID" :label="item.companyName" :value="item">
+							<el-select style="width: 100%" v-model="templateFreight.consignorName" filterable remote placeholder="请输入托运人关键词" :remote-method="getConsignor" :loading="loading" @change="getConsignorDetail">
+								<el-option v-for="item in ConsignorList" :key="item.companyName" :label="item.companyName" :value="item.customerID">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -28,32 +28,22 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="发货单位">
-							<el-select style="width: 100%" v-model="selectShipper" filterable remote placeholder="请输入关键词" :remote-method="getShiperConsigners1" :loading="loading" @change="handShipperConsignorSelect1">
-								<el-option v-for="item in shiperConsigners1" :key="item.customerID" :label="item.companyName" :value="item">
+							<el-select style="width: 100%" v-model="templateFreight.shipperCompanyName" filterable remote placeholder="请输入托运人关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="shipperDetail">
+								<el-option v-for="item in Recdeliverycomp" :key="item.companyName" :label="item.companyName" :value="item.companyName">
 								</el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<!-- <el-col :span="8">
-						<el-form-item label="发货人">
-							<el-input placeholder="发货人" v-model="templateFreight.contactName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="联系电话">
-							<el-input placeholder="联系电话" v-model="templateFreight.contactPhone"></el-input>
-						</el-form-item>
-					</el-col> -->
 				</el-row>
 				<el-row>
 					<el-col :span="12">
 						<el-form-item label="发货地">
-							<DistPicker @selectChange="handleSelectedArea" :selected="templateFreight.shipperAreaID" />
+							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea" />
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="详细地址">
-							<el-input placeholder="请输入..." v-model="templateFreight.shipperDetailAddress"></el-input>
+							<el-input placeholder="详细地址" v-model="templateFreight.shipperDetailAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -66,8 +56,8 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="收货单位">
-							<el-select style="width: 100%" v-model="selectConsignee" filterable remote placeholder="请输入关键词" :remote-method="getShiperConsigners2" :loading="loading" @change="handShipperConsignorSelect2">
-								<el-option v-for="item in shiperConsigners2" :key="item.customerID" :label="item.companyName" :value="item">
+							<el-select style="width: 100%" v-model="templateFreight.consigneeCompanyName" filterable remote placeholder="请输入收货单位关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="consigneeDetail">
+								<el-option v-for="item in Recdeliverycomp" :key="item.companyName" :label="item.companyName" :value="item.companyName">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -76,13 +66,12 @@
 				<el-row>
 					<el-col :span="12">
 						<el-form-item label="收货地">
-							<el-cascader style="width: 100%" :options="distData" v-model="selectConsigneeArea" @change="handConsignorAreaSelect">
-							</el-cascader>
+							<DistPicker @selectChange="handleSelectedArea1" :selected="selectedArea1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="详细地址">
-							<el-input placeholder="请输入..." v-model="templateFreight.consigneeDetailAddress"></el-input>
+							<el-input placeholder="详细地址" v-model="templateFreight.consigneeDetailAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -98,6 +87,7 @@
 							<el-input placeholder="请输入..." v-model="templateFreight.mileage"></el-input>
 						</el-form-item>
 					</el-col>
+					</el-col>
 					<el-col :span="8">
 						<el-form-item label="对内TKM">
 							<el-input placeholder="请输入..." v-model="templateFreight.internalUnitPrice"></el-input>
@@ -109,25 +99,28 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-col :span="24">
-					<p class="divided">
-						<svg-icon icon-class="list-tag"></svg-icon>对外</p>
-				</el-col>
-				<el-col :span="8">
-					<el-form-item label="对外运距">
-						<el-input placeholder="请输入..." v-model="templateFreight.externalMileage"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="8">
-					<el-form-item placeholder="请输入..." label="对外TKM">
-						<el-input v-model="templateFreight.externalUnitPrice"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="8">
-					<el-form-item placeholder="请输入..." label="对外运费">
-						<el-input v-model="templateFreight.externalPrice"></el-input>
-					</el-form-item>
-				</el-col>
+				<el-row>
+					<el-col :span="24">
+						<p class="divided">
+							<svg-icon icon-class="list-tag"></svg-icon>对外</p>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="对外运距">
+							<el-input placeholder="请输入..." v-model="templateFreight.externalMileage"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item placeholder="请输入..." label="对外TKM">
+							<el-input v-model="templateFreight.externalUnitPrice"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item placeholder="请输入..." label="对外运费">
+							<el-input v-model="templateFreight.externalPrice"></el-input>
+						</el-form-item>
+					</el-col>
 				</el-row>
 				<el-row>
 					<div class="split-item">
@@ -141,45 +134,60 @@
 							<svg-icon icon-class="list-tag"></svg-icon>对内付款方式占比</p>
 					</el-col>
 					<el-col :span="24" style="display:flex">
-						<el-form-item label="现付" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalCashRate"></el-input>
+						<el-form-item style="flex:1" label="现付">
+							<el-input placeholder="请输入..." v-model="templateFreight.internalCashRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
-						<el-form-item label="到付" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalCodRate"></el-input>
+						<el-form-item style="flex:1" label="到付">
+							<el-input placeholder="请输入..." v-model="templateFreight.internalCodRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
-						<el-form-item label="回单付" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalPorRate"></el-input>
+						<el-form-item style="flex:1" label="回单付">
+							<el-input placeholder="请输入..." v-model="templateFreight.internalPorRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
-						<el-form-item label="月结" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalAbschlussRate"></el-input>
+						<el-form-item style="flex:1" label="月结">
+							<el-input placeholder="请输入..." v-model="templateFreight.internalAbschlussRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
-						<el-form-item label="收方到货付" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalConsigneeCodRate"></el-input>
+						<el-form-item style="flex:1" label="收方到货付">
+							<el-input placeholder="请输入..." v-model="templateFreight.internalConsigneeCodRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="24">
-						<p class="divided">
-							<svg-icon icon-class="list-tag"></svg-icon>对外收款方式占比</p>
+						<p class="divided"><svg-icon icon-class="list-tag"></svg-icon>对外收款方式占比</p>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="24" style="display:flex">
-						<el-form-item label="现付" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalCashRate"></el-input>
+						<el-form-item style="flex:1" label="现付">
+							<el-input placeholder="请输入..." v-model="templateFreight.externalCashRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
-						<el-form-item label="到付" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalCodRate"></el-input>
+						<el-form-item style="flex:1" label="到付">
+							<el-input placeholder="请输入..." v-model="templateFreight.externalCodRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
-						<el-form-item label="回单付" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalPorRate"></el-input>
+						<el-form-item style="flex:1" label="回单付">
+							<el-input placeholder="请输入..." v-model="templateFreight.externalPorRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
-						<el-form-item label="月结" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalAbschlussRate"></el-input>
+						<el-form-item style="flex:1" label="月结">
+							<el-input placeholder="请输入..." v-model="templateFreight.externalAbschlussRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
-						<el-form-item label="收方到货付" style="flex: 1">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalConsigneeCodRate"></el-input>
+						<el-form-item style="flex:1" label="收方到货付">
+							<el-input placeholder="请输入..." v-model="templateFreight.externalConsigneeCodRate">
+								<span slot="suffix">%</span>
+							</el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -194,13 +202,17 @@
 
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
+import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
+import { searchAreaByKey } from '../../common/utils'
 export default {
 	data() {
 		return {
 			loading: false,
-			distData: regionData,
+			ConsignorList:[],
+			Recdeliverycomp:[],
+			selectedArea:[],
+			selectedArea1:[],
 			templateFreight: {
 				consigneeArea: '',	//收货地	string	
 				consigneeAreaID: '',	//收货地id	string	
@@ -230,94 +242,81 @@ export default {
 				shipperCompanyName: '',	//发货公司名称	string	
 				shipperDetailAddress: '',	//发货详细地址	string	
 				shipperID: ''
-			},
-			consigners: [], // 托运人
-			shiperConsigners1: [], // 收发货单位
-			shiperConsigners2: [], // 收发货单位
-			selectConsignor: '', // 选择的托运人
-			selectShipper: '', // 选择的收发货单位(发货单位)
-			selectConsignee: '', // 选择的收发货单位(收货单位)
-			selectShipperArea: [],
-			selectConsigneeArea: []
+			}
 		}
 	},
 	created() {
 		this.getInfo()
 	},
 	methods: {
-		getConsigners(companyName) {
-			if (companyName !== '') {
-				this.loading = true
-				let params = {
-					companyName,
-					type: 'Consignor'
-				}
-				request({
-					url: '/customer/findList',
-					params
-				}).then(res => {
-					this.loading = false
-					this.consigners = res.data.data.records
-				})
-			} else {
-				this.consigners = []
+		getConsignor(e) {
+			let params = {
+				type: 'Consignor',
 			}
-		},
-		getShiperConsigners1(companyName) {
-			if (companyName !== '') {
-				this.loading = true
-				let params = {
-					companyName,
-					type: 'ShipperConsignee'
-				}
-				request({
-					url: '/customer/findList',
-					params
-				}).then(res => {
-					this.loading = false
-					this.shiperConsigners1 = res.data.data.records
-					console.log(res.data.data.records)
+			request({
+				url: '/customer/findList',
+				params
+			}).then(res => {
+				console.log('托运人')
+				console.log(res.data)
+				this.ConsignorList= res.data.data.records
+				let arr = this.ConsignorList.filter(item => {
+					return item.customerID == e
 				})
-			} else {
-				this.shiperConsigners1 = []
+				
+			})
+		},
+		// 获取托运人详情
+		getConsignorDetail(e){
+			let arr = this.ConsignorList.filter(item => {
+				return item.customerID == e
+			})
+			console.log('托运人详情')
+			console.log(e)
+			this.templateFreight.consignorName = arr[0].companyName
+			this.templateFreight.consignorID = arr[0].customerID
+		},
+		getRecdeliverycomp() {
+			let params = {
+				type: 'ShipperConsignee',
 			}
+			request({
+				url: '/customer/findList',
+				params
+			}).then(res => {
+				this.Recdeliverycomp = res.data.data.records
+			})
 		},
-		getShiperConsigners2(companyName) {
-			if (companyName !== '') {
-				this.loading = true
-				let params = {
-					companyName,
-					type: 'ShipperConsignee'
-				}
-				request({
-					url: '/customer/findList',
-					params
-				}).then(res => {
-					this.loading = false
-					this.shiperConsigners2 = res.data.data.records
-					console.log(res.data.data.records)
-				})
-			} else {
-				this.shiperConsigners2 = []
-			}
+		shipperDetail(e){
+			let arr = this.Recdeliverycomp.filter(item => {
+				return item.companyName == e
+			})
+			this.templateFreight.shipperDetailAddress = arr[0].detailAddress
+			this.templateFreight.shipperID = arr[0].customerID
+			this.templateFreight.shipperCompanyName =arr[0].companyName
+
+			let areaID = String(arr[0].companyAreaID)
+			this.templateFreight.shipperAreaID =areaID
+			this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+			this.templateFreight.shipperArea = searchAreaByKey(areaID)
 		},
-		handConsignorSelect(data) {
-			this.templateFreight.consignorID = data.customerID
-			this.templateFreight.consignorName = data.companyName
+		consigneeDetail(e){
+			let arr = this.Recdeliverycomp.filter(item => {
+				return item.companyName == e
+			})
+			this.templateFreight.consigneeDetailAddress = arr[0].detailAddress
+			this.templateFreight.consigneeID = arr[0].customerID
+			this.templateFreight.consigneeCompanyName =arr[0].companyName
+			let areaID = String(arr[0].companyAreaID)
+			this.templateFreight.consigneeAreaID =areaID
+			this.selectedArea1 = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+			this.templateFreight.consigneeArea = searchAreaByKey(areaID)
 		},
-		handShipperConsignorSelect1(data) {
-			this.templateFreight.shipperID = data.customerID
-			this.templateFreight.shipperCompanyName = data.companyName
+		handleSelectedArea(data) {
+			this.templateFreight.shipperAreaID = data
 		},
-		handShipperConsignorSelect2(data) {
-			this.templateFreight.consigneeID = data.customerID
-			this.templateFreight.consigneeCompanyName = data.companyName
-		},
-		handShiperAreaSelect(data) {
-			this.templateFreight.shipperAreaID = data[data.length-1]
-		},
-		handConsignorAreaSelect(data) {
-			this.templateFreight.consigneeAreaID = data[data.length-1]
+		handleSelectedArea1(data) {
+			this.templateFreight.consigneeAreaID = data
 		},
 		getInfo() {
 			let params = {
@@ -330,13 +329,11 @@ export default {
 				console.log(res.data.data)
 				this.templateFreight = res.data.data
 
-				this.selectConsignor = res.data.data.consignorName
-				this.selectShipper = res.data.data.shipperCompanyName
-				this.selectConsignee = res.data.data.consigneeCompanyName
-				let shipperAreaID = res.data.data.shipperAreaID.toString()
-				let consigneeAreaID = res.data.data.consigneeAreaID.toString()
-				this.selectShipperArea = [(shipperAreaID.substr(0,2) + '0000'), (shipperAreaID.substr(0,4) + '00'), shipperAreaID]
-				this.selectConsigneeArea = [(consigneeAreaID.substr(0,2) + '0000'), (consigneeAreaID.substr(0,4) + '00'), consigneeAreaID]
+				let areaID = this.templateFreight.shipperAreaID
+				this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+
+				let areaID1 = this.templateFreight.consigneeAreaID
+				this.selectedArea1 = [(areaID1.substr(0, 2) + '0000'), (areaID1.substr(0, 4) + '00'), areaID1]
 			})
 		},
 		update() {
@@ -353,6 +350,9 @@ export default {
 		back() {
 			this.$router.go(-1)
 		}
+	},
+	components: {
+		DistPicker
 	}
 }
 
