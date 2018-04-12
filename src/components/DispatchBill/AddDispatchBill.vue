@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<el-card class="box-card hasTit">
 			<div slot="header" class="clearfix">新的调度
-				<el-button type="text" icon="el-icon-plus" class="addBtn" @click="dialogTableVisible = true" v-if="stepActive == 0">添加承运单</el-button>
+				<el-button type="text" icon="el-icon-plus" class="addBtn" @click="dialogTableVisible = true" v-if="stepActive == 0">选择承运单</el-button>
 			</div>
 			<el-steps :active="stepActive" finish-status="success" simple style="margin-bottom:20px;" class="stepBar">
 				<el-step title="选择待运货物"></el-step>

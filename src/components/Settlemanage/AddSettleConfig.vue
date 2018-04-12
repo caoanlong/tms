@@ -8,12 +8,12 @@
 					<span class="tit">配置运算项</span>
 				</div>
 			</el-row>
-			<el-form label-width="100px" size="small">
+			<el-form label-width="100px" size="mini">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="托运人">
-							<el-select style="width: 100%" v-model="Shippers.consignorID" filterable remote placeholder="请输入托运人关键词" :remote-method="getShippers" :loading="loading" @change="getConsignorDetail">
-								<el-option v-for="item in Shippers" :key="item.Shippers" :label="item.companyName" :value="item.customerID">
+							<el-select style="width: 100%" v-model="templateFreight.consignorName" filterable remote placeholder="请输入托运人关键词" :remote-method="getConsignor" :loading="loading" @change="getConsignorDetail">
+								<el-option v-for="item in ConsignorList" :key="item.companyName" :label="item.companyName" :value="item.customerID">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -28,32 +28,22 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="发货单位">
-							<el-select style="width: 100%" v-model="shipperDetail.shipperCompanyName" filterable remote placeholder="请输入托运人关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="getShipperDetail">
-								<el-option v-for="item in Recdeliverycomp" :key="item.Recdeliverycomp" :label="item.companyName" :value="item.companyName">
+							<el-select style="width: 100%" v-model="templateFreight.shipperCompanyName" filterable remote placeholder="请输入托运人关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="shipperDetail">
+								<el-option v-for="item in Recdeliverycomp" :key="item.companyName" :label="item.companyName" :value="item.companyName">
 								</el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<!-- <el-col :span="8">
-						<el-form-item label="发货人">
-							<el-input placeholder="发货人" v-model="shipperDetail.contactName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="联系电话">
-							<el-input placeholder="联系电话" v-model="shipperDetail.contactPhone"></el-input>
-						</el-form-item>
-					</el-col> -->
 				</el-row>
 				<el-row>
 					<el-col :span="12">
 						<el-form-item label="发货地">
-							<el-input placeholder="发货地" v-model="selectedArea"></el-input>
+							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea" />
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="详细地址">
-							<el-input placeholder="详细地址" v-model="shipperDetail.detailAddress"></el-input>
+							<el-input placeholder="详细地址" v-model="templateFreight.shipperDetailAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -66,32 +56,22 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="收货单位">
-							<el-select style="width: 100%" v-model="ConsigneeDetail.CompanyName" filterable remote placeholder="请输入收货单位关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="getConsigneeDetail">
-								<el-option v-for="item in Recdeliverycomp" :key="item.Recdeliverycomp" :label="item.companyName" :value="item.companyName">
+							<el-select style="width: 100%" v-model="templateFreight.consigneeCompanyName" filterable remote placeholder="请输入收货单位关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="consigneeDetail">
+								<el-option v-for="item in Recdeliverycomp" :key="item.companyName" :label="item.companyName" :value="item.companyName">
 								</el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<!-- <el-col :span="8">
-						<el-form-item label="收货人">
-							<el-input placeholder="收货人" v-model="ConsigneeDetail.contactName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="联系电话">
-							<el-input placeholder="联系电话" v-model="ConsigneeDetail.contactPhone"></el-input>
-						</el-form-item>
-					</el-col> -->
 				</el-row>
 				<el-row>
 					<el-col :span="12">
 						<el-form-item label="收货地">
-							<el-input placeholder="收货地" v-model="selectedArea1"></el-input>
+							<DistPicker @selectChange="handleSelectedArea1" :selected="selectedArea1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
 						<el-form-item label="详细地址">
-							<el-input placeholder="详细地址" v-model="ConsigneeDetail.detailAddress"></el-input>
+							<el-input placeholder="详细地址" v-model="templateFreight.consigneeDetailAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -219,6 +199,9 @@
 		</div>
 	</div>
 </template>
+
+
+
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
@@ -228,56 +211,46 @@ export default {
 	data() {
 		return {
 			loading: false,
-			//托运人
-			Shippers:{
-				companyName:'',
-				customerID:'',
-			},
-			Recdeliverycomp:{},
-			// 发货人
-			shipperDetail: {
-				companyName:'',
-				contactName:'',
-				companyArea:'',
-				detailAddress:'',
-				companyID:'',
-				customerID:''
-			},
-			// 收货人
-			ConsigneeDetail: {
-				companyName:'',
-				contactName:'',
-				companyArea:'',
-				detailAddress:'',
-				companyID:'',
-				customerID:''
-			},
-			selectedArea: '', //发货地id
-			selectedArea1: '',  // 收货地id
+			ConsignorList:[],
+			Recdeliverycomp:[],
+			selectedArea:[],
+			selectedArea1:[],
 			templateFreight: {
-				externalAbschlussRate:'', //对外月结比率
-				externalCashRate:'', //对外现付比率
-				externalCodRate:'', //对外到付比率
-				externalConsigneeCodRate:'', //对外收货方到付比率
-				externalMileage:'', //对外运距
-				externalPorRate:'', //对外回单比率
-				externalPrice:'', //对外运价
-				externalUnitPrice:'', //对外TKM
-				internalAbschlussRate:'', //对内月结比率
-				internalCashRate:'', //对内现付比率
-				internalCodRate:'', //对内到付比率
-				internalConsigneeCodRate:'', //对内收货方到付比率
-				internalPorRate:'', //对内回单比率
-				internalPrice:'', //对内运价
-				internalUnitPrice:'', //对内TKM
-				mileage:'' //对内运距
+				consigneeArea: '',	//收货地	string	
+				consigneeAreaID: '',	//收货地id	string	
+				consigneeCompanyName: '',	//收货公司名称	string	
+				consigneeDetailAddress: '',	//收货详细地址	string	
+				consigneeID: '',	//收货单位id	number	
+				consignorID: '',	//托运人id	number	
+				consignorName: '',	//托运人名称	string	
+				externalAbschlussRate: '',	//对外月结比率	number	
+				externalCashRate: '',	//对外现付比率	number	
+				externalCodRate: '',	//对外到付比率	number	
+				externalConsigneeCodRate: '',	//对外收货方到付比率	number	
+				externalMileage: '',	//对外运距	number	
+				externalPorRate: '',	//对外回单比率	number	
+				externalPrice: '',	//对外运价	number	
+				externalUnitPrice: '',	//对外TKM	number	
+				internalAbschlussRate: '',	//对内月结比率	number	
+				internalCashRate: '',	//对内现付比率	number	
+				internalCodRate: '',	//对内到付比率	number	
+				internalConsigneeCodRate: '',	//对内收货方到付比率	number	
+				internalPorRate: '',	//对内回单比率	number	
+				internalPrice: '',	//对内运价	number	
+				internalUnitPrice: '',	//对内TKM	number	
+				mileage: '',	//对内运距	number	
+				shipperArea: '',	//发货地	string	
+				shipperAreaID: '',	//发货地id	number	
+				shipperCompanyName: '',	//发货公司名称	string	
+				shipperDetailAddress: '',	//发货详细地址	string	
+				shipperID: ''
 			}
 		}
 	},
 	created() {
 	},
 	methods: {
-		getShippers(e) {
+		getConsignor(e) {
 			let params = {
 				type: 'Consignor',
 			}
@@ -287,27 +260,22 @@ export default {
 			}).then(res => {
 				console.log('托运人')
 				console.log(res.data)
-				this.Shippers = res.data.data.records
-				let arr = this.Shippers.filter(item => {
-					return item.companyName == e
-					
+				this.ConsignorList= res.data.data.records
+				let arr = this.ConsignorList.filter(item => {
+					return item.customerID == e
 				})
 				
 			})
 		},
 		// 获取托运人详情
 		getConsignorDetail(e){
-			let arr = this.Shippers.filter(item => {
+			let arr = this.ConsignorList.filter(item => {
 				return item.customerID == e
 			})
 			console.log('托运人详情')
-			console.log(arr[0])
-			this.Shippers.companyArea = arr[0].companyArea
-			this.Shippers.companyName = arr[0].companyName
-			this.Shippers.contactName = arr[0].contactName
-			this.Shippers.contactPhone = arr[0].contactPhone
-			this.Shippers.customerID = arr[0].customerID
-			this.Shippers.detailAddress = arr[0].detailAddress
+			console.log(e)
+			this.templateFreight.consignorName = arr[0].companyName
+			this.templateFreight.consignorID = arr[0].customerID
 		},
 		getRecdeliverycomp() {
 			let params = {
@@ -317,82 +285,37 @@ export default {
 				url: '/customer/findList',
 				params
 			}).then(res => {
-				console.log('发货人，收货人列表')
-				console.log(res.data.data)
 				this.Recdeliverycomp = res.data.data.records
 			})
 		},
-		getShipperDetail(e){
+		shipperDetail(e){
 			let arr = this.Recdeliverycomp.filter(item => {
 				return item.companyName == e
 			})
-			console.log('发货人详情')
-			console.log(arr[0])
-			this.shipperDetail.contactName = arr[0].contactName
-			this.shipperDetail.contactPhone = arr[0].contactPhone
-			this.shipperDetail.companyArea = arr[0].companyArea
-			this.shipperDetail.detailAddress = arr[0].detailAddress
-			this.shipperDetail.companyID = arr[0].companyID
-			this.shipperDetail.companyName =arr[0].companyName
-			this.shipperDetail.customerID = arr[0].customerID
+			this.templateFreight.shipperDetailAddress = arr[0].detailAddress
+			this.templateFreight.shipperID = arr[0].customerID
+			this.templateFreight.shipperCompanyName =arr[0].companyName
+
 			let areaID = String(arr[0].companyAreaID)
 			this.templateFreight.shipperAreaID =areaID
-			this.selectedArea = searchAreaByKey(areaID)
+			this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+			this.templateFreight.shipperArea = searchAreaByKey(areaID)
 		},
-		getConsigneeDetail(e){
+		consigneeDetail(e){
 			let arr = this.Recdeliverycomp.filter(item => {
 				return item.companyName == e
 			})
-			console.log('收货人详情')
-			console.log(arr[0])
-			this.ConsigneeDetail.contactName = arr[0].contactName
-			this.ConsigneeDetail.contactPhone = arr[0].contactPhone
-			this.ConsigneeDetail.companyArea = arr[0].companyArea
-			this.ConsigneeDetail.detailAddress = arr[0].detailAddress
-			this.ConsigneeDetail.companyID = arr[0].companyID
-			this.ConsigneeDetail.customerID = arr[0].customerID
-			this.ConsigneeDetail.companyName = arr[0].companyName
+			this.templateFreight.consigneeDetailAddress = arr[0].detailAddress
+			this.templateFreight.consigneeID = arr[0].customerID
+			this.templateFreight.consigneeCompanyName =arr[0].companyName
 			let areaID = String(arr[0].companyAreaID)
 			this.templateFreight.consigneeAreaID =areaID
-			this.selectedArea1 = searchAreaByKey(areaID)
+			this.selectedArea1 = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+			this.templateFreight.consigneeArea = searchAreaByKey(areaID)
 		},
 		add() {
-			let data = {
-				// consigneeArea:this.templateFreight.consigneeArea, //收货地
-				consigneeAreaID:this.templateFreight.consigneeAreaID,  //收货地id
-				consigneeCompanyName:this.ConsigneeDetail.companyName,  //收货公司名称
-				consigneeDetailAddress:this.ConsigneeDetail.detailAddress,  //收货详细地址
-				consigneeID:this.ConsigneeDetail.customerID,  //收货单位id
+			let data = this.templateFreight
 
-				consignorID:this.Shippers.customerID,  //托运人id
-				consignorName:this.Shippers.companyName,  //托运人名称
-
-				externalAbschlussRate:this.templateFreight.externalAbschlussRate,  //对外月结比率
-				externalCashRate:this.templateFreight.externalCashRate,  //对外现付比率
-				externalCodRate:this.templateFreight.externalCodRate,  //对外到付比率
-				externalConsigneeCodRate:this.templateFreight.externalConsigneeCodRate,  //对外收货方到付比率
-				externalMileage:this.templateFreight.externalMileage,  //对外运距
-				externalPorRate:this.templateFreight.externalPorRate,  //对外回单比率
-				externalPrice:this.templateFreight.externalPrice,  //对外运价
-				externalUnitPrice:this.templateFreight.externalUnitPrice,  //对外TKM
-
-				internalAbschlussRate:this.templateFreight.internalAbschlussRate,  //对内月结比率
-				internalCashRate:this.templateFreight.internalCashRate,  //对内现付比率
-				internalCodRate:this.templateFreight.internalCodRate,  //对内到付比率
-				internalConsigneeCodRate:this.templateFreight.internalConsigneeCodRate,  //对内收货方到付比率
-				internalPorRate:this.templateFreight.internalPorRate,  //对内回单比率
-				internalPrice:this.templateFreight.internalPrice,  //对内运价
-				internalUnitPrice:this.templateFreight.internalUnitPrice,  //对内TKM
-				mileage:this.templateFreight.mileage,  //对内运距
-
-				// shipperArea:this.templateFreight.shipperArea,  //发货地
-				shipperAreaID:this.templateFreight.shipperAreaID,  //发货地id
-				shipperCompanyName:this.shipperDetail.companyName,  //发货公司名称
-				shipperDetailAddress:this.shipperDetail.detailAddress,  //发货详细地址
-				shipperID:this.shipperDetail.customerID  //发货单位id
-			}
-			console.log(data)
-			// return
 			request({
 				url: '/transportPrice/add',
 				method:'post',
@@ -404,10 +327,10 @@ export default {
 			})
 		},
 		handleSelectedArea(data) {
-			this.selectedArea = data
+			this.templateFreight.shipperAreaID = data
 		},
 		handleSelectedArea1(data) {
-			this.selectedArea1 = data
+			this.templateFreight.consigneeAreaID = data
 		},
 		back() {
 			this.$router.go(-1)
