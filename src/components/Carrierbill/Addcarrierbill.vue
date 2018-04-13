@@ -255,7 +255,7 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
-import { checkInt2 } from '../../common/validators'
+import { checkFloat2 } from '../../common/validators'
 
 export default {
 	data() {
@@ -362,13 +362,13 @@ export default {
 					{required: true, message: '请输入货物规格', trigger: 'blur'}
 				],
 				cargoWeight: [
-					{validator: checkInt2, trigger: 'blur'}
+					{validator: checkFloat2, trigger: 'blur'}
 				],
 				cargoVolume: [
-					{validator: checkInt2, trigger: 'blur'}
+					{validator: checkFloat2, trigger: 'blur'}
 				],
 				cargoNum: [
-					{validator: checkInt2, trigger: 'blur'}
+					{validator: checkFloat2, trigger: 'blur'}
 				]
 			}
 		}
@@ -498,7 +498,6 @@ export default {
 			}
 			console.log(data)
 			new Promise((resolve, reject) => {
-				resolve()
 				this.$refs['ruleForm'].validate(valid => {
 					if (valid) {
 						resolve()

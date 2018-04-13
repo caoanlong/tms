@@ -133,7 +133,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="7" class="txt-r">合计</td>
+					<td colspan="7" class="txt-r">合计：{{totalDriver + totalSuperCargo}}</td>
 				</tr>
 			</tfoot>
 		</table>
