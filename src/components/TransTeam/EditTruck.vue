@@ -50,9 +50,10 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="车辆类别" prop="truckCategory">
-							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择" @change="changeTruckType">
+							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
 								<el-option label="挂车" value="挂车"></el-option>
 								<el-option label="牵引车" value="牵引车"></el-option>
+								<el-option label="整车" value="整车"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -75,14 +76,18 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
-						<el-form-item label="车牌号" v-if="truck.truckCategory == '牵引车'">
-							<el-input v-model="truck.plateNo"></el-input>
-						</el-form-item>
-						<el-form-item label="挂车车牌" v-else>
-							<el-input v-model="truck.trailerPlateNo"></el-input>
-						</el-form-item>
-					</el-col>
+				</el-row>
+				<el-row>
+					<el-form-item>
+						<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType">
+							<el-option label="车牌号" value="车牌号"></el-option>
+							<el-option label="挂车车牌" value="挂车车牌"></el-option>
+						</el-select>
+						<div style="display: inline-block">
+							<el-input placeholder="请输入车牌号" v-model="truck.plateNo" v-if="plateNoType == '车牌号'"></el-input>
+							<el-input placeholder="请输入挂车车牌" v-model="truck.trailerPlateNo" v-if="plateNoType == '挂车车牌'"></el-input>
+						</div>
+					</el-form-item>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
@@ -534,7 +539,6 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
@@ -543,7 +547,7 @@ export default {
 	data() {
 		return {
 			loading: true,
-			distData: regionData,
+			plateNoType: '车牌号',
 			truck: {
 				auditBy: '',
 				auditTime: '',
@@ -768,6 +772,11 @@ export default {
 			}).then(res => {
 				console.log(res.data.data)
 				this.truck = res.data.data
+				if (this.truck.plateNo) {
+					this.plateNoType = '车牌号'
+				} else {
+					this.plateNoType = '挂车车牌'
+				}
 				let areaID = res.data.data.areaID
 				this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
 				let resDataComStaffPic = res.data.data
@@ -815,8 +824,8 @@ export default {
 		handleSelectedArea(data) {
 			this.truck.areaID = data
 		},
-		changeTruckType(e) {
-			if (e == '牵引车') {
+		changePlateNoType(e) {
+			if (e == '车牌号') {
 				this.truck.trailerPlateNo = ''
 			} else {
 				this.truck.plateNo = ''

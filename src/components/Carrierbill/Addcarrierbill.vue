@@ -11,15 +11,17 @@
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="托运人">
-							<el-select style="width: 100%" v-model="Shippers.consignorID" filterable remote placeholder="请输入托运人关键词" :remote-method="getShippers" :loading="loading" @change="getConsignorDetail">
-								<el-option v-for="item in Shippers" :key="item.Shippers" :label="item.companyName" :value="item.customerID">
-								</el-option>
-							</el-select>
+						<el-form-item label="托运人" prop="consignorID">
+							<el-autocomplete
+								value-key="customerID" 
+								v-model="carrierbillInfo.consignorID"
+								:fetch-suggestions="getConsignors"
+								placeholder="请输入内容">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="承运人">
+						<el-form-item label="承运人" prop="carrierrName">
 							<el-input placeholder="请输入承运人" v-model="carrierbillInfo.carrierrName"></el-input>
 						</el-form-item>
 					</el-col>
@@ -32,11 +34,14 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="发货单位">
-							<el-select style="width: 100%" v-model="carrierbillInfo.shipperCompanyName" filterable remote placeholder="请输入托运人关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="getShipperDetail">
-								<el-option v-for="item in Recdeliverycomp" :key="item.Recdeliverycomp" :label="item.companyName" :value="item.companyName">
-								</el-option>
-							</el-select>
+						<el-form-item label="发货单位" prop="shipperCompanyName">
+							<el-autocomplete
+								value-key="companyName" 
+								v-model="carrierbillInfo.shipperCompanyName"
+								:fetch-suggestions="getRecdeliverycomp"
+								placeholder="请输入内容"
+								@select="handSelectShipper">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -47,83 +52,94 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="发货人">
-							<el-input placeholder="发货人" v-model="shipperDetail.contactName"></el-input>
+						<el-form-item label="发货人" prop="shipperName">
+							<el-input placeholder="发货人" v-model="carrierbillInfo.shipperName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发货人电话">
-							<el-input placeholder="发货人电话" v-model="shipperDetail.contactPhone"></el-input>
+							<el-input placeholder="发货人电话" v-model="carrierbillInfo.shipperPhone"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="发货时间">
+						<el-form-item label="发货时间" prop="shipperDate">
 							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierbillInfo.shipperDate" value-format="timestamp"></el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="发货地">
-							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea" />
+						<el-form-item label="发货地" prop="shipperAddressID">
+							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label-width="20px">
-							<el-input placeholder="发货详细地址" v-model="shipperDetail.detailAddress"></el-input>
+						<el-form-item label="详细地址" prop="shipperDetailAddress">
+							<el-input placeholder="发货详细地址" v-model="carrierbillInfo.shipperDetailAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row style="margin-top:20px">
 					<el-col :span="8">
-						<el-form-item label="收货单位">
-							<el-select style="width: 100%" v-model="carrierbillInfo.consigneeCompanyName" filterable remote placeholder="请输入收货单位关键词" :remote-method="getRecdeliverycomp" :loading="loading" @change="getConsigneeDetail">
-								<el-option v-for="item in Recdeliverycomp" :key="item.Recdeliverycomp" :label="item.companyName" :value="item.companyName">
-								</el-option>
-							</el-select>
+						<el-form-item label="收货单位" prop="consigneeCompanyName">
+							<el-autocomplete
+								value-key="companyName" 
+								v-model="carrierbillInfo.consigneeCompanyName"
+								:fetch-suggestions="getRecdeliverycomp"
+								placeholder="请输入内容"
+								@select="handSelectConsignee">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="收货人">
-							<el-input placeholder="收货人" v-model="ConsigneeDetail.contactName"></el-input>
+						<el-form-item label="收货人" prop="consigneeName">
+							<el-input placeholder="收货人" v-model="carrierbillInfo.consigneeName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="收货人电话">
-							<el-input placeholder="收货人电话" v-model="ConsigneeDetail.contactPhone"></el-input>
+							<el-input placeholder="收货人电话" v-model="carrierbillInfo.consigneePhone"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="到货时间">
+						<el-form-item label="到货时间" prop="consigneeDate">
 							<el-date-picker type="datetime" style="width:100%" placeholder="选择到货时间" v-model="carrierbillInfo.consigneeDate" value-format="timestamp"></el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="卸货地">
-							<DistPicker @selectChange="handleSelectedArea1" :selected="selectedArea1" />
+						<el-form-item label="卸货地" prop="consigneeAreaID">
+							<DistPicker @selectChange="handleSelectedArea1" :selected="selectedArea1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label-width="20px">
-							<el-input placeholder="卸货详细地址" v-model="ConsigneeDetail.detailAddress"></el-input>
+						<el-form-item label="详细地址" prop="consigneeDetailAddress">
+							<el-input placeholder="卸货详细地址" v-model="carrierbillInfo.consigneeDetailAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row style="margin-top:20px">
 					<el-col :span="8">
 						<el-form-item label="运输方式">
-							<el-select v-model="transType" placeholder="请选择" style="width:100%">
-								<el-option v-for="op in transTypeOption" :key="op.value" :label="op.label" :value="op.value"></el-option>
+							<el-select v-model="carrierbillInfo.transportType" placeholder="请选择" style="width:100%">
+								<el-option label="海上运输" value="海上运输"></el-option>
+								<el-option label="铁路运输" value="铁路运输"></el-option>
+								<el-option label="公路运输" value="公路运输"></el-option>
+								<el-option label="航空运输" value="航空运输"></el-option>
+								<el-option label="邮件运输" value="邮件运输"></el-option>
+								<el-option label="多式联运" value="多式联运"></el-option>
+								<el-option label="固定设施运输" value="固定设施运输"></el-option>
+								<el-option label="内河运输" value="内河运输"></el-option>
+								<el-option label="其他" value="其他"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="委托时间">
-							<el-date-picker style="width:100%" placeholder="后台现在没参数" value-format="timestamp"></el-date-picker>
+							<el-date-picker style="width:100%" placeholder="请选择" value-format="timestamp" v-model="carrierbillInfo.commissionDate"></el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -134,24 +150,40 @@
 						<el-button type="text" icon="el-icon-plus" class="fr" @click="addItem">添加</el-button>
 					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item label="货物信息">
-							<div class="cargoItem" v-for="(item,index) in carrierbillInfo.carrierCargoInfo">
-								<el-select v-model="item.weightType" placeholder="请选择" style="width:100px">
+				<div class="cargoItem" v-for="(item, index) in carrierbillInfo.carrierCargoInfo">
+					<el-form :inline="true" size="mini" :model="item" :rules="cargoRules" ref="cargoRuleForm">
+						<el-row>
+							<el-form-item :label="'货物' + (index + 1)" prop="weightType">
+								<el-select v-model="item.weightType" placeholder="请选择">
 									<el-option label="重货" value="Heavy"></el-option>
 									<el-option label="轻货" value="Light"></el-option>
 								</el-select>
-								<el-input placeholder="货物名称" style="width:150px" v-model="item.cargoName"></el-input>
-								<el-input placeholder="货物规格" style="width:150px" v-model="item.cargoType"></el-input>
-								<el-input placeholder="货物重量" style="width:150px" v-model="item.cargoWeight"><span slot="suffix">吨</span></el-input>
-								<el-input placeholder="货物体积" style="width:150px" v-model="item.cargoVolume"><span slot="suffix">方</span></el-input>
-								<el-input placeholder="货物数量" style="width:150px" v-model="item.cargoNum"><span slot="suffix">件</span></el-input>
-								<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="carrierbillInfo.carrierCargoInfo.length>1">删除</el-button>
-							</div>
-						</el-form-item>
-					</el-col>
-				</el-row>
+							</el-form-item>
+							<el-form-item prop="cargoName">
+								<el-input placeholder="货物名称" v-model="item.cargoName"></el-input>
+							</el-form-item>
+							<el-form-item prop="cargoType">
+								<el-input placeholder="货物规格" v-model="item.cargoType"></el-input>
+							</el-form-item>
+							<el-form-item prop="cargoWeight">
+								<el-input placeholder="货物重量" v-model="item.cargoWeight">
+									<span slot="suffix">吨</span>
+								</el-input>
+							</el-form-item>
+							<el-form-item prop="cargoVolume">
+								<el-input placeholder="货物体积" v-model="item.cargoVolume">
+									<span slot="suffix">方</span>
+								</el-input>
+							</el-form-item>
+							<el-form-item prop="cargoNum">
+								<el-input placeholder="货物数量" v-model="item.cargoNum">
+									<span slot="suffix">件</span>
+								</el-input>
+							</el-form-item>
+							<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="carrierbillInfo.carrierCargoInfo.length>1">删除</el-button>
+						</el-row>
+					</el-form>
+				</div>
 				<el-row>
 					<div class="split-item">
 						<span class="num">4</span>
@@ -229,31 +261,6 @@ export default {
 			selectedArea: [],
 			selectedArea1: [],
 			loading: false,
-			Shippers:{
-				companyArea:'',
-				companyName:'',
-				contactName:'',
-				contactPhone:'',
-				customerID:'',
-				detailAddress:''
-			},
-			Recdeliverycomp:{},
-			shipperDetail: {
-				companyName:'',
-				contactName:'',
-				companyArea:'',
-				detailAddress:'',
-				companyID:'',
-				customerID:''
-			},
-			ConsigneeDetail: {
-				companyName:'',
-				contactName:'',
-				companyArea:'',
-				detailAddress:'',
-				companyID:'',
-				customerID:''
-			},
 			carrierbillInfo: {
 				carrierCargoInfo:[
 					{
@@ -287,6 +294,7 @@ export default {
 				receiptMethod:'Manual',
 				shipperAddressID:'',
 				shipperArea:'',
+				shipperAreaID: '',
 				shipperCompanyName:'',
 				shipperDate:'',
 				shipperDetailAddress:'',
@@ -296,168 +304,163 @@ export default {
 				shipperPhone:'',
 				invoice:'N',
 				porRequire: ['NotRequired'],
+				transportType: '',
+				commissionDate: ''
 			},
 			transType:'',
-			transTypeOption:[
-				{
-					label:'后台现在没参数',
-					value:'海上运输'
-				}
-			],
 			rules: {
-				createName: [
-					{required: true, message: '请输入创建人', trigger: 'blur'}
+				consignorID: [
+					{required: true, message: '请输入托运人'}
 				],
-				status: [
-					{ required: true, message: '请选择状态', trigger: 'change' }
+				carrierrName: [
+					{required: true, message: '请输入承运人'}
 				],
-				auditName: [
-					{required: true, message: '请输入审核人', trigger: 'blur'}
+				shipperCompanyName: [
+					{required: true, message: '请输入发货单位'}
 				],
-				auditTime: [
-					{required: true, message: '请输入审核时间', trigger: 'blur'}
+				shipperName: [
+					{ required: true, message: '请输入发货人', trigger: 'blur' }
 				],
-				realName: [
-					{ required: true, message: '请选择姓名', trigger: 'blur' }
+				shipperDate: [
+					{required: true, message: '请选择发货时间', trigger: 'change'}
 				],
-				homeAddress: [
-					{required: true, message: '请输入家庭地址', trigger: 'blur'}
+				shipperAreaID: [
+					{required: true, message: '请选择发货地'}
 				],
-				// mobile: [
-				// 	{required: true, validator: checkMobile, trigger: 'blur'},
-				// ],
-				sex: [
-					{ required: true, message: '请选择性别', trigger: 'change' }
+				shipperDetailAddress: [
+					{ required: true, message: '请输入发货详细地址', trigger: 'blur' }
 				],
-				position: [
-					{required: true, message: '请选择岗位', trigger: 'change'}
+				consigneeCompanyName: [
+					{required: true, message: '请输入收货单位'}
 				],
-				// idCardNum: [
-				// 	{required: true, validator: checkIDCard, trigger: 'blur'}
-				// ]
+				consigneeName: [
+					{ required: true, message: '请输入收货人', trigger: 'blur' }
+				],
+				consigneeDate: [
+					{required: true, message: '请选择收货时间', trigger: 'change'}
+				],
+				consigneeAreaID: [
+					{required: true, message: '请选择收货地'}
+				],
+				consigneeDetailAddress: [
+					{required: true, message: '请输入收货详细地址', trigger: 'blur'}
+				],
+			},
+			cargoRules: {
+				cargoName: [
+					{required: true, message: '请输入货物名称', trigger: 'blur'}
+				],
 			}
 		}
 	},
 	methods: {
-		getShippers(e) {
+		getConsignors(queryString, cb) {
 			let params = {
 				type: 'Consignor',
+				companyName: queryString
 			}
 			request({
 				url: '/customer/findList',
 				params
 			}).then(res => {
-				console.log('托运人')
-				console.log(res.data)
-				this.Shippers = res.data.data.records
-				let arr = this.Shippers.filter(item => {
-					return item.companyName == e
-				})
+				let list = res.data.data.records
+				cb(list)
 			})
 		},
-		// 获取托运人详情
-		getConsignorDetail(e){
-			let arr = this.Shippers.filter(item => {
-				return item.customerID == e
-			})
-			console.log('托运人详情')
-			console.log(arr[0])
-			this.Shippers.companyArea = arr[0].companyArea
-			this.Shippers.companyName = arr[0].companyName
-			this.Shippers.contactName = arr[0].contactName
-			this.Shippers.contactPhone = arr[0].contactPhone
-			this.Shippers.customerID = arr[0].customerID
-			this.Shippers.detailAddress = arr[0].detailAddress
-		},
-		getRecdeliverycomp() {
+		getRecdeliverycomp(queryString, cb) {
 			let params = {
 				type: 'ShipperConsignee',
+				companyName: queryString
 			}
 			request({
 				url: '/customer/findList',
 				params
 			}).then(res => {
-				console.log('发货人，收货人列表')
-				console.log(res.data.data)
-				this.Recdeliverycomp = res.data.data.records
+				cb(res.data.data.records)
 			})
 		},
-		getShipperDetail(e){
-			let arr = this.Recdeliverycomp.filter(item => {
-				return item.companyName == e
-			})
-			console.log('发货人详情')
-			console.log(arr[0])
-			this.shipperDetail.contactName = arr[0].contactName
-			this.shipperDetail.contactPhone = arr[0].contactPhone
-			this.shipperDetail.companyArea = arr[0].companyArea
-			this.shipperDetail.detailAddress = arr[0].detailAddress
-			this.shipperDetail.companyID = arr[0].companyID
-			this.shipperDetail.customerID = arr[0].customerID
-			let areaID = String(arr[0].companyAreaID)
+		handSelectShipper(data){
+			this.carrierbillInfo.shipperCompanyName = data.companyName
+			this.carrierbillInfo.shipperName = data.contactName
+			this.carrierbillInfo.shipperArea = data.companyArea
+			this.carrierbillInfo.shipperDetailAddress = data.detailAddress
+			this.carrierbillInfo.shipperID = data.customerID
+			this.carrierbillInfo.shipperPhone = data.contactPhone
+			this.carrierbillInfo.shipperAreaID = data.companyAreaID
+			let areaID = String(data.companyAreaID)
 			this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
 		},
-		getConsigneeDetail(e){
-			let arr = this.Recdeliverycomp.filter(item => {
-				return item.companyName == e
-			})
-			console.log('收货人详情')
-			console.log(arr[0])
-			this.ConsigneeDetail.contactName = arr[0].contactName
-			this.ConsigneeDetail.contactPhone = arr[0].contactPhone
-			this.ConsigneeDetail.companyArea = arr[0].companyArea
-			this.ConsigneeDetail.detailAddress = arr[0].detailAddress
-			this.ConsigneeDetail.companyID = arr[0].companyID
-			this.ConsigneeDetail.customerID = arr[0].customerID
-			let areaID = String(arr[0].companyAreaID)
+		handSelectConsignee(data){
+			this.carrierbillInfo.consigneeCompanyName = data.companyName
+			this.carrierbillInfo.consigneeName = data.contactName
+			this.carrierbillInfo.consigneeArea = data.companyArea
+			this.carrierbillInfo.consigneeDetailAddress = data.detailAddress
+			this.carrierbillInfo.consigneeID = data.customerID
+			this.carrierbillInfo.consigneePhone = data.contactPhone
+			this.carrierbillInfo.consigneeAreaID = data.companyAreaID
+			let areaID = String(data.companyAreaID)
 			this.selectedArea1 = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
 		},
-		
-		save(){
+		handleSelectedArea(data) {
+			this.carrierbillInfo.shipperAreaID = data
+		},
+		handleSelectedArea1(data) {
+			this.carrierbillInfo.consigneeAreaID = data
+		},
+		save() {
+			console.log(this.carrierbillInfo)
 			let data = {
-				carrierCargoInfo:JSON.stringify(this.carrierbillInfo.carrierCargoInfo),
-				carrierOrderNo:this.carrierbillInfo.carrierOrderNo,
-				carrierrName:this.carrierbillInfo.carrierrName,
-				cashAmount:this.carrierbillInfo.cashAmount,
-				codAmount:this.carrierbillInfo.codAmount,
+				carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargoInfo),
+				carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
+				carrierrName: this.carrierbillInfo.carrierrName,
+				cashAmount: this.carrierbillInfo.cashAmount,
+				codAmount: this.carrierbillInfo.codAmount,
+
 				consigneeAddressID: '',
-				// consigneeAddressID:this.carrierbillInfo.consigneeAddressID,
-				consigneeAmount:this.carrierbillInfo.consigneeAmount,
-				consigneeArea:this.ConsigneeDetail.companyArea,
-				consigneeAreaID:this.selectedArea[this.selectedArea.length-1],
-				consigneeCompanyName:this.carrierbillInfo.consigneeCompanyName,
-				consigneeDate:this.carrierbillInfo.consigneeDate,
-				consigneeDetailAddress:this.ConsigneeDetail.detailAddress,
-				consigneeID:this.ConsigneeDetail.customerID,
-				consigneeName:this.ConsigneeDetail.contactName,
-				consigneePhone:this.ConsigneeDetail.contactPhone,
-				consignorID:this.Shippers.customerID,
-				monthlyAmount:this.carrierbillInfo.monthlyAmount,
-				paymentMethod:this.carrierbillInfo.paymentMethod,
-				porAmount:this.carrierbillInfo.porAmount,
-				receiptMethod:this.carrierbillInfo.receiptMethod,	
+				consigneeAmount: this.carrierbillInfo.consigneeAmount,
+				consigneeArea: this.carrierbillInfo.consigneeArea ,
+				consigneeAreaID: this.carrierbillInfo.consigneeAreaID,
+				consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
+				consigneeDate: this.carrierbillInfo.consigneeDate,
+				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
+				consigneeID: this.carrierbillInfo.consigneeID,
+				consigneeName: this.carrierbillInfo.consigneeName,
+				consigneePhone: this.carrierbillInfo.consigneePhone,
+				consignorID: this.carrierbillInfo.consignorID,
+				monthlyAmount: this.carrierbillInfo.monthlyAmount,
+				paymentMethod: this.carrierbillInfo.paymentMethod,
+				porAmount: this.carrierbillInfo.porAmount,
+				receiptMethod: this.carrierbillInfo.receiptMethod,	
+
 				shipperAddressID: '',
-				// shipperAddressID:this.shipperDetail.detailAddress,
-				shipperArea:this.shipperDetail.companyArea,
-				shipperAreaID:this.selectedArea1[this.selectedArea1.length-1],
-				shipperCompanyName:this.carrierbillInfo.shipperCompanyName,
-				shipperDate:this.carrierbillInfo.shipperDate,
-				shipperDetailAddress:this.shipperDetail.detailAddress,
-				shipperID:this.shipperDetail.customerID,
-				shipperName:this.shipperDetail.contactName,
-				shipperNo:this.carrierbillInfo.shipperNo,
-				shipperPhone:this.shipperDetail.contactPhone,
-				porRequire:this.carrierbillInfo.porRequire,
-				invoice:this.carrierbillInfo.invoice
+				shipperArea: this.carrierbillInfo.shipperArea,
+				shipperAreaID: this.carrierbillInfo.shipperAreaID,
+				shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
+				shipperDate: this.carrierbillInfo.shipperDate,
+				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
+				shipperID: this.carrierbillInfo.shipperID,
+				shipperName: this.carrierbillInfo.shipperName,
+				shipperNo: this.carrierbillInfo.shipperNo,
+				shipperPhone: this.carrierbillInfo.shipperPhone,
+
+				porRequire: this.carrierbillInfo.porRequire,
+				invoice: this.carrierbillInfo.invoice,
+
+				transportType: this.carrierbillInfo.transportType,
+				commissionDate: this.carrierbillInfo.commissionDate
 			}
 			console.log(data)
-			request({
-				url: '/biz/carrierOrder/add',
-				method: 'post',
-				data
-			}).then(res => {
-				Message.success(res.data.msg)
-				this.$router.push({name: 'carrierbills'})
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					request({
+						url: '/biz/carrierOrder/add',
+						method: 'post',
+						data
+					}).then(res => {
+						Message.success(res.data.msg)
+						this.$router.push({name: 'carrierbills'})
+					})
+				}
 			})
 		},
 		addItem() {
@@ -487,13 +490,7 @@ export default {
 		},
 		back() {
 			this.$router.go(-1)
-		},
-		handleSelectedArea(data) {
-			this.carrierbillInfo.shipperAddressID = data[data.length-1]
-		},
-		handleSelectedArea1(data) {
-			this.carrierbillInfo.consigneeAreaID = data[data.length-1]
-		},
+		}
 	},
 	components: {
 		DistPicker
@@ -529,15 +526,15 @@ export default {
 					background #909399
 	.tips
 		color #909399
-.cargoItem
-	padding-top 10px
-	border-top 1px solid #ebeef5
-	&:first-child
-		border-top none
-		padding-top 0
-	.el-select
-	.el-input
-		margin 0 10px 10px 0
+// .cargoItem
+// 	padding-top 10px
+// 	border-top 1px solid #ebeef5
+// 	&:first-child
+// 		border-top none
+// 		padding-top 0
+// 	.el-select
+// 	.el-input
+// 		margin 0 10px 10px 0
 .wf-checkbox
 	margin-right 30px
 	cursor pointer
