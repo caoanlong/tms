@@ -91,43 +91,43 @@
 					<td class="txt-r">司机</td>
 					<td>
 						<el-input size="mini" v-model="payMethods.driverCashAmount">
-							<span slot="suffix">%</span></el-input>
+						</el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverCodAmount"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.driverCodAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverPorAmount"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.driverPorAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverMonthlyAmont"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.driverMonthlyAmont"></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverCosigneeAmount"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.driverCosigneeAmount"></el-input>
 					</td>
 					<td>
-						<el-input disabled size="mini" :value="totalDriver"><span slot="suffix">%</span></el-input>
+						<el-input disabled size="mini" :value="totalDriver"></el-input>
 					</td>
 				</tr>
 				<tr>
 					<td class="txt-r">随车人员</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCargoCashAmount"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCashAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCargoCodAmount"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCodAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCargoCorAmount"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCorAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCargoMonthlyAmount"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoMonthlyAmount"></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCosigneeAmount"><span slot="suffix">%</span></el-input>
+						<el-input size="mini" v-model="payMethods.superCosigneeAmount"></el-input>
 					</td>
 					<td>
-						<el-input disabled size="mini" :value="totalSuperCargo"><span slot="suffix">%</span></el-input>
+						<el-input disabled size="mini" :value="totalSuperCargo"></el-input>
 					</td>
 				</tr>
 			</tbody>

@@ -93,14 +93,14 @@
 					<svg-icon icon-class="eye" @click.native="isShow = true" v-if="!isShow"/>
 					<i class="el-icon-view" @click="isShow = false" v-if="isShow"></i></caption>
 				<tr>
-					<th>现付</th>
-					<th>到付</th>
-					<th>回单付</th>
-					<th>月结</th>
-					<th>收方到货付</th>
-					<th>合计</th>
-					<th>其他</th>
-					<th>备注</th>
+					<th width="12.5%">现付</th>
+					<th width="12.5%">到付</th>
+					<th width="12.5%">回单付</th>
+					<th width="12.5%">月结</th>
+					<th width="12.5%">收方到货付</th>
+					<th width="12.5%">合计</th>
+					<th width="12.5%">其他</th>
+					<th width="12.5%">备注</th>
 				</tr>
 				<tr class="is-center">
 					<td>{{isShow ? carrierOrder.cashAmount : '**'}}元</td>
@@ -121,7 +121,7 @@
 							<span v-else-if="item=='ShipperPor'">发货单文件</span>
 							<span v-else>不需要回单</span>
 						</span>
-						<span class="labels fr">承运单应收总价：{{carrierOrderTotal}}元</span>
+						<span class="labels fr">承运单应收总价：{{isShow ? carrierOrderTotal:'**'}}元</span>
 					</td>
 				</tr>
 			</table>

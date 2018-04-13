@@ -4,11 +4,11 @@
 			<div  class="header clearfix">编辑托运人</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px">
+					<el-form label-width="120px" size="mini">
 						<el-form-item label="公司名称">
 							<el-input v-model="shipper.companyName"></el-input>
 						</el-form-item>
-						<el-form-item label="地址">
+						<el-form-item label="地区">
 							<DistPicker :selected="selectedArea" @selectChange="handleSelectedArea"/>
 						</el-form-item>
 						<el-form-item label="详细地址">

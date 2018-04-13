@@ -272,7 +272,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="行驶证审验效期至" prop="driverLicExamineExpires">
+						<el-form-item label="行驶证审验有效期至" prop="driverLicExamineExpires">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="truck.driverLicExamineExpires"

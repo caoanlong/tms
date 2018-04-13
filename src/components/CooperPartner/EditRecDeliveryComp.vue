@@ -4,11 +4,11 @@
 			<div  class="header clearfix">编辑收发货单位</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm">
+					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="mini">
 						<el-form-item label="公司名称" prop="companyName">
 							<el-input v-model="recdeliverycomp.companyName"></el-input>
 						</el-form-item>
-						<el-form-item label="地址" prop="companyAreaID">
+						<el-form-item label="地区" prop="companyAreaID">
 							<DistPicker :selected="selectedArea" @selectChange="handleSelectedArea"/>
 						</el-form-item>
 						<el-form-item label="详细地址" prop="detailAddress">

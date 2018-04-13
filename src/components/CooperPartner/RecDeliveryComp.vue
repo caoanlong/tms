@@ -7,7 +7,7 @@
 					<el-form-item label="公司名称">
 						<el-input placeholder="请输入..." v-model="findcompanyName"></el-input>
 					</el-form-item>
-					<el-form-item label="地址">
+					<el-form-item label="地区">
 						<el-input placeholder="请输入..." v-model="findcompanyArea"></el-input>
 					</el-form-item>
 					<el-form-item label="联系人">
@@ -216,7 +216,6 @@
 				} else {
 					ids = this.selectedList.join(',')
 				}
-				console.log(ids)
 				if(!ids) {
 					Message({
 						type: 'warning',
