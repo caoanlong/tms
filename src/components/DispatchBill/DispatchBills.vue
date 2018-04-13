@@ -27,7 +27,7 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="调度单号" prop="dispatchOrderNo" width="130" align="center">
+					<el-table-column label="调度单号" prop="dispatchOrderNo" width="180" align="center">
 					</el-table-column>
 					<el-table-column label="车辆号牌" prop="plateNo" width="110" align="center">
 					</el-table-column>
@@ -52,16 +52,16 @@
 					</el-table-column>
 					<el-table-column label="随车人员" prop="superCargoName"  width="120"></el-table-column>
 					<el-table-column label="订单号" prop="carrierOrder.carrierOrderNo"></el-table-column>
-					<el-table-column label="发货地" prop="dispatchOrderCargo.shipperArea" width="120"></el-table-column>
-					<el-table-column label="收货地" prop="dispatchOrderCargo.consigneeArea" width="120"></el-table-column>
-					<el-table-column label="到货时间" width="130">
+					<el-table-column label="发货地" prop="dispatchOrderCargo.shipperArea" width="120" align="center"></el-table-column>
+					<el-table-column label="收货地" prop="dispatchOrderCargo.consigneeArea" width="120" align="center"></el-table-column>
+					<el-table-column label="到货时间" width="100" align="center">
 						<template slot-scope="scope">
 							<span>{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="货物规格/名称">
 						<template slot-scope="scope">
-							<span>{{scope.row.dispatchOrderCargo.cargoType}}/{{scope.row.dispatchOrderCargo.cargoName}}</span>
+							<span>{{scope.row.dispatchOrderCargo.cargoType?scope.row.dispatchOrderCargo.cargoType+'/':''}}{{scope.row.dispatchOrderCargo.cargoName}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="60" align="center" fixed="right">

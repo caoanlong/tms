@@ -46,7 +46,7 @@
 					<el-table-column label="地区" prop="area" width="120"></el-table-column>
 					<el-table-column label="地点" prop="address"></el-table-column>
 					<el-table-column label="总货量" prop="totalGoods"></el-table-column>
-					<el-table-column label="总运费" prop="totalFreight" align="center" width="120"></el-table-column>
+					<el-table-column label="总运费" prop="money" align="center" width="120"></el-table-column>
 					<el-table-column label="操作" align="center" width="60" fixed="right">
 						<template slot-scope="scope">
 							<el-button type="primary" size="mini" @click="viewinfo">查看</el-button>
@@ -78,6 +78,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
@@ -89,64 +90,46 @@
                 endDate: '',
 				pageIndex: 1,
 				pageSize: 10,
-                count: 87,
-                tableData: [
-                    {
-                        'deliveryer': '安化',
-                        'receiver': '安宁恒源爆破工程有限公司',
-                        'totalNum': '5',
-                        'area': '昆明市',
-                        'address': '安宁',
-                        'totalGoods': '9.792吨',
-                        'totalFreight': 725.59
-                    },
-                    {
-                        'deliveryer': '安化',
-                        'receiver': '昆明市特里亚民爆器材专营公司晋宁分公司',
-                        'totalNum': '1',
-                        'area': '昆明市',
-                        'address': '晋宁一中队',
-                        'totalGoods': '48.96吨/28方/19930件',
-                        'totalFreight': 1953.5
-                    },
-                    {
-                        'deliveryer': '安化',
-                        'receiver': '昆明市特立亚石林分公司',
-                        'totalNum': '19',
-                        'area': '昆明市',
-                        'address': '石林',
-                        'totalGoods': '186.048吨',
-                        'totalFreight': 25674.7
-                    },
-                    {
-                        'deliveryer': '安化',
-                        'receiver': '昆明市特里阿拉善分公司',
-                        'totalNum': '3',
-                        'area': '昆明市',
-                        'address': '海口',
-                        'totalGoods': '34吨/25方/100件',
-                        'totalFreight': 2700.9
-                    }
-                ]
+                count:0,
+                tableData: []
 			}
         },
 		created() {
+			this.getList()
 		},
 		methods: {
             reset() {
                 this.findShipper = ''
-                this.findConsigner = ''
-                this.findReceipter = ''
+                this.findConsignee = ''
+                this.findConsignor = ''
                 this.findConsignDate = []
                 this.startDate = ''
                 this.endDate = ''
+                this.getList()
             },
+            getList() {
+				let params = {
+					current: this.pageIndex,
+					size: this.pageSize,
+					shipper: this.findShipper,     //托运人
+					consignee: this.findConsignee, //收货单位
+					consignor: this.findConsignor  //发货单位
+				}
+				request({
+					url: '/finance/receivable',
+					params
+				}).then(res => {
+					console.log(res.data.data)
+					this.tableData = res.data.data.records
+					this.count = res.data.data.total
+				})
+			},
 			pageChange(index) {
                 this.pageIndex = index
             },
             selectDateRange(date) {
-                this.startDate = new Date(date[0]).getTime()
-                this.endDate = new Date(date[1]).getTime()
+                this.startDate = date[0]
+                this.endDate = date[1]
             },
             viewinfo() {
                 this.$router.push({name: 'receivableinfosimple'})

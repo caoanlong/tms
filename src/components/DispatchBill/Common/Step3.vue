@@ -38,7 +38,7 @@
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
 									<el-input size="mini" v-model="totalWeight">
-										<template slot="suffix">吨</template>
+										<template slot="append">吨</template>
 									</el-input>
 								</el-form-item>
 							</el-form>
@@ -47,7 +47,7 @@
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
 									<el-input size="mini" v-model="totalVol">
-										<template slot="suffix">方</template>
+										<template slot="append">方</template>
 									</el-input>
 								</el-form-item>
 							</el-form>
@@ -56,7 +56,7 @@
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
 									<el-input size="mini" v-model="totalNum">
-										<template slot="suffix">件</template>
+										<template slot="append">件</template>
 									</el-input>
 								</el-form-item>
 							</el-form>
@@ -74,7 +74,7 @@
 				<span class="tit">付款方式及费用</span>
 			</div>
 		</el-row>
-		<table class="customertable">
+		<table class="customertable" width="100%">
 			<thead>
 				<tr>
 					<th width="100"></th>
@@ -90,43 +90,44 @@
 				<tr>
 					<td class="txt-r">司机</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverCashAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.driverCashAmount">
+							<span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverCodAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.driverCodAmount"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverPorAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.driverPorAmount"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverMonthlyAmont"></el-input>
+						<el-input size="mini" v-model="payMethods.driverMonthlyAmont"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverCosigneeAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.driverCosigneeAmount"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input disabled size="mini" :value="totalDriver"></el-input>
+						<el-input disabled size="mini" :value="totalDriver"><span slot="suffix">%</span></el-input>
 					</td>
 				</tr>
 				<tr>
 					<td class="txt-r">随车人员</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCargoCashAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCashAmount"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCargoCodAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCodAmount"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCargoCorAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoCorAmount"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCargoMonthlyAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.superCargoMonthlyAmount"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.superCosigneeAmount"></el-input>
+						<el-input size="mini" v-model="payMethods.superCosigneeAmount"><span slot="suffix">%</span></el-input>
 					</td>
 					<td>
-						<el-input disabled size="mini" :value="totalSuperCargo"></el-input>
+						<el-input disabled size="mini" :value="totalSuperCargo"><span slot="suffix">%</span></el-input>
 					</td>
 				</tr>
 			</tbody>
@@ -227,14 +228,14 @@
 	.step
 		.split-item
 			padding 10px 0
-			margin-bottom 20px
-			border-bottom 1px solid #ebeef5
 			.tit
 				padding-left 0
 	.control-info
 		font-size 14px
 		border-bottom 1px solid #ebeef5
-		padding-bottom 20px
+		border-top 1px solid #ebeef5
+		padding 20px 0
+		margin-bottom 20px
 		.sliderSelect
 			display inline-block
 			width 220px
@@ -256,19 +257,20 @@
 			p
 				line-height 30px
 				margin 0
-		.customertable
-			width 100%
-			font-size 12px
-			background #ebeef5
-			border-spacing 1px
-			td
-			th
-				background #fff
-				padding 6px 10px
-				color #909399
-				height 24px
-				line-height 24px
-				text-align center
-				&.txt-r
-					text-align right
+	.customertable
+		width 100%
+		font-size 14px
+		background #ebeef5
+		border-spacing 1px
+		margin-top -1px
+		td
+		th
+			background #fff
+			padding 6px 10px
+			color #909399
+			height 24px
+			line-height 24px
+			text-align center
+			&.txt-r
+				text-align right
 </style>
