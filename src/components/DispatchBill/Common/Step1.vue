@@ -137,14 +137,13 @@
 						cargoWeight: Number(this.selectedCargoList[i].cargoWeightNew),
 						carrierCargoID: this.selectedCargoList[i].carrierCargoID,
 						carrierOrderID: this.selectedCargoList[i].carrierOrderID,
-						carrierOrder: carrierBill[0] ? carrierBill[0] : ''
+						carrierOrder: carrierBill[0] ? carrierBill[0] : '',
+						weightType: this.selectedCargoList[i].weightType,
 					})
 				}
-				console.log([this.totalWeight, this.totalVolume, this.totalNum])
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
 			selectionChange(data, orderID) {
-				console.log(orderID)
 				let carrierCargoIDs = this.selectedCargoList.map(item => item.carrierCargoID)
 
 				for (let i = 0; i < this.selectedCargoList.length; i++) {
