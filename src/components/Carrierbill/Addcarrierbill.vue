@@ -13,10 +13,11 @@
 					<el-col :span="6">
 						<el-form-item label="托运人" prop="consignorID">
 							<el-autocomplete
-								value-key="customerID" 
+								value-key="companyName" 
 								v-model="carrierbillInfo.consignorID"
 								:fetch-suggestions="getConsignors"
-								placeholder="请输入内容">
+								placeholder="请输入内容"
+								@select="handSelectConsignor">
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
@@ -69,7 +70,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="发货地" prop="shipperAddressID">
+						<el-form-item label="发货地" prop="shipperAreaID">
 							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea"/>
 						</el-form-item>
 					</el-col>
@@ -123,7 +124,7 @@
 				</el-row>
 				<el-row style="margin-top:20px">
 					<el-col :span="8">
-						<el-form-item label="运输方式">
+						<el-form-item label="运输方式" prop="transportType">
 							<el-select v-model="carrierbillInfo.transportType" placeholder="请选择" style="width:100%">
 								<el-option label="海上运输" value="海上运输"></el-option>
 								<el-option label="铁路运输" value="铁路运输"></el-option>
@@ -150,37 +151,37 @@
 						<el-button type="text" icon="el-icon-plus" class="fr" @click="addItem">添加</el-button>
 					</div>
 				</el-row>
-				<div class="cargoItem" v-for="(item, index) in carrierbillInfo.carrierCargoInfo">
+				<div class="cargoItem" v-for="(item, index) in carrierbillInfo.carrierCargo">
 					<el-form :inline="true" size="mini" :model="item" :rules="cargoRules" ref="cargoRuleForm">
 						<el-row>
 							<el-form-item :label="'货物' + (index + 1)" prop="weightType">
-								<el-select v-model="item.weightType" placeholder="请选择">
+								<el-select v-model="item.weightType" placeholder="请选择" style="width: 100px">
 									<el-option label="重货" value="Heavy"></el-option>
 									<el-option label="轻货" value="Light"></el-option>
 								</el-select>
 							</el-form-item>
 							<el-form-item prop="cargoName">
-								<el-input placeholder="货物名称" v-model="item.cargoName"></el-input>
+								<el-input placeholder="货物名称" style="width: 130px" v-model="item.cargoName"></el-input>
 							</el-form-item>
 							<el-form-item prop="cargoType">
-								<el-input placeholder="货物规格" v-model="item.cargoType"></el-input>
+								<el-input placeholder="货物规格" style="width: 130px" v-model="item.cargoType"></el-input>
 							</el-form-item>
 							<el-form-item prop="cargoWeight">
-								<el-input placeholder="货物重量" v-model="item.cargoWeight">
+								<el-input placeholder="货物重量" style="width: 130px" v-model="item.cargoWeight">
 									<span slot="suffix">吨</span>
 								</el-input>
 							</el-form-item>
 							<el-form-item prop="cargoVolume">
-								<el-input placeholder="货物体积" v-model="item.cargoVolume">
+								<el-input placeholder="货物体积" style="width: 130px" v-model="item.cargoVolume">
 									<span slot="suffix">方</span>
 								</el-input>
 							</el-form-item>
 							<el-form-item prop="cargoNum">
-								<el-input placeholder="货物数量" v-model="item.cargoNum">
+								<el-input placeholder="货物数量" style="width: 130px" v-model="item.cargoNum">
 									<span slot="suffix">件</span>
 								</el-input>
 							</el-form-item>
-							<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="carrierbillInfo.carrierCargoInfo.length>1">删除</el-button>
+							<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="carrierbillInfo.carrierCargo.length>1">删除</el-button>
 						</el-row>
 					</el-form>
 				</div>
@@ -193,7 +194,7 @@
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="承运单应收款">
-							<el-radio-group v-model="carrierbillInfo.receiptMethod">
+							<el-radio-group v-model="carrierbillInfo.receiptMethod" @change="handSelectReceiptMethod">
 								<el-radio label="TKM">按吨公里自动生成</el-radio>
 								<el-radio label="Manual">手动输入</el-radio>
 							</el-radio-group>
@@ -254,15 +255,17 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
+import { checkInt2 } from '../../common/validators'
 
 export default {
 	data() {
 		return {
 			selectedArea: [],
 			selectedArea1: [],
+			consignor: {},
 			loading: false,
 			carrierbillInfo: {
-				carrierCargoInfo:[
+				carrierCargo:[
 					{
 						'weightType': 'Heavy',
 						'cargoName': '',
@@ -307,7 +310,6 @@ export default {
 				transportType: '',
 				commissionDate: ''
 			},
-			transType:'',
 			rules: {
 				consignorID: [
 					{required: true, message: '请输入托运人'}
@@ -319,7 +321,7 @@ export default {
 					{required: true, message: '请输入发货单位'}
 				],
 				shipperName: [
-					{ required: true, message: '请输入发货人', trigger: 'blur' }
+					{ required: true, message: '请输入发货人'}
 				],
 				shipperDate: [
 					{required: true, message: '请选择发货时间', trigger: 'change'}
@@ -328,13 +330,13 @@ export default {
 					{required: true, message: '请选择发货地'}
 				],
 				shipperDetailAddress: [
-					{ required: true, message: '请输入发货详细地址', trigger: 'blur' }
+					{ required: true, message: '请输入发货详细地址'}
 				],
 				consigneeCompanyName: [
 					{required: true, message: '请输入收货单位'}
 				],
 				consigneeName: [
-					{ required: true, message: '请输入收货人', trigger: 'blur' }
+					{ required: true, message: '请输入收货人'}
 				],
 				consigneeDate: [
 					{required: true, message: '请选择收货时间', trigger: 'change'}
@@ -343,13 +345,31 @@ export default {
 					{required: true, message: '请选择收货地'}
 				],
 				consigneeDetailAddress: [
-					{required: true, message: '请输入收货详细地址', trigger: 'blur'}
+					{required: true, message: '请输入收货详细地址'}
 				],
+				transportType: [
+					{required: true, message: '请选择运输方式'}
+				]
 			},
 			cargoRules: {
+				weightType: [
+					{required: true, message: '请选择货物类型', trigger: 'change'}
+				],
 				cargoName: [
 					{required: true, message: '请输入货物名称', trigger: 'blur'}
 				],
+				cargoType: [
+					{required: true, message: '请输入货物规格', trigger: 'blur'}
+				],
+				cargoWeight: [
+					{validator: checkInt2, trigger: 'blur'}
+				],
+				cargoVolume: [
+					{validator: checkInt2, trigger: 'blur'}
+				],
+				cargoNum: [
+					{validator: checkInt2, trigger: 'blur'}
+				]
 			}
 		}
 	},
@@ -379,6 +399,10 @@ export default {
 				cb(res.data.data.records)
 			})
 		},
+		handSelectConsignor(data) {
+			console.log(data)
+			this.consignor = data
+		},
 		handSelectShipper(data){
 			this.carrierbillInfo.shipperCompanyName = data.companyName
 			this.carrierbillInfo.shipperName = data.contactName
@@ -407,10 +431,30 @@ export default {
 		handleSelectedArea1(data) {
 			this.carrierbillInfo.consigneeAreaID = data
 		},
+		handSelectReceiptMethod(data) {
+			if (data == 'TKM') {
+				if (!this.carrierbillInfo.consigneeArea) {
+					Message.error('收货地区未填写！')
+					return
+				}
+				if (!this.carrierbillInfo.consigneeDetailAddress) {
+					Message.error('收货详细地址未填写！')
+					return
+				}
+				if (!this.carrierbillInfo.shipperArea) {
+					Message.error('发货地区未填写！')
+					return
+				}
+				if (!this.carrierbillInfo.shipperDetailAddress) {
+					Message.error('发货详细地址未填写！')
+					return
+				}
+				this.getTransportPrice()
+			}
+		},
 		save() {
-			console.log(this.carrierbillInfo)
 			let data = {
-				carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargoInfo),
+				carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargo),
 				carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
 				carrierrName: this.carrierbillInfo.carrierrName,
 				cashAmount: this.carrierbillInfo.cashAmount,
@@ -426,7 +470,10 @@ export default {
 				consigneeID: this.carrierbillInfo.consigneeID,
 				consigneeName: this.carrierbillInfo.consigneeName,
 				consigneePhone: this.carrierbillInfo.consigneePhone,
-				consignorID: this.carrierbillInfo.consignorID,
+
+				consignorID: this.consignor.customerID, // 托运人ID
+				consignorName: this.consignor.companyName, // 托运人名称
+
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
 				paymentMethod: this.carrierbillInfo.paymentMethod,
 				porAmount: this.carrierbillInfo.porAmount,
@@ -443,28 +490,52 @@ export default {
 				shipperNo: this.carrierbillInfo.shipperNo,
 				shipperPhone: this.carrierbillInfo.shipperPhone,
 
-				porRequire: this.carrierbillInfo.porRequire,
+				porRequire: this.carrierbillInfo.porRequire.join(','),
 				invoice: this.carrierbillInfo.invoice,
 
 				transportType: this.carrierbillInfo.transportType,
 				commissionDate: this.carrierbillInfo.commissionDate
 			}
 			console.log(data)
-			this.$refs['ruleForm'].validate(valid => {
-				if (valid) {
-					request({
-						url: '/biz/carrierOrder/add',
-						method: 'post',
-						data
-					}).then(res => {
-						Message.success(res.data.msg)
-						this.$router.push({name: 'carrierbills'})
+			new Promise((resolve, reject) => {
+				resolve()
+				this.$refs['ruleForm'].validate(valid => {
+					if (valid) {
+						resolve()
+					} else {
+						reject()
+					}
+				})
+			}).then(() => {
+				this.$refs['cargoRuleForm'].forEach(item => {
+					item.validate(valid => {
+						if (valid) {
+							let cargoInfo = this.carrierbillInfo.carrierCargo
+							for (let i = 0; i < cargoInfo.length; i++) {
+								if (cargoInfo[i].weightType == 'Heavy' && (cargoInfo[i].cargoWeight == '' || cargoInfo[i].cargoWeight == 0)) {
+									Message.error('重货必须填写货物重量！')
+									return
+								}
+								if (cargoInfo[i].weightType == 'Light' && (cargoInfo[i].cargoVolume == '' || cargoInfo[i].cargoVolume == 0)) {
+									Message.error('轻货必须填写货物体积！')
+									return
+								}
+							}
+							request({
+								url: '/biz/carrierOrder/add',
+								method: 'post',
+								data
+							}).then(res => {
+								Message.success(res.data.msg)
+								this.$router.push({name: 'carrierbills'})
+							})
+						}
 					})
-				}
+				})
 			})
 		},
 		addItem() {
-			this.carrierbillInfo.carrierCargoInfo.push({
+			this.carrierbillInfo.carrierCargo.push({
 				'cargoType': '',
 				'cargoName': '',
 				'weightType': 'Heavy',
@@ -474,7 +545,7 @@ export default {
 			})
 		},
 		removeItem(index) {
-			this.carrierbillInfo.carrierCargoInfo.splice(index, 1)
+			this.carrierbillInfo.carrierCargo.splice(index, 1)
 		},
 		selectReceipt(e){
 			if (this.carrierbillInfo.porRequire.includes(e)) {
@@ -487,6 +558,43 @@ export default {
 			} else {
 				this.carrierbillInfo.porRequire.includes('NotRequired') && this.carrierbillInfo.porRequire.splice(this.carrierbillInfo.porRequire.indexOf('NotRequired'), 1)
 			}
+		},
+		getTransportPrice() {
+			let params = {
+				consigneeArea: this.carrierbillInfo.consigneeArea, //	收货地区	
+				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress, //	收货详细地址	
+				shipperArea: this.carrierbillInfo.shipperArea, //	发货地区	
+				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress // 发货详细地址
+			}
+			request({
+				url: '/transportPrice/findOneByAddress',
+				method: 'get',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				if (res.data.code == 200) {
+					let result = res.data.data
+					let cargoWeights = this.carrierbillInfo.carrierCargo.map(item => Number(item.cargoWeight))
+					let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
+
+					//total = externalUnitPrice * externalMileage * 货物重量（单位：吨）
+					//"现付" v-model="carrierbillInfo.cashAmount"
+					//"到付" v-model="carrierbillInfo.codAmount"
+					//"回单结" v-model="carrierbillInfo.porAmount"
+					//"月结" v-model="carrierbillInfo.monthlyAmount"
+					//"收货方付" v-model="carrierbillInfo.consigneeAmount"
+
+					//externalAbschlussRate	对外月结比率	number	@mock=2000
+					//externalCashRate	对外现付比率	number	@mock=0.6
+					//externalCodRate	对外到付比率	number	@mock=0.9
+					//externalConsigneeCodRate	对外收货方到付比率	number	@mock=30000
+					//externalMileage	对外运距	number	@mock=2000
+					//externalPorRate	对外回单比率	number	@mock=0.3
+					//externalPrice	对外运价	number	@mock=30000
+					//externalUnitPrice	对外TKM
+					this.carrierbillInfo.cashAmount = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
+				}
+			})
 		},
 		back() {
 			this.$router.go(-1)
