@@ -2,90 +2,80 @@
 	<div class="main-content">
 		<div class="wf-card">
 			<div class="header clearfix">添加运输档案</div>
-			<el-form label-width="120px">
+			<el-form label-width="120px" :model="transInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="14" :offset="5">
-						<el-form label-width="120px">
-							<el-form-item label="姓名">
-								<el-select
-									style="width: 100%" 
-									v-model="transInfo.staffID"
-									filterable
-									remote
-									placeholder="请输入关键词"
-									:remote-method="getStaffs"
-									:loading="loading">
-									<el-option
-										v-for="item in staffs"
-										:key="item.staffID"
-										:label="item.realName"
-										:value="item.staffID">
-									</el-option>
-								</el-select>
-							</el-form-item>
-						</el-form>
+						<el-form-item label="姓名" prop="staffID">
+							<el-select
+								style="width: 100%" 
+								v-model="transInfo.staffID"
+								filterable
+								remote
+								placeholder="请输入关键词"
+								:remote-method="getStaffs"
+								:loading="loading">
+								<el-option
+									v-for="item in staffs"
+									:key="item.staffID"
+									:label="item.realName"
+									:value="item.staffID">
+								</el-option>
+							</el-select>
+						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="5">
-						<el-form label-width="120px">
-							<el-form-item label="车牌号">
-								<el-select
-									style="width: 100%" 
-									v-model="transInfo.truckID"
-									filterable
-									remote
-									placeholder="请输入关键词"
-									:remote-method="getTrucks"
-									:loading="loading">
-									<el-option
-										v-for="item in trucks"
-										:key="item.truckID"
-										:label="item.plateNo"
-										:value="item.truckID">
-									</el-option>
-								</el-select>
-							</el-form-item>
-						</el-form>
+						<el-form-item label="车牌号" prop="truckID">
+							<el-select
+								style="width: 100%" 
+								v-model="transInfo.truckID"
+								filterable
+								remote
+								placeholder="请输入关键词"
+								:remote-method="getTrucks"
+								:loading="loading">
+								<el-option
+									v-for="item in trucks"
+									:key="item.truckID"
+									:label="item.plateNo"
+									:value="item.truckID">
+								</el-option>
+							</el-select>
+						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="5">
-						<el-form label-width="120px">
-							<el-form-item label="挂车牌">
-								<el-select
-									style="width: 100%" 
-									v-model="transInfo.trailerID"
-									filterable
-									remote
-									placeholder="请输入关键词"
-									:remote-method="getTrailers"
-									:loading="loading">
-									<el-option
-										v-for="item in trailers"
-										:key="item.trailerID"
-										:label="item.trailerPlateNo"
-										:value="item.trailerID">
-									</el-option>
-								</el-select>
-							</el-form-item>
-						</el-form>
+						<el-form-item label="挂车牌">
+							<el-select
+								style="width: 100%" 
+								v-model="transInfo.trailerID"
+								filterable
+								remote
+								placeholder="请输入关键词"
+								:remote-method="getTrailers"
+								:loading="loading">
+								<el-option
+									v-for="item in trailers"
+									:key="item.trailerID"
+									:label="item.trailerPlateNo"
+									:value="item.trailerID">
+								</el-option>
+							</el-select>
+						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="5">
-						<el-form label-width="120px">
-							<el-form-item label="自编号">
-								<el-input v-model="transInfo.code"></el-input>
-							</el-form-item>
-						</el-form>
+						<el-form-item label="自编号" prop="code">
+							<el-input v-model="transInfo.code"></el-input>
+						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="5">
-						<el-form label-width="120px">
-							<el-form-item label="建档时间">
-								<el-date-picker
-									style="width: 100%" 
-									v-model="transInfo.archiveTime"
-									type="date"
-									value-format="timestamp"
-									placeholder="选择日期">
-								</el-date-picker>
-							</el-form-item>
-						</el-form>
+						<el-form-item label="建档时间" prop="archiveTime">
+							<el-date-picker
+								style="width: 100%" 
+								v-model="transInfo.archiveTime"
+								type="date"
+								value-format="timestamp"
+								placeholder="选择日期">
+							</el-date-picker>
+						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -103,6 +93,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
+// import { checkInt } from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -119,7 +110,21 @@ export default {
 			trailerID: '',
 			trailers: [],
 			truckID: '',
-			trucks: []
+			trucks: [],
+			rules: {
+				staffID: [
+					{required: true, message: '请输入姓名', trigger: 'blur'}
+				],
+				truckID: [
+					{required: true, message: '请输入车牌号', trigger: 'blur'}
+				],
+				code: [
+					{required: true, message: '请输入自编号', trigger: 'blur'}
+				],
+				archiveTime: [
+					{required: true, message: '请选择建档时间', trigger: 'change'}
+				],
+			}
 		}
 	},
 	created() {
@@ -179,14 +184,18 @@ export default {
 		createItem() {
 			let data = this.transInfo
 			console.log(data)
-			request({
-				url: '/transportRecord/add',
-				method: 'post',
-				data
-			}).then(res => {
-				console.log(res.data)
-				Message.success(res.data.msg)
-				this.$router.push({name: 'transinfo'})
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					request({
+						url: '/transportRecord/add',
+						method: 'post',
+						data
+					}).then(res => {
+						console.log(res.data)
+						Message.success(res.data.msg)
+						this.$router.push({name: 'transinfo'})
+					})
+				}
 			})
 		},
 		back() {
