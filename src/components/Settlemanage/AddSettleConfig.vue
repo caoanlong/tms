@@ -8,14 +8,21 @@
 					<span class="tit">配置运算项</span>
 				</div>
 			</el-row>
-			<el-form label-width="100px" size="mini">
+			<el-form label-width="100px" size="mini" :model="templateFreight" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="托运人">
-							<el-select style="width: 100%" v-model="templateFreight.consignorName" filterable remote placeholder="请输入托运人关键词" :remote-method="getConsignor" :loading="loading" @change="getConsignorDetail">
+							<!-- <el-select style="width: 100%" v-model="templateFreight.consignorName" filterable remote placeholder="请输入托运人关键词" :remote-method="getConsignor" :loading="loading" @change="getConsignorDetail">
 								<el-option v-for="item in ConsignorList" :key="item.companyName" :label="item.companyName" :value="item.customerID">
 								</el-option>
-							</el-select>
+							</el-select> -->
+							<el-autocomplete 
+								style="width: 100%" 
+								value-key="companyName" 
+								v-model="templateFreight.consignorName"
+								:fetch-suggestions="getConsignors"
+								placeholder="请输入内容">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -37,12 +44,12 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="发货地">
-							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea" />
+						<el-form-item label="发货地" prop="shipperAreaID">
+							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="详细地址">
+						<el-form-item label="详细地址" prop="shipperDetailAddress">
 							<el-input placeholder="详细地址" v-model="templateFreight.shipperDetailAddress"></el-input>
 						</el-form-item>
 					</el-col>
@@ -211,7 +218,6 @@ export default {
 	data() {
 		return {
 			loading: false,
-			ConsignorList:[],
 			Recdeliverycomp:[],
 			selectedArea:[],
 			selectedArea1:[],
@@ -244,27 +250,31 @@ export default {
 				shipperCompanyName: '',	//发货公司名称	string	
 				shipperDetailAddress: '',	//发货详细地址	string	
 				shipperID: ''
+			},
+			rules: {
+				shipperAreaID: [
+					{ required: true, message: '请选择发货地区', trigger: 'change' }
+				],
+				shipperDetailAddress: [
+					{required: true, message: '请输入发货详细地址', trigger: 'blur'}
+				],
 			}
 		}
 	},
 	created() {
 	},
 	methods: {
-		getConsignor(e) {
+		getConsignors(queryString, cb) {
 			let params = {
 				type: 'Consignor',
+				companyName: queryString
 			}
 			request({
 				url: '/customer/findList',
 				params
 			}).then(res => {
-				console.log('托运人')
-				console.log(res.data)
-				this.ConsignorList= res.data.data.records
-				let arr = this.ConsignorList.filter(item => {
-					return item.customerID == e
-				})
-				
+				let list = res.data.data.records
+				cb(list)
 			})
 		},
 		// 获取托运人详情

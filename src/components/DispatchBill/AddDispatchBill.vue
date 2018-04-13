@@ -167,7 +167,8 @@ export default {
 						cargoVolume: item.cargoVolume,
 						cargoWeight: item.cargoWeight,
 						carrierCargoID: item.carrierCargoID,
-						carrierOrderID: item.carrierOrderID
+						carrierOrderID: item.carrierOrderID,
+						weightType: item.weightType
 					}
 				})
 				this.totalList = data1

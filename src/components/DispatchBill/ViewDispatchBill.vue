@@ -278,7 +278,8 @@ export default {
 						"dispatchCargoID": item.dispatchCargoID,
 						"loadWeight": item.loadWeight,
 						"loadVolume": item.loadVolume, 
-						"loadNum": item.loadNum
+						"loadNum": item.loadNum,
+						"weightType": item.weightType
 					}
 				})
 				this.load(cargoInfo)
@@ -292,7 +293,8 @@ export default {
 						"dispatchCargoID": item.dispatchCargoID,
 						"signWeight": item.signWeight,
 						"signVolume": item.signVolume, 
-						"signNum": item.signNum
+						"signNum": item.signNum,
+						"weightType": item.weightType
 					}
 				})
 				this.confirm(cargoInfo, data2)
