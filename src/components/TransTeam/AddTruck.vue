@@ -356,7 +356,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="经营性质">
+						<el-form-item label="经营性质" prop="businessNature">
 							<el-select style="width: 100%" v-model="truck.businessNature" placeholder="请选择">
 								<el-option label="营运" value="营运"></el-option>
 								<el-option label="自用" value="自用"></el-option>
@@ -731,6 +731,9 @@ export default {
 				],
 				propertyType: [
 					{required: true, message: '请选择所有权', trigger: 'change'}
+				],
+				businessNature: [
+					{required: true, message: '请选择经营性质', trigger: 'change'}
 				],
 				businessLicenseNo: [
 					{required: true, message: '请输入经营证号', trigger: 'blur'}
