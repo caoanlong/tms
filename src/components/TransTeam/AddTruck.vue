@@ -50,9 +50,10 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="车辆类别" prop="truckCategory">
-							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择" @change="changeTruckType">
+							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
 								<el-option label="挂车" value="挂车"></el-option>
 								<el-option label="牵引车" value="牵引车"></el-option>
+								<el-option label="整车" value="整车"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -75,14 +76,18 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
-						<el-form-item label="车牌号" v-if="truck.truckCategory == '牵引车'">
-							<el-input v-model="truck.plateNo"></el-input>
-						</el-form-item>
-						<el-form-item label="挂车车牌" v-else>
-							<el-input v-model="truck.trailerPlateNo"></el-input>
-						</el-form-item>
-					</el-col>
+				</el-row>
+				<el-row>
+					<el-form-item>
+						<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType">
+							<el-option label="车牌号" value="车牌号"></el-option>
+							<el-option label="挂车车牌" value="挂车车牌"></el-option>
+						</el-select>
+						<div style="display: inline-block">
+							<el-input placeholder="请输入车牌号" v-model="truck.plateNo" v-if="plateNoType == '车牌号'"></el-input>
+							<el-input placeholder="请输入挂车车牌" v-model="truck.trailerPlateNo" v-if="plateNoType == '挂车车牌'"></el-input>
+						</div>
+					</el-form-item>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
@@ -543,6 +548,7 @@ export default {
 	data() {
 		return {
 			loading: true,
+			plateNoType: '车牌号',
 			truck: {
 				auditBy: '',
 				auditTime: '',
@@ -612,7 +618,7 @@ export default {
 				tractiveTonnage: '',		// string	@mock=12
 				trailerPlateNo: '',		// string 挂车牌号
 				truckBrand: '',		// string	@mock=1
-				truckCategory: '牵引车',		// string 车辆类别
+				truckCategory: '',		// string 车辆类别
 				truckFrontPic: '',		// string 车辆正面照
 				truckSidePic1: '',		// string 车辆侧面照1
 				truckSidePic2: '',		// string 车辆侧面照2
@@ -795,8 +801,8 @@ export default {
 			this.truck.area = data ? searchAreaByKey(data) : ''
 			console.log(this.truck.area)
 		},
-		changeTruckType(e) {
-			if (e == '牵引车') {
+		changePlateNoType(e) {
+			if (e == '车牌号') {
 				this.truck.trailerPlateNo = ''
 			} else {
 				this.truck.plateNo = ''

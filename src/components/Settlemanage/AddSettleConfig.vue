@@ -315,7 +315,6 @@ export default {
 		},
 		add() {
 			let data = this.templateFreight
-
 			request({
 				url: '/transportPrice/add',
 				method:'post',
