@@ -53,7 +53,7 @@
 							<span v-else-if="scope.row.status=='Canceled'">作废</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="承运单号" width="150" align="center">
+					<el-table-column label="承运单号" width="180" align="center">
 						<template slot-scope="scope">
 							<el-popover trigger="hover" placement="top" class="customerTablePop">
 								<p>发货单位：{{ scope.row.shipperCompanyName }}</p>

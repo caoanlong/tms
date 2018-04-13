@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}<span>发货单号：{{carrierOrder.shipperNo}}</span><span>创建时间：{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span>委托时间：{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
+			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}<span>发货单号：{{carrierOrder.shipperNo}}</span><span>创建时间：{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span>委托时间：{{carrierOrder.commissionDate | getdatefromtimestamp()}}</span>
 				<span class="status status1" v-if="carrierOrder.status=='Committed'">待执行</span>
 				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
@@ -42,8 +42,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货时间</span>{{carrierOrder.shipperDate | getdatefromtimestamp(true)}}</td>
-					<td><span class="justify">到货时间</span>{{carrierOrder.consigneeDate | getdatefromtimestamp(true)}}</td>
+					<td><span class="justify">发货时间</span>{{carrierOrder.shipperDate | getdatefromtimestamp()}}</td>
+					<td><span class="justify">到货时间</span>{{carrierOrder.consigneeDate | getdatefromtimestamp()}}</td>
 				</tr>
 			</table>
 			<table class="wf-table">
@@ -73,7 +73,7 @@
 					<td>{{item.cargoNum}}</td>
 					<td>{{item.cargoVolume}}</td>
 					<td>{{item.cargoWeight}}</td>
-					<td>{{item.remainingCargoNum?item.remainingCargoNum+'件/':''}}{{item.remainingCargoVolume?item.remainingCargoVolume+'方/':''}}{{item.remainingCargoWeight?item.remainingCargoWeight+'吨':''}}</td>
+					<td>{{item.remainingCargoNum+'件/'}}{{item.remainingCargoVolume+'方/'}}{{item.remainingCargoWeight+'吨'}}</td>
 				</tr>
 				<tr class="total is-center">
 					<td>合计</td>
