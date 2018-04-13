@@ -220,7 +220,7 @@
 										<td width="100">姓名</td>
 										<td>{{transportRecordDetail2.staff.realName}}</td>
 										<td width="80">性别</td>
-										<td>{{transportRecordDetail2.staff.sex}}</td>
+										<td>{{transportRecordDetail2.sex=="M"?'男':'女'}}</td>
 										<td>联系电话</td>
 										<td>{{transportRecordDetail2.staff.mobile}}</td>
 										<td>照片</td>

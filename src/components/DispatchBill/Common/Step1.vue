@@ -9,13 +9,13 @@
 					'consigneeDate': carrierBill.consigneeDate
 				}
 			]" border style="width: 100%" size="mini">
-				<el-table-column label="承运单号" prop="carrierOrderNo" width="110" align="center">
+				<el-table-column label="承运单号" prop="carrierOrderNo" width="180" align="center">
 				</el-table-column>
 				<el-table-column label="发货地" prop="shipperArea">
 				</el-table-column>
 				<el-table-column label="收货地" prop="consigneeArea">
 				</el-table-column>
-				<el-table-column label="到货时间" width="140" align="center">
+				<el-table-column label="到货时间" width="100" align="center">
 					<template slot-scope="scope">
 						<span>{{scope.row.consigneeDate | getdatefromtimestamp(true)}}</span>
 					</template>
@@ -26,31 +26,37 @@
 				@selection-change="selectionChange($event, carrierBill.carrierOrderID)"
 				border style="width: 100%;margin-top:-1px" size="mini" resizable="false">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
-				<el-table-column label="货物规格/货物名称" prop="cargoName">
+				<el-table-column label="货物规格/货物名称" prop="cargoName" width="140">
 					<template slot-scope="scope">
 						<span>{{scope.row.cargoType}}{{scope.row.cargoName ? '/' + scope.row.cargoName : ''}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="待配载量">
+				<el-table-column label="待配载量" width="140" align="center">
 					<template slot-scope="scope">
 						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}} 
 						{{scope.row.remainingCargoVolume ? ('/' + scope.row.remainingCargoVolume + '方') : ''}} 
 						{{scope.row.remainingCargoNum ? ('/' + scope.row.remainingCargoNum + '件') : ''}}
 					</template>
 				</el-table-column>
-				<el-table-column label="配载重量" width="180">
+				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew"></el-input>
+						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew">
+							<span slot="append">吨</span>
+						</el-input>
 					</template>
 				</el-table-column>
-				<el-table-column label="配载体积" width="180">
+				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew"></el-input>
+						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew">
+							<span slot="append">方</span>
+						</el-input>
 					</template>
 				</el-table-column>
-				<el-table-column label="配载件数" width="180">
+				<el-table-column label="配载件数" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew"></el-input>
+						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew">
+							<span slot="append">件</span>
+						</el-input>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -168,7 +174,7 @@
 		margin-top 20px
 		text-align center
 	.table
-		margin-top -1px
+		margin-bottom 10px
 		&:first-child
 			margin-top 0
 	.total-table

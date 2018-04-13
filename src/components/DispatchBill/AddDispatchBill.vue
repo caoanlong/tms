@@ -32,15 +32,15 @@
 					</div>
 				</el-row>
 				<div class="table">
-					<el-table :data="selectedCarrierCargos" border style="width: 100%" size="mini">
+					<el-table :data="selectedCarrierCargos" border style="width: 100%">
 						<el-table-column type="index" label="货物序号" width="80" align="center"></el-table-column>
-						<el-table-column label="承运单编号" width="110" align="center">
+						<el-table-column label="承运单编号" width="220" align="center">
 							<template slot-scope="scope">
 								<span>{{scope.row.carrierOrder.carrierOrderNo}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="货物规格" prop="cargoType"></el-table-column>
-						<el-table-column label="货物名称" prop="cargoName"></el-table-column>
+						<el-table-column label="货物规格" prop="cargoType"align="center"></el-table-column>
+						<el-table-column label="货物名称" prop="cargoName"align="center"></el-table-column>
 						<el-table-column label="配载量" align="center">
 							<template slot-scope="scope">
 								<span>{{scope.row.cargoWeight + '吨'}}/{{scope.row.cargoVolume + '方'}}/{{scope.row.cargoNum + '件'}}</span>
@@ -54,7 +54,7 @@
 				</div>
 				<div class="controlInfo">
 					<p>司机：{{selectedTruck.curDriverName}}&nbsp;&nbsp;{{selectedTruck.carOwnerMobile}}</p>
-					<p>载具：{{selectedTruck.plateNo}}&nbsp;&nbsp;{{selectedTruck.length}}米{{selectedTruck.truckType}}&nbsp;&nbsp;{{selectedTruck.loads}}吨{{selectedTruck.loadVolume}}方</p>
+					<p>载具：{{selectedTruck.plateNo}}&nbsp;&nbsp;{{selectedTruck.length}}米&nbsp;&nbsp;{{selectedTruck.truckType}}&nbsp;&nbsp;{{selectedTruck.loads}}吨{{selectedTruck.loadVolume}}方</p>
 					<p>随车人员：{{selectedPerson.realName}}&nbsp;&nbsp;{{selectedPerson.mobile}}</p>
 				</div>
 				<el-row>
@@ -346,7 +346,7 @@ export default {
 	padding 20px 0
 	p
 		line-height 30px
-		font-size 12px
+		font-size 14px
 		margin 0
 		color #999
 </style>
