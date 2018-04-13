@@ -84,9 +84,12 @@
 							<span>{{scope.row.shipperDate | getdatefromtimestamp() }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="发货人" prop="shipperName">
-					</el-table-column>
-					<el-table-column label="发货地" prop="shipperDetailAddress">
+					<el-table-column label="发货人" prop="shipperName"></el-table-column>
+					<el-table-column label="发货地" prop="shipperDetailAddress"></el-table-column>
+					<el-table-column label="创建时间" width="140" align="center">
+						<template slot-scope="scope">
+							<span>{{scope.row.createTime | getdatefromtimestamp() }}</span>
+						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
 						<template slot-scope="scope">
