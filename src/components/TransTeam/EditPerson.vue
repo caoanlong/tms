@@ -62,7 +62,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="初次发证时间">
+						<el-form-item label="驾驶证初次领证日期">
 							<el-date-picker
 								style="width: 100%" 
 								v-model="person.driverLicenseFirstTime"
@@ -405,7 +405,6 @@ export default {
 				url: '/staff/findById',
 				params
 			}).then(res => {
-				console.log(res.data.data)
 				let data = res.data.data
 				this.person = {
 					createName: data.createName,
@@ -421,7 +420,7 @@ export default {
 					position: data.position,
 					integrityExamineEndTime: data.comStaffIdentification.integrityExamineEndTime || '',
 					idCardNum: data.comStaffIdentification.idCardNum,
-					quasiDrivingType: data.quasiDrivingType,
+					quasiDrivingType: data.comStaffIdentification.quasiDrivingType,
 					laborContractBeginTime: data.comStaffIdentification.laborContractBeginTime || '',
 					laborContractEndTime: data.comStaffIdentification.laborContractEndTime || '',
 					driverLicExamineBeginTime: data.comStaffIdentification.driverLicExamineBeginTime || '',
@@ -446,7 +445,6 @@ export default {
 					otherStaffPic5: data.comStaffPic.otherStaffPic5
 				}
 				this.position = data.position.split(',')
-				
 				let resDataComStaffPic = data.comStaffPic
 				let i = 1
 				while (i < 6) {
@@ -506,9 +504,6 @@ export default {
 			if(!data.qualificationSecondPage) {
 				data.qualificationSecondPage = ''
 			}
-
-			console.log(data)
-			// return
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					request({

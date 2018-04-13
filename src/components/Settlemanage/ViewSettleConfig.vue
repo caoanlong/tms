@@ -18,8 +18,16 @@
 						<el-form-item style="flex: 1"></el-form-item>
 					</el-form>
 				</el-col>
+			</el-row>
+			<el-row>
 				<el-col :span="24">
-					<p style="text-align: center; color: #bfcbd9;">------ 从哪 ------</p>
+					<p class="divided">
+						<svg-icon icon-class="list-tag"></svg-icon>从哪</p>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="24">
+					
 					<el-form label-width="120px" style="display: flex">
 						<el-form-item label="发货单位" style="flex: 1">
 							<p>{{templateFreight.shipperCompanyName}}</p>
@@ -32,8 +40,16 @@
 						</el-form-item>
 					</el-form>
 				</el-col>
+			</el-row>
+			<el-row>
+					<el-col :span="24">
+						<p class="divided">
+							<svg-icon icon-class="list-tag"></svg-icon>到哪</p>
+					</el-col>
+				</el-row>
+				<el-row>
 				<el-col :span="24">
-					<p style="text-align: center; color: #bfcbd9;">------ 到哪 ------</p>
+					
 					<el-form label-width="120px" style="display: flex">
 						<el-form-item label="收货单位" style="flex: 1">
 							<p>{{templateFreight.consigneeCompanyName}}</p>
@@ -46,8 +62,16 @@
 						</el-form-item>
 					</el-form>
 				</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="24">
+						<p class="divided">
+							<svg-icon icon-class="list-tag"></svg-icon>对内</p>
+					</el-col>
+				</el-row>
+				<el-row>
 				<el-col :span="24">
-					<p style="text-align: center; color: #bfcbd9;">------ 对内 ------</p>
+					
 					<el-form label-width="120px" style="display: flex">
 						<el-form-item label="对内运距" style="flex: 1">
 							<p>{{templateFreight.mileage}}</p>
@@ -60,8 +84,16 @@
 						</el-form-item>
 					</el-form>
 				</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="24">
+						<p class="divided">
+							<svg-icon icon-class="list-tag"></svg-icon>对外</p>
+					</el-col>
+				</el-row>
+				<el-row>
 				<el-col :span="24">
-					<p style="text-align: center; color: #bfcbd9;">------ 对外 ------</p>
+					
 					<el-form label-width="120px" style="display: flex">
 						<el-form-item label="对外运距" style="flex: 1">
 							<p>{{templateFreight.externalMileage}}</p>
@@ -83,7 +115,11 @@
 			</el-row>
 			<el-row>
 				<el-col :span="24">
-					<p style="text-align: center; color: #bfcbd9;">------ 对内付款方式占比 ------</p>
+						<p class="divided">
+							<svg-icon icon-class="list-tag"></svg-icon>对内付款方式占比</p>
+					</el-col>
+				<el-col :span="24">
+					
 					<el-form label-width="120px" style="display: flex">
 						<el-form-item label="现付" style="flex: 1">
 							<p>{{templateFreight.internalCashRate}}%</p>
@@ -103,7 +139,10 @@
 					</el-form>
 				</el-col>
 				<el-col :span="24">
-					<p style="text-align: center; color: #bfcbd9;">------ 对外收款方式占比 ------</p>
+						<p class="divided"><svg-icon icon-class="list-tag"></svg-icon>对外收款方式占比</p>
+					</el-col>
+				<el-col :span="24">
+					
 					<el-form label-width="120px" style="display: flex">
 						<el-form-item label="现付" style="flex: 1">
 							<p>{{templateFreight.externalCashRate}}%</p>
@@ -166,27 +205,7 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-.avatar-uploader
-	line-height 1
-	width 100px
-	height 100px
-	overflow hidden
-	border 1px dashed #d9d9d9
-	border-radius 6px
-	&:hover 
-		border-color #409eff
-	.avatar-uploader-icon
-		font-size 28px
-		color #8c939d
-		width 98px
-		height 98px
-		line-height 98px
-		text-align center
-	.avatar
-		width 98px
-		height 98px
-		display block
-		vertical-align top
+
 .el-form-item__content
 	p
 		margin 0
@@ -198,4 +217,13 @@ export default {
 		line-height 40px
 		color #999
 		font-size 14px
+.divided
+	padding 10px 15px 5px 30px
+	margin-top 0
+	color #C0C4CC
+	border-bottom 1px solid #f2f2f2
+	font-size 14px
+	.svg-icon
+		margin-right 5px
+		color #909399
 </style>
