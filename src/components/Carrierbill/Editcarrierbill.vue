@@ -1,7 +1,10 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card hasTit">
-			<div class="header clearfix">承运单编号：{{carrierbillInfo.carrierOrderNo}}<span>发货单号：{{carrierbillInfo.shipperNo}}</span><span>创建时间：{{carrierbillInfo.createTime | getdatefromtimestamp()}}</span><span>委托时间：{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
+			<div class="header clearfix">承运单编号：{{carrierbillInfo.carrierOrderNo}}
+				<span>发货单号：{{carrierbillInfo.shipperNo}}</span>
+				<span>创建时间：{{carrierbillInfo.createTime | getdatefromtimestamp()}}</span>
+				<span>委托时间：{{carrierbillInfo.commissionDate | getdatefromtimestamp(true)}}</span>
 				<span class="status status1" v-if="carrierbillInfo.status=='Commited'">待执行</span>
 				<span class="status status2" v-else-if="carrierbillInfo.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierbillInfo.status=='Signed'">到达签收</span>
@@ -393,6 +396,7 @@ export default {
 			}).then(res => {
 				console.log(res.data.data)
 				this.carrierbillInfo = res.data.data
+
 				this.carrierbillInfo.porRequire = res.data.data.porRequire.split(',')
 				let shipperAreaID = res.data.data.shipperAreaID
 				this.selectedArea = [(shipperAreaID.substr(0, 2) + '0000'), (shipperAreaID.substr(0, 4) + '00'), shipperAreaID]
