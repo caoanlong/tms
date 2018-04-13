@@ -68,6 +68,16 @@ export const checkInt = (rule, value, callback) => {
 	}
 }
 
+// 验证正整数 + 0  非必填
+export const checkInt2 = (rule, value, callback) => {
+	let r = /^\+?[1-9][0-9]*$/
+	if (r.test(value) || value == 0) {
+		callback()
+	} else {
+		callback(new Error('请输入正确的数字'))
+	}
+}
+
 // 验证非负浮点数（正浮点数 + 0）
 export const checkFloat = (rule, value, callback) => {
 	if (!value) {
