@@ -96,7 +96,7 @@
 		}
 	}
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
 	.el-form-item__content
 		p
 			margin 0

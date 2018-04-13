@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="选择加承运单" :visible="isVisible" :show-close="false" custom-class="table" width="80%">
+	<el-dialog title="选择承运单" :visible="isVisible" :show-close="false" custom-class="table" width="80%">
 		<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="关键字" >
@@ -19,12 +19,13 @@
 					</el-form-item>
 					<el-form-item label="运单状态" class="customerSelect">
 						<el-select v-model="findStatus" placeholder="运单状态" style="width:140px">
-							<el-option value="" label="全部订单">全部订单</el-option>
-							<el-option value="Commited" label="待执行">待执行</el-option>
+							<el-option value="" label="无接口参数">无接口参数</el-option>
+							<!-- <el-option value="" label="全部订单">全部订单</el-option> -->
+							<!-- <el-option value="Committed" label="待执行">待执行</el-option>
 							<el-option value="Running" label="执行中">执行中</el-option>
 							<el-option value="Signed" label="到达签收">到达签收</el-option>
 							<el-option value="Closed" label="关闭">关闭</el-option>
-							<el-option value="Canceled" label="作废">作废</el-option>
+							<el-option value="Canceled" label="作废">作废</el-option> -->
 						</el-select>
 					</el-form-item>
 					<el-form-item>

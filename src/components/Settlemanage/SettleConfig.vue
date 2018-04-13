@@ -16,15 +16,6 @@
 					<el-form-item label="收货地">
 						<el-input placeholder="请输入..." v-model="findConsigneeArea"></el-input>
 					</el-form-item>
-					<el-form-item label="对外运距">
-						<el-input placeholder="请输入..." v-model="findMileage"></el-input>
-					</el-form-item>
-					<el-form-item label="对内运价">
-						<el-input placeholder="请输入..." v-model="findInternalPrice"></el-input>
-					</el-form-item>
-					<el-form-item label="对外运价">
-						<el-input placeholder="请输入..." v-model="findExternalPrice"></el-input>
-					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
@@ -120,9 +111,6 @@
 				findConsigneeCompanyName: '',
 				findShipperArea: '',
 				findShipperCompanyName: '',
-				findMileage: '',
-				findExternalPrice: '',
-				findInternalPrice: '',
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
@@ -166,10 +154,7 @@
 					consigneeArea: this.findConsigneeArea,
 					consigneeCompanyName: this.findConsigneeCompanyName,
 					shipperArea: this.findShipperArea,
-					shipperCompanyName: this.findShipperCompanyName,
-					mileage: this.findMileage,
-					externalPrice: this.findExternalPrice,
-					internalPrice: this.findInternalPrice
+					shipperCompanyName: this.findShipperCompanyName
 				}
 				request({
 					url: '/transportPrice/findList',
@@ -185,9 +170,7 @@
 				this.findConsigneeCompanyName = ''
 				this.findShipperArea = ''
 				this.findShipperCompanyName = ''
-				this.findMileage = ''
-				this.findExternalPrice = ''
-				this.findInternalPrice = ''
+				this.getList()
 			},
 			pageChange(index) {
 				this.pageIndex = index

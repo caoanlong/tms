@@ -8,7 +8,7 @@
 						<el-form-item label="公司名称">
 							<p>{{shipper.companyName}}</p>
 						</el-form-item>
-						<el-form-item label="地址">
+						<el-form-item label="地区">
 							<p v-if="shipper.companyArea">{{shipper.companyArea}}</p>
 							<p v-else-if="shipper.companyAreaID">{{shipper.companyAreaID | searchAreaByKey}}</p>
 						</el-form-item>
@@ -68,7 +68,7 @@
 		border 1px solid #fff
 		border-bottom-color #dcdfe6
 		padding 0 15px
-		height 40px
+		min-height 40px
 		font-family 'sans-serif'
 		line-height 40px
 		color #999

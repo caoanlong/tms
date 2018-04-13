@@ -11,16 +11,16 @@
 						<el-input placeholder="请输入..." v-model="findCode"></el-input>
 					</el-form-item>
 					<el-form-item label="牵引质量">
-						<el-input placeholder="请输入..." v-model="findTractiveTonnage"></el-input>
+						<el-input placeholder="请输入..." v-model="findTractiveTonnage"><template slot="append">千克</template></el-input>
 					</el-form-item>
 					<el-form-item label="车长">
-						<el-input placeholder="请输入..." v-model="findLength"></el-input>
+						<el-input placeholder="请输入..." v-model="findLength"><template slot="append">毫米</template></el-input>
 					</el-form-item>
 					<el-form-item label="车宽">
-						<el-input placeholder="请输入..." v-model="findWidth"></el-input>
+						<el-input placeholder="请输入..." v-model="findWidth"><template slot="append">毫米</template></el-input>
 					</el-form-item>
 					<el-form-item label="车高">
-						<el-input placeholder="请输入..." v-model="findHigh"></el-input>
+						<el-input placeholder="请输入..." v-model="findHigh"><template slot="append">毫米</template></el-input>
 					</el-form-item>
 					<el-form-item label="添加时间">
 						<el-date-picker
@@ -224,6 +224,7 @@
 				this.findDate = []
 				this.startDate = ''
 				this.endDate = ''
+				this.getList()
 			},
 			pageChange(index) {
 				this.pageIndex = index
