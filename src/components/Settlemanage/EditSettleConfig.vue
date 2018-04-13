@@ -373,7 +373,6 @@ export default {
 					}
 				})
 			}).then(() => {
-				console.log(data)
 				var internalCashRate = Number(data.internalCashRate)
 				var internalCodRate = Number(data.internalCodRate)
 				var internalPorRate = Number(data.internalPorRate)
