@@ -114,7 +114,7 @@
 							<span v-if="scope.row.qualificationExpirationTime">{{scope.row.qualificationExpirationTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="初次发证件时间" width="100">
+					<el-table-column label="驾驶证初次领证日期" width="100">
 						<template slot-scope="scope">
 							<span v-if="scope.row.qualificationFirstTime">{{scope.row.qualificationFirstTime | getdatefromtimestamp(true)}}</span>
 						</template>
