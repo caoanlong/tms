@@ -25,12 +25,12 @@
 				<tr>
 					<td>
 						<span class="justify">发货时间</span>
-						<span v-if="item.shipperDate">{{item.shipperDate | getdatefromtimestamp(true)}}</span>
+						<span v-if="item.shipperDate">{{item.shipperDate | getdatefromtimestamp()}}</span>
 						<span v-else></span>
 					</td>
 					<td>
 						<span class="justify">到货时间</span>
-						<span v-if="item.signTime">{{item.signTime | getdatefromtimestamp(true)}}</span>
+						<span v-if="item.signTime">{{item.signTime | getdatefromtimestamp()}}</span>
 						<span v-else></span>
 					</td>
 				</tr>

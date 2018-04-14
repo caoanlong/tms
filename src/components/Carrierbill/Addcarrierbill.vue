@@ -276,7 +276,7 @@ export default {
 					}
 				],
 				carrierOrderNo:'',
-				carrierrName:'',
+				carrierrName: JSON.parse(localStorage.getItem('userInfo')).companyName,
 				cashAmount:'',
 				chargeMode:'',
 				codAmount:'',

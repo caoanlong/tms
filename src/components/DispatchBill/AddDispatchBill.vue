@@ -43,7 +43,11 @@
 						<el-table-column label="货物名称" prop="cargoName"align="center"></el-table-column>
 						<el-table-column label="配载量" align="center">
 							<template slot-scope="scope">
-								<span>{{scope.row.cargoWeight + '吨'}}/{{scope.row.cargoVolume + '方'}}/{{scope.row.cargoNum + '件'}}</span>
+								<span>
+								{{(scope.row.cargoWeight ? scope.row.cargoWeight : 0) + '吨'}}
+								/{{(scope.row.cargoVolume ? scope.row.cargoVolume : 0) + '方'}}
+								/{{(scope.row.cargoNum ? scope.row.cargoNum : 0) + '件'}}
+								</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="运载量" prop="" width="100" align="center">
@@ -53,8 +57,8 @@
 					</el-table>
 				</div>
 				<div class="controlInfo">
-					<p>司机：{{selectedTruck.curDriverName}}&nbsp;&nbsp;{{selectedTruck.carOwnerMobile}}</p>
-					<p>载具：{{selectedTruck.plateNo}}&nbsp;&nbsp;{{selectedTruck.length}}米&nbsp;&nbsp;{{selectedTruck.truckType}}&nbsp;&nbsp;{{selectedTruck.loads}}吨{{selectedTruck.loadVolume}}方</p>
+					<p>司机：{{selectedTruck.realName}}&nbsp;&nbsp;{{selectedTruck.mobile}}</p>
+					<p>载具：{{selectedTruck.plateNo}}&nbsp;&nbsp;{{selectedTruck.length ? (selectedTruck.length + '米') : ''}}&nbsp;&nbsp;{{selectedTruck.truckType}}&nbsp;&nbsp;{{selectedTruck.loads}}吨{{selectedTruck.loadVolume}}方</p>
 					<p>随车人员：{{selectedPerson.realName}}&nbsp;&nbsp;{{selectedPerson.mobile}}</p>
 				</div>
 				<el-row>

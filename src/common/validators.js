@@ -100,3 +100,22 @@ export const checkFloat2 = (rule, value, callback) => {
 		callback(new Error('请输入正确的数字'))
 	}
 }
+
+
+// 限制长度50
+export const limitLength50 = (rule, value, callback) => {
+	if (value.length > 50) {
+		callback(new Error('长度不能超过50'))
+	} else {
+		callback()
+	}
+}
+
+// 限制长度100
+export const limitLength100 = (rule, value, callback) => {
+	if (value.length > 100) {
+		callback(new Error('长度不能超过100'))
+	} else {
+		callback()
+	}
+}

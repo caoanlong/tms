@@ -20,7 +20,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核日期" prop="auditTime">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.auditTime" 
 								type="date" 
@@ -171,7 +172,8 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="罐体检测有效期至">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.tankQCExpires"
 								type="date" 
@@ -182,7 +184,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="安全阀检测有效期至">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.safetyValvesQCExpires"
 								type="date" 
@@ -193,7 +196,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="压力表检测有效期至">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.pressureGaugeQCExpires"
 								type="date" 
@@ -252,7 +256,8 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="行驶证注册日期" prop="driverLicRegisterTime">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.driverLicRegisterTime"
 								type="date" 
@@ -263,7 +268,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="行驶证发证日期" prop="driverLicIssueTime">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.driverLicIssueTime"
 								type="date" 
@@ -274,7 +280,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="行驶证审验有效期至" prop="driverLicExamineExpires">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.driverLicExamineExpires"
 								type="date" 
@@ -297,7 +304,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="道路运输证年审期至" prop="roadTransportLicAnnualPeriod">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.roadTransportLicAnnualPeriod"
 								type="date" 
@@ -378,7 +386,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="下次等评日期" prop="nextRankEvaluteTime">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.nextRankEvaluteTime"
 								type="date" 
@@ -389,7 +398,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="二级维护日期" prop="secondaMaintainTime">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.secondaMaintainTime"
 								type="date" 
@@ -400,7 +410,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="下次二级维护日期" prop="nextSecondLevel">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.nextSecondLevel"
 								type="date" 
@@ -413,7 +424,8 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="承运人责任险有效期" prop="carrierRiskInsuranceExpires">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.carrierRiskInsuranceExpires"
 								type="date" 
@@ -424,7 +436,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="交强险有效期至" prop="saLIInsuranceExpires">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.saLIInsuranceExpires"
 								type="date" 
@@ -435,7 +448,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="商业险有效期至" prop="bizInsuranceExpires">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.bizInsuranceExpires"
 								type="date" 
@@ -470,7 +484,8 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="GPS安装时间">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="truck.gpSSetupTime"
 								type="date" 

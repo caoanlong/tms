@@ -25,7 +25,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="审核日期" prop="auditTime">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="person.auditTime"
 								type="date"
@@ -63,7 +64,8 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证初次领证日期">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="person.driverLicenseFirstTime"
 								type="date"
@@ -98,7 +100,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="诚信考核有效期至">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="person.integrityExamineEndTime"
 								type="date" 
@@ -138,7 +141,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="合同有效期起">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="person.laborContractBeginTime"
 								type="date" 
@@ -149,7 +153,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="合同有效期至">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="person.laborContractEndTime"
 								type="date" 
@@ -162,7 +167,8 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期起">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="person.driverLicExamineBeginTime"
 								type="date" 
@@ -173,7 +179,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期至">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="person.driverLicExamineEndTime"
 								type="date" 
@@ -206,7 +213,8 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="从业资格证有效期至">
-							<el-date-picker
+							<el-date-picker 
+								:editable="false"
 								style="width: 100%" 
 								v-model="person.qualificationExpirationTime"
 								type="date" 
@@ -285,7 +293,7 @@
 import { Message } from 'element-ui'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
-import { checkMobile, checkIDCard } from '../../common/validators'
+import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -332,22 +340,26 @@ export default {
 			otherImgs: [],
 			rules: {
 				createName: [
-					{required: true, message: '请输入创建人', trigger: 'blur'}
+					{required: true, message: '请输入创建人', trigger: 'blur'},
+					{validator: limitLength50, trigger: 'blur'},
 				],
 				status: [
 					{ required: true, message: '请选择状态', trigger: 'change' }
 				],
 				auditName: [
-					{required: true, message: '请输入审核人', trigger: 'blur'}
+					{required: true, message: '请输入审核人', trigger: 'blur'},
+					{validator: limitLength50, trigger: 'blur'},
 				],
 				auditTime: [
 					{required: true, message: '请输入审核时间', trigger: 'blur'}
 				],
 				realName: [
-					{ required: true, message: '请选择姓名', trigger: 'blur' }
+					{ required: true, message: '请选择姓名', trigger: 'blur' },
+					{validator: limitLength50, trigger: 'blur'},
 				],
 				homeAddress: [
-					{required: true, message: '请输入家庭地址', trigger: 'blur'}
+					{required: true, message: '请输入家庭地址', trigger: 'blur'},
+					{validator: limitLength100, trigger: 'blur'}
 				],
 				mobile: [
 					{required: true, validator: checkMobile, trigger: 'blur'},

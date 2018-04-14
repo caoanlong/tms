@@ -5,15 +5,23 @@
 				{
 					'carrierOrderNo': carrierBill.carrierOrderNo,
 					'shipperArea': carrierBill.shipperArea,
+					'shipperDetailAddress': carrierBill.shipperDetailAddress,
 					'consigneeArea': carrierBill.consigneeArea,
+					'consigneeDetailAddress': carrierBill.consigneeDetailAddress,
 					'consigneeDate': carrierBill.consigneeDate
 				}
 			]" border style="width: 100%" size="mini">
 				<el-table-column label="承运单号" prop="carrierOrderNo" width="180" align="center">
 				</el-table-column>
-				<el-table-column label="发货地" prop="shipperArea">
+				<el-table-column label="发货地">
+					<template slot-scope="scope">
+						<span>{{scope.row.shipperArea + scope.row.shipperDetailAddress}}</span>
+					</template>
 				</el-table-column>
-				<el-table-column label="收货地" prop="consigneeArea">
+				<el-table-column label="收货地">
+					<template slot-scope="scope">
+						<span>{{scope.row.consigneeArea + scope.row.consigneeDetailAddress}}</span>
+					</template>
 				</el-table-column>
 				<el-table-column label="到货时间" width="100" align="center">
 					<template slot-scope="scope">

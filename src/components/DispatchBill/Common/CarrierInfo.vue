@@ -7,7 +7,7 @@
 						<p>{{carrierBill.shipperName}}</p>
 					</el-form-item>
 					<el-form-item label="发货时间">
-						<p>{{carrierBill.shipperDate | getdatefromtimestamp(true)}}</p>
+						<p>{{carrierBill.shipperDate | getdatefromtimestamp()}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -44,7 +44,7 @@
 			<el-col :span="8">
 				<el-form label-width="120px">
 					<el-form-item label="到货时间">
-						<p>{{carrierBill.consigneeDate | getdatefromtimestamp(true)}}</p>
+						<p>{{carrierBill.consigneeDate | getdatefromtimestamp()}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
