@@ -141,6 +141,10 @@
 					Message.error('该车辆已经满载！')
 					return
 				}
+				if (data.workStatus != 'Free') {
+					Message.error('该车辆运输状态不为空闲！')
+					return
+				}
 				if (this.selectedDriver.truckID == data.truckID) {
 					this.selectedDriver = {}
 					return

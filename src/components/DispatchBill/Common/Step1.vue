@@ -34,12 +34,12 @@
 				@selection-change="selectionChange($event, carrierBill.carrierOrderID)"
 				border style="width: 100%;margin-top:-1px" size="mini" resizable="false">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
-				<el-table-column label="货物规格/货物名称" prop="cargoName" width="140">
+				<el-table-column label="货物规格/货物名称" prop="cargoName" width="200">
 					<template slot-scope="scope">
 						<span>{{scope.row.cargoType}}{{scope.row.cargoName ? '/' + scope.row.cargoName : ''}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="待配载量" width="140" align="center">
+				<el-table-column label="待配载量" width="180" align="center">
 					<template slot-scope="scope">
 						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}} 
 						{{scope.row.remainingCargoVolume ? ('/' + scope.row.remainingCargoVolume + '方') : ''}} 
