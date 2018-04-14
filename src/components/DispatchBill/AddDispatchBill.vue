@@ -146,6 +146,7 @@ export default {
 			selectedTruck: {},
 			selectedPerson: {},
 			payInfo: {},
+			loadStatus: '',
 			totalList: []
 		}
 	},
@@ -179,6 +180,7 @@ export default {
 				console.log(data)
 			} else if (x == 3) {
 				this.payInfo = data
+				this.loadStatus = data1
 			}
 			this.stepActive = x
 		},
@@ -210,7 +212,7 @@ export default {
 			let data ={
 				dispatchCargoInfo: JSON.stringify(this.selectedCarrierCargos2),	//调度货物信息
 				// dispatchOrderNo: '',	//调度单号	string	
-				loadStatus: this.selectedTruck.loadStatus,	//车辆满载状态	string	满载：Full， 未满载：NotFull，空载：Empty
+				loadStatus: this.loadStatus,	//车辆满载状态	string	满载：Full， 未满载：NotFull，空载：Empty
 				driverCashAmount: this.payInfo.driverCashAmount,	//司机现付金额		
 				driverCodAmount: this.payInfo.driverCodAmount,	//司机到付金额		
 				driverCosigneeAmount: this.payInfo.driverCosigneeAmount,	//司机收货方到付金额		

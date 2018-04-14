@@ -1,7 +1,10 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}<span>发货单号：{{carrierOrder.shipperNo}}</span><span>创建时间：{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span>委托时间：{{carrierOrder.commissionDate | getdatefromtimestamp()}}</span>
+			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}
+				<span>发货单号：{{carrierOrder.shipperNo}}</span>
+				<span>创建时间：<span v-if="carrierOrder.createTime">{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span v-else></span></span>
+				<span>委托时间：<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp()}}</span><span v-else></span></span>
 				<span class="status status1" v-if="carrierOrder.status=='Committed'">待执行</span>
 				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
@@ -139,7 +142,12 @@
 				</tr>
 				<tr class="is-center" v-for="item in dispatchbills">
 					<td>{{item.dispatchOrderNo}}</td>
-					<td>{{item.status}}</td>
+					<td>
+						<span v-if="item.status == 'Committed'">待执行</span>
+						<span v-else-if="item.status == 'Loaded'">已装运</span>
+						<span v-else-if="item.status == 'Signed'">已签收</span>
+						<span v-else-if="item.status == 'Canceled'">作废</span>
+					</td>
 					<td>{{item.plateNo}}</td>
 					<td>
 						{{item.dispatchOrderCargo.cargoType}}
@@ -169,9 +177,9 @@
 				<div class="btn-group fl">
 					<!-- <button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
 						<svg-icon icon-class="edit"></svg-icon>修改</button> -->
-					<button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
+					<button type="button" class="wf-btn btn-success" @click="EditCarrierbill" v-if="carrierOrder.status!='Running'">
 						<svg-icon icon-class="edit"></svg-icon>修改</button>
-					<button type="button" class="wf-btn btn-primary" @click="AddDispatchBill">
+					<button type="button" class="wf-btn btn-primary" @click="AddDispatchBill" v-if="carrierOrder.status!='Running'">
 						<svg-icon icon-class="dispatchbill"></svg-icon>调度</button>
 					<button type="button" class="wf-btn btn-warning" @click="Edit" v-if="carrierOrder.status!='Committed'">
 						<svg-icon icon-class="money1"></svg-icon>调整应收款</button>

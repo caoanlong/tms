@@ -141,6 +141,7 @@
 										<td width="80">核载质量</td>
 										<td width="100">{{transportRecordDetail2.truck.tractiveTonnage}}</td>
 										<td rowspan="6">
+											<p>内部编号：{{transportRecordDetail2.truck.code}}</p>
 											<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.truckFrontPic"/>
 										</td>
 									</tr>
@@ -227,6 +228,7 @@
 										<td>准驾车型</td>
 										<td>{{transportRecordDetail2.staff.quasiDrivingType}}</td>
 										<td rowspan="5">
+											<P>车辆：{{transportRecordDetail2.truck.plateNo}}</P>
 											<img width="120" height="150" :src="imgUrl + transportRecordDetail2.staff.headPic"/>
 										</td>
 									</tr>

@@ -9,29 +9,32 @@
 			<el-row :gutter="30">
 				<el-col :span="6" style="border-right:1px solid #ebeef5">
 					<div class="base-info inlineBlock">
-						<p class="driverName">{{truck.curDriverName}}</p>
+						<p class="driverName">{{truck.realName}}</p>
 						<p class="vehicleNo">{{truck.plateNo}}</p>
 						<p class="trailerNo">{{truck.trailerPlateNo}}</p>
-						<p class="vehicleType">{{truck.length}}米{{truck.truckType}}{{truck.truckCategory}}</p>
+						<p class="vehicleType">{{truck.length ? truck.length + '米' : ''}}{{truck.truckType}}{{truck.truckCategory}}</p>
 					</div>
 				</el-col>
 				<el-col :span="18">
 					<el-row :gutter="30">
 						<el-col :span="8">
 							<div class="sliderSelect">
-								<el-progress :percentage="70" style="margin-top:13px"></el-progress><span class="surplus">剩 吨</span>
+								<el-progress :percentage="parseInt(Number(truck.loadedCargoWeight)/Number(truck.loads) * 100)" style="margin-top:13px"></el-progress>
+								<span class="surplus">剩 {{Number(truck.loads) - Number(truck.loadedCargoWeight)}}吨</span>
 							</div>
 						</el-col>
 						<el-col :span="8">
 							<div class="sliderSelect">
-								<el-progress :percentage="70" style="margin-top:13px"></el-progress><span class="surplus">剩 方</span>
+								<el-progress :percentage="parseInt(Number(truck.loadedCargoVolume)/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
+								<span class="surplus">剩 {{Number(truck.loadVolume) - Number(truck.loadedCargoVolume)}}方</span>
 							</div>
 						</el-col>
-						<el-col :span="8">
+						<!-- <el-col :span="8">
 							<div class="sliderSelect">
-								<el-progress :percentage="70" style="margin-top:13px"></el-progress><span class="surplus">剩 件</span>
+								<el-progress :percentage="Number(totalNum)/Number(truck.loadVolume)" style="margin-top:13px"></el-progress>
+								<span class="surplus">剩 件</span>
 							</div>
-						</el-col>
+						</el-col> -->
 					</el-row>
 					<el-row :gutter="30">
 						<el-col :span="8">
@@ -71,6 +74,7 @@
 		</div>
 		<el-row>
 			<div class="split-item">
+				<p style="font-size: 12px">从“这个订单的发货地”到卸货地对内运距为“50公里”  TKM为1.1？</p>
 				<span class="tit">付款方式及费用</span>
 			</div>
 		</el-row>
@@ -202,21 +206,12 @@
 				totalNum: 0,
 			}
 		},
-		created() {
-			// let t = this.totalList
-			// console.log(t)
-			// if (t && t.length == 3) {
-			// 	this.totalWeight = t[0]
-			// 	this.totalVol = t[1]
-			// 	this.totalNum = t[2]
-			// }
-		},
 		methods: {
 			prevStep() {
 				this.$emit('prevStep', 1)
 			},
 			nextStep() {
-				this.$emit('nextStep', 3, this.payMethods)
+				this.$emit('nextStep', 3, this.payMethods, this.loadStatus)
 			},
 		}
 	}

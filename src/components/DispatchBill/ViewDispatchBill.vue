@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<div class="wf-card">
 			<div class="header clearfix">调度单编号：{{dispatchBill.dispatchOrderNo}}
-				<span>创建时间：{{dispatchBill.createTime}}</span>
+				<span>创建时间：{{dispatchBill.createTime | getdatefromtimestamp()}}</span>
 				<span class="status status1" v-if="dispatchBill.status == 'Committed'">待执行</span>
 				<span class="status status2" v-else-if="dispatchBill.status == 'Loaded'">已装运</span>
 				<span class="status status3" v-else-if="dispatchBill.status == 'Signed'">已签收</span>
@@ -23,16 +23,28 @@
 					<td><span class="justify">收货地</span>{{item.consigneeDetailAddress}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货时间</span>{{item.shipperDate | getdatefromtimestamp(true)}}</td>
-					<td><span class="justify">到货时间</span>{{item.signTime | getdatefromtimestamp(true)}}</td>
+					<td>
+						<span class="justify">发货时间</span>
+						<span v-if="item.shipperDate">{{item.shipperDate | getdatefromtimestamp(true)}}</span>
+						<span v-else></span>
+					</td>
+					<td>
+						<span class="justify">到货时间</span>
+						<span v-if="item.signTime">{{item.signTime | getdatefromtimestamp(true)}}</span>
+						<span v-else></span>
+					</td>
 				</tr>
 			</table>
 			<table class="wf-table">
 				<caption>货物信息</caption>
 				<tr>
 					<td colspan="6">
-						<span class="labels">实际发货时间：</span>{{dispatchBill.loadDate | getdatefromtimestamp(true)}}
-						<span class="labels" style="margin-left:40px">实际到货时间：</span>{{dispatchBill.signTime | getdatefromtimestamp(true)}}
+						<span class="labels">实际发货时间：</span>
+						<span v-if="dispatchBill.loadDate">{{dispatchBill.loadDate | getdatefromtimestamp(true)}}</span>
+						<span v-else></span>
+						<span class="labels" style="margin-left:40px">实际到货时间：</span>
+						<span v-if="dispatchBill.signTime">{{dispatchBill.signTime | getdatefromtimestamp(true)}}</span>
+						<span v-else></span>
 					</td>
 				</tr>
 				<tr>

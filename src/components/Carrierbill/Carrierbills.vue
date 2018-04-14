@@ -22,7 +22,7 @@
 					<el-form-item label="运单状态" class="customerSelect">
 						<el-select v-model="findStatus" placeholder="运单状态" style="width:140px">
 							<el-option value="" label="全部订单">全部订单</el-option>
-							<el-option value="Commited" label="待执行">待执行</el-option>
+							<el-option value="Committed" label="待执行">待执行</el-option>
 							<el-option value="Running" label="执行中">执行中</el-option>
 							<el-option value="Signed" label="到达签收">到达签收</el-option>
 							<el-option value="Closed" label="关闭">关闭</el-option>
@@ -154,8 +154,8 @@ export default {
 			this.findshipperBeginDate='',
 			this.findshipperEndDate='',
 			this.findRangeDate = [],
-			this.findStatus='',
-			this.pageIndex=1,
+			this.findStatus = '',
+			this.pageIndex = 1,
 			this.getList()
 		},
 		selectDateRange(date) {
@@ -190,7 +190,8 @@ export default {
 				size: this.pageSize,
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate,
-				searchInfo: this.findsearchInfo
+				searchInfo: this.findsearchInfo,
+				status: this.findStatus
 			}
 			request({
 				url: '/biz/carrierOrder/list',

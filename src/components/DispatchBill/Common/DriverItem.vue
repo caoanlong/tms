@@ -17,18 +17,18 @@
 			<div class="control">
 				<div class="sliderSelect">
 					<span class="labels">配载重量</span>
-					<el-progress :percentage="truck.loadedCargoWeight/Number(truck.loads)" style="margin-top:13px"></el-progress>
+					<el-progress :percentage="parseInt(truck.loadedCargoWeight/Number(truck.loads) *100)" style="margin-top:13px"></el-progress>
 					<span class="surplus">剩{{Number(truck.loads) - truck.loadedCargoWeight}}</span>
 				</div>
 				<div class="sliderSelect">
 					<span class="labels">配载体积</span>
-					<el-progress :percentage="truck.loadedCargoVolume/Number(truck.loadVolume)" style="margin-top:13px"></el-progress>
+					<el-progress :percentage="parseInt(truck.loadedCargoVolume/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
 					<span class="surplus">剩{{Number(truck.loadVolume) - truck.loadedCargoVolume}}</span>
 				</div>
 			</div>
 		</div>
 		<div class="lineInfo inlineBlock">
-			<p v-for="item in truck.runInfo">{{item.info}}</p>
+			<p v-for="item in truck.runInfo">{{item}}</p>
 		</div>
 		<svg-icon icon-class="select-icon" class="icon" :class="{selected: isSelected}"></svg-icon>
 	</div>
