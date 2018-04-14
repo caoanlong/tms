@@ -137,16 +137,32 @@
 					<th>重量(吨)</th>
 					<th>付款金额</th>
 				</tr>
-				<tr class="is-center">
-					<!-- <td>20180220001</td>
-					<td>已装运</td>
-					<td>云A-G3365</td>
-					<td>R72/炸药</td>
-					<td></td>
-					<td></td>
-					<td>9.76</td>
-					<td>月结1800.00元</td> -->
-					<td colspan="8">无参数</td>
+				<tr class="is-center" v-for="item in dispatchbills">
+					<td>{{item.dispatchOrderNo}}</td>
+					<td>{{item.status}}</td>
+					<td>{{item.plateNo}}</td>
+					<td>
+						{{item.dispatchOrderCargo.cargoType}}
+						{{item.dispatchOrderCargo.cargoName ? '/' + item.dispatchOrderCargo.cargoName : ''}}
+					</td>
+					<td>{{item.dispatchOrderCargo.cargoNum}}</td>
+					<td>{{item.dispatchOrderCargo.cargoVolume}}</td>
+					<td>{{item.dispatchOrderCargo.cargoWeight}}</td>
+					<td>
+						<span>月结</span>
+						{{item.driverCashAmount 
+						+ item.driverCodAmount 
+						+ item.driverCosigneeAmount 
+						+ item.driverDetoursAmount 
+						+ item.driverDetoursMileage
+						+ item.driverMonthlyAmont
+						+ item.superCargoCashAmount
+						+ item.superCargoCodAmount
+						+ item.superCargoCorAmount
+						+ item.superCargoDetoursAmount
+						+ item.superCargoDetoursMileage}}
+						<span>元</span>
+					</td>
 				</tr>
 			</table>
 			<div class="wf-footer clearfix">
@@ -240,7 +256,8 @@ export default {
 			consignor:'',
 			dialogFormVisible:false,
 			carrierCargo: [],
-			porRequire:[]
+			porRequire:[],
+			dispatchbills: []
 		}
 	},
 	computed:{
@@ -251,7 +268,7 @@ export default {
 	},
 	created() {
 		this.getDetail()
-		// this.getConsignor()
+		this.getDispacthBills()
 	},
 	methods: {
 		sum(o) {
@@ -263,7 +280,7 @@ export default {
 		},
 		getDetail() {
 			let params = {
-				carrierOrderID:this.$route.query.carrierOrderID
+				carrierOrderID: this.$route.query.carrierOrderID
 			}
 			request({
 				url: '/biz/carrierOrder/detail',
@@ -289,6 +306,20 @@ export default {
 				this.consignor = res.data.data
 			})
 
+		},
+		getDispacthBills() {
+			let params = {
+				current: this.pageIndex,
+				size: this.pageSize,
+				carrierOrderID: this.$route.query.carrierOrderID
+			}
+			request({
+				url: '/biz/dispatchOrder/list',
+				params
+			}).then(res => {
+				console.log(res.data.data)
+				this.dispatchbills = res.data.data.records
+			})
 		},
 		AddDispatchBill() {
 			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
