@@ -60,8 +60,16 @@
 					<td>{{item.carrierOrderNo}}</td>
 					<td>{{item.cargoType}}/{{item.cargoName}}</td>
 					<td>{{item.cargoWeight + '吨'}}/{{item.cargoVolume + '方'}}/{{item.cargoNum + '件'}}</td>
-					<td></td>
-					<td></td>
+					<td>
+						{{(item.loadWeight ? item.loadWeight : 0) + '吨'}}
+						/{{(item.loadVolume ? item.loadVolume : 0) + '方'}}
+						/{{(item.loadNum ? item.loadNum : 0) + '件'}}
+					</td>
+					<td>
+						{{(item.signWeight ? item.signWeight : 0) + '吨'}}
+						/{{(item.signVolume ? item.signVolume : 0) + '方'}}
+						/{{(item.signNum ? item.signNum : 0) + '件'}}
+					</td>
 				</tr>
 				<tr>
 					<td colspan="6">
