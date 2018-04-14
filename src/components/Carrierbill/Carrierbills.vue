@@ -37,7 +37,7 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
+				<!-- <el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button> -->
 				<el-button type="default" size="mini" icon="el-icon-news" @click="AddDispatchBill">调度</el-button>
 			</div>
 			<div class="table">
@@ -93,6 +93,9 @@
 					</el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
 						<template slot-scope="scope">
+							<el-button type="primary" size="mini" @click="view(scope.row.carrierOrderID)">查看</el-button>
+						</template>
+						<!-- <template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
@@ -101,7 +104,7 @@
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
-						</template>
+						</template> -->
 					</el-table-column>
 				</el-table>
 				<el-row type="flex">
@@ -209,6 +212,9 @@ export default {
 			} else if (e.type == 'delete') {
 				this.deleteConfirm(e.id)
 			}
+		},
+		view(carrierOrderID) {
+			this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
 		},
 		add() {
 			this.$router.push({ name: 'addcarrierbill' })

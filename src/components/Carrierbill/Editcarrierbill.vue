@@ -67,7 +67,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="发货人电话">
+						<el-form-item label="发货人电话" prop="shipperPhone">
 							<el-input placeholder="发货人电话" v-model="carrierbillInfo.shipperPhone"></el-input>
 						</el-form-item>
 					</el-col>
@@ -109,7 +109,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="收货人电话">
+						<el-form-item label="收货人电话" prop="consigneePhone">
 							<el-input placeholder="收货人电话" v-model="carrierbillInfo.consigneePhone"></el-input>
 						</el-form-item>
 					</el-col>
@@ -264,7 +264,7 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
-import { checkFloat2 } from '../../common/validators'
+import { checkFloat2, checkMobile } from '../../common/validators'
 
 export default {
 	data() {
@@ -332,6 +332,9 @@ export default {
 				shipperName: [
 					{ required: true, message: '请输入发货人'}
 				],
+				shipperPhone: [
+					{ required: true, validator: checkMobile}
+				],
 				shipperDate: [
 					{required: true, message: '请选择发货时间', trigger: 'change'}
 				],
@@ -346,6 +349,9 @@ export default {
 				],
 				consigneeName: [
 					{ required: true, message: '请输入收货人'}
+				],
+				consigneePhone: [
+					{ required: true, validator: checkMobile}
 				],
 				consigneeDate: [
 					{required: true, message: '请选择收货时间', trigger: 'change'}

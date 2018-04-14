@@ -297,8 +297,8 @@ export default {
 						this.$store.dispatch('login', res.headers['authorization'])
 						resolve()
 					}).then(() => {
-						this.$store.dispatch('getUserInfo')
 						this.$router.push({name: 'home'})
+						this.$store.dispatch('getUserInfo')
 					})
 				}
 			})
@@ -376,8 +376,8 @@ export default {
 						this.$store.dispatch('register', res.headers['authorization'])
 						resolve()
 					}).then(() => {
-						this.$store.dispatch('getUserInfo')
 						this.$router.push({name: 'home'})
+						this.$store.dispatch('getUserInfo')
 					})
 				}
 			})
