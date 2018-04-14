@@ -58,7 +58,7 @@
 				</div>
 				<div class="controlInfo">
 					<p>司机：{{selectedTruck.realName}}&nbsp;&nbsp;{{selectedTruck.mobile}}</p>
-					<p>载具：{{selectedTruck.plateNo}}&nbsp;&nbsp;{{selectedTruck.length ? (selectedTruck.length + '米') : ''}}&nbsp;&nbsp;{{selectedTruck.truckType}}&nbsp;&nbsp;{{selectedTruck.loads}}吨{{selectedTruck.loadVolume}}方</p>
+					<p>载具：{{selectedTruck.plateNo}}&nbsp;&nbsp;{{selectedTruck.length ? (Number(selectedTruck.length)/1000 + '米') : ''}}&nbsp;&nbsp;{{selectedTruck.truckType}}&nbsp;&nbsp;{{Number(selectedTruck.loads)/1000}}吨{{selectedTruck.loadVolume}}方</p>
 					<p>随车人员：{{selectedPerson.realName}}&nbsp;&nbsp;{{selectedPerson.mobile}}</p>
 				</div>
 				<el-row>
@@ -121,7 +121,7 @@
 				</div>
 			</div>
 		</el-card>
-		<AddCarrierBillDialog :dialogTableVisible="dialogTableVisible" @selectCarrierBills="handSelectCarrierBills"/>
+		<AddCarrierBillDialog :dialogTableVisible="dialogTableVisible" :selectedCarrierBillIDs="selectedCarrierBillIDs" @selectCarrierBills="handSelectCarrierBills"/>
 	</div>
 </template>
 <script type="text/javascript">
@@ -145,6 +145,7 @@ export default {
 				}
 			],
 			selectedCarrierBills: [],  // 选择的承运单
+			selectedCarrierBillIDs: [],  // 选择的承运单ID
 			selectedCarrierCargos: [],  // 选择的货物
 			selectedCarrierCargos2: [],  // 选择的货物
 			selectedTruck: {},
@@ -193,7 +194,7 @@ export default {
 		},
 		handSelectCarrierBills(data, bool) {
 			if (data) {
-				let selectedCarrierBillIDs = data
+				this.selectedCarrierBillIDs = data
 				for (let i = 0; i < data.length; i++) {
 					this.getDetail(data[i])
 				}

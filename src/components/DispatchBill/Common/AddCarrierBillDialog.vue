@@ -19,13 +19,12 @@
 					</el-form-item>
 					<el-form-item label="运单状态" class="customerSelect">
 						<el-select v-model="findStatus" placeholder="运单状态" style="width:140px">
-							<el-option value="" label="无接口参数">无接口参数</el-option>
-							<!-- <el-option value="" label="全部订单">全部订单</el-option> -->
-							<!-- <el-option value="Committed" label="待执行">待执行</el-option>
+							<el-option value="" label="全部订单">全部订单</el-option>
+							<el-option value="Committed" label="待执行">待执行</el-option>
 							<el-option value="Running" label="执行中">执行中</el-option>
 							<el-option value="Signed" label="到达签收">到达签收</el-option>
 							<el-option value="Closed" label="关闭">关闭</el-option>
-							<el-option value="Canceled" label="作废">作废</el-option> -->
+							<el-option value="Canceled" label="作废">作废</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -37,6 +36,7 @@
 		<el-table 
 			:data="tableData" 
 			@selection-change="selectionChange"
+			:row-class-name="tableRowClassName"
 			border style="width: 100%" size="mini">
 			<el-table-column type="selection" width="40" align="center" fixed></el-table-column>
 			<el-table-column label="处理状态"  prop="status" width="90" align="center">
@@ -48,7 +48,7 @@
 					<span v-else-if="scope.row.status=='Canceled'">作废</span>
 				</template>
 			</el-table-column>
-			<el-table-column label="承运单号" prop="carrierOrderNo" width="150" align="center"></el-table-column>
+			<el-table-column label="承运单号" prop="carrierOrderNo" width="180" align="center"></el-table-column>
 			<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
 			<el-table-column label="卸货地" prop="consigneeDetailAddress" width="120"></el-table-column>
 			<el-table-column label="收货人" prop="consigneeName"></el-table-column>
@@ -99,6 +99,10 @@
 			dialogTableVisible: {
 				type: Boolean,
 				default: false
+			},
+			selectedCarrierBillIDs: {
+				type: Array,
+				default: () => []
 			}
 		},
 		watch: {
@@ -138,7 +142,7 @@
 				this.findshipperBeginDate='',
 				this.findshipperEndDate='',
 				this.findRangeDate = [],
-				this.findStatus='',
+				this.findStatus = '',
 				this.pageIndex=1,
 				this.getList()
 			},
@@ -147,7 +151,8 @@
 				this.findshipperEndDate = date[1]
 			},
 			selectionChange(data) {
-				this.selectedList = data.map(item => item.carrierOrderID)
+				// this.selectedList = data.map(item => item.carrierOrderID)
+				this.selectedList = data
 			},
 			getList(){
 				let params = {
@@ -155,7 +160,8 @@
 					size: this.pageSize,
 					shipperBeginDate: this.findshipperBeginDate,
 					shipperEndDate: this.findshipperEndDate,
-					searchInfo: this.findsearchInfo
+					searchInfo: this.findsearchInfo,
+					status: this.findStatus
 				}
 				request({
 					url: '/biz/carrierOrder/list',
@@ -166,12 +172,29 @@
 				})
 			},
 			add() {
-				if (this.selectedList.length > 0) {
-					this.isVisible = false
-					this.$emit('selectCarrierBills', this.selectedList, false)
-				} else {
+				let selectedList = this.selectedList.map(item => item.carrierOrderID)
+				if (selectedList.length == 0) {
 					Message.error('请选择！')
+					return
 				}
+				let mutipleSelect = []
+				for (let i = 0; i < selectedList.length; i++) {
+					if (this.selectedCarrierBillIDs.includes(selectedList[i])) {
+						mutipleSelect.push(this.selectedList[i].carrierOrderNo)
+					}
+				}
+				if (mutipleSelect.length > 0) {
+					Message.error('承运单号为“' + mutipleSelect.join(',') + '”已经选择了！')
+					return
+				}
+				this.isVisible = false
+				this.$emit('selectCarrierBills', selectedList, false)
+			},
+			tableRowClassName({row, rowIndex}) {
+				if (this.selectedCarrierBillIDs.includes(row.carrierOrderID)) {
+				  return 'warning-row'
+				}
+				return ''
 			},
 			cancel() {
 				this.isVisible = false
@@ -180,3 +203,7 @@
 		}
 	}
 </script>
+<style lang="stylus">
+.el-table .warning-row
+	background oldlace
+</style>

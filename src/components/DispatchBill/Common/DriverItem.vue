@@ -17,13 +17,13 @@
 			<div class="control">
 				<div class="sliderSelect">
 					<span class="labels">配载重量</span>
-					<el-progress :percentage="parseInt(truck.loadedCargoWeight/Number(truck.loads) *100)" style="margin-top:13px"></el-progress>
-					<span class="surplus">剩{{Number(truck.loads) - truck.loadedCargoWeight}}</span>
+					<el-progress :percentage="parseInt(totalWeight/Number(truck.loads) *100)" style="margin-top:13px"></el-progress>
+					<span class="surplus">剩{{Number(truck.loads) - totalWeight}}</span>
 				</div>
 				<div class="sliderSelect">
 					<span class="labels">配载体积</span>
-					<el-progress :percentage="parseInt(truck.loadedCargoVolume/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
-					<span class="surplus">剩{{Number(truck.loadVolume) - truck.loadedCargoVolume}}</span>
+					<el-progress :percentage="parseInt(totalVolume/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
+					<span class="surplus">剩{{Number(truck.loadVolume) - totalVolume}}</span>
 				</div>
 			</div>
 		</div>
@@ -52,6 +52,16 @@ export default {
 	data(){
 		return {
 		}
+	},
+	computed: {
+		totalWeight() {
+			let values = this.truck.cargos.map(item => item.loadWeight ? Number(item.loadWeight) : 0)
+			return values.reduce((prev, next) => prev + next, 0)
+		},
+		totalVolume() {
+			let values = this.truck.cargos.map(item => item.loadVolume ? Number(item.loadVolume) : 0)
+			return values.reduce((prev, next) => prev + next, 0)
+		},
 	},
 	methods:{
 

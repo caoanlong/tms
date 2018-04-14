@@ -19,9 +19,9 @@
 			</el-row>
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="托运人" prop="consignorID">
-							<el-autocomplete
+							<el-autocomplete style="width:100%"
 								value-key="companyName" 
 								v-model="carrierbillInfo.consignorID"
 								:fetch-suggestions="getConsignors"
@@ -30,7 +30,7 @@
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="承运人" prop="carrierrName">
 							<el-input placeholder="请输入承运人" v-model="carrierbillInfo.carrierrName"></el-input>
 						</el-form-item>
@@ -45,7 +45,7 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="发货单位" prop="shipperCompanyName">
-							<el-autocomplete
+							<el-autocomplete style="width:100%"
 								value-key="companyName" 
 								v-model="carrierbillInfo.shipperCompanyName"
 								:fetch-suggestions="getRecdeliverycomp"

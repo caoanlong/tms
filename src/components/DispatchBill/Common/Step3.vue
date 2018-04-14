@@ -19,14 +19,14 @@
 					<el-row :gutter="30">
 						<el-col :span="8">
 							<div class="sliderSelect">
-								<el-progress :percentage="parseInt(Number(truck.loadedCargoWeight)/Number(truck.loads) * 100)" style="margin-top:13px"></el-progress>
-								<span class="surplus">剩 {{Number(truck.loads) - Number(truck.loadedCargoWeight)}}吨</span>
+								<el-progress :percentage="parseInt(totalCargoWeight/Number(truck.loads) *100)" style="margin-top:13px"></el-progress>
+								<span class="surplus">剩 {{Number(truck.loads) - totalCargoWeight}}吨</span>
 							</div>
 						</el-col>
 						<el-col :span="8">
 							<div class="sliderSelect">
-								<el-progress :percentage="parseInt(Number(truck.loadedCargoVolume)/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
-								<span class="surplus">剩 {{Number(truck.loadVolume) - Number(truck.loadedCargoVolume)}}方</span>
+								<el-progress :percentage="parseInt(totalCargoVolume/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
+								<span class="surplus">剩 {{Number(truck.loadVolume) - totalCargoVolume}}方</span>
 							</div>
 						</el-col>
 						<!-- <el-col :span="8">
@@ -173,6 +173,22 @@
 			},
 			totalSuperCargo() {
 				return Number(this.payMethods.superCargoCashAmount ? this.payMethods.superCargoCashAmount : 0) + Number(this.payMethods.superCargoCodAmount  ? this.payMethods.superCargoCodAmount : 0) + Number(this.payMethods.superCargoCorAmount  ? this.payMethods.superCargoCorAmount : 0) + Number(this.payMethods.superCargoMonthlyAmount  ? this.payMethods.superCargoMonthlyAmount : 0) + Number(this.payMethods.superCosigneeAmount  ? this.payMethods.superCosigneeAmount : 0)
+			},
+			totalCargoWeight() {
+				if (this.truck.cargos) {
+					let values = this.truck.cargos.map(item => item.loadWeight ? Number(item.loadWeight) : 0)
+					return values.reduce((prev, next) => prev + next, 0)
+				} else {
+					return 0
+				}
+			},
+			totalCargoVolume() {
+				if (this.truck.cargos) {
+					let values = this.truck.cargos.map(item => item.loadVolume ? Number(item.loadVolume) : 0)
+					return values.reduce((prev, next) => prev + next, 0)
+				} else {
+					return 0
+				}
 			},
 		},
 		watch: {

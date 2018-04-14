@@ -75,7 +75,7 @@
 					<td colspan="6">
 						<span class="labels">司机：</span>{{dispatchBill.driverName}} {{dispatchBill.driverMobile}}
 						<span class="labels" style="margin-left:40px">载具：</span>
-						{{dispatchBill.plateNo}} 6.2米{{dispatchBill.truckType}} {{dispatchBill.loads}}吨{{dispatchBill.loadVolume}}方
+						{{dispatchBill.plateNo}} {{dispatchBill.length/1000}}米{{dispatchBill.truckType}} {{dispatchBill.loads/1000}}吨{{dispatchBill.loadVolume}}方
 						<span class="labels" style="margin-left:40px">随车人员：</span>{{dispatchBill.superCargoName}} {{dispatchBill.superCargoMobile}}
 					</td>
 				</tr>

@@ -222,6 +222,7 @@
 				this.findDate = []
 				this.startDate = ''
 				this.endDate = ''
+				this.getList()
 			},
 			pageChange(index) {
 				this.pageIndex = index

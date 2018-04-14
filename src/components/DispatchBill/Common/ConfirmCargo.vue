@@ -38,9 +38,9 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td>{{cargoInfo[0].signWeight ? totalSignWeight : 0}}</td>
-					<td>{{cargoInfo[0].signVolume ? totalSignVolume : 0}}</td>
-					<td>{{cargoInfo[0].signNum ? totalSignNum : 0}}</td>
+					<td>{{cargoInfo[0] ? (cargoInfo[0].signWeight ? totalSignWeight : 0) : 0}}</td>
+					<td>{{cargoInfo[0] ? (cargoInfo[0].signVolume ? totalSignVolume : 0) : 0}}</td>
+					<td>{{cargoInfo[0] ? (cargoInfo[0].signNum ? totalSignNum : 0) : 0}}</td>
 				</tr>
 			</table>
 			<table class="customertable">

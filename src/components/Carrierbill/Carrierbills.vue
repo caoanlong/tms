@@ -77,6 +77,24 @@
 							<span>{{scope.row.consigneeDate | getdatefromtimestamp() }}</span>
 						</template>
 					</el-table-column>
+					<el-table-column label="货物规格/货物名称" width="140">
+						<template slot-scope="scope">
+							<span v-if="scope.row.carrierCargo[0]">
+								{{scope.row.carrierCargo[0].cargoType}}
+								/{{scope.row.carrierCargo[0].cargoName}}
+								<span v-if="scope.row.carrierCargo.length > 1">...</span>
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="货物总量" width="180">
+						<template slot-scope="scope">
+							<span v-if="scope.row.carrierCargo[0]">
+								{{(scope.row.carrierCargo[0].cargoWeight ? scope.row.carrierCargo[0].cargoWeight : 0) + '吨'}}
+								/{{(scope.row.carrierCargo[0].cargoVolume ? scope.row.carrierCargo[0].cargoVolume : 0) + '方'}}
+								/{{(scope.row.carrierCargo[0].cargoNum ? scope.row.carrierCargo[0].cargoNum : 0) + '件'}}
+							</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="发货单位" prop="shipperCompanyName">
 					</el-table-column>
 					<el-table-column label="发货时间" prop="shipperDate" width="140" align="center">

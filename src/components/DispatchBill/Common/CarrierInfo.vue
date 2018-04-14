@@ -14,7 +14,7 @@
 			<el-col :span="8">
 				<el-form label-width="120px">
 					<el-form-item label="委托时间">
-						<p></p>
+						<p>{{carrierBill.commissionDate | getdatefromtimestamp()}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -53,7 +53,7 @@
 			<el-col :span="8">
 				<el-form label-width="120px">
 					<el-form-item label="运输方式">
-						<p></p>
+						<p>{{carrierBill.transportType}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
