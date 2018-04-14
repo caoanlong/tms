@@ -114,7 +114,7 @@
 							<span v-if="scope.row.qualificationExpirationTime">{{scope.row.qualificationExpirationTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="初次发证件时间" width="100">
+					<el-table-column label="驾驶证初次领证日期" width="100">
 						<template slot-scope="scope">
 							<span v-if="scope.row.qualificationFirstTime">{{scope.row.qualificationFirstTime | getdatefromtimestamp(true)}}</span>
 						</template>
@@ -300,6 +300,13 @@
 					ids = id
 				} else {
 					ids = this.selectedList.join(',')
+				}
+				if(!ids) {
+					Message({
+						type: 'warning',
+						message: '请选择'
+					})
+					return
 				}
 				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
 					confirmButtonText: '确定',

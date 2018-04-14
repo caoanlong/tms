@@ -53,7 +53,7 @@
 							<span v-else-if="scope.row.status=='Canceled'">作废</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="承运单号" width="150" align="center">
+					<el-table-column label="承运单号" width="180" align="center">
 						<template slot-scope="scope">
 							<el-popover trigger="hover" placement="top" class="customerTablePop">
 								<p>发货单位：{{ scope.row.shipperCompanyName }}</p>
@@ -213,50 +213,48 @@ export default {
 			this.$router.push({ name: 'addcarrierbill' })
 		},
 		deleteConfirm(id) {
-				console.log(id)
-				let ids = ''
-				if (id && typeof id == 'string') {
-					ids = id
-				} else {
-					if(this.selectedList.length<1){
-						this.$message({
-							type: 'warning',
-							message: '请选择要删除的项!',
-							
-						})
-						return
-					}
-					ids = this.selectedList.join(',')
-				}
-				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.delItem(ids)
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					})
+			let ids = ''
+			if (id && typeof id == 'string') {
+				ids = id
+			} else {
+				ids = this.selectedList.join(',')
+			}
+			if(!ids) {
+				Message({
+					type: 'warning',
+					message: '请选择'
 				})
-			},
-			delItem(carrierOrderIDs) {
-				let data = {
-					carrierOrderIDs
-				}
-				request({
-					url: '/biz/carrierOrder/delete',
-					method: 'post',
-					data
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
-					this.getList()
+				return
+			}
+			this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				this.delItem(ids)
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
 				})
-			},
+			})
+		},
+		delItem(carrierOrderIDs) {
+			let data = {
+				carrierOrderIDs
+			}
+			request({
+				url: '/biz/carrierOrder/delete',
+				method: 'post',
+				data
+			}).then(res => {
+				this.$message({
+					type: 'success',
+					message: '删除成功!'
+				})
+				this.getList()
+			})
+		},
 	}
 }
 

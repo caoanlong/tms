@@ -24,7 +24,7 @@
 				</tr>
 				<tr>
 					<td><span class="justify">发货时间</span>{{item.shipperDate | getdatefromtimestamp(true)}}</td>
-					<td><span class="justify">到货时间</span>{{item.consigneeDate | getdatefromtimestamp(true)}}</td>
+					<td><span class="justify">到货时间</span>{{item.signTime | getdatefromtimestamp(true)}}</td>
 				</tr>
 			</table>
 			<table class="wf-table">

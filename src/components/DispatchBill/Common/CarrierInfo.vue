@@ -25,17 +25,10 @@
 					</el-form-item>
 				</el-form>
 			</el-col>
-			<el-col :span="6">
+			<el-col :span="16">
 				<el-form label-width="120px">
 					<el-form-item label="发货地">
-						<p>{{carrierBill.shipperArea}}</p>
-					</el-form-item>
-				</el-form>
-			</el-col>
-			<el-col :span="10">
-				<el-form label-width="20px">
-					<el-form-item>
-						<p>{{carrierBill.shipperDetailAddress}}</p>
+						<p>{{carrierBill.shipperArea}} {{carrierBill.shipperDetailAddress}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
@@ -64,17 +57,10 @@
 					</el-form-item>
 				</el-form>
 			</el-col>
-			<el-col :span="6">
+			<el-col :span="16">
 				<el-form label-width="120px">
 					<el-form-item label="卸货地">
-						<p>{{carrierBill.consigneeArea}}</p>
-					</el-form-item>
-				</el-form>
-			</el-col>
-			<el-col :span="10">
-				<el-form label-width="20px">
-					<el-form-item>
-						<p>{{carrierBill.consigneeDetailAddress}}</p>
+						<p>{{carrierBill.consigneeArea}} {{carrierBill.consigneeDetailAddress}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>

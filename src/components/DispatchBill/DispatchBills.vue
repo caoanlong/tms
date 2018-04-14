@@ -34,15 +34,15 @@
 					<el-table-column label="配载量" width="180" align="center">
 						<template slot-scope="scope">
 							<span>
-								{{(scope.row.totalCargoWeight ? scope.row.totalCargoWeight : 0) + '吨'}}
-								/{{(scope.row.totalCargoVolume ? scope.row.totalCargoVolume : 0) + '方'}}
-								/{{(scope.row.totalCargoNum ? scope.row.totalCargoNum : 0) + '件'}}
+								{{(scope.row.loadWeightSum ? scope.row.loadWeightSum : 0) + '吨'}}
+								/{{(scope.row.loadVolumeSum ? scope.row.loadVolumeSum : 0) + '方'}}
+								/{{(scope.row.loadNumSum ? scope.row.loadNumSum : 0) + '件'}}
 							</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="司机" prop="driverName" width="100" align="center">
+					<el-table-column label="司机" prop="driverName" width="80" align="center">
 					</el-table-column>
-					<el-table-column label="调度状态" width="100" align="center">
+					<el-table-column label="调度状态" width="80" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 'Committed'">待执行</span>
 							<span v-else-if="scope.row.status == 'Loaded'">已装运</span>
@@ -50,13 +50,21 @@
 							<span v-else-if="scope.row.status == 'Canceled'">作废</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="随车人员" prop="superCargoName"  width="120"></el-table-column>
-					<el-table-column label="订单号" prop="carrierOrder.carrierOrderNo"></el-table-column>
-					<el-table-column label="发货地" prop="dispatchOrderCargo.shipperArea" width="120" align="center"></el-table-column>
-					<el-table-column label="收货地" prop="dispatchOrderCargo.consigneeArea" width="120" align="center"></el-table-column>
-					<el-table-column label="到货时间" width="100" align="center">
+					<el-table-column label="随车人员" prop="superCargoName" width="80" align="center"></el-table-column>
+					<el-table-column label="订单号" prop="carrierOrder.carrierOrderNo" width="180" align="center"></el-table-column>
+					<el-table-column label="发货地" width="180" align="center">
 						<template slot-scope="scope">
-							<span>{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp(true)}}</span>
+							<span>{{scope.row.dispatchOrderCargo.shipperArea + scope.row.dispatchOrderCargo.shipperAreaDetail}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="收货地" width="180" align="center">
+						<template slot-scope="scope">
+							<span>{{scope.row.dispatchOrderCargo.consigneeArea + scope.row.dispatchOrderCargo.consigneeAresDetail}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="到货时间" width="140" align="center">
+						<template slot-scope="scope">
+							<span>{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp()}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="货物规格/名称">

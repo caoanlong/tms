@@ -197,7 +197,7 @@
 				<el-row>
 					<div class="split-item">
 						<span class="num">4</span>
-						<span class="tit">应款金额</span>
+						<span class="tit">收付款金额</span>
 					</div>
 				</el-row>
 				<el-row>

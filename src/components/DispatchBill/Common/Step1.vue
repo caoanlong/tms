@@ -173,7 +173,7 @@
 		margin-top 20px
 		text-align center
 	.table
-		margin-bottom 10px
+		margin-top 10px
 		&:first-child
 			margin-top 0
 	.total-table

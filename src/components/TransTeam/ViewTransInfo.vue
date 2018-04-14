@@ -29,18 +29,14 @@
 							<tr>
 								<td>所有权归属</td>
 								<td colspan="3">
-									<el-radio-group v-model="transportRecordDetail.propertyType" disabled>
-										<el-radio :label="1">单位</el-radio>
-										<el-radio :label="2">个人</el-radio>
-										<el-radio :label="3">挂靠</el-radio>
-									</el-radio-group>
+									<span v-if="transportRecordDetail.trailerPropertyType=='单位'">单位</span>
+									<span v-else-if="transportRecordDetail.trailerPropertyType=='个人'">个人</span>
+									<span v-else>挂靠</span>
 								</td>
 								<td>经营性质</td>
 								<td>
-									<el-radio-group v-model="transportRecordDetail.businessNature" disabled>
-										<el-radio :label="1">营运</el-radio>
-										<el-radio :label="2">自用</el-radio>
-									</el-radio-group>
+									<span v-if="transportRecordDetail.businessNature=='营运'">营运</span>
+									<span v-else>自用</span>
 								</td>
 							</tr>
 							<tr>
@@ -220,7 +216,7 @@
 										<td width="100">姓名</td>
 										<td>{{transportRecordDetail2.staff.realName}}</td>
 										<td width="80">性别</td>
-										<td>{{transportRecordDetail2.sex=="M"?'男':'女'}}</td>
+										<td>{{transportRecordDetail2.staff.sex=="M"?'男':'女'}}</td>
 										<td>联系电话</td>
 										<td>{{transportRecordDetail2.staff.mobile}}</td>
 										<td>照片</td>
