@@ -177,9 +177,15 @@
 				<div class="btn-group fl">
 					<!-- <button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
 						<svg-icon icon-class="edit"></svg-icon>修改</button> -->
-					<button type="button" class="wf-btn btn-success" @click="EditCarrierbill" v-if="carrierOrder.status!='Running'">
+					<button 
+						type="button" class="wf-btn btn-success" 
+						@click="EditCarrierbill" 
+						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed'">
 						<svg-icon icon-class="edit"></svg-icon>修改</button>
-					<button type="button" class="wf-btn btn-primary" @click="AddDispatchBill" v-if="carrierOrder.status!='Running'">
+					<button 
+						type="button" class="wf-btn btn-primary" 
+						@click="AddDispatchBill" 
+						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed'">
 						<svg-icon icon-class="dispatchbill"></svg-icon>调度</button>
 					<button type="button" class="wf-btn btn-warning" @click="Edit" v-if="carrierOrder.status!='Committed'">
 						<svg-icon icon-class="money1"></svg-icon>调整应收款</button>

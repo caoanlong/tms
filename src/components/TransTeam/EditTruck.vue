@@ -79,6 +79,7 @@
 				</el-row>
 				<el-row>
 					<el-form-item>
+						<span style="color: red">*</span>
 						<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType">
 							<el-option label="车牌号" value="车牌号"></el-option>
 							<el-option label="挂车车牌" value="挂车车牌"></el-option>
@@ -844,6 +845,10 @@ export default {
 			}
 			if (!data.gpSSetupTime) {
 				data.gpSSetupTime = ''
+			}
+			if (!data.trailerPlateNo && !data.plateNo) {
+				Message.error('车牌号或挂车牌不能为空！')
+				return 
 			}
 			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {

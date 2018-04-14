@@ -7,15 +7,21 @@
 					<th width="120">承运单编号</th>
 					<th>货物规格/名称</th>
 					<th width="80">配载量</th>
-					<th>运载量/吨</th>
-					<th>运载量/方</th>
-					<th>运载量/件</th>
+					<th>运载量</th>
+					<th width="90">吨</th>
+					<th width="90">方</th>
+					<th width="90">件</th>
 				</tr>
 				<tr class="is-center" v-for="(item, index) in cargoInfo">
 					<td>{{index+1}}</td>
 					<td>{{item.carrierOrderNo}}</td>
 					<td>{{item.cargoType}}/{{item.cargoName}}</td>
 					<td>{{item.cargoWeight + '吨'}}/{{item.cargoVolume + '方'}}/{{item.cargoNum + '件'}}</td>
+					<td>
+						{{(item.signWeight ? item.signWeight : 0) + '吨'}}
+						/{{(item.signVolume ? item.signVolume : 0) + '方'}}
+						/{{(item.signNum ? item.signNum : 0) + '件'}}
+					</td>
 					<td>
 						<el-input size="mini" v-model="item.signWeight"></el-input>
 					</td>
@@ -31,9 +37,10 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td>{{totalSignWeight}}</td>
-					<td>{{totalSignVolume}}</td>
-					<td>{{totalSignNum}}</td>
+					<td></td>
+					<td>{{cargoInfo[0].signWeight ? totalSignWeight : 0}}</td>
+					<td>{{cargoInfo[0].signVolume ? totalSignVolume : 0}}</td>
+					<td>{{cargoInfo[0].signNum ? totalSignNum : 0}}</td>
 				</tr>
 			</table>
 			<table class="customertable">

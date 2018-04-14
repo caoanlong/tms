@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<div class="wf-card">
 			<div class="header clearfix">调度单编号：{{dispatchBill.dispatchOrderNo}}
-				<span>创建时间：{{dispatchBill.createTime | getdatefromtimestamp()}}</span>
+				<span>创建时间：<span v-if="dispatchBill.createTime">{{dispatchBill.createTime | getdatefromtimestamp()}}</span><span v-else></span></span>
 				<span class="status status1" v-if="dispatchBill.status == 'Committed'">待执行</span>
 				<span class="status status2" v-else-if="dispatchBill.status == 'Loaded'">已装运</span>
 				<span class="status status3" v-else-if="dispatchBill.status == 'Signed'">已签收</span>
