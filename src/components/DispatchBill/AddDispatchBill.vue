@@ -11,7 +11,7 @@
 				<el-step title="确认调度信息"></el-step>
 			</el-steps>
 			<Step1 v-show="stepActive == 0" :carrierBills="selectedCarrierBills" @nextStep="nextStep"/>
-			<Step2 v-show="stepActive == 1" :startLoad="stepActive == 1" @nextStep="nextStep" @prevStep="prevStep"/>
+			<Step2 v-show="stepActive == 1" :totalList="totalList" :cargoNum="selectedCarrierCargos.length" :startLoad="stepActive == 1" @nextStep="nextStep" @prevStep="prevStep"/>
 			<Step3 v-show="stepActive == 2" :totalList="totalList" :carrierCargos="selectedCarrierCargos" :truck="selectedTruck" :person="selectedPerson" @nextStep="nextStep" @prevStep="prevStep"/>
 			<div v-show="stepActive == 3" class="step step4">
 				<el-row>

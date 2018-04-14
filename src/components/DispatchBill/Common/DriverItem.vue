@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div class="lineInfo inlineBlock">
-			<p v-for="item in truck.runInfo">{{item}}</p>
+			<p v-for="item in truck.cargos">从{{item.shipperArea}}到{{item.consigneeArea}}&nbsp;{{item.cargoName}}</p>
 		</div>
 		<svg-icon icon-class="select-icon" class="icon" :class="{selected: isSelected}"></svg-icon>
 	</div>

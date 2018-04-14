@@ -2,7 +2,9 @@
 	<div class="step step2">
 		<el-row>
 			<div class="split-item">
-				<span class="tit">司机及车辆</span>
+				<span class="tit">司机及车辆</span>&nbsp;&nbsp;
+				<span>{{cargoNum + '个货'}}</span>
+				<span>{{totalList[0] + '吨'}}</span>
 			</div>
 		</el-row>
 		<div class="search">
@@ -81,6 +83,14 @@
 			startLoad: {
 				type: Boolean,
 				default: false
+			},
+			totalList: {
+				type: Array,
+				default: () => []
+			},
+			cargoNum: {
+				type: Number,
+				default: 0
 			}
 		},
 		data() {
@@ -137,12 +147,16 @@
 				this.findPersonName = ''
 			},
 			selectDriverItem(data) {
-				if (data.loadStatus == 'Full') {
-					Message.error('该车辆已经满载！')
+				if (data.driverWorkStatus != 'Free') {
+					Message.error('该车辆司机工作状态不为空闲！')
 					return
 				}
 				if (data.workStatus != 'Free') {
 					Message.error('该车辆运输状态不为空闲！')
+					return
+				}
+				if (data.loadStatus == 'Full') {
+					Message.error('该车辆已经满载！')
 					return
 				}
 				if (this.selectedDriver.truckID == data.truckID) {

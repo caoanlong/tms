@@ -26,6 +26,7 @@
 					<el-col :span="6">
 						<el-form-item label="审核日期" prop="auditTime">
 							<el-date-picker 
+								:picker-options="{disabledDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="person.auditTime"
@@ -65,6 +66,7 @@
 					<el-col :span="6">
 						<el-form-item label="驾驶证初次领证日期">
 							<el-date-picker 
+								:picker-options="{disabledDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="person.driverLicenseFirstTime"
@@ -142,6 +144,7 @@
 					<el-col :span="6">
 						<el-form-item label="合同有效期起">
 							<el-date-picker 
+								:picker-options="{disabledDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="person.laborContractBeginTime"
@@ -168,6 +171,7 @@
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期起">
 							<el-date-picker 
+								:picker-options="{disabledDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="person.driverLicExamineBeginTime"
@@ -379,6 +383,9 @@ export default {
 		this.getInfo()
 	},
 	methods: {
+		disabledDate(curDate) {
+			return new Date() < curDate
+		},
 		handleAvatarSuccess(res) {
 			this.person.headPic = res[0]
 		},

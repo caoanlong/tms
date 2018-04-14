@@ -1,5 +1,5 @@
 <template>
-	<div class="main-content">
+	<div class="main-content" style="min-width: 1200px">
 		<div class="wf-card">
 			<div class="header clearfix">查看车辆</div>
 			<el-form label-width="155px">

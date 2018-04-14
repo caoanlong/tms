@@ -9,31 +9,33 @@
 					</div>
 					<div class="table">
 						<el-table :data="tableData" border style="width: 100%" size="mini">
-							<el-table-column label="承运单号" prop="CarrierNum" width="100" align="center" fixed>
+							<el-table-column label="承运单号" width="180" align="center" fixed>
 								<template slot-scope="scope">
-									<span style="color:#409EFF;cursor:pointer" @click="ViewCarrierbill(scope.row.CarrierNum)">{{scope.row.CarrierNum}}</span>
+									<span style="color:#409EFF;cursor:pointer" @click="ViewCarrierbill(scope.row.carrierOrderID)">{{scope.row.carrierOrderNo}}</span>
 								</template>
 							</el-table-column>
-							<el-table-column label="收货单位" prop="ConsigneeCompany">
+							<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
+							<el-table-column label="卸货地" prop="consigneeArea"></el-table-column>
+							<el-table-column label="收货人" prop="consigneeName"></el-table-column>
+							<el-table-column label="到货时间" prop="ArrivalDate" width="140" align="center">
+								<template slot-scope="scope">
+									<span v-if="scope.row.consigneeDate">{{scope.row.consigneeDate | getdatefromtimestamp()}}</span>
+								</template>
 							</el-table-column>
-							<el-table-column label="卸货地" prop="Discharge">
+							<el-table-column label="货物规格/货物名称" width="140">
+								<template slot-scope="scope">
+									<!-- <span>{{scope.row.consigneeDate}}</span> -->
+								</template>
 							</el-table-column>
-							<el-table-column label="收货人" prop="Consignee">
+							<el-table-column label="货物总量" prop="CargoTotal"></el-table-column>
+							<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
+							<el-table-column label="发货时间" width="140" align="center">
+								<template slot-scope="scope">
+									<span v-if="scope.row.shipperDate">{{scope.row.shipperDate | getdatefromtimestamp()}}</span>
+								</template>
 							</el-table-column>
-							<el-table-column label="到货时间" prop="ArrivalDate" width="120" align="center">
-							</el-table-column>
-							<el-table-column label="货物规格/货物名称" prop="CargoName">
-							</el-table-column>
-							<el-table-column label="货物总量" prop="CargoTotal">
-							</el-table-column>
-							<el-table-column label="发货单位" prop="ConsignerCompany">
-							</el-table-column>
-							<el-table-column label="发货时间" prop="DeliveryDate" width="120" align="center">
-							</el-table-column>
-							<el-table-column label="发货人" prop="Consigner">
-							</el-table-column>
-							<el-table-column label="发货地" prop="Dispatch">
-							</el-table-column>
+							<el-table-column label="发货人" prop="shipperName"></el-table-column>
+							<el-table-column label="发货地" prop="shipperArea"></el-table-column>
 						</el-table>
 					</div>
 				</div>
@@ -48,28 +50,50 @@
 						<el-table :data="tableData1" border style="width: 100%" size="mini">
 							<el-table-column label="调度单号" prop="ControlsNum" width="130" align="center">
 								<template slot-scope="scope">
-									<span style="color:#409EFF;cursor:pointer" @click="ViewDispatchBill(scope.row.ControlsNum)">{{scope.row.ControlsNum}}</span>
+									<span style="color:#409EFF;cursor:pointer" @click="ViewDispatchBill(scope.row.dispatchOrderID)">{{scope.row.dispatchOrderNo}}</span>
 								</template>
 							</el-table-column>
-							<el-table-column label="车辆号牌" prop="VehicleNum" width="110" align="center">
+							<el-table-column label="车辆号牌" prop="plateNo" width="110" align="center"></el-table-column>
+							<el-table-column label="配载量" align="center" width="180">
+								<template slot-scope="scope">
+									<span>
+										{{(scope.row.loadWeightSum ? scope.row.loadWeightSum : 0) + '吨'}}
+										/{{(scope.row.loadVolumeSum ? scope.row.loadVolumeSum : 0) + '方'}}
+										/{{(scope.row.loadNumSum ? scope.row.loadNumSum : 0) + '件'}}
+									</span>
+								</template>
 							</el-table-column>
-							<el-table-column label="配载量" prop="LoadingQuantity" align="center">
+							<el-table-column label="司机" prop="driverName" width="80" align="center"></el-table-column>
+							<el-table-column label="调度状态" width="80" align="center">
+								<template slot-scope="scope">
+									<span v-if="scope.row.status == 'Committed'">待执行</span>
+									<span v-else-if="scope.row.status == 'Loaded'">已装运</span>
+									<span v-else-if="scope.row.status == 'Signed'">已签收</span>
+									<span v-else-if="scope.row.status == 'Canceled'">作废</span>
+								</template>
 							</el-table-column>
-							<el-table-column label="司机" prop="Driver" width="100" align="center">
+							<el-table-column label="随车人员" prop="superCargoName" width="80" align="center"></el-table-column>
+							<el-table-column label="订单号" prop="carrierOrder.carrierOrderNo" width="180" align="center"></el-table-column>
+							<el-table-column label="发货地" width="180" align="center">
+								<template slot-scope="scope">
+									<span>{{scope.row.dispatchOrderCargo.shipperArea + scope.row.dispatchOrderCargo.shipperAreaDetail}}</span>
+								</template>
 							</el-table-column>
-							<el-table-column label="调度状态" prop="Status" width="100" align="center">
+							<el-table-column label="收货地" width="180" align="center">
+								<template slot-scope="scope">
+									<span>{{scope.row.dispatchOrderCargo.consigneeArea + scope.row.dispatchOrderCargo.consigneeAresDetail}}</span>
+								</template>
 							</el-table-column>
-							<el-table-column label="随车人员" prop="ApplianceCrew" width="120" align="center">
+							<el-table-column label="到货时间" width="140" align="center">
+								<template slot-scope="scope">
+									<span v-if="scope.row.carrierOrder">{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp()}}</span>
+									<span v-else></span>
+								</template>
 							</el-table-column>
-							<el-table-column label="订单号" prop="OrderNum" width="130" align="center">
-							</el-table-column>
-							<el-table-column label="发货地" prop="Dispatch">
-							</el-table-column>
-							<el-table-column label="收货地" prop="Discharge">
-							</el-table-column>
-							<el-table-column label="到货时间" prop="ArrivalDate" width="130" align="center">
-							</el-table-column>
-							<el-table-column label="货物规格/名称" prop="CargoName">
+							<el-table-column label="货物规格/名称">
+								<template slot-scope="scope">
+									<span>{{scope.row.dispatchOrderCargo.cargoType?scope.row.dispatchOrderCargo.cargoType+'/':''}}{{scope.row.dispatchOrderCargo.cargoName}}</span>
+								</template>
 							</el-table-column>
 						</el-table>
 					</div>
@@ -83,44 +107,92 @@
 					</div>
 					<div class="table">
 						<el-table :data="tableData2" border style="width: 100%" size="mini">
-							<el-table-column label="自编号" prop="selfNum" fixed width="60" align="center">
+							<el-table-column label="自编号" fixed width="60" align="center">
 								<template slot-scope="scope">
-									<span style="color:#409EFF;cursor:pointer" @click="ViewTruck(scope.row.selfNum)">{{scope.row.selfNum}}</span>
+									<span style="color:#409EFF;cursor:pointer" @click="ViewTruck(scope.row.truckID)">{{scope.row.code}}</span>
 								</template>
 							</el-table-column>
 							<el-table-column label="所属地区" prop="area"></el-table-column>
-							<el-table-column label="所属企业" prop="company"></el-table-column>
-							<el-table-column label="车牌号" prop="plateNum"></el-table-column>
-							<el-table-column label="车牌颜色" prop="plateColor"></el-table-column>
-							<el-table-column label="车辆类别" prop="plateType"></el-table-column>
-							<el-table-column label="车辆类型" prop="plateClass"></el-table-column>
-							<el-table-column label="道路运输证号" prop="roadTransNum" width="120"></el-table-column>
+							<el-table-column label="所属企业" prop="companyName"></el-table-column>
+							<el-table-column label="车牌号" prop="plateNo"></el-table-column>
+							<el-table-column label="车牌颜色" prop="plateNoColor"></el-table-column>
+							<el-table-column label="车辆类别" prop="truckCategory"></el-table-column>
+							<el-table-column label="车辆类型" prop="truckType"></el-table-column>
+							<el-table-column label="道路运输证号" prop="roadTransportNo" width="120"></el-table-column>
 							<el-table-column label="经营范围" prop="businessScope"></el-table-column>
-							<el-table-column label="道路运输证年审期至" prop="roadTransYearTo" width="140"></el-table-column>
-							<el-table-column label="行驶证审验效期至" prop="driverLicTo" width="140"></el-table-column>
-							<el-table-column label="承运人责任险有效期至" prop="carrierValid" width="150"></el-table-column>
-							<el-table-column label="等级评定" prop="levelEval" width="100"></el-table-column>
-							<el-table-column label="下次等评日期" prop="nextLevelEvalDate" width="100"></el-table-column>
-							<el-table-column label="二级维护日期" prop="secondMaintainDate" width="100"></el-table-column>
-							<el-table-column label="下次二级维护日期" prop="nextSecondMaintainDate" width="140"></el-table-column>
-							<el-table-column label="载重" prop="load" width="100"></el-table-column>
-							<el-table-column label="罐体类型" prop="tankType" width="100"></el-table-column>
+							<el-table-column label="道路运输证年审期至" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.roadTransportLicAnnualPeriod">{{scope.row.roadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="行驶证审验效期至" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.driverLicExamineExpires">{{scope.row.driverLicExamineExpires | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="承运人责任险有效期至" prop="carrierValid" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.carrierRiskInsuranceExpires">{{scope.row.carrierRiskInsuranceExpires | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="等级评定" prop="rank" width="100"></el-table-column>
+							<el-table-column label="下次等评日期" width="100">
+								<template slot-scope="scope">
+									<span v-if="scope.row.nextRankEvaluteTime">{{scope.row.nextRankEvaluteTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="二级维护日期" width="100">
+								<template slot-scope="scope">
+									<span v-if="scope.row.secondaMaintainTime">{{scope.row.secondaMaintainTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="下次二级维护日期" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.nextSecondLevel">{{scope.row.nextSecondLevel | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="载重" prop="loads" width="100"></el-table-column>
+							<el-table-column label="罐体类型" prop="cannedType" width="100"></el-table-column>
 							<el-table-column label="罐体容积" prop="tankVolume" width="100"></el-table-column>
-							<el-table-column label="罐体检测有效期至" prop="tankTestValidTo" width="140"></el-table-column>
-							<el-table-column label="安全阀检测有效期至" prop="safetyTestValidTo" width="140"></el-table-column>
-							<el-table-column label="压力表检测有效期至" prop="pressureTestValidTo" width="140"></el-table-column>
-							<el-table-column label="挂车车牌" prop="trailerPlate" width="100"></el-table-column>
-							<el-table-column label="汽车生产厂家" prop="truckManufacturer" width="100"></el-table-column>
-							<el-table-column label="品牌型号" prop="brandModel" width="100"></el-table-column>
-							<el-table-column label="发动机号" prop="engineNum" width="100"></el-table-column>
-							<el-table-column label="车架号" prop="frameNum" width="100"></el-table-column>
-							<el-table-column label="行驶证注册日期" prop="driverLicRgDate" width="100"></el-table-column>
-							<el-table-column label="行驶证发证日期" prop="driverLicAwDate" width="100"></el-table-column>
-							<el-table-column label="牵引质量" prop="towMass" width="100"></el-table-column>
-							<el-table-column label="车长" prop="truckLength" width="100"></el-table-column>
-							<el-table-column label="车宽" prop="truckWidth" width="100"></el-table-column>
-							<el-table-column label="车高" prop="truckHeight" width="100"></el-table-column>
-							<el-table-column label="添加时间" prop="createTime" width="140"></el-table-column>
+							<el-table-column label="罐体检测有效期至" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.tankQCExpires">{{scope.row.tankQCExpires | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="安全阀检测有效期至" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.safetyValvesQCExpires">{{scope.row.safetyValvesQCExpires | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="压力表检测有效期至" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.pressureGaugeQCExpires">{{scope.row.pressureGaugeQCExpires | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="挂车车牌" prop="trailerPlateNo" width="100"></el-table-column>
+							<el-table-column label="汽车生产厂家" prop="manufacturer" width="100"></el-table-column>
+							<el-table-column label="品牌型号" prop="carBrandModel" width="100"></el-table-column>
+							<el-table-column label="发动机号" prop="engineNO" width="100"></el-table-column>
+							<el-table-column label="车架号" prop="vehicleFrameNO" width="100"></el-table-column>
+							<el-table-column label="行驶证注册日期" prop="driverLicRgDate" width="100">
+								<template slot-scope="scope">
+									<span v-if="scope.row.driverLicRegisterTime">{{scope.row.driverLicRegisterTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="行驶证发证日期" prop="driverLicAwDate" width="100">
+								<template slot-scope="scope">
+									<span v-if="scope.row.driverLicIssueTime">{{scope.row.driverLicIssueTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="牵引质量" prop="tractiveTonnage" width="100"></el-table-column>
+							<el-table-column label="车长" prop="length" width="100"></el-table-column>
+							<el-table-column label="车宽" prop="width" width="100"></el-table-column>
+							<el-table-column label="车高" prop="high" width="100"></el-table-column>
+							<el-table-column label="添加时间" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp()}}</span>
+								</template>
+							</el-table-column>
 						</el-table>
 					</div>
 				</div>
@@ -133,33 +205,83 @@
 					</div>
 					<div class="table">
 						<el-table :data="tableData3" border style="width: 100%" size="mini">
-							<el-table-column label="姓名" prop="name" fixed>
+							<el-table-column label="姓名" fixed>
 								<template slot-scope="scope">
-									<span style="color:#409EFF;cursor:pointer" @click="ViewPerson(scope.row.cardId)">{{scope.row.name}}</span>
+									<span style="color:#409EFF;cursor:pointer" @click="ViewPerson(scope.row.staffID)">{{scope.row.realName}}</span>
 								</template>
 							</el-table-column>
-							<el-table-column label="性别" prop="sex" width="50" align="center"></el-table-column>
-							<el-table-column label="聘用岗位" prop="post" width="100"></el-table-column>
-							<el-table-column label="身份证号" prop="cardId" width="160"></el-table-column>
-							<el-table-column label="创建人" prop="creater"></el-table-column>
-							<el-table-column label="状态" prop="status"></el-table-column>
-							<el-table-column label="审核人" prop="auditor"></el-table-column>
-							<el-table-column label="审核日期" prop="auditDate" width="140"></el-table-column>
-							<el-table-column label="准驾车型" prop="quasiDrivingModel"></el-table-column>
-							<el-table-column label="驾驶证审验有效期至" prop="driverLicTo" width="140"></el-table-column>
-							<el-table-column label="从业资格证件号" prop="qualifCerNum" width="160"></el-table-column>
-							<el-table-column label="从业资格类别" prop="qualifCerType" width="150"></el-table-column>
-							<el-table-column label="从业资格证有效期至" prop="qualifCerValidTo" width="140"></el-table-column>
-							<el-table-column label="初次发证件时间" prop="initCerDate" width="140"></el-table-column>
-							<el-table-column label="诚信考核等级" prop="integrityLevel" width="100"></el-table-column>
-							<el-table-column label="诚信考核有效期至" prop="integrityValidTo" width="140"></el-table-column>
-							<el-table-column label="合同有效期起" prop="contractValidFrom" width="140"></el-table-column>
-							<el-table-column label="合同有效期至" prop="contractValidTo" width="140"></el-table-column>
-							<el-table-column label="职称或技术等级" prop="techLevel" width="120"></el-table-column>
+							<el-table-column label="性别" width="50" align="center">
+								<template slot-scope="scope">
+									<span >{{scope.row.sex == 'M' ? '男' : '女'}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="聘用岗位" width="100">
+								<template slot-scope="scope">
+									<span v-for="item in scope.row.position.split(',')">{{postMap[item]}},</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="身份证号" prop="idCardNum" width="160"></el-table-column>
+							<el-table-column label="创建人" prop="createName"></el-table-column>
+							<el-table-column label="状态">
+								<template slot-scope="scope">
+									<span v-if="scope.row.status == 'pass'">通过</span>
+									<span v-else-if="scope.row.status == 'unpass'">不通过</span>
+									<span v-else>其他</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="审核人" prop="auditName"></el-table-column>
+							<el-table-column label="审核日期" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.auditTime">{{scope.row.auditTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="准驾车型">
+								<template slot-scope="scope">
+									<span v-if="scope.row.quasiDrivingType">{{scope.row.quasiDrivingType}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="驾驶证审验有效期至" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.driverLicExamineEndTime">{{scope.row.driverLicExamineEndTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="从业资格证件号" prop="qualificationCode" width="160"></el-table-column>
+							<el-table-column label="从业资格类别" prop="qualificationType" width="150"></el-table-column>
+							<el-table-column label="从业资格证有效期至" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.qualificationExpirationTime">{{scope.row.qualificationExpirationTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="初次发证件时间" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.qualificationFirstTime">{{scope.row.qualificationFirstTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="诚信考核等级" prop="integrityExamineGrade" width="100"></el-table-column>
+							<el-table-column label="诚信考核有效期至" prop="integrityValidTo" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.integrityExamineEndTime">{{scope.row.integrityExamineEndTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="合同有效期起" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.laborContractBeginTime">{{scope.row.laborContractBeginTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="合同有效期至" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.laborContractEndTime">{{scope.row.laborContractEndTime | getdatefromtimestamp(true)}}</span>
+								</template>
+							</el-table-column>
+							<el-table-column label="职称或技术等级" prop="titleLever" width="120"></el-table-column>
 							<el-table-column label="联系电话" prop="mobile" width="100"></el-table-column>
-							<el-table-column label="家庭地址" prop="familyAddress" width="140"></el-table-column>
+							<el-table-column label="家庭地址" prop="homeAddress" width="140"></el-table-column>
 							<el-table-column label="备注说明" prop="remark" width="140"></el-table-column>
-							<el-table-column label="添加时间" prop="createTime" width="140"></el-table-column>
+							<el-table-column label="添加时间" width="140">
+								<template slot-scope="scope">
+									<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp()}}</span>
+								</template>
+							</el-table-column>
 						</el-table>
 					</div>
 				</div>
@@ -168,123 +290,89 @@
 	</div>
 </template>
 <script type="text/javascript">
+import request from "../../common/request"
 export default {
 	name: 'home',
 	data() {
 		return {
-			tableData: [
-				// {
-				// 	Status: '待执行',
-				// 	CarrierNum: '20180205001',
-				// 	ConsigneeCompany: '云南磷化',
-				// 	Discharge: '云南省昭通市镇远县城李家沟',
-				// 	Consignee: '磷化',
-				// 	ArrivalDate: '2018:02:06 18:00',
-				// 	CargoTotal: '9.76吨/10方',
-				// 	ConsignerCompany: '安宁~~化工厂',
-				// 	DeliveryDate: '2018-02-06 18:00',
-				// 	Consigner: '李铁军',
-				// 	Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-				// 	CargoName: 'R72/炸药'
-				// },
-			],
-			tableData1: [
-				// {
-				// 	ControlsNum: '20180205001-1',
-				// 	VehicleNum: '云AG3365',
-				// 	LoadingQuantity: '9.76吨',
-				// 	Driver: '李铁军',
-				// 	Status: '待执行',
-				// 	ApplianceCrew: '赵押运员',
-				// 	OrderNum: '20180205001',
-				// 	Dispatch: '云南省昆明市安宁市区山顶上化工厂',
-				// 	Discharge: '云南省昭通市镇远县城李家沟',
-				// 	ArrivalDate: '2018:02:06 18:00',
-				// 	CargoName: 'R72/炸药'
-				// },
-			],
-			tableData2: [
-				// {
-				// 	"area": "安宁市",
-				// 	"company": "云南安化中达物流有限责任公司",
-				// 	"selfNum": "6-1",
-				// 	"plateNum": "云AD3875",
-				// 	"plateColor": "黄",
-				// 	"plateType": "牵引车",
-				// 	"plateClass": "重型半挂牵引车",
-				// 	"roadTransNum": "530181012183",
-				// 	"businessScope": "危险货物运输(5类1项)",
-				// 	"roadTransYearTo": "2018年6月30日",
-				// 	"driverLicTo": "2018年8月31日",
-				// 	"carrierValid": "2018年8月13日",
-				// 	"levelEval": "一级",
-				// 	"nextLevelEvalDate": "2018年7月27日",
-				// 	"secondMaintainDate": "2017年11月9日",
-				// 	"nextSecondMaintainDate": "2018年3月31日",
-				// 	"load": "40000.000",
-				// 	"tankType": "",
-				// 	"tankVolume": "",
-				// 	"tankTestValidTo": "",
-				// 	"safetyTestValidTo": "",
-				// 	"pressureTestValidTo": "",
-				// 	"trailerPlate": "云A3229挂",
-				// 	"truckManufacturer": "东风汽车有限公司",
-				// 	"brandModel": "东风牌DFL4251A10",
-				// 	"engineNum": "",
-				// 	"frameNum": "",
-				// 	"driverLicRgDate": "2012年8月7日",
-				// 	"driverLicAwDate": "2012年8月7日",
-				// 	"towMass": "25000",
-				// 	"truckLength": "6810",
-				// 	"truckWidth": "2500",
-				// 	"truckHeight": "3700",
-				// 	"createTime": "2018-03-01 17:41"
-				// },
-				],
-			tableData3: [
-				// {
-				// 	"name": "刘贵权",
-				// 	"sex": "男",
-				// 	"post": "押运员",
-				// 	"cardId": "530128197203081814",
-				// 	"creater": "胡大江",
-				// 	"status": "审核通过",
-				// 	"auditor": "李华",
-				// 	"auditDate": "2017-04-27 10:20:25",
-				// 	"quasiDrivingModel": "A2",
-				// 	"driverLicTo": "2018-05-31 00:00:00",
-				// 	"qualifCerNum": "530128197203081814",
-				// 	"qualifCerType": "道路危险货物运输押运人员;爆炸品道路运输押运员",
-				// 	"qualifCerValidTo": "2022-07-20 00:00:00",
-				// 	"initCerDate": "2014-12-24 00:00:00",
-				// 	"integrityLevel": "AA级",
-				// 	"integrityValidTo": "2018-04-30 00:00:00",
-				// 	"contractValidFrom": "2015-01-16 00:00:00",
-				// 	"contractValidTo": "2018-12-31 00:00:00",
-				// 	"techLevel": "无",
-				// 	"mobile": "13700631861",
-				// 	"familyAddress": "安宁市太平镇西仪村",
-				// 	"remark": "7液硝",
-				// 	"createTime": "2018-03-01 17:41"
-				// },
-			]
+			tableData: [],
+			tableData1: [],
+			tableData2: [],
+			tableData3: [],
+			postMap: {
+				"Operator": "操作员",
+				"Driver": "驾驶员",
+				"Supercargo": "押运员",
+				"SafetyOfficer": "专职安全员",
+				"Stevedore": "装卸管理人员",
+				"Other": "其他人员"
+			}
 		}
 	},
 	created() {
 		this.$store.dispatch('getUserInfo')
+		this.getCarrierOrder()
+		this.getDispatchOrder()
+		this.getTruckList()
+		this.getStaffList()
 	},
 	methods: {
-		ViewCarrierbill(CarrierNum) {
-			this.$router.push({ name: 'viewcarrierbill', query: { CarrierNum } })
+		getCarrierOrder() {
+			let params ={
+				status: 'Committed'
+			}
+			request({
+				url: '/biz/carrierOrder/list',
+				params
+			}).then(res => {
+				this.tableData = res.data.data.records
+			})
 		},
-		ViewDispatchBill(ControlsNum) {
-			this.$router.push({ name: 'viewdispatchbill', query: { ControlsNum } })
+		getDispatchOrder() {
+			let params ={
+				status: 'Running'
+			}
+			request({
+				url: '/biz/dispatchOrder/list',
+				params
+			}).then(res => {
+				this.tableData1 = res.data.data.records
+			})
 		},
-		ViewTruck(selfNum) {
-			this.$router.push({name: 'viewtruck', query: { selfNum } })
+		getTruckList() {
+			let params ={
+				WorkStatus: 'Free',
+				isLoadStatus: 'Y'
+			}
+			request({
+				url: '/truck/findList',
+				params
+			}).then(res => {
+				this.tableData2 = res.data.data.records
+			})
 		},
-		ViewPerson(cardId) {
-            this.$router.push({name: 'viewperson', query: { cardId } })
+		getStaffList() {
+			let params ={
+				WorkStatus: 'Free'
+			}
+			request({
+				url: '/staff/findList',
+				params
+			}).then(res => {
+				this.tableData3 = res.data.data.records
+			})
+		},
+		ViewCarrierbill(carrierOrderID) {
+			this.$router.push({ name: 'viewcarrierbill', query: { carrierOrderID } })
+		},
+		ViewDispatchBill(dispatchOrderID) {
+			this.$router.push({ name: 'viewdispatchbill', query: { dispatchOrderID } })
+		},
+		ViewTruck(truckID) {
+			this.$router.push({name: 'viewtruck', query: { truckID } })
+		},
+		ViewPerson(staffID) {
+            this.$router.push({name: 'viewperson', query: { staffID } })
         }
 	}
 }

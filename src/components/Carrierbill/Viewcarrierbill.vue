@@ -339,7 +339,11 @@ export default {
 			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
 		},
 		EditCarrierbill() {
-			this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
+			if (this.dispatchbills.length != 0) {
+				this.Edit()
+			} else {
+				this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
+			}
 		},
 		Edit(){
 			this.dialogFormVisible = true
