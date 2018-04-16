@@ -142,7 +142,7 @@
 										<td width="100">{{transportRecordDetail2.truck.tractiveTonnage}}</td>
 										<td rowspan="6">
 											<p>内部编号：{{transportRecordDetail2.truck.code}}</p>
-											<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.truckFrontPic"/>
+											<img width="240" height="180" v-if="transportRecordDetail2.truck.truckFrontPic" :src="imgUrl + transportRecordDetail2.truck.truckFrontPic"/>
 										</td>
 									</tr>
 									<tr>
@@ -175,26 +175,104 @@
 										<td>有效期限</td>
 										<td>{{transportRecordDetail2.truck.roadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</td>
 									</tr>
-									<tr>
+									<tr v-if="transportRecordDetail2.truck.driverLicPic||transportRecordDetail2.truck.driverLicSidePic">
 										<td colspan="5">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.driverLicPic"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.truck.driverLicPic" :src="imgUrl + transportRecordDetail2.truck.driverLicPic"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.driverLicSidePic"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.truck.driverLicSidePic" :src="imgUrl + transportRecordDetail2.truck.driverLicSidePic"/>
 												</el-col>
 											</el-row>
 										</td>
 									</tr>
-									<tr>
+									<tr v-if="transportRecordDetail2.truck.roadTransportPic || transportRecordDetail2.truck.roadTransportSidePic">
 										<td colspan="5">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.roadTransportPic"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.truck.roadTransportPic" :src="imgUrl + transportRecordDetail2.truck.roadTransportPic"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.truck.roadTransportSidePic"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.truck.roadTransportSidePic" :src="imgUrl + transportRecordDetail2.truck.roadTransportSidePic"/>
+												</el-col>
+											</el-row>
+										</td>
+									</tr>
+								</table>
+							</el-col>
+						</el-row>
+						<el-row v-if="transportRecordDetail2.trailer.trailerPlateNo">
+							<el-col>
+								<h3 class="text-center">危险物品运输单位备案（危险物品运输车辆基本信息表）</h3>
+								<table class="common-table">
+									<tr>
+										<td colspan="5">
+											<span class="tit">车辆所有人：{{transportRecordDetail2.trailer.trailerCarOwnerName}}</span>
+											<span class="tit">公司经营证号：{{transportRecordDetail2.trailer.trailerBusinessLicenseNo}}</span>
+											<span class="tit">建档日期：{{transportRecordDetail2.trailer.archiveTime | getdatefromtimestamp(true)}}</span>
+										</td>
+									</tr>
+									<tr>
+										<td width="80">车牌号码</td>
+										<td>{{transportRecordDetail2.trailer.trailerPlateNo}}</td>
+										<td width="80">核载质量</td>
+										<td width="100">{{transportRecordDetail2.trailer.trailerTractiveTonnage}}</td>
+										<td rowspan="6">
+											<p>内部编号：{{transportRecordDetail2.trailer.trailerCode}}</p>
+											<img width="240" height="180" :src="imgUrl + transportRecordDetail2.trailer.trailerTruckFrontPic"/>
+										</td>
+									</tr>
+									<tr>
+										<td>品牌型号</td>
+										<td>{{transportRecordDetail2.trailer.trailerCarBrandModel}}</td>
+										<td>总质量</td>
+										<td>{{transportRecordDetail2.trailer.trailerTotalWeight}}</td> 
+									</tr>
+									<tr>
+										<td>车架号</td>
+										<td>{{transportRecordDetail2.trailer.trailerVehicleFrameNO}}</td>
+										<td>发动机号</td>
+										<td>{{transportRecordDetail2.trailer.trailerEngineNO}}</td>
+									</tr>
+									<tr>
+										<td>注册日期</td>
+										<td>{{transportRecordDetail2.trailer.trailerDriverLicRegisterTime | getdatefromtimestamp(true)}}</td>
+										<td>车辆类型</td>
+										<td>{{transportRecordDetail2.trailer.trailerTruckType}}</td>
+									</tr>
+									<tr>
+										<td>使用性质</td>
+										<td>{{transportRecordDetail2.trailer.trailerBusinessNature}}</td>
+										<td>经营类别</td>
+										<td>{{transportRecordDetail2.trailer.trailerBusinessScope}}</td>
+									</tr>
+									<tr>
+										<td>道路运输证号</td>
+										<td>{{transportRecordDetail2.trailer.trailerRoadTransportNo}}</td>
+										<td>有效期限</td>
+										<td>{{transportRecordDetail2.trailer.trailerRoadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</td>
+									</tr>
+									<tr v-if="transportRecordDetail2.trailer.trailerDriverLicPic || transportRecordDetail2.trailer.trailerRoadTransportSidePic">
+										<td colspan="5" >
+											<el-row>
+												<el-col :span="12">
+													<img width="240" height="180" v-if="transportRecordDetail2.trailer.trailerDriverLicPic" :src="imgUrl + transportRecordDetail2.trailer.trailerDriverLicPic"/>
+												</el-col>
+												<el-col :span="12">
+													<img width="240" height="180" v-if="transportRecordDetail2.trailer.trailerRoadTransportSidePic" :src="imgUrl + transportRecordDetail2.trailer.trailerRoadTransportSidePic"/>
+												</el-col>
+											</el-row>
+										</td>
+									</tr>
+									<tr v-if="transportRecordDetail2.trailer.trailerRoadTransportPic || transportRecordDetail2.trailer.trailerRoadTransportSidePic">
+										<td colspan="5" >
+											<el-row>
+												<el-col :span="12">
+													<img width="240" height="180" v-if="transportRecordDetail2.trailer.trailerRoadTransportPic" :src="imgUrl + transportRecordDetail2.trailer.trailerRoadTransportPic"/>
+												</el-col>
+												<el-col :span="12">
+													<img width="240" height="180" v-if="transportRecordDetail2.trailer.trailerRoadTransportSidePic" :src="imgUrl + transportRecordDetail2.trailer.trailerRoadTransportSidePic"/>
 												</el-col>
 											</el-row>
 										</td>
@@ -244,44 +322,45 @@
 									</tr>
 									<tr>
 										<td>从业资格证有效期至</td>
-										<td colspan="5">{{transportRecordDetail2.staff.qualificationExpirationTime | getdatefromtimestamp(true)}}</td>
+										<td colspan="5" v-if="transportRecordDetail2.staff.qualificationExpirationTime">{{transportRecordDetail2.staff.qualificationExpirationTime | getdatefromtimestamp(true)}}</td>
+										<td colspan="5" v-else></td>
 									</tr>
 									<tr>
 										<td>居住地</td>
 										<td colspan="5">{{transportRecordDetail2.staff.homeAddress}}</td>
 									</tr>
-									<tr>
+									<tr v-if="transportRecordDetail2.staff.driverLicFrontUrl||transportRecordDetail2.staff.driverLicBackUrl">
 										<td colspan="7">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.driverLicFrontUrl"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.staff.driverLicFrontUrl" :src="imgUrl + transportRecordDetail2.staff.driverLicFrontUrl"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.driverLicBackUrl"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.staff.driverLicBackUrl" :src="imgUrl + transportRecordDetail2.staff.driverLicBackUrl"/>
 												</el-col>
 											</el-row>
 										</td>
 									</tr>
-									<tr>
+									<tr v-if="transportRecordDetail2.staff.idCardFrontUrl|| transportRecordDetail2.staff.idCardBackUrl">
 										<td colspan="7">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.idCardFrontUrl"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.staff.idCardFrontUrl" :src="imgUrl + transportRecordDetail2.staff.idCardFrontUrl"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.idCardBackUrl"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.staff.idCardBackUrl" :src="imgUrl + transportRecordDetail2.staff.idCardBackUrl"/>
 												</el-col>
 											</el-row>
 										</td>
 									</tr>
-									<tr>
+									<tr v-if="transportRecordDetail2.staff.qualificationFirstPage || transportRecordDetail2.staff.qualificationSecondPage">
 										<td colspan="7">
 											<el-row>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.qualificationFirstPage"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.staff.qualificationFirstPage" :src="imgUrl + transportRecordDetail2.staff.qualificationFirstPage"/>
 												</el-col>
 												<el-col :span="12">
-													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.staff.qualificationSecondPage"/>
+													<img width="240" height="180" v-if="transportRecordDetail2.staff.qualificationSecondPage" :src="imgUrl + transportRecordDetail2.staff.qualificationSecondPage"/>
 												</el-col>
 											</el-row>
 										</td>

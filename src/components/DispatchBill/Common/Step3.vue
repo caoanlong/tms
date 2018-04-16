@@ -16,25 +16,19 @@
 					</div>
 				</el-col>
 				<el-col :span="18">
-					<el-row :gutter="30">
-						<el-col :span="8">
+					<el-row :gutter="20">
+						<el-col :span="12">
 							<div class="sliderSelect">
 								<el-progress :percentage="truck.loads ? parseInt(totalCargoWeight/Number(truck.loads) *100) : 0" style="margin-top:13px"></el-progress>
 								<span class="surplus">剩 {{Number(truck.loads) - totalCargoWeight}}吨</span>
 							</div>
 						</el-col>
-						<el-col :span="8">
+						<el-col :span="12">
 							<div class="sliderSelect">
 								<el-progress :percentage="truck.loadVolume ? parseInt(totalCargoVolume/Number(truck.loadVolume) * 100) : 0" style="margin-top:13px"></el-progress>
 								<span class="surplus">剩 {{Number(truck.loadVolume) - totalCargoVolume}}方</span>
 							</div>
 						</el-col>
-						<!-- <el-col :span="8">
-							<div class="sliderSelect">
-								<el-progress :percentage="Number(totalNum)/Number(truck.loadVolume)" style="margin-top:13px"></el-progress>
-								<span class="surplus">剩 件</span>
-							</div>
-						</el-col> -->
 					</el-row>
 					<el-row :gutter="30">
 						<el-col :span="8">

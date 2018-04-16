@@ -64,6 +64,7 @@ export default {
 		.status
 		.driverName
 		.phone
+			width 120px
 			text-align center
 			height 40px
 			line-height 20px

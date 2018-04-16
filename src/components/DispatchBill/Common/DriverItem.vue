@@ -10,8 +10,8 @@
 		<div class="info inlineBlock">
 			<p class="driverName">{{truck.realName}}</p>
 			<p class="vehicleNo">{{truck.plateNo}}</p>
-			<p class="trailerNo">{{truck.trailerPlateNo}}</p>
-			<p class="vehicleType">{{truck.length ? (truck.length + '米') : ''}}{{truck.truckType}}{{truck.truckCategory}}</p>
+			<p class="trailerNo" v-if="truck.trailerPlateNo">{{truck.trailerPlateNo}}</p>
+			<p class="vehicleType">{{truck.length ? (truck.length + '毫米') : ''}}{{truck.truckType}}{{truck.truckCategory}}</p>
 		</div>
 		<div class="statusInfo inlineBlock">
 			<div class="control">
@@ -75,21 +75,21 @@ export default {
 		margin-bottom 10px
 		padding 10px
 		font-size 12px
-		hiehgt 120px
+		hiehgt 80px
 		position relative
 		&.selected
 			border-color #409EFF
 		p
 			margin 0
-			line-height 30px
+			line-height 20px
 		.pic
-			width 100px
+			width 80px
 			padding 0 10px
 			vertical-align top
-			height 120px
+			height 80px
 			img
-				width 80px
-				height 80px
+				width 60px
+				height 60px
 				vertical-align top
 			.status
 				text-align center
@@ -98,7 +98,7 @@ export default {
 			padding 0 10px
 			vertical-align top
 			position relative
-			height 100px
+			height 90px
 			span
 				width 30px
 				height 30px
@@ -116,8 +116,8 @@ export default {
 		.info
 			width 180px
 			p
-				height 30px
-				line-height 30px
+				height 20px
+				line-height 20px
 				overflow hidden
 				white-space nowrap
 				text-overflow ellipsis
