@@ -127,6 +127,16 @@
 				this.$emit('prevStep', 0)
 			},
 			nextStep() {
+				if (!this.selectedDriver.truckID) {
+					Message.error('请选择司机车辆！')
+					return
+				}
+				if (this.selectedDriver.loadStatus == 'Empty') {
+					if(!this.selectedEscort.staffID) {
+						Message.error('该车辆需要随车人员！')
+						return
+					}
+				}
 				this.$emit('nextStep', 2, this.selectedDriver, this.selectedEscort)
 			},
 			pageTruckChange(index) {
@@ -147,9 +157,11 @@
 				this.findPersonName = ''
 			},
 			selectDriverItem(data) {
-				if (data.driverWorkStatus != 'Free') {
-					Message.error('该车辆司机工作状态不为空闲！')
-					return
+				if (data.loadStatus == 'Empty') {
+					if (data.driverWorkStatus != 'Free') {
+						Message.error('该车辆司机工作状态不为空闲！')
+						return
+					}
 				}
 				if (data.workStatus != 'Free') {
 					Message.error('该车辆运输状态不为空闲！')
@@ -170,7 +182,7 @@
 					Message.error('该人员已经在工作了！')
 					return
 				}
-				if (data.loadStatus == 'NotFull') {
+				if (this.selectedDriver.loadStatus == 'NotFull') {
 					Message.error('该车辆已经安排押运人员了！')
 					return
 				}

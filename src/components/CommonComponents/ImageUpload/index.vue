@@ -40,6 +40,7 @@
 </template>
 <script>
 	import axios from 'axios'
+	import { Message } from 'element-ui'
 	import { baseURL } from '../../../common/request'
 	import { formDataReq } from '../../../common/utils'
 	import VueCropper from 'vue-cropper'
@@ -78,7 +79,8 @@
 			return {
 				fileUrl: this.files[0] ? this.files : [],
 				localImgUrl: '',
-				isShowCropper: false
+				isShowCropper: false,
+				isUploaded: false
 			}
 		},
 		computed: {
@@ -106,6 +108,14 @@
 				}
 			},
 			upload() {
+				if (this.isUploaded) {
+					Message.error('正在上传,请稍等！')
+					return
+				}
+				if (this.fileUrl.length > this.limitNum) {
+					return
+				}
+				this.isUploaded = true
 				this.$refs.cropper.getCropBlob((data) => {
 					let url = baseURL + "/sys/picture/upload"
 					let headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
@@ -117,6 +127,7 @@
 						this.fileUrl.push(res.data.data)
 						this.$emit('imgUrlBack', this.fileUrl)
 						this.isShowCropper = false
+						this.isUploaded = false
 					}).catch(err => {
 						console.log('服务器异常' + err)
 					})
