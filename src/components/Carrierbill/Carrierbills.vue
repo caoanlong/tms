@@ -38,7 +38,7 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<!-- <el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button> -->
-				<el-button type="default" size="mini" icon="el-icon-news" @click="AddDispatchBill">调度</el-button>
+				<!-- <el-button type="default" size="mini" icon="el-icon-news" @click="AddDispatchBill">调度</el-button> -->
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe @selection-change="selectionChange" >

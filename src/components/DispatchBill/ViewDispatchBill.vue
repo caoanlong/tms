@@ -55,7 +55,7 @@
 					<th>运载量</th>
 					<th>签收量</th>
 				</tr>
-				<tr class="is-center" v-for="(item, index) in cargoInfos">
+				<tr class="is-center" v-for="(item, index) in dispatchBill.cargoInfos">
 					<td>{{index+1}}</td>
 					<td>{{item.carrierOrderNo}}</td>
 					<td>{{item.cargoType}}/{{item.cargoName}}</td>
@@ -148,8 +148,8 @@
 			</div>
 		</div>
 		<ModifyPayInfo :isVisible="isModifyVisible" :payInfo="payMethods" @control="handModifyPayInfo"/>
-		<LoadSend :isVisible="isLoadVisible" :cargoInfo="cargoInfos" @control="handLoadSend"/>
-		<ConfirmCargo :isVisible="isConfirmVisible" :cargoInfo="cargoInfos" :payInfo="payMethods" @control="handConfirm"/>
+		<LoadSend :isVisible="isLoadVisible" :cargoInfo="dispatchBill.cargoInfos" @control="handLoadSend"/>
+		<ConfirmCargo :isVisible="isConfirmVisible" :cargoInfo="dispatchBill.cargoInfos" :payInfo="payMethods" @control="handConfirm"/>
 	</div>
 </template>
 <script type="text/javascript">
@@ -165,9 +165,6 @@ export default {
 			isLoadVisible: false,
 			isConfirmVisible: false,
 			dispatchBill: {},
-			pageIndex: 1,
-			pageSize: 200,
-			cargoInfos: [],
 			payMethods: {
 				driverCashAmount: '', // 司机现付金额
 				driverCodAmount: '', // 司机到付金额
@@ -213,20 +210,6 @@ export default {
 					superCargoDetoursAmount: this.dispatchBill.superCargoDetoursAmount, // 押运人收货方到付金额
 					superCargoOtherAmount: this.dispatchBill.superCargoOtherAmount // 押运人收货方到付金额
 				}
-				this.getCargoInfos(this.$route.query.dispatchOrderID)
-			})
-		},
-		getCargoInfos(dispatchOrderID) {
-			let params = {
-				current: this.pageIndex,
-				size: this.pageSize,
-				dispatchOrderID
-			}
-			request({
-				url: '/biz/dispatchCargo/list',
-				params
-			}).then(res => {
-				this.cargoInfos = res.data.data.records
 			})
 		},
 		load(cargoInfo) {

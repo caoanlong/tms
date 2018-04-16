@@ -152,22 +152,10 @@
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
 			selectionChange(data, orderID) {
-				let carrierCargoIDs = this.selectedCargoList.map(item => item.carrierCargoID)
-
-				for (let i = 0; i < this.selectedCargoList.length; i++) {
-					if (orderID == this.selectedCargoList[i].carrierOrderID) {
-						console.log('删除')
-						this.selectedCargoList.splice(i, 1)
-					}
-				}
-
-				data.forEach(item => {
-					if (!carrierCargoIDs.includes(item.carrierCargoID)) {
-						console.log('添加')
-						this.selectedCargoList.push(item)
-					}
-				})
-				console.log(data)
+				console.log(data, orderID)
+				let list = this.selectedCargoList.filter(item => item.carrierOrderID != orderID)
+				list.push(...data)
+				this.selectedCargoList = list
 				console.log(this.selectedCargoList)
 			},
 			back() {
