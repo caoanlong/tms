@@ -367,6 +367,7 @@ export default {
 				this.$router.push({ name: 'carrierbills'})
 			})
 		},
+		// 调整应收款
 		adjustSum(){
 			let data = {
 				carrierOrderID:this.$route.query.carrierOrderID,

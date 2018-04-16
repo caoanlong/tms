@@ -23,7 +23,7 @@
 						<el-form-item label="托运人" prop="consignorID">
 							<el-autocomplete style="width:100%"
 								value-key="companyName" 
-								v-model="carrierbillInfo.consignorID"
+								v-model="carrierbillInfo.consignorName"
 								:fetch-suggestions="getConsignors"
 								placeholder="请输入内容"
 								@select="handSelectConsignor">
@@ -494,7 +494,7 @@ export default {
 				consigneeName: this.carrierbillInfo.consigneeName,
 				// consigneePhone: this.carrierbillInfo.consigneePhone,
 
-				consignorID: this.consignor.customerID, // 托运人ID
+				consignorID: this.consignor.customerID || this.carrierbillInfo.consignorID, // 托运人ID
 				// consignorName: this.consignor.companyName, // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
@@ -532,29 +532,35 @@ export default {
 					}
 				})
 			}).then(() => {
-				this.$refs['cargoRuleForm'].forEach(item => {
-					item.validate(valid => {
-						if (valid) {
-							let cargoInfo = this.carrierbillInfo.carrierCargo
-							for (let i = 0; i < cargoInfo.length; i++) {
-								if (cargoInfo[i].weightType == 'Heavy' && (cargoInfo[i].cargoWeight == '' || cargoInfo[i].cargoWeight == 0)) {
-									Message.error('重货必须填写货物重量！')
-									return
+				new Promise((resolve, reject) => {
+					this.$refs['cargoRuleForm'].forEach(item => {
+						item.validate(valid => {
+							if (valid) {
+								let cargoInfo = this.carrierbillInfo.carrierCargo
+								for (let i = 0; i < cargoInfo.length; i++) {
+									if (cargoInfo[i].weightType == 'Heavy' && (cargoInfo[i].cargoWeight == '' || cargoInfo[i].cargoWeight == 0)) {
+										Message.error('重货必须填写货物重量！')
+										return reject()
+									}
+									if (cargoInfo[i].weightType == 'Light' && (cargoInfo[i].cargoVolume == '' || cargoInfo[i].cargoVolume == 0)) {
+										Message.error('轻货必须填写货物体积！')
+										return reject()
+									}
 								}
-								if (cargoInfo[i].weightType == 'Light' && (cargoInfo[i].cargoVolume == '' || cargoInfo[i].cargoVolume == 0)) {
-									Message.error('轻货必须填写货物体积！')
-									return
-								}
+								resolve()
+							} else {
+								reject()
 							}
-							request({
-								url: '/biz/carrierOrder/modify',
-								method: 'post',
-								data
-							}).then(res => {
-								Message.success(res.data.msg)
-								this.$router.push({name: 'carrierbills'})
-							})
-						}
+						})
+					})
+				}).then(() => {
+					request({
+						url: '/biz/carrierOrder/modify',
+						method: 'post',
+						data
+					}).then(res => {
+						Message.success(res.data.msg)
+						this.$router.push({name: 'carrierbills'})
 					})
 				})
 			})
