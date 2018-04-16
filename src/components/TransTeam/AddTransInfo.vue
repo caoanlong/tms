@@ -45,6 +45,7 @@
 					<el-col :span="14" :offset="5">
 						<el-form-item label="挂车牌">
 							<el-select
+								:clearable="true"
 								style="width: 100%" 
 								v-model="transInfo.trailerID"
 								filterable

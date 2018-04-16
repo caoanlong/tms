@@ -257,6 +257,7 @@
 					<el-col :span="6">
 						<el-form-item label="行驶证注册日期" prop="driverLicRegisterTime">
 							<el-date-picker 
+								:picker-options="{disabledDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="truck.driverLicRegisterTime"
@@ -269,6 +270,7 @@
 					<el-col :span="6">
 						<el-form-item label="行驶证发证日期" prop="driverLicIssueTime">
 							<el-date-picker 
+								:picker-options="{disabledDate: (curDate) => truck.driverLicRegisterTime > curDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="truck.driverLicIssueTime"
@@ -399,6 +401,7 @@
 					<el-col :span="6">
 						<el-form-item label="二级维护日期" prop="secondaMaintainTime">
 							<el-date-picker 
+								:picker-options="{disabledDate: (curDate) => new Date() > curDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="truck.secondaMaintainTime"
@@ -411,6 +414,7 @@
 					<el-col :span="6">
 						<el-form-item label="下次二级维护日期" prop="nextSecondLevel">
 							<el-date-picker 
+								:picker-options="{disabledDate: (curDate) => truck.secondaMaintainTime > curDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="truck.nextSecondLevel"
@@ -803,6 +807,9 @@ export default {
 				}
 			})
 		},
+		disabledDate(curDate) {
+			return new Date() < curDate
+		},
 		// 车辆照片(正)
 		handleTruckFrontPicSuccess(res) {
 			this.truck.truckFrontPic = res[0]
@@ -864,6 +871,14 @@ export default {
 			if (!data.trailerPlateNo && !data.plateNo) {
 				Message.error('车牌号或挂车牌不能为空！')
 				return 
+			}
+			if (data.driverLicRegisterTime > data.driverLicIssueTime) {
+				Message.error('行驶证注册日期不能早于行驶证发证日期！')
+				return
+			}
+			if (data.secondaMaintainTime > data.nextSecondLevel) {
+				Message.error('二级维护日期不能早于下次二级维护日期！')
+				return
 			}
 			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {

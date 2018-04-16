@@ -80,6 +80,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import { isFloat } from '../../../common/validators'
 	export default {
 		props: {
 			carrierBills: {
@@ -135,6 +136,30 @@
 							Message.error('货物《' + this.selectedCargoList[i].cargoName + '》体积、重量、数量必填一项!')
 							return
 						}
+					}
+					// if (isFloat(this.selectedCargoList[i].cargoWeightNew)) {
+					// 	Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载重量输入数值非法!')
+					// 	return
+					// }
+					// if (isFloat(this.selectedCargoList[i].cargoVolumeNew)) {
+					// 	Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载体积输入数值非法!')
+					// 	return
+					// }
+					// if (isFloat(this.selectedCargoList[i].cargoNumNew)) {
+					// 	Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载件数输入数值非法!')
+					// 	return
+					// }
+					if (this.selectedCargoList[i].cargoWeightNew > this.selectedCargoList[i].remainingCargoWeight) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载重量不能超过待配载重量!')
+						return
+					}
+					if (this.selectedCargoList[i].cargoVolumeNew > this.selectedCargoList[i].remainingCargoVolume) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载体积不能超过待配载体积!')
+						return
+					}
+					if (this.selectedCargoList[i].cargoNumNew > this.selectedCargoList[i].remainingCargoNum) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载件数不能超过待配载件数!')
+						return
 					}
 					let carrierBill = this.carrierBills.filter(item => item.carrierOrderID == this.selectedCargoList[i].carrierOrderID)
 					list.push({
