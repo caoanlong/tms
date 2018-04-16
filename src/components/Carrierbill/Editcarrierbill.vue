@@ -20,7 +20,7 @@
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="托运人" prop="consignorID">
+						<el-form-item label="托运人" prop="consignorName">
 							<el-autocomplete style="width:100%"
 								value-key="companyName" 
 								v-model="carrierbillInfo.consignorName"
@@ -320,7 +320,7 @@ export default {
 				commissionDate: ''
 			},
 			rules: {
-				consignorID: [
+				consignorName: [
 					{required: true, message: '请输入托运人'}
 				],
 				carrierrName: [
