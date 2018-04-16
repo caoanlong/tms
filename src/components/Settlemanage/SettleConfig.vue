@@ -61,10 +61,12 @@
 					<el-table-column label="对内现付比率" prop="internalCashRate" width="100"></el-table-column>
 					<el-table-column label="对内到付比率" prop="internalCodRate" width="100"></el-table-column>
 					<el-table-column label="对内收货方到付比率" prop="internalConsigneeCodRate" width="140"></el-table-column>
+					<el-table-column label="对内回单比率" prop="internalPorRate" width="140"></el-table-column>
 					<el-table-column label="对外月结比率" prop="externalAbschlussRate" width="100"></el-table-column>
 					<el-table-column label="对外现付比率" prop="externalCashRate" width="100"></el-table-column>
 					<el-table-column label="对外到付比率" prop="externalCodRate" width="100"></el-table-column>
 					<el-table-column label="对外收货方到付比率" prop="externalConsigneeCodRate" width="140"></el-table-column>
+					<el-table-column label="对外回单比率" prop="externalPorRate" width="140"></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
@@ -160,7 +162,6 @@
 					url: '/transportPrice/findList',
 					params
 				}).then(res => {
-					console.log(res.data.data)
 					this.tableData = res.data.data.records
 					this.count = res.data.data.total
 				})

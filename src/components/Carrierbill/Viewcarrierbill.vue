@@ -180,18 +180,23 @@
 					<button 
 						type="button" class="wf-btn btn-success" 
 						@click="EditCarrierbill" 
-						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed'">
+						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed' && carrierOrder.status != 'Closed'">
 						<svg-icon icon-class="edit"></svg-icon>修改</button>
+					<button 
+						type="button" class="wf-btn btn-danger" 
+						@click="closeCarrierbill" 
+						v-if="carrierOrder.status=='Running' || carrierOrder.status == 'Signed' && carrierOrder.status != 'Closed'">
+						<svg-icon icon-class="edit"></svg-icon>关闭</button>
 					<button 
 						type="button" class="wf-btn btn-primary" 
 						@click="AddDispatchBill" 
-						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed'">
+						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed' && carrierOrder.status != 'Closed'">
 						<svg-icon icon-class="dispatchbill"></svg-icon>调度</button>
-					<button type="button" class="wf-btn btn-warning" @click="Edit" v-if="carrierOrder.status!='Committed'">
+					<button type="button" class="wf-btn btn-warning" @click="Edit" v-if="carrierOrder.status!='Committed' && carrierOrder.status != 'Closed'">
 						<svg-icon icon-class="money1"></svg-icon>调整应收款</button>
 				</div>
 				<div class="btn-group fr">
-					<button type="button" class="wf-btn btn-danger plain" @click="deleteCarrierOrder">
+					<button type="button" class="wf-btn btn-danger plain" @click="deleteCarrierOrder" v-if="carrierOrder.status == 'Committed'">
 						<svg-icon icon-class="delete" ></svg-icon>删除</button>
 					<button type="button" class="wf-btn btn-default" @click="back">
 						<svg-icon icon-class="back"></svg-icon>返回</button>
@@ -331,12 +336,28 @@ export default {
 		Edit(){
 			this.dialogFormVisible = true
 		},
+		closeCarrierbill() {
+			let data = {
+				carrierOrderIDs: this.$route.query.carrierOrderID
+			}
+			request({
+				url: '/biz/carrierOrder/close',
+				method: 'post',
+				data
+			}).then(res => {
+				this.$message({
+					type: 'success',
+					message: '关闭成功!'
+				})
+				this.getDetail()
+			})
+		},
 		back() {
 			this.$router.go(-1)
 		},
 		deleteCarrierOrder() {
 			let data = {
-				carrierOrderIDs:this.$route.query.carrierOrderID
+				carrierOrderIDs: this.$route.query.carrierOrderID
 			}
 			request({
 				url: '/biz/carrierOrder/delete',

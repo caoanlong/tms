@@ -31,6 +31,11 @@
 					</el-table-column>
 					<el-table-column label="车辆号牌" prop="plateNo" width="110" align="center">
 					</el-table-column>
+					<el-table-column label="货物规格/名称">
+						<template slot-scope="scope">
+							<span>{{scope.row.dispatchOrderCargo.cargoType?scope.row.dispatchOrderCargo.cargoType+'/':''}}{{scope.row.dispatchOrderCargo.cargoName}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="配载量" width="180" align="center">
 						<template slot-scope="scope">
 							<span>
@@ -66,11 +71,6 @@
 						<template slot-scope="scope">
 							<span v-if="scope.row.carrierOrder">{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp()}}</span>
 							<span v-else></span>
-						</template>
-					</el-table-column>
-					<el-table-column label="货物规格/名称">
-						<template slot-scope="scope">
-							<span>{{scope.row.dispatchOrderCargo.cargoType?scope.row.dispatchOrderCargo.cargoType+'/':''}}{{scope.row.dispatchOrderCargo.cargoName}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="60" align="center" fixed="right">
