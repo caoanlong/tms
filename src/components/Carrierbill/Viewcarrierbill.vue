@@ -14,7 +14,7 @@
 			<table class="wf-table">
 				<caption>承运信息</caption>
 				<tr>
-					<td width="50%"><span class="justify">托运人</span>{{consignor.companyName}}</td>
+					<td width="50%"><span class="justify">托运人</span>{{carrierOrder.consignorName}}</td>
 					<td width="50%"><span class="justify">承运人</span>{{carrierOrder.carrierrName}}</td>
 				</tr>
 			</table>
@@ -85,9 +85,9 @@
 					<td>{{sum('cargoVolume')}}</td>
 					<td>{{sum('cargoWeight')}}</td>
 					<td>
-						<span v-if="sum('cargoNum')>0">{{sum('cargoNum')}}件/</span>
-						<span v-if="sum('cargoVolume')>0">{{sum('cargoVolume')}}方/</span>
-						<span v-if="sum('cargoWeight')>0">{{sum('cargoWeight')}}吨</span>	
+						<span v-if="sum('remainingCargoNum')>0">{{sum('remainingCargoNum')}}件/</span>
+						<span v-if="sum('remainingCargoVolume')>0">{{sum('remainingCargoVolume')}}方/</span>
+						<span v-if="sum('remainingCargoWeight')>0">{{sum('remainingCargoWeight')}}吨</span>	
 					</td>
 				</tr>
 			</table>
@@ -112,8 +112,8 @@
 					<td>{{isShow ? carrierOrder.monthlyAmount : '**'}}元</td>
 					<td>{{isShow ? carrierOrder.consigneeAmount : '**'}}元</td>
 					<td>{{isShow ? carrierOrderTotal : '**'}}元</td>
-					<td>无参数</td>
-					<td>人民币</td>
+					<td>{{isShow ? carrierOrder.otherAmount : '**'}}</td>
+					<td>{{isShow ? carrierOrder.remark : '**'}}</td>
 				</tr>
 				<tr>
 					<td colspan="8">
@@ -242,10 +242,10 @@
 				<el-col :span="24">
 					<el-form label-width="100px">
 						<el-form-item label="其它">
-							<el-input></el-input>
+							<el-input v-model="carrierOrder.otherAmount"></el-input>
 						</el-form-item>
 						<el-form-item label="备注">
-							<el-input type="textarea" resize="none" :rows="3"></el-input>
+							<el-input type="textarea" resize="none" :rows="3" v-model="carrierOrder.remark"></el-input>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -266,8 +266,6 @@ export default {
 		return {
 			isShow: false,
 			carrierOrder:{},
-			consignorID:'',
-			consignor:'',
 			dialogFormVisible:false,
 			carrierCargo: [],
 			porRequire:[],
@@ -303,23 +301,8 @@ export default {
 				console.log(res.data.data)
 				this.carrierOrder = res.data.data
 				this.carrierCargo = res.data.data.carrierCargo
-				this.consignorID = res.data.data.consignorID
-				this.getConsignor()
 				this.porRequire = res.data.data.porRequire.split(',')
 			})
-		},
-		getConsignor(){
-			let params = {
-				customerID: this.consignorID
-			}
-			request({
-				url: '/customer/findById',
-				params
-			}).then(res => {
-				console.log(res.data.data)
-				this.consignor = res.data.data
-			})
-
 		},
 		getDispacthBills() {
 			let params = {
@@ -370,13 +353,15 @@ export default {
 		// 调整应收款
 		adjustSum(){
 			let data = {
-				carrierOrderID:this.$route.query.carrierOrderID,
-				shipperNo:this.carrierOrder.shipperNo,
-				cashAmount:this.carrierOrder.cashAmount,
-				monthlyAmount:this.carrierOrder.monthlyAmount,
-				codAmount:this.carrierOrder.codAmount,
-				consigneeAmount:this.carrierOrder.consigneeAmount,
-				porAmount:this.carrierOrder.porAmount
+				carrierOrderID: this.$route.query.carrierOrderID,
+				shipperNo: this.carrierOrder.shipperNo,
+				cashAmount: this.carrierOrder.cashAmount,
+				monthlyAmount: this.carrierOrder.monthlyAmount,
+				codAmount: this.carrierOrder.codAmount,
+				consigneeAmount: this.carrierOrder.consigneeAmount,
+				porAmount: this.carrierOrder.porAmount,
+				otherAmount: this.carrierOrder.otherAmount,
+				remark: this.carrierOrder.remark
 			}
 			request({
 				url: '/biz/carrierOrder/modify',

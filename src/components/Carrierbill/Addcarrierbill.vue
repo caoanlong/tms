@@ -14,7 +14,7 @@
 						<el-form-item label="托运人" prop="consignorID">
 							<el-autocomplete style="width:100%"
 								value-key="companyName" 
-								v-model="carrierbillInfo.consignorID"
+								v-model="carrierbillInfo.consignorName"
 								:fetch-suggestions="getConsignors"
 								placeholder="请输入内容"
 								@select="handSelectConsignor">
@@ -262,7 +262,6 @@ export default {
 		return {
 			selectedArea: [],
 			selectedArea1: [],
-			consignor: {},
 			loading: false,
 			carrierbillInfo: {
 				carrierCargo:[
@@ -406,8 +405,8 @@ export default {
 			})
 		},
 		handSelectConsignor(data) {
-			console.log(data)
-			this.consignor = data
+			this.carrierbillInfo.consignorID = data.customerID
+			this.carrierbillInfo.consignorName = data.companyName
 		},
 		handSelectShipper(data){
 			this.carrierbillInfo.shipperCompanyName = data.companyName
@@ -477,8 +476,8 @@ export default {
 				consigneeName: this.carrierbillInfo.consigneeName,
 				consigneePhone: this.carrierbillInfo.consigneePhone,
 
-				consignorID: this.consignor.customerID, // 托运人ID
-				consignorName: this.consignor.companyName, // 托运人名称
+				consignorID: this.carrierbillInfo.consignorID, // 托运人ID
+				consignorName: this.carrierbillInfo.consignorName, // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
 				paymentMethod: this.carrierbillInfo.paymentMethod,
