@@ -44,9 +44,9 @@
 						<el-table-column label="配载量" align="center">
 							<template slot-scope="scope">
 								<span>
-								{{(scope.row.cargoWeight ? scope.row.cargoWeight : 0) + '吨'}}
-								/{{(scope.row.cargoVolume ? scope.row.cargoVolume : 0) + '方'}}
-								/{{(scope.row.cargoNum ? scope.row.cargoNum : 0) + '件'}}
+								{{(scope.row.cargoWeight ? scope.row.cargoWeight : 0) + '千克/'}}
+								{{(scope.row.cargoVolume ? scope.row.cargoVolume : 0) + '方/'}}
+								{{(scope.row.cargoNum ? scope.row.cargoNum : 0) + '件'}}
 								</span>
 							</template>
 						</el-table-column>

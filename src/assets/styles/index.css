@@ -131,3 +131,4 @@ input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
 input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
 	color:#C0C4CC;
 }
+.el-input-group__append, .el-input-group__prepend{padding:0 10px;}

@@ -2,7 +2,7 @@
 	<div>
 		<el-row>
 			<el-col :span="8">
-				<el-form label-width="120px">
+				<el-form label-width="80px">
 					<el-form-item label="发货人">
 						<p>{{carrierBill.shipperName}}</p>
 					</el-form-item>
@@ -12,21 +12,21 @@
 				</el-form>
 			</el-col>
 			<el-col :span="8">
-				<el-form label-width="120px">
+				<el-form label-width="80px">
 					<el-form-item label="委托时间">
 						<p>{{carrierBill.commissionDate | getdatefromtimestamp()}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
 			<el-col :span="8">
-				<el-form label-width="120px">
+				<el-form label-width="80px">
 					<el-form-item label="发货单号">
 						<p>{{carrierBill.shipperNo}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
 			<el-col :span="16">
-				<el-form label-width="120px">
+				<el-form label-width="80px">
 					<el-form-item label="发货地">
 						<p>{{carrierBill.shipperArea}} {{carrierBill.shipperDetailAddress}}</p>
 					</el-form-item>
@@ -35,14 +35,14 @@
 		</el-row>
 		<el-row>
 			<el-col :span="8">
-				<el-form label-width="120px">
+				<el-form label-width="80px">
 					<el-form-item label="收货人">
 						<p>{{carrierBill.consigneeName}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
 			<el-col :span="8">
-				<el-form label-width="120px">
+				<el-form label-width="80px">
 					<el-form-item label="到货时间">
 						<p>{{carrierBill.consigneeDate | getdatefromtimestamp()}}</p>
 					</el-form-item>
@@ -51,14 +51,14 @@
 		</el-row>
 		<el-row>
 			<el-col :span="8">
-				<el-form label-width="120px">
+				<el-form label-width="80px">
 					<el-form-item label="运输方式">
 						<p>{{carrierBill.transportType}}</p>
 					</el-form-item>
 				</el-form>
 			</el-col>
 			<el-col :span="16">
-				<el-form label-width="120px">
+				<el-form label-width="80px">
 					<el-form-item label="卸货地">
 						<p>{{carrierBill.consigneeArea}} {{carrierBill.consigneeDetailAddress}}</p>
 					</el-form-item>
@@ -93,5 +93,5 @@
 			font-family 'sans-serif'
 			line-height 40px
 			color #999
-			font-size 14px
+			font-size 13px
 </style>
