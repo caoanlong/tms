@@ -10,8 +10,8 @@
 		<div class="info inlineBlock">
 			<p class="driverName">{{truck.realName}}</p>
 			<p class="vehicleNo">{{truck.plateNo}}</p>
-			<p class="trailerNo">{{truck.trailerPlateNo}}</p>
-			<p class="vehicleType">{{truck.length ? (truck.length + '米') : ''}}{{truck.truckType}}{{truck.truckCategory}}</p>
+			<p class="trailerNo" v-if="truck.trailerPlateNo">{{truck.trailerPlateNo}}</p>
+			<p class="vehicleType">{{truck.length ? (truck.length + '毫米') : ''}}{{truck.truckType}}{{truck.truckCategory}}</p>
 		</div>
 		<div class="statusInfo inlineBlock">
 			<div class="control">
