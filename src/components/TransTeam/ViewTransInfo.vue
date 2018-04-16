@@ -202,6 +202,84 @@
 								</table>
 							</el-col>
 						</el-row>
+						<el-row v-if="transportRecordDetail2.trailer.trailerPlateNo">
+							<el-col>
+								<h3 class="text-center">危险物品运输单位备案（危险物品运输车辆基本信息表）</h3>
+								<table class="common-table">
+									<tr>
+										<td colspan="5">
+											<span class="tit">车辆所有人：{{transportRecordDetail2.trailer.trailerCarOwnerName}}</span>
+											<span class="tit">公司经营证号：{{transportRecordDetail2.trailer.trailerBusinessLicenseNo}}</span>
+											<span class="tit">建档日期：{{transportRecordDetail2.trailer.archiveTime | getdatefromtimestamp(true)}}</span>
+										</td>
+									</tr>
+									<tr>
+										<td width="80">车牌号码</td>
+										<td>{{transportRecordDetail2.trailer.trailerPlateNo}}</td>
+										<td width="80">核载质量</td>
+										<td width="100">{{transportRecordDetail2.trailer.trailerTractiveTonnage}}</td>
+										<td rowspan="6">
+											<p>内部编号：{{transportRecordDetail2.trailer.trailerCode}}</p>
+											<img width="240" height="180" :src="imgUrl + transportRecordDetail2.trailer.trailerTruckFrontPic"/>
+										</td>
+									</tr>
+									<tr>
+										<td>品牌型号</td>
+										<td>{{transportRecordDetail2.trailer.trailerCarBrandModel}}</td>
+										<td>总质量</td>
+										<td>{{transportRecordDetail2.trailer.trailerTotalWeight}}</td> 
+									</tr>
+									<tr>
+										<td>车架号</td>
+										<td>{{transportRecordDetail2.trailer.trailerVehicleFrameNO}}</td>
+										<td>发动机号</td>
+										<td>{{transportRecordDetail2.trailer.trailerEngineNO}}</td>
+									</tr>
+									<tr>
+										<td>注册日期</td>
+										<td>{{transportRecordDetail2.trailer.trailerDriverLicRegisterTime | getdatefromtimestamp(true)}}</td>
+										<td>车辆类型</td>
+										<td>{{transportRecordDetail2.trailer.trailerTruckType}}</td>
+									</tr>
+									<tr>
+										<td>使用性质</td>
+										<td>{{transportRecordDetail2.trailer.trailerBusinessNature}}</td>
+										<td>经营类别</td>
+										<td>{{transportRecordDetail2.trailer.trailerBusinessScope}}</td>
+									</tr>
+									<tr>
+										<td>道路运输证号</td>
+										<td>{{transportRecordDetail2.trailer.trailerRoadTransportNo}}</td>
+										<td>有效期限</td>
+										<td>{{transportRecordDetail2.trailer.trailerRoadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</td>
+									</tr>
+									<tr>
+										<td colspan="5">
+											<el-row>
+												<el-col :span="12">
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.trailer.trailerDriverLicPic"/>
+												</el-col>
+												<el-col :span="12">
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.trailer.trailerRoadTransportSidePic"/>
+												</el-col>
+											</el-row>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="5">
+											<el-row>
+												<el-col :span="12">
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.trailer.trailerRoadTransportPic"/>
+												</el-col>
+												<el-col :span="12">
+													<img width="240" height="180" :src="imgUrl + transportRecordDetail2.trailer.trailerRoadTransportSidePic"/>
+												</el-col>
+											</el-row>
+										</td>
+									</tr>
+								</table>
+							</el-col>
+						</el-row>
 						<el-row style="margin-top: 20px">
 							<el-col>
 								<h3 class="text-center">危险物品运输单位备案（危险物品运输驾驶员基本信息表）</h3>
