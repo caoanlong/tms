@@ -59,19 +59,19 @@
 		},
 		computed: {
 			totalLoadWeight() {
-				let values = this.cargoInfo.map(item => Number(item.loadWeight))
+				let values = this.cargoInfo.map(item => Number(item.loadWeight ? item.loadWeight : 0))
 				return values.reduce((prev, next) => {
 					return prev + next
 				}, 0)
 			},
 			totalLoadVolume() {
-				let values = this.cargoInfo.map(item => Number(item.loadVolume))
+				let values = this.cargoInfo.map(item => Number(item.loadVolume ? item.loadVolume : 0))
 				return values.reduce((prev, next) => {
 					return prev + next
 				}, 0)
 			},
 			totalLoadNum() {
-				let values = this.cargoInfo.map(item => Number(item.loadNum))
+				let values = this.cargoInfo.map(item => Number(item.loadNum ? item.loadNum : 0))
 				return values.reduce((prev, next) => {
 					return prev + next
 				}, 0)

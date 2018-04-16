@@ -88,8 +88,7 @@
 				<tr>
 					<td class="txt-r">司机</td>
 					<td>
-						<el-input size="mini" v-model="payMethods.driverCashAmount">
-						</el-input>
+						<el-input size="mini" v-model="payMethods.driverCashAmount"></el-input>
 					</td>
 					<td>
 						<el-input size="mini" v-model="payMethods.driverCodAmount"></el-input>
@@ -142,6 +141,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import { Message } from 'element-ui'
 	export default {
 		props: {
 			truck: {
@@ -170,7 +170,7 @@
 			},
 			totalCargoWeight() {
 				if (this.truck.cargos) {
-					let values = this.truck.cargos.map(item => item.loadWeight ? Number(item.loadWeight) : 0)
+					let values = this.truck.cargos.map(item => item.cargoWeight ? Number(item.cargoWeight) : 0)
 					return values.reduce((prev, next) => prev + next, 0)
 				} else {
 					return 0
@@ -178,7 +178,7 @@
 			},
 			totalCargoVolume() {
 				if (this.truck.cargos) {
-					let values = this.truck.cargos.map(item => item.loadVolume ? Number(item.loadVolume) : 0)
+					let values = this.truck.cargos.map(item => item.cargoVolume ? Number(item.cargoVolume) : 0)
 					return values.reduce((prev, next) => prev + next, 0)
 				} else {
 					return 0
@@ -214,6 +214,11 @@
 				totalWeight: 0,
 				totalVol: 0,
 				totalNum: 0,
+				rules: {
+					status: [
+						{ required: true, message: '请选择状态', trigger: 'change' }
+					],
+				}
 			}
 		},
 		methods: {
@@ -221,6 +226,22 @@
 				this.$emit('prevStep', 1)
 			},
 			nextStep() {
+				if (!this.payMethods.driverCashAmount 
+					&& !this.payMethods.driverCodAmount 
+					&& !this.payMethods.driverPorAmount 
+					&& !this.payMethods.driverMonthlyAmont 
+					&& !this.payMethods.driverCosigneeAmount) {
+					Message.error('司机金额必填一项！')
+					return
+				}
+				if (!this.payMethods.superCargoCashAmount 
+					&& !this.payMethods.superCargoCodAmount 
+					&& !this.payMethods.superCargoCorAmount 
+					&& !this.payMethods.superCargoMonthlyAmount 
+					&& !this.payMethods.superCosigneeAmount) {
+					Message.error('随车人员金额必填一项！')
+					return
+				}
 				this.$emit('nextStep', 3, this.payMethods, this.loadStatus)
 			},
 		}

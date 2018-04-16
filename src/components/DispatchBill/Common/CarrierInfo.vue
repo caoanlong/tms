@@ -14,7 +14,8 @@
 			<el-col :span="8">
 				<el-form label-width="80px">
 					<el-form-item label="委托时间">
-						<p>{{carrierBill.commissionDate | getdatefromtimestamp()}}</p>
+						<p v-if="carrierBill.commissionDate">{{carrierBill.commissionDate | getdatefromtimestamp()}}</p>
+						<p v-else></p>
 					</el-form-item>
 				</el-form>
 			</el-col>

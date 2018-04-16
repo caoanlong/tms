@@ -30,7 +30,7 @@
 					</td>
 					<td>
 						<span class="justify">到货时间</span>
-						<span v-if="item.signTime">{{item.signTime | getdatefromtimestamp()}}</span>
+						<span v-if="item.consigneeDate">{{item.consigneeDate | getdatefromtimestamp()}}</span>
 						<span v-else></span>
 					</td>
 				</tr>

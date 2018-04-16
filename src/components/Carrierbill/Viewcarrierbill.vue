@@ -1,5 +1,5 @@
 <template>
-	<div class="main-content">
+	<div class="main-content" style="min-width: 1200px">
 		<div class="wf-card">
 			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}
 				<span>发货单号：{{carrierOrder.shipperNo}}</span>

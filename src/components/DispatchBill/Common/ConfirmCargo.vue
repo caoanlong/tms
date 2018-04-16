@@ -123,7 +123,6 @@
 								+ Number(payInfo.driverPorAmount)
 								+ Number(payInfo.driverMonthlyAmont)
 								+ Number(payInfo.driverCosigneeAmount)
-								+ Number(payInfo.driverDetoursMileage)
 								+ Number(payInfo.driverDetoursAmount)
 								+ Number(payInfo.driverOtherAmount)
 								+ Number(payInfo.superCargoCashAmount)
@@ -131,7 +130,6 @@
 								+ Number(payInfo.superCargoCorAmount)
 								+ Number(payInfo.superCargoMonthlyAmount)
 								+ Number(payInfo.superCosigneeAmount)
-								+ Number(payInfo.superCargoDetoursMileage)
 								+ Number(payInfo.superCargoDetoursAmount)
 								+ Number(payInfo.superCargoOtherAmount)
 							}}
@@ -166,19 +164,19 @@
 		},
 		computed: {
 			totalSignWeight() {
-				let values = this.cargoInfo.map(item => Number(item.signWeight))
+				let values = this.cargoInfo.map(item => Number(item.signWeight ? item.signWeight : 0))
 				return values.reduce((prev, next) => {
 					return prev + next
 				}, 0)
 			},
 			totalSignVolume() {
-				let values = this.cargoInfo.map(item => Number(item.signVolume))
+				let values = this.cargoInfo.map(item => Number(item.signVolume ? item.signVolume : 0))
 				return values.reduce((prev, next) => {
 					return prev + next
 				}, 0)
 			},
 			totalSignNum() {
-				let values = this.cargoInfo.map(item => Number(item.signNum))
+				let values = this.cargoInfo.map(item => Number(item.signNum ? item.signNum : 0))
 				return values.reduce((prev, next) => {
 					return prev + next
 				}, 0)

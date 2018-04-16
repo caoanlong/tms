@@ -21,6 +21,7 @@
 					<el-col :span="6">
 						<el-form-item label="审核日期" prop="auditTime">
 							<el-date-picker 
+								:picker-options="{disabledDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="truck.auditTime" 

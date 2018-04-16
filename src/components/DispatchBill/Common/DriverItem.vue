@@ -22,12 +22,10 @@
 					<span class="labels">配载重量</span>
 					<el-progress :percentage="parseInt(totalWeight/Number(truck.loads/1000) *100)" style="margin-top:13px"></el-progress>
 					<span class="surplus">剩{{(Number(truck.loads/1000) - totalWeight)}}吨</span>
-					<span>{{parseInt(totalWeight/Number(truck.loads) *100)}}</span>
 				</div>
 				<div class="sliderSelect">
 					<span class="labels">配载体积</span>
 					<el-progress :percentage="parseInt(totalVolume/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
-					<span class="surplus">剩{{Number(truck.loadVolume) - totalVolume}}方</span>
 				</div>
 			</div>
 		</div>
@@ -59,11 +57,11 @@ export default {
 	},
 	computed: {
 		totalWeight() {
-			let values = this.truck.cargos.map(item => item.loadWeight ? Number(item.loadWeight) : 0)
+			let values = this.truck.cargos.map(item => item.cargoWeight ? Number(item.cargoWeight) : 0)
 			return values.reduce((prev, next) => prev + next, 0)
 		},
 		totalVolume() {
-			let values = this.truck.cargos.map(item => item.loadVolume ? Number(item.loadVolume) : 0)
+			let values = this.truck.cargos.map(item => item.cargoVolume ? Number(item.cargoVolume) : 0)
 			return values.reduce((prev, next) => prev + next, 0)
 		},
 	},
