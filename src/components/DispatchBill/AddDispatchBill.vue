@@ -204,7 +204,8 @@ export default {
 		// 单个承运单详情
 		getDetail(carrierOrderID) {
 			let params = {
-				carrierOrderID
+				carrierOrderID,
+				ignoreFinishedCargo : 'Y'
 			}
 			request({
 				url: '/biz/carrierOrder/detail',

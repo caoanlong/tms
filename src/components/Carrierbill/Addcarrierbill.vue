@@ -479,11 +479,11 @@ export default {
 				consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
 				consigneeDate: this.carrierbillInfo.consigneeDate,
 				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
-				consigneeID: this.carrierbillInfo.consigneeID,
+				consigneeID: this.carrierbillInfo.consigneeID || '',
 				consigneeName: this.carrierbillInfo.consigneeName,
 				consigneePhone: this.carrierbillInfo.consigneePhone,
 
-				consignorID: this.carrierbillInfo.consignorID, // 托运人ID
+				consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
 				consignorName: this.carrierbillInfo.consignorName, // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
@@ -497,7 +497,7 @@ export default {
 				shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
 				shipperDate: this.carrierbillInfo.shipperDate,
 				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
-				shipperID: this.carrierbillInfo.shipperID,
+				shipperID: this.carrierbillInfo.shipperID || '',
 				shipperName: this.carrierbillInfo.shipperName,
 				shipperNo: this.carrierbillInfo.shipperNo,
 				shipperPhone: this.carrierbillInfo.shipperPhone,
