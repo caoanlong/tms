@@ -4,7 +4,7 @@
 			<div class="header clearfix">承运单编号：{{carrierbillInfo.carrierOrderNo}}
 				<span>发货单号：{{carrierbillInfo.shipperNo}}</span>
 				<span>创建时间：{{carrierbillInfo.createTime | getdatefromtimestamp()}}</span>
-				<span>委托时间：{{carrierbillInfo.commissionDate | getdatefromtimestamp(true)}}</span>
+				<span>委托时间：<span v-if="carrierbillInfo.commissionDate">{{carrierbillInfo.commissionDate | getdatefromtimestamp(true)}}</span></span>
 				<span class="status status1" v-if="carrierbillInfo.status=='Commited'">待执行</span>
 				<span class="status status2" v-else-if="carrierbillInfo.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierbillInfo.status=='Signed'">到达签收</span>
@@ -223,6 +223,9 @@
 								</el-form-item>
 								<el-form-item label="收货方付" label-width="70px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
 									<el-input placeholder="收货方付" v-model="carrierbillInfo.consigneeAmount"></el-input>
+								</el-form-item>
+								<el-form-item style="width:180px;display:inline-block;margin:10px 10px 0 0" v-if="carrierbillInfo.receiptMethod=='TKM'">
+									<el-button type="primary" @click="getTransportPrice">重新生成</el-button>
 								</el-form-item>
 							</div>
 						</el-form-item>
@@ -469,6 +472,26 @@ export default {
 		},
 		handSelectReceiptMethod(data) {
 			if (data == 'TKM') {
+				if (!this.carrierbillInfo.consigneeArea) {
+					Message.error('收货地区未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.consigneeDetailAddress) {
+					Message.error('收货详细地址未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.shipperArea) {
+					Message.error('发货地区未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.shipperDetailAddress) {
+					Message.error('发货详细地址未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
 				this.getTransportPrice()
 			}
 		},
@@ -599,7 +622,30 @@ export default {
 				method: 'get',
 				params
 			}).then(res => {
-				console.log(res.data.data)
+				if (res.data.code == 200) {
+					let result = res.data.data
+					let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
+					let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
+					let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
+					let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
+					this.carrierbillInfo.cashAmount = temp * result.externalCashRate
+					this.carrierbillInfo.codAmount = temp * result.externalCodRate
+					this.carrierbillInfo.porAmount = temp * result.externalPorRate
+					this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
+					this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
+				} else if (res.data.code == 2001) {
+					this.$msgbox({
+						message: '请先配置运费模板！',
+						title: '未配置运费模板',
+						confirmButtonText: '去配置',
+						showCancelButton: true,
+						callback: (action) => {
+							if (action == 'confirm') {
+								this.$router.push({name: 'addsettleconfig'})
+							}
+						}
+					})
+				}
 			})
 		},
 		back() {

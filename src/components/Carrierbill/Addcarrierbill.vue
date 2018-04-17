@@ -215,6 +215,9 @@
 								<el-form-item label="收货方付" label-width="70px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
 									<el-input placeholder="收货方付" v-model="carrierbillInfo.consigneeAmount"></el-input>
 								</el-form-item>
+								<el-form-item style="width:180px;display:inline-block;margin:10px 10px 0 0" v-if="carrierbillInfo.receiptMethod=='TKM'">
+									<el-button type="primary" @click="getTransportPrice">重新生成</el-button>
+								</el-form-item>
 							</div>
 						</el-form-item>
 						<el-form-item label="付款费用">
@@ -441,18 +444,22 @@ export default {
 			if (data == 'TKM') {
 				if (!this.carrierbillInfo.consigneeArea) {
 					Message.error('收货地区未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
 				if (!this.carrierbillInfo.consigneeDetailAddress) {
 					Message.error('收货详细地址未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
 				if (!this.carrierbillInfo.shipperArea) {
 					Message.error('发货地区未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
 				if (!this.carrierbillInfo.shipperDetailAddress) {
 					Message.error('发货详细地址未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
 				this.getTransportPrice()
@@ -582,28 +589,29 @@ export default {
 				method: 'get',
 				params
 			}).then(res => {
-				console.log(res.data.data)
 				if (res.data.code == 200) {
 					let result = res.data.data
-					let cargoWeights = this.carrierbillInfo.carrierCargo.map(item => Number(item.cargoWeight))
+					let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
+					let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
 					let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
-
-					//total = externalUnitPrice * externalMileage * 货物重量（单位：吨）
-					//"现付" v-model="carrierbillInfo.cashAmount"
-					//"到付" v-model="carrierbillInfo.codAmount"
-					//"回单结" v-model="carrierbillInfo.porAmount"
-					//"月结" v-model="carrierbillInfo.monthlyAmount"
-					//"收货方付" v-model="carrierbillInfo.consigneeAmount"
-
-					//externalAbschlussRate	对外月结比率	number	@mock=2000
-					//externalCashRate	对外现付比率	number	@mock=0.6
-					//externalCodRate	对外到付比率	number	@mock=0.9
-					//externalConsigneeCodRate	对外收货方到付比率	number	@mock=30000
-					//externalMileage	对外运距	number	@mock=2000
-					//externalPorRate	对外回单比率	number	@mock=0.3
-					//externalPrice	对外运价	number	@mock=30000
-					//externalUnitPrice	对外TKM
-					this.carrierbillInfo.cashAmount = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
+					let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
+					this.carrierbillInfo.cashAmount = temp * result.externalCashRate
+					this.carrierbillInfo.codAmount = temp * result.externalCodRate
+					this.carrierbillInfo.porAmount = temp * result.externalPorRate
+					this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
+					this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
+				} else if (res.data.code == 2001) {
+					this.$msgbox({
+						message: '请先配置运费模板！',
+						title: '未配置运费模板',
+						confirmButtonText: '去配置',
+						showCancelButton: true,
+						callback: (action) => {
+							if (action == 'confirm') {
+								this.$router.push({name: 'addsettleconfig'})
+							}
+						}
+					})
 				}
 			})
 		},
