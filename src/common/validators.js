@@ -15,6 +15,15 @@ export function isVerCodeAvailable(str) {
 		return true
 	}  
 }
+// 验证浮点数（正浮点数 + 0）
+export const isFloat = (value) => {
+	let r = /^\d+(\.\d+)?$/
+	if (r.test(value) || value == 0) {
+		return true
+	} else {
+		return false
+	}
+}
 
 
 

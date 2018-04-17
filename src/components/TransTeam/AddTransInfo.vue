@@ -45,6 +45,7 @@
 					<el-col :span="14" :offset="5">
 						<el-form-item label="挂车牌">
 							<el-select
+								:clearable="true"
 								style="width: 100%" 
 								v-model="transInfo.trailerID"
 								filterable
@@ -68,7 +69,8 @@
 					</el-col>
 					<el-col :span="14" :offset="5">
 						<el-form-item label="建档时间" prop="archiveTime">
-							<el-date-picker
+							<el-date-picker 
+								:picker-options="{disabledDate}"
 								style="width: 100%" 
 								v-model="transInfo.archiveTime"
 								type="date"
@@ -130,6 +132,9 @@ export default {
 	created() {
 	},
 	methods: {
+		disabledDate(curDate) {
+			return new Date() < curDate
+		},
 		getStaffs(realName) {
 			if (realName !== '') {
 				this.loading = true

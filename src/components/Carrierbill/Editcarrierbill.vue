@@ -20,7 +20,7 @@
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="托运人" prop="consignorID">
+						<el-form-item label="托运人" prop="consignorName">
 							<el-autocomplete style="width:100%"
 								value-key="companyName" 
 								v-model="carrierbillInfo.consignorName"
@@ -320,7 +320,7 @@ export default {
 				commissionDate: ''
 			},
 			rules: {
-				consignorID: [
+				consignorName: [
 					{required: true, message: '请输入托运人'}
 				],
 				carrierrName: [
@@ -333,7 +333,7 @@ export default {
 					{ required: true, message: '请输入发货人'}
 				],
 				shipperPhone: [
-					{ required: true, validator: checkMobile}
+					{ required: true, validator: checkMobile, trigger: 'blur'}
 				],
 				shipperDate: [
 					{required: true, message: '请选择发货时间', trigger: 'change'}
@@ -351,7 +351,7 @@ export default {
 					{ required: true, message: '请输入收货人'}
 				],
 				consigneePhone: [
-					{ required: true, validator: checkMobile}
+					{ required: true, validator: checkMobile, trigger: 'blur'}
 				],
 				consigneeDate: [
 					{required: true, message: '请选择收货时间', trigger: 'change'}
@@ -408,8 +408,6 @@ export default {
 				this.selectedArea = [(shipperAreaID.substr(0, 2) + '0000'), (shipperAreaID.substr(0, 4) + '00'), shipperAreaID]
 				let consigneeAreaID = res.data.data.consigneeAreaID
 				this.selectedArea1 = [(consigneeAreaID.substr(0, 2) + '0000'), (consigneeAreaID.substr(0, 4) + '00'), consigneeAreaID]
-
-				this.consignor.customerID = res.data.data.consignorID
 			})
 		},
 		getConsignors(queryString, cb) {
@@ -438,8 +436,8 @@ export default {
 			})
 		},
 		handSelectConsignor(data) {
-			console.log(data)
-			this.consignor = data
+			this.carrierbillInfo.consignorID = data.customerID
+			this.carrierbillInfo.consignorName = data.companyName
 		},
 		handSelectShipper(data){
 			this.carrierbillInfo.shipperCompanyName = data.companyName
@@ -494,8 +492,8 @@ export default {
 				consigneeName: this.carrierbillInfo.consigneeName,
 				// consigneePhone: this.carrierbillInfo.consigneePhone,
 
-				consignorID: this.consignor.customerID || this.carrierbillInfo.consignorID, // 托运人ID
-				// consignorName: this.consignor.companyName, // 托运人名称
+				consignorID: this.carrierbillInfo.consignorID, // 托运人ID
+				consignorName: this.carrierbillInfo.consignorName, // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
 				paymentMethod: this.carrierbillInfo.paymentMethod,
@@ -523,7 +521,6 @@ export default {
 			}
 			console.log(data)
 			new Promise((resolve, reject) => {
-				resolve()
 				this.$refs['ruleForm'].validate(valid => {
 					if (valid) {
 						resolve()

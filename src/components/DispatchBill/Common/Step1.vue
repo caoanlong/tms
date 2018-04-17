@@ -30,6 +30,7 @@
 				</el-table-column>
 			</el-table>
 			<el-table 
+				ref="multipleTable"
 				:data="carrierBill.carrierCargo" 
 				@selection-change="selectionChange($event, carrierBill.carrierOrderID)"
 				border style="width: 100%;margin-top:-1px" size="mini" resizable="false">
@@ -69,7 +70,10 @@
 				</el-table-column>
 			</el-table>
 		</div>
-		<div class="total-table">已配载{{selectedCargoList.length}}个货物
+		<div class="total-table">
+			<el-button size="mini" @click="selectAll(true)" v-if="isSel">全部选中</el-button>
+			<el-button size="mini" @click="selectAll(false)" v-if="!isSel">全部取消</el-button>
+			&nbsp;已配载{{selectedCargoList.length}}个货物
 			<div class="fr total-count"><b>合计：</b><span>{{totalWeight}}</span><span>{{totalVolume}}</span><span>{{totalNum}}</span></div>
 		</div>
 		<div class="step-footer">
@@ -80,6 +84,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import { isFloat } from '../../../common/validators'
 	export default {
 		props: {
 			carrierBills: {
@@ -89,7 +94,8 @@
 		},
 		data() {
 			return {
-				selectedCargoList: []
+				selectedCargoList: [],
+				isSel: true
 			}
 		},
 		computed: {
@@ -116,7 +122,7 @@
 			nextStep() {
 				let list = []
 				if (this.selectedCargoList.length == 0) {
-					Message.error('配载货物不能为空!')
+					Message.error('请选择承运单!')
 					return
 				}
 				for (let i = 0; i < this.selectedCargoList.length; i++) {
@@ -136,6 +142,30 @@
 							return
 						}
 					}
+					if (this.selectedCargoList[i].cargoWeightNew < 0) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载重量输入数值必须大于零!')
+						return
+					}
+					if (this.selectedCargoList[i].cargoVolumeNew  < 0) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载体积输入数值必须大于零!')
+						return
+					}
+					if (this.selectedCargoList[i].cargoNumNew < 0) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载件数输入数值必须大于零!')
+						return
+					}
+					if (this.selectedCargoList[i].cargoWeightNew > this.selectedCargoList[i].remainingCargoWeight) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载重量不能超过待配载重量!')
+						return
+					}
+					if (this.selectedCargoList[i].cargoVolumeNew > this.selectedCargoList[i].remainingCargoVolume) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载体积不能超过待配载体积!')
+						return
+					}
+					if (this.selectedCargoList[i].cargoNumNew > this.selectedCargoList[i].remainingCargoNum) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载件数不能超过待配载件数!')
+						return
+					}
 					let carrierBill = this.carrierBills.filter(item => item.carrierOrderID == this.selectedCargoList[i].carrierOrderID)
 					list.push({
 						cargoNum: Number(this.selectedCargoList[i].cargoNumNew),
@@ -152,23 +182,31 @@
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
 			selectionChange(data, orderID) {
-				let carrierCargoIDs = this.selectedCargoList.map(item => item.carrierCargoID)
-
-				for (let i = 0; i < this.selectedCargoList.length; i++) {
-					if (orderID == this.selectedCargoList[i].carrierOrderID) {
-						console.log('删除')
-						this.selectedCargoList.splice(i, 1)
-					}
-				}
-
-				data.forEach(item => {
-					if (!carrierCargoIDs.includes(item.carrierCargoID)) {
-						console.log('添加')
-						this.selectedCargoList.push(item)
-					}
-				})
-				console.log(data)
+				let list = this.selectedCargoList.filter(item => item.carrierOrderID != orderID)
+				list.push(...data)
+				this.selectedCargoList = list
 				console.log(this.selectedCargoList)
+			},
+			selectAll(type) {
+				if (type) {
+					this.selectedCargoList = []
+					this.carrierBills.forEach(item => {
+						this.selectedCargoList.push(...item.carrierCargo)
+					})
+					this.selectedCargoList.forEach(row => {
+						this.$refs.multipleTable.forEach(item => {
+							item.toggleRowSelection(row)
+						})
+					})
+						
+					this.isSel = false
+				} else {
+					this.selectedCargoList = []
+					this.$refs.multipleTable.forEach(item => {
+						item.clearSelection()
+					})
+					this.isSel = true
+				}
 			},
 			back() {
 				this.$router.go(-1)

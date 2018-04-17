@@ -72,6 +72,9 @@ response => {
 			})
 			return
 		}
+		if (response.data.code == 2001) {
+			return response
+		}
 		Message.error(response.data.msg)
 		return Promise.reject('error')
 	} else {

@@ -204,13 +204,24 @@ export default {
 		// 单个承运单详情
 		getDetail(carrierOrderID) {
 			let params = {
-				carrierOrderID
+				carrierOrderID,
+				ignoreFinishedCargo : 'Y'
 			}
 			request({
 				url: '/biz/carrierOrder/detail',
 				params
 			}).then(res => {
-				this.selectedCarrierBills.push(res.data.data)
+				let carrierBill = res.data.data
+				carrierBill.carrierCargo = carrierBill.carrierCargo.filter(item => {
+					if (item.weightType == 'Heavy') {
+						return item.remainingCargoWeight != 0
+					} else {
+						return item.remainingCargoVolume != 0
+					}
+				})
+				if (carrierBill.carrierCargo.length > 0) {
+					this.selectedCarrierBills.push(carrierBill)
+				}
 			})
 		},
 		save(){

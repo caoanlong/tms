@@ -54,7 +54,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="6">
-						<el-form-item label="初次发证时间">
+						<el-form-item label="驾驶证初次领证日期">
 							<p v-if="person.comStaffIdentification.driverLicenseFirstTime">{{person.comStaffIdentification.driverLicenseFirstTime | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>

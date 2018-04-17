@@ -34,7 +34,7 @@
 				</el-form>
 			</div>
 		<el-table 
-			:data="tableData" 
+			:data="tableData.filter(item => item.status == 'Committed')" 
 			@selection-change="selectionChange"
 			:row-class-name="tableRowClassName"
 			border style="width: 100%" size="mini">

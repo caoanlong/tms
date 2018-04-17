@@ -178,12 +178,12 @@
 				this.selectedDriver = data
 			},
 			selectEscortItem(data) {
-				if (data.workStatus == 'Working') {
-					Message.error('该人员已经在工作了！')
-					return
-				}
 				if (this.selectedDriver.loadStatus == 'NotFull') {
 					Message.error('该车辆已经安排押运人员了！')
+					return
+				}
+				if (data.workStatus == 'Working') {
+					Message.error('该人员已经在工作了！')
 					return
 				}
 				if (this.selectedEscort.staffID == data.staffID) {
