@@ -76,7 +76,7 @@
 					<td>{{item.cargoNum}}</td>
 					<td>{{item.cargoVolume}}</td>
 					<td>{{item.cargoWeight}}</td>
-					<td>{{item.remainingCargoNum+'件/'}}{{item.remainingCargoVolume+'方/'}}{{item.remainingCargoWeight+'吨'}}</td>
+					<td>{{item.remainingCargoNum?item.remainingCargoNum+'件':''}}{{item.remainingCargoNum?'/':''}}{{item.remainingCargoVolume?item.remainingCargoVolume+'方':''}}{{item.remainingCargoVolume?'/':''}}{{item.remainingCargoWeight?item.remainingCargoWeight+'吨':''}}</td>
 				</tr>
 				<tr class="total is-center">
 					<td>合计</td>
