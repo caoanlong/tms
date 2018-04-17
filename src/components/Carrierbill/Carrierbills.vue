@@ -87,11 +87,9 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="货物总量" width="180">
-						<template slot-scope="scope">
+						<template slot-scope="scope" >
 							<span v-if="scope.row.carrierCargo[0]">
-								{{(scope.row.carrierCargo[0].cargoWeight ? scope.row.carrierCargo[0].cargoWeight : 0) + '吨'}}
-								/{{(scope.row.carrierCargo[0].cargoVolume ? scope.row.carrierCargo[0].cargoVolume : 0) + '方'}}
-								/{{(scope.row.carrierCargo[0].cargoNum ? scope.row.carrierCargo[0].cargoNum : 0) + '件'}}
+								  {{ SumDispatchCargoQuantity(scope.row.carrierCargo) }} 
 							</span>
 						</template>
 					</el-table-column>
@@ -186,6 +184,18 @@ export default {
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.carrierOrderID)
 			console.log(this.selectedList)
+		},
+		SumDispatchCargoQuantity(data) {
+			let sumWeight = 0;
+			let sumVolume = 0;
+			let sumNum = 0;
+			data.map(item => {
+				sumWeight += (item.cargoWeight ?item.cargoWeight : 0)
+				sumVolume += (item.cargoVolume ? item.cargoVolume : 0)
+				sumNum += (item.cargoNum ? item.cargoNum : 0)
+			})
+
+			return (sumWeight + '吨/' + sumVolume + '方/' + sumNum + '件')
 		},
 		AddDispatchBill() {
 			console.log(this.selectedList)
