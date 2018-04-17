@@ -86,7 +86,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="载重">
-							<p>{{truck.loads + '千克'}}</p>
+							<p>{{truck.loads + '吨'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -96,12 +96,12 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="牵引质量">
-							<p>{{truck.tractiveTonnage ? (truck.tractiveTonnage + '千克') : ''}}</p>
+							<p>{{truck.tractiveTonnage ? (truck.tractiveTonnage + '吨') : ''}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="总质量">
-							<p>{{truck.totalWeight ? (truck.totalWeight + '千克') : ''}}</p>
+							<p>{{truck.totalWeight ? (truck.totalWeight + '吨') : ''}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
