@@ -44,7 +44,7 @@
 						<el-table-column label="配载量" align="center">
 							<template slot-scope="scope">
 								<span>
-								{{(scope.row.cargoWeight ? scope.row.cargoWeight : 0) + '千克/'}}
+								{{(scope.row.cargoWeight ? scope.row.cargoWeight : 0) + '吨/'}}
 								{{(scope.row.cargoVolume ? scope.row.cargoVolume : 0) + '方/'}}
 								{{(scope.row.cargoNum ? scope.row.cargoNum : 0) + '件'}}
 								</span>
@@ -110,7 +110,15 @@
 					</tbody>
 					<tfoot>
 						<tr>
-							<td colspan="9" class="txt-r">合计</td>
+							<td class="txt-r">合计</td>
+							<td>{{Number(payInfo.driverCashAmount) +Number(payInfo.superCargoCashAmount) }}</td>
+							<td>{{Number(payInfo.driverCodAmount) +Number(payInfo.superCargoCodAmount) }}</td>
+							<td>{{Number(payInfo.driverPorAmount) +Number(payInfo.superCargoCorAmount) }}</td>
+							<td>{{Number(payInfo.driverMonthlyAmont) +Number(payInfo.superCargoMonthlyAmount) }}</td>
+							<td>{{Number(payInfo.driverCosigneeAmount) +Number(payInfo.superCosigneeAmount) }}</td>
+							<td></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</tfoot>
 				</table>

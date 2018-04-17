@@ -55,14 +55,14 @@
 							<p>{{truck.plateNoColor}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6" v-if="truck.truckCategory == '牵引车'">
-						<el-form-item label="车牌号">
-							<p>{{truck.plateNo}}</p>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6" v-else>
+					<el-col :span="6" v-if="truck.trailerPlateNo">
 						<el-form-item label="挂车车牌">
 							<p>{{truck.trailerPlateNo}}</p>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6" v-else>	
+						<el-form-item label="车牌号">
+							<p>{{truck.plateNo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -86,7 +86,7 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="载重">
-							<p>{{truck.loads + '千克'}}</p>
+							<p>{{truck.loads + '吨'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
@@ -96,12 +96,12 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="牵引质量">
-							<p>{{truck.tractiveTonnage ? (truck.tractiveTonnage + '千克') : ''}}</p>
+							<p>{{truck.tractiveTonnage ? (truck.tractiveTonnage + '吨') : ''}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="总质量">
-							<p>{{truck.totalWeight ? (truck.totalWeight + '千克') : ''}}</p>
+							<p>{{truck.totalWeight ? (truck.totalWeight + '吨') : ''}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
