@@ -262,7 +262,7 @@ export default {
 				driverPorAmount: payInfo.driverPorAmount //	司机回单金额
 			}
 			request({
-				url: '/biz/dispatchOrder/confirm',
+				url: '/biz/dispatchOrder/modify',
 				method: 'post',
 				data
 			}).then(res => {
