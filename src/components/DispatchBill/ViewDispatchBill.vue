@@ -117,26 +117,14 @@
 				</tr>
 				<tr class="is-center">
 					<td>合计：</td>
-					<td colspan="8">
-						{{
-							Number(dispatchBill.driverCashAmount) 
-							+ Number(dispatchBill.driverCodAmount)
-							+ Number(dispatchBill.driverPorAmount)
-							+ Number(dispatchBill.driverMonthlyAmont)
-							+ Number(dispatchBill.driverCosigneeAmount)
-							+ Number(dispatchBill.driverDetoursMileage)
-							+ Number(dispatchBill.driverDetoursAmount)
-							+ Number(dispatchBill.driverOtherAmount)
-							+ Number(dispatchBill.superCargoCashAmount)
-							+ Number(dispatchBill.superCargoCodAmount)
-							+ Number(dispatchBill.superCargoCorAmount)
-							+ Number(dispatchBill.superCargoMonthlyAmount)
-							+ Number(dispatchBill.superCosigneeAmount)
-							+ Number(dispatchBill.superCargoDetoursMileage)
-							+ Number(dispatchBill.superCargoDetoursAmount)
-							+ Number(dispatchBill.superCargoOtherAmount)
-						}}
-					</td>
+					<td>{{ Number(dispatchBill.driverCashAmount) + Number(dispatchBill.superCargoCashAmount) }}</td>
+					<td>{{ Number(dispatchBill.driverCodAmount)+ Number(dispatchBill.superCargoCodAmount) }}</td>
+					<td>{{ Number(dispatchBill.driverPorAmount) + Number(dispatchBill.superCargoCorAmount) }}</td>
+					<td>{{ Number(dispatchBill.driverMonthlyAmont) + Number(dispatchBill.superCargoMonthlyAmount) }}</td>
+					<td>{{ Number(dispatchBill.driverCosigneeAmount) + Number(dispatchBill.superCosigneeAmount) }}</td>
+					<td>{{ Number(dispatchBill.driverDetoursMileage) + Number(dispatchBill.superCargoDetoursMileage) }}</td>
+					<td>{{ Number(dispatchBill.driverDetoursAmount) + Number(dispatchBill.superCargoDetoursAmount) }}</td>
+					<td>{{ Number(dispatchBill.driverOtherAmount) + Number(dispatchBill.superCargoOtherAmount) }}</td>
 				</tr>
 			</table>
 			<div class="wf-footer clearfix is-center">
