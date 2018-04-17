@@ -360,6 +360,16 @@ export default {
 
 				let areaID1 = this.templateFreight.consigneeAreaID
 				this.selectedArea1 = [(areaID1.substr(0, 2) + '0000'), (areaID1.substr(0, 4) + '00'), areaID1]
+				this.templateFreight.internalCashRate = this.templateFreight.internalCashRate *100
+				this.templateFreight.internalCodRate = this.templateFreight.internalCodRate *100
+				this.templateFreight.internalPorRate = this.templateFreight.internalPorRate *100
+				this.templateFreight.internalAbschlussRate = this.templateFreight.internalAbschlussRate *100
+				this.templateFreight.internalConsigneeCodRate = this.templateFreight.internalConsigneeCodRate *100
+				this.templateFreight.externalCashRate = this.templateFreight.externalCashRate *100
+				this.templateFreight.externalCodRate = this.templateFreight.externalCodRate *100
+				this.templateFreight.externalPorRate = this.templateFreight.externalPorRate *100
+				this.templateFreight.externalAbschlussRate = this.templateFreight.externalAbschlussRate *100
+				this.templateFreight.externalConsigneeCodRate = this.templateFreight.externalConsigneeCodRate *100
 			})
 		},
 		update() {
