@@ -140,7 +140,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="委托时间">
-							<el-date-picker style="width:100%" placeholder="请选择" value-format="timestamp" v-model="carrierbillInfo.commissionDate"></el-date-picker>
+							<el-date-picker style="width:100%" type="datetime" placeholder="请选择" value-format="timestamp" v-model="carrierbillInfo.commissionDate"></el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>
