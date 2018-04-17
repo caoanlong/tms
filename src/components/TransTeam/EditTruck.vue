@@ -887,6 +887,25 @@ export default {
 			if(!data.truckFrontPic) {
 				data.truckFrontPic = ''
 			}
+			if(!data.truckSidePic1) {
+				data.truckSidePic1 = ''
+			}
+			if(!data.truckSidePic2) {
+				data.truckSidePic2 = ''
+			}
+			if(!data.driverLicPic) {
+				data.driverLicPic = ''
+			}
+			if(!data.driverLicSidePic) {
+				data.driverLicSidePic = ''
+			}
+			if(!data.roadTransportPic) {
+				data.roadTransportPic = ''
+			}
+			if(!data.roadTransportSidePic) {
+				data.roadTransportSidePic = ''
+			}
+			
 			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {

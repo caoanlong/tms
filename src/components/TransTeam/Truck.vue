@@ -11,7 +11,7 @@
 						<el-input placeholder="请输入..." v-model="find.code"></el-input>
 					</el-form-item>
 					<el-form-item label="牵引质量" prop="tractiveTonnage">
-						<el-input placeholder="请输入..." v-model="find.tractiveTonnage"><template slot="append">千克</template></el-input>
+						<el-input placeholder="请输入..." v-model="find.tractiveTonnage"><template slot="append">吨</template></el-input>
 					</el-form-item>
 					<el-form-item label="车长">
 						<el-input placeholder="请输入..." v-model="find.length"><template slot="append">毫米</template></el-input>
