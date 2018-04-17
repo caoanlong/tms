@@ -221,7 +221,7 @@
 							</div>
 						</el-form-item>
 						<el-form-item label="付款费用">
-							<el-radio-group v-model="carrierbillInfo.paymentMethod">
+							<el-radio-group v-model="carrierbillInfo.paymentMethod" @change="handSelectPaymentMethod">
 								<el-radio label="TKM">按吨公里自动生成</el-radio>
 								<el-radio label="Manual">手动输入</el-radio>
 							</el-radio-group>
@@ -447,6 +447,37 @@ export default {
 			this.carrierbillInfo.consigneeArea = searchAreaByKey(data)
 		},
 		handSelectReceiptMethod(data) {
+			if (data == 'TKM') {
+				if (!this.carrierbillInfo.consigneeArea) {
+					Message.error('收货地区未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.consigneeDetailAddress) {
+					Message.error('收货详细地址未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.shipperArea) {
+					Message.error('发货地区未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.shipperDetailAddress) {
+					Message.error('发货详细地址未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
+				if (heavyCargos.length == 0) {
+					Message.error('货物不能全是轻货！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				this.getTransportPrice()
+			}
+		},
+		handSelectPaymentMethod(data) {
 			if (data == 'TKM') {
 				if (!this.carrierbillInfo.consigneeArea) {
 					Message.error('收货地区未填写！')
