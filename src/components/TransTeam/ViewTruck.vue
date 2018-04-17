@@ -55,14 +55,14 @@
 							<p>{{truck.plateNoColor}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6" v-if="truck.truckCategory == '牵引车'">
-						<el-form-item label="车牌号">
-							<p>{{truck.plateNo}}</p>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6" v-else>
+					<el-col :span="6" v-if="truck.trailerPlateNo">
 						<el-form-item label="挂车车牌">
 							<p>{{truck.trailerPlateNo}}</p>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6" v-else>	
+						<el-form-item label="车牌号">
+							<p>{{truck.plateNo}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
