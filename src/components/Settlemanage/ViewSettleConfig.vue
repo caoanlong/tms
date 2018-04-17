@@ -116,19 +116,19 @@
 					</el-col>
 					<el-col :span="24" style="display:flex">
 						<el-form-item label="现付" style="flex: 1">
-							<p>{{templateFreight.internalCashRate}}%</p>
+							<p>{{(templateFreight.internalCashRate)*100}}%</p>
 						</el-form-item>
 						<el-form-item label="到付" style="flex: 1">
-							<p>{{templateFreight.internalCodRate}}%</p>
+							<p>{{(templateFreight.internalCodRate)*100}}%</p>
 						</el-form-item>
 						<el-form-item label="回单付" style="flex: 1">
-							<p>{{templateFreight.internalPorRate}}%</p>
+							<p>{{(templateFreight.internalPorRate)*100}}%</p>
 						</el-form-item>
 						<el-form-item label="月结" style="flex: 1">
-							<p>{{templateFreight.internalAbschlussRate}}%</p>
+							<p>{{(templateFreight.internalAbschlussRate)*100}}%</p>
 						</el-form-item>
 						<el-form-item label="收方到货付" style="flex: 1">
-							<p>{{templateFreight.internalConsigneeCodRate}}%</p>
+							<p>{{(templateFreight.internalConsigneeCodRate)*100}}%</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="24">
@@ -136,19 +136,19 @@
 					</el-col>
 					<el-col :span="24" style="display: flex">
 						<el-form-item label="现付" style="flex: 1">
-							<p>{{templateFreight.externalCashRate}}%</p>
+							<p>{{(templateFreight.externalCashRate)*100}}%</p>
 						</el-form-item>
 						<el-form-item label="到付" style="flex: 1">
-							<p>{{templateFreight.externalCodRate}}%</p>
+							<p>{{(templateFreight.externalCodRate)*100}}%</p>
 						</el-form-item>
 						<el-form-item label="回单付" style="flex: 1">
-							<p>{{templateFreight.externalPorRate}}%</p>
+							<p>{{(templateFreight.externalPorRate)*100}}%</p>
 						</el-form-item>
 						<el-form-item label="月结" style="flex: 1">
-							<p>{{templateFreight.externalAbschlussRate}}%</p>
+							<p>{{(templateFreight.externalAbschlussRate)*100}}%</p>
 						</el-form-item>
 						<el-form-item label="收方到货付" style="flex: 1">
-							<p>{{templateFreight.externalConsigneeCodRate}}%</p>
+							<p>{{(templateFreight.externalConsigneeCodRate)*100}}%</p>
 						</el-form-item>
 					</el-col>
 				</el-row>		

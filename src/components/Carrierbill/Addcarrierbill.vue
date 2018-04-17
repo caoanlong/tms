@@ -11,10 +11,10 @@
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="托运人" prop="consignorName">
+						<el-form-item label="托运人" prop="consignorID">
 							<el-autocomplete style="width:100%"
 								value-key="companyName" 
-								v-model="carrierbillInfo.consignorName"
+								v-model="carrierbillInfo.consignorID"
 								:fetch-suggestions="getConsignors"
 								placeholder="请输入内容"
 								@select="handSelectConsignor">
@@ -215,9 +215,6 @@
 								<el-form-item label="收货方付" label-width="70px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
 									<el-input placeholder="收货方付" v-model="carrierbillInfo.consigneeAmount"></el-input>
 								</el-form-item>
-								<el-form-item style="width:180px;display:inline-block;margin:10px 10px 0 0" v-if="carrierbillInfo.receiptMethod=='TKM'">
-									<el-button type="primary" @click="getTransportPrice">重新生成</el-button>
-								</el-form-item>
 							</div>
 						</el-form-item>
 						<el-form-item label="付款费用">
@@ -265,6 +262,7 @@ export default {
 		return {
 			selectedArea: [],
 			selectedArea1: [],
+			consignor: {},
 			loading: false,
 			carrierbillInfo: {
 				carrierCargo:[
@@ -313,7 +311,7 @@ export default {
 				commissionDate: ''
 			},
 			rules: {
-				consignorName: [
+				consignorID: [
 					{required: true, message: '请输入托运人'}
 				],
 				carrierrName: [
@@ -408,8 +406,8 @@ export default {
 			})
 		},
 		handSelectConsignor(data) {
-			this.carrierbillInfo.consignorID = data.customerID
-			this.carrierbillInfo.consignorName = data.companyName
+			console.log(data)
+			this.consignor = data
 		},
 		handSelectShipper(data){
 			this.carrierbillInfo.shipperCompanyName = data.companyName
@@ -443,22 +441,18 @@ export default {
 			if (data == 'TKM') {
 				if (!this.carrierbillInfo.consigneeArea) {
 					Message.error('收货地区未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
 				if (!this.carrierbillInfo.consigneeDetailAddress) {
 					Message.error('收货详细地址未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
 				if (!this.carrierbillInfo.shipperArea) {
 					Message.error('发货地区未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
 				if (!this.carrierbillInfo.shipperDetailAddress) {
 					Message.error('发货详细地址未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
 				this.getTransportPrice()
@@ -479,12 +473,12 @@ export default {
 				consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
 				consigneeDate: this.carrierbillInfo.consigneeDate,
 				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
-				consigneeID: this.carrierbillInfo.consigneeID || '',
+				consigneeID: this.carrierbillInfo.consigneeID,
 				consigneeName: this.carrierbillInfo.consigneeName,
 				consigneePhone: this.carrierbillInfo.consigneePhone,
 
-				consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
-				consignorName: this.carrierbillInfo.consignorName, // 托运人名称
+				consignorID: this.consignor.customerID || '', // 托运人ID
+				consignorName: this.consignor.companyName || '', // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
 				paymentMethod: this.carrierbillInfo.paymentMethod,
@@ -497,7 +491,7 @@ export default {
 				shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
 				shipperDate: this.carrierbillInfo.shipperDate,
 				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
-				shipperID: this.carrierbillInfo.shipperID || '',
+				shipperID: this.carrierbillInfo.shipperID,
 				shipperName: this.carrierbillInfo.shipperName,
 				shipperNo: this.carrierbillInfo.shipperNo,
 				shipperPhone: this.carrierbillInfo.shipperPhone,
@@ -591,28 +585,25 @@ export default {
 				console.log(res.data.data)
 				if (res.data.code == 200) {
 					let result = res.data.data
-					let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
-					let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
+					let cargoWeights = this.carrierbillInfo.carrierCargo.map(item => Number(item.cargoWeight))
 					let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
 
-					let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
-					this.carrierbillInfo.cashAmount = temp * result.externalCashRate
-					this.carrierbillInfo.codAmount = temp * result.externalCodRate
-					this.carrierbillInfo.porAmount = temp * result.externalPorRate
-					this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
-					this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
-				} else if (res.data.code == 2001) {
-					this.$msgbox({
-						message: '请先配置运费模板！',
-						title: '未配置运费模板',
-						confirmButtonText: '去配置',
-						showCancelButton: true,
-						callback: (action) => {
-							if (action == 'confirm') {
-								this.$router.push({name: 'addsettleconfig'})
-							}
-						}
-					})
+					//total = externalUnitPrice * externalMileage * 货物重量（单位：吨）
+					//"现付" v-model="carrierbillInfo.cashAmount"
+					//"到付" v-model="carrierbillInfo.codAmount"
+					//"回单结" v-model="carrierbillInfo.porAmount"
+					//"月结" v-model="carrierbillInfo.monthlyAmount"
+					//"收货方付" v-model="carrierbillInfo.consigneeAmount"
+
+					//externalAbschlussRate	对外月结比率	number	@mock=2000
+					//externalCashRate	对外现付比率	number	@mock=0.6
+					//externalCodRate	对外到付比率	number	@mock=0.9
+					//externalConsigneeCodRate	对外收货方到付比率	number	@mock=30000
+					//externalMileage	对外运距	number	@mock=2000
+					//externalPorRate	对外回单比率	number	@mock=0.3
+					//externalPrice	对外运价	number	@mock=30000
+					//externalUnitPrice	对外TKM
+					this.carrierbillInfo.cashAmount = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
 				}
 			})
 		},

@@ -111,6 +111,8 @@
 					</div>
 				</div>
 			</el-col>
+		</el-row>
+		<el-row :gutter="20">
 			<el-col :span="12">
 				<div class="wf-card dashboardItem">
 					<div class="header clearfix">
@@ -392,6 +394,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .wf-card
+	margin-bottom 20px
 	.header
 		.more
 			float right
@@ -399,8 +402,4 @@ export default {
 			font-size 12px
 			line-height 20px
 			margin-top 15px
-.dashboardItem
-	margin-bottom 20px
-
-
 </style>
