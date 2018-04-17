@@ -12,7 +12,7 @@
 						<p class="driverName">{{truck.realName}}</p>
 						<p class="vehicleNo">{{truck.plateNo}}</p>
 						<p class="trailerNo">{{truck.trailerPlateNo}}</p>
-						<p class="vehicleType">{{truck.length ? truck.length + '米' : ''}}{{truck.truckType}}{{truck.truckCategory}}</p>
+						<p class="vehicleType">{{truck.length ? truck.length/1000 + '米' : ''}}{{truck.truckType}}</p>
 					</div>
 				</el-col>
 				<el-col :span="18">
@@ -142,6 +142,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import { isFloat, isInt } from '../../../common/validators'
 	export default {
 		props: {
 			truck: {
@@ -191,7 +192,7 @@
 					console.log(newVal[2])
 					this.totalWeight = newVal[0]
 					this.totalVol = newVal[1]
-					this.totalNum = newVal[2]
+					this.totalNum = Number(newVal[2]).toFixed(0)
 				},
 				deep: true
 			}
@@ -226,20 +227,34 @@
 				this.$emit('prevStep', 1)
 			},
 			nextStep() {
-				if (!this.payMethods.driverCashAmount 
-					&& !this.payMethods.driverCodAmount 
-					&& !this.payMethods.driverPorAmount 
-					&& !this.payMethods.driverMonthlyAmont 
-					&& !this.payMethods.driverCosigneeAmount) {
-					Message.error('司机金额必填一项！')
+				if (!isFloat(this.totalWeight)) {
+					Message.error('请输入正确的配载重量！')
 					return
 				}
-				if (!this.payMethods.superCargoCashAmount 
-					&& !this.payMethods.superCargoCodAmount 
-					&& !this.payMethods.superCargoCorAmount 
-					&& !this.payMethods.superCargoMonthlyAmount 
-					&& !this.payMethods.superCosigneeAmount) {
-					Message.error('随车人员金额必填一项！')
+				if (!isFloat(this.totalVol)) {
+					Message.error('请输入正确的配载体积！')
+					return
+				}
+				if (!isInt(this.totalNum)) {
+					Message.error('请输入正确的配载数量！')
+					return
+				}
+				if (!isFloat(this.payMethods.driverCashAmount) 
+					&& !isFloat(this.payMethods.driverCodAmount)
+					&& !isFloat(this.payMethods.driverPorAmount)
+					&& !isFloat(this.payMethods.driverMonthlyAmont)
+					&& !isFloat(this.payMethods.driverCosigneeAmount)
+					) {
+					Message.error('司机各项金额必须正确的填写一项！')
+					return
+				}
+				if (!isFloat(this.payMethods.superCargoCashAmount) 
+					&& !isFloat(this.payMethods.superCargoCodAmount)
+					&& !isFloat(this.payMethods.superCargoCorAmount)
+					&& !isFloat(this.payMethods.superCargoMonthlyAmount)
+					&& !isFloat(this.payMethods.superCosigneeAmount)
+					) {
+					Message.error('随车人员各项金额必须正确的填写一项！')
 					return
 				}
 				this.$emit('nextStep', 3, this.payMethods, this.loadStatus)

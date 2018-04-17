@@ -74,7 +74,7 @@
 			<el-button size="mini" @click="selectAll(true)" v-if="isSel">全部选中</el-button>
 			<el-button size="mini" @click="selectAll(false)" v-if="!isSel">全部取消</el-button>
 			&nbsp;已配载{{selectedCargoList.length}}个货物
-			<div class="fr total-count"><b>合计：</b><span>{{totalWeight}}</span><span>{{totalVolume}}</span><span>{{totalNum}}</span></div>
+			<div class="fr total-count"><b>合计：</b><span>{{totalWeight}}吨</span><span>{{totalVolume}}方</span><span>{{totalNum}}件</span></div>
 		</div>
 		<div class="step-footer">
 			<el-button type="primary" @click="nextStep">下一步</el-button>
@@ -182,6 +182,7 @@
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
 			selectionChange(data, orderID) {
+				console.log(data, orderID)
 				let list = this.selectedCargoList.filter(item => item.carrierOrderID != orderID)
 				list.push(...data)
 				this.selectedCargoList = list

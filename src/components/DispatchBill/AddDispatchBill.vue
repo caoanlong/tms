@@ -21,7 +21,7 @@
 					</div>
 				</el-row>
 				<CarrierInfo 
-					v-for="item in selectedCarrierBills" 
+					v-for="item in selectedCarrierBillsFilter" 
 					:key="item.carrierOrderID" 
 					:carrierBill="item" 
 					:isOnly="selectedCarrierBills.length == 1"/>
@@ -145,6 +145,7 @@ export default {
 				}
 			],
 			selectedCarrierBills: [],  // 选择的承运单
+			selectedCarrierBillsFilter: [],  // 选择的承运单过滤
 			selectedCarrierBillIDs: [],  // 选择的承运单ID
 			selectedCarrierCargos: [],  // 选择的货物
 			selectedCarrierCargos2: [],  // 选择的货物
@@ -178,14 +179,16 @@ export default {
 					}
 				})
 				this.totalList = data1
-				console.log(data)
 			} else if (x == 2) {
 				this.selectedTruck = data
 				this.selectedPerson = data1
-				console.log(data)
 			} else if (x == 3) {
 				this.payInfo = data
 				this.loadStatus = data1
+				this.selectedCarrierBillsFilter = this.selectedCarrierBills.filter(item => {
+					let list = this.selectedCarrierCargos2.map(item2 => item2.carrierOrderID)
+					return list.includes(item.carrierOrderID)
+				})
 			}
 			this.stepActive = x
 		},

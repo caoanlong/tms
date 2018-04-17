@@ -238,7 +238,15 @@ export default {
 				driverDetoursMileage: payInfo.driverDetoursMileage, //	司机绕路里	
 				driverMonthlyAmont: payInfo.driverMonthlyAmont, //	司机月结金	
 				driverOtherAmount: payInfo.driverOtherAmount, //	司机其他费	
-				driverPorAmount: payInfo.driverPorAmount //	司机回单金额
+				driverPorAmount: payInfo.driverPorAmount, //	司机回单金额
+				superCargoCashAmount: payInfo.superCargoCashAmount, //随车人员现付金额,
+				superCargoCodAmount: payInfo.superCargoCodAmount, //随车人员到付金额,
+				superCargoCorAmount: payInfo.superCargoCorAmount, //随车人员回单金额,
+				superCargoMonthlyAmount: payInfo.superCargoMonthlyAmount, //随车人员月结金额,
+				superCosigneeAmount: payInfo.superCosigneeAmount, //随车人员收货方到付金额,
+				superCargoDetoursMileage: payInfo.superCargoDetoursMileage, //随车人员绕路里程,
+				superCargoDetoursAmount: payInfo.superCargoDetoursAmount, //随车人员绕路费,
+				superCargoOtherAmount: payInfo.superCargoOtherAmount //随车人员其他费用
 			}
 			request({
 				url: '/biz/dispatchOrder/confirm',

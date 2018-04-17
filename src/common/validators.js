@@ -9,23 +9,22 @@ export function isPoneAvailable(str) {
 
 export function isVerCodeAvailable(str) {  
 	let myreg=/^-?\\d+$/
-	if (!myreg.test(str)) {  
+	if (!myreg.test(str)) {
 		return false
 	} else {  
 		return true
 	}  
 }
-// 验证浮点数（正浮点数 + 0）
+// 验证正浮点数
 export const isFloat = (value) => {
-	let r = /^\d+(\.\d+)?$/
-	if (r.test(value) || value == 0) {
-		return true
-	} else {
-		return false
-	}
+	let r = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
+	return r.test(value)
 }
-
-
+// 验证正整数
+export const isInt = (value) => {
+	let r = /^\+?[1-9][0-9]*$/
+	return r.test(value)
+}
 
 export const checkMobile = (rule, value, callback) => {
 	if (!value) {
