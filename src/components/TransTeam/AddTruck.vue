@@ -119,7 +119,7 @@
 					<el-col :span="8">
 						<el-form-item label="载重" prop="loads">
 							<el-input v-model="truck.loads">
-								<template slot="append">千克</template>
+								<template slot="append">吨</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
@@ -133,7 +133,7 @@
 					<el-col :span="8">
 						<el-form-item label="牵引质量" prop="tractiveTonnage">
 							<el-input v-model="truck.tractiveTonnage">
-								<template slot="append">千克</template>
+								<template slot="append">吨</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
@@ -142,7 +142,7 @@
 					<el-col :span="8">
 						<el-form-item label="总质量" prop="totalWeight">
 							<el-input v-model="truck.totalWeight">
-								<template slot="append">千克</template>
+								<template slot="append">吨</template>
 							</el-input>
 						</el-form-item>
 					</el-col>
