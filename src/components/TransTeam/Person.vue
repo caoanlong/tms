@@ -209,8 +209,8 @@
 					"Stevedore": "装卸管理人员",
 					"Other": "其他人员"
 				},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xls&&Authorization=' +localStorage.getItem("token"),
-				templateTit:'employee.xls'
+				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xlsx&&Authorization=' +localStorage.getItem("token"),
+				templateTit:'employee.xlsx'
 			}
 		},
 		created() {

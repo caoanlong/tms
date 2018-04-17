@@ -884,6 +884,9 @@ export default {
 				Message.error('二级维护日期不能早于下次二级维护日期！')
 				return
 			}
+			if(!data.truckFrontPic) {
+				data.truckFrontPic = ''
+			}
 			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {

@@ -11,7 +11,7 @@
 						<el-input placeholder="请输入..." v-model="findCode"></el-input>
 					</el-form-item>
 					<el-form-item label="牵引质量">
-						<el-input placeholder="请输入..." v-model="findTractiveTonnage"><template slot="append">千克</template></el-input>
+						<el-input placeholder="请输入..." v-model="findTractiveTonnage"><template slot="append">吨</template></el-input>
 					</el-form-item>
 					<el-form-item label="车长">
 						<el-input placeholder="请输入..." v-model="findLength"><template slot="append">毫米</template></el-input>
@@ -210,8 +210,8 @@
 				selectedList: [],
 				importFileUrl: baseURL + '/truck/upload',
 				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xls&&Authorization=' +localStorage.getItem("token"),
-				templateTit:'vehicleInfo.xls'
+				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' +localStorage.getItem("token"),
+				templateTit:'vehicleInfo.xlsx'
 			}
 		},
 		created() {

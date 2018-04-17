@@ -161,8 +161,8 @@
 				tableData: [],
 				importFileUrl: baseURL + '/transportPrice/upload',
 				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=freight.xls&&Authorization=' +localStorage.getItem("token"),
-				templateTit:'freight.xls'
+				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=freight.xlsx&&Authorization=' +localStorage.getItem("token"),
+				templateTit:'freight.xlsx'
 			}
 		},
 		created() {
