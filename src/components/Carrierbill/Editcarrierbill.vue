@@ -516,7 +516,7 @@ export default {
 				consigneePhone: this.carrierbillInfo.consigneePhone,
 
 				consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
-				consignorName: this.carrierbillInfo.consignorName, // 托运人名称
+				consignorName: this.carrierbillInfo.consignorName || '', // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
 				paymentMethod: this.carrierbillInfo.paymentMethod,

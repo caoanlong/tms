@@ -11,10 +11,10 @@
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="托运人" prop="consignorID">
+						<el-form-item label="托运人" prop="consignorName">
 							<el-autocomplete style="width:100%"
 								value-key="companyName" 
-								v-model="carrierbillInfo.consignorID"
+								v-model="carrierbillInfo.consignorName"
 								:fetch-suggestions="getConsignors"
 								placeholder="请输入内容"
 								@select="handSelectConsignor">
@@ -314,7 +314,7 @@ export default {
 				commissionDate: ''
 			},
 			rules: {
-				consignorID: [
+				consignorName: [
 					{required: true, message: '请输入托运人'}
 				],
 				carrierrName: [
@@ -409,8 +409,8 @@ export default {
 			})
 		},
 		handSelectConsignor(data) {
-			console.log(data)
-			this.consignor = data
+			this.carrierbillInfo.consignorID = data.customerID
+			this.carrierbillInfo.consignorName = data.companyName
 		},
 		handSelectShipper(data){
 			this.carrierbillInfo.shipperCompanyName = data.companyName
@@ -462,6 +462,12 @@ export default {
 					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
+				let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
+				if (heavyCargos.length == 0) {
+					Message.error('货物不能全是轻货！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
 				this.getTransportPrice()
 			}
 		},
@@ -484,8 +490,8 @@ export default {
 				consigneeName: this.carrierbillInfo.consigneeName,
 				consigneePhone: this.carrierbillInfo.consigneePhone,
 
-				consignorID: this.consignor.customerID || '', // 托运人ID
-				consignorName: this.consignor.companyName || '', // 托运人名称
+				consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
+				consignorName: this.carrierbillInfo.consignorName || '', // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
 				paymentMethod: this.carrierbillInfo.paymentMethod,

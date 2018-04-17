@@ -243,7 +243,7 @@
 				if (response.code != 200) {
 					Message.error(response.msg)
 				} else {
-					Message.success(msg)
+					Message.success(response.msg)
 					this.getList()
 				}
 			},

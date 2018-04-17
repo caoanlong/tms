@@ -109,6 +109,14 @@ export const checkFloat2 = (rule, value, callback) => {
 	}
 }
 
+// 限制长度20
+export const limitLength20 = (rule, value, callback) => {
+	if (value.length > 20) {
+		callback(new Error('长度不能超过20'))
+	} else {
+		callback()
+	}
+}
 
 // 限制长度50
 export const limitLength50 = (rule, value, callback) => {
