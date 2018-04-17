@@ -48,6 +48,7 @@
 					:show-file-list="false">
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
+				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
 			<div class="table">
@@ -122,7 +123,9 @@
 				tableData: [],
 				selectedList: [],
 				importFileUrl: baseURL + '/customer/upload',
-				uploadHeaders: {'Authorization': localStorage.getItem('token')}
+				uploadHeaders: {'Authorization': localStorage.getItem('token')},
+				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=shipperAndConsignor.xls&&Authorization=' +localStorage.getItem("token"),
+				templateTit:'shipperAndConsignor.xls'
 			}
 		},
 		created() {
