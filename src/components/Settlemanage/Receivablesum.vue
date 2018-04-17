@@ -43,7 +43,7 @@
 					<el-table-column label="总趟次" prop="countDispatchOrder" width="80" align="center"></el-table-column>
 					<el-table-column label="总货量" align="center">
 						<template slot-scope="scope">
-							{{scope.row.cargoWeight?scope.row.cargoWeight+'千克/':''}}{{scope.row.cargoVolume?scope.row.cargoVolume+'方/':''}}{{scope.row.cargoNum?scope.row.cargoNum+'件':''}}
+							{{scope.row.cargoWeight?scope.row.cargoWeight+'吨/':''}}{{scope.row.cargoVolume?scope.row.cargoVolume+'方/':''}}{{scope.row.cargoNum?scope.row.cargoNum+'件':''}}
 						</template>
 					</el-table-column>
 					<el-table-column label="总运费" prop="money" align="center" width="120"></el-table-column>

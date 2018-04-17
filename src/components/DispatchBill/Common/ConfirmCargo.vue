@@ -8,7 +8,7 @@
 					<th>货物规格/名称</th>
 					<th width="80">配载量</th>
 					<th>运载量</th>
-					<th width="90">签收量/千克</th>
+					<th width="90">签收量/吨</th>
 					<th width="90">签收量/方</th>
 					<th width="90">签收量/件</th>
 				</tr>
@@ -16,9 +16,9 @@
 					<td>{{index+1}}</td>
 					<td>{{item.carrierOrderNo}}</td>
 					<td>{{item.cargoType}}/{{item.cargoName}}</td>
-					<td>{{item.cargoWeight + '千克/'}}{{item.cargoVolume + '方/'}}{{item.cargoNum + '件'}}</td>
+					<td>{{item.cargoWeight + '吨/'}}{{item.cargoVolume + '方/'}}{{item.cargoNum + '件'}}</td>
 					<td>
-						{{(item.loadWeight ? item.loadWeight : 0) + '千克/'}}
+						{{(item.loadWeight ? item.loadWeight : 0) + '吨/'}}
 						{{(item.loadVolume ? item.loadVolume : 0) + '方/'}}
 						{{(item.loadNum ? item.loadNum : 0) + '件'}}
 					</td>
