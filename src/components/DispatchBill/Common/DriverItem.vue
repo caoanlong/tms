@@ -2,7 +2,7 @@
 	<div class="listItem" >
 		<div class="driverNum inlineBlock" ><span>{{truck.code}}</span></div>
 		<div class="pic inlineBlock" >
-			<img :src="imgUrl + truck.truckFrontPic">
+			<img :src="truck.truckFrontPic&&truck.truckFrontPic!='undefined'?(imgUrl + truck.truckFrontPic):defaultImg" />
 			<p class="status" v-if="truck.loadStatus == 'Empty'">空载</p>
 			<p class="status" v-else-if="truck.loadStatus == 'NotFull'">未满载</p>
 			<p class="status" v-else-if="truck.loadStatus == 'Full'">满载</p>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import {defaultImg} from '../../../assets/icons/icons'
 export default {
 	props: {
 		isSelected: {
@@ -64,9 +65,9 @@ export default {
 			let values = this.truck.cargos.map(item => item.cargoVolume ? Number(item.cargoVolume) : 0)
 			return values.reduce((prev, next) => prev + next, 0)
 		},
+		defaultImg: () => defaultImg
 	},
 	methods:{
-
 	}
 }
 </script>

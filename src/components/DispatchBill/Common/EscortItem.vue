@@ -1,7 +1,7 @@
 <template>
 	<div class="EscortItem">
 		<div class="pic inlineBlock">
-			<img :src="imgUrl + person.headPic" >
+			<img :src="person.headPic&&person.headPic!='undefined'?(imgUrl + person.headPic):defaultImg">
 		</div>
 		<div class="status" v-if="person.workStatus == 'Free'">空闲中</div>
 		<div class="status" v-else-if="person.workStatus == 'Working'">工作中</div>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import {defaultImg} from '../../../assets/icons/icons'
 export default {
 	props: {
 		isSelected: {
@@ -34,8 +35,10 @@ export default {
 			
 		}
 	},
+	computed:{
+		defaultImg: () => defaultImg
+	},
 	methods:{
-
 	}
 }
 </script>
