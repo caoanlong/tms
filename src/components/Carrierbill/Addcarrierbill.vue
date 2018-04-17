@@ -477,8 +477,8 @@ export default {
 				consigneeName: this.carrierbillInfo.consigneeName,
 				consigneePhone: this.carrierbillInfo.consigneePhone,
 
-				consignorID: this.consignor.customerID, // 托运人ID
-				consignorName: this.consignor.companyName, // 托运人名称
+				consignorID: this.consignor.customerID || '', // 托运人ID
+				consignorName: this.consignor.companyName || '', // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
 				paymentMethod: this.carrierbillInfo.paymentMethod,
