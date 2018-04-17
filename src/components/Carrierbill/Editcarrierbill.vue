@@ -515,7 +515,7 @@ export default {
 				invoice: this.carrierbillInfo.invoice,
 
 				transportType: this.carrierbillInfo.transportType,
-				commissionDate: this.carrierbillInfo.commissionDate,
+				commissionDate: this.carrierbillInfo.commissionDate || '',
 
 				status: this.carrierbillInfo.status,
 			}
