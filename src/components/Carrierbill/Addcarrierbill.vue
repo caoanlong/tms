@@ -258,6 +258,7 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
+import { searchAreaByKey } from '../../common/utils'
 import { checkFloat2, checkMobile } from '../../common/validators'
 
 export default {
@@ -436,9 +437,11 @@ export default {
 		},
 		handleSelectedArea(data) {
 			this.carrierbillInfo.shipperAreaID = data
+			this.carrierbillInfo.shipperArea = searchAreaByKey(data)
 		},
 		handleSelectedArea1(data) {
 			this.carrierbillInfo.consigneeAreaID = data
+			this.carrierbillInfo.consigneeArea = searchAreaByKey(data)
 		},
 		handSelectReceiptMethod(data) {
 			if (data == 'TKM') {

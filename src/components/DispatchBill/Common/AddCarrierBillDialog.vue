@@ -17,16 +17,6 @@
 							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="运单状态" class="customerSelect">
-						<el-select v-model="findStatus" placeholder="运单状态" style="width:140px">
-							<el-option value="" label="全部订单">全部订单</el-option>
-							<el-option value="Committed" label="待执行">待执行</el-option>
-							<el-option value="Running" label="执行中">执行中</el-option>
-							<el-option value="Signed" label="到达签收">到达签收</el-option>
-							<el-option value="Closed" label="关闭">关闭</el-option>
-							<el-option value="Canceled" label="作废">作废</el-option>
-						</el-select>
-					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList">搜索</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
@@ -34,7 +24,7 @@
 				</el-form>
 			</div>
 		<el-table 
-			:data="tableData.filter(item => item.status == 'Committed')" 
+			:data="tableData" 
 			@selection-change="selectionChange"
 			:row-class-name="tableRowClassName"
 			border style="width: 100%" size="mini">
@@ -124,8 +114,7 @@
 				findsearchInfo:'',
 				findRangeDate: [],
 				findshipperBeginDate: '',
-				findshipperEndDate: '',
-				findStatus:''
+				findshipperEndDate: ''
 			}
 		},
 		methods: {
@@ -142,7 +131,6 @@
 				this.findshipperBeginDate='',
 				this.findshipperEndDate='',
 				this.findRangeDate = [],
-				this.findStatus = '',
 				this.pageIndex=1,
 				this.getList()
 			},
@@ -161,7 +149,7 @@
 					shipperBeginDate: this.findshipperBeginDate,
 					shipperEndDate: this.findshipperEndDate,
 					searchInfo: this.findsearchInfo,
-					status: this.findStatus
+					status: 'Committed'
 				}
 				request({
 					url: '/biz/carrierOrder/list',

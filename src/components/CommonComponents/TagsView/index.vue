@@ -79,16 +79,29 @@ export default {
 			})
 		},
 		closeSelectedTag(view) {
-			this.$store.dispatch('delVisitedViews', view).then((views) => {
-				if (this.isActive(view)) {
-					const latestView = views.slice(-1)[0]
-					if (latestView) {
-						this.$router.push({name: latestView.name, query: latestView.query})
-					} else {
-						this.$router.push('/')
+			// 如果关闭编辑和添加页面
+			if ((view.name.indexOf('add') > -1) || (view.name.indexOf('edit') > -1)) {
+				this.$msgbox({
+					message: '数据将清空，是否确定离开该页面？',
+					title: '温馨提示',
+					confirmButtonText: '确定',
+					showCancelButton: true,
+					callback: (action) => {
+						if (action == 'confirm') {
+							this.$store.dispatch('delVisitedViews', view).then((views) => {
+								if (this.isActive(view)) {
+									const latestView = views.slice(-1)[0]
+									if (latestView) {
+										this.$router.push({name: latestView.name, query: latestView.query})
+									} else {
+										this.$router.push('/')
+									}
+								}
+							})
+						}
 					}
-				}
-			})
+				})
+			}
 		},
 		closeOthersTags() {
 			this.$router.push(this.selectedTag.path)

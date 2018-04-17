@@ -81,7 +81,6 @@
 								+ Number(payInfo.driverPorAmount)
 								+ Number(payInfo.driverMonthlyAmont)
 								+ Number(payInfo.driverCosigneeAmount)
-								+ Number(payInfo.driverDetoursMileage)
 								+ Number(payInfo.driverDetoursAmount)
 								+ Number(payInfo.driverOtherAmount)
 								+ Number(payInfo.superCargoCashAmount)
@@ -89,7 +88,6 @@
 								+ Number(payInfo.superCargoCorAmount)
 								+ Number(payInfo.superCargoMonthlyAmount)
 								+ Number(payInfo.superCosigneeAmount)
-								+ Number(payInfo.superCargoDetoursMileage)
 								+ Number(payInfo.superCargoDetoursAmount)
 								+ Number(payInfo.superCargoOtherAmount)
 							}}
