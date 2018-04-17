@@ -198,7 +198,7 @@
 								<el-radio label="TKM">按吨公里自动生成</el-radio>
 								<el-radio label="Manual">手动输入</el-radio>
 							</el-radio-group>
-							<div v-show="carrierbillInfo.receiptMethod=='TKM'" class="tips">从“这个单的发货地”到卸货地对外运距为“50公里”总价为90909009？</div>
+							<div v-show="carrierbillInfo.receiptMethod=='TKM'" class="tips">从“这个单的发货地”到卸货地对外运距为“{{exmile}}公里”总价为{{totalPrice}}？</div>
 							<div class="form-input">
 								<el-form-item label="现付" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
 									<el-input placeholder="现付" v-model="carrierbillInfo.cashAmount"></el-input>
@@ -225,7 +225,7 @@
 								<el-radio label="TKM">按吨公里自动生成</el-radio>
 								<el-radio label="Manual">手动输入</el-radio>
 							</el-radio-group>
-							<div v-show="carrierbillInfo.paymentMethod=='TKM'" class="tips">从“这单的发货地”到卸货地对内运距为“50公里”?</div>
+							<div v-show="carrierbillInfo.paymentMethod=='TKM'" class="tips">从“这单的发货地”到卸货地对内运距为“{{innermile}}公里”?</div>
 						</el-form-item>
 						<el-form-item label="发票">
 							<el-radio-group v-model="carrierbillInfo.invoice">
@@ -314,6 +314,9 @@ export default {
 				transportType: '',
 				commissionDate: ''
 			},
+			totalPrice: 0,
+			exmile: 0,
+			innermile: 0,
 			rules: {
 				consignorName: [
 					{required: true, message: '请输入托运人'}
@@ -609,6 +612,9 @@ export default {
 					this.carrierbillInfo.porAmount = temp * result.externalPorRate
 					this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
 					this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
+					this.exmile = result.externalMileage
+					this.innermile = result.mileage
+					this.totalPrice = temp
 				} else if (res.data.code == 2001) {
 					this.$msgbox({
 						message: '请先配置运费模板！',
