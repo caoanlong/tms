@@ -488,11 +488,11 @@ export default {
 				consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
 				consigneeDate: this.carrierbillInfo.consigneeDate,
 				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
-				// consigneeID: this.carrierbillInfo.consigneeID,
+				consigneeID: this.carrierbillInfo.consigneeID || '',
 				consigneeName: this.carrierbillInfo.consigneeName,
-				// consigneePhone: this.carrierbillInfo.consigneePhone,
+				consigneePhone: this.carrierbillInfo.consigneePhone,
 
-				consignorID: this.carrierbillInfo.consignorID, // 托运人ID
+				consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
 				consignorName: this.carrierbillInfo.consignorName, // 托运人名称
 
 				monthlyAmount: this.carrierbillInfo.monthlyAmount,
@@ -506,16 +506,16 @@ export default {
 				shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
 				shipperDate: this.carrierbillInfo.shipperDate,
 				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
-				// shipperID: this.carrierbillInfo.shipperID,
-				shipperName: this.carrierbillInfo.shipperName,
+				shipperID: this.carrierbillInfo.shipperID || '',  // 收货人ID
+				shipperName: this.carrierbillInfo.shipperName,    // 收货人名
 				shipperNo: this.carrierbillInfo.shipperNo,
-				// shipperPhone: this.carrierbillInfo.shipperPhone,
+				shipperPhone: this.carrierbillInfo.shipperPhone,
 
 				porRequire: this.carrierbillInfo.porRequire.join(','),
 				invoice: this.carrierbillInfo.invoice,
 
 				transportType: this.carrierbillInfo.transportType,
-				commissionDate: this.carrierbillInfo.commissionDate,
+				commissionDate: this.carrierbillInfo.commissionDate || '',
 
 				status: this.carrierbillInfo.status,
 			}
