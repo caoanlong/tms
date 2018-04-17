@@ -3,28 +3,28 @@
 		<div class="wf-card">
 			<div class="header clearfix">车辆</div>
 			<div class="search">
-				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="车牌号">
-						<el-input placeholder="请输入..." v-model="findPlateNo"></el-input>
+				<el-form :inline="true"  class="demo-form-inline"  size="small" :model="find" :rules="rules" ref="ruleForm">
+					<el-form-item label="车牌号" prop="plateNo">
+						<el-input placeholder="请输入..." v-model="find.plateNo"></el-input>
 					</el-form-item>
-					<el-form-item label="自编号">
-						<el-input placeholder="请输入..." v-model="findCode"></el-input>
+					<el-form-item label="自编号" prop="code">
+						<el-input placeholder="请输入..." v-model="find.code"></el-input>
 					</el-form-item>
-					<el-form-item label="牵引质量">
-						<el-input placeholder="请输入..." v-model="findTractiveTonnage"><template slot="append">吨</template></el-input>
+					<el-form-item label="牵引质量" prop="tractiveTonnage">
+						<el-input placeholder="请输入..." v-model="find.tractiveTonnage"><template slot="append">千克</template></el-input>
 					</el-form-item>
 					<el-form-item label="车长">
-						<el-input placeholder="请输入..." v-model="findLength"><template slot="append">毫米</template></el-input>
+						<el-input placeholder="请输入..." v-model="find.length"><template slot="append">毫米</template></el-input>
 					</el-form-item>
 					<el-form-item label="车宽">
-						<el-input placeholder="请输入..." v-model="findWidth"><template slot="append">毫米</template></el-input>
+						<el-input placeholder="请输入..." v-model="find.width"><template slot="append">毫米</template></el-input>
 					</el-form-item>
 					<el-form-item label="车高">
-						<el-input placeholder="请输入..." v-model="findHigh"><template slot="append">毫米</template></el-input>
+						<el-input placeholder="请输入..." v-model="find.high"><template slot="append">毫米</template></el-input>
 					</el-form-item>
 					<el-form-item label="添加时间">
 						<el-date-picker
-							v-model="findDate"
+							v-model="find.date"
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
@@ -34,7 +34,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -191,16 +191,19 @@
 <script type="text/javascript">
 	import { Message } from 'element-ui'
 	import request, { baseURL } from '../../common/request'
+	import { limitLength20, checkInt2 } from '../../common/validators'
 	export default {
 		data() {
 			return {
-				findHigh: '',
-				findLength: '',
-				findPlateNo: '',
-				findCode: '',
-				findWidth: '',
-				findTractiveTonnage: '',
-				findDate: [],
+				find: {
+					high: '',
+					length: '',
+					plateNo: '',
+					code: '',
+					width: '',
+					tractiveTonnage: '',
+					date: [],
+				},
 				startDate: '',
 				endDate: '',
 				pageIndex: 1,
@@ -210,8 +213,20 @@
 				selectedList: [],
 				importFileUrl: baseURL + '/truck/upload',
 				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' +localStorage.getItem("token"),
-				templateTit:'vehicleInfo.xlsx'
+				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xls&&Authorization=' +localStorage.getItem("token"),
+				templateTit: 'vehicleInfo.xls',
+				rules: {
+					plateNo: [
+						{ validator: limitLength20 }
+					],
+					code: [
+						{ validator: limitLength20 }
+					],
+					tractiveTonnage: [
+						{ validator: checkInt2 },
+						{ validator: limitLength20 }
+					]
+				}
 			}
 		},
 		created() {
@@ -219,13 +234,13 @@
 		},
 		methods: {
 			reset() {
-				this.findHigh = ''
-				this.findLength = ''
-				this.findPlateNo = ''
-				this.findCode = ''
-				this.findWidth = ''
-				this.findTractiveTonnage = ''
-				this.findDate = []
+				this.find.high = ''
+				this.find.length = ''
+				this.find.plateNo = ''
+				this.find.code = ''
+				this.find.width = ''
+				this.find.tractiveTonnage = ''
+				this.find.date = []
 				this.startDate = ''
 				this.endDate = ''
 				this.getList()
@@ -241,12 +256,19 @@
 				this.startDate = date[0]
 				this.endDate = date[1]
 			},
+			search() {
+				this.$refs['ruleForm'].validate(valid => {
+					if (valid) {
+						this.getList()
+					}
+				})
+			},
 			// 导入
 			uploadSuccess (response) {
 				if (response.code != 200) {
 					Message.error(response.msg)
 				} else {
-					Message.success(msg)
+					Message.success(response.msg)
 					this.getList()
 				}
 			},
@@ -271,12 +293,12 @@
 				let params = {
 					current: this.pageIndex,
 					size: this.pageSize,
-					high: this.findHigh,
-					length: this.findLength,
-					plateNo: this.findPlateNo,
-					code: this.findCode,
-					width: this.findWidth,
-					tractiveTonnage: this.findTractiveTonnage,
+					high: this.find.high,
+					length: this.find.length,
+					plateNo: this.find.plateNo,
+					code: this.find.code,
+					width: this.find.width,
+					tractiveTonnage: this.find.tractiveTonnage,
 					createTimeBegin: this.startDate,
 					createTimeEnd: this.endDate
 				}
