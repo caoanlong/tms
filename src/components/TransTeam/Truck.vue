@@ -191,7 +191,7 @@
 <script type="text/javascript">
 	import { Message } from 'element-ui'
 	import request, { baseURL } from '../../common/request'
-	import { limitLength20 } from '../../common/validators'
+	import { limitLength20, checkInt2 } from '../../common/validators'
 	export default {
 		data() {
 			return {
@@ -217,6 +217,13 @@
 				templateTit: 'vehicleInfo.xls',
 				rules: {
 					plateNo: [
+						{ validator: limitLength20 }
+					],
+					code: [
+						{ validator: limitLength20 }
+					],
+					tractiveTonnage: [
+						{ validator: checkInt2 },
 						{ validator: limitLength20 }
 					]
 				}
