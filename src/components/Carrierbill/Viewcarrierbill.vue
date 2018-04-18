@@ -124,7 +124,7 @@
 							<span v-else-if="item=='ShipperPor'">发货单文件</span>
 							<span v-else>不需要回单</span>
 						</span>
-						<span class="labels fr">承运单应收总价：{{isShow ? carrierOrderTotal:'**'}}元</span>
+						<span class="labels fr">承运单应收总价：{{isShow ? carrierOrderTotal + parseInt(carrierOrder.otherAmount) : '**'}}元</span>
 					</td>
 				</tr>
 			</table>
@@ -279,7 +279,7 @@ export default {
 	},
 	computed:{
 		carrierOrderTotal:function(){
-			return parseInt(this.carrierOrder.cashAmount) + parseInt(this.carrierOrder.codAmount) + parseInt(this.carrierOrder.porAmount) + parseInt(this.carrierOrder.monthlyAmount) + parseInt(this.carrierOrder.consigneeAmount) + parseInt(this.carrierOrder.otherAmount)
+			return parseInt(this.carrierOrder.cashAmount) + parseInt(this.carrierOrder.codAmount) + parseInt(this.carrierOrder.porAmount) + parseInt(this.carrierOrder.monthlyAmount) + parseInt(this.carrierOrder.consigneeAmount)
 		}
 		
 	},
