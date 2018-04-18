@@ -95,24 +95,25 @@
 		data() {
 			return {
 				selectedCargoList: [],
+				carrierCargos: [],
 				isSel: true
 			}
 		},
 		computed: {
 			totalWeight() {
-				const values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
+				let values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
 				return values.reduce((prev, curr) => {
 					return prev + curr
 				}, 0).toFixed(2)
 			},
 			totalVolume() {
-				const values = this.selectedCargoList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
+				let values = this.selectedCargoList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
 				return values.reduce((prev, curr) => {
 					return prev + curr
 				}, 0).toFixed(2)
 			},
 			totalNum() {
-				const values = this.selectedCargoList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
+				let values = this.selectedCargoList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
 				return values.reduce((prev, curr) => {
 					return prev + curr
 				}, 0).toFixed(2)
@@ -191,27 +192,27 @@
 				list.push(...data)
 				this.selectedCargoList = list
 			},
-			selectAll(type) {
-				if (type) {
-					this.selectedCargoList = []
-					this.carrierBills.forEach(item => {
-						this.selectedCargoList.push(...item.carrierCargo)
-					})
-					this.selectedCargoList.forEach(row => {
-						this.$refs.multipleTable.forEach(item => {
-							item.toggleRowSelection(row)
-						})
-					})
+			// selectAll(type) {
+			// 	if (type) {
+			// 		this.selectedCargoList = []
+			// 		this.carrierBills.forEach(item => {
+			// 			this.selectedCargoList.push(...item.carrierCargo)
+			// 		})
+			// 		this.selectedCargoList.forEach(row => {
+			// 			this.$refs.multipleTable.forEach(item => {
+			// 				item.toggleRowSelection(row)
+			// 			})
+			// 		})
 						
-					this.isSel = false
-				} else {
-					this.selectedCargoList = []
-					this.$refs.multipleTable.forEach(item => {
-						item.clearSelection()
-					})
-					this.isSel = true
-				}
-			},
+			// 		this.isSel = false
+			// 	} else {
+			// 		this.selectedCargoList = []
+			// 		this.$refs.multipleTable.forEach(item => {
+			// 			item.clearSelection()
+			// 		})
+			// 		this.isSel = true
+			// 	}
+			// },
 			back() {
 				this.$router.go(-1)
 			},

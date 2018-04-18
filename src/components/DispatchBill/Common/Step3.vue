@@ -287,16 +287,16 @@
 						let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
 						let temp = Number(result.internalUnitPrice) * Number(result.mileage) * totalCargoWeight
 						this.payMethods = {
-							driverCashAmount: temp * result.internalCashRate, // 司机现付金额
-							driverCodAmount: temp * result.internalCodRate, // 司机到付金额
-							driverPorAmount: temp * result.internalPorRate, // 司机回单金额
-							driverMonthlyAmont: temp * result.internalAbschlussRate, // 司机月结金额
-							driverCosigneeAmount: temp * result.internalConsigneeCodRate, // 司机收货方到付金额
-							superCargoCashAmount: temp * result.internalCashRate, // 押运人现付金额
-							superCargoCodAmount: temp * result.internalCodRate, // 押运人到付金额
-							superCargoCorAmount: temp * result.internalPorRate, // 押运人回单金额
-							superCargoMonthlyAmount: temp * result.internalAbschlussRate, // 押运人月结金额
-							superCosigneeAmount: temp * result.internalConsigneeCodRate // 押运人收货方到付金额
+							driverCashAmount: (temp * result.internalCashRate).toFixed(2), // 司机现付金额
+							driverCodAmount: (temp * result.internalCodRate).toFixed(2), // 司机到付金额
+							driverPorAmount: (temp * result.internalPorRate).toFixed(2), // 司机回单金额
+							driverMonthlyAmont: (temp * result.internalAbschlussRate).toFixed(2), // 司机月结金额
+							driverCosigneeAmount: (temp * result.internalConsigneeCodRate).toFixed(2), // 司机收货方到付金额
+							superCargoCashAmount: (temp * result.internalCashRate).toFixed(2), // 押运人现付金额
+							superCargoCodAmount: (temp * result.internalCodRate).toFixed(2), // 押运人到付金额
+							superCargoCorAmount: (temp * result.internalPorRate).toFixed(2), // 押运人回单金额
+							superCargoMonthlyAmount: (temp * result.internalAbschlussRate).toFixed(2), // 押运人月结金额
+							superCosigneeAmount: (temp * result.internalConsigneeCodRate).toFixed(2) // 押运人收货方到付金额
 						}
 						this.innermile = result.mileage
 						this.TKM = result.internalPrice

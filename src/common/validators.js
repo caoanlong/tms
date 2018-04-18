@@ -23,7 +23,11 @@ export const isFloat = (value) => {
 // 验证正整数
 export const isInt = (value) => {
 	let r = /^\+?[1-9][0-9]*$/
-	return r.test(value)
+	if (r.test(value) || Number(value) == 0) {
+		return true
+	} else {
+		return false
+	}
 }
 
 export const checkMobile = (rule, value, callback) => {
