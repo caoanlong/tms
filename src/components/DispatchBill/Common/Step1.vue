@@ -182,7 +182,6 @@
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
 			selectionChange(data, carrierBill) {
-				console.log(data, carrierBill)
 				for (let i = 0; i < data.length; i++) {
 					data[i].cargoWeightNew = data[i].remainingCargoWeight
 					data[i].cargoVolumeNew = data[i].remainingCargoVolume

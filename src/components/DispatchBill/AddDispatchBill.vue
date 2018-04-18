@@ -10,9 +10,26 @@
 				<el-step title="设置运费及付款方式"></el-step>
 				<el-step title="确认调度信息"></el-step>
 			</el-steps>
-			<Step1 v-show="stepActive == 0" :carrierBills="selectedCarrierBills" @nextStep="nextStep"/>
-			<Step2 v-show="stepActive == 1" :totalList="totalList" :cargoNum="selectedCarrierCargos.length" :startLoad="stepActive == 1" @nextStep="nextStep" @prevStep="prevStep"/>
-			<Step3 v-show="stepActive == 2" :totalList="totalList" :carrierCargos="selectedCarrierCargos" :truck="selectedTruck" :person="selectedPerson" @nextStep="nextStep" @prevStep="prevStep"/>
+			<Step1 
+				v-show="stepActive == 0" 
+				:carrierBills="selectedCarrierBills" 
+				@nextStep="nextStep"/>
+			<Step2 
+				v-show="stepActive == 1" 
+				:totalList="totalList" 
+				:cargoNum="selectedCarrierCargos.length" 
+				:startLoad="stepActive == 1" 
+				@nextStep="nextStep" 
+				@prevStep="prevStep"/>
+			<Step3 
+				v-show="stepActive == 2" 
+				:totalList="totalList" 
+				:carrierCargos="selectedCarrierCargos" 
+				:selectedCarrierBills="selectedCarrierBillsFilter" 
+				:truck="selectedTruck" 
+				:person="selectedPerson" 
+				@nextStep="nextStep" 
+				@prevStep="prevStep"/>
 			<div v-show="stepActive == 3" class="step step4">
 				<el-row>
 					<div class="split-item">
@@ -140,13 +157,6 @@ export default {
 		return {
 			stepActive: 0,
 			dialogTableVisible: false,
-			tableData: [
-				{
-					CarrierNum: '20180205001',
-					CargoTotal: '9.76吨/10方',
-					CargoName:'R72/炸药'
-				}
-			],
 			selectedCarrierBills: [],  // 选择的承运单
 			selectedCarrierBillsFilter: [],  // 选择的承运单过滤
 			selectedCarrierBillIDs: [],  // 选择的承运单ID
@@ -185,13 +195,14 @@ export default {
 			} else if (x == 2) {
 				this.selectedTruck = data
 				this.selectedPerson = data1
-			} else if (x == 3) {
-				this.payInfo = data
-				this.loadStatus = data1
+				// 最终选择的承运单条数
 				this.selectedCarrierBillsFilter = this.selectedCarrierBills.filter(item => {
 					let list = this.selectedCarrierCargos2.map(item2 => item2.carrierOrderID)
 					return list.includes(item.carrierOrderID)
 				})
+			} else if (x == 3) {
+				this.payInfo = data
+				this.loadStatus = data1
 			}
 			this.stepActive = x
 		},
