@@ -62,7 +62,7 @@ response => {
 					<p style="margin-top: 40px;color: #aaa">
 						一般客户处理时间为24小时内；客服联系电话，13529005327
 					</p>
-					<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/tms/#/login'">退出当前账户</button>
+					<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/tms-h5/#/login'">退出当前账户</button>
 				</div>
 				`,
 				dangerouslyUseHTMLString: true,
