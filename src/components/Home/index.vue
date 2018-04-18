@@ -8,7 +8,7 @@
 						<router-link tag="a" class="more" :to="{name: 'carrierbills'}">查看更多</router-link>
 					</div>
 					<div class="table">
-						<el-table :data="tableData" border style="width: 100%" size="mini">
+						<el-table :data="tableData" border style="width: 100%" size="mini" :height="250">
 							<el-table-column label="承运单号" width="180" align="center" fixed>
 								<template slot-scope="scope">
 									<span style="color:#409EFF;cursor:pointer" @click="ViewCarrierbill(scope.row.carrierOrderID)">{{scope.row.carrierOrderNo}}</span>
@@ -56,10 +56,10 @@
 				<div class="wf-card dashboardItem">
 					<div class="header clearfix">
 						<el-badge :value="0" :max="99" class="item"><span>运输中</span></el-badge>
-						<router-link tag="a" class="more" :to="{name: 'carrierbills'}">查看更多</router-link>
+						<router-link tag="a" class="more" :to="{name: 'dispatchbills'}">查看更多</router-link>
 					</div>
 					<div class="table">
-						<el-table :data="tableData1" border style="width: 100%" size="mini">
+						<el-table :data="tableData1" border style="width: 100%" size="mini" :height="250">
 							<el-table-column label="调度单号" prop="ControlsNum" width="130" align="center">
 								<template slot-scope="scope">
 									<span style="color:#409EFF;cursor:pointer" @click="ViewDispatchBill(scope.row.dispatchOrderID)">{{scope.row.dispatchOrderNo}}</span>
@@ -120,7 +120,7 @@
 						<router-link tag="a" class="more" :to="{name: 'truck'}">查看更多</router-link>
 					</div>
 					<div class="table">
-						<el-table :data="tableData2" border style="width: 100%" size="mini">
+						<el-table :data="tableData2" border style="width: 100%" size="mini" :height="250">
 							<el-table-column label="自编号" fixed width="60" align="center">
 								<template slot-scope="scope">
 									<span style="color:#409EFF;cursor:pointer" @click="ViewTruck(scope.row.truckID)">{{scope.row.code}}</span>
@@ -218,7 +218,7 @@
 						<router-link tag="a" class="more" :to="{name: 'person'}">查看更多</router-link>
 					</div>
 					<div class="table">
-						<el-table :data="tableData3" border style="width: 100%" size="mini">
+						<el-table :data="tableData3" border style="width: 100%" size="mini" :height="250">
 							<el-table-column label="姓名" fixed>
 								<template slot-scope="scope">
 									<span style="color:#409EFF;cursor:pointer" @click="ViewPerson(scope.row.staffID)">{{scope.row.realName}}</span>
@@ -333,7 +333,8 @@ export default {
 	methods: {
 		getCarrierOrder() {
 			let params ={
-				status: 'Committed'
+				status: 'Committed',
+				pageSize: 5
 			}
 			request({
 				url: '/biz/carrierOrder/list',
@@ -344,7 +345,8 @@ export default {
 		},
 		getDispatchOrder() {
 			let params ={
-				status: 'Running'
+				status: 'Loaded',
+				pageSize: 5
 			}
 			request({
 				url: '/biz/dispatchOrder/list',
@@ -356,7 +358,8 @@ export default {
 		getTruckList() {
 			let params ={
 				WorkStatus: 'Free',
-				isLoadStatus: 'Y'
+				isLoadStatus: 'Y',
+				pageSize: 5
 			}
 			request({
 				url: '/truck/findList',
@@ -367,7 +370,8 @@ export default {
 		},
 		getStaffList() {
 			let params ={
-				WorkStatus: 'Free'
+				WorkStatus: 'Free',
+				pageSize: 5
 			}
 			request({
 				url: '/staff/findList',

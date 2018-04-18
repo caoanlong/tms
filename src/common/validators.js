@@ -15,9 +15,9 @@ export function isVerCodeAvailable(str) {
 		return true
 	}  
 }
-// 验证正浮点数
+// 验证正浮点数(两位)
 export const isFloat = (value) => {
-	let r = /^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$/
+	let r = /^[0-9]+(.[0-9]{2})?$/
 	return r.test(value)
 }
 // 验证正整数

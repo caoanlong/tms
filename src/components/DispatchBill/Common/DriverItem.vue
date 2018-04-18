@@ -14,7 +14,7 @@
 			</p>
 			<p class="vehicleNo">{{truck.plateNo}}</p>
 			<p class="trailerNo" v-if="truck.trailerPlateNo">{{truck.trailerPlateNo}}</p>
-			<p class="vehicleType">{{truck.length ? (truck.length/1000 + '米') : ''}}{{truck.truckType}}</p>
+			<p class="vehicleType">{{truck.length ? (truck.length/1000 + '米') : ''}}{{truck.truckType}}&nbsp;{{truck.loads/1000 + '吨'}}{{truck.loadVolume + '方'}}</p>
 		</div>
 		<div class="statusInfo inlineBlock">
 			<div class="control">
@@ -26,11 +26,12 @@
 				<div class="sliderSelect">
 					<span class="labels">配载体积</span>
 					<el-progress :percentage="parseInt(totalVolume/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
+					<span class="surplus">剩{{(Number(truck.loadVolume) - totalVolume)}}方</span>
 				</div>
 			</div>
 		</div>
 		<div class="lineInfo inlineBlock">
-			<p v-for="item in truck.cargos">从{{item.shipperArea}}到{{item.consigneeArea}}&nbsp;{{item.cargoName+'/'+item.cargoType}}&nbsp;{{item.consigneeCompany}}</p>
+			<p v-for="item in truck.cargos">从{{item.shipperArea}}到{{item.consigneeArea}}&nbsp;{{item.cargoName+'/'+item.cargoType}}&nbsp;{{item.consigneeCompany}}&nbsp;{{item.cargoWeight + '吨'}}{{item.cargoVolume + '方'}}</p>
 		</div>
 		<svg-icon icon-class="select-icon" class="icon" :class="{selected: isSelected}"></svg-icon>
 	</div>

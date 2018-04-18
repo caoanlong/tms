@@ -198,7 +198,7 @@
 								<el-radio label="TKM">按吨公里自动生成</el-radio>
 								<el-radio label="Manual">手动输入</el-radio>
 							</el-radio-group>
-							<div v-show="carrierbillInfo.receiptMethod=='TKM'" class="tips">从“这个单的发货地”到卸货地对外运距为“50公里”总价为90909009？</div>
+							<div v-show="carrierbillInfo.receiptMethod=='TKM'" class="tips">从“这个单的发货地”到卸货地对外运距为“{{exmile}}公里”总价为{{totalPrice}}？</div>
 							<div class="form-input">
 								<el-form-item label="现付" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
 									<el-input placeholder="现付" v-model="carrierbillInfo.cashAmount"></el-input>
@@ -221,11 +221,11 @@
 							</div>
 						</el-form-item>
 						<el-form-item label="付款费用">
-							<el-radio-group v-model="carrierbillInfo.paymentMethod">
+							<el-radio-group v-model="carrierbillInfo.paymentMethod" @change="handSelectPaymentMethod">
 								<el-radio label="TKM">按吨公里自动生成</el-radio>
 								<el-radio label="Manual">手动输入</el-radio>
 							</el-radio-group>
-							<div v-show="carrierbillInfo.paymentMethod=='TKM'" class="tips">从“这单的发货地”到卸货地对内运距为“50公里”?</div>
+							<div v-show="carrierbillInfo.paymentMethod=='TKM'" class="tips">从“这单的发货地”到卸货地对内运距为“{{innermile}}公里”?</div>
 						</el-form-item>
 						<el-form-item label="发票">
 							<el-radio-group v-model="carrierbillInfo.invoice">
@@ -258,6 +258,7 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
+import { searchAreaByKey } from '../../common/utils'
 import { checkFloat2, checkMobile } from '../../common/validators'
 
 export default {
@@ -313,6 +314,9 @@ export default {
 				transportType: '',
 				commissionDate: ''
 			},
+			totalPrice: 0,
+			exmile: 0,
+			innermile: 0,
 			rules: {
 				consignorName: [
 					{required: true, message: '请输入托运人'}
@@ -436,11 +440,44 @@ export default {
 		},
 		handleSelectedArea(data) {
 			this.carrierbillInfo.shipperAreaID = data
+			this.carrierbillInfo.shipperArea = searchAreaByKey(data)
 		},
 		handleSelectedArea1(data) {
 			this.carrierbillInfo.consigneeAreaID = data
+			this.carrierbillInfo.consigneeArea = searchAreaByKey(data)
 		},
 		handSelectReceiptMethod(data) {
+			if (data == 'TKM') {
+				if (!this.carrierbillInfo.consigneeArea) {
+					Message.error('收货地区未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.consigneeDetailAddress) {
+					Message.error('收货详细地址未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.shipperArea) {
+					Message.error('发货地区未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				if (!this.carrierbillInfo.shipperDetailAddress) {
+					Message.error('发货详细地址未填写！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
+				if (heavyCargos.length == 0) {
+					Message.error('货物不能全是轻货！')
+					this.carrierbillInfo.receiptMethod = 'Manual'
+					return
+				}
+				this.getTransportPrice()
+			}
+		},
+		handSelectPaymentMethod(data) {
 			if (data == 'TKM') {
 				if (!this.carrierbillInfo.consigneeArea) {
 					Message.error('收货地区未填写！')
@@ -606,6 +643,9 @@ export default {
 					this.carrierbillInfo.porAmount = temp * result.externalPorRate
 					this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
 					this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
+					this.exmile = result.externalMileage
+					this.innermile = result.mileage
+					this.totalPrice = temp
 				} else if (res.data.code == 2001) {
 					this.$msgbox({
 						message: '请先配置运费模板！',

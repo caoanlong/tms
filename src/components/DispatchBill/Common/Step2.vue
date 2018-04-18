@@ -171,6 +171,10 @@
 					Message.error('该车辆已经满载！')
 					return
 				}
+				if (data.loadStatus == 'NotFull' && this.selectedEscort.staffID) {
+					Message.error('该车辆已经有押运人员了！')
+					return
+				}
 				if (this.selectedDriver.truckID == data.truckID) {
 					this.selectedDriver = {}
 					return

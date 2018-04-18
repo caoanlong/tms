@@ -59,7 +59,10 @@
 				<div class="controlInfo">
 					<p>司机：{{selectedTruck.realName}}&nbsp;&nbsp;{{selectedTruck.mobile}}</p>
 					<p>载具：{{selectedTruck.plateNo}}&nbsp;&nbsp;{{selectedTruck.length ? (Number(selectedTruck.length)/1000 + '米') : ''}}&nbsp;&nbsp;{{selectedTruck.truckType}}&nbsp;&nbsp;{{Number(selectedTruck.loads)/1000}}吨{{selectedTruck.loadVolume}}方</p>
-					<p>随车人员：{{selectedPerson.realName}}&nbsp;&nbsp;{{selectedPerson.mobile}}</p>
+					<p>随车人员：
+						<span v-if="selectedPerson.realName">{{selectedPerson.realName}}&nbsp;&nbsp;{{selectedPerson.mobile}}</span>
+						<span v-else>{{selectedTruck.superCargoName}}&nbsp;&nbsp;{{selectedTruck.superCargoMobile}}</span>
+					</p>
 				</div>
 				<el-row>
 					<div class="split-item">
