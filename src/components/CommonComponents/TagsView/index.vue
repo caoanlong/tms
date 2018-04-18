@@ -101,6 +101,17 @@ export default {
 						}
 					}
 				})
+			} else {
+				this.$store.dispatch('delVisitedViews', view).then((views) => {
+					if (this.isActive(view)) {
+						const latestView = views.slice(-1)[0]
+						if (latestView) {
+							this.$router.push({name: latestView.name, query: latestView.query})
+						} else {
+							this.$router.push('/')
+						}
+					}
+				})
 			}
 		},
 		closeOthersTags() {
