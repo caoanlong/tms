@@ -47,7 +47,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import { isFloat,isInt } from '../../../common/validators'
+	import { isFloat, isInt } from '../../../common/validators'
 	export default {
 		props: {
 			isVisible: {
@@ -102,6 +102,18 @@
 								Message.error('输入体积数据非法！')
 								return
 							}
+						}
+						if (this.cargoInfo[i].loadWeight > this.cargoInfo[i].cargoWeight) {
+							Message.error('运载重量不能超过配载重量！')
+							return
+						}
+						if (this.cargoInfo[i].loadVolume > this.cargoInfo[i].cargoVolume) {
+							Message.error('运载体积不能超过配载体积！')
+							return
+						}
+						if (this.cargoInfo[i].loadNum && !isInt(this.cargoInfo[i].loadNum)) {
+							Message.error('输入数量非法！')
+							return
 						}
 					}
 					this.$emit('control', false, this.cargoInfo)

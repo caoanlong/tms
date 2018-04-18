@@ -34,7 +34,7 @@
 						<el-col :span="8">
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
-									<el-input size="mini" v-model="totalWeight">
+									<el-input size="mini" v-model="totalWeight" disabled>
 										<template slot="append">吨</template>
 									</el-input>
 								</el-form-item>
@@ -43,7 +43,7 @@
 						<el-col :span="8">
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
-									<el-input size="mini" v-model="totalVol">
+									<el-input size="mini" v-model="totalVol" disabled>
 										<template slot="append">方</template>
 									</el-input>
 								</el-form-item>
@@ -52,7 +52,7 @@
 						<el-col :span="8">
 							<el-form label-width="60px">
 								<el-form-item label="已配载">
-									<el-input size="mini" v-model="totalNum">
+									<el-input size="mini" v-model="totalNum" disabled>
 										<template slot="append">件</template>
 									</el-input>
 								</el-form-item>
@@ -227,18 +227,6 @@
 				this.$emit('prevStep', 1)
 			},
 			nextStep() {
-				if (!isFloat(this.totalWeight)) {
-					Message.error('请输入正确的配载重量！')
-					return
-				}
-				if (!isFloat(this.totalVol)) {
-					Message.error('请输入正确的配载体积！')
-					return
-				}
-				if (!isInt(this.totalNum)) {
-					Message.error('请输入正确的配载数量！')
-					return
-				}
 				if (!isFloat(this.payMethods.driverCashAmount) 
 					&& !isFloat(this.payMethods.driverCodAmount)
 					&& !isFloat(this.payMethods.driverPorAmount)

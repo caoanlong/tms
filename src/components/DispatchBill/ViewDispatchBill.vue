@@ -19,8 +19,8 @@
 					<td><span class="justify">联系方式</span>{{item.consigneePhone}}</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货地</span>{{item.shipperDetailAddress}}</td>
-					<td><span class="justify">收货地</span>{{item.consigneeDetailAddress}}</td>
+					<td><span class="justify">发货地</span>{{item.shipperArea + item.shipperDetailAddress}}</td>
+					<td><span class="justify">收货地</span>{{item.consigneeArea + item.consigneeDetailAddress}}</td>
 				</tr>
 				<tr>
 					<td>

@@ -38,9 +38,9 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td>{{cargoInfo[0] ? (cargoInfo[0].signWeight ? totalSignWeight : 0) : 0}}</td>
-					<td>{{cargoInfo[0] ? (cargoInfo[0].signVolume ? totalSignVolume : 0) : 0}}</td>
-					<td>{{cargoInfo[0] ? (cargoInfo[0].signNum ? totalSignNum : 0) : 0}}</td>
+					<td>{{totalSignWeight}}</td>
+					<td>{{totalSignVolume}}</td>
+					<td>{{totalSignNum}}</td>
 				</tr>
 			</table>
 			<table class="customertable">
@@ -148,7 +148,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import { isFloat } from '../../../common/validators'
+	import { isFloat, isInt } from '../../../common/validators'
 	export default {
 		props: {
 			isVisible: {
@@ -207,6 +207,18 @@
 								Message.error('输入体积数据非法！')
 								return
 							}
+						}
+						if (this.cargoInfo[i].signWeight > this.cargoInfo[i].loadWeight) {
+							Message.error('签收重量不能超过运载重量！')
+							return
+						}
+						if (this.cargoInfo[i].signVolume > this.cargoInfo[i].loadVolume) {
+							Message.error('签收体积不能超过运载体积！')
+							return
+						}
+						if (this.cargoInfo[i].signNum && !isInt(Number(this.cargoInfo[i].signNum))) {
+							Message.error('输入数量非法！')
+							return
 						}
 					}
 					this.$emit('control', false, this.cargoInfo, this.payInfo)
