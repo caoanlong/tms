@@ -32,7 +32,7 @@
 			<el-table 
 				ref="multipleTable"
 				:data="carrierBill.carrierCargo" 
-				@selection-change="selectionChange($event, carrierBill.carrierOrderID)"
+				@selection-change="selectionChange($event, carrierBill)"
 				border style="width: 100%;margin-top:-1px" size="mini" resizable="false">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
 				<el-table-column label="货物规格/货物名称" prop="cargoName" width="140">
@@ -181,17 +181,16 @@
 				}
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
-			selectionChange(data, orderID) {
-				console.log(data, orderID)
+			selectionChange(data, carrierBill) {
+				console.log(data, carrierBill)
 				for (let i = 0; i < data.length; i++) {
 					data[i].cargoWeightNew = data[i].remainingCargoWeight
 					data[i].cargoVolumeNew = data[i].remainingCargoVolume
 					data[i].cargoNumNew = data[i].remainingCargoNum
 				}
-				let list = this.selectedCargoList.filter(item => item.carrierOrderID != orderID)
+				let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
 				list.push(...data)
 				this.selectedCargoList = list
-				console.log(this.selectedCargoList)
 			},
 			selectAll(type) {
 				if (type) {

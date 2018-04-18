@@ -622,8 +622,10 @@ export default {
 		},
 		getTransportPrice() {
 			let params = {
-				consigneeArea: this.carrierbillInfo.consigneeArea, //	收货地区	
+				consigneeAreaID: this.carrierbillInfo.consigneeAreaID, //	收货地区ID
+				consigneeArea: this.carrierbillInfo.consigneeArea, //	收货地区
 				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress, //	收货详细地址	
+				shipperAreaID: this.carrierbillInfo.shipperAreaID, //	发货地区ID
 				shipperArea: this.carrierbillInfo.shipperArea, //	发货地区	
 				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress // 发货详细地址
 			}

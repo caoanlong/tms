@@ -41,11 +41,12 @@ response => {
 			|| response.data.code == 5202) { // 帐号已在其它地方登录!
 			localStorage.clear()
 			Message.error(response.data.msg)
-			if (process.env == 'production') {
-				window.location.href = '/#/login'
-			} else {
-				window.location.href = '/tms/#/login'
-			}
+			// if (process.env == 'production') {
+			// 	window.location.href = '/#/login'
+			// } else {
+			// 	window.location.href = '/tms/#/login'
+			// }
+			window.location.href = '/tms-h5/#/login'
 
 			return Promise.reject('error')
 		}
