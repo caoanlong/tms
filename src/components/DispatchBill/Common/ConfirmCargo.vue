@@ -147,6 +147,8 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import { Message } from 'element-ui'
+	import { isFloat } from '../../../common/validators'
 	export default {
 		props: {
 			isVisible: {
@@ -185,6 +187,28 @@
 		methods: {
 			control(bool) {
 				if (bool) {
+					for (let i = 0; i < this.cargoInfo.length; i++) {
+						if (this.cargoInfo[i].weightType == 'Heavy') {
+							if (!Number(this.cargoInfo[i].signWeight)) {
+								Message.error('重货签收重量不能为空！')
+								return
+							}
+							if (!isFloat(this.cargoInfo[i].signWeight)) {
+								Message.error('输入载重数据非法！')
+								return
+							}
+						}
+						if (this.cargoInfo[i].weightType == 'Light') {
+							if (!Number(this.cargoInfo[i].signVolume)) {
+								Message.error('轻货签收体积不能为空！')
+								return
+							}
+							if (!isFloat(this.cargoInfo[i].signVolume)) {
+								Message.error('输入体积数据非法！')
+								return
+							}
+						}
+					}
 					this.$emit('control', false, this.cargoInfo, this.payInfo)
 				} else {
 					this.$emit('control', false)

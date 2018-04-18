@@ -83,17 +83,25 @@
 			control(bool) {
 				if (bool) {
 					for (let i = 0; i < this.cargoInfo.length; i++) {
-						if (!isFloat(this.cargoInfo[i].loadWeight) || !(this.cargoInfo[i].loadWeight > 0) || this.cargoInfo[i].loadWeight > this.cargoInfo[i].cargoWeight) {
-							Message.error('输入载重数据非法！')
-							return
+						if (this.cargoInfo[i].weightType == 'Heavy') {
+							if (!Number(this.cargoInfo[i].loadWeight)) {
+								Message.error('重货运载重量不能为空！')
+								return
+							}
+							if (!isFloat(this.cargoInfo[i].loadWeight)) {
+								Message.error('输入载重数据非法！')
+								return
+							}
 						}
-						if (!isFloat(this.cargoInfo[i].loadVolume)) {
-							Message.error('输入体积数据非法！')
-							return
-						}
-						if (!isInt(this.cargoInfo[i].loadNum)) {
-							Message.error('输入体积数据非法！')
-							return
+						if (this.cargoInfo[i].weightType == 'Light') {
+							if (!Number(this.cargoInfo[i].loadVolume)) {
+								Message.error('轻货运载体积不能为空！')
+								return
+							}
+							if (!isFloat(this.cargoInfo[i].loadVolume)) {
+								Message.error('输入体积数据非法！')
+								return
+							}
 						}
 					}
 					this.$emit('control', false, this.cargoInfo)

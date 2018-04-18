@@ -17,7 +17,7 @@ export function isVerCodeAvailable(str) {
 }
 // 验证正浮点数(两位)
 export const isFloat = (value) => {
-	let r = /^[0-9]+(.[0-9]{2})?$/
+	let r = /^[0-9]+(.[0-9]{1,2})?$/
 	return r.test(value)
 }
 // 验证正整数
@@ -91,7 +91,7 @@ export const checkFloat = (rule, value, callback) => {
 	if (!value) {
 		callback(new Error('值不能为空'))
 	}
-	let r = /^\d+(\.\d+)?$/
+	let r = /^[0-9]+(.[0-9]{1,2})?$/
 	if (r.test(value) || value == 0) {
 		callback()
 	} else {
@@ -101,7 +101,7 @@ export const checkFloat = (rule, value, callback) => {
 
 // 验证非负浮点数（正浮点数 + 0） 非必填
 export const checkFloat2 = (rule, value, callback) => {
-	let r = /^\d+(\.\d+)?$/
+	let r = /^[0-9]+(.[0-9]{1,2})?$/
 	if (r.test(value) || value == 0) {
 		callback()
 	} else {
