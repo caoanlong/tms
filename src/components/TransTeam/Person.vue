@@ -37,7 +37,7 @@
 							range-separator="至"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
-							value-format="timestamp" 
+							value-format="timestamp"
 							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
@@ -49,15 +49,15 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-upload 
-					class="upload-File" 
-					name="excelFile" 
-					:action="importFileUrl" 
-					:auto-upload="true" 
-					:onError="uploadError" 
-					:onSuccess="uploadSuccess" 
-					:beforeUpload="beforeFileUpload" 
-					:headers="uploadHeaders" 
+				<el-upload
+					class="upload-File"
+					name="excelFile"
+					:action="importFileUrl"
+					:auto-upload="true"
+					:onError="uploadError"
+					:onSuccess="uploadSuccess"
+					:beforeUpload="beforeFileUpload"
+					:headers="uploadHeaders"
 					:show-file-list="false">
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
@@ -65,9 +65,9 @@
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
 			<div class="table">
-				<el-table 
-					ref="recTable" 
-					:data="tableData" 
+				<el-table
+					ref="recTable"
+					:data="tableData"
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
@@ -117,7 +117,7 @@
 					</el-table-column>
 					<el-table-column label="驾驶证初次领证日期" width="100">
 						<template slot-scope="scope">
-							<span v-if="scope.row.qualificationFirstTime">{{scope.row.qualificationFirstTime | getdatefromtimestamp(true)}}</span>
+							<span v-if="scope.row.driverLicenseFirstTime">{{scope.row.driverLicenseFirstTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="诚信考核等级" prop="integrityExamineGrade" width="100"></el-table-column>
