@@ -2,7 +2,7 @@
 	<scroll-bar>
 		<div class="logo">
 			<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
-			<img v-else :src="defaultImg">
+			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180">
 		</div>
 		<el-menu 
 			mode="vertical"  
@@ -66,8 +66,6 @@
 import { mapGetters } from 'vuex'
 import ScrollBar from '../ScrollBar'
 import menus from '../../../assets/data/menus'
-import {defaultImg} from '../../../assets/icons/icons'
-
 export default {
 	name: 'sideBar',
 	computed: {
