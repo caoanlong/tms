@@ -141,26 +141,29 @@
 					<th>重量(吨)</th>
 				</tr>
 				<tr class="is-center" v-for="(item, index) in dispatchbillsCargoList">
-					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.dispatchOrderNo}}</td>
-					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
+					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.dispatchOrderNo}}</td>
+					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
 						<span v-if="item.dispatchbill.status == 'Committed'">待执行</span>
 						<span v-else-if="item.dispatchbill.status == 'Loaded'">已装运</span>
 						<span v-else-if="item.dispatchbill.status == 'Signed'">已签收</span>
 						<span v-else-if="item.dispatchbill.status == 'Canceled'">作废</span>
 					</td>
-					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.plateNo}}</td>
-					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
-						{{item.dispatchbill.driverCashAmount 
-						+ item.dispatchbill.driverCodAmount 
-						+ item.dispatchbill.driverCosigneeAmount 
-						+ item.dispatchbill.driverDetoursAmount 
-						+ item.dispatchbill.driverDetoursMileage
-						+ item.dispatchbill.driverMonthlyAmont
-						+ item.dispatchbill.superCargoCashAmount
-						+ item.dispatchbill.superCargoCodAmount
-						+ item.dispatchbill.superCargoCorAmount
-						+ item.dispatchbill.superCargoDetoursAmount
-						+ item.dispatchbill.superCargoDetoursMileage}}
+					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.plateNo}}</td>
+					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
+						{{Number(item.dispatchbill.driverCashAmount) 
+						+ Number(item.dispatchbill.driverCodAmount) 
+						+ Number(item.dispatchbill.driverCosigneeAmount) 
+						+ Number(item.dispatchbill.driverDetoursAmount) 
+						+ Number(item.dispatchbill.driverMonthlyAmont)
+						+ Number(item.dispatchbill.driverOtherAmount)
+						+ Number(item.dispatchbill.driverPorAmount)
+						+ Number(item.dispatchbill.superCargoCashAmount)
+						+ Number(item.dispatchbill.superCargoCodAmount)
+						+ Number(item.dispatchbill.superCargoCorAmount)
+						+ Number(item.dispatchbill.superCargoDetoursAmount)
+						+ Number(item.dispatchbill.superCargoMonthlyAmount)
+						+ Number(item.dispatchbill.superCargoOtherAmount)
+						+ Number(item.dispatchbill.superCosigneeAmount)}}
 						<span>元</span>
 					</td>
 					<td>
@@ -323,6 +326,9 @@ export default {
 				for (let i = 0; i < this.dispatchbills.length; i++) {
 					for (let x = 0; x < this.dispatchbills[i].bizDispatchOrderCargoList.length; x++) {
 						this.dispatchbills[i].bizDispatchOrderCargoList[x].dispatchbill = this.dispatchbills[i]
+						if (x == 0) {
+							this.dispatchbills[i].isShow = i
+						}
 					}
 					arr.push(...this.dispatchbills[i].bizDispatchOrderCargoList)
 				}

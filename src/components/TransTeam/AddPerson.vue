@@ -12,9 +12,9 @@
 					<el-col :span="6">
 						<el-form-item label="状态" prop="status">
 							<el-select style="width: 100%" v-model="person.status" placeholder="请选择">
-								<el-option label="通过" value="pass"></el-option>
-								<el-option label="未通过" value="unpass"></el-option>
-								<el-option label="其他" value="other"></el-option>
+								<el-option label="通过" value="Passed"></el-option>
+								<el-option label="未通过" value="NotPassed"></el-option>
+								<el-option label="其他" value="Other"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -157,6 +157,15 @@
 					<el-col :span="6">
 						<el-form-item label="合同有效期至">
 							<el-date-picker 
+								:picker-options="{
+									disabledDate: curDate => {
+										if (person.laborContractBeginTime) {
+											return person.laborContractBeginTime > curDate
+										} else {
+											return new Date() > curDate
+										}
+									}
+								}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="person.laborContractEndTime"
@@ -184,6 +193,15 @@
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期至">
 							<el-date-picker 
+								:picker-options="{
+									disabledDate: curDate => {
+										if (person.driverLicExamineBeginTime) {
+											return person.driverLicExamineBeginTime > curDate
+										} else {
+											return new Date() > curDate
+										}
+									}
+								}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="person.driverLicExamineEndTime"

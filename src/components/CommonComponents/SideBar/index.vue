@@ -92,7 +92,8 @@ export default {
 </script>
 <style lang="stylus" scoped>
 	.logo
+		padding 5px 10px
 		img
-			width 180px
-			height 50px
+			width 160px
+			height 40px
 </style>

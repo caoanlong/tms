@@ -6,60 +6,35 @@
 				<el-row>
 					<el-col :span="14" :offset="5">
 						<el-form-item label="姓名" prop="staffID">
-							<el-select
-								style="width: 100%" 
-								v-model="transInfo.staffID"
-								filterable
-								remote
-								placeholder="请输入关键词"
-								:remote-method="getStaffs"
-								:loading="loading">
-								<el-option
-									v-for="item in staffs"
-									:key="item.staffID"
-									:label="item.realName"
-									:value="item.staffID">
-								</el-option>
-							</el-select>
+							<el-autocomplete style="width:100%"
+								value-key="realName" 
+								v-model="transInfo.realName"
+								:fetch-suggestions="getStaffs"
+								placeholder="请选择内容"
+								@select="handSelectStaff">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="5">
 						<el-form-item label="车牌号" prop="truckID">
-							<el-select
-								style="width: 100%" 
-								v-model="transInfo.truckID"
-								filterable
-								remote
-								placeholder="请输入关键词"
-								:remote-method="getTrucks"
-								:loading="loading">
-								<el-option
-									v-for="item in trucks"
-									:key="item.truckID"
-									:label="item.plateNo"
-									:value="item.truckID">
-								</el-option>
-							</el-select>
+							<el-autocomplete style="width:100%"
+								value-key="plateNo" 
+								v-model="transInfo.plateNo"
+								:fetch-suggestions="getTrucks"
+								placeholder="请选择内容"
+								@select="handSelectTruck">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="5">
 						<el-form-item label="挂车牌">
-							<el-select
-								:clearable="true"
-								style="width: 100%" 
-								v-model="transInfo.trailerID"
-								filterable
-								remote
-								placeholder="请输入关键词"
-								:remote-method="getTrailers"
-								:loading="loading">
-								<el-option
-									v-for="item in trailers"
-									:key="item.trailerID"
-									:label="item.trailerPlateNo"
-									:value="item.trailerID">
-								</el-option>
-							</el-select>
+							<el-autocomplete style="width:100%"
+								value-key="trailerPlateNo" 
+								v-model="transInfo.trailerPlateNo"
+								:fetch-suggestions="getTrailers"
+								placeholder="请选择内容"
+								@select="handSelectTrailer">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 					<el-col :span="14" :offset="5">
@@ -95,11 +70,9 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
-// import { checkInt } from '../../common/validators'
 export default {
 	data() {
 		return {
-			loading: false,
 			transInfo: {
 				archiveTime: '',
 				code: '',
@@ -107,21 +80,15 @@ export default {
 				trailerID: '',
 				truckID: ''
 			},
-			staffID: '',
-			staffs: [],
-			trailerID: '',
-			trailers: [],
-			truckID: '',
-			trucks: [],
 			rules: {
 				staffID: [
-					{required: true, message: '请输入姓名', trigger: 'blur'}
+					{required: true, message: '请选择姓名'}
 				],
 				truckID: [
-					{required: true, message: '请输入车牌号', trigger: 'blur'}
+					{required: true, message: '请选择车牌号'}
 				],
 				code: [
-					{required: true, message: '请输入自编号', trigger: 'blur'}
+					{required: true, message: '请输入自编号'}
 				],
 				archiveTime: [
 					{required: true, message: '请选择建档时间', trigger: 'change'}
@@ -135,59 +102,59 @@ export default {
 		disabledDate(curDate) {
 			return new Date() < curDate
 		},
-		getStaffs(realName) {
-			if (realName !== '') {
-				this.loading = true
-				let params = {
-					realName
-				}
-				request({
-					url: '/staff/driver/suggest',
-					params
-				}).then(res => {
-					this.loading = false
-					this.staffs = res.data.data
-				})
-			} else {
-				this.staffs = []
+		getStaffs(queryString, cb) {
+			let params = {
+				realName: queryString
 			}
+			request({
+				url: '/staff/driver/suggest',
+				params
+			}).then(res => {
+				let list = res.data.data
+				cb(list)
+			})
 		},
-		getTrucks(plateNo) {
-			if (plateNo !== '') {
-				this.loading = true
-				let params = {
-					plateNo
-				}
-				request({
-					url: '/truck/plateNo/suggest',
-					params
-				}).then(res => {
-					this.loading = false
-					this.trucks = res.data.data
-				})
-			} else {
-				this.trucks = []
+		getTrucks(queryString, cb) {
+			let params = {
+				plateNo: queryString
 			}
+			request({
+				url: '/truck/plateNo/suggest',
+				params
+			}).then(res => {
+				let list = res.data.data
+				cb(list)
+			})
 		},
-		getTrailers(trailerPlateNo, cb) {
-			if (trailerPlateNo !== '') {
-				this.loading = true
-				let params = {
-					trailerPlateNo
-				}
-				request({
-					url: '/truck/trailerPlateNo/suggest',
-					params
-				}).then(res => {
-					this.loading = false
-					this.trailers = res.data.data
-				})
-			} else {
-				this.trailers = []
+		getTrailers(queryString, cb) {
+			let params = {
+				trailerPlateNo: queryString
 			}
+			request({
+				url: '/truck/trailerPlateNo/suggest',
+				params
+			}).then(res => {
+				let list = res.data.data
+				cb(list)
+			})
+		},
+		handSelectStaff(data) {
+			this.transInfo.staffID = data.staffID
+			this.transInfo.realName = data.realName
+		},
+		handSelectTruck(data) {
+			this.transInfo.truckID = data.truckID
+			this.transInfo.plateNo = data.plateNo
+		},
+		handSelectTrailer(data) {
+			this.transInfo.trailerID = data.trailerID
+			this.transInfo.trailerPlateNo = data.trailerPlateNo
 		},
 		createItem() {
 			let data = this.transInfo
+			if (!data.trailerPlateNo) {
+				data.trailerID = ''
+			}
 			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {

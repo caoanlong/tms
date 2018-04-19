@@ -49,21 +49,21 @@
 				</el-table-column>
 				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew">
+						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange">
 							<span slot="append">吨</span>
 						</el-input>
 					</template>
 				</el-table-column>
 				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew">
+						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange">
 							<span slot="append">方</span>
 						</el-input>
 					</template>
 				</el-table-column>
 				<el-table-column label="配载件数" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew">
+						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange">
 							<span slot="append">件</span>
 						</el-input>
 					</template>
@@ -96,30 +96,56 @@
 			return {
 				selectedCargoList: [],
 				carrierCargos: [],
-				isSel: true
+				isSel: true,
+				totalWeight: 0,
+				totalVolume: 0,
+				totalNum: 0,
 			}
 		},
-		computed: {
-			totalWeight() {
-				let values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
-				return values.reduce((prev, curr) => {
-					return prev + curr
-				}, 0).toFixed(2)
-			},
-			totalVolume() {
-				let values = this.selectedCargoList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
-				return values.reduce((prev, curr) => {
-					return prev + curr
-				}, 0).toFixed(2)
-			},
-			totalNum() {
-				let values = this.selectedCargoList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
-				return values.reduce((prev, curr) => {
-					return prev + curr
-				}, 0).toFixed(2)
-			},
-		},
+		// computed: {
+		// 	totalWeight() {
+		// 		let values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
+		// 		return values.reduce((prev, curr) => {
+		// 			return prev + curr
+		// 		}, 0).toFixed(2)
+		// 	},
+		// 	totalVolume() {
+		// 		let values = this.selectedCargoList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
+		// 		return values.reduce((prev, curr) => {
+		// 			return prev + curr
+		// 		}, 0).toFixed(2)
+		// 	},
+		// 	totalNum() {
+		// 		let values = this.selectedCargoList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
+		// 		return values.reduce((prev, curr) => {
+		// 			return prev + curr
+		// 		}, 0).toFixed(2)
+		// 	},
+		// },
 		methods: {
+			handTotalWeight() {
+				let values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
+				this.totalWeight = values.reduce((prev, curr) => {
+					return prev + curr
+				}, 0).toFixed(2)
+			},
+			handTotalVolume() {
+				let values = this.selectedCargoList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
+				this.totalVolume = values.reduce((prev, curr) => {
+					return prev + curr
+				}, 0).toFixed(2)
+			},
+			handTotalNum() {
+				let values = this.selectedCargoList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
+				this.totalNum = values.reduce((prev, curr) => {
+					return prev + curr
+				}, 0).toFixed(2)
+			},
+			handInputChange() {
+				this.handTotalWeight()
+				this.handTotalVolume()
+				this.handTotalNum()
+			},
 			nextStep() {
 				let list = []
 				if (this.selectedCargoList.length == 0) {
@@ -180,6 +206,8 @@
 						weightType: this.selectedCargoList[i].weightType,
 					})
 				}
+				console.log(list)
+				// return
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
 			selectionChange(data, carrierBill) {
@@ -191,6 +219,9 @@
 				let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
 				list.push(...data)
 				this.selectedCargoList = list
+				this.handTotalWeight()
+				this.handTotalVolume()
+				this.handTotalNum()
 			},
 			// selectAll(type) {
 			// 	if (type) {
