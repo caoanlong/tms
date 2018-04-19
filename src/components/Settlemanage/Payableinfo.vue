@@ -7,37 +7,28 @@
 				<el-tab-pane label="随车人员" name="follower"></el-tab-pane>
 			</el-tabs>
 			<div class="search">
-				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="司机姓名" v-show="tabSelected == 'driver'">
-						<el-input placeholder="请输入..." v-model="findDriver"></el-input>
-					</el-form-item>
-					<el-form-item label="随车人员" v-show="tabSelected == 'follower'">
-						<el-input placeholder="请输入..." v-model="findFollower"></el-input>
-					</el-form-item>
-					<el-form-item label="车牌">
-						<el-input placeholder="请输入..." v-model="findTruckCode"></el-input>
+				<el-form :inline="true" class="demo-form-inline" size="small">
+					<el-form-item label="司机/随车人员">
+						<el-input placeholder="请输入..." v-model="findName"></el-input>
 					</el-form-item>
 					<el-form-item label="车辆编号">
-						<el-input placeholder="请输入..." v-model="findTruckNum"></el-input>
+						<el-input placeholder="请输入..." v-model="findcode"></el-input>
 					</el-form-item>
-					<el-form-item label="收货人">
-						<el-input placeholder="请输入..." v-model="findReceiver"></el-input>
+					<el-form-item label="车牌号码">
+						<el-input placeholder="请输入..." v-model="findplateNo"></el-input>
 					</el-form-item>
-					<el-form-item label="地点">
-						<el-input placeholder="请输入..." v-model="findAddress"></el-input>
+					<el-form-item label="发货单位">
+						<el-input placeholder="请输入..." v-model="findshipperCompanyName"></el-input>
+					</el-form-item>
+					<el-form-item label="收货单位">
+						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="发货日期">
-						<el-date-picker
-							v-model="findConsignDate"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							@change="selectDateRange">
+						<el-date-picker v-model="findRangeDate" type="daterange" range-separator="至" value-format="timestamp" start-placeholder="开始日期" end-placeholder="结束日期" :clearable="false" @change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">查询</el-button>
+						<el-button type="primary" @click="getDetail">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -48,337 +39,187 @@
 			<div class="table">
 				<!-- 司机 -->
 				<el-table 
-					v-show="tabSelected == 'driver'"
-					ref="recTable" 
-					:data="driverData" 
-					show-summary 
-					:summary-method="getSummaries" 
-					border style="width: 100%" size="mini" stripe>
+					ref="recTable" :data="tableData"  show-summary :summary-method="getSummaries" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="驾驶员" prop="driver"></el-table-column>
-					<el-table-column label="发货日期" prop="consigneDate"></el-table-column>
-					<el-table-column label="发货单号" prop="consigneNum"></el-table-column>
-					<el-table-column label="调度单号" prop="controlNum"></el-table-column>
-					<el-table-column label="承运单号" prop="carrierNum"></el-table-column>
-					<el-table-column label="发货单位" prop="consigneCompany"></el-table-column>
-					<el-table-column label="收货单位" prop="receiveCompany"></el-table-column>
-					<el-table-column label="派单日期" prop="sendDate"></el-table-column>
-					<el-table-column label="签收日期" prop="receiveDate"></el-table-column>
-					<el-table-column label="车辆编号" prop="truckNum"></el-table-column>
-					<el-table-column label="车牌号码" prop="truckCode"></el-table-column>
-					<el-table-column label="核载吨位" prop="loadNum"></el-table-column>
-					<el-table-column label="地区" prop="area" width="120"></el-table-column>
-					<el-table-column label="地点" prop="address"></el-table-column>
-					<el-table-column label="里程" prop="mile"></el-table-column>
-					<el-table-column label="签收货量" prop="receiveNum"></el-table-column>
-					<el-table-column label="单价" prop="unitPrice"></el-table-column>
-					<el-table-column label="内部运费" prop="innerFreight"></el-table-column>
-					<el-table-column label="绕路里程" prop="roundWayMile"></el-table-column>
-					<el-table-column label="绕路费用" prop="roundWayFreight"></el-table-column>
-					<el-table-column label="其他" prop="other"></el-table-column>
-					<el-table-column label="备注" prop="remark"></el-table-column>
-					<el-table-column label="总计" prop="totalNum" align="center" width="120"></el-table-column>
+					
+					<el-table-column label="发货日期" align="center" width="140">
+						<template slot-scope="scope">
+							<span v-if="scope.row.shipperDate">{{scope.row.shipperDate  | getdatefromtimestamp()}}</span>
+							<span v-else></span>
+						</template>
+					</el-table-column>
+					<el-table-column label="发货单号" align="center">
+						<template slot-scope="scope">
+							{{scope.row.shipperNo?(scope.row.shipperNo +''):''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="调度单号" align="center">
+						<template slot-scope="scope">
+							{{scope.row.dispatchOrderNo?(scope.row.dispatchOrderNo +''):''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="承运单号" align="center">
+						<template slot-scope="scope">
+							{{scope.row.carrierOrderNo?(scope.row.carrierOrderNo +''):''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
+					<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
+					<el-table-column label="派单日期" align="center" width="140">
+						<template slot-scope="scope">
+							<span v-if="scope.row.createTime">
+								{{scope.row.createTime  | getdatefromtimestamp()}}
+							</span>
+							<span v-else></span>
+						</template>
+					</el-table-column>
+					<el-table-column label="签收日期" align="center" width="140">
+						<template slot-scope="scope">
+							<span v-if="scope.row.signTime">
+							{{scope.row.signTime | getdatefromtimestamp()}}</span>
+							<span v-else></span>
+						</template>
+					</el-table-column>
+
+					<el-table-column label="车辆编号" prop="code"></el-table-column>
+					<el-table-column label="车牌号码" prop="plateNo" align="center" width="90"></el-table-column>
+					<el-table-column label="司机姓名" prop="realName" align="center"></el-table-column>
+					<el-table-column label="随车人员" prop="followerRealName">
+					</el-table-column>
+					<el-table-column label="核载吨位" prop="loads" align="center">
+						<template slot-scope="scope">
+							{{scope.row.loads?(scope.row.loads +''):''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="收货地区" prop="consigneeArea"></el-table-column>
+					<el-table-column label="收货详细地址" prop="consigneeDetailAddress"></el-table-column>
+
+					<el-table-column label="签收货量">
+						<template slot-scope="scope">
+							{{scope.row.cargoWeight?scope.row.cargoWeight+'吨/':''}}{{scope.row.cargoVolume?scope.row.cargoVolume+'方/':''}}{{scope.row.cargoNum?scope.row.cargoNum+'件':''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="运费" prop="freight" align="center">
+						<template slot-scope="scope">
+							{{scope.row.freight?scope.row.freight:''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="绕路里程" align="center">
+						<template slot-scope="scope">
+							{{scope.row.driverDetoursMileage?(scope.row.driverDetoursMileage +''):''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="绕路费用" align="center">
+						<template slot-scope="scope">
+						{{scope.row.DriverDetoursAmount?(scope.row.DriverDetoursAmount +''):''}}
+					</template>
+					</el-table-column>
+					<el-table-column label="其他" align="center">
+						<template slot-scope="scope">
+						{{scope.row.DriverOtherAmount?(scope.row.DriverOtherAmount +''):''}}
+					</template>
+					</el-table-column>
+					<el-table-column label="备注"></el-table-column>
+					<el-table-column label="总计" prop="allMoney" align="center" width="120"></el-table-column>
 				</el-table>
-				<!-- 随车人员 -->
-				<el-table 
-					v-show="tabSelected == 'follower'"
-					ref="recTable" 
-					:data="followerData" 
-					show-summary 
-					:summary-method="getSummaries" 
-					border style="width: 100%" size="mini">
-					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="随车人员" prop="follower"></el-table-column>
-					<el-table-column label="驾驶员" prop="driver"></el-table-column>
-					<el-table-column label="发货日期" prop="consigneDate"></el-table-column>
-					<el-table-column label="发货单号" prop="consigneNum"></el-table-column>
-					<el-table-column label="调度单号" prop="controlNum"></el-table-column>
-					<el-table-column label="承运单号" prop="carrierNum"></el-table-column>
-					<el-table-column label="发货单位" prop="consigneCompany"></el-table-column>
-					<el-table-column label="收货单位" prop="receiveCompany"></el-table-column>
-					<el-table-column label="派单日期" prop="sendDate"></el-table-column>
-					<el-table-column label="签收日期" prop="receiveDate"></el-table-column>
-					<el-table-column label="车辆编号" prop="truckNum"></el-table-column>
-					<el-table-column label="车牌号码" prop="truckCode"></el-table-column>
-					<el-table-column label="核载吨位" prop="loadNum"></el-table-column>
-					<el-table-column label="地区" prop="area" width="120"></el-table-column>
-					<el-table-column label="地点" prop="address"></el-table-column>
-					<el-table-column label="里程" prop="mile"></el-table-column>
-					<el-table-column label="签收货量" prop="receiveNum"></el-table-column>
-					<el-table-column label="内部运费" prop="innerFreight"></el-table-column>
-					<el-table-column label="绕路里程" prop="roundWayMile"></el-table-column>
-					<el-table-column label="绕路费用" prop="roundWayFreight"></el-table-column>
-					<el-table-column label="其他" prop="other"></el-table-column>
-					<el-table-column label="备注" prop="remark"></el-table-column>
-					<el-table-column label="总计" prop="totalNum" align="center" width="120"></el-table-column>
-				</el-table>
+				<el-row type="flex">
+					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
+						<span>总共 {{total}} 条记录每页显示</span>
+						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getDetail">
+							<el-option label="10" :value="10"></el-option>
+							<el-option label="20" :value="20"></el-option>
+							<el-option label="30" :value="30"></el-option>
+							<el-option label="40" :value="40"></el-option>
+							<el-option label="50" :value="50"></el-option>
+							<el-option label="100" :value="100"></el-option>
+						</el-select>
+						<span>条记录</span>
+					</el-col>
+					<el-col :span="12">
+						<div class="pagination">
+							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="total" @current-change="pageChange"></el-pagination>
+						</div>
+					</el-col>
+				</el-row>
 			</div>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	export default {
-		data() {
-			return {
-				findDriver: '',
-				findFollower: '',
-				findTruckCode: '',
-				findTruckNum: '',
-				findReceiver: '',
-				findAddress: '',
-				findConsignDate: [],
-				startDate: '',
-				endDate: '',
-				pageIndex: 1,
-				pageSize: 10,
-				count: 87,
-				tabSelected: 'driver',
-				driverData: [
-					[
-						{
-							'consigneDate': '2017-12-21',
-							'consigneNum': '2017110335',
-							'controlNum': '2017120068',
-							'carrierNum': '2017120026',
-							'consigneCompany': '',
-							'receiveCompany': '安宁恒源爆破工程有限公司',
-							'sendDate': '2017-11-25',
-							'receiveDate': '2018-01-24',
-							'truckNum': '5',
-							'truckCode': '云AE0699',
-							'driver': '李金瑞',
-							'loadNum': '9.99',
-							'area': '昆明市',
-							'address': '安宁',
-							'mile': '35',
-							'unitPrice': '1.14TKM',
-							'receiveNum': '9.792吨',
-							'innerFreight': '390.7',
-							'roundWayMile': '0',
-							'roundWayFreight': '0',
-							'other': '0',
-							'remark': '',
-							'totalNum': 390.7
-						},
-						{
-							'consigneDate': '2017-12-21',
-							'consigneNum': '2017110335',
-							'controlNum': '2017120068',
-							'carrierNum': '2017120026',
-							'consigneCompany': '',
-							'receiveCompany': '安宁恒源爆破工程有限公司',
-							'sendDate': '2017-11-25',
-							'receiveDate': '2018-01-24',
-							'truckNum': '5',
-							'truckCode': '云AE0699',
-							'driver': '李金瑞',
-							'loadNum': '9.99',
-							'area': '昆明市',
-							'address': '安宁',
-							'mile': '35',
-							'unitPrice': '1.14TKM',
-							'receiveNum': '9.792吨',
-							'innerFreight': '390.7',
-							'roundWayMile': '0',
-							'roundWayFreight': '0',
-							'other': '0',
-							'remark': '',
-							'totalNum': 390.7
-						}
-					],
-					[
-						{
-							'consigneDate': '2017-12-21',
-							'consigneNum': '2017110335',
-							'controlNum': '2017120068',
-							'carrierNum': '2017120026',
-							'consigneCompany': '',
-							'receiveCompany': '安宁恒源爆破工程有限公司',
-							'sendDate': '2017-11-25',
-							'receiveDate': '2018-01-24',
-							'truckNum': '5',
-							'truckCode': '云AE0699',
-							'driver': '苏明',
-							'loadNum': '9.99',
-							'area': '昆明市',
-							'address': '安宁',
-							'mile': '35',
-							'unitPrice': '1.14TKM',
-							'receiveNum': '9.792吨',
-							'innerFreight': '390.7',
-							'roundWayMile': '0',
-							'roundWayFreight': '0',
-							'other': '0',
-							'remark': '',
-							'totalNum': 390.7
-						},
-						{
-							'consigneDate': '2017-12-21',
-							'consigneNum': '2017110335',
-							'controlNum': '2017120068',
-							'carrierNum': '2017120026',
-							'consigneCompany': '',
-							'receiveCompany': '安宁恒源爆破工程有限公司',
-							'sendDate': '2017-11-25',
-							'receiveDate': '2018-01-24',
-							'truckNum': '5',
-							'truckCode': '云AE0699',
-							'driver': '苏明',
-							'loadNum': '9.99',
-							'area': '昆明市',
-							'address': '安宁',
-							'mile': '35',
-							'unitPrice': '1.14TKM',
-							'receiveNum': '9.792吨',
-							'innerFreight': '390.7',
-							'roundWayMile': '0',
-							'roundWayFreight': '0',
-							'other': '0',
-							'remark': '',
-							'totalNum': 390.7
-						}
-					]
-				],
-				followerData: [
-					[
-						{
-							'consigneDate': '2017-12-21',
-							'consigneNum': '2017110335',
-							'controlNum': '2017120068',
-							'carrierNum': '2017120026',
-							'consigneCompany': '',
-							'receiveCompany': '安宁恒源爆破工程有限公司',
-							'sendDate': '2017-11-25',
-							'receiveDate': '2018-01-24',
-							'truckNum': '5',
-							'truckCode': '云AE0699',
-							'follower': '李押运',
-							'driver': '李金瑞',
-							'loadNum': '9.99',
-							'area': '昆明市',
-							'address': '安宁',
-							'mile': '35',
-							'unitPrice': '1.14TKM',
-							'receiveNum': '9.792吨',
-							'innerFreight': '390.7',
-							'roundWayMile': '0',
-							'roundWayFreight': '0',
-							'other': '0',
-							'remark': '',
-							'totalNum': 390.7
-						},
-						{
-							'consigneDate': '2017-12-21',
-							'consigneNum': '2017110335',
-							'controlNum': '2017120068',
-							'carrierNum': '2017120026',
-							'consigneCompany': '',
-							'receiveCompany': '安宁恒源爆破工程有限公司',
-							'sendDate': '2017-11-25',
-							'receiveDate': '2018-01-24',
-							'truckNum': '5',
-							'truckCode': '云AE0699',
-							'follower': '李押运',
-							'driver': '李金瑞',
-							'loadNum': '9.99',
-							'area': '昆明市',
-							'address': '安宁',
-							'mile': '35',
-							'unitPrice': '1.14TKM',
-							'receiveNum': '9.792吨',
-							'innerFreight': '390.7',
-							'roundWayMile': '0',
-							'roundWayFreight': '0',
-							'other': '0',
-							'remark': '',
-							'totalNum': 390.7
-						}
-					],
-					[
-						{
-							'consigneDate': '2017-12-21',
-							'consigneNum': '2017110335',
-							'controlNum': '2017120068',
-							'carrierNum': '2017120026',
-							'consigneCompany': '',
-							'receiveCompany': '安宁恒源爆破工程有限公司',
-							'sendDate': '2017-11-25',
-							'receiveDate': '2018-01-24',
-							'truckNum': '5',
-							'truckCode': '云AE0699',
-							'follower': '王押运',
-							'driver': '苏明',
-							'loadNum': '9.99',
-							'area': '昆明市',
-							'address': '安宁',
-							'mile': '35',
-							'unitPrice': '1.14TKM',
-							'receiveNum': '9.792吨',
-							'innerFreight': '390.7',
-							'roundWayMile': '0',
-							'roundWayFreight': '0',
-							'other': '0',
-							'remark': '',
-							'totalNum': 390.7
-						},
-						{
-							'consigneDate': '2017-12-21',
-							'consigneNum': '2017110335',
-							'controlNum': '2017120068',
-							'carrierNum': '2017120026',
-							'consigneCompany': '',
-							'receiveCompany': '安宁恒源爆破工程有限公司',
-							'sendDate': '2017-11-25',
-							'receiveDate': '2018-01-24',
-							'truckNum': '5',
-							'truckCode': '云AE0699',
-							'follower': '王押运',
-							'driver': '苏明',
-							'loadNum': '9.99',
-							'area': '昆明市',
-							'address': '安宁',
-							'mile': '35',
-							'unitPrice': '1.14TKM',
-							'receiveNum': '9.792吨',
-							'innerFreight': '390.7',
-							'roundWayMile': '0',
-							'roundWayFreight': '0',
-							'other': '0',
-							'remark': '',
-							'totalNum': 390.7
-						}
-					]
-				]
-			}
+import { Message } from 'element-ui'
+import request from '../../common/request'
+export default {
+	data() {
+		return {
+			tabSelected: 'driver',
+			pageIndex: 1,
+			pageSize: 10,
+			total: 0,
+			tableData: [],
+			findRangeDate: [],
+			findshipperBeginDate: '',
+			findshipperEndDate: '',
+			findplateNo: '',
+			findName: '',
+			findshipperCompanyName: '',
+			findconsigneeCompanyName: '',
+			findcode: ''
+		}
+	},
+	created() {
+		this.getDetail()
+	},
+	methods: {
+		reset() {
+			this.findRangeDate = [],
+			this.findshipperBeginDate = '',
+			this.findshipperEndDate = '',
+			this.findplateNo = '',
+			this.findName = '',
+			this.findshipperCompanyName = '',
+			this.findconsigneeCompanyName = '',
+			this.findcode = ''
+			this.getDetail()
 		},
-		created() {
-		},
-		methods: {
-			reset() {
-				this.findDriver = ''
-				this.findFollower = ''
-				this.findTruckCode = ''
-				this.findTruckNum = ''
-				this.findReceiver = ''
-				this.findAddress = ''
-				this.findConsignDate = []
-				this.startDate = ''
-				this.endDate = ''
-			},
-			pageChange(index) {
-				this.pageIndex = index
-			},
-			selectDateRange(date) {
-				this.startDate = new Date(date[0]).getTime()
-				this.endDate = new Date(date[1]).getTime()
-			},
-			handleTabSelected(tab) {
-				console.log(tab.$options.propsData.name)
+		getDetail() {
+			let params = {
+				current: this.pageIndex,
+				size: this.pageSize,
+				name: this.findDriver,
+				type: this.tabSelected,
+				shipperBeginDate: this.findshipperBeginDate,
+				shipperEndDate: this.findshipperEndDate,
+				plateNo: this.findplateNo,
+				name: this.findName,
+				shipperCompanyName: this.findshipperCompanyName,
+				consigneeCompanyName: this.findconsigneeCompanyName,
+				code: this.findcode
 			}
+			request({
+				url: '/finance/payableDetail',
+				params
+			}).then(res => {
+				this.tableData = res.data.data.records
+				this.total = res.data.data.total
+			})
+		},
+		pageChange(index) {
+			this.pageIndex = index
+			this.getDetail()
+		},
+		selectDateRange(date) {
+			this.findshipperBeginDate = date[0]
+			this.findshipperEndDate = date[1]
+		},
+		handleTabSelected(tab) {
+			this.tabSelected = tab.$options.propsData.name
+			this.getDetail()
 		}
 	}
+}
+
 </script>
 <style lang="stylus" scoped>
+
 
 </style>
