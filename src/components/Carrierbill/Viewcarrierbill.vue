@@ -266,7 +266,6 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from "../../common/request"
-import co from 'co'
 export default {
 	data() {
 		return {
@@ -326,7 +325,6 @@ export default {
 					for (let x = 0; x < this.dispatchbills[i].bizDispatchOrderCargoList.length; x++) {
 						this.dispatchbills[i].bizDispatchOrderCargoList[x].dispatchbill = this.dispatchbills[i]
 					}
-					console.log(this.dispatchbills[i].bizDispatchOrderCargoList)
 					arr.push(...this.dispatchbills[i].bizDispatchOrderCargoList)
 				}
 				this.dispatchbillsCargoList = arr
