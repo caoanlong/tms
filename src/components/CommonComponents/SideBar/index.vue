@@ -1,6 +1,9 @@
 <template>
 	<scroll-bar>
-		<div class="logo">AH 安化物流</div>
+		<div class="logo">
+			<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
+			<img v-else :src="defaultImg">
+		</div>
 		<el-menu 
 			mode="vertical"  
 			background-color="#4f4f4f" 
@@ -64,18 +67,20 @@ import { mapGetters } from 'vuex'
 import ScrollBar from '../ScrollBar'
 import SidebarItem from './SidebarItem'
 import menus from '../../../assets/data/menus'
+import {defaultImg} from '../../../assets/icons/icons'
 
 export default {
 	name: 'sideBar',
 	computed: {
 		...mapGetters([
-			// 'menus',
+			'userInfo',
 			'sidebar'
 		]),
 		menus: () => menus,
 		isCollapse() {
 			return !this.sidebar.opened
-		}
+		},
+		defaultImg: () => defaultImg
 	},
 	methods: {
 		selectIndex(index) {
@@ -89,4 +94,9 @@ export default {
 }
 
 </script>
-
+<style lang="stylus" scoped>
+	.logo
+		img
+			width 180px
+			height 50px
+</style>
