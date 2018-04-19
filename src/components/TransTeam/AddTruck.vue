@@ -44,7 +44,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="自编号">
+						<el-form-item label="自编号" prop="code">
 							<el-input v-model="truck.code"></el-input>
 						</el-form-item>
 					</el-col>
@@ -564,7 +564,7 @@ import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
 import {searchAreaByKey} from '../../common/utils'
-import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../common/validators'
+import { checkTel, checkInt, checkFloat, checkFloat2, limitLength3 } from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -665,6 +665,9 @@ export default {
 				],
 				companyName: [
 					{required: true, message: '请输入企业', trigger: 'blur'}
+				],
+				code: [
+					{validator: limitLength3}
 				],
 				truckCategory: [
 					{required: true, message: '请选择车辆类别', trigger: 'change'},

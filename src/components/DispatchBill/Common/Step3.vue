@@ -143,7 +143,7 @@
 <script type="text/javascript">
 	import { Message } from 'element-ui'
 	import request from '../../../common/request'
-	import { isFloat, isInt } from '../../../common/validators'
+	import { isFloaNot0, isInt } from '../../../common/validators'
 	export default {
 		props: {
 			truck: {
@@ -242,20 +242,20 @@
 				this.$emit('prevStep', 1)
 			},
 			nextStep() {
-				if (!isFloat(this.payMethods.driverCashAmount) 
-					&& !isFloat(this.payMethods.driverCodAmount)
-					&& !isFloat(this.payMethods.driverPorAmount)
-					&& !isFloat(this.payMethods.driverMonthlyAmont)
-					&& !isFloat(this.payMethods.driverCosigneeAmount)
+				if (!isFloaNot0(this.payMethods.driverCashAmount) 
+					&& !isFloaNot0(this.payMethods.driverCodAmount)
+					&& !isFloaNot0(this.payMethods.driverPorAmount)
+					&& !isFloaNot0(this.payMethods.driverMonthlyAmont)
+					&& !isFloaNot0(this.payMethods.driverCosigneeAmount)
 					) {
 					Message.error('司机各项金额必须正确的填写一项！')
 					return
 				}
-				if (!isFloat(this.payMethods.superCargoCashAmount) 
-					&& !isFloat(this.payMethods.superCargoCodAmount)
-					&& !isFloat(this.payMethods.superCargoCorAmount)
-					&& !isFloat(this.payMethods.superCargoMonthlyAmount)
-					&& !isFloat(this.payMethods.superCosigneeAmount)
+				if (!isFloaNot0(this.payMethods.superCargoCashAmount) 
+					&& !isFloaNot0(this.payMethods.superCargoCodAmount)
+					&& !isFloaNot0(this.payMethods.superCargoCorAmount)
+					&& !isFloaNot0(this.payMethods.superCargoMonthlyAmount)
+					&& !isFloaNot0(this.payMethods.superCosigneeAmount)
 					) {
 					Message.error('随车人员各项金额必须正确的填写一项！')
 					return

@@ -45,8 +45,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货时间</span>{{carrierOrder.shipperDate | getdatefromtimestamp()}}</td>
-					<td><span class="justify">到货时间</span>{{carrierOrder.consigneeDate | getdatefromtimestamp()}}</td>
+					<td>
+						<span class="justify">发货时间</span>
+						<span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp()}}</span>
+					</td>
+					<td>
+						<span class="justify">到货时间</span>
+						<span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | getdatefromtimestamp()}}</span>
+					</td>
 				</tr>
 			</table>
 			<table class="wf-table">
@@ -341,7 +347,7 @@ export default {
 			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
 		},
 		EditCarrierbill() {
-			if (this.dispatchbills.length != 0) {
+			if (this.dispatchbills.length > 0) {
 				this.Edit()
 			} else {
 				this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })

@@ -70,6 +70,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
+import {limitLength3} from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -89,7 +90,8 @@ export default {
 					{required: true, message: '请选择车牌号'}
 				],
 				code: [
-					{required: true, message: '请输入自编号'}
+					{required: true, message: '请输入自编号'},
+					{validator: limitLength3}
 				],
 				archiveTime: [
 					{required: true, message: '请选择建档时间', trigger: 'change'}

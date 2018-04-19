@@ -153,8 +153,16 @@
 						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载重量输入数值必须大于零!')
 						return
 					}
+					if (!isFloat(this.selectedCargoList[i].cargoWeightNew)) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载重量输入数值不合法!')
+						return
+					}
 					if (this.selectedCargoList[i].cargoVolumeNew  < 0) {
 						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载体积输入数值必须大于零!')
+						return
+					}
+					if (!isFloat(this.selectedCargoList[i].cargoVolumeNew)) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载体积输入数值不合法!')
 						return
 					}
 					if (this.selectedCargoList[i].cargoNumNew < 0) {
@@ -187,11 +195,9 @@
 						carrierCargoID: this.selectedCargoList[i].carrierCargoID,
 						carrierOrderID: this.selectedCargoList[i].carrierOrderID,
 						carrierOrder: carrierBill[0] ? carrierBill[0] : '',
-						weightType: this.selectedCargoList[i].weightType,
+						weightType: this.selectedCargoList[i].weightType
 					})
 				}
-				console.log(list)
-				// return
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
 			selectionChange(data, carrierBill) {

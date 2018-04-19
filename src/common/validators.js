@@ -17,26 +17,30 @@ export function isVerCodeAvailable(str) {
 }
 // 验证正浮点数(两位)
 export const isFloat = (value) => {
+	if (Number(value[0]) == 0 && Number(value[1]) == 0) {
+		return false
+	}
+	let r = /^[0-9]+(.[0-9]{1,2})?$/
+	return r.test(value)
+}
+// 验证正浮点数(非零两位)
+export const isFloaNot0 = (value) => {
+	if (Number(value) == 0) {
+		return false
+	}
 	let r = /^[0-9]+(.[0-9]{1,2})?$/
 	return r.test(value)
 }
 // 验证正整数(非零)
 export const isIntNot0 = (value) => {
 	let r = /^\+?[1-9][0-9]*$/
-	if (r.test(value)) {
-		return true
-	} else {
-		return false
-	}
+	return r.test(value)
 }
 // 验证正整数
 export const isInt = (value) => {
 	let r = /^\+?[1-9][0-9]*$/
-	if (r.test(value) || Number(value) == 0) {
-		return true
-	} else {
-		return false
-	}
+	let r2 = /^[0]$/
+	return r.test(value) || r2.test(value)
 }
 
 export const checkMobile = (rule, value, callback) => {
@@ -119,6 +123,15 @@ export const checkFloat2 = (rule, value, callback) => {
 		callback()
 	} else {
 		callback(new Error('请输入正确的数字'))
+	}
+}
+
+// 限制长度3
+export const limitLength3 = (rule, value, callback) => {
+	if (value.length > 3) {
+		callback(new Error('长度不能超过3'))
+	} else {
+		callback()
 	}
 }
 
