@@ -150,7 +150,6 @@
 					</td>
 					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.plateNo}}</td>
 					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
-						<span>月结</span>
 						{{item.dispatchbill.driverCashAmount 
 						+ item.dispatchbill.driverCodAmount 
 						+ item.dispatchbill.driverCosigneeAmount 
