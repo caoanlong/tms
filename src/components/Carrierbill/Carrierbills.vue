@@ -68,7 +68,10 @@
 					</el-table-column>
 					<el-table-column label="收货单位" prop="consigneeCompanyName">
 					</el-table-column>
-					<el-table-column label="卸货地" prop="consigneeDetailAddress">
+					<el-table-column label="卸货地" width="140">
+						<template slot-scope="scope">
+							<span>{{scope.row.consigneeArea + scope.row.consigneeDetailAddress}}</span>
+						</template>
 					</el-table-column>
 					<el-table-column label="收货人" prop="consigneeName">
 					</el-table-column>
@@ -101,7 +104,11 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="发货人" prop="shipperName"></el-table-column>
-					<el-table-column label="发货地" prop="shipperDetailAddress"></el-table-column>
+					<el-table-column label="发货地" width="140">
+						<template slot-scope="scope">
+							<span>{{scope.row.shipperArea + scope.row.shipperDetailAddress}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="创建时间" width="140" align="center">
 						<template slot-scope="scope">
 							<span>{{scope.row.createTime | getdatefromtimestamp() }}</span>
