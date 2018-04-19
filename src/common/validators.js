@@ -20,6 +20,15 @@ export const isFloat = (value) => {
 	let r = /^[0-9]+(.[0-9]{1,2})?$/
 	return r.test(value)
 }
+// 验证正整数(非零)
+export const isIntNot0 = (value) => {
+	let r = /^\+?[1-9][0-9]*$/
+	if (r.test(value)) {
+		return true
+	} else {
+		return false
+	}
+}
 // 验证正整数
 export const isInt = (value) => {
 	let r = /^\+?[1-9][0-9]*$/

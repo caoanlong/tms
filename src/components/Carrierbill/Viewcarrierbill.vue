@@ -334,7 +334,6 @@ export default {
 					flags += this.dispatchbills[i].bizDispatchOrderCargoList.length
 					arr.push(...this.dispatchbills[i].bizDispatchOrderCargoList)
 				}
-				console.log(arr)
 				this.dispatchbillsCargoList = arr	
 			})
 		},

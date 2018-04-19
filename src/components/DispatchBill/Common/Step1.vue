@@ -84,7 +84,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import { isFloat } from '../../../common/validators'
+	import { isFloat, isInt, isIntNot0 } from '../../../common/validators'
 	export default {
 		props: {
 			carrierBills: {
@@ -102,26 +102,6 @@
 				totalNum: 0,
 			}
 		},
-		// computed: {
-		// 	totalWeight() {
-		// 		let values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
-		// 		return values.reduce((prev, curr) => {
-		// 			return prev + curr
-		// 		}, 0).toFixed(2)
-		// 	},
-		// 	totalVolume() {
-		// 		let values = this.selectedCargoList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
-		// 		return values.reduce((prev, curr) => {
-		// 			return prev + curr
-		// 		}, 0).toFixed(2)
-		// 	},
-		// 	totalNum() {
-		// 		let values = this.selectedCargoList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
-		// 		return values.reduce((prev, curr) => {
-		// 			return prev + curr
-		// 		}, 0).toFixed(2)
-		// 	},
-		// },
 		methods: {
 			handTotalWeight() {
 				let values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
@@ -154,17 +134,17 @@
 				}
 				for (let i = 0; i < this.selectedCargoList.length; i++) {
 					if (this.selectedCargoList[i].weightType == 'Light') {
-						if (!this.selectedCargoList[i].cargoVolumeNew) {
+						if (!Number(this.selectedCargoList[i].cargoVolumeNew)) {
 							Message.error('货物《' + this.selectedCargoList[i].cargoName + '》体积不能为空!')
 							return
 						}
 					} else if (this.selectedCargoList[i].weightType == 'Heavy') {
-						if (!this.selectedCargoList[i].cargoWeightNew) {
+						if (!Number(this.selectedCargoList[i].cargoWeightNew)) {
 							Message.error('货物《' + this.selectedCargoList[i].cargoName + '》重量不能为空!')
 							return
 						}
 					} else {
-						if (!this.selectedCargoList[i].cargoNumNew && !this.selectedCargoList[i].cargoVolumeNew && !this.selectedCargoList[i].cargoWeightNew) {
+						if (!Number(this.selectedCargoList[i].cargoNumNew) && !Number(this.selectedCargoList[i].cargoVolumeNew) && !Number(this.selectedCargoList[i].cargoWeightNew)) {
 							Message.error('货物《' + this.selectedCargoList[i].cargoName + '》体积、重量、数量必填一项!')
 							return
 						}
@@ -179,6 +159,10 @@
 					}
 					if (this.selectedCargoList[i].cargoNumNew < 0) {
 						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载件数输入数值必须大于零!')
+						return
+					}
+					if (!isInt(this.selectedCargoList[i].cargoNumNew)) {
+						Message.error('货物《' + this.selectedCargoList[i].cargoName + '》的配载件数输入数值不合法!')
 						return
 					}
 					if (this.selectedCargoList[i].cargoWeightNew > this.selectedCargoList[i].remainingCargoWeight) {

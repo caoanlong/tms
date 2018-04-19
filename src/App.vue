@@ -7,7 +7,9 @@
 export default {
 	name: 'App',
 	created() {
-		this.$store.dispatch('getUserInfo')
+		if (localStorage.getItem('token')) {
+			this.$store.dispatch('getUserInfo')
+		}
 	}
 }
 
