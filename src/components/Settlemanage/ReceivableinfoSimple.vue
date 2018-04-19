@@ -10,6 +10,12 @@
 					<el-form-item label="收货地区">
 						<DistPicker @selectChange="handleSelectedArea1" class="normal" :selected="selectedArea1"/>
 					</el-form-item>
+					<el-form-item label="发货单位">
+						<el-input placeholder="请输入..." v-model="findshipperCompanyName"></el-input>
+					</el-form-item>
+					<el-form-item label="收货单位">
+						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName"></el-input>
+					</el-form-item>
 					<el-form-item label="发货时间">
 						<el-date-picker v-model="findRangeDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="timestamp" :clearable="false" @change="selectDateRange">
 						</el-date-picker>
@@ -97,6 +103,8 @@ export default {
 			findRangeDate: [],
 			findshipperBeginDate: '',
 			findshipperEndDate: '',
+			findshipperCompanyName: '',
+			findconsigneeCompanyName: '',
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
@@ -111,7 +119,9 @@ export default {
 			this.selectedArea =[]
 			this.selectedArea1 =[]
 			this.findshipperAreaID= this.$route.query.shipperAreaID
-			this.findconsigneeAreaID= this.$route.query.consigneeAreaID 
+			this.findconsigneeAreaID= this.$route.query.consigneeAreaID
+			this.findshipperCompanyName = '',
+			this.findconsigneeCompanyName = '',
 			this.findRangeDate = []
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
@@ -126,7 +136,9 @@ export default {
 				shipperAreaID:this.findshipperAreaID ,
 				consigneeAreaID: this.findconsigneeAreaID,
 				shipperBeginDate: this.findshipperBeginDate,
-				shipperEndDate: this.findshipperEndDate
+				shipperEndDate: this.findshipperEndDate,
+				shipperCompanyName: this.findshipperCompanyName,
+				consigneeCompanyName: this.findconsigneeCompanyName	
 			}
 			request({
 				url: '/finance/receivableDetail',

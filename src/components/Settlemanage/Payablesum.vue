@@ -8,11 +8,11 @@
 			</el-tabs>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="司机姓名" v-show="tabSelected == 'driver'">
-						<el-input placeholder="请输入..." v-model="findDriver"></el-input>
+					<el-form-item label="司机姓名" v-if="tabSelected == 'driver'">
+						<el-input placeholder="请输入..." v-model="findName"></el-input>
 					</el-form-item>
-					<el-form-item label="随车人员" v-show="tabSelected == 'follower'">
-						<el-input placeholder="请输入..." v-model="findFollower"></el-input>
+					<el-form-item label="随车人员" v-else>
+						<el-input placeholder="请输入..." v-model="findName"></el-input>
 					</el-form-item>
 					<el-form-item label="发货日期">
 						<el-date-picker
@@ -35,15 +35,15 @@
 			</div>
 			<div class="table">
 				<el-table 
-					v-show="tabSelected == 'driver'"
+					
 					ref="recTable" 
-					:data="driverData" 
+					:data="tableData" 
 					show-summary :summary-method="getSummaries"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="车辆牌号" prop="plateNo" align="center"></el-table-column>
-					<el-table-column label="司机姓名" prop="realName" align="center"></el-table-column>
-					<el-table-column label="总趟次" align="center">
+					<el-table-column label="司机姓名" prop="realName" align="center" v-if="tabSelected=='driver'"></el-table-column>
+					<el-table-column label="随车人员" prop="realName" align="center" v-else></el-table-column>
+					<el-table-column label="总趟数" align="center">
 						<template slot-scope="scope">
 							{{scope.row.count+''}}
 						</template>
@@ -61,12 +61,12 @@
 					</el-table-column>
 					<el-table-column label="绕路费用" prop="driverDetoursAmount" align="center" width="120">
 						<template slot-scope="scope">
-							{{scope.row.driverDetoursAmount?scope.row.driverDetoursAmount:''}}
+							{{scope.row.driverDetoursAmount?scope.row.driverDetoursAmount:'0'}}
 						</template>
 					</el-table-column>
 					<el-table-column label="其他费用" prop="driverOtherAmount" align="center" width="120">
 						<template slot-scope="scope">
-							{{scope.row.driverOtherAmount?scope.row.driverOtherAmount:''}}
+							{{scope.row.driverOtherAmount?scope.row.driverOtherAmount:'0'}}
 						</template>
 					</el-table-column>
 					<el-table-column label="总计" prop="allMoney" align="center">
@@ -74,33 +74,6 @@
 					<el-table-column label="操作" align="center" width="60" fixed="right">
 						<template slot-scope="scope">
 							<el-button type="primary" size="mini" @click="viewinfo('driver',scope.row.transportRecordID)">查看</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
-				<el-table 
-					v-show="tabSelected == 'follower'"
-					ref="recTable" 
-					:data="followerData" 
-					border style="width: 100%" size="mini">
-					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="随车人员" prop="realName" align="center"></el-table-column>
-					<el-table-column label="总趟数" prop="count" width="60" align="center"></el-table-column>
-					<el-table-column label="总里程" prop="totalMile" align="center"></el-table-column>
-					<el-table-column label="总趟数" prop="count" align="center"></el-table-column>
-					<el-table-column label="总货量" align="center">
-						<template slot-scope="scope">
-							<span>{{scope.row.cargoNum?scope.row.cargoNum+'件':''}}{{scope.row.cargoNum?'/':''}}{{ scope.row.cargoVolume?scope.row.cargoVolume+'方':''}}{{scope.row.cargoVolume?'/':''}}{{scope.row.cargoWeight?scope.row.cargoWeight+'吨':''}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="运费" prop="freight" align="center" width="120"></el-table-column>
-					<el-table-column label="绕路总里程" prop="driverDetoursMileage" align="center" width="120"></el-table-column>
-					<el-table-column label="绕路费用" prop="driverDetoursAmount" align="center" width="120"></el-table-column>
-					<el-table-column label="其他费用" prop="driverOtherAmount" align="center" width="120"></el-table-column>
-					<el-table-column label="总计" prop="allMoney" align="center">
-					</el-table-column>
-					<el-table-column label="操作" align="center" width="60">
-						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="viewinfo('follower',scope.row.transportRecordID)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -137,11 +110,8 @@
 				pageSize: 10,
 				count: 0,
 				findName:'',
-				driverData:[],
-				followerData:[],
+				tableData:[],
 				tabSelected:'driver',
-				findDriver:'',
-				findFollower:''
 			}
 		},
 		created() {
@@ -149,26 +119,21 @@
 		},
 		methods: {
 			reset() {
-
+				this.findName=''
 			},
 			getList() {
 				let params = {
 					current: this.pageIndex,
 					size: this.pageSize,
-					name: this.findDriver,
+					name: this.findName,
 					type:this.tabSelected
 				}
 				request({
 					url: '/finance/payable',
 					params
 				}).then(res => {
-					if(this.tabSelected=='driver'){
-						this.driverData = res.data.data.records
-						this.count = res.data.data.total
-					}else{
-						this.followerData = res.data.data.records
-						this.count = res.data.data.total
-					}
+					this.tableData = res.data.data.records
+					this.count = res.data.data.total
 				})
 			},
 			pageChange(index) {
@@ -180,7 +145,6 @@
 				this.endDate = date[1]
 			},
 			handleTabSelected(tab) {
-				
 				this.tabSelected = tab.$options.propsData.name
 				console.log(this.tabSelected)
 				this.getList()
