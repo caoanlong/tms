@@ -853,6 +853,10 @@ export default {
 				Message.error('车牌号或挂车牌不能为空！')
 				return 
 			}
+			if (data.trailerPlateNo.length > 10 || data.plateNo.length > 10) {
+				Message.error('车牌号或挂车牌长度不能超过10位！')
+				return 
+			}
 			if (data.driverLicRegisterTime > data.driverLicIssueTime) {
 				Message.error('行驶证注册日期不能早于行驶证发证日期！')
 				return

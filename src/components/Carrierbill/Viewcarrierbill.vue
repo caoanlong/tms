@@ -150,17 +150,20 @@
 					</td>
 					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.plateNo}}</td>
 					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
-						{{item.dispatchbill.driverCashAmount 
-						+ item.dispatchbill.driverCodAmount 
-						+ item.dispatchbill.driverCosigneeAmount 
-						+ item.dispatchbill.driverDetoursAmount 
-						+ item.dispatchbill.driverDetoursMileage
-						+ item.dispatchbill.driverMonthlyAmont
-						+ item.dispatchbill.superCargoCashAmount
-						+ item.dispatchbill.superCargoCodAmount
-						+ item.dispatchbill.superCargoCorAmount
-						+ item.dispatchbill.superCargoDetoursAmount
-						+ item.dispatchbill.superCargoDetoursMileage}}
+						{{Number(item.dispatchbill.driverCashAmount) 
+						+ Number(item.dispatchbill.driverCodAmount) 
+						+ Number(item.dispatchbill.driverCosigneeAmount) 
+						+ Number(item.dispatchbill.driverDetoursAmount) 
+						+ Number(item.dispatchbill.driverMonthlyAmont)
+						+ Number(item.dispatchbill.driverOtherAmount)
+						+ Number(item.dispatchbill.driverPorAmount)
+						+ Number(item.dispatchbill.superCargoCashAmount)
+						+ Number(item.dispatchbill.superCargoCodAmount)
+						+ Number(item.dispatchbill.superCargoCorAmount)
+						+ Number(item.dispatchbill.superCargoDetoursAmount)
+						+ Number(item.dispatchbill.superCargoMonthlyAmount)
+						+ Number(item.dispatchbill.superCargoOtherAmount)
+						+ Number(item.dispatchbill.superCosigneeAmount)}}
 						<span>元</span>
 					</td>
 					<td>

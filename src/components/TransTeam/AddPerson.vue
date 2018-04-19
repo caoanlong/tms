@@ -157,6 +157,15 @@
 					<el-col :span="6">
 						<el-form-item label="合同有效期至">
 							<el-date-picker 
+								:picker-options="{
+									disabledDate: curDate => {
+										if (person.laborContractBeginTime) {
+											return person.laborContractBeginTime > curDate
+										} else {
+											return new Date() > curDate
+										}
+									}
+								}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="person.laborContractEndTime"
@@ -184,6 +193,15 @@
 					<el-col :span="6">
 						<el-form-item label="驾驶证审验有效期至">
 							<el-date-picker 
+								:picker-options="{
+									disabledDate: curDate => {
+										if (person.driverLicExamineBeginTime) {
+											return person.driverLicExamineBeginTime > curDate
+										} else {
+											return new Date() > curDate
+										}
+									}
+								}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="person.driverLicExamineEndTime"

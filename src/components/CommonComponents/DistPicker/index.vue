@@ -33,7 +33,7 @@
 		data() {
 			return {
 				areaPID: '',
-				level1: ChineseDistricts[0],
+				level1: ChineseDistricts[100000],
 				level2: {},
 				level3: {},
 				watchOne: false,
@@ -42,20 +42,15 @@
 		},
 		watch: {
 			selected: function (newVal) {
-				// console.log(newVal)
-				// if (!this.watchOne) {
-					this.selectedList = newVal
-					this.level2 = ChineseDistricts[newVal[0]]
-					this.level3 = ChineseDistricts[newVal[1]]
-					// this.watchOne = true
-				// }
+				this.selectedList = newVal
+				this.level2 = ChineseDistricts[newVal[0]]
+				this.level3 = ChineseDistricts[newVal[1]]
 			}
 		},
 		created() {
 		},
 		methods: {
 			selectChange(e, x) {
-				console.log(e.target.value, x)
 				if (x == 1) {
 					if (e.target.value == '请选择') {
 						this.selectedList = []
