@@ -220,6 +220,10 @@
 							Message.error('输入数量非法！')
 							return
 						}
+						if (this.cargoInfo[i].signNum > this.cargoInfo[i].loadNum) {
+							Message.error('签收数量不能超过运载数量！')
+							return
+						}
 					}
 					this.$emit('control', false, this.cargoInfo, this.payInfo)
 				} else {

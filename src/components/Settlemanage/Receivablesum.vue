@@ -24,7 +24,7 @@
 				<el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
 			</div>
 			<div class="table">
-				<el-table ref="recTable" :data="tableData" show-summary :summary-method="getSummaries2" border style="width: 100%" size="mini" stripe>
+				<el-table ref="recTable" :data="tableData" show-summary :summary-method="getSummaries" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
 					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="发货地区" prop="area" width="120">
@@ -40,7 +40,11 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="收货详细地址" prop="consigneeDetailAddress"></el-table-column>
-					<el-table-column label="总趟次" prop="countDispatchOrder" width="80" align="center"></el-table-column>
+					<el-table-column label="总趟次" width="80" align="center">
+						<template slot-scope="scope">
+							{{scope.row.countDispatchOrder +''}}
+						</template>
+					</el-table-column>
 					<el-table-column label="总货量" align="center">
 						<template slot-scope="scope">
 							{{scope.row.cargoWeight?scope.row.cargoWeight+'吨/':''}}{{scope.row.cargoVolume?scope.row.cargoVolume+'方/':''}}{{scope.row.cargoNum?scope.row.cargoNum+'件':''}}
@@ -87,8 +91,8 @@ export default {
 			selectedArea1:[],
 			findshipperAreaID:'',
 			findconsigneeAreaID:'',
-            findRangeDate: [],
-            findshipperBeginDate: '',
+			findRangeDate: [],
+			findshipperBeginDate: '',
 			findshipperEndDate: '',
 			pageIndex: 1,
 			pageSize: 10,

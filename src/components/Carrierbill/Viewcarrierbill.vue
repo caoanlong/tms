@@ -124,7 +124,7 @@
 							<span v-else-if="item=='ShipperPor'">发货单文件</span>
 							<span v-else>不需要回单</span>
 						</span>
-						<span class="labels fr">承运单应收总价：{{isShow ? carrierOrderTotal:'**'}}元</span>
+						<span class="labels fr">承运单应收总价：{{isShow ? carrierOrderTotal + parseInt(carrierOrder.otherAmount) : '**'}}元</span>
 					</td>
 				</tr>
 			</table>
@@ -134,43 +134,42 @@
 					<th>调度单号</th>
 					<th>状态</th>
 					<th>车辆</th>
+					<th>付款金额</th>
 					<th>货物规格/名称</th>
 					<th>数量(件)</th>
 					<th>体积(方)</th>
 					<th>重量(吨)</th>
-					<th>付款金额</th>
 				</tr>
-				<tr class="is-center" v-for="item in dispatchbills">
-					<td>{{item.dispatchOrderNo}}</td>
-					<td>
-						<span v-if="item.status == 'Committed'">待执行</span>
-						<span v-else-if="item.status == 'Loaded'">已装运</span>
-						<span v-else-if="item.status == 'Signed'">已签收</span>
-						<span v-else-if="item.status == 'Canceled'">作废</span>
+				<tr class="is-center" v-for="(item, index) in dispatchbillsCargoList">
+					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.dispatchOrderNo}}</td>
+					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
+						<span v-if="item.dispatchbill.status == 'Committed'">待执行</span>
+						<span v-else-if="item.dispatchbill.status == 'Loaded'">已装运</span>
+						<span v-else-if="item.dispatchbill.status == 'Signed'">已签收</span>
+						<span v-else-if="item.dispatchbill.status == 'Canceled'">作废</span>
 					</td>
-					<td>{{item.plateNo}}</td>
-					<td>
-						{{item.dispatchOrderCargo.cargoType}}
-						{{item.dispatchOrderCargo.cargoName ? '/' + item.dispatchOrderCargo.cargoName : ''}}
-					</td>
-					<td>{{item.dispatchOrderCargo.cargoNum}}</td>
-					<td>{{item.dispatchOrderCargo.cargoVolume}}</td>
-					<td>{{item.dispatchOrderCargo.cargoWeight}}</td>
-					<td>
-						<span>月结</span>
-						{{item.driverCashAmount 
-						+ item.driverCodAmount 
-						+ item.driverCosigneeAmount 
-						+ item.driverDetoursAmount 
-						+ item.driverDetoursMileage
-						+ item.driverMonthlyAmont
-						+ item.superCargoCashAmount
-						+ item.superCargoCodAmount
-						+ item.superCargoCorAmount
-						+ item.superCargoDetoursAmount
-						+ item.superCargoDetoursMileage}}
+					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.plateNo}}</td>
+					<td v-if="index == 0" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
+						{{item.dispatchbill.driverCashAmount 
+						+ item.dispatchbill.driverCodAmount 
+						+ item.dispatchbill.driverCosigneeAmount 
+						+ item.dispatchbill.driverDetoursAmount 
+						+ item.dispatchbill.driverDetoursMileage
+						+ item.dispatchbill.driverMonthlyAmont
+						+ item.dispatchbill.superCargoCashAmount
+						+ item.dispatchbill.superCargoCodAmount
+						+ item.dispatchbill.superCargoCorAmount
+						+ item.dispatchbill.superCargoDetoursAmount
+						+ item.dispatchbill.superCargoDetoursMileage}}
 						<span>元</span>
 					</td>
+					<td>
+						{{item.cargoType}}
+						{{item.cargoName ? '/' + item.cargoName : ''}}
+					</td>
+					<td>{{item.cargoNum}}</td>
+					<td>{{item.cargoVolume}}</td>
+					<td>{{item.cargoWeight}}</td>
 				</tr>
 			</table>
 			<div class="wf-footer clearfix">
@@ -274,12 +273,13 @@ export default {
 			dialogFormVisible:false,
 			carrierCargo: [],
 			porRequire:[],
-			dispatchbills: []
+			dispatchbills: [],
+			dispatchbillsCargoList: []
 		}
 	},
 	computed:{
 		carrierOrderTotal:function(){
-			return parseInt(this.carrierOrder.cashAmount) + parseInt(this.carrierOrder.codAmount) + parseInt(this.carrierOrder.porAmount) + parseInt(this.carrierOrder.monthlyAmount) + parseInt(this.carrierOrder.consigneeAmount) + parseInt(this.carrierOrder.otherAmount)
+			return parseInt(this.carrierOrder.cashAmount) + parseInt(this.carrierOrder.codAmount) + parseInt(this.carrierOrder.porAmount) + parseInt(this.carrierOrder.monthlyAmount) + parseInt(this.carrierOrder.consigneeAmount)
 		}
 		
 	},
@@ -303,7 +303,6 @@ export default {
 				url: '/biz/carrierOrder/detail',
 				params
 			}).then(res => {
-				console.log(res.data.data)
 				this.carrierOrder = res.data.data
 				this.carrierCargo = res.data.data.carrierCargo
 				this.porRequire = res.data.data.porRequire.split(',')
@@ -316,11 +315,19 @@ export default {
 				carrierOrderID: this.$route.query.carrierOrderID
 			}
 			request({
-				url: '/biz/dispatchOrder/list',
+				url: '/biz/carrierOrder/findDispatchCargos',
 				params
 			}).then(res => {
-				console.log(res.data.data)
 				this.dispatchbills = res.data.data.records
+				let arr = []
+				for (let i = 0; i < this.dispatchbills.length; i++) {
+					for (let x = 0; x < this.dispatchbills[i].bizDispatchOrderCargoList.length; x++) {
+						this.dispatchbills[i].bizDispatchOrderCargoList[x].dispatchbill = this.dispatchbills[i]
+					}
+					arr.push(...this.dispatchbills[i].bizDispatchOrderCargoList)
+				}
+				this.dispatchbillsCargoList = arr
+					
 			})
 		},
 		AddDispatchBill() {

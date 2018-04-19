@@ -87,9 +87,9 @@
 					<el-table-column label="创建人" prop="createName" width="100"></el-table-column>
 					<el-table-column label="状态">
 						<template slot-scope="scope">
-							<span v-if="scope.row.status == 'pass'">通过</span>
-							<span v-else-if="scope.row.status == 'unpass'">不通过</span>
-							<span v-else>其他</span>
+							<span v-if="scope.row.status == 'Passed'">通过</span>
+							<span v-else-if="scope.row.status == 'NotPassed'">不通过</span>
+							<span v-else-if="scope.row.status == 'Other'">其他</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="审核人" prop="auditName" width="100"></el-table-column>

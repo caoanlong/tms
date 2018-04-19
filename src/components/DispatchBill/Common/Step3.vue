@@ -68,7 +68,7 @@
 		</div>
 		<el-row>
 			<div class="split-item">
-				<p style="font-size: 12px">从“这个订单的发货地”到卸货地对内运距为“50公里”  TKM为1.1？</p>
+				<p style="font-size: 12px" v-if="selectedCarrierBills.length == 1 && heavyCargos.length != 0">从“这个订单的发货地”到卸货地对内运距为“{{innermile}}公里”  TKM为{{TKM}}？</p>
 				<span class="tit">付款方式及费用</span>
 			</div>
 		</el-row>
@@ -142,6 +142,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../../common/request'
 	import { isFloat, isInt } from '../../../common/validators'
 	export default {
 		props: {
@@ -158,6 +159,10 @@
 				default: () => []
 			},
 			totalList: {
+				type: Array,
+				default: () => []
+			},
+			selectedCarrierBills: {
 				type: Array,
 				default: () => []
 			}
@@ -189,10 +194,17 @@
 		watch: {
 			totalList: {
 				handler: function(newVal) {
-					console.log(newVal[2])
 					this.totalWeight = newVal[0]
 					this.totalVol = newVal[1]
 					this.totalNum = Number(newVal[2]).toFixed(0)
+				},
+				deep: true
+			},
+			selectedCarrierBills: {
+				handler: function(newVal) {
+					if (newVal.length == 1) {
+						this.getTransportPrice(newVal[0])
+					}
 				},
 				deep: true
 			}
@@ -215,6 +227,9 @@
 				totalWeight: 0,
 				totalVol: 0,
 				totalNum: 0,
+				innermile: 0,
+				TKM: 0,
+				heavyCargos: [],
 				rules: {
 					status: [
 						{ required: true, message: '请选择状态', trigger: 'change' }
@@ -247,6 +262,47 @@
 				}
 				this.$emit('nextStep', 3, this.payMethods, this.loadStatus)
 			},
+			getTransportPrice(carrierbillInfo) {
+				let params = {
+					consigneeAreaID: carrierbillInfo.consigneeAreaID, //	收货地区ID
+					consigneeArea: carrierbillInfo.consigneeArea, //	收货地区
+					consigneeDetailAddress: carrierbillInfo.consigneeDetailAddress, //	收货详细地址	
+					shipperAreaID: carrierbillInfo.shipperAreaID, //	发货地区ID
+					shipperArea: carrierbillInfo.shipperArea, //	发货地区	
+					shipperDetailAddress: carrierbillInfo.shipperDetailAddress // 发货详细地址
+				}
+				request({
+					url: '/transportPrice/findOneByAddress',
+					method: 'get',
+					params
+				}).then(res => {
+					if (res.data.code == 200) {
+						let result = res.data.data
+						console.log(this.carrierCargos)
+						this.heavyCargos = this.carrierCargos.filter(item => item.weightType == 'Heavy')
+						if (this.heavyCargos.length == 0) {
+							return
+						}
+						let cargoWeights = this.heavyCargos.map(item => Number(item.cargoWeight))
+						let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
+						let temp = Number(result.internalUnitPrice) * Number(result.mileage) * totalCargoWeight
+						this.payMethods = {
+							driverCashAmount: (temp * result.internalCashRate).toFixed(2), // 司机现付金额
+							driverCodAmount: (temp * result.internalCodRate).toFixed(2), // 司机到付金额
+							driverPorAmount: (temp * result.internalPorRate).toFixed(2), // 司机回单金额
+							driverMonthlyAmont: (temp * result.internalAbschlussRate).toFixed(2), // 司机月结金额
+							driverCosigneeAmount: (temp * result.internalConsigneeCodRate).toFixed(2), // 司机收货方到付金额
+							superCargoCashAmount: (temp * result.internalCashRate).toFixed(2), // 押运人现付金额
+							superCargoCodAmount: (temp * result.internalCodRate).toFixed(2), // 押运人到付金额
+							superCargoCorAmount: (temp * result.internalPorRate).toFixed(2), // 押运人回单金额
+							superCargoMonthlyAmount: (temp * result.internalAbschlussRate).toFixed(2), // 押运人月结金额
+							superCosigneeAmount: (temp * result.internalConsigneeCodRate).toFixed(2) // 押运人收货方到付金额
+						}
+						this.innermile = result.mileage
+						this.TKM = result.internalPrice
+					}
+				})
+			}
 		}
 	}
 </script>

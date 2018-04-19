@@ -380,20 +380,22 @@ export default {
 					Message.error('对外收款方式占比各项之和必须等于100%！')
 					return
 				}
-				data.internalCashRate = internalCashRate / 100
-				data.internalCodRate = internalCodRate / 100
-				data.internalPorRate = internalPorRate / 100
-				data.internalAbschlussRate = internalAbschlussRate / 100
-				data.internalConsigneeCodRate = internalConsigneeCodRate / 100
-				data.externalCashRate = externalCashRate / 100
-				data.externalCodRate = externalCodRate / 100
-				data.externalPorRate = externalPorRate / 100
-				data.externalAbschlussRate = externalAbschlussRate / 100
-				data.externalConsigneeCodRate = externalConsigneeCodRate / 100
+				let params = {}
+				Object.assign(params, data)
+				params.internalCashRate = internalCashRate / 100
+				params.internalCodRate = internalCodRate / 100
+				params.internalPorRate = internalPorRate / 100
+				params.internalAbschlussRate = internalAbschlussRate / 100
+				params.internalConsigneeCodRate = internalConsigneeCodRate / 100
+				params.externalCashRate = externalCashRate / 100
+				params.externalCodRate = externalCodRate / 100
+				params.externalPorRate = externalPorRate / 100
+				params.externalAbschlussRate = externalAbschlussRate / 100
+				params.externalConsigneeCodRate = externalConsigneeCodRate / 100
 				request({
 					url: '/transportPrice/add',
 					method:'post',
-					data
+					params
 				}).then(res => {
 					console.log(res.data)
 					Message.success('保存成功！')
