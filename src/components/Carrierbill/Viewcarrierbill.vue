@@ -323,17 +323,19 @@ export default {
 			}).then(res => {
 				this.dispatchbills = res.data.data.records
 				let arr = []
+				let flags = 0
 				for (let i = 0; i < this.dispatchbills.length; i++) {
 					for (let x = 0; x < this.dispatchbills[i].bizDispatchOrderCargoList.length; x++) {
 						this.dispatchbills[i].bizDispatchOrderCargoList[x].dispatchbill = this.dispatchbills[i]
 						if (x == 0) {
-							this.dispatchbills[i].isShow = i
+							this.dispatchbills[i].isShow = flags
 						}
 					}
+					flags += this.dispatchbills[i].bizDispatchOrderCargoList.length
 					arr.push(...this.dispatchbills[i].bizDispatchOrderCargoList)
 				}
-				this.dispatchbillsCargoList = arr
-					
+				console.log(arr)
+				this.dispatchbillsCargoList = arr	
 			})
 		},
 		AddDispatchBill() {

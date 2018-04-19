@@ -299,7 +299,7 @@
 							superCosigneeAmount: (temp * result.internalConsigneeCodRate).toFixed(2) // 押运人收货方到付金额
 						}
 						this.innermile = result.mileage
-						this.TKM = result.internalPrice
+						this.TKM = result.internalUnitPrice
 					}
 				})
 			}
