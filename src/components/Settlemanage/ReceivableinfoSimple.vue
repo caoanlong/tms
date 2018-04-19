@@ -1,9 +1,9 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">应收明细</div>
+			<div class="header clearfix">应收详情</div>
 			<div class="search">
-				<el-form :inline="true" class="demo-form-inline" size="small">
+				<el-form :inline="true" class="demo-form-inline" size="mini">
 					<el-form-item label="发货地区">
 						<DistPicker @selectChange="handleSelectedArea" class="normal" :selected="selectedArea"/>
 					</el-form-item>
@@ -90,10 +90,10 @@ import request from '../../common/request'
 export default {
 	data() {
 		return {
-			selectedArea:'',
-			selectedArea1:'',
-			findshipperAreaID: '',
-			findconsigneeAreaID: '',
+			selectedArea:[],
+			selectedArea1:[],
+			findshipperAreaID:this.$route.query.shipperAreaID,
+			findconsigneeAreaID:this.$route.query.consigneeAreaID,
 			findRangeDate: [],
 			findshipperBeginDate: '',
 			findshipperEndDate: '',
@@ -108,11 +108,14 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.selectedArea = ''
-			this.selectedArea1 = ''
+			this.selectedArea =[]
+			this.selectedArea1 =[]
+			this.findshipperAreaID= this.$route.query.shipperAreaID
+			this.findconsigneeAreaID= this.$route.query.consigneeAreaID 
 			this.findRangeDate = []
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
+			this.getDetail()
 		},
 		pageChange(index) {
 			this.pageIndex = index
@@ -120,8 +123,8 @@ export default {
 		},
 		getDetail() {
 			let params = {
-				shipperAreaID: this.selectedArea || this.$route.query.shipperAreaID,
-				consigneeAreaID: this.selectedArea1 || this.$route.query.consigneeAreaID,
+				shipperAreaID:this.findshipperAreaID ,
+				consigneeAreaID: this.findconsigneeAreaID,
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate
 			}
@@ -143,7 +146,7 @@ export default {
 		},
 		handleSelectedArea1(data) {
 			this.findconsigneeAreaID = data
-		}
+		},
 	},
 	components: {
 		DistPicker

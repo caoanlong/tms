@@ -62,7 +62,6 @@
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import ScrollBar from '../ScrollBar'
-import SidebarItem from './SidebarItem'
 import menus from '../../../assets/data/menus'
 
 export default {
@@ -83,8 +82,7 @@ export default {
 		}
 	},
 	components: {
-		ScrollBar,
-		SidebarItem
+		ScrollBar
 	}
 }
 

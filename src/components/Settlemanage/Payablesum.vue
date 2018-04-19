@@ -16,7 +16,7 @@
 					</el-form-item>
 					<el-form-item label="发货日期">
 						<el-date-picker
-							v-model="findConsignDate"
+							
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
@@ -25,7 +25,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary">查询</el-button>
+						<el-button type="primary" @click="getList">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -38,24 +38,42 @@
 					v-show="tabSelected == 'driver'"
 					ref="recTable" 
 					:data="driverData" 
+					show-summary :summary-method="getSummaries"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="车辆牌号" prop="truckCode"></el-table-column>
-					<el-table-column label="驾驶员" prop="driver"></el-table-column>
-					<el-table-column label="总趟数" prop="totalNum" width="60"></el-table-column>
-					<el-table-column label="总货量" prop="totalGoods"></el-table-column>
-					<el-table-column label="运费" prop="freight" align="center" width="120"></el-table-column>
-					<el-table-column label="绕路总里程" prop="roundWayTotalMile" align="center" width="120"></el-table-column>
-					<el-table-column label="绕路费用" prop="roundWayFreight" align="center" width="120"></el-table-column>
-					<el-table-column label="其他费用" prop="otherFreight" align="center" width="120"></el-table-column>
-					<el-table-column label="总计">
+					<el-table-column label="车辆牌号" prop="plateNo" align="center"></el-table-column>
+					<el-table-column label="司机姓名" prop="realName" align="center"></el-table-column>
+					<el-table-column label="总趟次" align="center">
 						<template slot-scope="scope">
-							<span>{{scope.row.freight + scope.row.roundWayFreight}}</span>
+							{{scope.row.count+''}}
 						</template>
+					</el-table-column>
+					<el-table-column label="总货量" align="center">
+						<template slot-scope="scope">
+							<span>{{scope.row.cargoNum?scope.row.cargoNum+'件':''}}{{scope.row.cargoNum?'/':''}}{{ scope.row.cargoVolume?scope.row.cargoVolume+'方':''}}{{scope.row.cargoVolume?'/':''}}{{scope.row.cargoWeight?scope.row.cargoWeight+'吨':''}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="运费" prop="freight" align="center" width="120"></el-table-column>
+					<el-table-column label="绕路总里程" align="center" width="120">
+						<template slot-scope="scope">
+							{{scope.row.driverDetoursMileage?(scope.row.driverDetoursMileage+'KM'):''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="绕路费用" prop="driverDetoursAmount" align="center" width="120">
+						<template slot-scope="scope">
+							{{scope.row.driverDetoursAmount?scope.row.driverDetoursAmount:''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="其他费用" prop="driverOtherAmount" align="center" width="120">
+						<template slot-scope="scope">
+							{{scope.row.driverOtherAmount?scope.row.driverOtherAmount:''}}
+						</template>
+					</el-table-column>
+					<el-table-column label="总计" prop="allMoney" align="center">
 					</el-table-column>
 					<el-table-column label="操作" align="center" width="60" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="viewinfo('driver')">查看</el-button>
+							<el-button type="primary" size="mini" @click="viewinfo('driver',scope.row.transportRecordID)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -65,35 +83,37 @@
 					:data="followerData" 
 					border style="width: 100%" size="mini">
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="随车人员" prop="follower"></el-table-column>
-					<el-table-column label="总趟数" prop="totalNum" width="60"></el-table-column>
-					<el-table-column label="总里程" prop="totalMile"></el-table-column>
-					<el-table-column label="总货量" prop="totalGoods"></el-table-column>
-					<el-table-column label="运费" prop="freight" align="center" width="120"></el-table-column>
-					<el-table-column label="绕路总里程" prop="roundWayTotalMile" align="center" width="120"></el-table-column>
-					<el-table-column label="绕路费用" prop="roundWayFreight" align="center" width="120"></el-table-column>
-					<el-table-column label="其他费用" prop="otherFreight" align="center" width="120"></el-table-column>
-					<el-table-column label="总计">
+					<el-table-column label="随车人员" prop="realName" align="center"></el-table-column>
+					<el-table-column label="总趟数" prop="count" width="60" align="center"></el-table-column>
+					<el-table-column label="总里程" prop="totalMile" align="center"></el-table-column>
+					<el-table-column label="总趟数" prop="count" align="center"></el-table-column>
+					<el-table-column label="总货量" align="center">
 						<template slot-scope="scope">
-							<span>{{scope.row.freight + scope.row.roundWayFreight}}</span>
+							<span>{{scope.row.cargoNum?scope.row.cargoNum+'件':''}}{{scope.row.cargoNum?'/':''}}{{ scope.row.cargoVolume?scope.row.cargoVolume+'方':''}}{{scope.row.cargoVolume?'/':''}}{{scope.row.cargoWeight?scope.row.cargoWeight+'吨':''}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="操作" align="center" width="120">
+					<el-table-column label="运费" prop="freight" align="center" width="120"></el-table-column>
+					<el-table-column label="绕路总里程" prop="driverDetoursMileage" align="center" width="120"></el-table-column>
+					<el-table-column label="绕路费用" prop="driverDetoursAmount" align="center" width="120"></el-table-column>
+					<el-table-column label="其他费用" prop="driverOtherAmount" align="center" width="120"></el-table-column>
+					<el-table-column label="总计" prop="allMoney" align="center">
+					</el-table-column>
+					<el-table-column label="操作" align="center" width="60">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="viewinfo('follower')">查看明细</el-button>
+							<el-button type="primary" size="mini" @click="viewinfo('follower',scope.row.transportRecordID)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
 						<span>总共 {{count}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize">
-							<el-option label="10" value="10"></el-option>
-							<el-option label="20" value="20"></el-option>
-							<el-option label="30" value="30"></el-option>
-							<el-option label="40" value="40"></el-option>
-							<el-option label="50" value="50"></el-option>
-							<el-option label="100" value="100"></el-option>
+						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
+							<el-option label="10" :value="10"></el-option>
+							<el-option label="20" :value="20"></el-option>
+							<el-option label="30" :value="30"></el-option>
+							<el-option label="40" :value="40"></el-option>
+							<el-option label="50" :value="50"></el-option>
+							<el-option label="100" :value="100"></el-option>
 						</el-select>
 						<span>条记录</span>
 					</el-col>
@@ -109,103 +129,64 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import request from '../../common/request'
 	export default {
 		data() {
 			return {
-				findDriver: '',
-				findFollower: '',
-				findConsignDate: [],
-				startDate: '',
-				endDate: '',
 				pageIndex: 1,
 				pageSize: 10,
-				count: 87,
-				tabSelected: 'driver',
-				driverData: [
-					{
-						'truckCode': '云AG5836',
-						'driver': '李金瑞',
-						'totalNum': 11,
-						'totalGoods': '107.52吨/10方/100件',
-						'freight': 30302.09,
-						'roundWayTotalMile': 1000,
-						'roundWayFreight': 10000,
-						'otherFreight': 0,
-						'totalFreight': ''
-					},
-					{
-						'truckCode': '云AG5836',
-						'driver': '李金瑞',
-						'totalNum': 11,
-						'totalGoods': '107.52吨/10方/100件',
-						'freight': 30302.09,
-						'roundWayTotalMile': 1000,
-						'roundWayFreight': 10000,
-						'otherFreight': 0,
-						'totalFreight': ''
-					},
-					{
-						'truckCode': '云AG5836',
-						'driver': '李金瑞',
-						'totalNum': 11,
-						'totalGoods': '107.52吨/10方/100件',
-						'freight': 30302.09,
-						'roundWayTotalMile': 1000,
-						'roundWayFreight': 10000,
-						'otherFreight': 0,
-						'totalFreight': ''
-					},
-				],
-				followerData: [
-					{
-						'truckCode': '云AG5836',
-						'follower': '李押运',
-						'totalNum': 11,
-						'totalMile': 3125,
-						'totalGoods': '107.52吨/10方/100件',
-						'freight': 30302.09,
-						'roundWayTotalMile': 1000,
-						'roundWayFreight': 10000,
-						'otherFreight': 0,
-						'totalFreight': ''
-					},
-					{
-						'truckCode': '云AG5836',
-						'follower': '李押运',
-						'totalNum': 11,
-						'totalMile': 3125,
-						'totalGoods': '107.52吨/10方/100件',
-						'freight': 30302.09,
-						'roundWayTotalMile': 1000,
-						'roundWayFreight': 10000,
-						'otherFreight': 0,
-						'totalFreight': ''
-					}
-				]
+				count: 0,
+				findName:'',
+				driverData:[],
+				followerData:[],
+				tabSelected:'driver',
+				findDriver:'',
+				findFollower:''
 			}
 		},
 		created() {
+			this.getList()
 		},
 		methods: {
 			reset() {
-				this.findDriver = ''
-				this.findFollower = ''
-				this.findConsignDate = []
-				this.startDate = ''
-				this.endDate = ''
+
+			},
+			getList() {
+				let params = {
+					current: this.pageIndex,
+					size: this.pageSize,
+					name: this.findDriver,
+					type:this.tabSelected
+				}
+				request({
+					url: '/finance/payable',
+					params
+				}).then(res => {
+					if(this.tabSelected=='driver'){
+						this.driverData = res.data.data.records
+						this.count = res.data.data.total
+					}else{
+						this.followerData = res.data.data.records
+						this.count = res.data.data.total
+					}
+				})
 			},
 			pageChange(index) {
 				this.pageIndex = index
+				this.getList()
 			},
 			selectDateRange(date) {
-				this.startDate = new Date(date[0]).getTime()
-				this.endDate = new Date(date[1]).getTime()
+				this.startDate = date[0]
+				this.endDate = date[1]
 			},
 			handleTabSelected(tab) {
-				console.log(tab.$options.propsData.name)
+				
+				this.tabSelected = tab.$options.propsData.name
+				console.log(this.tabSelected)
+				this.getList()
 			},
-			viewinfo(type) {
-				this.$router.push({name: 'payableinfosimple', query: {type}})
+			viewinfo(type,transportRecordID) {
+				this.$router.push({name: 'payableinfosimple', query: {type:type,transportRecordID:transportRecordID}})
 			}
 		}
 	}
