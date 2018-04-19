@@ -41,11 +41,12 @@ response => {
 			|| response.data.code == 5202) { // 帐号已在其它地方登录!
 			localStorage.clear()
 			Message.error(response.data.msg)
-			if (process.env == 'production') {
-				window.location.href = '/#/login'
-			} else {
-				window.location.href = '/tms/#/login'
-			}
+			// if (process.env == 'production') {
+			// 	window.location.href = '/#/login'
+			// } else {
+			// 	window.location.href = '/tms/#/login'
+			// }
+			window.location.href = '/tms-h5/#/login'
 
 			return Promise.reject('error')
 		}
@@ -61,7 +62,7 @@ response => {
 					<p style="margin-top: 40px;color: #aaa">
 						一般客户处理时间为24小时内；客服联系电话，13529005327
 					</p>
-					<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/tms/#/login'">退出当前账户</button>
+					<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/tms-h5/#/login'">退出当前账户</button>
 				</div>
 				`,
 				dangerouslyUseHTMLString: true,

@@ -32,7 +32,7 @@
 			<el-table 
 				ref="multipleTable"
 				:data="carrierBill.carrierCargo" 
-				@selection-change="selectionChange($event, carrierBill.carrierOrderID)"
+				@selection-change="selectionChange($event, carrierBill)"
 				border style="width: 100%;margin-top:-1px" size="mini" resizable="false">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
 				<el-table-column label="货物规格/货物名称" prop="cargoName" width="140">
@@ -95,24 +95,25 @@
 		data() {
 			return {
 				selectedCargoList: [],
+				carrierCargos: [],
 				isSel: true
 			}
 		},
 		computed: {
 			totalWeight() {
-				const values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
+				let values = this.selectedCargoList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
 				return values.reduce((prev, curr) => {
 					return prev + curr
 				}, 0).toFixed(2)
 			},
 			totalVolume() {
-				const values = this.selectedCargoList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
+				let values = this.selectedCargoList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
 				return values.reduce((prev, curr) => {
 					return prev + curr
 				}, 0).toFixed(2)
 			},
 			totalNum() {
-				const values = this.selectedCargoList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
+				let values = this.selectedCargoList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
 				return values.reduce((prev, curr) => {
 					return prev + curr
 				}, 0).toFixed(2)
@@ -181,39 +182,37 @@
 				}
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
-			selectionChange(data, orderID) {
-				console.log(data, orderID)
+			selectionChange(data, carrierBill) {
 				for (let i = 0; i < data.length; i++) {
 					data[i].cargoWeightNew = data[i].remainingCargoWeight
 					data[i].cargoVolumeNew = data[i].remainingCargoVolume
 					data[i].cargoNumNew = data[i].remainingCargoNum
 				}
-				let list = this.selectedCargoList.filter(item => item.carrierOrderID != orderID)
+				let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
 				list.push(...data)
 				this.selectedCargoList = list
-				console.log(this.selectedCargoList)
 			},
-			selectAll(type) {
-				if (type) {
-					this.selectedCargoList = []
-					this.carrierBills.forEach(item => {
-						this.selectedCargoList.push(...item.carrierCargo)
-					})
-					this.selectedCargoList.forEach(row => {
-						this.$refs.multipleTable.forEach(item => {
-							item.toggleRowSelection(row)
-						})
-					})
+			// selectAll(type) {
+			// 	if (type) {
+			// 		this.selectedCargoList = []
+			// 		this.carrierBills.forEach(item => {
+			// 			this.selectedCargoList.push(...item.carrierCargo)
+			// 		})
+			// 		this.selectedCargoList.forEach(row => {
+			// 			this.$refs.multipleTable.forEach(item => {
+			// 				item.toggleRowSelection(row)
+			// 			})
+			// 		})
 						
-					this.isSel = false
-				} else {
-					this.selectedCargoList = []
-					this.$refs.multipleTable.forEach(item => {
-						item.clearSelection()
-					})
-					this.isSel = true
-				}
-			},
+			// 		this.isSel = false
+			// 	} else {
+			// 		this.selectedCargoList = []
+			// 		this.$refs.multipleTable.forEach(item => {
+			// 			item.clearSelection()
+			// 		})
+			// 		this.isSel = true
+			// 	}
+			// },
 			back() {
 				this.$router.go(-1)
 			},

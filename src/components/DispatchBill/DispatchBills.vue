@@ -69,7 +69,7 @@
 					</el-table-column>
 					<el-table-column label="到货时间" width="140" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.carrierOrder">{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp()}}</span>
+							<span v-if="scope.row.carrierOrder && scope.row.carrierOrder.consigneeDate">{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp()}}</span>
 							<span v-else></span>
 						</template>
 					</el-table-column>

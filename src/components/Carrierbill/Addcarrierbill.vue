@@ -474,7 +474,7 @@ export default {
 					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
-				this.getTransportPrice()
+				this.getTransportPrice(true)
 			}
 		},
 		handSelectPaymentMethod(data) {
@@ -505,7 +505,7 @@ export default {
 					this.carrierbillInfo.receiptMethod = 'Manual'
 					return
 				}
-				this.getTransportPrice()
+				this.getTransportPrice(false)
 			}
 		},
 		save() {
@@ -620,10 +620,12 @@ export default {
 				this.carrierbillInfo.porRequire.includes('NotRequired') && this.carrierbillInfo.porRequire.splice(this.carrierbillInfo.porRequire.indexOf('NotRequired'), 1)
 			}
 		},
-		getTransportPrice() {
+		getTransportPrice(type) {
 			let params = {
-				consigneeArea: this.carrierbillInfo.consigneeArea, //	收货地区	
+				consigneeAreaID: this.carrierbillInfo.consigneeAreaID, //	收货地区ID
+				consigneeArea: this.carrierbillInfo.consigneeArea, //	收货地区
 				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress, //	收货详细地址	
+				shipperAreaID: this.carrierbillInfo.shipperAreaID, //	发货地区ID
 				shipperArea: this.carrierbillInfo.shipperArea, //	发货地区	
 				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress // 发货详细地址
 			}
@@ -638,11 +640,13 @@ export default {
 					let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
 					let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
 					let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
-					this.carrierbillInfo.cashAmount = temp * result.externalCashRate
-					this.carrierbillInfo.codAmount = temp * result.externalCodRate
-					this.carrierbillInfo.porAmount = temp * result.externalPorRate
-					this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
-					this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
+					if (type) {
+						this.carrierbillInfo.cashAmount = temp * result.externalCashRate
+						this.carrierbillInfo.codAmount = temp * result.externalCodRate
+						this.carrierbillInfo.porAmount = temp * result.externalPorRate
+						this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
+						this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
+					}
 					this.exmile = result.externalMileage
 					this.innermile = result.mileage
 					this.totalPrice = temp
