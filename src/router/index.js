@@ -125,7 +125,7 @@ let routerMap = [
 						path: '/receivableinfosimple',
 						name: 'receivableinfosimple',
 						meta: {
-							title: '应收明细'
+							title: '应收详情'
 						},
 						component: () => import ('../components/Settlemanage/ReceivableinfoSimple'),
 					},
@@ -149,7 +149,7 @@ let routerMap = [
 						path: '/payableinfosimple',
 						name: 'payableinfosimple',
 						meta: {
-							title: '应付明细'
+							title: '应付详情'
 						},
 						component: () => import ('../components/Settlemanage/PayableinfoSimple'),
 					},

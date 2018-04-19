@@ -48,11 +48,9 @@
 			<div class="table">
 				<!-- 司机 -->
 				<el-table 
-					v-for="(driverItem, index) in driverData" 
-					:key="index + '1'"
 					v-show="tabSelected == 'driver'"
 					ref="recTable" 
-					:data="driverItem" 
+					:data="driverData" 
 					show-summary 
 					:summary-method="getSummaries" 
 					border style="width: 100%" size="mini" stripe>
@@ -83,11 +81,9 @@
 				</el-table>
 				<!-- 随车人员 -->
 				<el-table 
-					v-for="(followerItem, index) in followerData" 
-					:key="index + '2'"
 					v-show="tabSelected == 'follower'"
 					ref="recTable" 
-					:data="followerItem" 
+					:data="followerData" 
 					show-summary 
 					:summary-method="getSummaries" 
 					border style="width: 100%" size="mini">

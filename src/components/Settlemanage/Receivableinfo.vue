@@ -3,7 +3,7 @@
 		<div class="wf-card">
 			<div class="header clearfix">应收明细</div>
 			<div class="search">
-				<el-form :inline="true"  class="demo-form-inline"  size="small">
+				<el-form :inline="true"  class="demo-form-inline"  size="mini">
 					<el-form-item label="发货单位">
 						<el-input placeholder="请输入..." v-model="findConsigner"></el-input>
 					</el-form-item>
