@@ -10,13 +10,19 @@ const service = axios.create({
 	transformRequest: [function (data) {
 		// Do whatever you want to transform the data
 		let ret = ''
-		for (let it in data) {
-			ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+		for (let key in data) {
+			ret += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]) + '&'
 		}
+		let t = ret.split('&')
+		let arr = []
+		for (let i = 0; i < t.length; i++) {
+			t[i] && arr.push(t[i])
+		}
+		ret = arr.join('&')
 		return ret
 	}],
 	headers: {
-		'Content-Type': 'application/x-www-form-urlencoded'
+		'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
 	}
 })
 
@@ -62,7 +68,7 @@ response => {
 					<p style="margin-top: 40px;color: #aaa">
 						一般客户处理时间为24小时内；客服联系电话，13529005327
 					</p>
-					<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/tms-h5/#/login'">退出当前账户</button>
+					<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/#/login'">退出当前账户</button>
 				</div>
 				`,
 				dangerouslyUseHTMLString: true,

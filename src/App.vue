@@ -9,6 +9,7 @@ export default {
 	created() {
 		if (localStorage.getItem('token')) {
 			this.$store.dispatch('getUserInfo')
+			this.$store.dispatch('getConsts')
 		}
 	}
 }

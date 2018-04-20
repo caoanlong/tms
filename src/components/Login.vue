@@ -1,7 +1,7 @@
 <template>
 	<div class="login-container">
 		<div class="login-box">
-			<h1 class="login-title">TMS管理系统</h1>
+			<h1 class="login-title">微服TMS</h1>
 			<div class="form">
 				<div class="tabs">
 					<div 
@@ -15,7 +15,7 @@
 						class="tab-item" 
 						:class="{'active': loginOrRegister == 'register'}" 
 						@click="handleTabClick('register')">注册</div>
-					<div v-show="loginOrRegister == 'findpassword'" class="tab-item active">找回密码</div>
+					<div v-show="loginOrRegister == 'findpassword'" class="tab-item findpwd active">找回密码</div>
 				</div>
 				<!-- 登录 -->
 				<form class="login" v-show="loginOrRegister == 'login'" autocomplete="off">
@@ -26,8 +26,9 @@
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="password"></svg-icon>
 						<input autocomplete="off" :type="passwordType" name="password" placeholder="请输入密码" v-model="login.password">
-						<span class="ico show-pwd" @click="showPwd">
-							<svg-icon icon-class="eye"/>
+						<span class="show-pwd" @click="showPwd">
+							<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
+							<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
 						</span>
 					</div>
 					<div class="txt-btn" @click="handleTabClick('findpassword')">忘记密码?</div>
@@ -42,13 +43,14 @@
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="email"></svg-icon>
 						<input type="text" name="vcode" placeholder="请输入验证码" v-model="register.vcode">
-						<el-button style="width: 100px" type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
+						<el-button class="vercode-btn" type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
 					</div>
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="password"></svg-icon>
 						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="register.password">
-						<span class="ico show-pwd" @click="showPwd">
-							<svg-icon icon-class="eye"/>
+						<span class="show-pwd" @click="showPwd">
+							<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
+							<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
 						</span>
 					</div>
 					<div class="ipt">
@@ -99,7 +101,7 @@
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="email"></svg-icon>
 						<input type="text" name="vcode" placeholder="请输入验证码" v-model="findPassword.vcode">
-						<el-button style="width: 100px" type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
+						<el-button class="vercode-btn" type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
 					</div>
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="password"></svg-icon>
@@ -111,8 +113,9 @@
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="password"></svg-icon>
 						<input :type="passwordType" name="confirmPassword" placeholder="请重复输入密码" v-model="findPassword.confirmPassword">
-						<span class="ico show-pwd" @click="showPwd">
-							<svg-icon icon-class="eye"/>
+						<span class="show-pwd" @click="showPwd">
+							<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
+							<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
 						</span>
 					</div>
 					<div class="txt-btn">
@@ -123,9 +126,11 @@
 				</form>
 			</div>
 		</div>
+		<Footer/>
 	</div>
 </template>
 <script>
+import Footer from './CommonComponents/Footer'
 import request from "../common/request"
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
@@ -249,17 +254,16 @@ export default {
 			}
 
 			this.timeGo()
-			console.log(params)
 			request({
 				url: '/common/vcode',
 				params
 			}).then(res => {
 				console.log(res.data)
-				Message({
-					type: 'info',
-					message: res.data.data,
-					duration: 3 * 1000
-				})
+				// Message({
+				// 	type: 'info',
+				// 	message: res.data.data,
+				// 	duration: 3 * 1000
+				// })
 			})
 		},
 		/**
@@ -299,6 +303,7 @@ export default {
 					}).then(() => {
 						this.$router.push({name: 'home'})
 						this.$store.dispatch('getUserInfo')
+						this.$store.dispatch('getConsts')
 					})
 				}
 			})
@@ -378,6 +383,7 @@ export default {
 					}).then(() => {
 						this.$router.push({name: 'home'})
 						this.$store.dispatch('getUserInfo')
+						this.$store.dispatch('getConsts')
 					})
 				}
 			})
@@ -454,19 +460,26 @@ export default {
 				}, 1000)
 			}
 		}
+	},
+	components: {
+		Footer
 	}
 }
 </script>
 <style lang="stylus" scoped>
 	.login-container
-		display flex
-		justify-content center
-		align-items center
+		position relative
 		height 100%
 		background-color #424242
 		.login-box
+			position absolute
+			top 0
+			left 0
+			bottom 0
+			right 0
+			margin auto
 			width 480px
-			height 740px
+			// height 740px
 			.login-title
 				text-align center
 				color #fff
@@ -476,15 +489,20 @@ export default {
 				border-radius 8px
 				box-shadow 0 10px 30px rgba(0, 0, 0, .2)
 				.tabs
-					display flex
+					position relative
 					height 50px
 					line-height 50px
 					color #303133
 					.spit-line
-						flex 0 0 1px
+						position absolute
+						left 225px
+						top 0
+						width 1px
+						height 50px
 						background-color #e4e7ed
 					.tab-item
-						flex 1
+						float left
+						width 50%
 						text-align center
 						cursor pointer
 						border-bottom 1px solid #e4e7ed
@@ -493,6 +511,8 @@ export default {
 						&.active
 							color #409EFF
 							border none
+					.findpwd
+						width 100%
 				.login
 					.txt-btn
 						color #409EFF
@@ -503,22 +523,21 @@ export default {
 						cursor pointer
 				.findpassword
 					.txt-btn
-						display flex
 						color #409EFF
 						height 30px
 						line-height 30px
 						margin-top 10px
 						cursor pointer
-					.lg-btn
-						flex 1
-						text-align left
-					.gg-btn
-						flex 1
-						text-align right
+						.lg-btn
+							float left
+							width 50%
+							text-align left
+						.rg-btn
+							float left
+							width 50%
+							text-align right
 				.ipt
-					display flex
-					align-items center
-					align-content space-between
+					position relative
 					width 100%
 					height 44px
 					margin-top 20px
@@ -527,25 +546,43 @@ export default {
 					padding 5px
 					background-color #eee
 					.ico
-						flex 0 0 30px
+						position absolute
+						left 0
+						top 12px
+						width 30px
 						color #ccc
-						&.show-pwd
-							font-size 16px
-							cursor pointer
-							user-select none
+					.show-pwd
+						position absolute
+						right 0
+						top 12px
+						width 30px
+						color #ccc
+						font-size 16px
+						cursor pointer
+						user-select none
+					.vercode-btn
+						position absolute
+						right 10px
+						top 7px
+						width 100px
 					input
-						flex 1
 						display block
+						position relative
+						top -3px
+						width 100%
 						height 36px
 						line-height 36px
+						padding-left 30px
 						border none
 						outline none
 						background none
 						-webkit-appearance none
 					.sel
-						flex 1
+						float left
+						width 50%
 					.btn
-						flex 1
+						float left
+						width 50%
 				.login-btn
 					width 100%
 					margin-top 20px

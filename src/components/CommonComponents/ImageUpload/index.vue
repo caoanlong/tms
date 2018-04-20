@@ -29,7 +29,7 @@
 				:fixedNumber="fixedNumber" 
 				:img="localImgUrl" 
 				:outputSize="1"
-				outputType="jpeg">
+				outputType="png">
 			</vueCropper>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="isShowCropper = false">取 消</el-button>

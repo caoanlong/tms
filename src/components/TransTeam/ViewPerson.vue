@@ -11,9 +11,9 @@
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="状态">
-							<p v-if="person.status == 'pass'">通过</p>
-							<p v-else-if="person.status == 'unpass'">不通过</p>
-							<p v-else>其他</p>
+							<p v-if="person.status == 'Passed'">通过</p>
+							<p v-else-if="person.status == 'NotPassed'">不通过</p>
+							<p v-else-if="person.status == 'Other'">其他</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">

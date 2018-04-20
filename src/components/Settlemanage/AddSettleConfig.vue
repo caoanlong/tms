@@ -346,10 +346,10 @@ export default {
 			this.templateFreight.consigneeAreaID = data
 		},
 		calcInternalAmount(data) {
-			this.templateFreight.internalPrice = (this.templateFreight.mileage || 0) * (this.templateFreight.internalUnitPrice || 0)
+			this.templateFreight.internalPrice = ((this.templateFreight.mileage || 0) * (this.templateFreight.internalUnitPrice || 0)).toFixed(2)
 		},
 		calcExternalAmount(data) {
-			this.templateFreight.externalPrice = (this.templateFreight.externalMileage || 0) * (this.templateFreight.externalUnitPrice || 0)
+			this.templateFreight.externalPrice = ((this.templateFreight.externalMileage || 0) * (this.templateFreight.externalUnitPrice || 0)).toFixed(2)
 		},
 		add() {
 			let data = this.templateFreight

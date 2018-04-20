@@ -131,4 +131,18 @@ input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
 input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
 	color:#C0C4CC;
 }
+
+
+input:-webkit-autofill {
+    -webkit-animation: autofill-fix 1s infinite;
+}
+
+@-webkit-keyframes autofill-fix {
+    from {
+        background-color: transparent
+    }
+    to {
+        background-color: transparent
+    }
+}
 .el-input-group__append, .el-input-group__prepend{padding:0 10px;}

@@ -31,10 +31,10 @@
 					<span>结算管理</span>
 				</template>
 				<el-menu-item-group>
-					<el-menu-item index="receivablesum">应收汇总</el-menu-item>
+					<!-- <el-menu-item index="receivablesum">应收汇总</el-menu-item>
 					<el-menu-item index="receivableinfo">应收明细</el-menu-item>
 					<el-menu-item index="payablesum">应付汇总</el-menu-item>
-					<el-menu-item index="payableinfo">应付明细</el-menu-item>
+					<el-menu-item index="payableinfo">应付明细</el-menu-item> -->
 					<el-menu-item index="settleconfig">结算设置</el-menu-item>
 				</el-menu-item-group>
 			</el-submenu>
