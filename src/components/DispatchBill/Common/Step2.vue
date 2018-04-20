@@ -50,8 +50,8 @@
 					<el-input placeholder="姓名" v-model="findPersonName"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary">搜索</el-button>
-					<el-button type="default">重置</el-button>
+					<el-button type="primary" @click="getPersonList">搜索</el-button>
+					<el-button type="default" @click="resetPerson">重置</el-button>
 				</el-form-item>
 			</el-form>
 		</div>

@@ -46,7 +46,7 @@ response => {
 			// } else {
 			// 	window.location.href = '/tms/#/login'
 			// }
-			window.location.href = '/tms-h5/#/login'
+			window.location.href = '/#/login'
 
 			return Promise.reject('error')
 		}
