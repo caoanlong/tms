@@ -43,6 +43,7 @@ export const isInt = (value) => {
 	return r.test(value) || r2.test(value)
 }
 
+// 验证手机号
 export const checkMobile = (rule, value, callback) => {
 	if (!value) {
 		callback(new Error('手机号不能为空'))
@@ -55,6 +56,7 @@ export const checkMobile = (rule, value, callback) => {
 	} 
 }
 
+// 验证电话(包括手机号)
 export const checkTel = (rule, value, callback) => {
 	if (!value) {
 		callback(new Error('电话不能为空'))

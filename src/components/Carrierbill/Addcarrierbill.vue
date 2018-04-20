@@ -259,7 +259,7 @@ import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
 import { searchAreaByKey } from '../../common/utils'
-import { checkFloat2, checkMobile } from '../../common/validators'
+import { checkFloat2, checkTel } from '../../common/validators'
 
 export default {
 	data() {
@@ -331,7 +331,7 @@ export default {
 					{ required: true, message: '请输入发货人'}
 				],
 				shipperPhone: [
-					{ required: true, validator: checkMobile}
+					{ required: true, validator: checkTel}
 				],
 				shipperDate: [
 					{required: true, message: '请选择发货时间', trigger: 'change'}
@@ -349,7 +349,7 @@ export default {
 					{ required: true, message: '请输入收货人'}
 				],
 				consigneePhone: [
-					{ required: true, validator: checkMobile}
+					{ required: true, validator: checkTel}
 				],
 				consigneeDate: [
 					{required: true, message: '请选择收货时间', trigger: 'change'}

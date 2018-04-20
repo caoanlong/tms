@@ -470,6 +470,7 @@ export default {
 	.login-container
 		position relative
 		height 100%
+		min-height 768px
 		background-color #424242
 		.login-box
 			position absolute
@@ -479,7 +480,6 @@ export default {
 			right 0
 			margin auto
 			width 480px
-			// height 740px
 			.login-title
 				text-align center
 				color #fff

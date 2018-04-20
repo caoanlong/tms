@@ -28,10 +28,10 @@ export default {
 	methods: {
 		getBreadcrumb() {
 			let matched = this.$route.matched.filter(item => item.name)
-			const first = matched[0]
-			if (first && first.name !== 'home') {
-				matched = [{ path: '/', meta: { title: '安化' }}].concat(matched)
-			}
+			// const first = matched[0]
+			// if (first && first.name !== 'home') {
+			// 	matched = [{ path: '/', meta: { title: 'TMS' }}].concat(matched)
+			// }
 			this.levelList = matched
 		}
 	}
