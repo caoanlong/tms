@@ -4,6 +4,7 @@
 	</div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'App',
 	created() {
@@ -11,6 +12,12 @@ export default {
 			this.$store.dispatch('getUserInfo')
 			this.$store.dispatch('getConsts')
 		}
+	},
+	computed: {
+		...mapGetters(['consts'])
+	},
+	mounted() {
+		// console.log(this.consts)
 	}
 }
 

@@ -36,6 +36,7 @@
 					:show-file-list="false">
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
+				<!-- <FileUpload class="upload-File" name="excelFile" url="/transportPrice/upload"/> -->
 				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
@@ -147,6 +148,7 @@
 <script type="text/javascript">
 	import { Message } from 'element-ui'
 	import request, { baseURL } from '../../common/request'
+	import FileUpload from '../CommonComponents/FileUpload'
 	export default {
 		data() {
 			return {
@@ -273,6 +275,9 @@
 					this.getList()
 				})
 			}
+		},
+		components: {
+			FileUpload
 		}
 	}
 </script>

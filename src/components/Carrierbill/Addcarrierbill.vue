@@ -256,6 +256,7 @@
 
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
 import { searchAreaByKey } from '../../common/utils'
@@ -280,7 +281,7 @@ export default {
 					}
 				],
 				carrierOrderNo:'',
-				carrierrName: JSON.parse(localStorage.getItem('userInfo')).companyName,
+				carrierrName: this.userInfo.companyName,
 				cashAmount:'',
 				chargeMode:'',
 				codAmount:'',
@@ -385,6 +386,11 @@ export default {
 				]
 			}
 		}
+	},
+	computed: {
+		...mapGetters([
+			'userInfo'
+		])
 	},
 	methods: {
 		getConsignors(queryString, cb) {

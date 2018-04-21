@@ -131,7 +131,7 @@
 </template>
 <script>
 import Footer from './CommonComponents/Footer'
-import request from "../common/request"
+import request, {baseURL} from "../common/request"
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
 import { isPoneAvailable, isVerCodeAvailable } from '../common/validators'

@@ -222,7 +222,6 @@ export default {
 		},
 
 		getList() {
-			console.log(this.pageIndex)
 			let params = {
 				current: this.pageIndex,
 				size: this.pageSize,

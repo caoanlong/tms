@@ -20,13 +20,6 @@ const consts = {
 			}).then(res => {
 				commit('GET_CONSTS', res.data.data.records)
 			})
-		},
-		getConstWithType(type) {
-			new Promise((resolve, reject) => {
-				for (var i = 0; i < state.consts.length; i++) {
-					state.consts[i]
-				}
-			})
 		}
 	}
 }

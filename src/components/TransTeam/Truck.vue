@@ -190,6 +190,7 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
+	import { mapGetters } from 'vuex'
 	import request, { baseURL } from '../../common/request'
 	import { limitLength20, checkInt2 } from '../../common/validators'
 	export default {
@@ -212,8 +213,8 @@
 				tableData: [],
 				selectedList: [],
 				importFileUrl: baseURL + '/truck/upload',
-				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' +localStorage.getItem("token"),
+				uploadHeaders: {'Authorization': this.token},
+				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' + this.token,
 				templateTit: 'vehicleInfo.xlsx',
 				rules: {
 					plateNo: [
@@ -228,6 +229,11 @@
 					]
 				}
 			}
+		},
+		computed: {
+			...mapGetters([
+				'token'
+			])
 		},
 		created() {
 			this.getList()
