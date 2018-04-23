@@ -121,6 +121,7 @@ const ajax = function (json) {
 					localStorage.clear()
 					Message.error(response.msg)
 					window.location.href = '/#/login'
+					// window.location.href = '/tms/#/login' // 测试
 					// window.location.href = '/tms-h5/#/login' // 演练
 					reject(res)
 					return

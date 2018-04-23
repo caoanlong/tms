@@ -6,7 +6,9 @@
 				<el-row>
 					<el-col :span="6">
 						<el-form-item label="状态">
-							<p>{{truck.status}}</p>
+							<p v-if="truck.status == 'Passed'">通过</p>
+							<p v-if="truck.status == 'NotPassed'">未通过</p>
+							<p v-if="truck.status == 'Other'">其他</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">

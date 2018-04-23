@@ -5,7 +5,15 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="mini">
 					<el-form-item label="发货时间">
-						<el-date-picker v-model="findRangeDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="timestamp" :clearable="false" @change="selectDateRange">
+						<el-date-picker 
+							v-model="findRangeDate" 
+							type="daterange" 
+							range-separator="至" 
+							start-placeholder="开始日期" 
+							end-placeholder="结束日期" 
+							value-format="timestamp" 
+							:clearable="false" 
+							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -26,7 +34,7 @@
 							{{scope.row.shipperAreaID | searchAreaByKey()}}
 						</template>
 					</el-table-column>
-					<el-table-column label="发货详细地址" prop="consigneeDetailAddress"></el-table-column>
+					<el-table-column label="发货详细地址" prop="shipperDetailAddress"></el-table-column>
 					<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
 					<el-table-column label="收货地区">
 						<template slot-scope="scope">
@@ -41,7 +49,11 @@
 					</el-table-column>
 					<el-table-column label="总货量" align="center">
 						<template slot-scope="scope">
-							{{scope.row.cargoWeight?scope.row.cargoWeight+'吨/':''}}{{scope.row.cargoVolume?scope.row.cargoVolume+'方/':''}}{{scope.row.cargoNum?scope.row.cargoNum+'件':''}}
+							<span>
+							{{scope.row.cargoWeight ? (scope.row.cargoWeight + '吨'):''}}
+							{{scope.row.cargoVolume ? ('/' + scope.row.cargoVolume + '方'):''}}
+							{{scope.row.cargoNum ? '/' + scope.row.cargoNum + '件':''}}
+							</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="总运费" prop="money" align="center" width="120"></el-table-column>
@@ -81,8 +93,8 @@ export default {
 	data() {
 		return {
 			findRangeDate: [],
-			findshipperBeginDate: '',
-			findshipperEndDate: '',
+			findshipperBeginDate: new Date().getTime() - 3600000 * 24 * 30,
+			findshipperEndDate: new Date().getTime(),
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,

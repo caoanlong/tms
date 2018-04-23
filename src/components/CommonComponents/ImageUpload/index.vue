@@ -102,6 +102,12 @@
 		methods: {
 			addImg(e) {
 				if (this.$refs.uploadFile.value != '') {
+					let arr = this.$refs.uploadFile.files[0].name.split('.')
+					let suffix = arr[arr.length-1].toLowerCase()
+					if (suffix != 'jpg' && suffix != 'jpeg' && suffix != 'png' && suffix != 'gif') {
+						Message.error('图片格式只支持jpg、png和gif！')
+						return
+					}
 					this.localImgUrl = window.URL.createObjectURL(this.$refs.uploadFile.files[0])
 					this.isShowCropper = true
 					this.$refs.uploadFile.value = ''
