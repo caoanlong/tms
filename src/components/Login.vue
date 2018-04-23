@@ -259,11 +259,11 @@ export default {
 				params
 			}).then(res => {
 				console.log(res.data)
-				// Message({
-				// 	type: 'info',
-				// 	message: res.data.data,
-				// 	duration: 3 * 1000
-				// })
+				Message({
+					type: 'info',
+					message: res.data.data,
+					duration: 3 * 1000
+				})
 			})
 		},
 		/**

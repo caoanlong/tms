@@ -213,8 +213,8 @@
 				tableData: [],
 				selectedList: [],
 				importFileUrl: baseURL + '/truck/upload',
-				uploadHeaders: {'Authorization': this.token},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' + this.token,
+				uploadHeaders: {'Authorization': localStorage.getItem('token')},
+				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' + localStorage.getItem('token'),
 				templateTit: 'vehicleInfo.xlsx',
 				rules: {
 					plateNo: [

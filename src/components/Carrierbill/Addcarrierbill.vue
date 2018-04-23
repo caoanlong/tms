@@ -281,7 +281,7 @@ export default {
 					}
 				],
 				carrierOrderNo:'',
-				carrierrName: this.userInfo.companyName,
+				carrierrName: '',
 				cashAmount:'',
 				chargeMode:'',
 				codAmount:'',
@@ -388,9 +388,13 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
-			'userInfo'
-		])
+		...mapGetters(['userInfo'])
+	},
+	created() {
+		if (this.userInfo) {
+			let companyName = JSON.parse(this.userInfo).companyName
+			this.carrierbillInfo.carrierrName = companyName
+		}
 	},
 	methods: {
 		getConsignors(queryString, cb) {

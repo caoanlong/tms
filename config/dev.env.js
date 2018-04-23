@@ -17,7 +17,7 @@ module.exports = merge(prodEnv, {
 	// 农新考电脑
 	// BASE_API: '"http://192.168.1.49:9999"',
 	// 测试
-	// BASE_API: '"http://develop.we-service.cn/tms-api/"',
-	BASE_API: '"http://tms.develop.we-service.cn/tms-api-practice"',
+	BASE_API: '"http://develop.we-service.cn/tms-api"',
+	// BASE_API: '"http://tms.develop.we-service.cn/tms-api-practice"',
 	IMG_API: '"http://develop.we-service.cn/hdd/image/"',
 })

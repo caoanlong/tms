@@ -4,12 +4,6 @@
 			<div class="header clearfix">应收汇总</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="mini">
-					<el-form-item label="发货地区">
-						<DistPicker @selectChange="handleSelectedArea" class="normal" :selected="selectedArea"/>
-					</el-form-item>
-					<el-form-item label="收货地区">
-						<DistPicker @selectChange="handleSelectedArea1" class="normal" :selected="selectedArea1"/>
-					</el-form-item>
 					<el-form-item label="发货时间">
 						<el-date-picker v-model="findRangeDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="timestamp" :clearable="false" @change="selectDateRange">
 						</el-date-picker>
@@ -82,15 +76,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
 export default {
 	data() {
 		return {
-			selectedArea:[],
-			selectedArea1:[],
-			findshipperAreaID:'',
-			findconsigneeAreaID:'',
 			findRangeDate: [],
 			findshipperBeginDate: '',
 			findshipperEndDate: '',
@@ -105,10 +94,6 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.selectedArea =[]
-			this.selectedArea1 =[]
-			this.findshipperAreaID= '' 
-			this.findconsigneeAreaID= '' 
 			this.findRangeDate = []
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
@@ -118,8 +103,6 @@ export default {
 			let params = {
 				current: this.pageIndex,
 				size: this.pageSize,
-				shipperAreaID: this.findshipperAreaID, 
-				consigneeAreaID: this.findconsigneeAreaID, 
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate
 			}
@@ -127,7 +110,6 @@ export default {
 				url: '/finance/receivable',
 				params
 			}).then(res => {
-				console.log(res.data.data)
 				this.tableData = res.data.data.records
 				this.count = res.data.data.total
 			})
@@ -140,18 +122,9 @@ export default {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
 		},
-		handleSelectedArea(data) {
-			this.findshipperAreaID = data
-		},
-		handleSelectedArea1(data) {
-			this.findconsigneeAreaID = data
-		},
 		viewinfo(shipperAreaID, consigneeAreaID) {
 			this.$router.push({ name: 'receivableinfosimple', query: { shipperAreaID, consigneeAreaID } })
 		}
-	},
-	components: {
-		DistPicker
 	}
 }
 

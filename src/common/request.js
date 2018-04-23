@@ -92,13 +92,19 @@ error => {
 // jquery ajax
 // jQuery.support.cors = true
 const ajax = function (json) {
+	let data = null
+	if (json.data) {
+		data = json.data
+	} else {
+		data = json.params
+	}	
 	return new Promise((resolve, reject) => {
 		$.ajax({
 			url: baseURL + json.url,
 			type: json.method || 'get',
 			dataType: 'json',
 			processData: false,
-			data: !json.contentType ? qs.stringify(json.data) : json.data,
+			data: !json.contentType ? qs.stringify(data) : data,
 			headers: {
 				'contentType': json.contentType || 'application/x-www-form-urlencoded;charset=utf-8',
 				'Authorization': localStorage.getItem('token')
@@ -147,7 +153,7 @@ const ajax = function (json) {
 				let authorization = res.getResponseHeader('authorization')
 				if (authorization) resData.headers = {'authorization': authorization}
 				resData.data = response
-				console.log(resData)
+				// console.log(resData)
 				resolve(resData)
 			},
 			success: (res) => {

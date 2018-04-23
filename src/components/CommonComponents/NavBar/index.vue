@@ -6,7 +6,7 @@
 			<el-dropdown class="avatar-container right-menu-item">
 				<div class="avatar-wrapper">
 					<img class="user-avatar" src="Photo" @error="errorImg">
-					<span class="user-text">你好！{{userInfo.userName}}</span>
+					<span class="user-text">你好！{{name}}</span>
 					<i class="el-icon-caret-bottom"></i>
 				</div>
 				<el-dropdown-menu slot="dropdown">
@@ -32,10 +32,8 @@ import { mapGetters } from 'vuex'
 export default {
 	computed: {
 		...mapGetters([
-			'userInfo'
+			'name'
 		])
-	},
-	created() {
 	},
 	methods: {
 		logout() {
