@@ -38,12 +38,13 @@ response => {
 			|| response.data.code == 5202) { // 帐号已在其它地方登录!
 			localStorage.clear()
 			Message.error(response.data.msg)
-			// if (process.env == 'production') {
-			// 	window.location.href = '/#/login'
-			// } else {
-			// 	window.location.href = '/tms/#/login'
-			// }
-			window.location.href = '/#/login'
+			if (process.env.ENV_CONFIG == 'test') {
+				window.location.href = '/tms/#/login' // 测试
+			} else if (process.env.ENV_CONFIG == 'practice') {
+				window.location.href = '/tms-h5/#/login' // 演练
+			} else {
+				window.location.href = '/#/login'  // 生产
+			}
 
 			return Promise.reject('error')
 		}
@@ -97,7 +98,7 @@ const ajax = function (json) {
 		data = json.data
 	} else {
 		data = json.params
-	}	
+	}
 	return new Promise((resolve, reject) => {
 		$.ajax({
 			url: baseURL + json.url,
@@ -120,9 +121,13 @@ const ajax = function (json) {
 					|| response.code == 5202) { // 帐号已在其它地方登录!
 					localStorage.clear()
 					Message.error(response.msg)
-					window.location.href = '/#/login'
-					// window.location.href = '/tms/#/login' // 测试
-					// window.location.href = '/tms-h5/#/login' // 演练
+					if (process.env.ENV_CONFIG == 'test') {
+						window.location.href = '/tms/#/login' // 测试
+					} else if (process.env.ENV_CONFIG == 'practice') {
+						window.location.href = '/tms-h5/#/login' // 演练
+					} else {
+						window.location.href = '/#/login'  // 生产
+					}
 					reject(res)
 					return
 				}
@@ -138,7 +143,7 @@ const ajax = function (json) {
 							<p style="margin-top: 40px;color: #aaa">
 								一般客户处理时间为24小时内；客服联系电话，13529005327
 							</p>
-							<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/#/login'">退出当前账户</button>
+							<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/tms/#/login'">退出当前账户</button>
 						</div>
 						`,
 						dangerouslyUseHTMLString: true,
@@ -160,7 +165,8 @@ const ajax = function (json) {
 			success: (res) => {
 			},
 			error: (res) => {
-				// reject(res)
+				reject(res)
+				return
 			}
 		})
 	})
