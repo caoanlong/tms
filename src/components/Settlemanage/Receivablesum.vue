@@ -92,7 +92,7 @@ import request from '../../common/request'
 export default {
 	data() {
 		return {
-			findRangeDate: [],
+			findRangeDate: [new Date().getTime() - 3600000 * 24 * 30, new Date().getTime()],
 			findshipperBeginDate: new Date().getTime() - 3600000 * 24 * 30,
 			findshipperEndDate: new Date().getTime(),
 			pageIndex: 1,

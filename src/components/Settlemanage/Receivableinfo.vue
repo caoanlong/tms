@@ -27,8 +27,8 @@
 				<el-table ref="recTable" :data="tableData" show-summary :summary-method="getSummaries" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="序号" type="index" align="center" fixed width="60"></el-table-column>
 					<el-table-column label="发货日期" width="90" align="center">
-						<template slot-scope="scope" v-if="scope.row.shipperDate">
-							{{scope.row.shipperDate | getdatefromtimestamp(true)}}
+						<template slot-scope="scope">
+							<span v-if="scope.row.shipperDate">{{scope.row.shipperDate | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="发货单号" prop="consigneNum"></el-table-column>
@@ -36,20 +36,24 @@
 					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
 					<el-table-column label="派单日期" width="90" align="center">
-						<template slot-scope="scope" v-if="scope.row.createTime">
-							{{scope.row.createTime | getdatefromtimestamp(true)}}
+						<template slot-scope="scope">
+							<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="调度单号" prop="dispatchOrderNo"></el-table-column>
 					<el-table-column label="签收日期" width="90" align="center">
-						<template slot-scope="scope" v-if="scope.row.signTime">
-							{{scope.row.signTime | getdatefromtimestamp(true)}}
+						<template slot-scope="scope">
+							<span v-if="scope.row.signTime">{{scope.row.signTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="车辆编号" prop="code"></el-table-column>
 					<el-table-column label="车牌号码" prop="plateNo"></el-table-column>
 					<el-table-column label="驾驶员" prop="realName"></el-table-column>
-					<el-table-column label="核载吨位" prop="loads"></el-table-column>
+					<el-table-column label="核载吨位">
+						<template slot-scope="scope">
+							<span>{{(Number(scope.row.loads) / 1000).tofixed(2)}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="收货地区" prop="consigneeArea" width="120"></el-table-column>
 					<el-table-column label="收货详细地址" prop="consigneeDetailAddress"></el-table-column>
 					<!-- <el-table-column label="对外里程" prop="externalMile"></el-table-column> -->
