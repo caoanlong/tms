@@ -183,12 +183,12 @@
 				let params = {
 					current: this.pageIndex,
 					size: this.pageSize,
-					companyArea:this.findcompanyArea,
-					companyName:this.findcompanyName,
-					contactName:this.findcontactName,
-					contactPhone:this.findcontactPhone,
-					createTimeBegin:this.findcreateTimeBegin,
-					createTimeEnd:this.findcreateTimeEnd,
+					companyArea: this.findcompanyArea,
+					companyName: this.findcompanyName,
+					contactName: this.findcontactName,
+					contactPhone: this.findcontactPhone,
+					createTimeBegin: this.findcreateTimeBegin,
+					createTimeEnd: this.findcreateTimeEnd,
 					type: 'ShipperConsignee',
 				}
 				request({

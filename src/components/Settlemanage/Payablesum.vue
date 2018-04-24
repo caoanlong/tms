@@ -31,7 +31,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
+				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="table">
 				<el-table 
@@ -102,10 +102,11 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import request from '../../common/request'
+	import request, { baseURL } from '../../common/request'
 	export default {
 		data() {
 			return {
+				exportExcelUrl: baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token"),
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
@@ -156,5 +157,24 @@
 	}
 </script>
 <style lang="stylus" scoped>
-
+.download-btn
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-right 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
 </style>

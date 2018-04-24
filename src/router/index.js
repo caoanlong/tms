@@ -122,14 +122,6 @@ let routerMap = [
 						component: () => import ('../components/Settlemanage/Receivablesum'),
 					},
 					{
-						path: '/receivableinfosimple',
-						name: 'receivableinfosimple',
-						meta: {
-							title: '应收详情'
-						},
-						component: () => import ('../components/Settlemanage/ReceivableinfoSimple'),
-					},
-					{
 						path: '/receivableinfo',
 						name: 'receivableinfo',
 						meta: {

@@ -21,7 +21,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
+				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="table">
 				<el-table ref="recTable" :data="tableData" show-summary :summary-method="getSummaries" border style="width: 100%" size="mini" stripe>
@@ -49,11 +49,11 @@
 					<el-table-column label="车辆编号" prop="code"></el-table-column>
 					<el-table-column label="车牌号码" prop="plateNo"></el-table-column>
 					<el-table-column label="驾驶员" prop="realName"></el-table-column>
-					<el-table-column label="核载吨位">
+					<!-- <el-table-column label="核载吨位">
 						<template slot-scope="scope">
-							<span>{{(Number(scope.row.loads) / 1000).tofixed(2)}}</span>
+							<span>{{scope.row.loads}}</span>
 						</template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column label="收货地区" prop="consigneeArea" width="120"></el-table-column>
 					<el-table-column label="收货详细地址" prop="consigneeDetailAddress"></el-table-column>
 					<!-- <el-table-column label="对外里程" prop="externalMile"></el-table-column> -->
@@ -90,20 +90,21 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import request from '../../common/request'
+	import request, { baseURL } from '../../common/request'
 	export default {
 		data() {
-		return {
-			findRangeDate: [],
-			findshipperBeginDate: '',
-			findshipperEndDate: '',
-			findshipperCompanyName: '',
-			findconsigneeCompanyName: '',
-			pageIndex: 1,
-			pageSize: 10,
-			count: 0,
-			tableData: []
-		}
+			return {
+				exportExcelUrl: baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token"),
+				findRangeDate: [],
+				findshipperBeginDate: '',
+				findshipperEndDate: '',
+				findshipperCompanyName: '',
+				findconsigneeCompanyName: '',
+				pageIndex: 1,
+				pageSize: 10,
+				count: 0,
+				tableData: []
+			}
 	},
 	created() {
 		this.getDetail()
@@ -125,6 +126,8 @@
 			let params = {
 				shipperAreaID: this.$route.query.shipperAreaID || '',
 				consigneeAreaID: this.$route.query.consigneeAreaID || '',
+				shipperDetailAddress: this.$route.query.shipperDetailAddress || '',
+				consigneeDetailAddress: this.$route.query.consigneeDetailAddress || '',
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate,
 				shipperCompanyName: this.findshipperCompanyName,
@@ -146,5 +149,24 @@
 }
 </script>
 <style lang="stylus" scoped>
-
+.download-btn
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-right 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
 </style>

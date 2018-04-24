@@ -23,19 +23,19 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-download">导出</el-button>
+				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="table">
 				<el-table ref="recTable" :data="tableData" show-summary :summary-method="getSummaries" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
+					<!-- <el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column> -->
 					<el-table-column label="发货地区" prop="area" width="120">
 						<template slot-scope="scope">
 							{{scope.row.shipperAreaID | searchAreaByKey()}}
 						</template>
 					</el-table-column>
 					<el-table-column label="发货详细地址" prop="shipperDetailAddress"></el-table-column>
-					<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
+					<!-- <el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column> -->
 					<el-table-column label="收货地区">
 						<template slot-scope="scope">
 							{{scope.row.consigneeAreaID | searchAreaByKey()}}
@@ -59,7 +59,7 @@
 					<el-table-column label="总运费" prop="money" align="center" width="120"></el-table-column>
 					<el-table-column label="操作" align="center" width="60" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="viewinfo(scope.row.shipperAreaID,scope.row.consigneeAreaID)">查看</el-button>
+							<el-button type="primary" size="mini" @click="viewinfo(scope.row)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -88,10 +88,11 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from '../../common/request'
+import request, { baseURL } from '../../common/request'
 export default {
 	data() {
 		return {
+			exportExcelUrl: baseURL + '/export/finance/receivable?Authorization=' + localStorage.getItem("token"),
 			findRangeDate: [new Date().getTime() - 3600000 * 24 * 30, new Date().getTime()],
 			findshipperBeginDate: new Date().getTime() - 3600000 * 24 * 30,
 			findshipperEndDate: new Date().getTime(),
@@ -134,14 +135,37 @@ export default {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
 		},
-		viewinfo(shipperAreaID, consigneeAreaID) {
-			this.$router.push({ name: 'receivableinfosimple', query: { shipperAreaID, consigneeAreaID } })
+		viewinfo(data) {
+			this.$router.push({ name: 'receivableinfo', query: { 
+				'shipperAreaID': data.shipperAreaID, 
+				'consigneeAreaID': data.consigneeAreaID,
+				'shipperDetailAddress': data.shipperDetailAddress,
+				'consigneeDetailAddress': data.consigneeDetailAddress
+			}})
 		}
 	}
 }
 
 </script>
 <style lang="stylus" scoped>
-
-
+.download-btn
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-right 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
 </style>
