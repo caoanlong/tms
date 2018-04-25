@@ -16,7 +16,6 @@
 					</el-form-item>
 					<el-form-item label="发货日期">
 						<el-date-picker
-							
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
@@ -35,7 +34,6 @@
 			</div>
 			<div class="table">
 				<el-table 
-					
 					ref="recTable" 
 					:data="tableData" 
 					show-summary :summary-method="getSummaries"
