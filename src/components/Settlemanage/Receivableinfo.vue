@@ -59,11 +59,19 @@
 					<!-- <el-table-column label="对外里程" prop="externalMile"></el-table-column> -->
 					<!-- <el-table-column label="对外单价" prop="externalUnitPrice"></el-table-column> -->
 					<el-table-column label="应收款" prop="receivables"></el-table-column>
-					<el-table-column label="签收货量" prop="receiveNum"></el-table-column>
+					<el-table-column label="签收货量" width="100">
+						<template slot-scope="scope">
+							<span>
+							{{scope.row.cargoWeight ? (scope.row.cargoWeight + '吨') : ''}}
+							{{scope.row.cargoVolume ? ('/' + scope.row.cargoVolume + '方') : ''}}
+							{{scope.row.cargoNum ? ('/' + scope.row.cargoNum + '件') : ''}}
+							</span>
+						</template>
+					</el-table-column>
 					<!-- <el-table-column label="外部运费" prop="externalFreight"></el-table-column> -->
-					<el-table-column label="其他" prop="other"></el-table-column>
+					<el-table-column label="其他" prop="otherAmount"></el-table-column>
 					<el-table-column label="备注" prop="remark"></el-table-column>
-					<el-table-column label="总计" prop="totalNum" align="center" width="120"></el-table-column>
+					<el-table-column label="总计" prop="allmoney"></el-table-column>
 				</el-table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
@@ -124,6 +132,8 @@
 		},
 		getDetail() {
 			let params = {
+				current: this.pageIndex,
+				size: this.pageSize,
 				shipperAreaID: this.$route.query.shipperAreaID || '',
 				consigneeAreaID: this.$route.query.consigneeAreaID || '',
 				shipperDetailAddress: this.$route.query.shipperDetailAddress || '',

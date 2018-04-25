@@ -424,7 +424,6 @@ export default {
 				url: '/truck/info',
 				params
 			}).then(res => {
-				console.log(res.data.data)
 				this.truck = res.data.data
 				let resDataComStaffPic = res.data.data
 				let i = 1
