@@ -388,13 +388,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['userInfo'])
+		...mapGetters(['companyName'])
 	},
 	created() {
-		if (this.userInfo) {
-			let companyName = JSON.parse(this.userInfo).companyName
-			this.carrierbillInfo.carrierrName = companyName
-		}
+		this.carrierbillInfo.carrierrName = this.companyName
 	},
 	methods: {
 		getConsignors(queryString, cb) {

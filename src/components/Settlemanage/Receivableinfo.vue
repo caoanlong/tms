@@ -31,7 +31,7 @@
 							<span v-if="scope.row.shipperDate">{{scope.row.shipperDate | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="发货单号" prop="consigneNum"></el-table-column>
+					<el-table-column label="发货单号" prop="shipperNo"></el-table-column>
 					<el-table-column label="承运单号" prop="carrierOrderNo"></el-table-column>
 					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
@@ -104,8 +104,8 @@
 			return {
 				exportExcelUrl: baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token"),
 				findRangeDate: [],
-				findshipperBeginDate: '',
-				findshipperEndDate: '',
+				findshipperBeginDate: this.$route.query.shipperBeginDate || '',
+				findshipperEndDate: this.$route.query.shipperEndDate || '',
 				findshipperCompanyName: '',
 				findconsigneeCompanyName: '',
 				pageIndex: 1,
@@ -138,8 +138,8 @@
 				consigneeAreaID: this.$route.query.consigneeAreaID || '',
 				shipperDetailAddress: this.$route.query.shipperDetailAddress || '',
 				consigneeDetailAddress: this.$route.query.consigneeDetailAddress || '',
-				shipperBeginDate: this.findshipperBeginDate,
-				shipperEndDate: this.findshipperEndDate,
+				shipperBeginDate: this.$route.query.shipperBeginDate || this.findshipperBeginDate,
+				shipperEndDate: this.$route.query.shipperEndDate || this.findshipperEndDate,
 				shipperCompanyName: this.findshipperCompanyName,
 				consigneeCompanyName: this.findconsigneeCompanyName
 			}

@@ -59,7 +59,7 @@
 					<el-table-column label="总运费" prop="money" align="center" width="120"></el-table-column>
 					<el-table-column label="操作" align="center" width="60" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="viewinfo(scope.row)">查看</el-button>
+							<el-button type="primary" size="mini" @click="view(scope.row)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -135,12 +135,14 @@ export default {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
 		},
-		viewinfo(data) {
+		view(data) {
 			this.$router.push({ name: 'receivableinfo', query: { 
-				'shipperAreaID': data.shipperAreaID, 
+				'shipperAreaID': data.shipperAreaID,
 				'consigneeAreaID': data.consigneeAreaID,
 				'shipperDetailAddress': data.shipperDetailAddress,
-				'consigneeDetailAddress': data.consigneeDetailAddress
+				'consigneeDetailAddress': data.consigneeDetailAddress,
+				'shipperBeginDate': this.findshipperBeginDate,
+				'shipperEndDate': this.findshipperEndDate
 			}})
 		}
 	}

@@ -86,11 +86,11 @@
 					<el-table-column label="司机姓名" prop="realName" align="center"></el-table-column>
 					<el-table-column label="随车人员" prop="followerRealName">
 					</el-table-column>
-					<el-table-column label="核载吨位" prop="loads" align="center">
+					<!-- <el-table-column label="核载吨位" prop="loads" align="center">
 						<template slot-scope="scope">
 							{{scope.row.loads?(scope.row.loads +''):''}}
 						</template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column label="收货地区" prop="consigneeArea"></el-table-column>
 					<el-table-column label="收货详细地址" prop="consigneeDetailAddress"></el-table-column>
 
@@ -171,6 +171,14 @@ export default {
 		this.getDetail()
 	},
 	methods: {
+		pageChange(index) {
+			this.pageIndex = index
+			this.getDetail()
+		},
+		selectDateRange(date) {
+			this.findshipperBeginDate = date[0]
+			this.findshipperEndDate = date[1]
+		},
 		reset() {
 			this.findRangeDate = [],
 			this.findshipperBeginDate = '',
@@ -188,13 +196,14 @@ export default {
 				size: this.pageSize,
 				name: this.findDriver,
 				type: this.tabSelected,
-				shipperBeginDate: this.findshipperBeginDate,
-				shipperEndDate: this.findshipperEndDate,
+				shipperBeginDate: this.$route.query.shipperBeginDate || this.findshipperBeginDate,
+				shipperEndDate: this.$route.query.shipperEndDate || this.findshipperEndDate,
 				plateNo: this.findplateNo,
 				name: this.findName,
 				shipperCompanyName: this.findshipperCompanyName,
 				consigneeCompanyName: this.findconsigneeCompanyName,
-				code: this.findcode
+				code: this.findcode,
+				transportRecordID: this.$route.query.transportRecordID || ''
 			}
 			request({
 				url: '/finance/payableDetail',
@@ -203,14 +212,6 @@ export default {
 				this.tableData = res.data.data.records
 				this.total = res.data.data.total
 			})
-		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getDetail()
-		},
-		selectDateRange(date) {
-			this.findshipperBeginDate = date[0]
-			this.findshipperEndDate = date[1]
 		},
 		handleTabSelected(tab) {
 			this.tabSelected = tab.$options.propsData.name

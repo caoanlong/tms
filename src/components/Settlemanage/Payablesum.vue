@@ -16,10 +16,13 @@
 					</el-form-item>
 					<el-form-item label="发货日期">
 						<el-date-picker
+							v-model="findRangeDate" 
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
+							value-format="timestamp" 
+							:clearable="false"
 							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
@@ -71,7 +74,7 @@
 					</el-table-column>
 					<el-table-column label="操作" align="center" width="60" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="viewinfo('driver',scope.row.transportRecordID)">查看</el-button>
+							<el-button type="primary" size="mini" @click="view(scope.row.transportRecordID)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -109,7 +112,10 @@
 				pageSize: 10,
 				count: 0,
 				findName:'',
-				tableData:[],
+				findRangeDate: [],
+				findShipperBeginDate: '',
+				findShipperEndDate: '',
+				tableData: [],
 				tabSelected:'driver',
 			}
 		},
@@ -117,15 +123,29 @@
 			this.getList()
 		},
 		methods: {
+			pageChange(index) {
+				this.pageIndex = index
+				this.getList()
+			},
+			selectDateRange(date) {
+				this.findShipperBeginDate = date[0]
+				this.findShipperEndDate = date[1]
+			},
 			reset() {
-				this.findName=''
+				this.findName = ''
+				this.findShipperBeginDate = ''
+				this.findShipperEndDate = ''
+				this.findRangeDate = []
+				this.getList()
 			},
 			getList() {
 				let params = {
-					current: this.pageIndex,
-					size: this.pageSize,
-					name: this.findName,
-					type:this.tabSelected
+					'current': this.pageIndex,
+					'size': this.pageSize,
+					'name': this.findName,
+					'type': this.tabSelected,
+					'shipperBeginDate': this.findShipperBeginDate,
+					'shipperEndDate': this.findShipperEndDate
 				}
 				request({
 					url: '/finance/payable',
@@ -135,21 +155,16 @@
 					this.count = res.data.data.total
 				})
 			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			selectDateRange(date) {
-				this.startDate = date[0]
-				this.endDate = date[1]
-			},
 			handleTabSelected(tab) {
 				this.tabSelected = tab.$options.propsData.name
-				console.log(this.tabSelected)
-				this.getList()
+				this.reset()
 			},
-			viewinfo(type,transportRecordID) {
-				this.$router.push({name: 'payableinfosimple', query: {type:type,transportRecordID:transportRecordID}})
+			view(transportRecordID) {
+				this.$router.push({name: 'payableinfo', query: {
+					'transportRecordID': transportRecordID,
+					'shipperBeginDate': this.findShipperBeginDate,
+					'shipperEndDate': this.findShipperEndDate
+				}})
 			}
 		}
 	}

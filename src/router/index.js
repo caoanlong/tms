@@ -138,14 +138,6 @@ let routerMap = [
 						component: () => import ('../components/Settlemanage/Payablesum'),
 					},
 					{
-						path: '/payableinfosimple',
-						name: 'payableinfosimple',
-						meta: {
-							title: '应付详情'
-						},
-						component: () => import ('../components/Settlemanage/PayableinfoSimple'),
-					},
-					{
 						path: '/payableinfo',
 						name: 'payableinfo',
 						meta: {
