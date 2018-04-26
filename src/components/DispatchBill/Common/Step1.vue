@@ -32,7 +32,8 @@
 			<el-table 
 				ref="multipleTable"
 				:data="carrierBill.carrierCargo" 
-				@selection-change="selectionChange($event, carrierBill)"
+				@select="selectionSimple" 
+				@select-all="selectionAll($event, carrierBill)"
 				border style="width: 100%;margin-top:-1px" size="mini" resizable="false">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
 				<el-table-column label="货物规格/货物名称" prop="cargoName" width="140">
@@ -126,6 +127,35 @@
 				this.handTotalVolume()
 				this.handTotalNum()
 			},
+			selectionAll(data, carrierBill) {
+				let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
+				if (data.length > 0) {
+					for (let i = 0; i < data.length; i++) {
+						data[i].cargoWeightNew = data[i].remainingCargoWeight
+						data[i].cargoVolumeNew = data[i].remainingCargoVolume
+						data[i].cargoNumNew = data[i].remainingCargoNum
+					}
+					list.push(...data)
+				}
+				this.selectedCargoList = list
+				this.handInputChange()
+			},
+			selectionSimple(data, row) {
+				let flag = true
+				for (let i = 0; i < this.selectedCargoList.length; i++) {
+					if (this.selectedCargoList[i].carrierCargoID == row.carrierCargoID) {
+						this.selectedCargoList.splice(i, 1)
+						flag = false
+					}
+				}
+				row.cargoWeightNew = row.remainingCargoWeight
+				row.cargoVolumeNew = row.remainingCargoVolume
+				row.cargoNumNew = row.remainingCargoNum
+				if (flag) {
+					this.selectedCargoList.push(row)
+				}
+				this.handInputChange()
+			},
 			nextStep() {
 				let list = []
 				if (this.selectedCargoList.length == 0) {
@@ -200,19 +230,7 @@
 				}
 				this.$emit('nextStep', 1, list, [this.totalWeight, this.totalVolume, this.totalNum])
 			},
-			selectionChange(data, carrierBill) {
-				for (let i = 0; i < data.length; i++) {
-					data[i].cargoWeightNew = data[i].remainingCargoWeight
-					data[i].cargoVolumeNew = data[i].remainingCargoVolume
-					data[i].cargoNumNew = data[i].remainingCargoNum
-				}
-				let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
-				list.push(...data)
-				this.selectedCargoList = list
-				this.handTotalWeight()
-				this.handTotalVolume()
-				this.handTotalNum()
-			},
+			// 全部选择
 			// selectAll(type) {
 			// 	if (type) {
 			// 		this.selectedCargoList = []

@@ -92,10 +92,10 @@ import request, { baseURL } from '../../common/request'
 export default {
 	data() {
 		return {
-			exportExcelUrl: baseURL + '/export/finance/receivable?Authorization=' + localStorage.getItem("token"),
-			findRangeDate: [new Date().getTime() - 3600000 * 24 * 30, new Date().getTime()],
-			findshipperBeginDate: new Date().getTime() - 3600000 * 24 * 30,
-			findshipperEndDate: new Date().getTime(),
+			exportExcelUrl: '',
+			findRangeDate: [],
+			findshipperBeginDate: '',
+			findshipperEndDate: '',
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
@@ -103,6 +103,12 @@ export default {
 		}
 	},
 	created() {
+		this.findRangeDate = [new Date().getTime() - 3600000 * 24 * 30, new Date().getTime()]
+		this.findshipperBeginDate = new Date().getTime() - 3600000 * 24 * 30
+		this.findshipperEndDate = new Date().getTime()
+		this.exportExcelUrl = baseURL + '/export/finance/receivable?Authorization=' + localStorage.getItem("token") 
+			+ '&shipperBeginDate=' + this.findshipperBeginDate 
+			+ '&shipperEndDate=' + this.findshipperEndDate
 		this.getList()
 	},
 	methods: {

@@ -102,18 +102,16 @@
 	export default {
 		data() {
 			return {
-				exportExcelUrl: baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token"),
-				findRangeDate: (this.$route.query.shipperBeginDate 
-					&& this.$route.query.shipperEndDate) 
-					? [this.$route.query.shipperBeginDate, this.$route.query.shipperEndDate] : [],
-				findshipperBeginDate: this.$route.query.shipperBeginDate || '',
-				findshipperEndDate: this.$route.query.shipperEndDate || '',
+				exportExcelUrl: '',
+				findRangeDate: [],
+				findshipperBeginDate: '',
+				findshipperEndDate: '',
 				findshipperCompanyName: '',
 				findconsigneeCompanyName: '',
-				shipperDetailAddress: this.$route.query.shipperDetailAddress || '',
-				consigneeDetailAddress: this.$route.query.consigneeDetailAddress || '',
-				shipperAreaID: this.$route.query.shipperAreaID || '',
-				consigneeAreaID: this.$route.query.consigneeAreaID || '',
+				shipperDetailAddress: '',
+				consigneeDetailAddress: '',
+				shipperAreaID: '',
+				consigneeAreaID: '',
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
@@ -121,6 +119,28 @@
 			}
 	},
 	created() {
+		let shipperBeginDate = this.$route.query.shipperBeginDate
+		let shipperEndDate = this.$route.query.shipperEndDate
+		let shipperDetailAddress = this.$route.query.shipperDetailAddress
+		let consigneeDetailAddress = this.$route.query.consigneeDetailAddress
+		let shipperAreaID = this.$route.query.shipperAreaID
+		let consigneeAreaID = this.$route.query.consigneeAreaID
+		this.findRangeDate = (shipperBeginDate && shipperEndDate) ? [shipperBeginDate, shipperEndDate] : []
+		this.findshipperBeginDate = shipperBeginDate || ''
+		this.findshipperEndDate = shipperEndDate || ''
+		this.shipperDetailAddress = shipperDetailAddress || ''
+		this.consigneeDetailAddress = consigneeDetailAddress || ''
+		this.shipperAreaID = shipperAreaID || ''
+		this.consigneeAreaID = consigneeAreaID || ''
+		this.exportExcelUrl = baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token") 
+			+ '&shipperAreaID=' + this.shipperAreaID 
+			+ '&consigneeAreaID=' + this.consigneeAreaID 
+			+ '&shipperDetailAddress=' + this.shipperDetailAddress 
+			+ '&consigneeDetailAddress=' + this.consigneeDetailAddress 
+			+ '&shipperBeginDate=' + this.findshipperBeginDate 
+			+ '&shipperEndDate=' + this.findshipperEndDate 
+			+ '&shipperCompanyName=' + this.findshipperCompanyName 
+			+ '&consigneeCompanyName=' + this.findconsigneeCompanyName
 		this.getDetail()
 	},
 	methods: {

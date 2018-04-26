@@ -110,12 +110,12 @@
 					</el-table-column>
 					<el-table-column label="绕路费用" align="center">
 						<template slot-scope="scope">
-						{{scope.row.DriverDetoursAmount?(scope.row.DriverDetoursAmount +''):''}}
+						{{scope.row.driverDetoursAmount?(scope.row.driverDetoursAmount +''):''}}
 					</template>
 					</el-table-column>
 					<el-table-column label="其他" align="center">
 						<template slot-scope="scope">
-						{{scope.row.DriverOtherAmount?(scope.row.DriverOtherAmount +''):''}}
+						{{scope.row.driverOtherAmount?(scope.row.driverOtherAmount +''):''}}
 					</template>
 					</el-table-column>
 					<el-table-column label="备注"></el-table-column>
@@ -150,26 +150,43 @@ import request, { baseURL } from '../../common/request'
 export default {
 	data() {
 		return {
-			exportExcelUrl: baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token"),
-			tabSelected: this.$route.query.type || 'driver',
+			exportExcelUrl: '',
+			tabSelected: 'driver',
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
 			tableData: [],
-			findRangeDate: (this.$route.query.shipperBeginDate 
-				&& this.$route.query.shipperEndDate) 
-				? [this.$route.query.shipperBeginDate, this.$route.query.shipperEndDate] : [],
-			findshipperBeginDate: this.$route.query.shipperBeginDate || '',
-			findshipperEndDate: this.$route.query.shipperEndDate || '',
+			findRangeDate: [],
+			findshipperBeginDate: '',
+			findshipperEndDate: '',
 			findplateNo: '',
 			findName: '',
 			findshipperCompanyName: '',
 			findconsigneeCompanyName: '',
 			findcode: '',
-			transportRecordID: this.$route.query.transportRecordID || ''
+			transportRecordID: ''
 		}
 	},
 	created() {
+		let type = this.$route.query.type
+		let shipperBeginDate = this.$route.query.shipperBeginDate || ''
+		let shipperEndDate = this.$route.query.shipperEndDate || ''
+		let transportRecordID = this.$route.query.transportRecordID || ''
+		this.tabSelected = type || 'driver'
+		this.findRangeDate = (shipperBeginDate && shipperEndDate) ? [shipperBeginDate, shipperEndDate] : []
+		this.findshipperBeginDate = shipperBeginDate
+		this.findshipperEndDate = shipperEndDate
+		this.transportRecordID = transportRecordID
+		this.exportExcelUrl = baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token") 
+			+ '&name=' + this.findName 
+			+ '&type=' + this.tabSelected 
+			+ '&shipperBeginDate=' + this.findshipperBeginDate 
+			+ '&shipperEndDate=' + this.findshipperEndDate 
+			+ '&plateNo=' + this.findplateNo 
+			+ '&shipperCompanyName=' + this.findshipperCompanyName 
+			+ '&consigneeCompanyName=' + this.findconsigneeCompanyName 
+			+ '&code=' + this.findcode 
+			+ '&transportRecordID=' + this.transportRecordID
 		this.getDetail()
 	},
 	methods: {
@@ -197,12 +214,11 @@ export default {
 			let params = {
 				current: this.pageIndex,
 				size: this.pageSize,
-				name: this.findDriver,
+				name: this.findName,
 				type: this.tabSelected,
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate,
 				plateNo: this.findplateNo,
-				name: this.findName,
 				shipperCompanyName: this.findshipperCompanyName,
 				consigneeCompanyName: this.findconsigneeCompanyName,
 				code: this.findcode,

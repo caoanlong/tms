@@ -107,7 +107,7 @@
 	export default {
 		data() {
 			return {
-				exportExcelUrl: baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token"),
+				exportExcelUrl: '',
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
@@ -120,6 +120,11 @@
 			}
 		},
 		created() {
+			this.exportExcelUrl = baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token") 
+				+ '&name=' + this.findName 
+				+ '&type=' + this.tabSelected 
+				+ '&shipperBeginDate=' + this.findShipperBeginDate 
+				+ '&shipperEndDate=' + this.findShipperEndDate
 			this.getList()
 		},
 		methods: {
