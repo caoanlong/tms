@@ -162,6 +162,11 @@
 			},
 			handleTabSelected(tab) {
 				this.tabSelected = tab.$options.propsData.name
+				this.exportExcelUrl = baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token") 
+					+ '&name=' + this.findName 
+					+ '&type=' + this.tabSelected 
+					+ '&shipperBeginDate=' + this.findShipperBeginDate 
+					+ '&shipperEndDate=' + this.findShipperEndDate
 				this.reset()
 			},
 			view(transportRecordID) {

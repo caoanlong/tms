@@ -168,11 +168,11 @@ export default {
 		}
 	},
 	created() {
-		let type = this.$route.query.type
+		let type = this.$route.query.type || ''
 		let shipperBeginDate = this.$route.query.shipperBeginDate || ''
 		let shipperEndDate = this.$route.query.shipperEndDate || ''
 		let transportRecordID = this.$route.query.transportRecordID || ''
-		this.tabSelected = type || 'driver'
+		this.tabSelected = type || this.tabSelected
 		this.findRangeDate = (shipperBeginDate && shipperEndDate) ? [shipperBeginDate, shipperEndDate] : []
 		this.findshipperBeginDate = shipperBeginDate
 		this.findshipperEndDate = shipperEndDate
@@ -234,6 +234,16 @@ export default {
 		},
 		handleTabSelected(tab) {
 			this.tabSelected = tab.$options.propsData.name
+			this.exportExcelUrl = baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token") 
+				+ '&name=' + this.findName 
+				+ '&type=' + this.tabSelected 
+				+ '&shipperBeginDate=' + this.findshipperBeginDate 
+				+ '&shipperEndDate=' + this.findshipperEndDate 
+				+ '&plateNo=' + this.findplateNo 
+				+ '&shipperCompanyName=' + this.findshipperCompanyName 
+				+ '&consigneeCompanyName=' + this.findconsigneeCompanyName 
+				+ '&code=' + this.findcode 
+				+ '&transportRecordID=' + this.transportRecordID
 			this.getDetail()
 		}
 	}
