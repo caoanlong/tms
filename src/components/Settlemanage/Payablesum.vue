@@ -116,7 +116,7 @@
 				findShipperBeginDate: '',
 				findShipperEndDate: '',
 				tableData: [],
-				tabSelected:'driver',
+				tabSelected: 'driver',
 			}
 		},
 		created() {
@@ -161,6 +161,7 @@
 			},
 			view(transportRecordID) {
 				this.$router.push({name: 'payableinfo', query: {
+					'type': this.tabSelected,
 					'transportRecordID': transportRecordID,
 					'shipperBeginDate': this.findShipperBeginDate,
 					'shipperEndDate': this.findShipperEndDate

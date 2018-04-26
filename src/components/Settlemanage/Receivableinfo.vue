@@ -103,11 +103,17 @@
 		data() {
 			return {
 				exportExcelUrl: baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token"),
-				findRangeDate: [],
+				findRangeDate: (this.$route.query.shipperBeginDate 
+					&& this.$route.query.shipperEndDate) 
+					? [this.$route.query.shipperBeginDate, this.$route.query.shipperEndDate] : [],
 				findshipperBeginDate: this.$route.query.shipperBeginDate || '',
 				findshipperEndDate: this.$route.query.shipperEndDate || '',
 				findshipperCompanyName: '',
 				findconsigneeCompanyName: '',
+				shipperDetailAddress: this.$route.query.shipperDetailAddress || '',
+				consigneeDetailAddress: this.$route.query.consigneeDetailAddress || '',
+				shipperAreaID: this.$route.query.shipperAreaID || '',
+				consigneeAreaID: this.$route.query.consigneeAreaID || '',
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
@@ -124,6 +130,10 @@
 			this.findRangeDate = []
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
+			this.shipperAreaID = ''
+			this.consigneeAreaID = ''
+			this.shipperDetailAddress = ''
+			this.consigneeDetailAddress = ''
 			this.getDetail()
 		},
 		pageChange(index) {
@@ -134,12 +144,12 @@
 			let params = {
 				current: this.pageIndex,
 				size: this.pageSize,
-				shipperAreaID: this.$route.query.shipperAreaID || '',
-				consigneeAreaID: this.$route.query.consigneeAreaID || '',
-				shipperDetailAddress: this.$route.query.shipperDetailAddress || '',
-				consigneeDetailAddress: this.$route.query.consigneeDetailAddress || '',
-				shipperBeginDate: this.$route.query.shipperBeginDate || this.findshipperBeginDate,
-				shipperEndDate: this.$route.query.shipperEndDate || this.findshipperEndDate,
+				shipperAreaID: this.shipperAreaID,
+				consigneeAreaID: this.consigneeAreaID,
+				shipperDetailAddress: this.shipperDetailAddress,
+				consigneeDetailAddress: this.consigneeDetailAddress,
+				shipperBeginDate: this.findshipperBeginDate,
+				shipperEndDate: this.findshipperEndDate,
 				shipperCompanyName: this.findshipperCompanyName,
 				consigneeCompanyName: this.findconsigneeCompanyName
 			}

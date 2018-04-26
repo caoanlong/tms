@@ -83,9 +83,8 @@
 
 					<el-table-column label="车辆编号" prop="code"></el-table-column>
 					<el-table-column label="车牌号码" prop="plateNo" align="center" width="90"></el-table-column>
-					<el-table-column label="司机姓名" prop="realName" align="center"></el-table-column>
-					<el-table-column label="随车人员" prop="followerRealName">
-					</el-table-column>
+					<el-table-column :label="tabSelected == 'driver' ? '司机姓名' : '随车人员'" prop="realName" align="center"></el-table-column>
+					<!-- <el-table-column label="随车人员" prop="followerRealName"></el-table-column> -->
 					<!-- <el-table-column label="核载吨位" prop="loads" align="center">
 						<template slot-scope="scope">
 							{{scope.row.loads?(scope.row.loads +''):''}}
@@ -152,19 +151,22 @@ export default {
 	data() {
 		return {
 			exportExcelUrl: baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token"),
-			tabSelected: 'driver',
+			tabSelected: this.$route.query.type || 'driver',
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
 			tableData: [],
-			findRangeDate: [],
-			findshipperBeginDate: '',
-			findshipperEndDate: '',
+			findRangeDate: (this.$route.query.shipperBeginDate 
+				&& this.$route.query.shipperEndDate) 
+				? [this.$route.query.shipperBeginDate, this.$route.query.shipperEndDate] : [],
+			findshipperBeginDate: this.$route.query.shipperBeginDate || '',
+			findshipperEndDate: this.$route.query.shipperEndDate || '',
 			findplateNo: '',
 			findName: '',
 			findshipperCompanyName: '',
 			findconsigneeCompanyName: '',
-			findcode: ''
+			findcode: '',
+			transportRecordID: this.$route.query.transportRecordID || ''
 		}
 	},
 	created() {
@@ -188,6 +190,7 @@ export default {
 			this.findshipperCompanyName = '',
 			this.findconsigneeCompanyName = '',
 			this.findcode = ''
+			this.transportRecordID = ''
 			this.getDetail()
 		},
 		getDetail() {
@@ -196,14 +199,14 @@ export default {
 				size: this.pageSize,
 				name: this.findDriver,
 				type: this.tabSelected,
-				shipperBeginDate: this.$route.query.shipperBeginDate || this.findshipperBeginDate,
-				shipperEndDate: this.$route.query.shipperEndDate || this.findshipperEndDate,
+				shipperBeginDate: this.findshipperBeginDate,
+				shipperEndDate: this.findshipperEndDate,
 				plateNo: this.findplateNo,
 				name: this.findName,
 				shipperCompanyName: this.findshipperCompanyName,
 				consigneeCompanyName: this.findconsigneeCompanyName,
 				code: this.findcode,
-				transportRecordID: this.$route.query.transportRecordID || ''
+				transportRecordID: this.transportRecordID
 			}
 			request({
 				url: '/finance/payableDetail',
