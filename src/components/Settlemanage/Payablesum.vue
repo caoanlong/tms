@@ -9,10 +9,10 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="司机姓名" v-if="tabSelected == 'driver'">
-						<el-input placeholder="请输入..." v-model="findName"></el-input>
+						<el-input placeholder="请输入..." v-model="findName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="随车人员" v-else>
-						<el-input placeholder="请输入..." v-model="findName"></el-input>
+						<el-input placeholder="请输入..." v-model="findName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="发货日期">
 						<el-date-picker
@@ -120,11 +120,7 @@
 			}
 		},
 		created() {
-			this.exportExcelUrl = baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token") 
-				+ '&name=' + this.findName 
-				+ '&type=' + this.tabSelected 
-				+ '&shipperBeginDate=' + this.findShipperBeginDate 
-				+ '&shipperEndDate=' + this.findShipperEndDate
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		methods: {
@@ -135,13 +131,22 @@
 			selectDateRange(date) {
 				this.findShipperBeginDate = date[0]
 				this.findShipperEndDate = date[1]
+				this.resetExportExcelUrl()
 			},
 			reset() {
 				this.findName = ''
 				this.findShipperBeginDate = ''
 				this.findShipperEndDate = ''
 				this.findRangeDate = []
+				this.resetExportExcelUrl()
 				this.getList()
+			},
+			resetExportExcelUrl() {
+				this.exportExcelUrl = baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token") 
+					+ '&name=' + this.findName 
+					+ '&type=' + this.tabSelected 
+					+ '&shipperBeginDate=' + this.findShipperBeginDate 
+					+ '&shipperEndDate=' + this.findShipperEndDate
 			},
 			getList() {
 				let params = {
@@ -162,11 +167,6 @@
 			},
 			handleTabSelected(tab) {
 				this.tabSelected = tab.$options.propsData.name
-				this.exportExcelUrl = baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token") 
-					+ '&name=' + this.findName 
-					+ '&type=' + this.tabSelected 
-					+ '&shipperBeginDate=' + this.findShipperBeginDate 
-					+ '&shipperEndDate=' + this.findShipperEndDate
 				this.reset()
 			},
 			view(transportRecordID) {
@@ -176,6 +176,9 @@
 					'shipperBeginDate': this.findShipperBeginDate,
 					'shipperEndDate': this.findShipperEndDate
 				}})
+			},
+			inputChange() {
+				this.resetExportExcelUrl()
 			}
 		}
 	}

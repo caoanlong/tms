@@ -9,22 +9,30 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="司机/随车人员">
-						<el-input placeholder="请输入..." v-model="findName"></el-input>
+						<el-input placeholder="请输入..." v-model="findName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="车辆编号">
-						<el-input placeholder="请输入..." v-model="findcode"></el-input>
+						<el-input placeholder="请输入..." v-model="findcode" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="车牌号码">
-						<el-input placeholder="请输入..." v-model="findplateNo"></el-input>
+						<el-input placeholder="请输入..." v-model="findplateNo" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="发货单位">
-						<el-input placeholder="请输入..." v-model="findshipperCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findshipperCompanyName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="收货单位">
-						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="发货日期">
-						<el-date-picker v-model="findRangeDate" type="daterange" range-separator="至" value-format="timestamp" start-placeholder="开始日期" end-placeholder="结束日期" :clearable="false" @change="selectDateRange">
+						<el-date-picker 
+							v-model="findRangeDate" 
+							type="daterange" 
+							range-separator="至" 
+							value-format="timestamp" 
+							start-placeholder="开始日期" 
+							end-placeholder="结束日期" 
+							:clearable="false" 
+							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -177,16 +185,7 @@ export default {
 		this.findshipperBeginDate = shipperBeginDate
 		this.findshipperEndDate = shipperEndDate
 		this.transportRecordID = transportRecordID
-		this.exportExcelUrl = baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token") 
-			+ '&name=' + this.findName 
-			+ '&type=' + this.tabSelected 
-			+ '&shipperBeginDate=' + this.findshipperBeginDate 
-			+ '&shipperEndDate=' + this.findshipperEndDate 
-			+ '&plateNo=' + this.findplateNo 
-			+ '&shipperCompanyName=' + this.findshipperCompanyName 
-			+ '&consigneeCompanyName=' + this.findconsigneeCompanyName 
-			+ '&code=' + this.findcode 
-			+ '&transportRecordID=' + this.transportRecordID
+		this.resetExportExcelUrl()
 		this.getDetail()
 	},
 	methods: {
@@ -197,6 +196,7 @@ export default {
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
+			this.resetExportExcelUrl()
 		},
 		reset() {
 			this.findRangeDate = [],
@@ -208,7 +208,20 @@ export default {
 			this.findconsigneeCompanyName = '',
 			this.findcode = ''
 			this.transportRecordID = ''
+			this.resetExportExcelUrl()
 			this.getDetail()
+		},
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token") 
+				+ '&name=' + this.findName 
+				+ '&type=' + this.tabSelected 
+				+ '&shipperBeginDate=' + this.findshipperBeginDate 
+				+ '&shipperEndDate=' + this.findshipperEndDate 
+				+ '&plateNo=' + this.findplateNo 
+				+ '&shipperCompanyName=' + this.findshipperCompanyName 
+				+ '&consigneeCompanyName=' + this.findconsigneeCompanyName 
+				+ '&code=' + this.findcode 
+				+ '&transportRecordID=' + this.transportRecordID
 		},
 		getDetail() {
 			let params = {
@@ -234,17 +247,10 @@ export default {
 		},
 		handleTabSelected(tab) {
 			this.tabSelected = tab.$options.propsData.name
-			this.exportExcelUrl = baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token") 
-				+ '&name=' + this.findName 
-				+ '&type=' + this.tabSelected 
-				+ '&shipperBeginDate=' + this.findshipperBeginDate 
-				+ '&shipperEndDate=' + this.findshipperEndDate 
-				+ '&plateNo=' + this.findplateNo 
-				+ '&shipperCompanyName=' + this.findshipperCompanyName 
-				+ '&consigneeCompanyName=' + this.findconsigneeCompanyName 
-				+ '&code=' + this.findcode 
-				+ '&transportRecordID=' + this.transportRecordID
-			this.getDetail()
+			this.reset()
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
 		}
 	}
 }

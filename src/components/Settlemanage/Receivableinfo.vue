@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="mini">
 					<el-form-item label="发货单位">
-						<el-input placeholder="请输入..." v-model="findshipperCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findshipperCompanyName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="收货单位">
-						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="发货时间">
 						<el-date-picker v-model="findRangeDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="timestamp" :clearable="false" @change="selectDateRange">
@@ -132,15 +132,7 @@
 		this.consigneeDetailAddress = consigneeDetailAddress || ''
 		this.shipperAreaID = shipperAreaID || ''
 		this.consigneeAreaID = consigneeAreaID || ''
-		this.exportExcelUrl = baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token") 
-			+ '&shipperAreaID=' + this.shipperAreaID 
-			+ '&consigneeAreaID=' + this.consigneeAreaID 
-			+ '&shipperDetailAddress=' + this.shipperDetailAddress 
-			+ '&consigneeDetailAddress=' + this.consigneeDetailAddress 
-			+ '&shipperBeginDate=' + this.findshipperBeginDate 
-			+ '&shipperEndDate=' + this.findshipperEndDate 
-			+ '&shipperCompanyName=' + this.findshipperCompanyName 
-			+ '&consigneeCompanyName=' + this.findconsigneeCompanyName
+		this.resetExportExcelUrl()
 		this.getDetail()
 	},
 	methods: {
@@ -154,11 +146,23 @@
 			this.consigneeAreaID = ''
 			this.shipperDetailAddress = ''
 			this.consigneeDetailAddress = ''
+			this.resetExportExcelUrl()
 			this.getDetail()
 		},
 		pageChange(index) {
 			this.pageIndex = index
 			this.getDetail()
+		},
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token") 
+				+ '&shipperAreaID=' + this.shipperAreaID 
+				+ '&consigneeAreaID=' + this.consigneeAreaID 
+				+ '&shipperDetailAddress=' + this.shipperDetailAddress 
+				+ '&consigneeDetailAddress=' + this.consigneeDetailAddress 
+				+ '&shipperBeginDate=' + this.findshipperBeginDate 
+				+ '&shipperEndDate=' + this.findshipperEndDate 
+				+ '&shipperCompanyName=' + this.findshipperCompanyName 
+				+ '&consigneeCompanyName=' + this.findconsigneeCompanyName
 		},
 		getDetail() {
 			let params = {
@@ -184,7 +188,11 @@
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
+			this.resetExportExcelUrl()
 		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		}
 	}
 }
 </script>

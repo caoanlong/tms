@@ -106,9 +106,7 @@ export default {
 		this.findRangeDate = [new Date().getTime() - 3600000 * 24 * 30, new Date().getTime()]
 		this.findshipperBeginDate = new Date().getTime() - 3600000 * 24 * 30
 		this.findshipperEndDate = new Date().getTime()
-		this.exportExcelUrl = baseURL + '/export/finance/receivable?Authorization=' + localStorage.getItem("token") 
-			+ '&shipperBeginDate=' + this.findshipperBeginDate 
-			+ '&shipperEndDate=' + this.findshipperEndDate
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -116,7 +114,13 @@ export default {
 			this.findRangeDate = []
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
+			this.resetExportExcelUrl()
 			this.getList()
+		},
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/export/finance/receivable?Authorization=' + localStorage.getItem("token") 
+				+ '&shipperBeginDate=' + this.findshipperBeginDate 
+				+ '&shipperEndDate=' + this.findshipperEndDate
 		},
 		getList() {
 			let params = {
@@ -140,6 +144,7 @@ export default {
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
+			this.resetExportExcelUrl()
 		},
 		view(data) {
 			this.$router.push({ name: 'receivableinfo', query: { 
