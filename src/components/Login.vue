@@ -282,8 +282,8 @@ export default {
 				Message.error('用户名不能为空！')
 				return
 			}
-			if (this.login.password.length > 32) {
-				Message.error('密码过长！')
+			if (this.login.password.length > 32 || this.login.password.length <8) {
+				Message.error('8-16位字母、下划线、数字')
 				return
 			}
 			let data = {
@@ -332,8 +332,8 @@ export default {
 				Message.error('密码不能为空！')
 				return
 			}
-			if (this.register.password.length > 32) {
-				Message.error('密码过长！')
+			if (this.login.password.length > 32 || this.login.password.length <8) {
+				Message.error('8-16位字母、下划线、数字')
 				return
 			}
 			if (!this.register.contact.trim()) {
@@ -412,8 +412,8 @@ export default {
 				Message.error('密码不能为空！')
 				return
 			}
-			if (this.findPassword.password.length > 32) {
-				Message.error('密码过长！')
+			if (this.findPassword.password.length > 32 || this.findPassword.password.length <8 ) {
+				Message.error('8-16位字母、下划线、数字')
 				return
 			}
 			if (this.findPassword.password != this.findPassword.confirmPassword) {
