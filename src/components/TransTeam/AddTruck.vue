@@ -402,7 +402,6 @@
 					<el-col :span="6">
 						<el-form-item label="二级维护日期" prop="secondaMaintainTime">
 							<el-date-picker 
-								:picker-options="{disabledDate: (curDate) => new Date() > curDate}"
 								:editable="false"
 								style="width: 100%" 
 								v-model="truck.secondaMaintainTime"

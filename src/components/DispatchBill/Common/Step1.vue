@@ -131,9 +131,9 @@
 				let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
 				if (data.length > 0) {
 					for (let i = 0; i < data.length; i++) {
-						data[i].cargoWeightNew = data[i].remainingCargoWeight
-						data[i].cargoVolumeNew = data[i].remainingCargoVolume
-						data[i].cargoNumNew = data[i].remainingCargoNum
+						if (!data[i].cargoWeightNew) data[i].cargoWeightNew = data[i].remainingCargoWeight
+						if (!data[i].cargoVolumeNew) data[i].cargoVolumeNew = data[i].remainingCargoVolume
+						if (!data[i].cargoNumNew) data[i].cargoNumNew = data[i].remainingCargoNum
 					}
 					list.push(...data)
 				}
@@ -148,9 +148,9 @@
 						flag = false
 					}
 				}
-				row.cargoWeightNew = row.remainingCargoWeight
-				row.cargoVolumeNew = row.remainingCargoVolume
-				row.cargoNumNew = row.remainingCargoNum
+				if (!row.cargoWeightNew) row.cargoWeightNew = row.remainingCargoWeight
+				if (!row.cargoVolumeNew) row.cargoVolumeNew = row.remainingCargoVolume
+				if (!row.cargoNumNew) row.cargoNumNew = row.remainingCargoNum
 				if (flag) {
 					this.selectedCargoList.push(row)
 				}
