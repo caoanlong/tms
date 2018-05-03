@@ -278,7 +278,6 @@
 				}).then(res => {
 					if (res.data.code == 200) {
 						let result = res.data.data
-						console.log(this.carrierCargos)
 						this.heavyCargos = this.carrierCargos.filter(item => item.weightType == 'Heavy')
 						if (this.heavyCargos.length == 0) {
 							return
@@ -300,6 +299,8 @@
 						}
 						this.innermile = result.mileage
 						this.TKM = result.internalUnitPrice
+					} else if (res.data.code == 2001) {
+						console.log(res.data)
 					}
 				})
 			}

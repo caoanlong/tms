@@ -279,7 +279,7 @@ export default {
 				return
 			}
 			if (!this.login.password.trim()) {
-				Message.error('用户名不能为空！')
+				Message.error('密码不能为空！')
 				return
 			}
 			if (this.login.password.length > 32) {
