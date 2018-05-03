@@ -9,22 +9,30 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="司机/随车人员">
-						<el-input placeholder="请输入..." v-model="findName"></el-input>
+						<el-input placeholder="请输入..." v-model="findName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="车辆编号">
-						<el-input placeholder="请输入..." v-model="findcode"></el-input>
+						<el-input placeholder="请输入..." v-model="findcode" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="车牌号码">
-						<el-input placeholder="请输入..." v-model="findplateNo"></el-input>
+						<el-input placeholder="请输入..." v-model="findplateNo" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="发货单位">
-						<el-input placeholder="请输入..." v-model="findshipperCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findshipperCompanyName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="收货单位">
-						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="发货日期">
-						<el-date-picker v-model="findRangeDate" type="daterange" range-separator="至" value-format="timestamp" start-placeholder="开始日期" end-placeholder="结束日期" :clearable="false" @change="selectDateRange">
+						<el-date-picker 
+							v-model="findRangeDate" 
+							type="daterange" 
+							range-separator="至" 
+							value-format="timestamp" 
+							start-placeholder="开始日期" 
+							end-placeholder="结束日期" 
+							:clearable="false" 
+							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -83,14 +91,13 @@
 
 					<el-table-column label="车辆编号" prop="code"></el-table-column>
 					<el-table-column label="车牌号码" prop="plateNo" align="center" width="90"></el-table-column>
-					<el-table-column label="司机姓名" prop="realName" align="center"></el-table-column>
-					<el-table-column label="随车人员" prop="followerRealName">
-					</el-table-column>
-					<el-table-column label="核载吨位" prop="loads" align="center">
+					<el-table-column :label="tabSelected == 'driver' ? '司机姓名' : '随车人员'" prop="realName" align="center"></el-table-column>
+					<!-- <el-table-column label="随车人员" prop="followerRealName"></el-table-column> -->
+					<!-- <el-table-column label="核载吨位" prop="loads" align="center">
 						<template slot-scope="scope">
 							{{scope.row.loads?(scope.row.loads +''):''}}
 						</template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column label="收货地区" prop="consigneeArea"></el-table-column>
 					<el-table-column label="收货详细地址" prop="consigneeDetailAddress"></el-table-column>
 
@@ -111,12 +118,12 @@
 					</el-table-column>
 					<el-table-column label="绕路费用" align="center">
 						<template slot-scope="scope">
-						{{scope.row.DriverDetoursAmount?(scope.row.DriverDetoursAmount +''):''}}
+						{{scope.row.driverDetoursAmount?(scope.row.driverDetoursAmount +''):''}}
 					</template>
 					</el-table-column>
 					<el-table-column label="其他" align="center">
 						<template slot-scope="scope">
-						{{scope.row.DriverOtherAmount?(scope.row.DriverOtherAmount +''):''}}
+						{{scope.row.driverOtherAmount?(scope.row.driverOtherAmount +''):''}}
 					</template>
 					</el-table-column>
 					<el-table-column label="备注"></el-table-column>
@@ -151,7 +158,7 @@ import request, { baseURL } from '../../common/request'
 export default {
 	data() {
 		return {
-			exportExcelUrl: baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: '',
 			tabSelected: 'driver',
 			pageIndex: 1,
 			pageSize: 10,
@@ -164,13 +171,33 @@ export default {
 			findName: '',
 			findshipperCompanyName: '',
 			findconsigneeCompanyName: '',
-			findcode: ''
+			findcode: '',
+			transportRecordID: ''
 		}
 	},
 	created() {
+		let type = this.$route.query.type || ''
+		let shipperBeginDate = this.$route.query.shipperBeginDate || ''
+		let shipperEndDate = this.$route.query.shipperEndDate || ''
+		let transportRecordID = this.$route.query.transportRecordID || ''
+		this.tabSelected = type || this.tabSelected
+		this.findRangeDate = (shipperBeginDate && shipperEndDate) ? [shipperBeginDate, shipperEndDate] : []
+		this.findshipperBeginDate = shipperBeginDate
+		this.findshipperEndDate = shipperEndDate
+		this.transportRecordID = transportRecordID
+		this.resetExportExcelUrl()
 		this.getDetail()
 	},
 	methods: {
+		pageChange(index) {
+			this.pageIndex = index
+			this.getDetail()
+		},
+		selectDateRange(date) {
+			this.findshipperBeginDate = date[0]
+			this.findshipperEndDate = date[1]
+			this.resetExportExcelUrl()
+		},
 		reset() {
 			this.findRangeDate = [],
 			this.findshipperBeginDate = '',
@@ -180,21 +207,35 @@ export default {
 			this.findshipperCompanyName = '',
 			this.findconsigneeCompanyName = '',
 			this.findcode = ''
+			this.transportRecordID = ''
+			this.resetExportExcelUrl()
 			this.getDetail()
+		},
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token") 
+				+ '&name=' + this.findName 
+				+ '&type=' + this.tabSelected 
+				+ '&shipperBeginDate=' + this.findshipperBeginDate 
+				+ '&shipperEndDate=' + this.findshipperEndDate 
+				+ '&plateNo=' + this.findplateNo 
+				+ '&shipperCompanyName=' + this.findshipperCompanyName 
+				+ '&consigneeCompanyName=' + this.findconsigneeCompanyName 
+				+ '&code=' + this.findcode 
+				+ '&transportRecordID=' + this.transportRecordID
 		},
 		getDetail() {
 			let params = {
 				current: this.pageIndex,
 				size: this.pageSize,
-				name: this.findDriver,
+				name: this.findName,
 				type: this.tabSelected,
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate,
 				plateNo: this.findplateNo,
-				name: this.findName,
 				shipperCompanyName: this.findshipperCompanyName,
 				consigneeCompanyName: this.findconsigneeCompanyName,
-				code: this.findcode
+				code: this.findcode,
+				transportRecordID: this.transportRecordID
 			}
 			request({
 				url: '/finance/payableDetail',
@@ -204,17 +245,12 @@ export default {
 				this.total = res.data.data.total
 			})
 		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getDetail()
-		},
-		selectDateRange(date) {
-			this.findshipperBeginDate = date[0]
-			this.findshipperEndDate = date[1]
-		},
 		handleTabSelected(tab) {
 			this.tabSelected = tab.$options.propsData.name
-			this.getDetail()
+			this.reset()
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
 		}
 	}
 }

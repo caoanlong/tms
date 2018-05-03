@@ -88,7 +88,7 @@
 					<el-table-column label="状态">
 						<template slot-scope="scope">
 							<span v-if="scope.row.status == 'Passed'">通过</span>
-							<span v-else-if="scope.row.status == 'NotPassed'">不通过</span>
+							<span v-else-if="scope.row.status == 'NotPassed'">未通过</span>
 							<span v-else-if="scope.row.status == 'Other'">其他</span>
 						</template>
 					</el-table-column>

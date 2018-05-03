@@ -27,6 +27,16 @@ service.interceptors.request.use(config => {
 	Promise.reject(error)
 })
 
+let href = ''
+
+if (process.env.ENV_CONFIG == 'test') {
+	href = '/tms/#/login' // 测试
+} else if (process.env.ENV_CONFIG == 'practice') {
+	href = '/tms-h5/#/login' // 演练
+} else {
+	href = '/#/login'  // 生产
+}
+
 // respone interceptor
 service.interceptors.response.use(
 response => {
@@ -38,14 +48,7 @@ response => {
 			|| response.data.code == 5202) { // 帐号已在其它地方登录!
 			localStorage.clear()
 			Message.error(response.data.msg)
-			if (process.env.ENV_CONFIG == 'test') {
-				window.location.href = '/tms/#/login' // 测试
-			} else if (process.env.ENV_CONFIG == 'practice') {
-				window.location.href = '/tms-h5/#/login' // 演练
-			} else {
-				window.location.href = '/#/login'  // 生产
-			}
-
+			window.location.href = href
 			return Promise.reject('error')
 		}
 		if (response.data.code == 104) {
@@ -60,7 +63,7 @@ response => {
 					<p style="margin-top: 40px;color: #aaa">
 						一般客户处理时间为24小时内；客服联系电话，13529005327
 					</p>
-					<button style="margin-top: 20px" onclick="localStorage.clear();location.href = '/#/login'">退出当前账户</button>
+					<button style="margin-top: 20px" onclick="localStorage.clear();location.href=${href}">退出当前账户</button>
 				</div>
 				`,
 				dangerouslyUseHTMLString: true,

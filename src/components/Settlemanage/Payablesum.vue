@@ -9,18 +9,20 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="司机姓名" v-if="tabSelected == 'driver'">
-						<el-input placeholder="请输入..." v-model="findName"></el-input>
+						<el-input placeholder="请输入..." v-model="findName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="随车人员" v-else>
-						<el-input placeholder="请输入..." v-model="findName"></el-input>
+						<el-input placeholder="请输入..." v-model="findName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="发货日期">
 						<el-date-picker
-							
+							v-model="findRangeDate" 
 							type="daterange"
 							range-separator="至"
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
+							value-format="timestamp" 
+							:clearable="false"
 							@change="selectDateRange">
 						</el-date-picker>
 					</el-form-item>
@@ -35,7 +37,6 @@
 			</div>
 			<div class="table">
 				<el-table 
-					
 					ref="recTable" 
 					:data="tableData" 
 					show-summary :summary-method="getSummaries"
@@ -73,7 +74,7 @@
 					</el-table-column>
 					<el-table-column label="操作" align="center" width="60" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="viewinfo('driver',scope.row.transportRecordID)">查看</el-button>
+							<el-button type="primary" size="mini" @click="view(scope.row.transportRecordID)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -106,28 +107,55 @@
 	export default {
 		data() {
 			return {
-				exportExcelUrl: baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token"),
+				exportExcelUrl: '',
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
 				findName:'',
-				tableData:[],
-				tabSelected:'driver',
+				findRangeDate: [],
+				findShipperBeginDate: '',
+				findShipperEndDate: '',
+				tableData: [],
+				tabSelected: 'driver',
 			}
 		},
 		created() {
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		methods: {
+			pageChange(index) {
+				this.pageIndex = index
+				this.getList()
+			},
+			selectDateRange(date) {
+				this.findShipperBeginDate = date[0]
+				this.findShipperEndDate = date[1]
+				this.resetExportExcelUrl()
+			},
 			reset() {
-				this.findName=''
+				this.findName = ''
+				this.findShipperBeginDate = ''
+				this.findShipperEndDate = ''
+				this.findRangeDate = []
+				this.resetExportExcelUrl()
+				this.getList()
+			},
+			resetExportExcelUrl() {
+				this.exportExcelUrl = baseURL + '/export/finance/payable?Authorization=' + localStorage.getItem("token") 
+					+ '&name=' + this.findName 
+					+ '&type=' + this.tabSelected 
+					+ '&shipperBeginDate=' + this.findShipperBeginDate 
+					+ '&shipperEndDate=' + this.findShipperEndDate
 			},
 			getList() {
 				let params = {
-					current: this.pageIndex,
-					size: this.pageSize,
-					name: this.findName,
-					type:this.tabSelected
+					'current': this.pageIndex,
+					'size': this.pageSize,
+					'name': this.findName,
+					'type': this.tabSelected,
+					'shipperBeginDate': this.findShipperBeginDate,
+					'shipperEndDate': this.findShipperEndDate
 				}
 				request({
 					url: '/finance/payable',
@@ -137,21 +165,20 @@
 					this.count = res.data.data.total
 				})
 			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			selectDateRange(date) {
-				this.startDate = date[0]
-				this.endDate = date[1]
-			},
 			handleTabSelected(tab) {
 				this.tabSelected = tab.$options.propsData.name
-				console.log(this.tabSelected)
-				this.getList()
+				this.reset()
 			},
-			viewinfo(type,transportRecordID) {
-				this.$router.push({name: 'payableinfosimple', query: {type:type,transportRecordID:transportRecordID}})
+			view(transportRecordID) {
+				this.$router.push({name: 'payableinfo', query: {
+					'type': this.tabSelected,
+					'transportRecordID': transportRecordID,
+					'shipperBeginDate': this.findShipperBeginDate,
+					'shipperEndDate': this.findShipperEndDate
+				}})
+			},
+			inputChange() {
+				this.resetExportExcelUrl()
 			}
 		}
 	}

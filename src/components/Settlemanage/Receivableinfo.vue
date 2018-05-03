@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="mini">
 					<el-form-item label="发货单位">
-						<el-input placeholder="请输入..." v-model="findshipperCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findshipperCompanyName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="收货单位">
-						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="findconsigneeCompanyName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="发货时间">
 						<el-date-picker v-model="findRangeDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="timestamp" :clearable="false" @change="selectDateRange">
@@ -31,7 +31,7 @@
 							<span v-if="scope.row.shipperDate">{{scope.row.shipperDate | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="发货单号" prop="consigneNum"></el-table-column>
+					<el-table-column label="发货单号" prop="shipperNo"></el-table-column>
 					<el-table-column label="承运单号" prop="carrierOrderNo"></el-table-column>
 					<el-table-column label="发货单位" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="收货单位" prop="consigneeCompanyName"></el-table-column>
@@ -59,11 +59,19 @@
 					<!-- <el-table-column label="对外里程" prop="externalMile"></el-table-column> -->
 					<!-- <el-table-column label="对外单价" prop="externalUnitPrice"></el-table-column> -->
 					<el-table-column label="应收款" prop="receivables"></el-table-column>
-					<el-table-column label="签收货量" prop="receiveNum"></el-table-column>
+					<el-table-column label="签收货量" width="100">
+						<template slot-scope="scope">
+							<span>
+							{{scope.row.cargoWeight ? (scope.row.cargoWeight + '吨') : ''}}
+							{{scope.row.cargoVolume ? ('/' + scope.row.cargoVolume + '方') : ''}}
+							{{scope.row.cargoNum ? ('/' + scope.row.cargoNum + '件') : ''}}
+							</span>
+						</template>
+					</el-table-column>
 					<!-- <el-table-column label="外部运费" prop="externalFreight"></el-table-column> -->
-					<el-table-column label="其他" prop="other"></el-table-column>
+					<el-table-column label="其他" prop="otherAmount"></el-table-column>
 					<el-table-column label="备注" prop="remark"></el-table-column>
-					<el-table-column label="总计" prop="totalNum" align="center" width="120"></el-table-column>
+					<el-table-column label="总计" prop="allmoney"></el-table-column>
 				</el-table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
@@ -94,12 +102,16 @@
 	export default {
 		data() {
 			return {
-				exportExcelUrl: baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token"),
+				exportExcelUrl: '',
 				findRangeDate: [],
 				findshipperBeginDate: '',
 				findshipperEndDate: '',
 				findshipperCompanyName: '',
 				findconsigneeCompanyName: '',
+				shipperDetailAddress: '',
+				consigneeDetailAddress: '',
+				shipperAreaID: '',
+				consigneeAreaID: '',
 				pageIndex: 1,
 				pageSize: 10,
 				count: 0,
@@ -107,6 +119,20 @@
 			}
 	},
 	created() {
+		let shipperBeginDate = this.$route.query.shipperBeginDate
+		let shipperEndDate = this.$route.query.shipperEndDate
+		let shipperDetailAddress = this.$route.query.shipperDetailAddress
+		let consigneeDetailAddress = this.$route.query.consigneeDetailAddress
+		let shipperAreaID = this.$route.query.shipperAreaID
+		let consigneeAreaID = this.$route.query.consigneeAreaID
+		this.findRangeDate = (shipperBeginDate && shipperEndDate) ? [shipperBeginDate, shipperEndDate] : []
+		this.findshipperBeginDate = shipperBeginDate || ''
+		this.findshipperEndDate = shipperEndDate || ''
+		this.shipperDetailAddress = shipperDetailAddress || ''
+		this.consigneeDetailAddress = consigneeDetailAddress || ''
+		this.shipperAreaID = shipperAreaID || ''
+		this.consigneeAreaID = consigneeAreaID || ''
+		this.resetExportExcelUrl()
 		this.getDetail()
 	},
 	methods: {
@@ -116,18 +142,36 @@
 			this.findRangeDate = []
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
+			this.shipperAreaID = ''
+			this.consigneeAreaID = ''
+			this.shipperDetailAddress = ''
+			this.consigneeDetailAddress = ''
+			this.resetExportExcelUrl()
 			this.getDetail()
 		},
 		pageChange(index) {
 			this.pageIndex = index
 			this.getDetail()
 		},
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/export/finance/receivableDetail?Authorization=' + localStorage.getItem("token") 
+				+ '&shipperAreaID=' + this.shipperAreaID 
+				+ '&consigneeAreaID=' + this.consigneeAreaID 
+				+ '&shipperDetailAddress=' + this.shipperDetailAddress 
+				+ '&consigneeDetailAddress=' + this.consigneeDetailAddress 
+				+ '&shipperBeginDate=' + this.findshipperBeginDate 
+				+ '&shipperEndDate=' + this.findshipperEndDate 
+				+ '&shipperCompanyName=' + this.findshipperCompanyName 
+				+ '&consigneeCompanyName=' + this.findconsigneeCompanyName
+		},
 		getDetail() {
 			let params = {
-				shipperAreaID: this.$route.query.shipperAreaID || '',
-				consigneeAreaID: this.$route.query.consigneeAreaID || '',
-				shipperDetailAddress: this.$route.query.shipperDetailAddress || '',
-				consigneeDetailAddress: this.$route.query.consigneeDetailAddress || '',
+				current: this.pageIndex,
+				size: this.pageSize,
+				shipperAreaID: this.shipperAreaID,
+				consigneeAreaID: this.consigneeAreaID,
+				shipperDetailAddress: this.shipperDetailAddress,
+				consigneeDetailAddress: this.consigneeDetailAddress,
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate,
 				shipperCompanyName: this.findshipperCompanyName,
@@ -144,7 +188,11 @@
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
+			this.resetExportExcelUrl()
 		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		}
 	}
 }
 </script>
