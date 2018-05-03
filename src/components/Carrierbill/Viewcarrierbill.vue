@@ -375,7 +375,21 @@ export default {
 		back() {
 			this.$router.go(-1)
 		},
-		deleteCarrierOrder() {
+		deleteCarrierOrder(){
+			this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				this.deleteItem()
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				})
+			})
+		},
+		deleteItem() {
 			let data = {
 				carrierOrderIDs: this.$route.query.carrierOrderID
 			}
