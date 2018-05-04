@@ -80,7 +80,9 @@
 							</tr>
 							<tr>
 								<td>驾驶证审验有效起止</td>
-								<td colspan="3">{{transportRecordDetail.driverLicExamineBeginTime | getdatefromtimestamp(true) }}--{{transportRecordDetail.driverLicExamineEndTime | getdatefromtimestamp(true) }}</td>
+								<td colspan="3">
+									<span v-if="transportRecordDetail.driverLicExamineBeginTime">{{transportRecordDetail.driverLicExamineBeginTime | getdatefromtimestamp(true) }}--{{transportRecordDetail.driverLicExamineEndTime | getdatefromtimestamp(true) }}</span>
+								</td>
 								<td>联系电话</td>
 								<td>{{transportRecordDetail.mobile}}</td>
 							</tr>
@@ -91,9 +93,9 @@
 							<tr>
 								<td><p style="width: 1em">车辆照片</p></td>
 								<td colspan="6">
-									<img width="200" height="150" :src="imgUrl + transportRecordDetail.truckFrontPic"/>
-									<img width="200" height="150" :src="imgUrl + transportRecordDetail.truckSidePic1"/>
-									<img width="200" height="150" :src="imgUrl + transportRecordDetail.truckSidePic2"/>
+									<img v-if="transportRecordDetail.truckFrontPic" width="200" height="150" :src="imgUrl + transportRecordDetail.truckFrontPic"/>
+									<img v-if="transportRecordDetail.truckSidePic1" width="200" height="150" :src="imgUrl + transportRecordDetail.truckSidePic1"/>
+									<img v-if="transportRecordDetail.truckSidePic2" width="200" height="150" :src="imgUrl + transportRecordDetail.truckSidePic2"/>
 								</td>
 							</tr>
 							<tr>
@@ -307,7 +309,7 @@
 										<td>{{transportRecordDetail2.staff.quasiDrivingType}}</td>
 										<td rowspan="5">
 											<P>车辆：{{transportRecordDetail2.truck.plateNo}}</P>
-											<img width="120" height="150" :src="imgUrl + transportRecordDetail2.staff.headPic"/>
+											<img v-if="transportRecordDetail2.staff.headPic" width="120" height="150" :src="imgUrl + transportRecordDetail2.staff.headPic"/>
 										</td>
 									</tr>
 									<tr>
