@@ -4,7 +4,7 @@
 			<div class="header clearfix">编辑车辆</div>
 			<el-form label-width="155px" size="mini" :model="truck" :rules="rules" ref="ruleForm">
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="状态" prop="status">
 							<el-select style="width: 100%" v-model="truck.status" placeholder="请选择">
 								<el-option label="通过" value="Passed"></el-option>
@@ -13,12 +13,12 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="审核人" prop="auditName">
 							<el-input v-model="truck.auditName"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="审核日期" prop="auditTime">
 							<el-date-picker 
 								:picker-options="{disabledDate}"
@@ -33,24 +33,20 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="12">
+					<el-col :span="16">
 						<el-form-item label="所属地区" prop="areaID">
 							<DistPicker :selected="selectedArea" @selectChange="handleSelectedArea"/>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="所属企业" prop="companyName">
 							<el-input v-model="truck.companyName"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
-						<el-form-item label="自编号" prop="code">
-							<el-input v-model="truck.code"></el-input>
-						</el-form-item>
-					</el-col>
+					
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="车辆类别" prop="truckCategory">
 							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
 								<el-option label="挂车" value="挂车"></el-option>
@@ -59,7 +55,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="车辆类型" prop="truckType">
 							<el-select style="width: 100%" v-model="truck.truckType" placeholder="请选择">
 								<el-option label="集装箱挂车" value="集装箱挂车"></el-option>
@@ -70,7 +66,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="车牌颜色" prop="plateNoColor">
 							<el-select style="width: 100%" v-model="truck.plateNoColor" placeholder="请选择">
 								<el-option label="黄" value="黄"></el-option>
@@ -80,17 +76,24 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-form-item>
-						<span style="color: red">*</span>
-						<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType">
-							<el-option label="车牌号" value="车牌号"></el-option>
-							<el-option label="挂车车牌" value="挂车车牌"></el-option>
-						</el-select>
-						<div style="display: inline-block">
-							<el-input placeholder="请输入车牌号" v-model="truck.plateNo" v-if="plateNoType == '车牌号'"></el-input>
-							<el-input placeholder="请输入挂车车牌" v-model="truck.trailerPlateNo" v-if="plateNoType == '挂车车牌'"></el-input>
-						</div>
-					</el-form-item>
+					<el-col :span="16">
+						<el-form-item>
+							<span style="color: red" slot="label">*</span>
+							<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType">
+								<el-option label="车牌号" value="车牌号"></el-option>
+								<el-option label="挂车车牌" value="挂车车牌"></el-option>
+							</el-select>
+							<div style="display: inline-block">
+								<el-input placeholder="请输入车牌号" v-model="truck.plateNo" v-if="plateNoType == '车牌号'"></el-input>
+								<el-input placeholder="请输入挂车车牌" v-model="truck.trailerPlateNo" v-if="plateNoType == '挂车车牌'"></el-input>
+							</div>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="自编号" prop="code">
+							<el-input v-model="truck.code"></el-input>
+						</el-form-item>
+					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
@@ -151,8 +154,6 @@
 							<el-input v-model="truck.accurateLoadType"></el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
 						<el-form-item label="罐体类型">
 							<el-select style="width: 100%" v-model="truck.cannedType" placeholder="请选择">
@@ -162,6 +163,9 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
+					
 					<el-col :span="8">
 						<el-form-item label="罐体容积" prop="tankVolume">
 							<el-input v-model="truck.tankVolume">
@@ -169,9 +173,7 @@
 							</el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="罐体检测有效期至">
 							<el-date-picker 
 								:editable="false"
@@ -183,7 +185,7 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="安全阀检测有效期至">
 							<el-date-picker 
 								:editable="false"
@@ -195,7 +197,9 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="压力表检测有效期至">
 							<el-date-picker 
 								:editable="false"
@@ -207,31 +211,33 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="汽车生产厂家" prop="manufacturer">
 							<el-input v-model="truck.manufacturer"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="品牌型号" prop="carBrandModel">
 							<el-input v-model="truck.carBrandModel"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					
+					
+					<el-col :span="8">
 						<el-form-item label="发动机号">
 							<el-input v-model="truck.engineNO"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="车架号">
 							<el-input v-model="truck.vehicleFrameNO"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="核载人数" prop="personsCapacity">
 							<el-select style="width: 100%" v-model="truck.personsCapacity" placeholder="请选择">
 								<el-option 
@@ -240,12 +246,12 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="车身颜色" prop="carBodyColor">
 							<el-input v-model="truck.carBodyColor"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="是否喷涂警示标志" prop="hasWarnMark">
 							<el-select style="width: 100%" v-model="truck.hasWarnMark" placeholder="请选择">
 								<el-option label="是" value="是"></el-option>
@@ -255,7 +261,7 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="行驶证注册日期" prop="driverLicRegisterTime">
 							<el-date-picker 
 								:picker-options="{disabledDate}"
@@ -268,7 +274,7 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="行驶证发证日期" prop="driverLicIssueTime">
 							<el-date-picker 
 								:picker-options="{disabledDate: (curDate) => truck.driverLicRegisterTime > curDate}"
@@ -281,8 +287,8 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
-						<el-form-item label="行驶证审验效期至" prop="driverLicExamineExpires">
+					<el-col :span="8">
+						<el-form-item label="行驶证审验有效期至" prop="driverLicExamineExpires">
 							<el-date-picker 
 								:editable="false"
 								style="width: 100%" 
@@ -295,17 +301,17 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="道路运输证号" prop="roadTransportNo">
 							<el-input v-model="truck.roadTransportNo"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="经营范围" prop="businessScope">
 							<el-input v-model="truck.businessScope"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="道路运输证年审期至" prop="roadTransportLicAnnualPeriod">
 							<el-date-picker 
 								:editable="false"
@@ -319,41 +325,41 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="所有人或单位" prop="carOwnerName">
 							<el-input v-model="truck.carOwnerName"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="所有人联系电话" prop="carOwnerMobile">
 							<el-input v-model="truck.carOwnerMobile"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="所有人登记地址" prop="carOwnerAddress">
 							<el-input v-model="truck.carOwnerAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="实际车主姓名" prop="curDriverName">
 							<el-input v-model="truck.curDriverName"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="实际车主电话" prop="curDriverMobile">
 							<el-input v-model="truck.curDriverMobile"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="实际车主现住址" prop="curDriverAddress">
 							<el-input v-model="truck.curDriverAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="所有权" prop="propertyType">
 							<el-select style="width: 100%" v-model="truck.propertyType" placeholder="请选择">
 								<el-option label="单位" value="单位"></el-option>
@@ -362,12 +368,12 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="经营证号" prop="businessLicenseNo">
 							<el-input v-model="truck.businessLicenseNo"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="经营性质" prop="businessNature">
 							<el-select style="width: 100%" v-model="truck.businessNature" placeholder="请选择">
 								<el-option label="营运" value="营运"></el-option>
@@ -377,7 +383,7 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="等级评定" prop="rank">
 							<el-select style="width: 100%" v-model="truck.rank" placeholder="请选择">
 								<el-option label="一级" value="一级"></el-option>
@@ -387,7 +393,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="下次等评日期" prop="nextRankEvaluteTime">
 							<el-date-picker 
 								:editable="false"
@@ -399,7 +405,7 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="二级维护日期" prop="secondaMaintainTime">
 							<el-date-picker 
 								:editable="false"
@@ -411,7 +417,9 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="下次二级维护日期" prop="nextSecondLevel">
 							<el-date-picker 
 								:picker-options="{disabledDate: (curDate) => truck.secondaMaintainTime > curDate}"
@@ -424,10 +432,8 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
-						<el-form-item label="承运人责任险有效期至" prop="carrierRiskInsuranceExpires">
+					<el-col :span="8">
+						<el-form-item label="承运人责任险有效期" prop="carrierRiskInsuranceExpires">
 							<el-date-picker 
 								:editable="false"
 								style="width: 100%" 
@@ -437,8 +443,8 @@
 								placeholder="选择日期">
 							</el-date-picker>
 						</el-form-item>
-					</el-col>
-					<el-col :span="6">
+					</el-col>				
+					<el-col :span="8">
 						<el-form-item label="交强险有效期至" prop="saLIInsuranceExpires">
 							<el-date-picker 
 								:editable="false"
@@ -450,7 +456,10 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="商业险有效期至" prop="bizInsuranceExpires">
 							<el-date-picker 
 								:editable="false"
@@ -462,31 +471,29 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="GPS类型">
 							<el-input v-model="truck.gpSType"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="GPS入网号">
 							<el-input v-model="truck.gpSNetworkNo"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="GPS卡号">
 							<el-input v-model="truck.gpSCardNo"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="GPS序列号">
 							<el-input v-model="truck.gpSSerialNumber"></el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="GPS安装时间">
 							<el-date-picker 
 								:editable="false"

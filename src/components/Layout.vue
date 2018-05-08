@@ -8,7 +8,7 @@
 		</div>
 		<sidebar class="sidebar-container"></sidebar>
 		
-		<div class="main-container right-container">
+		<div class="main-container right-container" >
 			<breadcrumb class="breadcrumb-container"></breadcrumb>
 			<app-main></app-main>
 		</div>

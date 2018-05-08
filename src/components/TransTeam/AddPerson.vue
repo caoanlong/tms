@@ -4,12 +4,12 @@
 			<div class="header clearfix">添加人员</div>
 			<el-form label-width="155px" size="mini" :model="person" :rules="rules" ref="ruleForm">
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="创建人" prop="createName">
 							<el-input v-model="person.createName"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="状态" prop="status">
 							<el-select style="width: 100%" v-model="person.status" placeholder="请选择">
 								<el-option label="通过" value="Passed"></el-option>
@@ -18,12 +18,14 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="审核人" prop="auditName">
 							<el-input v-model="person.auditName"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="审核日期" prop="auditTime">
 							<el-date-picker 
 								:picker-options="{disabledDate}" 
@@ -36,24 +38,24 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="姓名" prop="realName">
 							<el-input v-model="person.realName"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="家庭地址" prop="homeAddress">
 							<el-input v-model="person.homeAddress"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="联系电话" prop="mobile">
 							<el-input v-model="person.mobile"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="性别" prop="sex">
 							<el-select style="width: 100%" v-model="person.sex" placeholder="请选择">
 								<el-option label="男" value="M"></el-option>
@@ -61,9 +63,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="驾驶证初次领证日期">
 							<el-date-picker 
 								:picker-options="{disabledDate}"
@@ -76,7 +76,9 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="诚信考核等级">
 							<el-select style="width: 100%" v-model="person.integrityExamineGrade" placeholder="请选择">
 								<el-option label="无" value=""></el-option>
@@ -88,7 +90,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="聘用岗位" prop="position">
 							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择" @change="changePost">
 								<el-option label="操作员" value="Operator"></el-option>
@@ -100,7 +102,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="诚信考核有效期至">
 							<el-date-picker 
 								:editable="false"
@@ -114,12 +116,12 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="身份证号" prop="idCardNum">
 							<el-input v-model="person.idCardNum"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="准驾车型">
 							<el-select style="width: 100%" v-model="person.quasiDrivingType" placeholder="请选择">
 								<el-option label="A1" value="A1"></el-option>
@@ -141,7 +143,7 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="合同有效期起">
 							<el-date-picker 
 								:picker-options="{disabledDate}"
@@ -154,7 +156,9 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="合同有效期至">
 							<el-date-picker 
 								:picker-options="{
@@ -175,9 +179,7 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="驾驶证审验有效期起">
 							<el-date-picker 
 								:picker-options="{disabledDate}"
@@ -190,7 +192,7 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="驾驶证审验有效期至">
 							<el-date-picker 
 								:picker-options="{
@@ -211,29 +213,31 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="驾驶证档案编号">
 							<el-input v-model="person.driverLicenseCode"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="职称或技术等级">
 							<el-input v-model="person.titleLever"></el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="从业资格证件号">
 							<el-input v-model="person.qualificationCode"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="从业资格类别">
 							<el-input v-model="person.qualificationType"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="从业资格证有效期至">
 							<el-date-picker 
 								:editable="false"

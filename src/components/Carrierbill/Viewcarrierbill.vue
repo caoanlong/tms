@@ -1,15 +1,22 @@
 <template>
-	<div class="main-content" style="min-width: 1200px">
+	<div class="main-content" >
 		<div class="wf-card">
 			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}
-				<span>发货单号：{{carrierOrder.shipperNo}}</span>
-				<span>创建时间：<span v-if="carrierOrder.createTime">{{carrierOrder.createTime | getdatefromtimestamp()}}</span><span v-else></span></span>
-				<span>委托时间：<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp()}}</span><span v-else></span></span>
+				
 				<span class="status status1" v-if="carrierOrder.status=='Committed'">待执行</span>
 				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
 				<span class="status status1" v-else-if="carrierOrder.status=='Closed'">关闭</span>
 				<span class="status status1" v-else-if="carrierOrder.status=='Canceled'">作废</span>
+			</div>
+			<div class="datetime">
+				<span class="label">发货单号：</span><span>{{carrierOrder.shipperNo}}</span>
+				<span class="label">创建时间：</span>
+				<span v-if="carrierOrder.createTime">{{carrierOrder.createTime | getdatefromtimestamp()}}</span>
+				<span v-else></span>
+				<span class="label">委托时间：</span>
+				<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp()}}</span>
+				<span v-else></span>
 			</div>
 			<table class="wf-table">
 				<caption>承运信息</caption>
@@ -441,6 +448,7 @@ export default {
 	padding-top 20px
 	.wf-card
 		.header
+			margin-bottom 0
 			span
 				font-size 12px
 				margin-left 40px
@@ -462,6 +470,14 @@ export default {
 					background #409EFF
 				&.status3
 					background #909399
+		.datetime
+			font-size 12px
+			padding 10px 15px 
+			margin-bottom 10px
+			border 1px solid #e2ecf6
+			color #3582d0
+			.label~.label
+				margin-left 40px
 		.wf-table
 			.justify
 				width 80px

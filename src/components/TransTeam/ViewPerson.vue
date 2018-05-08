@@ -4,74 +4,76 @@
 			<div class="header clearfix">查看人员</div>
 			<el-form label-width="155px">
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="创建人">
 							<p>{{person.createName}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="状态">
 							<p v-if="person.status == 'Passed'">通过</p>
 							<p v-else-if="person.status == 'NotPassed'">不通过</p>
 							<p v-else-if="person.status == 'Other'">其他</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="审核人">
 							<p>{{person.auditName}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="审核日期">
 							<p v-if="person.auditTime">{{person.auditTime | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="姓名">
 							<p>{{person.realName}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="家庭地址">
 							<el-tooltip class="item" effect="dark" :content="person.comStaffIdentification.homeAddress" placement="top">
 								<p>{{person.comStaffIdentification.homeAddress}}</p>
 							</el-tooltip>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="联系电话">
 							<p>{{person.mobile}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="性别">
 							<p>{{person.comStaffIdentification.sex == 'M' ? '男' : '女'}}</p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="驾驶证初次领证日期">
 							<p v-if="person.comStaffIdentification.driverLicenseFirstTime">{{person.comStaffIdentification.driverLicenseFirstTime | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="诚信考核等级">
 							<p>{{person.comStaffIdentification.integrityExamineGrade}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="聘用岗位">
 							<p>
 								<span v-for="item in (person.position ? person.position.split(',') : 0)">{{postMap[item]}},</span>
 							</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="诚信考核有效期至">
 							<p v-if="person.comStaffIdentification.integrityExamineEndTime">{{person.comStaffIdentification.integrityExamineEndTime  | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
@@ -79,65 +81,67 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="身份证号">
 							<p>{{person.comStaffIdentification.idCardNum}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="准驾车型">
 							<p>{{person.comStaffIdentification.quasiDrivingType}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="合同有效期起">
 							<p v-if="person.comStaffIdentification.laborContractBeginTime">{{person.comStaffIdentification.laborContractBeginTime  | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="合同有效期至">
 							<p v-if="person.comStaffIdentification.laborContractEndTime">{{person.comStaffIdentification.laborContractEndTime  | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="驾驶证审验有效期起">
 							<p v-if="person.comStaffIdentification.driverLicExamineBeginTime">{{person.comStaffIdentification.driverLicExamineBeginTime  | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="驾驶证审验有效期至">
 							<p v-if="person.comStaffIdentification.driverLicExamineEndTime">{{person.comStaffIdentification.driverLicExamineEndTime  | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="驾驶证档案编号">
 							<p>{{person.comStaffIdentification.driverLicenseCode}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="职称或技术等级">
 							<p>{{person.comStaffIdentification.titleLever}}</p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="从业资格证件号">
 							<p>{{person.comStaffIdentification.qualificationCode}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+				</el-row>
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="从业资格类别">
 							<p>{{person.comStaffIdentification.qualificationType}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="从业资格证有效期至">
 							<p v-if="person.comStaffIdentification.qualificationExpirationTime">{{person.comStaffIdentification.qualificationExpirationTime  | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
@@ -147,7 +151,7 @@
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="备注说明">
-							<el-input disabled type="textarea" v-model="person.remark" resize="none"></el-input>
+							<p>{{person.remark}}<span v-for="i in 100">备注说明</span></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -265,39 +269,15 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-.avatar-uploader
-	line-height 1
-	width 100px
-	height 100px
-	overflow hidden
-	border 1px dashed #d9d9d9
-	border-radius 6px
-	&:hover 
-		border-color #409eff
-	.avatar-uploader-icon
-		font-size 28px
-		color #8c939d
-		width 98px
-		height 98px
-		line-height 98px
-		text-align center
-	.avatar
-		width 98px
-		height 98px
-		display block
-		vertical-align top
 .el-form-item__content
 	p
 		margin 0
 		border 1px solid #fff
 		border-bottom-color #dcdfe6
 		padding 0 15px
-		height 40px
+		min-height 40px
 		font-family 'sans-serif'
 		line-height 40px
 		color #999
 		font-size 12px
-		overflow hidden
-		white-space nowrap
-		text-overflow ellipsis
 </style>
