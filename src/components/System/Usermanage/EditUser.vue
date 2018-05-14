@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>编辑用户</span>
-			</div>
+		<div class="wf-card box-card">
+			<div class="header clearfix">编辑用户</div>
 			<el-form label-width="120px" :model="user" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
@@ -90,7 +88,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">

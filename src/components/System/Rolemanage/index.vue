@@ -16,7 +16,6 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click.native="addRole">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click.native="deleteConfirm">批量删除</el-button>
-				<el-button type="default" size="mini" icon="el-icon-refresh" :loading="refreshing" @click.native="refresh">刷新</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -160,6 +159,7 @@
 			// 重置搜索表单
 			reset() {
 				this.findRoleName = ''
+				this.getRoles()
 			},
 			// 获取所有菜单
 			getMenus() {

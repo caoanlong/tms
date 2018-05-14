@@ -7,17 +7,12 @@
 					<el-form-item label="姓名">
 						<el-input placeholder="姓名" v-model="findName"></el-input>
 					</el-form-item>
-					<el-form-item label="登录名">
-						<el-input placeholder="登录名" v-model="findLoginName"></el-input>
+					<el-form-item label="手机号">
+						<el-input placeholder="登录名" v-model="findMobile"></el-input>
 					</el-form-item>
 					<el-form-item label="归属公司">
 						<el-select v-model="findCompany" placeholder="请选择" @change="changeCompany">
 							<el-option :label="company.Name" :value="company.Organization_ID" v-for="company in companys" :key="company.Organization_ID"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="归属部门">
-						<el-select v-model="findDepartment" placeholder="请选择">
-							<el-option :label="department.Name" :value="department.Organization_ID" v-for="department in departments" :key="department.Organization_ID"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -29,24 +24,27 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="addUser">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
-				<upload-excel btnType="default" btnTxt="导入" @on-selected-file="onSelectedFile"/>
+				<!-- <upload-excel btnType="default" btnTxt="导入" @on-selected-file="onSelectedFile"/>
 				<el-button type="default" size="mini" icon="el-icon-download" :loading="downloadLoading" @click="exportExcel">导出</el-button>
-				<a href="../../../../../static/user_template.xlsx" download="user_template.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+				<a href="../../../../../static/user_template.xlsx" download="user_template.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a> -->
 			</div>
 			<div class="table">
 				<el-table :data="users" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="登录名" prop="LoginName"></el-table-column>
-					<el-table-column label="姓名" prop="Name"></el-table-column>
-					<el-table-column label="电话" prop="Phone" align="center" width="120"></el-table-column>
-					<el-table-column label="手机" prop="Mobile" align="center" width="100"></el-table-column>
+					<el-table-column label="姓名" prop="RealName"></el-table-column>
+					<el-table-column label="手机" prop="Mobile" align="center"></el-table-column>
 					<el-table-column label="归属公司" prop="company.Name"></el-table-column>
-					<el-table-column label="归属部门" prop="department.Name"></el-table-column>
+					<el-table-column label="创建时间" prop="CreateTime" width="140" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.CreateTime">{{ new Date(scope.row.CreateTime).getTime() | getdatefromtimestamp()}}</span>
+							
+						</template>
+					</el-table-column>
 					<el-table-column label="操作" width="230" align="center">
 						<template slot-scope="scope">
-							<el-button size="mini" icon="el-icon-view" @click="viewUser(scope.row.User_ID)">查看</el-button>
-							<el-button size="mini" icon="el-icon-edit" @click="editUser(scope.row.User_ID)">编辑</el-button>
-							<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.row.User_ID)">删除</el-button>
+							<el-button size="mini" icon="el-icon-view" @click="viewUser(scope.row.Staff_ID)">查看</el-button>
+							<el-button size="mini" icon="el-icon-edit" @click="editUser(scope.row.Staff_ID)">编辑</el-button>
+							<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.row.Staff_ID)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -74,7 +72,7 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import request from '../../../common/request'
+	import requestNode from '../../../common/requestNode'
 	import { Message } from 'element-ui'
 	import UploadExcel from '../../CommonComponents/UploadExcel'
 	import { validUploadFile } from '../../../common/utils'
@@ -95,9 +93,8 @@
 				pageIndex: 1,
 				pageSize: 10,
 				findName: '',
-				findLoginName: '',
+				findMobile: '',
 				findCompany: '',
-				findDepartment: '',
 				count: 0,
 				selectedUsers: [],
 				companys: [],
@@ -143,8 +140,8 @@
 				let data = {
 					users: users,
 				}
-				request({
-					url: '/sys_user/addmutip',
+				requestNode({
+					url: '/com_staff/addmutip',
 					method: 'post',
 					data
 				}).then(res => {
@@ -163,7 +160,7 @@
 			// 重置搜索表单
 			reset() {
 				this.findName = ''
-				this.findLoginName = ''
+				this.findMobile = ''
 				this.findCompany = ''
 				this.findDepartment = ''
 				this.getUsers()
@@ -172,13 +169,12 @@
 				let params = {
 					pageIndex: this.pageIndex || 1,
 					pageSize: this.pageSize,
-					LoginName: this.findLoginName,
-					Name: this.findName,
-					Company_ID: this.findCompany,
-					Organization_ID: this.findDepartment
+					Mobile: this.findMobile,
+					RealName: this.findName,
+					Company_ID: this.findCompany
 				}
-				request({
-					url: '/sys_user/list',
+				requestNode({
+					url: '/com_staff/list',
 					method: 'get',
 					params
 				}).then(res => {
@@ -228,8 +224,8 @@
 				let data = {
 					ids: ids
 				}
-				request({
-					url: '/sys_user/delete',
+				requestNode({
+					url: '/com_staff/delete',
 					method: 'post',
 					data
 				}).then(res => {
@@ -241,16 +237,16 @@
 				})
 			},
 			editUser(id) {
-				this.$router.push({ name: 'edituser', query: { User_ID: id} })
+				this.$router.push({ name: 'edituser', query: { Staff_ID: id} })
 			},
 			viewUser(id) {
-				this.$router.push({ name: 'viewuser', query: { User_ID: id} })
+				this.$router.push({ name: 'viewuser', query: { Staff_ID: id} })
 			},
 			getOrgs(Organization_PID) {
 				let params = {
 					Organization_PID: Organization_PID || ''
 				}
-				request({
+				requestNode({
 					url: '/sys_organization/list',
 					method: 'get',
 					params
@@ -271,7 +267,7 @@
 				this.getOrgs(id)
 			},
 			selectionChange(data) {
-				this.selectedUsers = data.map(item => item.User_ID)
+				this.selectedUsers = data.map(item => item.Staff_ID)
 				console.log(this.selectedUsers )
 			}
 		},
