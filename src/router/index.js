@@ -379,6 +379,98 @@ let routerMap = [
 						component: () => import('../components/User/UserProfile')
 					}
 				]
+			},
+			{
+				path: '/system',
+				name: '/system',
+				meta: {
+					title: '系统设置'
+				},
+				component: () => import('../components/System'),
+				redirect: '/usermanage',
+				children: [
+					
+					{
+						path: '/usermanage',
+						name: 'usermanage',
+						meta: {
+							title: '用户管理'
+						},
+						component: () => import('../components/System/Usermanage')
+					},
+					{
+						path: '/adduser',
+						name: 'adduser',
+						meta: {
+							title: '添加用户'
+						},
+						component: () => import('../components/System/Usermanage/AddUser')
+					},
+					{
+						path: '/edituser',
+						name: 'edituser',
+						meta: {
+							title: '编辑用户'
+						},
+						component: () => import('../components/System/Usermanage/EditUser')
+					},
+					{
+						path: '/viewuser',
+						name: 'viewuser',
+						meta: {
+							title: '查看用户'
+						},
+						component: () => import('../components/System/Usermanage/ViewUser')
+					},
+					{
+						path: '/menumanage',
+						name: 'menumanage',
+						meta: {
+							title: '菜单管理'
+						},
+						component: () => import('../components/System/Menumanage')
+					},
+					{
+						path: '/rolemanage',
+						name: 'rolemanage',
+						meta: {
+							title: '角色管理'
+						},
+						component: () => import('../components/System/Rolemanage')
+					},
+					{
+						path: '/addrole',
+						name: 'addrole',
+						meta: {
+							title: '添加角色'
+						},
+						component: () => import('../components/System/Rolemanage/AddRole')
+					},
+					{
+						path: '/editrole',
+						name: 'editrole',
+						meta: {
+							title: '编辑角色'
+						},
+						component: () => import('../components/System/Rolemanage/EditRole')
+					},
+					{
+						path: '/viewrole',
+						name: 'viewrole',
+						meta: {
+							title: '查看角色'
+						},
+						component: () => import('../components/System/Rolemanage/ViewRole')
+					},
+					{
+						path: '/orgmange',
+						name: 'orgmange',
+						meta: {
+							title: '机构管理'
+						},
+						component: () => import('../components/System/Orgmange')
+					}
+				]
 			}
 		]
 	}

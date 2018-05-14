@@ -43,3 +43,30 @@ export const getdatefromtimestamp = function (input, bool) {
 		return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
 	}
 }
+export function validUploadFile(result, map, propertys) {
+	return new Promise((resolve, reject) => {
+		if (result.length == 0) {
+			return reject('无数据！')
+		}
+		let uploadExcelConstants = []
+		for (let i = 0; i < result.length; i++) {
+			let excelConstant = {}
+			let j = 1
+			let item = result[i]
+			for (let key in item) {
+				if (!propertys.includes(key)) {
+					return reject(`文件中应不包含“${key}”字段`)
+				}
+				for (let x = 0; x < propertys.length; x++) {
+					if (!item[propertys[x]]) {
+						return reject(`第${i + 1}行，第${j}列不能为空`)
+					}
+				}
+				excelConstant[map[key]] = item[key]
+				j++
+			}
+			uploadExcelConstants.push(excelConstant)
+		}
+		resolve(uploadExcelConstants)
+	})
+}

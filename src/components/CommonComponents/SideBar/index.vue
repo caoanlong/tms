@@ -59,6 +59,18 @@
 					<el-menu-item index="recdeliverycomp">收发货单位</el-menu-item>
 				</el-menu-item-group>
 			</el-submenu>
+			<el-submenu index="system">
+				<template slot="title">
+					<svg-icon icon-class="settings-icon"></svg-icon>
+					<span>系统设置</span>
+				</template>
+				<el-menu-item-group>
+					<el-menu-item index="usermanage">用户管理</el-menu-item>
+					<el-menu-item index="menumanage">菜单管理</el-menu-item>
+					<el-menu-item index="rolemanage">角色管理</el-menu-item>
+					<el-menu-item index="orgmange">机构管理</el-menu-item>
+				</el-menu-item-group>
+			</el-submenu>
 		</el-menu>
 	</scroll-bar>
 </template>
