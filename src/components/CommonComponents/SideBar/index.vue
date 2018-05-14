@@ -65,7 +65,7 @@
 					<span>系统设置</span>
 				</template>
 				<el-menu-item-group>
-					<el-menu-item index="usermanage">用户管理</el-menu-item>
+					<el-menu-item index="usermanage">员工管理</el-menu-item>
 					<el-menu-item index="menumanage">菜单管理</el-menu-item>
 					<el-menu-item index="rolemanage">角色管理</el-menu-item>
 					<el-menu-item index="orgmange">机构管理</el-menu-item>
