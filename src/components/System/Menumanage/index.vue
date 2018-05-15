@@ -42,7 +42,7 @@
 				</el-form-item>
 				<el-form-item label="角色权限">
 					<el-select style="width: 100%" v-model="selectedRoles" multiple placeholder="请选择">
-						<el-option v-for="role in roles" :key="role.Role_ID" :label="role.Name" :value="role.Role_ID">
+						<el-option v-for="role in roles" :key="role.Role_ID" :label="role.RoleName" :value="role.Role_ID">
 						</el-option>
 					</el-select>
 				</el-form-item>
@@ -107,8 +107,12 @@ export default {
 	created() {
 		this.getRoles()
 	},
+	mounted() {
+		console.log(this.menus)
+	},
 	methods: {
 		addRoot() {
+			console.log(this.menus)
 			this.title = '添加顶级节点'
 			this.button = '立即创建'
 			this.currentNode = {
@@ -266,7 +270,7 @@ export default {
 					this.roles = Oroles.map(item => {
 						return {
 							Role_ID: item.Role_ID,
-							Name: item.Name
+							RoleName: item.RoleName
 						}
 					})
 				} else {

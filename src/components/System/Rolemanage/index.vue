@@ -35,13 +35,18 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="备注" prop="Remark" align="left"></el-table-column>
-					<el-table-column label="操作" width="420" align="center">
+					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="viewRole(scope.row.Role_ID)">查看</el-button>
-							<el-button type="default" size="mini" icon="el-icon-edit" @click="editRole(scope.row.Role_ID)">修改</el-button>
-							<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.row.Role_ID)">删除</el-button>
-							<el-button type="default" size="mini" icon="el-icon-setting" @click="setAuth(scope.row)">权限设置</el-button>
-							<el-button type="default" size="mini" icon="el-icon-plus"  @click="setUser(scope.row)">分配用户</el-button>
+							<el-dropdown  @command="handleCommand"  trigger="click">
+								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item :command="{type: 'view', id:scope.row.Role_ID}">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.Role_ID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.Role_ID}" >删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'setAuth', id: scope.row.Role_ID}" >权限设置</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'setUser', id: scope.row.Role_ID}" >分配用户</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -91,9 +96,7 @@
 				border style="width: 100%" 
 				size="mini">
 				<el-table-column type="selection" align="center"></el-table-column>
-				<el-table-column label="登录名" prop="LoginName"></el-table-column>
-				<el-table-column label="姓名" prop="Name"></el-table-column>
-				<el-table-column label="电话" prop="Phone"></el-table-column>
+				<el-table-column label="姓名" prop="RealName"></el-table-column>
 				<el-table-column label="手机" prop="Mobile"></el-table-column>
 			</el-table>
 			<span slot="footer" class="dialog-footer">
@@ -141,11 +144,18 @@
 			addRole() {
 				this.$router.push({name: 'addrole'})
 			},
-			editRole(id) {
-				this.$router.push({name: 'editrole', query: {Role_ID: id}})
-			},
-			viewRole(id) {
-				this.$router.push({name: 'viewrole', query: {Role_ID: id}})
+			handleCommand(e) {
+				if(e.type=='view'){
+					this.$router.push({name: 'viewrole', query: { Role_ID:e.id }})
+				}else if(e.type=='edit'){
+					this.$router.push({ name: 'editrole' , query: {  Role_ID:e.id } })
+				}else if(e.type=='setAuth'){
+					this.setAuth(e)
+				}else if(e.type=='setUser'){
+					this.setUser(e)
+				}else if(e.type=='delete'){
+					this.deleteConfirm(e.id)
+				}
 			},
 			pageChange(index) {
 				this.getRoles(index)
@@ -245,8 +255,9 @@
 				})
 			},
 			setAuth(data) {
+				console.log(data)
 				this.getMenus().then(() => {
-					this.setAuthId = data.Role_ID
+					this.setAuthId = data.id
 					this.showSetAuth = true
 					this.getRole(data.Role_ID, res => {
 						let menusID = res.sys_menu_2s.map(item => item.Menu_ID)
@@ -307,7 +318,7 @@
 					pageSize: 100
 				}
 				requestNode({
-					url: '/sys_user/list',
+					url: '/com_staff/list',
 					method: 'get',
 					params
 				}).then(res => {
@@ -320,7 +331,7 @@
 				})
 			},
 			setUser(data) {
-				this.setUserId = data.Role_ID
+				this.setUserId = data.id
 				this.showSetUser = true
 				this.getUsers(() => {
 					this.getRole(data.Role_ID, res => {
@@ -341,10 +352,10 @@
 			},
 			submitSetUser() {
 				this.showSetUser = false
-				let userIds = this.selectedUsers.map(item => item.User_ID)
+				let Staff_IDs = this.selectedUsers.map(item => item.Staff_ID)
 				let data = {
 					Role_ID: this.setUserId,
-					sys_users: userIds
+					sys_users: Staff_IDs
 				}
 				requestNode({
 					url: '/sys_role/update/user',

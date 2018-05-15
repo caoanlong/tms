@@ -49,19 +49,12 @@
 							<span v-if="scope.row.CreateTime">{{ new Date(scope.row.CreateTime).getTime() | getdatefromtimestamp()}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="操作" width="230" align="center">
-						<template slot-scope="scope">
-							<el-button size="mini" icon="el-icon-view" @click="viewUser(scope.row.Staff_ID)">查看</el-button>
-							<el-button size="mini" icon="el-icon-edit" @click="editUser(scope.row.Staff_ID)">编辑</el-button>
-							<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.row.Staff_ID)">删除</el-button>
-						</template>
-					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id:scope.row.Staff_ID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id:scope.row.Staff_ID}">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.Staff_ID}">编辑</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.Staff_ID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
@@ -206,6 +199,15 @@
 					}
 				})
 			},
+			handleCommand(e) {
+				if(e.type=='view'){
+					this.$router.push({name: 'viewuser', query: { Staff_ID:e.id }})
+				}else if(e.type=='edit'){
+					this.$router.push({ name: 'edituser' , query: {  Staff_ID:e.id } })
+				}else if(e.type=='delete'){
+					this.deleteConfirm(e.id)
+				}
+			},
 			addUser() {
 				this.$router.push({ name: 'adduser' })
 			},
@@ -256,12 +258,7 @@
 					}
 				})
 			},
-			editUser(id) {
-				this.$router.push({ name: 'edituser', query: { Staff_ID: id} })
-			},
-			viewUser(id) {
-				this.$router.push({ name: 'viewuser', query: { Staff_ID: id} })
-			},
+			
 			getOrgs(Organization_PID) {
 				let params = {
 					Organization_PID: Organization_PID || ''

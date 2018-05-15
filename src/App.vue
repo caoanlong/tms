@@ -11,7 +11,9 @@ export default {
 		if (localStorage.getItem('token')) {
 			this.$store.dispatch('getUserInfo')
 			this.$store.dispatch('getConsts')
+			this.$store.dispatch('getMenu')
 		}
+
 	},
 	computed: {
 		...mapGetters(['consts'])
