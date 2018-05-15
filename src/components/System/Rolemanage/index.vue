@@ -105,7 +105,7 @@
 </template>
 <script type="text/javascript">
 	import { mapGetters } from 'vuex'
-	import request from '../../../common/request'
+	import requestNode from '../../../common/requestNode'
 	import { Message } from 'element-ui'
 	export default {
 		data() {
@@ -135,7 +135,7 @@
 			}
 		},
 		created() {
-			this.getDataScope()
+			this.getRoles()
 		},
 		methods: {
 			addRole() {
@@ -164,7 +164,7 @@
 			// 获取所有菜单
 			getMenus() {
 				return new Promise((resolve, reject) => {
-					request({
+					requestNode({
 						url: '/sys_menu/list/all',
 						method: 'get'
 					}).then(res => {
@@ -184,7 +184,7 @@
 					pageSize: this.pageSize,
 					Name: this.findRoleName
 				}
-				request({
+				requestNode({
 					url: '/sys_role/list',
 					method: 'get',
 					params
@@ -232,7 +232,7 @@
 				let data = {
 					ids: ids
 				}
-				request({
+				requestNode({
 					url: '/sys_role/delete',
 					method: 'post',
 					data
@@ -263,7 +263,7 @@
 					Role_ID: this.setAuthId,
 					sys_menus: this.selectedMenuId
 				}
-				request({
+				requestNode({
 					url: '/sys_role/update/menu',
 					method: 'post',
 					data
@@ -288,7 +288,7 @@
 				let params = {
 					Role_ID
 				}
-				request({
+				requestNode({
 					url: '/sys_role/info',
 					method: 'get',
 					params
@@ -306,7 +306,7 @@
 				let params = {
 					pageSize: 100
 				}
-				request({
+				requestNode({
 					url: '/sys_user/list',
 					method: 'get',
 					params
@@ -346,31 +346,13 @@
 					Role_ID: this.setUserId,
 					sys_users: userIds
 				}
-				request({
+				requestNode({
 					url: '/sys_role/update/user',
 					method: 'post',
 					data
 				}).then(res => {
 					if (res.data.code == 0) {
 						Message.success(res.data.msg)
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			// 获取数据范围
-			getDataScope() {
-				let params = {
-					TYPE: 'sys_data_scope'
-				}
-				request({
-					url: '/sys_dict/list/type',
-					method: 'get',
-					params
-				}).then(res => {
-					if (res.data.code == 0) {
-						this.sysDataScopes = res.data.data
-						this.getRoles()
 					} else {
 						Message.error(res.data.msg)
 					}
