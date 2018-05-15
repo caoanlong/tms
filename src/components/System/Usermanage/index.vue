@@ -10,11 +10,6 @@
 					<el-form-item label="手机号">
 						<el-input placeholder="登录名" v-model="findMobile"></el-input>
 					</el-form-item>
-					<el-form-item label="归属公司">
-						<el-select v-model="findCompany" placeholder="请选择" @change="changeCompany">
-							<el-option :label="company.Name" :value="company.Organization_ID" v-for="company in companys" :key="company.Organization_ID"></el-option>
-						</el-select>
-					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getUsers()">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
@@ -32,12 +27,26 @@
 				<el-table :data="users" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="姓名" prop="RealName"></el-table-column>
-					<el-table-column label="手机" prop="Mobile" align="center"></el-table-column>
-					<el-table-column label="归属公司" prop="company.Name"></el-table-column>
+					<el-table-column label="员工编号" prop="StaffCode"></el-table-column>
+					<el-table-column label="手机号码" prop="Mobile" align="center" width="100"></el-table-column>
+					<el-table-column label="职位名称" prop="Position"></el-table-column>
+					<el-table-column label="职位类型" prop="PositionType"></el-table-column>
+					<el-table-column label="资料状态" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.Status=='Passed'">通过</span>
+							<span v-else-if="scope.row.Status=='NotPassed'">审核中</span>
+							<span v-else>其它</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="工作状态" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.WorkStatus=='Free'">空闲中</span>
+							<span v-else>工作中</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="创建时间" prop="CreateTime" width="140" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.CreateTime">{{ new Date(scope.row.CreateTime).getTime() | getdatefromtimestamp()}}</span>
-							
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="230" align="center">
@@ -45,6 +54,18 @@
 							<el-button size="mini" icon="el-icon-view" @click="viewUser(scope.row.Staff_ID)">查看</el-button>
 							<el-button size="mini" icon="el-icon-edit" @click="editUser(scope.row.Staff_ID)">编辑</el-button>
 							<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.row.Staff_ID)">删除</el-button>
+						</template>
+					</el-table-column>
+					<el-table-column width="80" align="center" fixed="right">
+						<template slot-scope="scope">
+							<el-dropdown  @command="handleCommand"  trigger="click">
+								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item :command="{type: 'view', id:scope.row.Staff_ID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.Staff_ID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.Staff_ID}" >删除</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -170,8 +191,7 @@
 					pageIndex: this.pageIndex || 1,
 					pageSize: this.pageSize,
 					Mobile: this.findMobile,
-					RealName: this.findName,
-					Company_ID: this.findCompany
+					RealName: this.findName
 				}
 				requestNode({
 					url: '/com_staff/list',

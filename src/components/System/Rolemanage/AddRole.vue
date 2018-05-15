@@ -6,19 +6,13 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
 						<el-form-item label="名称">
-							<el-input auto-complete="off" v-model="role.Name"></el-input>
+							<el-input auto-complete="off" v-model="role.RoleName"></el-input>
 						</el-form-item>
 						<el-form-item label="英文名称">
-							<el-input auto-complete="off" v-model="role.EnName"></el-input>
+							<el-input auto-complete="off" v-model="role.RoleEnName"></el-input>
 						</el-form-item>
-						<el-form-item label="组织机构">
-							<el-select style="width: 100%" placeholder="请选择" v-model="role.Organization_ID">
-								<el-option 
-								v-for="organization in organizations" 
-								:key="organization.Organization_ID" 
-								:label="organization.Name" 
-								:value="organization.Organization_ID"></el-option>
-							</el-select>
+						<el-form-item label="角色代码">
+							<el-input auto-complete="off" v-model="role.RoleCode"></el-input>
 						</el-form-item>
 						<el-form-item label="角色类型">
 							<el-select style="width: 100%" placeholder="请选择" v-model="role.RoleType">
@@ -26,27 +20,6 @@
 								<el-option label="管理角色" value="security-role"></el-option>
 								<el-option label="普通角色" value="user"></el-option>
 							</el-select>
-						</el-form-item>
-						<el-form-item label="数据范围">
-							<el-select style="width: 100%" placeholder="请选择" v-model="role.DataScope">
-								<el-option 
-								v-for="sysDataScope in sysDataScopes" 
-								:key="sysDataScope.Dict_ID" 
-								:label="sysDataScope.NAME" 
-								:value="sysDataScope.VALUE"></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="是否系统数据">
-							<el-radio-group v-model="role.Issys">
-								<el-radio label="Y">是</el-radio>
-								<el-radio label="N">否</el-radio>
-							</el-radio-group>
-						</el-form-item>
-						<el-form-item label="是否可用">
-							<el-radio-group v-model="role.Useable">
-								<el-radio label="Y">是</el-radio>
-								<el-radio label="N">否</el-radio>
-							</el-radio-group>
 						</el-form-item>
 						<el-form-item label="备注">
 							<el-input type="textarea" resize="none" v-model="role.Remark"></el-input>
@@ -62,19 +35,16 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import request from '../../../common/request'
+	import requestNode from '../../../common/requestNode'
 	import { Message } from 'element-ui'
 	export default {
 		data() {
 			return {
 				role: {
-					Name: '',
-					EnName: '',
-					Organization_ID: '',
+					RoleName: '',
+					RoleEnName: '',
+					RoleCode: '',
 					RoleType: '',
-					DataScope: '',
-					Issys: 'Y',
-					Useable: 'Y',
 					Remark: ''
 				},
 				organizations: [],
@@ -82,23 +52,18 @@
 			}
 		},
 		created() {
-			this.getOrganizations()
-			this.getDataScope()
 		},
 		methods: {
 			addRole() {
 				let data = {
-					Name: this.role.Name,
-					EnName: this.role.EnName,
-					Organization_ID: this.role.Organization_ID,
+					RoleName: this.role.RoleName,
+					RoleEnName: this.role.RoleEnName,
+					RoleCode: this.role.RoleCode,
 					RoleType: this.role.RoleType,
-					DataScope: this.role.DataScope,
-					Issys: this.role.Issys,
-					Useable: this.role.Useable,
 					Remark: this.role.Remark
 				}
 				console.log(JSON.stringify(data))
-				request({
+				requestNode({
 					url: '/sys_role/add',
 					method: 'post',
 					data
@@ -112,36 +77,7 @@
 					}
 				})
 			},
-			// 获取所有机构
-			getOrganizations() {
-				request({
-					url: '/sys_organization/list/all',
-					method: 'get'
-				}).then(res => {
-					if (res.data.code == 0) {
-						this.organizations = res.data.data
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			// 获取数据范围
-			getDataScope() {
-				let params = {
-					TYPE: 'sys_data_scope'
-				}
-				request({
-					url: '/sys_dict/list/type',
-					method: 'get',
-					params
-				}).then(res => {
-					if (res.data.code == 0) {
-						this.sysDataScopes = res.data.data
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
+			
 			back() {
 				this.$router.go(-1)
 			}

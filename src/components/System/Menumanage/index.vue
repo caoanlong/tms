@@ -70,7 +70,7 @@ import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import TreeRender from '../../CommonComponents/TreeRender'
 import { requireAllName, req } from '../../../assets/icons'
-import request from '../../../common/request'
+import requestNode from '../../../common/requestNode'
 
 export default {
 	data() {
@@ -237,7 +237,7 @@ export default {
 			let params = {
 				Menu_ID
 			}
-			request({
+			requestNode({
 				url: '/sys_menu/info',
 				method: 'get',
 				params
@@ -256,7 +256,7 @@ export default {
 			let params = {
 				pageSize: 100
 			}
-			request({
+			requestNode({
 				url: '/sys_role/list',
 				method: 'get',
 				params
