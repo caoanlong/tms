@@ -1,104 +1,105 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card box-card">
-			<div class="header clearfix">查看用户</div>
+			<div class="header clearfix">查看员工</div>
+			<el-form label-width="120px">
 			<el-row>
 				<el-col :span="8">
-					<el-form label-width="120px">
 						<el-form-item label="头像">
-							<ImageUpload :files="[user.Photo]" :isPreview="true"/>
+							<ImageUpload :files="[user.HeadPic]" :isPreview="true"/>
 						</el-form-item>
-						<el-form-item label="登录名">
-							<p>{{user.LoginName}}</p>
+				</el-col>
+				<el-col :span="8">
+					
+						<el-form-item label="姓名">
+							<p>{{user.RealName}}</p>
 						</el-form-item>
-						<el-form-item label="手机">
+						<el-form-item label="手机号码">
 							<p>{{user.Mobile}}</p>
 						</el-form-item>
-						<el-form-item label="用户角色">
-							<p>{{user.sys_roles.map(item => item.Name).join(',')}}</p>
-						</el-form-item>
-					</el-form>
+					
 				</el-col>
 				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="归属公司">
-							<p>{{user.company && user.company.Name}}</p>
+						<el-form-item label="员工编号">
+							<p>{{user.StaffCode}}</p>
 						</el-form-item>
-						<el-form-item label="归属部门">
-							<p>{{user.department && user.department.Name}}</p>
+						<el-form-item label="入职时间">
+							<p>{{ new Date(user.EntryDate).getTime() | getdatefromtimestamp(true)}}</p>
 						</el-form-item>
-						<el-form-item label="邮箱">
-							<p>{{user.Email}}</p>
-						</el-form-item>
-						<el-form-item label="是否允许登录">
-							<p>{{isAllowLogin?'是':'否'}}</p>
-						</el-form-item>
-					</el-form>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="8">
+					<el-form-item label="职位类型">
+						<p>{{user.RealName}}</p>
+					</el-form-item>
 				</el-col>
 				<el-col :span="8">
-					<el-form label-width="120px">
-						<el-form-item label="工号">
-							<p>{{user.JobNo}}</p>
-						</el-form-item>
-						<el-form-item label="姓名">
-							<p>{{user.Name}}</p>
-						</el-form-item>
-						<el-form-item label="电话">
-							<p>{{user.Phone}}</p>
-						</el-form-item>
-						<el-form-item label="用户类型">
-							<p v-if="user.Type == 0">系统管理</p>
-							<p v-else-if="user.Type == 1">部门经理</p>
-							<p v-else>普通用户</p>
-						</el-form-item>
-					</el-form>
+					<el-form-item label="职位名称">
+						<p>{{user.RealName}}</p>
+					</el-form-item>
 				</el-col>
-				<el-col :span="16">
-					<el-form label-width="120px">
-						<el-form-item label="备注">
-							<p>{{user.Remark}}</p>
-						</el-form-item>
-					</el-form>
+				<el-col :span="8">
+					<el-form-item label="工作状态">
+						<p v-if="user.WorkStatus=='free'">空闲中</p>
+						<p v-else>工作中</p>
+					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="8">
+					<el-form-item label="资料状态">
+						<p v-if="user.Status=='Passed'">通过</p>
+						<p v-else-if="user.Status=='NotPassed'">审核中</p>
+						<p v-else>其他</p>
+					</el-form-item>
+				</el-col>
+				<el-col :span="8">
+					<el-form-item label="是否离职">
+						<p v-if="user.InLeave=='Y'">是</p>
+						<p v-else>否</p>
+					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="24">
+					<el-form-item label="用户角色">
+						<p>{{user.sys_roles.map(item => item.RoleName).join(',')}}</p>
+					</el-form-item>
+					<el-form-item label="备注">
+						<p>{{user.Remark}}</p>
+					</el-form-item>
 				</el-col>
 				<el-col :span="24">
-					<el-form label-width="120px">
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
 						</el-form-item>
-					</el-form>
 				</el-col>
 			</el-row>
+		</el-form>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
-import request from '../../../common/request'
+import requestNode from '../../../common/requestNode'
 import { Message } from 'element-ui'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {
 			user: {
-				Company_ID: '',
-				Organization_ID: '',
-				LoginName: '',
-				Password: '',
-				Password2: '',
-				PayPassword: '',
-				JobNo: '',
-				Name: '',
-				Sex: '',
-				Email: '',
-				Phone: '',
+				EntryDate:'',
+				StaffCode: '',
+				RealName: '',
 				Mobile: '',
-				Type: '',
-				Photo: '',
-				PCID: '',
-				LoginFlag: '',
+				PositionType: '',
+				HeadPic: '',
+				Position: '',
+				InLeave: '',
 				Remark: '',
 				sys_roles: []
 			},
-			isAllowLogin: true
+			
 		}
 	},
 	created() {
@@ -107,17 +108,15 @@ export default {
 	methods: {
 		getUser() {
 			let params = {
-				User_ID: this.$route.query.User_ID
+				Staff_ID: this.$route.query.Staff_ID
 			}
-			request({
-				url: '/sys_user/info',
+			requestNode({
+				url: '/com_staff/info',
 				method: 'get',
 				params
 			}).then(res => {
 				if (res.data.code == 0) {
 					this.user = res.data.data
-					console.log(this.user.sys_roles)
-					this.isAllowLogin = res.data.data.LoginFlag == 'Y' ? true : false
 				} else {
 					Message.error(res.data.msg)
 				}
@@ -134,34 +133,13 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-.avatar-uploader
-	line-height 1
-	width 100px
-	height 100px
-	overflow hidden
-	border 1px dashed #d9d9d9
-	border-radius 6px
-	&:hover 
-		border-color #409eff
-	.avatar-uploader-icon
-		font-size 28px
-		color #8c939d
-		width 98px
-		height 98px
-		line-height 98px
-		text-align center
-	.avatar
-		width 98px
-		height 98px
-		display block
-		vertical-align top
 .el-form-item__content
 	p
 		margin 0
 		border 1px solid #fff
 		border-bottom-color #dcdfe6
 		padding 0 15px
-		height 40px
+		min-height 40px
 		font-family 'sans-serif'
 		line-height 40px
 		color #999

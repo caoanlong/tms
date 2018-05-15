@@ -24,17 +24,17 @@
 					@selection-change="selectRoleChange" 
 					border style="width: 100%" size="mini">
 					<el-table-column type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="角色名称" prop="Name" align="left"></el-table-column>
-					<el-table-column label="英文名称" prop="EnName" align="left"></el-table-column>
-					<el-table-column label="归属机构" prop="sys_organization.Name" align="left"></el-table-column>
-					<el-table-column label="数据范围" align="left">
+					<el-table-column label="角色名称" prop="RoleName" align="left"></el-table-column>
+					<el-table-column label="英文名称" prop="RoleEnName" align="left"></el-table-column>
+					<el-table-column label="角色代码" prop="RoleCode" align="left"></el-table-column>
+					<el-table-column label="角色类型" prop="RoleType" align="center">
 						<template slot-scope="scope">
-							<span 
-							v-for="sysDataScope in sysDataScopes" 
-							:key="sysDataScope.Dict_ID" 
-							v-if="sysDataScope.VALUE == scope.row.DataScope">{{sysDataScope.NAME}}</span>
+							<span v-if="scope.row.RoleType=='assignment'">任务分配</span>
+							<span v-if="scope.row.RoleType=='security-role'">管理角色</span>
+							<span v-if="scope.row.RoleType=='user'">普通角色</span>
 						</template>
 					</el-table-column>
+					<el-table-column label="备注" prop="Remark" align="left"></el-table-column>
 					<el-table-column label="操作" width="420" align="center">
 						<template slot-scope="scope">
 							<el-button type="default" size="mini" icon="el-icon-view" @click="viewRole(scope.row.Role_ID)">查看</el-button>
@@ -182,7 +182,7 @@
 				let params = {
 					pageIndex: pageIndex || 1,
 					pageSize: this.pageSize,
-					Name: this.findRoleName
+					RoleName: this.findRoleName
 				}
 				requestNode({
 					url: '/sys_role/list',

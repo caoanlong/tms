@@ -6,25 +6,16 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
 						<el-form-item label="名称">
-							<p v-text="role.Name"></p>
+							<p v-text="role.RoleName"></p>
 						</el-form-item>
 						<el-form-item label="英文名称">
-							<p v-text="role.EnName"></p>
+							<p v-text="role.RoleEnName"></p>
 						</el-form-item>
-						<el-form-item label="组织机构">
-							<p v-text="role.Organization_ID"></p>
+						<el-form-item label="角色代码">
+							<p v-text="role.RoleCode"></p>
 						</el-form-item>
 						<el-form-item label="角色类型">
 							<p v-text="role.RoleType"></p>
-						</el-form-item>
-						<el-form-item label="数据范围">
-							<p v-text="role.DataScope"></p>
-						</el-form-item>
-						<el-form-item label="是否系统数据">
-							<p>{{role.Issys == 'Y' ? '是' : '否'}}</p>
-						</el-form-item>
-						<el-form-item label="是否可用">
-							<p>{{role.Useable == 'Y' ? '是' : '否'}}</p>
 						</el-form-item>
 						<el-form-item label="备注">
 							<p v-text="role.Remark"></p>
@@ -39,19 +30,16 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import request from '../../../common/request'
+	import requestNode from '../../../common/requestNode'
 	import { Message } from 'element-ui'
 	export default {
 		data() {
 			return {
 				role: {
-					Name: '',
-					EnName: '',
-					Organization_ID: '',
+					RoleName: '',
+					RoleEnName: '',
+					RoleCode: '',
 					RoleType: '',
-					DataScope: '',
-					Issys: '',
-					Useable: '',
 					Remark: ''
 				}
 			}
@@ -64,31 +52,13 @@
 				let params = {
 					Role_ID: this.$route.query.Role_ID
 				}
-				request({
+				requestNode({
 					url: '/sys_role/info',
 					method: 'get',
 					params
 				}).then(res => {
 					if (res.data.code == 0) {
 						this.role = res.data.data
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			editRole() {
-				let data = this.role
-				data.id = this.role._id
-				console.log(JSON.stringify(data))
-				request({
-					url: '/role/update',
-					method: 'post',
-					data
-				}).then(res => {
-					if (res.data.code == 0) {
-						console.log(res.data)
-						Message.success(res.data.msg)
-						this.$router.push({name: 'rolemanage'})
 					} else {
 						Message.error(res.data.msg)
 					}
@@ -107,7 +77,7 @@
 		border 1px solid #fff
 		border-bottom-color #dcdfe6
 		padding 0 15px
-		height 40px
+		min-height 40px
 		font-family 'sans-serif'
 		line-height 40px
 		color #999
