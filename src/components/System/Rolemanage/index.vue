@@ -259,8 +259,8 @@
 				this.getMenus().then(() => {
 					this.setAuthId = data.id
 					this.showSetAuth = true
-					this.getRole(data.Role_ID, res => {
-						let menusID = res.sys_menu_2s.map(item => item.Menu_ID)
+					this.getRole(data.id, res => {
+						let menusID = res.sys_menus.map(item => item.Menu_ID)
 						this.$nextTick(() => {
 							this.$refs.tree.setCheckedKeys(menusID)
 							this.getRoles()
