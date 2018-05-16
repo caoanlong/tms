@@ -1,7 +1,7 @@
 /* @Author: coolia
 * @Date:   2018-01-17 11:19:03
 * @Last Modified by:   coolia
-* @Last Modified time: 2018-03-22 16:46:31
+* @Last Modified time: 2018-05-16 11:19:25
 */
 .logo{height:50px;line-height:50px;
 text-align: center;color:#ffcd07;font-size: 24px}
@@ -11,5 +11,6 @@ text-align: center;color:#ffcd07;font-size: 24px}
 #app .sidebar-container .svg-icon{margin-right:5px;}
 #app .sidebar-container .el-menu{border:none;width:100%;background: #4f4f4f;}
 #app .el-menu--collapse .el-menu .el-submenu,.el-submenu .el-menu-item{min-width:180px!important;}
-
-.el-menu-item.is-active{color: #fff;background: #409EFF}
+#app .sidebar-container .el-menu .el-menu .el-menu-item{background: #444!important}
+#app .sidebar-container .el-menu .el-menu .el-menu-item:hover,#app .sidebar-container .el-menu .el-menu .el-menu-item:focus{background: #333!important}
+.el-menu-item.is-active,#app .sidebar-container .el-menu .el-menu .el-menu-item.is-active{color: #fff;background: #409EFF!important}
