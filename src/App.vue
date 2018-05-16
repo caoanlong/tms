@@ -7,19 +7,15 @@
 import { mapGetters } from 'vuex'
 export default {
 	name: 'App',
+	computed: {
+		...mapGetters(['consts'])
+	},
 	created() {
 		if (localStorage.getItem('token')) {
 			this.$store.dispatch('getUserInfo')
 			this.$store.dispatch('getConsts')
 			this.$store.dispatch('getMenu')
 		}
-
-	},
-	computed: {
-		...mapGetters(['consts'])
-	},
-	mounted() {
-		// console.log(this.consts)
 	}
 }
 

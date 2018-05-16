@@ -107,9 +107,6 @@ export default {
 	created() {
 		this.getRoles()
 	},
-	mounted() {
-		console.log(this.menus)
-	},
 	methods: {
 		addRoot() {
 			console.log(this.menus)

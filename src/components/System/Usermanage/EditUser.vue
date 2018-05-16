@@ -62,27 +62,19 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item label="角色权限" prop="sys_roles">
-							<el-select style="width: 100%" v-model="user.sys_roles" multiple placeholder="请选择">
-								<el-option v-for="role in roles" :key="role.Role_ID" :label="role.RoleName" :value="role.Role_ID">
-								</el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="24">
-						<el-form-item label="备注">
-							<el-input type="textarea" resize="none" v-model="user.Remark" :rows="5"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="24">
-						<el-form-item>
-							<el-button type="primary" @click="editUser">保存</el-button>
-							<el-button @click="back">取消</el-button>
-						</el-form-item>
-					</el-col>
-				</el-row>
+				<el-form-item label="角色权限" prop="sys_roles">
+					<el-select style="width: 100%" v-model="user.sys_roles" multiple placeholder="请选择">
+						<el-option v-for="role in roles" :key="role.Role_ID" :label="role.RoleName" :value="role.Role_ID">
+						</el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item label="备注">
+					<el-input type="textarea" resize="none" v-model="user.Remark" :rows="5"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary" @click="editUser">保存</el-button>
+					<el-button @click="back">取消</el-button>
+				</el-form-item>
 			</el-form>
 		</div>
 	</div>
