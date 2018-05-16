@@ -1,13 +1,18 @@
 <template>
 	<scroll-bar>
+		<div class="logo">
+			<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
+			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180">
+		</div>
 		<el-menu 
-			mode="vertical" 
-			:default-active="$route.name" 
-			:collapse="isCollapse" 
-			background-color="#304156" 
-			text-color="#bfcbd9" 
-			active-text-color="#409EFF"
-			@select="selectIndex">
+			mode="vertical"  
+			background-color="#4f4f4f" 
+			text-color="#fff" 
+			active-text-color="#fff" 
+			@select="selectIndex" 
+			:unique-opened="true" 
+			:default-active="$route.name"
+			:collapse="isCollapse">
 			<sidebar-item :routes="menus"></sidebar-item>
 		</el-menu>
 	</scroll-bar>
@@ -20,6 +25,7 @@ export default {
 	name: 'sideBar',
 	computed: {
 		...mapGetters([
+			'userInfo',
 			'menus',
 			'sidebar'
 		]),
@@ -38,3 +44,10 @@ export default {
 	}
 }
 </script>
+<style lang="stylus" scoped>
+	.logo
+		padding 5px 10px
+		img
+			width 160px
+			height 40px
+</style>
