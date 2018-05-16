@@ -4,17 +4,21 @@
 			<el-menu-item 
 				v-if="!item.children || item.children.length == 0" 
 				:index="item.Target" 
+				:key="item.Target" 
 				:class="{'submenu-title-noDropdown':!isNest}">
 				<svg-icon v-if="item.Icon" :icon-class="item.Icon"></svg-icon>
 				<span slot="title">{{item.Name}}</span>
 			</el-menu-item>
-			<el-submenu v-else :index="item.Target">
+			<el-submenu v-else :index="item.Target" :key="item.Target">
 				<template slot="title">
 					<svg-icon v-if="item.Icon" :icon-class="item.Icon"></svg-icon>
 					<span slot="title">{{item.Name}}</span>
 				</template>
 				<template v-for="child in item.children" v-if="child.IsShow == '1'">
-					<el-menu-item :index="child.Target" v-if="!child.children || child.children.length == 0">
+					<el-menu-item 
+						:index="child.Target" 
+						:key="child.Target"  
+						v-if="!child.children || child.children.length == 0">
 						<svg-icon v-if="child.Icon" :icon-class="child.Icon"></svg-icon>
 						<span>{{child.Name}}</span>
 					</el-menu-item>

@@ -203,7 +203,7 @@ export default {
 					SortNumber: this.currentNode.SortNumber,
 					Icon: this.currentNode.Icon,
 					Menu_PID: this.currentNode.Menu_PID,
-					IsShow: this.isShow ? '1' : '0',
+					IsShow: this.isShow ? 'Y' : 'N',
 					sys_roles: this.selectedRoles
 				}
 				this.$store.dispatch('addMenu', params)
@@ -220,7 +220,7 @@ export default {
 					SortNumber: this.currentNode.SortNumber,
 					Icon: this.currentNode.Icon,
 					Menu_PID: this.currentNode.Menu_PID,
-					IsShow: this.isShow ? '1' : '0',
+					IsShow: this.isShow ? 'Y' : 'N',
 					sys_roles: this.selectedRoles
 				}
 				this.$store.dispatch('editMenu', params)
@@ -248,7 +248,7 @@ export default {
 			}).then(res => {
 				if (res.data.code == 0) {
 					this.currentNode = res.data.data
-					this.isShow = res.data.data.IsShow == '1' ? true : false
+					this.isShow = res.data.data.IsShow == 'Y' ? true : false
 					this.selectedRoles = res.data.data.sys_roles.map(item => item.Role_ID)
 				} else {
 					Message.error(res.data.msg)
