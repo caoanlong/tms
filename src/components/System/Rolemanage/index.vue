@@ -255,17 +255,16 @@
 				})
 			},
 			setAuth(data) {
-				console.log(data)
 				this.getMenus().then(() => {
 					this.setAuthId = data.id
 					this.showSetAuth = true
 					this.getRole(data.id, res => {
 						let menusID = res.sys_menus.map(item => item.Menu_ID)
-						this.$nextTick(() => {
-							this.$refs.tree.setCheckedKeys(menusID)
-							this.getRoles()
-							this.$store.dispatch('getMenu')
-						})
+						for (let i = 0; i < menusID.length; i++) {
+							this.$refs.tree.setChecked(menusID[i], true)
+						}
+						this.getRoles()
+						this.$store.dispatch('getMenu')
 					})
 				})
 			},
