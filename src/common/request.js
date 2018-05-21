@@ -7,12 +7,9 @@ export const baseURL = process.env.BASE_API
 // create an axios instance
 const service = axios.create({
 	baseURL: baseURL, // api的base_url
-	timeout: 50000, // request timeout
-	headers: {
-		'Content-Type': 'application/x-www-form-urlencoded'
-	}
+	timeout: 50000 // request timeout
 })
-service.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+
 // request interceptor
 service.interceptors.request.use(config => {
 	config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -41,7 +38,7 @@ if (process.env.ENV_CONFIG == 'test') {
 service.interceptors.response.use(
 response => {
 	if (response.data.code != 200) {
-		if (response.data.code == 100 // 用户未登录
+		if (   response.data.code == 100 // 用户未登录
 			|| response.data.code == 101 // 用户不存在
 			|| response.data.code == 403 // 拒绝访问
 			|| response.data.code == 5201 // Token验证失败, 请求重新登录!

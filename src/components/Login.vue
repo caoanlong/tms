@@ -166,7 +166,7 @@ export default {
 			passwordType: 'password',
 			// 控制显示登录或者注册
 			loginOrRegister: 'login',
-			wait: 30,
+			wait: 60,
 			isGetVCode: false,
 			getVcodeText: '获取验证码',
 			citys: []
