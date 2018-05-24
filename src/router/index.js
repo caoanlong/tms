@@ -101,6 +101,14 @@ let routerMap = [
 							title: '调度单详情'
 						},
 						component: () => import ('../components/DispatchBill/ViewDispatchBill')
+					},
+					{
+						path: '/viewtaskdetail',
+						name: 'viewtaskdetail',
+						meta: {
+							title: '任务单详情'
+						},
+						component: () => import ('../components/DispatchBill/ViewTaskDetail')
 					}
 				]
 			},
