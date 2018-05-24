@@ -3,18 +3,15 @@
 		<div class="wf-card">
 			<div class="header clearfix">调度列表</div>
 			<div class="search">
-				<el-form :inline="true" class="demo-form-inline" size="small">
-					<el-form-item label="调度单号">
-						<el-input placeholder="调度单号" v-model="findDispatchOrderNo"></el-input>
+				<el-form :inline="true" size="small">
+					<el-form-item label="关键字">
+						<el-input placeholder="调度单号/货物名称/司机/车牌号"></el-input>
 					</el-form-item>
-					<el-form-item label="发货地">
-						<el-input placeholder="发货地" v-model="findShipperAddress"></el-input>
+					<el-form-item label="收发货单位">
+						<el-input placeholder="收发货单位"></el-input>
 					</el-form-item>
-					<el-form-item label="收货地">
-						<el-input placeholder="收货地" v-model="findConsigneeAddress"></el-input>
-					</el-form-item>
-					<el-form-item label="司机/随车员姓名">
-						<el-input placeholder="司机/随车员姓名" v-model="findName"></el-input>
+					<el-form-item label="调度状态">
+						<el-input placeholder="调度状态"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList">搜索</el-button>
@@ -24,61 +21,44 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-upload2" @click="add">导入</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="调度单号" prop="dispatchOrderNo" width="180" align="center">
-					</el-table-column>
-					<el-table-column label="车辆号牌" prop="plateNo" width="110" align="center">
-					</el-table-column>
-					<el-table-column label="货物规格/名称">
-						<template slot-scope="scope">
-							<span>{{scope.row.dispatchOrderCargo.cargoType?scope.row.dispatchOrderCargo.cargoType+'/':''}}{{scope.row.dispatchOrderCargo.cargoName}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="配载量" width="180" align="center">
-						<template slot-scope="scope">
-							<span>
-								{{(scope.row.loadWeightSum ? scope.row.loadWeightSum : 0) + '吨'}}
-								/{{(scope.row.loadVolumeSum ? scope.row.loadVolumeSum : 0) + '方'}}
-								/{{(scope.row.loadNumSum ? scope.row.loadNumSum : 0) + '件'}}
-							</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="司机" prop="driverName" width="80" align="center">
-					</el-table-column>
-					<el-table-column label="调度状态" width="80" align="center">
-						<template slot-scope="scope">
-							<span v-if="scope.row.status == 'Committed'">待执行</span>
-							<span v-else-if="scope.row.status == 'Loaded'">已装运</span>
-							<span v-else-if="scope.row.status == 'Signed'">已签收</span>
-							<span v-else-if="scope.row.status == 'Canceled'">作废</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="随车人员" prop="superCargoName" width="80" align="center"></el-table-column>
-					<el-table-column label="订单号" prop="carrierOrder.carrierOrderNo" width="180" align="center"></el-table-column>
-					<el-table-column label="发货地" width="180" align="center">
-						<template slot-scope="scope">
-							<span>{{scope.row.dispatchOrderCargo.shipperArea + scope.row.dispatchOrderCargo.shipperAreaDetail}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="收货地" width="180" align="center">
-						<template slot-scope="scope">
-							<span>{{scope.row.dispatchOrderCargo.consigneeArea + scope.row.dispatchOrderCargo.consigneeAresDetail}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="到货时间" width="140" align="center">
-						<template slot-scope="scope">
-							<span v-if="scope.row.carrierOrder && scope.row.carrierOrder.consigneeDate">{{scope.row.carrierOrder.consigneeDate | getdatefromtimestamp()}}</span>
-							<span v-else></span>
-						</template>
-					</el-table-column>
-					<el-table-column label="操作" width="60" align="center" fixed="right">
-						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="viewDispatchBill(scope.row.dispatchOrderID)">查看</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
+				<table class="wfTable">
+					<tr>
+						<th width="200">任务单号</th>
+						<th width="80">任务状态</th>
+						<th width="80">货物类型</th>
+						<th>货物名称</th>
+						<th>配载货量</th>
+						<th width="160">收货时间</th>
+						<th>收货地</th>
+						<th width="160">发货时间</th>
+						<th>发货地</th>
+						<th>操作</th>
+					</tr>
+					<template v-for="i in 10" >
+					<tr class="tit">
+						<td colspan="9"><span class="infoItem">调度单号：20170603002468001</span>
+						<span class="infoItem">状态：未接单</span>
+						<span class="infoItem">车牌号：粤A08H9L</span></td>
+						<td><el-button type="text" size="mini">取消</el-button>
+							<el-button type="text" size="mini">删除</el-button></td>
+					</tr>
+					<tr class="list">
+						<td class="text-center">919239801</td>
+						<td class="text-center" width="80">待装车</td>
+						<td class="text-center" width="80">重货</td>
+						<td>太古咖啡</td>
+						<td class="text-center">6吨/40方/1000件</td>
+						<td class="text-center" width="160">2018-04-22  18:33:15</td>
+						<td>广东广州</td>
+						<td class="text-center" width="160">2018-04-22  18:33:15</td>
+						<td>湖南常德</td>
+						<td class="text-center"><el-button type="text" size="mini">查看</el-button></td>
+					</tr>
+					</template>
+				</table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
 						<span>总共 {{count}} 条记录每页显示</span>
@@ -105,6 +85,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
+import DispatchBillItem from './Common/DispatchBillItem'
 export default {
 	data() {
 		return {
@@ -119,7 +100,7 @@ export default {
 		}
 	},
 	created() {
-		this.getList()
+		// this.getList()
 	},
 	methods: {
 		reset() {
@@ -156,10 +137,39 @@ export default {
 		viewDispatchBill(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID} })
 		}
+	},
+	components:{
+		DispatchBillItem
 	}
 }
 
 </script>
 <style lang="stylus" scoped>
-
+.wfTable
+	width 100%
+	background #e2ecf6
+	border-spacing 1px
+	font-size 14px
+	margin-bottom 10px
+	td
+		background #fff
+		padding 6px 10px
+		height 36px
+		line-height 24px
+		color #666
+		position relative
+	.tit
+		td
+			border-top 1px solid #bbb
+			background #f8f8f8
+			color #3582d0
+			.infoItem
+				margin-right 40px
+	th
+		padding 6px 10px
+		height 36px
+		line-height 24px
+		background #f0f0f0
+		color #666
+		width 100px
 </style>
