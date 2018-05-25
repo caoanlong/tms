@@ -19,7 +19,7 @@
 						:index="child.Target" 
 						:key="child.Target"  
 						v-if="!child.children || child.children.length == 0">
-						<svg-icon v-if="child.Icon" :icon-class="child.Icon"></svg-icon>
+						<svg-icon v-if="child.Icon" :icon-class="child.Icon"></svg-icon> 
 						<span>{{child.Name}}</span>
 					</el-menu-item>
 					<sidebar-item v-else :is-nest="true" class="nest-menu" :routes="[child]" :key="child.Target"></sidebar-item>
