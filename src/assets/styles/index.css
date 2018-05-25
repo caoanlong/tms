@@ -12,7 +12,15 @@ body{
 }
 label{font-weight:700;}
 html{height:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
-#app{height:100%;}
+#app{
+	/* height:100%; */
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0
+}
 *,*:before,*:after{-webkit-box-sizing:inherit;-moz-box-sizing:inherit;box-sizing:inherit;}
 .no-padding{padding:0px!important;}
 .padding-content{padding:4px 0;}
