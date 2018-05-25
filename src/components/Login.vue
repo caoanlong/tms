@@ -303,8 +303,7 @@ export default {
 					}).then(() => {
 						this.$router.push({name: 'home'})
 						this.$store.dispatch('getUserInfo')
-						this.$store.dispatch('getMenu')
-						this.$store.dispatch('getConsts')
+						// this.$store.dispatch('getMenu')
 					})
 				}
 			})

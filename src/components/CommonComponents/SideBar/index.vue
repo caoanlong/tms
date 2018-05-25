@@ -21,43 +21,41 @@
 import { mapGetters } from 'vuex'
 import ScrollBar from '../ScrollBar'
 import SidebarItem from './SidebarItem'
+import menus from '../../../assets/data/menus'
 export default {
+	name: 'sideBar',
 	data(){
 		return{
-			fullHeight: document.documentElement.clientHeight -65
+			fullHeight: document.documentElement.clientHeight -50
 		}
 		
 	},
-	mounted() {
-	  const that = this
-	  window.onresize = () => {
-		return (() => {
-		  window.fullHeight = document.documentElement.clientHeight
-		  that.fullHeight = window.fullHeight-65
-		})()
-	  }
-	},
-	watch: {
-	  fullHeight (val) {
-		if(!this.timer) {
-		  this.fullHeight = val
-		  this.timer = true
-		  let that = this
-		  setTimeout(function (){
-			that.timer = false
-		  },400)
-		}
-	  }
-	},
-	name: 'sideBar',
 	computed: {
 		...mapGetters([
 			'userInfo',
-			'menus',
+			// 'menus',
 			'sidebar'
 		]),
 		isCollapse() {
 			return !this.sidebar.opened
+		},
+		menus: () => menus
+	},
+	watch: {
+		fullHeight (val) {
+			if(!this.timer) {
+				this.fullHeight = val
+				this.timer = true
+				setTimeout(() => {
+					this.timer = false
+				}, 400)
+			}
+		}
+	},
+	mounted() {
+		window.onresize = () => {
+			window.fullHeight = document.documentElement.clientHeight
+			this.fullHeight = window.fullHeight-50
 		}
 	},
 	methods: {
