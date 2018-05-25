@@ -22,7 +22,7 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<!-- <DriverItem></DriverItem> -->
+			<DriverItem></DriverItem>
 			<!-- <div class="pagination">
 				<el-pagination align="right" background layout="prev, pager, next" total="count"></el-pagination>
 			</div> -->

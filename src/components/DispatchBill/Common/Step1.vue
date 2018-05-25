@@ -33,11 +33,11 @@
 						<th>货量</th>
 						<th>件数</th>
 						<th>发货公司</th>
-						<th>发货人</th>
+						<th width="160">发货人</th>
 						<th>发货地</th>
 						<th width="160">发货时间</th>
 						<th>收货公司</th>
-						<th>收货人</th>
+						<th width="160">收货人</th>
 						<th>收货地</th>
 						<th width="160">收货时间</th>
 					</tr>
@@ -60,13 +60,13 @@
 						<td>3000kg/3.5m³</td>
 						<td class="text-center">556</td>
 						<td>昆明天龙</td>
-						<td class="text-center">周俊1342438994</td>
+						<td class="text-center" width="160">周俊1342438994</td>
 						<td>云南昆明</td>
-						<td class="text-center">2018-04-22 18:33:15</td>
+						<td class="text-center" width="160">2018-04-22 18:33:15</td>
 						<td>广东天龙</td>
-						<td class="text-center">董戡134455666</td>
+						<td class="text-center" width="160">董戡134455666</td>
 						<td>广东广州</td>
-						<td class="text-center">2018-04-22 18:33:15</td>
+						<td class="text-center" width="160">2018-04-22 18:33:15</td>
 					</tr>
 					</template>
 				</table>
@@ -182,9 +182,6 @@
 		line-height 24px
 		color #666
 		position relative
-		white-space nowrap
-		overflow hidden
-		text-overflow ellipsis
 	.tit
 		td
 			border-top 1px solid #bbb

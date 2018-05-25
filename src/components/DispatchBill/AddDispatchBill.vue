@@ -10,7 +10,7 @@
 			</el-steps>
 			<Step1 v-show="stepActive == 0" @nextStep="nextStep"/>
 			<Step2 v-show="stepActive == 1" @nextStep="nextStep" @prevStep="prevStep" :carrierBills="selectedCarrierBills" />
-			<Step3 v-show="stepActive == 2" @nextStep="nextStep" @prevStep="prevStep"/>
+			<Step3 v-show="stepActive == 2" @nextStep="nextStep" @prevStep="prevStep" :truck="selectedTruck" :person="selectedPerson" />
 			<Step4 v-show="stepActive == 3" @prevStep="prevStep"/>
 		</div>
 	</div>
