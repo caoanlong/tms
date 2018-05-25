@@ -151,7 +151,7 @@
 						<el-button type="text" icon="el-icon-plus" class="fr" @click="addItem">添加</el-button>
 					</div>
 				</el-row>
-				<div class="cargoItem" v-for="(item, index) in carrierbillInfo.carrierCargo">
+				<div class="cargoItem" v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
 					<el-form :inline="true" size="mini" :model="item" :rules="cargoRules" ref="cargoRuleForm">
 						<el-row>
 							<el-form-item :label="'货物' + (index + 1)" prop="weightType">

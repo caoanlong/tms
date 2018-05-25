@@ -2,7 +2,6 @@
 	<div class="main-content" >
 		<div class="wf-card">
 			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}
-				
 				<span class="status status1" v-if="carrierOrder.status=='Committed'">待执行</span>
 				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
@@ -130,11 +129,11 @@
 				</tr>
 				<tr>
 					<td colspan="8">
-						<span class="labels">发票：</span>{{carrierOrder.invoice=='Y'?'开发票':'不开发票'}}
+						<span class="labels">发票：</span>{{carrierOrder.invoice == 'Y' ? '开发票' : '不开发票'}}
 						<span class="labels" style="margin-left:40px">回单要求：</span>
-						<span v-for="item in porRequire" class="porRequire">
-							<span v-if="item=='ConsigneePor'">货物托运单</span>
-							<span v-else-if="item=='ShipperPor'">发货单文件</span>
+						<span v-for="item in porRequire" class="porRequire" :key="item">
+							<span v-if="item == 'ConsigneePor'">货物托运单</span>
+							<span v-else-if="item == 'ShipperPor'">发货单文件</span>
 							<span v-else>不需要回单</span>
 						</span>
 						<span class="labels fr">承运单应收总价：{{isShow ? carrierOrderTotal + parseInt(carrierOrder.otherAmount) : '**'}}元</span>
@@ -153,7 +152,7 @@
 					<th>体积(方)</th>
 					<th>重量(吨)</th>
 				</tr>
-				<tr class="is-center" v-for="(item, index) in dispatchbillsCargoList">
+				<tr class="is-center" v-for="(item, index) in dispatchbillsCargoList" :key="index">
 					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.dispatchOrderNo}}</td>
 					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
 						<span v-if="item.dispatchbill.status == 'Committed'">待执行</span>
@@ -188,116 +187,122 @@
 					<td>{{item.cargoWeight}}</td>
 				</tr>
 			</table>
+			<table class="wf-table">
+				<caption>运输进展</caption>
+				<tr>
+					<th>车牌号/挂车号</th>
+					<th>司机</th>
+					<th>随车人员</th>
+					<th>任务单号</th>
+					<th>任务状态</th>
+					<th>货物名称</th>
+					<th>配载货量</th>
+					<th>运输照片</th>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td style="text-align: center">
+						<el-button type="primary" size="mini" @click="dialogPhotoVisible = true">查看</el-button>
+						<!-- <el-button type="primary" size="mini" @click="dialogCargoVisible = true">查看货物</el-button> -->
+					</td>
+				</tr>
+			</table>
 			<div class="wf-footer clearfix">
 				<div class="btn-group fl">
-					<!-- <button type="button" class="wf-btn btn-success" @click="EditCarrierbill">
-						<svg-icon icon-class="edit"></svg-icon>修改</button> -->
 					<button 
 						type="button" class="wf-btn btn-success" 
 						@click="EditCarrierbill" 
 						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed' && carrierOrder.status != 'Closed'">
-						<svg-icon icon-class="edit"></svg-icon>修改</button>
+						<svg-icon icon-class="edit"></svg-icon>修改
+					</button>
 					<button 
 						type="button" class="wf-btn btn-danger" 
 						@click="closeCarrierbill" 
 						v-if="carrierOrder.status=='Running' || carrierOrder.status == 'Signed' && carrierOrder.status != 'Closed'">
-						<svg-icon icon-class="edit"></svg-icon>关闭</button>
+						<svg-icon icon-class="edit"></svg-icon>关闭
+					</button>
 					<button 
 						type="button" class="wf-btn btn-primary" 
 						@click="AddDispatchBill" 
 						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed' && carrierOrder.status != 'Closed'">
-						<svg-icon icon-class="dispatchbill"></svg-icon>调度</button>
-					<button type="button" class="wf-btn btn-warning" @click="Edit" v-if="carrierOrder.status!='Committed' && carrierOrder.status != 'Closed'">
-						<svg-icon icon-class="money1"></svg-icon>调整应收款</button>
+						<svg-icon icon-class="dispatchbill"></svg-icon>调度
+					</button>
+					<button 
+						type="button" class="wf-btn btn-warning" 
+						@click="dialogReceivableVisible = true" 
+						v-if="carrierOrder.status!='Committed' && carrierOrder.status != 'Closed'">
+						<svg-icon icon-class="money1"></svg-icon>调整应收款
+					</button>
 				</div>
 				<div class="btn-group fr">
-					<button type="button" class="wf-btn btn-danger plain" @click="deleteCarrierOrder" v-if="carrierOrder.status == 'Committed'">
-						<svg-icon icon-class="delete" ></svg-icon>删除</button>
-					<button type="button" class="wf-btn btn-default" @click="back">
-						<svg-icon icon-class="back"></svg-icon>返回</button>
+					<button 
+						type="button" class="wf-btn btn-danger plain" 
+						@click="deleteCarrierOrder" 
+						v-if="carrierOrder.status == 'Committed'">
+						<svg-icon icon-class="delete" ></svg-icon>删除
+					</button>
+					<button 
+						type="button" class="wf-btn btn-default" 
+						@click="back">
+						<svg-icon icon-class="back"></svg-icon>返回
+					</button>
 				</div>
 			</div>
 		</div>
-		<el-dialog title="调整应收款" :visible.sync="dialogFormVisible" width="80%">
-			<el-row>
-				<el-col :span="8">
-					<el-form label-width="100px">
-						<el-form-item label="发货单号">
-							<el-input v-model="carrierOrder.shipperNo"></el-input>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="8">
-					<el-form label-width="100px">
-						<el-form-item label="现付">
-							<el-input v-model="carrierOrder.cashAmount"><span slot="suffix">元</span></el-input>
-						</el-form-item>
-						<el-form-item label="月结">
-							<el-input v-model="carrierOrder.monthlyAmount"><span slot="suffix">元</span></el-input>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="100px">
-						<el-form-item label="到付">
-							<el-input v-model="carrierOrder.codAmount"><span slot="suffix">元</span></el-input>
-						</el-form-item>
-						<el-form-item label="收方到货付">
-							<el-input v-model="carrierOrder.consigneeAmount"><span slot="suffix">元</span></el-input>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="100px">
-						<el-form-item label="回单付">
-							<el-input v-model="carrierOrder.porAmount"><span slot="suffix">元</span></el-input>
-						</el-form-item>
-						<el-form-item label="合计">
-							<el-input v-model="carrierOrderTotal" disabled><span slot="suffix">元</span></el-input>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="24">
-					<el-form label-width="100px">
-						<el-form-item label="其它">
-							<el-input v-model="carrierOrder.otherAmount"></el-input>
-						</el-form-item>
-						<el-form-item label="备注">
-							<el-input type="textarea" resize="none" :rows="3" v-model="carrierOrder.remark"></el-input>
-						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="adjustSum">确 定</el-button>
-			</div>
-		</el-dialog>
-
+		<ChangeReceivables 
+			:carrierOrder="carrierOrder" 
+			:visible="dialogReceivableVisible" 
+			@callback="receivableCallback">
+		</ChangeReceivables>
+		<ViewPhotos 
+			:visible="dialogPhotoVisible" 
+			@callback="photoCallback">
+		</ViewPhotos>
+		<ViewCargos 
+			:visible="dialogCargoVisible" 
+			@callback="cargoCallback">
+		</ViewCargos>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from "../../common/request"
+import ChangeReceivables from './ChangeReceivables'
+import ViewPhotos from './ViewPhotos'
+import ViewCargos from './ViewCargos'
 export default {
 	data() {
 		return {
 			isShow: false,
-			carrierOrder:{},
-			dialogFormVisible:false,
+			carrierOrder: {},
+			dialogReceivableVisible: false,
+			dialogPhotoVisible: false,
+			dialogCargoVisible: false,
 			carrierCargo: [],
-			porRequire:[],
+			porRequire: [],
 			dispatchbills: [],
 			dispatchbillsCargoList: []
 		}
 	},
 	computed:{
-		carrierOrderTotal:function(){
-			return parseInt(this.carrierOrder.cashAmount) + parseInt(this.carrierOrder.codAmount) + parseInt(this.carrierOrder.porAmount) + parseInt(this.carrierOrder.monthlyAmount) + parseInt(this.carrierOrder.consigneeAmount)
+		carrierOrderTotal() {
+			return parseInt(this.carrierOrder.cashAmount) 
+				+ parseInt(this.carrierOrder.codAmount) 
+				+ parseInt(this.carrierOrder.porAmount) 
+				+ parseInt(this.carrierOrder.monthlyAmount) 
+				+ parseInt(this.carrierOrder.consigneeAmount)
 		}
-		
+	},
+	components: {
+		ChangeReceivables,
+		ViewPhotos,
+		ViewCargos
 	},
 	created() {
 		this.getDetail()
@@ -360,9 +365,6 @@ export default {
 				this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
 			}
 		},
-		Edit(){
-			this.dialogFormVisible = true
-		},
 		closeCarrierbill() {
 			let data = {
 				carrierOrderIDs: this.$route.query.carrierOrderID
@@ -412,18 +414,33 @@ export default {
 				this.$router.push({ name: 'carrierbills'})
 			})
 		},
+		// 调整应收款弹窗回调
+		receivableCallback(bool, data) {
+			if (data) {
+				this.adjustSum(data)
+			}
+			this.dialogReceivableVisible = bool
+		},
+		// 查看照片弹窗回调
+		photoCallback(bool) {
+			this.dialogPhotoVisible = bool
+		},
+		// 查看货物弹窗回调
+		cargoCallback(bool) {
+			this.dialogCargoVisible = bool
+		},
 		// 调整应收款
-		adjustSum(){
+		adjustSum(carrierOrder){
 			let data = {
 				carrierOrderID: this.$route.query.carrierOrderID,
-				shipperNo: this.carrierOrder.shipperNo,
-				cashAmount: this.carrierOrder.cashAmount,
-				monthlyAmount: this.carrierOrder.monthlyAmount,
-				codAmount: this.carrierOrder.codAmount,
-				consigneeAmount: this.carrierOrder.consigneeAmount,
-				porAmount: this.carrierOrder.porAmount,
-				otherAmount: this.carrierOrder.otherAmount,
-				remark: this.carrierOrder.remark
+				shipperNo: carrierOrder.shipperNo,
+				cashAmount: carrierOrder.cashAmount,
+				monthlyAmount: carrierOrder.monthlyAmount,
+				codAmount: carrierOrder.codAmount,
+				consigneeAmount: carrierOrder.consigneeAmount,
+				porAmount: carrierOrder.porAmount,
+				otherAmount: carrierOrder.otherAmount,
+				remark: carrierOrder.remark
 			}
 			request({
 				url: '/biz/carrierOrder/modify',
@@ -434,13 +451,10 @@ export default {
 					type: 'success',
 					message: '调整成功!'
 				})
-				this.dialogFormVisible = false
 			})
-			
 		}
 	}
 }
-
 </script>
 <style lang="stylus" scoped>
 .main-content

@@ -385,7 +385,6 @@ export default {
 						this.$router.push({name: 'home'})
 						this.$store.dispatch('getUserInfo')
 						this.$store.dispatch('getMenu')
-						this.$store.dispatch('getConsts')
 					})
 				}
 			})
