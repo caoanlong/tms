@@ -5,13 +5,20 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="调度单号/货物名称/司机/车牌号"></el-input>
+						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="findKeyword"></el-input>
 					</el-form-item>
 					<el-form-item label="收发货单位">
-						<el-input placeholder="收发货单位"></el-input>
+						<el-input placeholder="收发货单位" v-model="findrecdeliverycomp"></el-input>
 					</el-form-item>
 					<el-form-item label="调度状态">
-						<el-input placeholder="调度状态"></el-input>
+						<el-select v-model="findStatus" placeholder="请选择">
+							<el-option label="全部" value="全部"></el-option>
+							<el-option label="未接单" value="未接单"></el-option>
+							<el-option label="已接单" value="已接单"></el-option>
+							<el-option label="已关闭" value="已关闭"></el-option>
+							<el-option label="已取消" value="已取消"></el-option>
+							<el-option label="已完成" value="已完成"></el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList">搜索</el-button>
@@ -37,15 +44,19 @@
 						<th>发货地</th>
 						<th>操作</th>
 					</tr>
-					<template v-for="i in 10" >
+					<template v-for="item in DispatchBillList">
 					<tr class="tit">
-						<td colspan="9"><span class="infoItem">调度单号：20170603002468001</span>
-						<span class="infoItem">状态：未接单</span>
-						<span class="infoItem">车牌号：粤A08H9L</span></td>
-						<td><el-button type="text" size="mini">取消</el-button>
-							<el-button type="text" size="mini">删除</el-button></td>
+						<td colspan="9"><span class="infoItem ViewDispatchBill" @click="ViewDispatchBill(item.dispatchOrderID)" >调度单号：{{item.dispatchOrderNo}}</span>
+						<span class="infoItem">车牌号：{{item.plateNo}}</span><span class="infoItem">
+							<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
+							<span class="tag tag2" v-else-if="item.status == 'Loaded'">已装运</span>
+							<span class="tag tag3" v-else-if="item.status == 'Signed'">已签收</span>
+							<span class="tag tag4" v-else-if="item.status == 'Canceled'">作废</span>
+						</span></td>
+						<td class="text-center" width="160"><el-button type="text" size="mini">编辑</el-button><el-button type="text" size="mini">取消</el-button>
+							<el-button type="text" size="mini">关闭</el-button></td>
 					</tr>
-					<tr class="list">
+					<tr class="list" v-for="taskItem in 4">
 						<td class="text-center">919239801</td>
 						<td class="text-center" width="80">待装车</td>
 						<td class="text-center" width="80">重货</td>
@@ -89,25 +100,23 @@ import DispatchBillItem from './Common/DispatchBillItem'
 export default {
 	data() {
 		return {
-			findDispatchOrderNo: '',
-			findShipperAddress: '',
-			findConsigneeAddress: '',
-			findName: '',
+			findKeyword: '',
+			findrecdeliverycomp: '',
+			findStatus: '',
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
-			tableData: []
+			DispatchBillList: []
 		}
 	},
 	created() {
-		// this.getList()
+		this.getList()
 	},
 	methods: {
 		reset() {
 			this.findDispatchOrderNo = ''
 			this.findShipperAddress = ''
 			this.findConsigneeAddress = ''
-			this.findName = ''
 			this.getList()
 		},
 		pageChange(index) {
@@ -117,24 +126,20 @@ export default {
 		getList(){
 			let params = {
 				current: this.pageIndex,
-				size: this.pageSize,
-				consigneeAddress: this.findConsigneeAddress,  //	收货地址
-				dispatchOrderNo: this.findDispatchOrderNo,  //	调度单号
-				name: this.findName,  //	司机或随车人员姓名
-				shipperAddress: this.findShipperAddress,  //发货地址
+				size: this.pageSize
 			}
 			request({
 				url: '/biz/dispatchOrder/list',
 				params
 			}).then(res => {
-				this.tableData = res.data.data.records
+				this.DispatchBillList = res.data.data.records
 				this.count = res.data.data.total
 			})
 		},
 		add() {
 			this.$router.push({ name: 'adddispatchbill' })
 		},
-		viewDispatchBill(dispatchOrderID) {
+		ViewDispatchBill(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID} })
 		}
 	},
@@ -165,6 +170,8 @@ export default {
 			color #3582d0
 			.infoItem
 				margin-right 40px
+				&.ViewDispatchBill
+					cursor pointer
 	th
 		padding 6px 10px
 		height 36px
@@ -172,4 +179,7 @@ export default {
 		background #f0f0f0
 		color #666
 		width 100px
+	.list
+		td
+			font-size 12px
 </style>
