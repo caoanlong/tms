@@ -567,7 +567,7 @@ import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
 import { searchAreaByKey } from '../../common/utils'
 import { getConsts } from '../../api/consts'
-import { checkTel, checkInt, checkFloat, checkFloat2, limitLength3 } from '../../common/validators'
+import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -671,7 +671,7 @@ export default {
 					{required: true, message: '请输入企业', trigger: 'blur'}
 				],
 				code: [
-					{validator: limitLength3}
+					{min: 1, max: 20, message: '长度在 1 到 20 个字符'}
 				],
 				truckCategory: [
 					{required: true, message: '请选择车辆类别', trigger: 'change'},

@@ -187,7 +187,7 @@
 					<td>{{item.cargoWeight}}</td>
 				</tr>
 			</table>
-			<table class="wf-table">
+			<!-- <table class="wf-table">
 				<caption>运输进展</caption>
 				<tr>
 					<th>车牌号/挂车号</th>
@@ -209,10 +209,10 @@
 					<td></td>
 					<td style="text-align: center">
 						<el-button type="primary" size="mini" @click="dialogPhotoVisible = true">查看</el-button>
-						<!-- <el-button type="primary" size="mini" @click="dialogCargoVisible = true">查看货物</el-button> -->
+						<el-button type="primary" size="mini" @click="dialogCargoVisible = true">查看货物</el-button>
 					</td>
 				</tr>
-			</table>
+			</table> -->
 			<div class="wf-footer clearfix">
 				<div class="btn-group fl">
 					<button 

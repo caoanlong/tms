@@ -70,7 +70,6 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
-import {limitLength3} from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -90,7 +89,7 @@ export default {
 				],
 				code: [
 					{required: true, message: '请输入自编号'},
-					{validator: limitLength3}
+					{min: 1, max: 20, message: '长度在 1 到 20 个字符'}
 				],
 				archiveTime: [
 					{required: true, message: '请选择建档时间', trigger: 'change'}
