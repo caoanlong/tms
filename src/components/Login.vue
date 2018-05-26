@@ -283,7 +283,7 @@ export default {
 				return
 			}
 			if (this.login.password.length > 32 || this.login.password.length <8) {
-				Message.error('8-16位字母、下划线、数字')
+				Message.error('密码必须是8-16位字母、下划线、数字')
 				return
 			}
 			let data = {
@@ -333,7 +333,7 @@ export default {
 				return
 			}
 			if (this.login.password.length > 32 || this.login.password.length <8) {
-				Message.error('8-16位字母、下划线、数字')
+				Message.error('密码必须是8-16位字母、下划线、数字')
 				return
 			}
 			if (!this.register.contact.trim()) {

@@ -60,10 +60,10 @@
 							<el-select style="width: 100%" v-model="truck.truckType" placeholder="请选择">
 								<!-- <el-option v-for="item in truckTypes" :key="item.constStdID" :label="item.name" :value="item.name"></el-option> -->
 								<el-option label="集装箱挂车" value="集装箱挂车"></el-option>
--								<el-option label="厢式货车" value="厢式货车"></el-option>
--								<el-option label="重型半挂牵引车" value="重型半挂牵引车"></el-option>
--								<el-option label="重型厢式货车" value="重型厢式货车"></el-option>
--								<el-option label="重型集装箱半挂车" value="重型集装箱半挂车"></el-option>
+								<el-option label="厢式货车" value="厢式货车"></el-option>
+								<el-option label="重型半挂牵引车" value="重型半挂牵引车"></el-option>
+								<el-option label="重型厢式货车" value="重型厢式货车"></el-option>
+								<el-option label="重型集装箱半挂车" value="重型集装箱半挂车"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
