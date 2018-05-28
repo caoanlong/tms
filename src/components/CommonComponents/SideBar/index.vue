@@ -1,11 +1,11 @@
 <template>
-	<scroll-bar>
+	<div class="lside">
 		<div class="logo">
 			<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
 			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180">
 		</div>
 		<el-menu 
-			mode="vertical"  
+			mode="vertical"  :style="{'height':fullHeight+'px'}" class="sidenav"
 			background-color="#4f4f4f" 
 			text-color="#fff" 
 			active-text-color="#fff" 
@@ -15,22 +15,47 @@
 			:collapse="isCollapse">
 			<sidebar-item :routes="menus"></sidebar-item>
 		</el-menu>
-	</scroll-bar>
+	</div>
 </template>
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import ScrollBar from '../ScrollBar'
 import SidebarItem from './SidebarItem'
+import menus from '../../../assets/data/menus'
 export default {
 	name: 'sideBar',
+	data(){
+		return{
+			fullHeight: document.documentElement.clientHeight -50
+		}
+		
+	},
 	computed: {
 		...mapGetters([
 			'userInfo',
-			'menus',
+			// 'menus',
 			'sidebar'
 		]),
 		isCollapse() {
 			return !this.sidebar.opened
+		},
+		menus: () => menus
+	},
+	watch: {
+		fullHeight (val) {
+			if(!this.timer) {
+				this.fullHeight = val
+				this.timer = true
+				setTimeout(() => {
+					this.timer = false
+				}, 400)
+			}
+		}
+	},
+	mounted() {
+		window.onresize = () => {
+			window.fullHeight = document.documentElement.clientHeight
+			this.fullHeight = window.fullHeight-50
 		}
 	},
 	methods: {
@@ -50,4 +75,7 @@ export default {
 		img
 			width 160px
 			height 40px
+	.sidenav
+		overflow hidden
+		overflow-y auto
 </style>

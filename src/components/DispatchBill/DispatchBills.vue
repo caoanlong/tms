@@ -57,7 +57,7 @@
 							<el-button type="text" size="mini">关闭</el-button></td>
 					</tr>
 					<tr class="list" v-for="taskItem in 4">
-						<td class="text-center">919239801</td>
+						<td class="text-center"><span @click="ViewTaskDetail" class="ViewTaskDetail">919239801</span></td>
 						<td class="text-center" width="80">待装车</td>
 						<td class="text-center" width="80">重货</td>
 						<td>太古咖啡</td>
@@ -141,6 +141,9 @@ export default {
 		},
 		ViewDispatchBill(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID} })
+		},
+		ViewTaskDetail() {
+			this.$router.push({ name: 'viewtaskdetail'})
 		}
 	},
 	components:{
@@ -172,6 +175,7 @@ export default {
 				margin-right 40px
 				&.ViewDispatchBill
 					cursor pointer
+	
 	th
 		padding 6px 10px
 		height 36px
@@ -182,4 +186,7 @@ export default {
 	.list
 		td
 			font-size 12px
+			.ViewTaskDetail
+				cursor pointer
+				display block
 </style>
