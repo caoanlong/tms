@@ -40,7 +40,6 @@
 	.app-wrapper
 		position relative
 		height 100%
-		position relative
 		padding-top 88px
 		margin-left 180px
 	.header

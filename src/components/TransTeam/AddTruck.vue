@@ -58,7 +58,12 @@
 					<el-col :span="8">
 						<el-form-item label="车辆类型" prop="truckType">
 							<el-select style="width: 100%" v-model="truck.truckType" placeholder="请选择">
-								<el-option v-for="item in truckTypes" :key="item.constStdID" :label="item.name" :value="item.name"></el-option>
+								<!-- <el-option v-for="item in truckTypes" :key="item.constStdID" :label="item.name" :value="item.name"></el-option> -->
+								<el-option label="集装箱挂车" value="集装箱挂车"></el-option>
+								<el-option label="厢式货车" value="厢式货车"></el-option>
+								<el-option label="重型半挂牵引车" value="重型半挂牵引车"></el-option>
+								<el-option label="重型厢式货车" value="重型厢式货车"></el-option>
+								<el-option label="重型集装箱半挂车" value="重型集装箱半挂车"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -567,8 +572,8 @@ import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
 import { searchAreaByKey } from '../../common/utils'
-import { getConsts } from '../../api/consts'
-import { checkTel, checkInt, checkFloat, checkFloat2, limitLength3 } from '../../common/validators'
+// import { getConsts } from '../../api/consts'
+import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../common/validators'
 export default {
 	data() {
 		return {
@@ -672,7 +677,7 @@ export default {
 					{required: true, message: '请输入企业', trigger: 'blur'}
 				],
 				code: [
-					{validator: limitLength3}
+					{min: 1, max: 20, message: '长度在 1 到 20 个字符'}
 				],
 				truckCategory: [
 					{required: true, message: '请选择车辆类别', trigger: 'change'},
@@ -792,15 +797,15 @@ export default {
 		}
 	},
 	created() {
-		getConsts({ 
-			params: {
-				'type': 'TruckType'
-			}
-		}).then(res => {
-			this.truckTypes = res.data.data.records
-		}).catch(err => {
-			console.log(err)
-		})
+		// getConsts({ 
+		// 	params: {
+		// 		'type': 'TruckType'
+		// 	}
+		// }).then(res => {
+		// 	this.truckTypes = res.data.data.records
+		// }).catch(err => {
+		// 	console.log(err)
+		// })
 	},
 	methods: {
 		disabledDate(curDate) {

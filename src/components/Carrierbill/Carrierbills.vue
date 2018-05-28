@@ -37,8 +37,6 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<!-- <el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button> -->
-				<!-- <el-button type="default" size="mini" icon="el-icon-news" @click="AddDispatchBill">调度</el-button> -->
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe @selection-change="selectionChange" >
@@ -118,16 +116,6 @@
 						<template slot-scope="scope">
 							<el-button type="primary" size="mini" @click="view(scope.row.carrierOrderID)">查看</el-button>
 						</template>
-						<!-- <template slot-scope="scope">
-							<el-dropdown  @command="handleCommand"  trigger="click">
-								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}" icon="el-icon-view">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}">删除</el-dropdown-item>
-								</el-dropdown-menu>
-							</el-dropdown>
-						</template> -->
 					</el-table-column>
 				</el-table>
 				<el-row type="flex">
@@ -203,18 +191,6 @@ export default {
 			})
 
 			return (sumWeight + '吨/' + sumVolume + '方/' + sumNum + '件')
-		},
-		AddDispatchBill() {
-			console.log(this.selectedList)
-			if(this.selectedList.length<1){
-				this.$message({
-					type: 'warning',
-					message: '请选择承运单!',
-					
-				})
-				return
-			}
-			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.selectedList.join(',') } })
 		},
 		pageChange(index) {
 			this.pageIndex = index

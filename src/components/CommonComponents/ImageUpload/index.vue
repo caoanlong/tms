@@ -3,8 +3,9 @@
 		<div class="imgLi" 
 		:style="{'width': width+'px','height': height+'px'}" 
 		v-for="(file,i) in fileUrl"
-		:key="i" v-if="file">
-			<img :src="imgUrl + file">
+		:key="i">
+			<img v-if="file" :src="imgUrl + file">
+			<img v-else :src="defaultImg">
 			<div class="controller">
 				<div class="controllerBtn">
 					<div class="perviewBtn" @click.stop="showImgModal(file)"></div>
@@ -44,6 +45,7 @@
 	import { baseURL } from '../../../common/request'
 	import { formDataReq } from '../../../common/utils'
 	import VueCropper from 'vue-cropper'
+	import { defaultImg } from '../../../assets/icons/icons'
 	export default {
 		props: {
 			width: {
