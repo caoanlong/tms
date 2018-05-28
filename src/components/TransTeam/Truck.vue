@@ -104,7 +104,6 @@
 							<span v-if="scope.row.secondaMaintainTime">{{scope.row.secondaMaintainTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
-					</el-table-column>
 					<el-table-column label="下次二级维护日期" width="120">
 						<template slot-scope="scope">
 							<span v-if="scope.row.nextSecondLevel">{{scope.row.nextSecondLevel | getdatefromtimestamp(true)}}</span>
