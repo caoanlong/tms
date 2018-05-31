@@ -131,6 +131,7 @@
 </template>
 <script>
 import Footer from './CommonComponents/Footer'
+
 import request, { baseURL } from "../common/request"
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
@@ -259,6 +260,7 @@ export default {
 				params
 			}).then(res => {
 				console.log(res.data)
+
 				if (baseURL.includes('develop')) {
 					Message({
 						type: 'info',
@@ -276,6 +278,7 @@ export default {
 				Message.error('用户名不能为空！')
 				return
 			}
+
 			if (this.login.username.trim().length > 50) {
 				Message.error('用户名过长！')
 				return
@@ -284,6 +287,7 @@ export default {
 				Message.error('密码不能为空！')
 				return
 			}
+
 			if (this.login.password.trim().length > 32 || this.login.password.trim().length <8) {
 				Message.error('密码必须是8-16位字母、下划线、数字')
 				return
