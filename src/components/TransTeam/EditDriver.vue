@@ -10,12 +10,12 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="姓名" prop="realName">
-							<el-input v-model="person.realName"></el-input>
+							<el-input v-model="person.realName" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="性别" prop="sex">
-							<el-select style="width: 100%" v-model="person.sex" placeholder="请选择">
+							<el-select style="width: 100%" v-model="person.sex" placeholder="请选择" disabled>
 								<el-option label="男" value="M"></el-option>
 								<el-option label="女" value="F"></el-option>
 							</el-select>
@@ -47,7 +47,7 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="身份证号" prop="idCardNum">
-							<el-input v-model="person.idCardNum"></el-input>
+							<el-input v-model="person.idCardNum" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
