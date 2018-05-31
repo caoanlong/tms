@@ -1,5 +1,6 @@
 <template>
 	<div class="main-content">
+		<div id="cb"></div>
 		<div class="wf-card hasTit">
 			<div class="header clearfix">添加承运单</div>
 			<el-row>
@@ -92,6 +93,18 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
+				<el-row>
+					<el-col :span="12">
+						<el-form-item label="发货位置" prop="shipperLocation">
+							<el-autocomplete  style="width:100%"
+								value-key="name" 
+								v-model="carrierbillInfo.shipperLocation"
+								:fetch-suggestions="getShipperLocation"
+								placeholder="请输入内容">
+							</el-autocomplete>
+						</el-form-item>
+					</el-col>
+				</el-row>
 				<el-row style="margin-top:20px">
 					<el-col :span="8">
 						<el-form-item label="收货单位" prop="consigneeCompanyName">
@@ -131,6 +144,18 @@
 					<el-col :span="12">
 						<el-form-item label="详细地址" prop="consigneeDetailAddress">
 							<el-input placeholder="卸货详细地址" v-model="carrierbillInfo.consigneeDetailAddress"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="12">
+						<el-form-item label="卸货位置" prop="consigneeLocation">
+							<el-autocomplete  style="width:100%"
+								value-key="name" 
+								v-model="carrierbillInfo.consigneeLocation"
+								:fetch-suggestions="getConsigneeLocation"
+								placeholder="请输入内容">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -270,7 +295,9 @@
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
 import DistPicker from '../CommonComponents/DistPicker'
+import axios from 'axios'
 import request from '../../common/request'
+import requestNode from '../../common/requestNode'
 import { searchAreaByKey } from '../../common/utils'
 import { checkFloat2, checkTel } from '../../common/validators'
 
@@ -354,6 +381,9 @@ export default {
 				shipperAreaID: [
 					{required: true, message: '请选择发货地'}
 				],
+				shipperLocation: [
+					{required: true, message: '请选择定位地址'}
+				],
 				shipperDetailAddress: [
 					{ required: true, message: '请输入发货详细地址'}
 				],
@@ -371,6 +401,9 @@ export default {
 				],
 				consigneeAreaID: [
 					{required: true, message: '请选择收货地'}
+				],
+				consigneeLocation: [
+					{required: true, message: '请选择定位地址'}
 				],
 				consigneeDetailAddress: [
 					{required: true, message: '请输入收货详细地址'}
@@ -431,6 +464,36 @@ export default {
 				params
 			}).then(res => {
 				cb(res.data.data.records)
+			})
+		},
+		getShipperLocation(queryString, cb) {
+			let params = {
+				region: this.carrierbillInfo.shipperArea,
+				queryString
+			}
+			requestNode({
+				url: '/baiduMap/getLocation',
+				params
+			}).then(res => {
+				if (res.data.result instanceof Object && res.data.result.name instanceof Array) {
+					let names = res.data.result.name.map(item => { return { name: item } })
+					cb(names)
+				}
+			})
+		},
+		getConsigneeLocation(queryString, cb) {
+			let params = {
+				region: this.carrierbillInfo.consigneeArea,
+				queryString
+			}
+			requestNode({
+				url: '/baiduMap/getLocation',
+				params
+			}).then(res => {
+				if (res.data.result instanceof Object && res.data.result.name instanceof Array) {
+					let names = res.data.result.name.map(item => { return { name: item } })
+					cb(names)
+				}
 			})
 		},
 		handSelectConsignor(data) {

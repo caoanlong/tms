@@ -139,6 +139,7 @@
 				}
 				this.$emit('nextStep', 2, this.selectedDriver, this.selectedEscort)
 			},
+
 			pageTruckChange(index) {
 				this.truckPageIndex = index
 				this.getTruckList()
