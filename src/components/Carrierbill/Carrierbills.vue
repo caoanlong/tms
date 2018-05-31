@@ -39,85 +39,53 @@
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini" stripe @selection-change="selectionChange" >
-					<el-table-column type="selection" width="36" align="center" fixed >
-					</el-table-column>
-					<el-table-column label="处理状态"  prop="status" width="90" align="center">
-						<template slot-scope="scope">
-							<span v-if="scope.row.status=='Committed'">待执行</span>
-							<span v-else-if="scope.row.status=='Running'">执行中</span>
-							<span v-else-if="scope.row.status=='Signed'">到达签收</span>
-							<span v-else-if="scope.row.status=='Closed'">关闭</span>
-							<span v-else-if="scope.row.status=='Canceled'">作废</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="承运单号" width="180" align="center">
-						<template slot-scope="scope">
-							<el-popover trigger="hover" placement="top" class="customerTablePop">
-								<p>发货单位：{{ scope.row.shipperCompanyName }}</p>
-								<p>发货地：{{ scope.row.shipperDetailAddress }}</p>
-								<p>收货单位：{{ scope.row.consigneeCompanyName }}</p>
-								<p>卸货地：{{ scope.row.consigneeDetailAddress }}</p>
-								<div slot="reference" class="name-wrapper">
-									<span style="color:#409EFF">{{ scope.row.carrierOrderNo}}</span>
-								</div>
-							</el-popover>
-						</template>
-					</el-table-column>
-					<el-table-column label="收货单位" prop="consigneeCompanyName">
-					</el-table-column>
-					<el-table-column label="卸货地" width="140">
-						<template slot-scope="scope">
-							<span>{{scope.row.consigneeArea + scope.row.consigneeDetailAddress}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="收货人" prop="consigneeName">
-					</el-table-column>
-					<el-table-column label="到货时间" prop="consigneeDate" width="140" align="center">
-						<template slot-scope="scope">
-							<span>{{scope.row.consigneeDate | getdatefromtimestamp() }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="货物规格/货物名称" width="140">
-						<template slot-scope="scope">
-							<span v-if="scope.row.carrierCargo[0]">
-								{{scope.row.carrierCargo[0].cargoType}}
-								/{{scope.row.carrierCargo[0].cargoName}}
-								<span v-if="scope.row.carrierCargo.length > 1">...</span>
-							</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="货物总量" width="180">
-						<template slot-scope="scope" >
-							<span v-if="scope.row.carrierCargo[0]">
-								  {{ SumDispatchCargoQuantity(scope.row.carrierCargo) }} 
-							</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="发货单位" prop="shipperCompanyName">
-					</el-table-column>
-					<el-table-column label="发货时间" prop="shipperDate" width="140" align="center">
-						<template slot-scope="scope">
-							<span>{{scope.row.shipperDate | getdatefromtimestamp() }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="发货人" prop="shipperName"></el-table-column>
-					<el-table-column label="发货地" width="140">
-						<template slot-scope="scope">
-							<span>{{scope.row.shipperArea + scope.row.shipperDetailAddress}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="创建时间" width="140" align="center">
-						<template slot-scope="scope">
-							<span>{{scope.row.createTime | getdatefromtimestamp() }}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="操作" width="80" align="center" fixed="right">
-						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="view(scope.row.carrierOrderID)">查看</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
+				<table class="wfTable">
+					<tr>
+						<th>货物</th>
+						<th>货量</th>
+						<th>件数</th>
+						<th>发货公司</th>
+						<th>发货人</th>
+						<th>发货地</th>
+						<th width="140">发货时间</th>
+						<th>到货公司</th>
+						<th>到货人</th>
+						<th>到货地</th>
+						<th width="140">到货时间</th>
+					</tr>
+					<template v-for="(item, index) in tableData">
+						<tr class="tit" :key="index">
+							<td colspan="10">
+								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)" >承运单号：{{item.carrierOrderNo}}</span>
+								<span class="infoItem">
+									<span class="tag tag1" v-if="item.status=='Committed'">待执行</span>
+									<span class="tag tag2" v-else-if="item.status=='Running'">执行中</span>
+									<span class="tag tag3" v-else-if="item.status=='Signed'">到达签收</span>
+									<span class="tag tag4" v-else-if="item.status=='Closed'">关闭</span>
+									<span class="tag tag5" v-else-if="item.status=='Canceled'">作废</span>
+								</span>
+							</td>
+							<td class="text-center" width="140">
+								<el-button type="text" size="mini">编辑</el-button>
+								<el-button type="text" size="mini">关闭</el-button>
+								<el-button type="text" size="mini">删除</el-button>
+							</td>
+						</tr>
+						<tr class="list" :key="index+100">
+							<td>{{item.carrierCargo[0].cargoName}}</td>
+							<td width="80">{{item.carrierCargo[0].cargoWeight + 'kg'}}/{{item.carrierCargo[0].cargoVolume + 'm³'}}</td>
+							<td width="80">{{item.carrierCargo[0].cargoNum}}</td>
+							<td>{{item.shipperCompanyName}}</td>
+							<td>{{item.shipperName}}</td>
+							<td>{{item.shipperArea}}</td>
+							<td width="140">{{item.shipperDate | getdatefromtimestamp()}}</td>
+							<td>{{item.consigneeCompanyName}}</td>
+							<td>{{item.consigneeName}}</td>
+							<td>{{item.consigneeArea}}</td>
+							<td width="140">{{item.consigneeDate | getdatefromtimestamp()}}</td>
+						</tr>
+					</template>
+				</table>
 				<el-row type="flex">
 					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
 						<span>总共 {{total}} 条记录每页显示</span>
@@ -277,5 +245,40 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-
+.wfTable
+	width 100%
+	background #e2ecf6
+	border-spacing 1px
+	font-size 14px
+	margin-bottom 10px
+	td
+		background #fff
+		padding 6px 10px
+		height 36px
+		line-height 24px
+		color #666
+		position relative
+	.tit
+		td
+			border-top 1px solid #bbb
+			background #f8f8f8
+			color #3582d0
+			.infoItem
+				margin-right 40px
+				&.ViewDispatchBill
+					cursor pointer
+	
+	th
+		padding 6px 10px
+		height 36px
+		line-height 24px
+		background #f0f0f0
+		color #666
+		width 100px
+	.list
+		td
+			font-size 12px
+			.ViewTaskDetail
+				cursor pointer
+				display block
 </style>
