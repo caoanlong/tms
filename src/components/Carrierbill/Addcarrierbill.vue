@@ -476,7 +476,12 @@ export default {
 				params
 			}).then(res => {
 				if (res.data.result instanceof Object && res.data.result.name instanceof Array) {
-					let names = res.data.result.name.map(item => { return { name: item } })
+					let names = res.data.result.name.map((item, i) => { 
+						return { 
+							name: item,
+							location: res.data.result.location[i]
+						} 
+					})
 					cb(names)
 				}
 			})
@@ -491,7 +496,12 @@ export default {
 				params
 			}).then(res => {
 				if (res.data.result instanceof Object && res.data.result.name instanceof Array) {
-					let names = res.data.result.name.map(item => { return { name: item } })
+					let names = res.data.result.name.map((item, i) => { 
+						return { 
+							name: item,
+							location: res.data.result.location[i]
+						} 
+					})
 					cb(names)
 				}
 			})

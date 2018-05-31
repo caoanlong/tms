@@ -56,7 +56,7 @@
 					<template v-for="(item, index) in tableData">
 						<tr class="tit" :key="index">
 							<td colspan="10">
-								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)" >承运单号：{{item.carrierOrderNo}}</span>
+								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 								<span class="infoItem">
 									<span class="tag tag1" v-if="item.status=='Committed'">待执行</span>
 									<span class="tag tag2" v-else-if="item.status=='Running'">执行中</span>
@@ -66,9 +66,17 @@
 								</span>
 							</td>
 							<td class="text-center" width="140">
-								<el-button type="text" size="mini">编辑</el-button>
-								<el-button type="text" size="mini">关闭</el-button>
-								<el-button type="text" size="mini">删除</el-button>
+								<el-button type="text" size="mini" 
+									:disabled="item.status != 'Committed'" 
+									@click="edit(item.carrierOrderID)">
+									编辑
+								</el-button>
+								<el-button type="text" size="mini" 
+									:disabled="item.status != 'Running' && item.status != 'Signed'"
+									@click="close(item.carrierOrderID)">
+									关闭
+								</el-button>
+								<el-button type="text" size="mini" @click="deleteConfirm(item.carrierOrderID)">删除</el-button>
 							</td>
 						</tr>
 						<tr class="list" :key="index+100">
@@ -194,8 +202,38 @@ export default {
 		view(carrierOrderID) {
 			this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
 		},
+		edit(carrierOrderID) {
+			this.$router.push({name: 'editcarrierbill', query: {carrierOrderID}})
+		},
 		add() {
 			this.$router.push({ name: 'addcarrierbill' })
+		},
+		close(carrierOrderID) {
+			let data = {
+				carrierOrderIDs: carrierOrderID
+			}
+			this.$confirm('此操作将关闭, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				request({
+					url: '/biz/carrierOrder/close',
+					method: 'post',
+					data
+				}).then(res => {
+					this.$message({
+						type: 'success',
+						message: '关闭成功!'
+					})
+					this.getList()
+				})
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消关闭'
+				})
+			})
 		},
 		deleteConfirm(id) {
 			let ids = ''

@@ -1,17 +1,17 @@
 <template>
-    <el-dialog title="查看照片" :visible.sync="visible" width="80%">
+    <el-dialog title="查看照片" :show-close="false" :close-on-click-modal="false" :visible.sync="visible" width="80%">
         <el-form label-width="100px">
             <el-form-item label="装车照片">
-                <ImageUpload :limitNum="10"></ImageUpload>
+                <ImageUpload :limitNum="10" :isPreview="true"></ImageUpload>
             </el-form-item>
             <el-form-item label="到货照片">
-                <ImageUpload :limitNum="10"></ImageUpload>
+                <ImageUpload :limitNum="10" :isPreview="true"></ImageUpload>
             </el-form-item>
             <el-form-item label="回单照片">
-                <ImageUpload :limitNum="10"></ImageUpload>
+                <ImageUpload :limitNum="10" :isPreview="true"></ImageUpload>
             </el-form-item>
             <el-form-item label="异常上报">
-                <ImageUpload :limitNum="10"></ImageUpload>
+                <ImageUpload :limitNum="10" :isPreview="true"></ImageUpload>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

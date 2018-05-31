@@ -144,7 +144,7 @@
 					</td>
 				</tr>
 			</table>
-			<table class="wf-table">
+			<!-- <table class="wf-table">
 				<caption>调度单</caption>
 				<tr>
 					<th>调度单号</th>
@@ -190,8 +190,8 @@
 					<td>{{item.cargoVolume}}</td>
 					<td>{{item.cargoWeight}}</td>
 				</tr>
-			</table>
-			<!-- <table class="wf-table">
+			</table> -->
+			<table class="wf-table">
 				<caption>运输进展</caption>
 				<tr>
 					<th>车牌号/挂车号</th>
@@ -213,10 +213,10 @@
 					<td></td>
 					<td style="text-align: center">
 						<el-button type="primary" size="mini" @click="dialogPhotoVisible = true">查看</el-button>
-						<el-button type="primary" size="mini" @click="dialogCargoVisible = true">查看货物</el-button>
+						<!-- <el-button type="primary" size="mini" @click="dialogCargoVisible = true">查看货物</el-button> -->
 					</td>
 				</tr>
-			</table> -->
+			</table>
 			<div class="wf-footer clearfix">
 				<div class="btn-group fl">
 					<button 
@@ -373,16 +373,27 @@ export default {
 			let data = {
 				carrierOrderIDs: this.$route.query.carrierOrderID
 			}
-			request({
-				url: '/biz/carrierOrder/close',
-				method: 'post',
-				data
-			}).then(res => {
-				this.$message({
-					type: 'success',
-					message: '关闭成功!'
+			this.$confirm('此操作将关闭, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				request({
+					url: '/biz/carrierOrder/close',
+					method: 'post',
+					data
+				}).then(res => {
+					this.$message({
+						type: 'success',
+						message: '关闭成功!'
+					})
+					this.getDetail()
 				})
-				this.getDetail()
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消关闭'
+				})
 			})
 		},
 		back() {

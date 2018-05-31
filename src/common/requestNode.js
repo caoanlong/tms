@@ -17,6 +17,16 @@ service.interceptors.request.use(config => {
 	Promise.reject(error)
 })
 
+let href = ''
+
+if (process.env.ENV_CONFIG == 'test') {
+	href = '/tms/#/login' // 测试
+} else if (process.env.ENV_CONFIG == 'practice') {
+	href = '/tms-h5/login' // 演练
+} else {
+	href = '/login'  // 生产
+}
+
 // respone interceptor
 service.interceptors.response.use(
 	response => {
@@ -25,7 +35,7 @@ service.interceptors.response.use(
 			|| response.data.code == 1003 
 			|| response.data.code == 1004) {
 			localStorage.clear()
-			window.location.href = '/login'
+			window.location.href = href
 			return Promise.reject('error')
 		}
 		return response
