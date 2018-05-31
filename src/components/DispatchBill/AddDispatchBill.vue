@@ -56,8 +56,8 @@
 								<span>{{scope.row.carrierOrder.carrierOrderNo}}</span>
 							</template>
 						</el-table-column>
-						<el-table-column label="货物规格" prop="cargoType"align="center"></el-table-column>
-						<el-table-column label="货物名称" prop="cargoName"align="center"></el-table-column>
+						<el-table-column label="货物规格" prop="cargoType" align="center"></el-table-column>
+						<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
 						<el-table-column label="配载量" align="center">
 							<template slot-scope="scope">
 								<span>

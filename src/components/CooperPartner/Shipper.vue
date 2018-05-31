@@ -196,7 +196,6 @@
 					url: '/customer/findList',
 					params
 				}).then(res => {
-					console.log(res.data)
 					this.tableData = res.data.data.records
 					this.total= res.data.data.total
 				})

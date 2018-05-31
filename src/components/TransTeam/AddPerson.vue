@@ -317,6 +317,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
@@ -402,7 +403,19 @@ export default {
 			}
 		}
 	},
-	created() {
+	computed: {
+		...mapGetters(['name', 'mobile'])
+	},
+	watch: {
+		position: {
+			handler(newVal) {
+				if (newVal.includes('Operator')) {
+					this.person.auditName = this.name
+					this.person.mobile = this.mobile
+				}
+			},
+			deep: true
+		}
 	},
 	methods: {
 		disabledDate(curDate) {
@@ -467,7 +480,6 @@ export default {
 			if(!data.qualificationExpirationTime) {
 				data.qualificationExpirationTime = ''
 			}
-			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					request({

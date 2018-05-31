@@ -37,6 +37,18 @@
 					</el-col>
 				</el-row>
 				<el-row>
+					<el-col :span="8">
+						<el-form-item label="准运证号">
+							<el-input placeholder="请输入..." v-model="carrierbillInfo.navicertNo"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="电子运单">
+							<el-input placeholder="请输入..." v-model="carrierbillInfo.electronicWaybill"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
 					<div class="split-item">
 						<span class="num">2</span>
 						<span class="tit">收发货信息</span>
@@ -160,7 +172,7 @@
 						<el-button type="text" icon="el-icon-plus" class="fr" @click="addItem">添加</el-button>
 					</div>
 				</el-row>
-				<div class="cargoItem" v-for="(item, index) in carrierbillInfo.carrierCargo">
+				<div class="cargoItem" v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
 					<el-form :inline="true" size="mini" :model="item" :rules="cargoRules" ref="cargoRuleForm">
 						<el-row>
 							<el-form-item :label="'货物' + (index + 1)" prop="weightType">
@@ -290,6 +302,8 @@ export default {
 				],
 				carrierOrderNo:'',
 				carrierrName:'',
+				navicertNo: '',   // 新增
+				electronicWaybill: '',   // 新增
 				cashAmount:'',
 				chargeMode:'',
 				codAmount:'',
@@ -544,6 +558,8 @@ export default {
 				carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargo),
 				// carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
 				carrierrName: this.carrierbillInfo.carrierrName,
+				navicertNo: this.carrierbillInfo.navicertNo,
+				electronicWaybill: this.carrierbillInfo.electronicWaybill,
 				cashAmount: this.carrierbillInfo.cashAmount,
 				codAmount: this.carrierbillInfo.codAmount,
 
@@ -585,7 +601,6 @@ export default {
 
 				status: this.carrierbillInfo.status,
 			}
-			console.log(data)
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					if (valid) {

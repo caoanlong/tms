@@ -151,7 +151,7 @@
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="备注说明">
-							<p>{{person.remark}}<span v-for="i in 100">备注说明</span></p>
+							<p>{{person.remark}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>

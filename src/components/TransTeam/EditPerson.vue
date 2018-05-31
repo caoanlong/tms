@@ -299,6 +299,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import request from '../../common/request'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
@@ -381,6 +382,20 @@ export default {
 					{required: true, validator: checkIDCard, trigger: 'blur'}
 				]
 			}
+		}
+	},
+	computed: {
+		...mapGetters(['name', 'mobile'])
+	},
+	watch: {
+		position: {
+			handler(newVal) {
+				if (newVal.includes('Operator')) {
+					this.person.auditName = this.name
+					this.person.mobile = this.mobile
+				}
+			},
+			deep: true
 		}
 	},
 	created() {

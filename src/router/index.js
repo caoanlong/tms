@@ -476,7 +476,7 @@ let routerMap = [
 	}
 ]
 const router = new Router({
-	mode: 'history',
+	mode: process.env.ENV_CONFIG == 'test' ? 'hash' : 'history',
 	scrollBehavior: () => ({
 		y: 0
 	}),

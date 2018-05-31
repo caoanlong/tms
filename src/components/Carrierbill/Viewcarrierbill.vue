@@ -23,6 +23,10 @@
 					<td width="50%"><span class="justify">托运人</span>{{carrierOrder.consignorName}}</td>
 					<td width="50%"><span class="justify">承运人</span>{{carrierOrder.carrierrName}}</td>
 				</tr>
+				<tr>
+					<td width="50%"><span class="justify">准运证号</span>{{carrierOrder.navicertNo}}</td>
+					<td width="50%"><span class="justify">电子运单</span>{{carrierOrder.electronicWaybill}}</td>
+				</tr>
 			</table>
 			<table class="wf-table">
 				<caption>收发货信息</caption>
@@ -360,7 +364,7 @@ export default {
 		},
 		EditCarrierbill() {
 			if (this.dispatchbills.length > 0) {
-				this.Edit()
+				this.dialogReceivableVisible = true
 			} else {
 				this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
 			}

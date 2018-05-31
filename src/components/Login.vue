@@ -131,7 +131,7 @@
 </template>
 <script>
 import Footer from './CommonComponents/Footer'
-import request, {baseURL} from "../common/request"
+import request, { baseURL } from "../common/request"
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
 import { isPoneAvailable, isVerCodeAvailable } from '../common/validators'
@@ -259,11 +259,13 @@ export default {
 				params
 			}).then(res => {
 				console.log(res.data)
-				Message({
-					type: 'info',
-					message: res.data.data,
-					duration: 3 * 1000
-				})
+				if (baseURL.includes('develop')) {
+					Message({
+						type: 'info',
+						message: res.data.data,
+						duration: 3 * 1000
+					})
+				}
 			})
 		},
 		/**
@@ -274,7 +276,7 @@ export default {
 				Message.error('用户名不能为空！')
 				return
 			}
-			if (this.login.username.length > 50) {
+			if (this.login.username.trim().length > 50) {
 				Message.error('用户名过长！')
 				return
 			}
@@ -282,7 +284,7 @@ export default {
 				Message.error('密码不能为空！')
 				return
 			}
-			if (this.login.password.length > 32 || this.login.password.length <8) {
+			if (this.login.password.trim().length > 32 || this.login.password.trim().length <8) {
 				Message.error('密码必须是8-16位字母、下划线、数字')
 				return
 			}
@@ -324,7 +326,7 @@ export default {
 				Message.error('验证码不能为空！')
 				return
 			}
-			if (this.register.vcode.length != 6) {
+			if (this.register.vcode.trim().length != 6) {
 				Message.error('请输入正确长度的验证码！')
 				return
 			}
@@ -332,7 +334,7 @@ export default {
 				Message.error('密码不能为空！')
 				return
 			}
-			if (this.login.password.length > 32 || this.login.password.length <8) {
+			if (this.register.password.trim().length > 32 || this.register.password.trim().length <8) {
 				Message.error('密码必须是8-16位字母、下划线、数字')
 				return
 			}
@@ -344,7 +346,7 @@ export default {
 				Message.error('公司不能为空！')
 				return
 			}
-			if (this.register.company.length > 100) {
+			if (this.register.company.trim().length > 100) {
 				Message.error('公司名过长！')
 				return
 			}
@@ -356,7 +358,7 @@ export default {
 				Message.error('详细地址不能为空！')
 				return
 			}
-			if (this.register.address.length > 100) {
+			if (this.register.address.trim().length > 100) {
 				Message.error('地址过长！')
 				return
 			}

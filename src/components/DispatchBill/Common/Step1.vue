@@ -1,6 +1,6 @@
 <template>
 	<div class="step step1">
-		<div class="table" v-for="(carrierBill, index) in carrierBills">
+		<div class="table" v-for="(carrierBill, index) in carrierBills" :key="index">
 			<el-table :data="[
 				{
 					'carrierOrderNo': carrierBill.carrierOrderNo,

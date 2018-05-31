@@ -28,6 +28,18 @@
 					</el-col>
 				</el-row>
 				<el-row>
+					<el-col :span="8">
+						<el-form-item label="准运证号">
+							<el-input placeholder="请输入..." v-model="carrierbillInfo.navicertNo"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="电子运单">
+							<el-input placeholder="请输入..." v-model="carrierbillInfo.electronicWaybill"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
 					<div class="split-item">
 						<span class="num">2</span>
 						<span class="tit">收发货信息</span>
@@ -282,6 +294,8 @@ export default {
 				],
 				carrierOrderNo:'',
 				carrierrName: '',
+				navicertNo: '',   // 新增
+				electronicWaybill: '',   // 新增
 				cashAmount:'',
 				chargeMode:'',
 				codAmount:'',
@@ -520,6 +534,8 @@ export default {
 				carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargo),
 				carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
 				carrierrName: this.carrierbillInfo.carrierrName,
+				navicertNo: this.carrierbillInfo.navicertNo,
+				electronicWaybill: this.carrierbillInfo.electronicWaybill,
 				cashAmount: this.carrierbillInfo.cashAmount,
 				codAmount: this.carrierbillInfo.codAmount,
 
@@ -559,7 +575,6 @@ export default {
 				transportType: this.carrierbillInfo.transportType,
 				commissionDate: this.carrierbillInfo.commissionDate
 			}
-			console.log(data)
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					if (valid) {

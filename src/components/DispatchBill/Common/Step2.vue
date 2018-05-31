@@ -157,24 +157,24 @@
 				this.findPersonName = ''
 			},
 			selectDriverItem(data) {
-				if (data.loadStatus == 'Empty') {
-					if (data.driverWorkStatus != 'Free') {
-						Message.error('该车辆司机工作状态不为空闲！')
-						return
-					}
-				}
-				if (data.workStatus != 'Free') {
-					Message.error('该车辆运输状态不为空闲！')
-					return
-				}
-				if (data.loadStatus == 'Full') {
-					Message.error('该车辆已经满载！')
-					return
-				}
-				if (data.loadStatus == 'NotFull' && this.selectedEscort.staffID) {
-					Message.error('该车辆已经有押运人员了！')
-					return
-				}
+				// if (data.loadStatus == 'Empty') {
+				// 	if (data.driverWorkStatus != 'Free') {
+				// 		Message.error('该车辆司机工作状态不为空闲！')
+				// 		return
+				// 	}
+				// }
+				// if (data.workStatus != 'Free') {
+				// 	Message.error('该车辆运输状态不为空闲！')
+				// 	return
+				// }
+				// if (data.loadStatus == 'Full') {
+				// 	Message.error('该车辆已经满载！')
+				// 	return
+				// }
+				// if (data.loadStatus == 'NotFull' && this.selectedEscort.staffID) {
+				// 	Message.error('该车辆已经有押运人员了！')
+				// 	return
+				// }
 				if (this.selectedDriver.truckID == data.truckID) {
 					this.selectedDriver = {}
 					return
@@ -182,14 +182,14 @@
 				this.selectedDriver = data
 			},
 			selectEscortItem(data) {
-				if (this.selectedDriver.loadStatus == 'NotFull') {
-					Message.error('该车辆已经安排押运人员了！')
-					return
-				}
-				if (data.workStatus == 'Working') {
-					Message.error('该人员已经在工作了！')
-					return
-				}
+				// if (this.selectedDriver.loadStatus == 'NotFull') {
+				// 	Message.error('该车辆已经安排押运人员了！')
+				// 	return
+				// }
+				// if (data.workStatus == 'Working') {
+				// 	Message.error('该人员已经在工作了！')
+				// 	return
+				// }
 				if (this.selectedEscort.staffID == data.staffID) {
 					this.selectedEscort = {}
 					return

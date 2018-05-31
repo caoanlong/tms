@@ -4,6 +4,7 @@ const user = {
 	state: {
 		userInfo: localStorage.getItem('userInfo'),
 		name: localStorage.getItem('name'),
+		mobile: localStorage.getItem('mobile'),
 		companyName: localStorage.getItem('companyName'),
 		token: localStorage.getItem('token')
 	},
@@ -15,6 +16,10 @@ const user = {
 		SET_NAME: (state, name) => {
 			state.name = name
 			localStorage.setItem('name', name)
+		},
+		SET_MOBILE: (state, mobile) => {
+			state.mobile = mobile
+			localStorage.setItem('mobile', mobile)
 		},
 		SET_COMPANYNAME: (state, companyName) => {
 			state.companyName = companyName
@@ -48,6 +53,7 @@ const user = {
 				}).then(res => {
 					commit('SET_USERINFO', res.data.data)
 					commit('SET_NAME', res.data.data.userName)
+					commit('SET_MOBILE', res.data.data.mobile)
 					commit('SET_COMPANYNAME', res.data.data.companyName)
 				})
 			})
