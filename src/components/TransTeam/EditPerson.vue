@@ -94,7 +94,6 @@
 						<el-form-item label="聘用岗位" prop="position">
 							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择" @change="changePost">
 								<el-option label="操作员" value="Operator"></el-option>
-								<el-option label="驾驶员" value="Driver"></el-option>
 								<el-option label="押运员" value="Supercargo"></el-option>
 								<el-option label="专职安全员" value="SafetyOfficer"></el-option>
 								<el-option label="装卸管理人员" value="Stevedore"></el-option>

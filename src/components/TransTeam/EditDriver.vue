@@ -1,58 +1,16 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">添加人员</div>
-			<el-form label-width="155px" size="mini" :model="person" :rules="rules" ref="ruleForm">
+			<el-form label-width="155px" size="small" :model="person" :rules="rules" ref="ruleForm">
 				<el-row>
-					<el-col :span="8">
-						<el-form-item label="创建人" prop="createName">
-							<el-input v-model="person.createName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="状态" prop="status">
-							<el-select style="width: 100%" v-model="person.status" placeholder="请选择">
-								<el-option label="通过" value="Passed"></el-option>
-								<el-option label="未通过" value="NotPassed"></el-option>
-								<el-option label="其他" value="Other"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="审核人" prop="auditName">
-							<el-input v-model="person.auditName"></el-input>
-						</el-form-item>
+					<el-col :span="24">
+						<p class="divided"><svg-icon icon-class="list-tag"></svg-icon>基本信息</p>
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="8">
-						<el-form-item label="审核日期" prop="auditTime">
-							<el-date-picker 
-								:picker-options="{disabledDate}" 
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.auditTime"
-								type="date"
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
 					<el-col :span="8">
 						<el-form-item label="姓名" prop="realName">
 							<el-input v-model="person.realName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="家庭地址" prop="homeAddress">
-							<el-input v-model="person.homeAddress"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="联系电话" prop="mobile">
-							<el-input v-model="person.mobile"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -64,52 +22,24 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="驾驶证初次领证日期">
-							<el-date-picker 
-								:picker-options="{disabledDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.driverLicenseFirstTime"
-								type="date"
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
+						<el-form-item label="手机号" prop="mobile">
+							<el-input v-model="person.mobile"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="诚信考核等级">
+						<el-form-item label="合作关系">
 							<el-select style="width: 100%" v-model="person.integrityExamineGrade" placeholder="请选择">
-								<el-option label="无" value=""></el-option>
-								<el-option label="A" value="A"></el-option>
-								<el-option label="AA" value="AA"></el-option>
-								<el-option label="AAA" value="AAA"></el-option>
-								<el-option label="AAAA" value="AAAA"></el-option>
-								<el-option label="AAAAA" value="AAAAA"></el-option>
+								<el-option label="单位挂靠" value="单位挂靠"></el-option>
+								<el-option label="个人挂靠" value="个人挂靠"></el-option>
+								<el-option label="自有车辆" value="自有车辆"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="聘用岗位" prop="position">
-							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择" @change="changePost">
-								<el-option label="操作员" value="Operator"></el-option>
-								<el-option label="押运员" value="Supercargo"></el-option>
-								<el-option label="专职安全员" value="SafetyOfficer"></el-option>
-								<el-option label="装卸管理人员" value="Stevedore"></el-option>
-								<el-option label="其他人员" value="Other"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="诚信考核有效期至">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.integrityExamineEndTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
+						<el-form-item label="合同有效期">
+							<el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
@@ -118,6 +48,55 @@
 					<el-col :span="8">
 						<el-form-item label="身份证号" prop="idCardNum">
 							<el-input v-model="person.idCardNum"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="身份证有效期">
+							<el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="24">
+						<el-form-item label="家庭地址" prop="homeAddress">
+							<el-input v-model="person.homeAddress"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="24">
+						<el-form-item label="备注说明">
+							<el-input type="textarea" v-model="person.remark"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="头像">
+							<ImageUpload :files="[person.headPic]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="身份证正面">
+							<ImageUpload :files="[person.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="身份证反面">
+							<ImageUpload :files="[person.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="24">
+						<p class="divided"><svg-icon icon-class="list-tag"></svg-icon>驾驶证信息</p>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="驾驶证档案编号">
+							<el-input v-model="person.driverLicenseCode"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -143,13 +122,13 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="合同有效期起">
+						<el-form-item label="初次领证日期">
 							<el-date-picker 
 								:picker-options="{disabledDate}"
 								:editable="false"
 								style="width: 100%" 
-								v-model="person.laborContractBeginTime"
-								type="date" 
+								v-model="person.driverLicenseFirstTime"
+								type="date"
 								value-format="timestamp"
 								placeholder="选择日期">
 							</el-date-picker>
@@ -158,147 +137,60 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="合同有效期至">
-							<el-date-picker 
-								:picker-options="{
-									disabledDate: curDate => {
-										if (person.laborContractBeginTime) {
-											return person.laborContractBeginTime > curDate
-										} else {
-											return new Date() > curDate
-										}
-									}
-								}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.laborContractEndTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
+						<el-form-item label="驾驶证有效期">
+							<el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
-						<el-form-item label="驾驶证审验有效期起">
-							<el-date-picker 
-								:picker-options="{disabledDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.driverLicExamineBeginTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="驾驶证审验有效期至">
-							<el-date-picker 
-								:picker-options="{
-									disabledDate: curDate => {
-										if (person.driverLicExamineBeginTime) {
-											return person.driverLicExamineBeginTime > curDate
-										} else {
-											return new Date() > curDate
-										}
-									}
-								}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.driverLicExamineEndTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
+					
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="驾驶证档案编号">
-							<el-input v-model="person.driverLicenseCode"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="职称或技术等级">
-							<el-input v-model="person.titleLever"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="从业资格证件号">
-							<el-input v-model="person.qualificationCode"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="从业资格类别">
-							<el-input v-model="person.qualificationType"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="从业资格证有效期至">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.qualificationExpirationTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item label="备注说明">
-							<el-input type="textarea" v-model="person.remark"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
-						<el-form-item label="头像">
-							<ImageUpload :files="[person.headPic]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="身份证正面">
-							<ImageUpload :files="[person.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="身份证反面">
-							<ImageUpload :files="[person.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
 						<el-form-item label="驾驶证正面">
 							<ImageUpload :files="[person.driverLicFrontUrl]" @imgUrlBack="handleDriverFrontSuccess"/>
 						</el-form-item>
 					</el-col>
-					<el-col :span="6">
+					<el-col :span="8">
 						<el-form-item label="驾驶证反面">
 							<ImageUpload :files="[person.driverLicBackUrl]" @imgUrlBack="handleDriverBackSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="从业资格证正">
-							<ImageUpload :files="[person.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="从业资格证副">
-							<ImageUpload :files="[person.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
-						<el-form-item label="其他照片">
-							<ImageUpload :files="otherImgs" :limitNum="5" @imgUrlBack="imgUrlBack"/>
+						<p class="divided"><svg-icon icon-class="list-tag"></svg-icon>从业资格证</p>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="从业资格证编号">
+							<el-input v-model="person.qualificationCode"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="从业资格证类别">
+							<el-input v-model="person.qualificationType"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="从业资格证有效期">
+							<el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					
+				</el-row>
+				
+				
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="从业资格证正">
+							<ImageUpload :files="[person.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="从业资格证副">
+							<ImageUpload :files="[person.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -450,8 +342,65 @@ export default {
 		changePost(e) {
 			this.person.position = e.join(',')
 		},
-		createItem() {
+		getInfo() {
+			let params = {
+				staffID: this.$route.query.staffID
+			}
+			request({
+				url: '/staff/findById',
+				params
+			}).then(res => {
+				let data = res.data.data
+				this.person = {
+					createName: data.createName,
+					status: data.status,
+					auditName: data.auditName,
+					auditTime: data.auditTime,
+					realName: data.realName,
+					homeAddress: data.comStaffIdentification.homeAddress,
+					mobile: data.mobile,
+					sex: data.comStaffIdentification.sex,
+					driverLicenseFirstTime: data.comStaffIdentification.driverLicenseFirstTime || '',
+					integrityExamineGrade: data.comStaffIdentification.integrityExamineGrade,
+					position: data.position,
+					integrityExamineEndTime: data.comStaffIdentification.integrityExamineEndTime || '',
+					idCardNum: data.comStaffIdentification.idCardNum,
+					quasiDrivingType: data.comStaffIdentification.quasiDrivingType,
+					laborContractBeginTime: data.comStaffIdentification.laborContractBeginTime || '',
+					laborContractEndTime: data.comStaffIdentification.laborContractEndTime || '',
+					driverLicExamineBeginTime: data.comStaffIdentification.driverLicExamineBeginTime || '',
+					driverLicExamineEndTime: data.comStaffIdentification.driverLicExamineEndTime || '',
+					driverLicenseCode: data.comStaffIdentification.driverLicenseCode,
+					titleLever: data.comStaffIdentification.titleLever,
+					qualificationCode: data.comStaffIdentification.qualificationCode,
+					qualificationType: data.comStaffIdentification.qualificationType,
+					qualificationExpirationTime: data.comStaffIdentification.qualificationExpirationTime || '',
+					remark: data.remark,
+					headPic: data.headPic,
+					idCardFrontUrl: data.comStaffPic.idCardFrontUrl,
+					idCardBackUrl: data.comStaffPic.idCardBackUrl,
+					driverLicFrontUrl: data.comStaffPic.driverLicFrontUrl,
+					driverLicBackUrl: data.comStaffPic.driverLicBackUrl,
+					qualificationFirstPage: data.comStaffPic.qualificationFirstPage,
+					qualificationSecondPage: data.comStaffPic.qualificationSecondPage,
+					otherStaffPic1: data.comStaffPic.otherStaffPic1,
+					otherStaffPic2: data.comStaffPic.otherStaffPic2,
+					otherStaffPic3: data.comStaffPic.otherStaffPic3,
+					otherStaffPic4: data.comStaffPic.otherStaffPic4,
+					otherStaffPic5: data.comStaffPic.otherStaffPic5
+				}
+				this.position = data.position.split(',')
+				let resDataComStaffPic = data.comStaffPic
+				let i = 1
+				while (i < 6) {
+					this.otherImgs.push(resDataComStaffPic['otherStaffPic' + i])
+					i++
+				}
+			})
+		},
+		updateItem() {
 			let data = this.person
+			data.staffID = this.$route.query.staffID
 			if(!data.integrityExamineEndTime) {
 				data.integrityExamineEndTime = ''
 			}
@@ -479,10 +428,36 @@ export default {
 			if(!data.qualificationExpirationTime) {
 				data.qualificationExpirationTime = ''
 			}
+			if(!data.headPic) {
+				data.headPic = ''
+			}
+			if(!data.idCardFrontUrl) {
+				data.idCardFrontUrl = ''
+			}
+			if(!data.idCardBackUrl) {
+				data.idCardBackUrl = ''
+			}
+			if(!data.driverLicFrontUrl) {
+				data.driverLicFrontUrl = ''
+			}
+			if(!data.driverLicBackUrl) {
+				data.driverLicBackUrl = ''
+			}
+			if(!data.qualificationFirstPage) {
+				data.qualificationFirstPage = ''
+			}
+			if(!data.qualificationSecondPage) {
+				data.qualificationSecondPage = ''
+			}
+			for (let i = 1; i < 6; i++) {
+				if(!data['otherStaffPic' + i]) {
+					data['otherStaffPic' + i] = ''
+				}
+			}
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					request({
-						url: '/staff/add',
+						url: '/staff/update',
 						method: 'post',
 						data
 					}).then(res => {
@@ -504,6 +479,15 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
+.divided
+	padding 10px 15px 5px
+	margin-top 0
+	color #C0C4CC
+	border-bottom 1px solid #f2f2f2
+	font-size 16px
+	.svg-icon
+		margin-right 5px
+		color #909399
 .avatar-uploader
 	line-height 1
 	width 100px

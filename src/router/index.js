@@ -253,6 +253,38 @@ let routerMap = [
 						component: () => import ('../components/TransTeam/ViewPerson'),
 					},
 					{
+						path: '/driver',
+						name: 'driver',
+						meta: {
+							title: '司机'
+						},
+						component: () => import ('../components/TransTeam/Driver'),
+					},
+					{
+						path: '/adddriver',
+						name: 'adddriver',
+						meta: {
+							title: '添加司机'
+						},
+						component: () => import ('../components/TransTeam/AddDriver'),
+					},
+					{
+						path: '/editdriver',
+						name: 'editdriver',
+						meta: {
+							title: '编辑司机'
+						},
+						component: () => import ('../components/TransTeam/EditDriver'),
+					},
+					{
+						path: '/viewdriver',
+						name: 'viewdriver',
+						meta: {
+							title: '查看司机'
+						},
+						component: () => import ('../components/TransTeam/ViewDriver'),
+					},
+					{
 						path: '/transinfo',
 						name: 'transinfo',
 						meta: {
