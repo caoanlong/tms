@@ -48,7 +48,7 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="车辆类别" prop="truckCategory">
-							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
+							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择" disabled>
 								<el-option label="挂车" value="挂车"></el-option>
 								<el-option label="牵引车" value="牵引车"></el-option>
 								<el-option label="整车" value="整车"></el-option>
@@ -57,7 +57,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="车辆类型" prop="truckType">
-							<el-select style="width: 100%" v-model="truck.truckType" placeholder="请选择">
+							<el-select style="width: 100%" v-model="truck.truckType" placeholder="请选择" disabled>
 								<!-- <el-option v-for="item in truckTypes" :key="item.constStdID" :label="item.name" :value="item.name"></el-option> -->
 								<el-option label="集装箱挂车" value="集装箱挂车"></el-option>
 								<el-option label="厢式货车" value="厢式货车"></el-option>
@@ -69,7 +69,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="车牌颜色" prop="plateNoColor">
-							<el-select style="width: 100%" v-model="truck.plateNoColor" placeholder="请选择">
+							<el-select style="width: 100%" v-model="truck.plateNoColor" placeholder="请选择" disabled>
 								<el-option label="黄" value="黄"></el-option>
 								<el-option label="蓝" value="蓝"></el-option>
 							</el-select>
@@ -80,13 +80,13 @@
 					<el-col :span="16">
 						<el-form-item>
 							<span style="color: red" slot="label">*</span>
-							<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType">
-								<el-option label="车牌号" value="车牌号"></el-option>
-								<el-option label="挂车车牌" value="挂车车牌"></el-option>
+							<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType" disabled>
+								<el-option label="车牌号" value="车牌号" disabled></el-option>
+								<el-option label="挂车车牌" value="挂车车牌" disabled></el-option>
 							</el-select>
 							<div style="display: inline-block">
-								<el-input placeholder="请输入车牌号" v-model="truck.plateNo" v-if="plateNoType == '车牌号'"></el-input>
-								<el-input placeholder="请输入挂车车牌" v-model="truck.trailerPlateNo" v-if="plateNoType == '挂车车牌'"></el-input>
+								<el-input placeholder="请输入车牌号" v-model="truck.plateNo" v-if="plateNoType == '车牌号'" disabled></el-input>
+								<el-input placeholder="请输入挂车车牌" v-model="truck.trailerPlateNo" v-if="plateNoType == '挂车车牌'" disabled></el-input>
 							</div>
 						</el-form-item>
 					</el-col>

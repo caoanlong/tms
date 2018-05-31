@@ -1,44 +1,19 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">人员管理</div>
+			<div class="header clearfix">司机管理</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="姓名">
-						<el-input placeholder="请输入..." v-model="findName"></el-input>
+					<el-form-item label="关键字">
+						<el-input placeholder="车牌号/挂车号/姓名" v-model="findName"></el-input>
 					</el-form-item>
-					<el-form-item label="联系电话">
-						<el-input placeholder="请输入..." v-model="findMobile"></el-input>
-					</el-form-item>
-					<el-form-item label="评级">
-						<el-select v-model="findLevel" placeholder="请选择">
-							<el-option label="无" value=""></el-option>
-							<el-option label="A" value="A"></el-option>
-							<el-option label="AA" value="AA"></el-option>
-							<el-option label="AAA" value="AAA"></el-option>
-							<el-option label="AAAA" value="AAAA"></el-option>
-							<el-option label="AAAAA" value="AAAAA"></el-option>
+					<el-form-item label="车辆归属">
+						<el-select v-model="findLevel" placeholder="全部">
+							<el-option label="全部" value=""></el-option>
+							<el-option label="单位挂靠" value="单位挂靠"></el-option>
+							<el-option label="个人挂靠" value="个人挂靠"></el-option>
+							<el-option label="自有车辆" value="自有车辆"></el-option>
 						</el-select>
-					</el-form-item>
-					<el-form-item label="岗位">
-						<el-select v-model="findPost" placeholder="请选择">
-							<el-option label="操作员" value="Operator"></el-option>
-							<el-option label="押运员" value="Supercargo"></el-option>
-							<el-option label="专职安全员" value="SafetyOfficer"></el-option>
-							<el-option label="装卸管理人员" value="Stevedore"></el-option>
-							<el-option label="其他人员" value="Other"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item label="添加时间">
-						<el-date-picker
-							v-model="findDate"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							value-format="timestamp"
-							@change="selectDateRange">
-						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList">查询</el-button>
@@ -70,76 +45,22 @@
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
 					<el-table-column label="姓名" prop="realName"></el-table-column>
 					<el-table-column label="性别">
 						<template slot-scope="scope">
 							<span >{{scope.row.sex == 'M' ? '男' : '女'}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="聘用岗位" width="100">
-						<template slot-scope="scope">
-							<span v-for="item in scope.row.position.split(',')">{{postMap[item]}},</span>
-						</template>
+					<el-table-column label="手机" width="100">
 					</el-table-column>
-					<el-table-column label="身份证号" prop="idCardNum" width="160"></el-table-column>
-					<el-table-column label="创建人" prop="createName" width="100"></el-table-column>
-					<el-table-column label="状态">
-						<template slot-scope="scope">
-							<span v-if="scope.row.status == 'Passed'">通过</span>
-							<span v-else-if="scope.row.status == 'NotPassed'">未通过</span>
-							<span v-else-if="scope.row.status == 'Other'">其他</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="审核人" prop="auditName" width="100"></el-table-column>
-					<el-table-column label="审核日期" width="100">
-						<template slot-scope="scope">
-							<span v-if="scope.row.auditTime">{{scope.row.auditTime | getdatefromtimestamp(true)}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="准驾车型">
-						<template slot-scope="scope">
-							<span v-if="scope.row.quasiDrivingType">{{scope.row.quasiDrivingType}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="驾驶证审验有效期至" width="100">
-						<template slot-scope="scope">
-							<span v-if="scope.row.driverLicExamineEndTime">{{scope.row.driverLicExamineEndTime | getdatefromtimestamp(true)}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="从业资格证件号" prop="qualificationCode" width="160"></el-table-column>
-					<el-table-column label="从业资格类别" prop="qualificationType" width="100"></el-table-column>
-					<el-table-column label="从业资格证有效期至" width="100">
-						<template slot-scope="scope">
-							<span v-if="scope.row.qualificationExpirationTime">{{scope.row.qualificationExpirationTime | getdatefromtimestamp(true)}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="驾驶证初次领证日期" width="100">
-						<template slot-scope="scope">
-							<span v-if="scope.row.driverLicenseFirstTime">{{scope.row.driverLicenseFirstTime | getdatefromtimestamp(true)}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="诚信考核等级" prop="integrityExamineGrade" width="100"></el-table-column>
-					<el-table-column label="诚信考核有效期至" width="100">
-						<template slot-scope="scope">
-							<span v-if="scope.row.integrityExamineEndTime">{{scope.row.integrityExamineEndTime | getdatefromtimestamp(true)}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="合同有效期起" width="100">
-						<template slot-scope="scope">
-							<span v-if="scope.row.laborContractBeginTime">{{scope.row.laborContractBeginTime | getdatefromtimestamp(true)}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="合同有效期至" width="100">
-						<template slot-scope="scope">
-							<span v-if="scope.row.laborContractEndTime">{{scope.row.laborContractEndTime | getdatefromtimestamp(true)}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="职称或技术等级" prop="titleLever" width="120"></el-table-column>
-					<el-table-column label="联系电话" prop="mobile" width="100"></el-table-column>
-					<el-table-column label="家庭地址" prop="homeAddress" width="140"></el-table-column>
-					<el-table-column label="备注说明" prop="remark" width="140"></el-table-column>
-					<el-table-column label="添加时间" width="140">
+					<el-table-column label="合作关系" prop="idCardNum" width="160"></el-table-column>
+					<el-table-column label="关联账号" prop="createName" ></el-table-column>
+					<el-table-column label="备注"></el-table-column>
+					<el-table-column label="身份证" prop="auditName" ></el-table-column>
+					<el-table-column label="驾驶证" ></el-table-column>
+					<el-table-column label="从业资格证"></el-table-column>
+					
+					<el-table-column label="更新时间" width="140">
 						<template slot-scope="scope">
 							<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp()}}</span>
 						</template>
@@ -287,15 +208,15 @@
 			handleCommand(e) {
 				console.log(e)
 				if (e.type == 'view') {
-					this.$router.push({name: 'viewperson', query: {staffID: e.id}})
+					this.$router.push({name: 'viewdriver', query: {staffID: e.id}})
 				} else if (e.type == 'edit') {
-					this.$router.push({name: 'editperson', query: {staffID: e.id}})
+					this.$router.push({name: 'editdriver', query: {staffID: e.id}})
 				} else if (e.type == 'delete') {
 					this.deleteConfirm(e.id)
 				}
 			},
 			add() {
-				this.$router.push({name: 'addperson'})
+				this.$router.push({name: 'adddriver'})
 			},
 			deleteConfirm(id) {
 				let ids = ''

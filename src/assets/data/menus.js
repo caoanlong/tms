@@ -206,6 +206,23 @@ const menus = [
 				"Remark": ""
 			},
 			{
+				"Menu_ID": "996571847292227594",
+				"Menu_PID": "996571711145119744",
+				"ParentIds": "",
+				"Name": "司机",
+				"Target": "driver",
+				"SortNumber": 1,
+				"Href": "/driver",
+				"Icon": "",
+				"IsShow": "Y",
+				"Permission": null,
+				"CreateBy": "988253851100033026",
+				"CreateDate": "2018-05-16T01:52:26.000Z",
+				"UpdateBy": "988253851100033026",
+				"UpdateDate": "2018-05-16T01:52:26.000Z",
+				"Remark": ""
+			},
+			{
 				"Menu_ID": "996571931132170240",
 				"Menu_PID": "996571711145119744",
 				"ParentIds": "",
