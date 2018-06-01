@@ -1,12 +1,12 @@
 <template>
 	<div class="scroll-container" ref="scrollContainer" @wheel.prevent="handleScroll">
-		<i class="el-icon-arrow-left scrollBtn scrollLeft" @click="scroll(1)"></i>
+		<i class="el-icon-arrow-left scrollBtn scrollLeft" @click="scroll(true)"></i>
 		<div class="scroll-box" id="scroll-box">
 			<div class="scroll-wrapper" id="scroll-wrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
 				<slot></slot>
 			</div>
 		</div>
-		<i class="el-icon-arrow-right scrollBtn scrollRight" @click="scroll(2)"></i>
+		<i class="el-icon-arrow-right scrollBtn scrollRight" @click="scroll(false)"></i>
 	</div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
 			let wrapper = document.getElementById('scroll-wrapper').offsetWidth
 			let box = document.getElementById('scroll-box').offsetWidth
 			let offsetL = document.getElementById('scroll-wrapper').offsetLeft
-			if(o=='1'){
+			if(o){
 				if(wrapper>box&& box-wrapper<offsetL){
 					this.left -= 100
 				}

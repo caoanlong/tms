@@ -51,7 +51,7 @@
 								<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
 								<span class="tag tag2" v-else-if="item.status == 'Loaded'">已装运</span>
 								<span class="tag tag3" v-else-if="item.status == 'Signed'">已签收</span>
-								<span class="tag tag4" v-else-if="item.status == 'Canceled'">作废</span>
+								<span class="tag tag4" v-else-if="item.status == 'Canceled'">已作废</span>
 							</span></td>
 							<td class="text-center" width="160">
 								<el-button type="text" size="mini">编辑</el-button>
