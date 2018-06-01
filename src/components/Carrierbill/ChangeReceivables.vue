@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="调整应收款" :visible.sync="visible" width="80%">
+    <el-dialog title="调整应收款" :show-close="false" :close-on-click-modal="false" :visible.sync="visible" width="80%">
         <el-row>
             <el-col :span="8">
                 <el-form label-width="100px">

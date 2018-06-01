@@ -56,7 +56,7 @@
 					<template v-for="(item, index) in tableData">
 						<tr class="tit" :key="index">
 							<td colspan="10">
-								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)" >承运单号：{{item.carrierOrderNo}}</span>
+								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 								<span class="infoItem">
 									<span class="tag tag1" v-if="item.status=='Committed'">待执行</span>
 									<span class="tag tag2" v-else-if="item.status=='Running'">执行中</span>
@@ -66,9 +66,17 @@
 								</span>
 							</td>
 							<td class="text-center" width="140">
-								<el-button type="text" size="mini">编辑</el-button>
-								<el-button type="text" size="mini">关闭</el-button>
-								<el-button type="text" size="mini">删除</el-button>
+								<el-button type="text" size="mini" 
+									:disabled="item.status != 'Committed'" 
+									@click="edit(item.carrierOrderID)">
+									编辑
+								</el-button>
+								<el-button type="text" size="mini" 
+									:disabled="item.status != 'Running' && item.status != 'Signed'"
+									@click="close(item.carrierOrderID)">
+									关闭
+								</el-button>
+								<el-button type="text" size="mini" @click="del(item.carrierOrderID)">删除</el-button>
 							</td>
 						</tr>
 						<tr class="list" :key="index+100">
@@ -112,19 +120,20 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from "../../common/request"
+import { deleteConfirm, closeConfirm } from '../../common/utils'
+import { getCarrierbills, closeCarrierbill, delCarrierbill } from '../../api/carrierbill'
 export default {
 	data() {
 		return {
 			pageIndex: 1,
 			pageSize: 10,
-			total:0,
+			total: 0,
 			tableData: [],
-			selectedList: [],
 			findsearchInfo:'',
 			findRangeDate: [],
 			findshipperBeginDate: '',
 			findshipperEndDate: '',
-			findStatus:''
+			findStatus: ''
 		}
 	},
 	created() {
@@ -132,114 +141,71 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.findsearchInfo='',
-			this.findshipperBeginDate='',
-			this.findshipperEndDate='',
-			this.findRangeDate = [],
-			this.findStatus = '',
-			this.pageIndex = 1,
+			this.findsearchInfo = ''
+			this.findshipperBeginDate = ''
+			this.findshipperEndDate = ''
+			this.findRangeDate = []
+			this.findStatus = ''
+			this.pageIndex = 1
 			this.getList()
 		},
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
 		},
-		selectionChange(data) {
-			this.selectedList = data.map(item => item.carrierOrderID)
-			console.log(this.selectedList)
-		},
 		SumDispatchCargoQuantity(data) {
-			let sumWeight = 0;
-			let sumVolume = 0;
-			let sumNum = 0;
+			let sumWeight = 0
+			let sumVolume = 0
+			let sumNum = 0
 			data.map(item => {
 				sumWeight += (item.cargoWeight ?item.cargoWeight : 0)
 				sumVolume += (item.cargoVolume ? item.cargoVolume : 0)
 				sumNum += (item.cargoNum ? item.cargoNum : 0)
 			})
-
 			return (sumWeight + '吨/' + sumVolume + '方/' + sumNum + '件')
 		},
 		pageChange(index) {
 			this.pageIndex = index
 			this.getList() 
 		},
-
 		getList() {
-			let params = {
+			getCarrierbills({
 				current: this.pageIndex,
 				size: this.pageSize,
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate,
 				searchInfo: this.findsearchInfo,
 				status: this.findStatus
-			}
-			request({
-				url: '/biz/carrierOrder/list',
-				params
 			}).then(res => {
-				this.tableData = res.data.data.records
-				this.total= res.data.data.total
+				this.tableData = res.records
+				this.total= res.total
 			})
-		},
-		handleCommand(e) {
-			if (e.type == 'view') {
-				this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID: e.id}})
-			} else if (e.type == 'edit') {
-				this.$router.push({name: 'editcarrierbill', query: {carrierOrderID: e.id}})
-			} else if (e.type == 'delete') {
-				this.deleteConfirm(e.id)
-			}
 		},
 		view(carrierOrderID) {
 			this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
 		},
+		edit(carrierOrderID) {
+			this.$router.push({name: 'editcarrierbill', query: {carrierOrderID}})
+		},
 		add() {
 			this.$router.push({ name: 'addcarrierbill' })
 		},
-		deleteConfirm(id) {
-			let ids = ''
-			if (id && typeof id == 'string') {
-				ids = id
-			} else {
-				ids = this.selectedList.join(',')
-			}
-			if(!ids) {
-				Message({
-					type: 'warning',
-					message: '请选择'
-				})
-				return
-			}
-			this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				this.delItem(ids)
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消删除'
+		close(id) {
+			closeConfirm(id, ids => {
+				closeCarrierbill(ids).then(res => {
+					Message({ type: 'success', message: '关闭成功!' })
+					this.getList()
 				})
 			})
 		},
-		delItem(carrierOrderIDs) {
-			let data = {
-				carrierOrderIDs
-			}
-			request({
-				url: '/biz/carrierOrder/delete',
-				method: 'post',
-				data
-			}).then(res => {
-				this.$message({
-					type: 'success',
-					message: '删除成功!'
+		del(id) {
+			deleteConfirm(id, ids => {
+				delCarrierbill(ids).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.getList()
 				})
-				this.getList()
 			})
-		},
+		}
 	}
 }
 

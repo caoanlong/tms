@@ -279,7 +279,8 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
-import { searchAreaByKey } from '../../common/utils'
+import { getCarrierbill, updateCarrierbill } from '../../api/carrierbill'
+import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import { checkFloat2, checkMobile } from '../../common/validators'
 
 export default {
@@ -414,21 +415,11 @@ export default {
 	},
 	methods: {
 		getDetail() {
-			let params = {
-				carrierOrderID: this.$route.query.carrierOrderID
-			}
-			request({
-				url: '/biz/carrierOrder/detail',
-				params
-			}).then(res => {
-				console.log(res.data.data)
-				this.carrierbillInfo = res.data.data
-
-				this.carrierbillInfo.porRequire = res.data.data.porRequire.split(',')
-				let shipperAreaID = res.data.data.shipperAreaID
-				this.selectedArea = [(shipperAreaID.substr(0, 2) + '0000'), (shipperAreaID.substr(0, 4) + '00'), shipperAreaID]
-				let consigneeAreaID = res.data.data.consigneeAreaID
-				this.selectedArea1 = [(consigneeAreaID.substr(0, 2) + '0000'), (consigneeAreaID.substr(0, 4) + '00'), consigneeAreaID]
+			getCarrierbill(this.$route.query.carrierOrderID).then(res => {
+				this.carrierbillInfo = res
+				this.carrierbillInfo.porRequire = res.porRequire.split(',')
+				this.selectedArea = areaIdToArrayId(res.shipperAreaID)
+				this.selectedArea1 = areaIdToArrayId(res.consigneeAreaID)
 			})
 		},
 		getConsignors(queryString, cb) {
@@ -553,54 +544,6 @@ export default {
 			}
 		},
 		save() {
-			let data = {
-				carrierOrderID: this.$route.query.carrierOrderID,
-				carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargo),
-				// carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
-				carrierrName: this.carrierbillInfo.carrierrName,
-				navicertNo: this.carrierbillInfo.navicertNo,
-				electronicWaybill: this.carrierbillInfo.electronicWaybill,
-				cashAmount: this.carrierbillInfo.cashAmount,
-				codAmount: this.carrierbillInfo.codAmount,
-
-				// consigneeAddressID: '',
-				consigneeAmount: this.carrierbillInfo.consigneeAmount,
-				// consigneeArea: this.carrierbillInfo.consigneeArea ,
-				consigneeAreaID: this.carrierbillInfo.consigneeAreaID,
-				consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
-				consigneeDate: this.carrierbillInfo.consigneeDate,
-				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
-				consigneeID: this.carrierbillInfo.consigneeID || '',
-				consigneeName: this.carrierbillInfo.consigneeName,
-				consigneePhone: this.carrierbillInfo.consigneePhone,
-
-				consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
-				consignorName: this.carrierbillInfo.consignorName || '', // 托运人名称
-
-				monthlyAmount: this.carrierbillInfo.monthlyAmount,
-				paymentMethod: this.carrierbillInfo.paymentMethod,
-				porAmount: this.carrierbillInfo.porAmount,
-				receiptMethod: this.carrierbillInfo.receiptMethod,	
-
-				// shipperAddressID: '',
-				// shipperArea: this.carrierbillInfo.shipperArea,
-				shipperAreaID: this.carrierbillInfo.shipperAreaID,
-				shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
-				shipperDate: this.carrierbillInfo.shipperDate,
-				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
-				shipperID: this.carrierbillInfo.shipperID || '',  // 收货人ID
-				shipperName: this.carrierbillInfo.shipperName,    // 收货人名
-				shipperNo: this.carrierbillInfo.shipperNo,
-				shipperPhone: this.carrierbillInfo.shipperPhone,
-
-				porRequire: this.carrierbillInfo.porRequire.join(','),
-				invoice: this.carrierbillInfo.invoice,
-
-				transportType: this.carrierbillInfo.transportType,
-				commissionDate: this.carrierbillInfo.commissionDate || '',
-
-				status: this.carrierbillInfo.status,
-			}
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					if (valid) {
@@ -632,10 +575,46 @@ export default {
 						})
 					})
 				}).then(() => {
-					request({
-						url: '/biz/carrierOrder/modify',
-						method: 'post',
-						data
+					updateCarrierbill({
+						carrierOrderID: this.$route.query.carrierOrderID,
+						carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargo),
+						// carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
+						carrierrName: this.carrierbillInfo.carrierrName,
+						navicertNo: this.carrierbillInfo.navicertNo,
+						electronicWaybill: this.carrierbillInfo.electronicWaybill,
+						cashAmount: this.carrierbillInfo.cashAmount,
+						codAmount: this.carrierbillInfo.codAmount,
+						// consigneeAddressID: '',
+						consigneeAmount: this.carrierbillInfo.consigneeAmount,
+						// consigneeArea: this.carrierbillInfo.consigneeArea ,
+						consigneeAreaID: this.carrierbillInfo.consigneeAreaID,
+						consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
+						consigneeDate: this.carrierbillInfo.consigneeDate,
+						consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
+						consigneeID: this.carrierbillInfo.consigneeID || '',
+						consigneeName: this.carrierbillInfo.consigneeName,
+						consigneePhone: this.carrierbillInfo.consigneePhone,
+						consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
+						consignorName: this.carrierbillInfo.consignorName || '', // 托运人名称
+						monthlyAmount: this.carrierbillInfo.monthlyAmount,
+						paymentMethod: this.carrierbillInfo.paymentMethod,
+						porAmount: this.carrierbillInfo.porAmount,
+						receiptMethod: this.carrierbillInfo.receiptMethod,	
+						// shipperAddressID: '',
+						// shipperArea: this.carrierbillInfo.shipperArea,
+						shipperAreaID: this.carrierbillInfo.shipperAreaID,
+						shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
+						shipperDate: this.carrierbillInfo.shipperDate,
+						shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
+						shipperID: this.carrierbillInfo.shipperID || '',  // 收货人ID
+						shipperName: this.carrierbillInfo.shipperName,    // 收货人名
+						shipperNo: this.carrierbillInfo.shipperNo,
+						shipperPhone: this.carrierbillInfo.shipperPhone,
+						porRequire: this.carrierbillInfo.porRequire.join(','),
+						invoice: this.carrierbillInfo.invoice,
+						transportType: this.carrierbillInfo.transportType,
+						commissionDate: this.carrierbillInfo.commissionDate || '',
+						status: this.carrierbillInfo.status
 					}).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'carrierbills'})
@@ -665,7 +644,8 @@ export default {
 			if(e == 'NotRequired'){
 				this.carrierbillInfo.porRequire = ['NotRequired']
 			} else {
-				this.carrierbillInfo.porRequire.includes('NotRequired') && this.carrierbillInfo.porRequire.splice(this.carrierbillInfo.porRequire.indexOf('NotRequired'), 1)
+				this.carrierbillInfo.porRequire.includes('NotRequired') 
+				&& this.carrierbillInfo.porRequire.splice(this.carrierbillInfo.porRequire.indexOf('NotRequired'), 1)
 			}
 		},
 		getTransportPrice(type) {
