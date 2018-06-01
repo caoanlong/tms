@@ -1,6 +1,8 @@
 import ChineseDistricts from '../assets/data/distpicker.data'
+import { Message } from 'element-ui'
+import { vueInstance } from '../main'
 
-export const searchAreaByKey = function (areaKey) {
+export function searchAreaByKey (areaKey) {
 	let area = String(areaKey)
 	// 如果是省
 	if (area.indexOf('0000') > -1) {
@@ -17,11 +19,15 @@ export const searchAreaByKey = function (areaKey) {
 	}
 }
 
+export function areaIdToArrayId (areaId) {
+	return [(areaId.substr(0, 2) + '0000'), (areaId.substr(0, 4) + '00'), areaId]
+}
+
 /**author:Caoanlong *day:2017-08-24
  * form表单数据请求
  * @param json 请求参数 {key:value,key:value,...}
  */
-export const formDataReq = function (json) {
+export function formDataReq (json) {
 	var formData = new FormData()
 	for (let attr in json) {
 		formData.append(attr,json[attr])
@@ -29,7 +35,7 @@ export const formDataReq = function (json) {
 	return formData
 }
 
-export const getdatefromtimestamp = function (input, bool) {
+export function getdatefromtimestamp (input, bool) {
 	let now = new Date(Number(input))
 	let year = now.getFullYear()
 	let month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1
@@ -68,5 +74,47 @@ export function validUploadFile(result, map, propertys) {
 			uploadExcelConstants.push(excelConstant)
 		}
 		resolve(uploadExcelConstants)
+	})
+}
+
+/**
+ * 删除确认
+ * @param {单个id} id 
+ * @param {多个id} idList 
+ */
+export function deleteConfirm (id, callback, idList) {
+	let ids = ''
+	if (id && (typeof id == 'string' || typeof id == 'number')) {
+		ids = id
+	} else {
+		ids = idList.join(',')
+	}
+	if(!ids) {
+		Message({ type: 'warning', message: '请选择' })
+		return
+	}
+	vueInstance.$confirm('此操作将永久删除, 是否继续?', '提示', {
+		confirmButtonText: '确定',
+		cancelButtonText: '取消',
+		type: 'warning'
+	}).then(() => {
+		callback && callback(ids)
+	}).catch(() => {
+		Message({
+			type: 'info',
+			message: '已取消删除'
+		})
+	})
+}
+
+export function closeConfirm (id, callback) {
+	vueInstance.$confirm('此操作将关闭, 是否继续?', '提示', {
+		confirmButtonText: '确定',
+		cancelButtonText: '取消',
+		type: 'warning'
+	}).then(() => {
+		callback && callback(id)
+	}).catch(() => {
+		Message({ type: 'info', message: '已取消关闭'})
 	})
 }

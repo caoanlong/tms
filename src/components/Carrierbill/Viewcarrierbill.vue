@@ -221,19 +221,19 @@
 				<div class="btn-group fl">
 					<button 
 						type="button" class="wf-btn btn-success" 
-						@click="EditCarrierbill" 
+						@click="edit" 
 						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed' && carrierOrder.status != 'Closed'">
 						<svg-icon icon-class="edit"></svg-icon>修改
 					</button>
 					<button 
 						type="button" class="wf-btn btn-danger" 
-						@click="closeCarrierbill" 
+						@click="close" 
 						v-if="carrierOrder.status=='Running' || carrierOrder.status == 'Signed' && carrierOrder.status != 'Closed'">
 						<svg-icon icon-class="edit"></svg-icon>关闭
 					</button>
 					<button 
 						type="button" class="wf-btn btn-primary" 
-						@click="AddDispatchBill" 
+						@click="addDispatchBill" 
 						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed' && carrierOrder.status != 'Closed'">
 						<svg-icon icon-class="dispatchbill"></svg-icon>调度
 					</button>
@@ -247,7 +247,7 @@
 				<div class="btn-group fr">
 					<button 
 						type="button" class="wf-btn btn-danger plain" 
-						@click="deleteCarrierOrder" 
+						@click="del" 
 						v-if="carrierOrder.status == 'Committed'">
 						<svg-icon icon-class="delete" ></svg-icon>删除
 					</button>
@@ -276,7 +276,8 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from "../../common/request"
+import { closeConfirm, deleteConfirm } from '../../common/utils'
+import { getCarrierbill, getCarrierbillDispacthBills, updateCarrierbill, closeCarrierbill, delCarrierbill } from '../../api/carrierbill'
 import ChangeReceivables from './ChangeReceivables'
 import ViewPhotos from './ViewPhotos'
 import ViewCargos from './ViewCargos'
@@ -321,29 +322,19 @@ export default {
 			return sum
 		},
 		getDetail() {
-			let params = {
-				carrierOrderID: this.$route.query.carrierOrderID
-			}
-			request({
-				url: '/biz/carrierOrder/detail',
-				params
-			}).then(res => {
-				this.carrierOrder = res.data.data
-				this.carrierCargo = res.data.data.carrierCargo
-				this.porRequire = res.data.data.porRequire.split(',')
+			getCarrierbill(this.$route.query.carrierOrderID).then(res => {
+				this.carrierOrder = res
+				this.carrierCargo = res.carrierCargo
+				this.porRequire = res.porRequire.split(',')
 			})
 		},
 		getDispacthBills() {
-			let params = {
+			getCarrierbillDispacthBills({
 				current: this.pageIndex,
 				size: this.pageSize,
 				carrierOrderID: this.$route.query.carrierOrderID
-			}
-			request({
-				url: '/biz/carrierOrder/findDispatchCargos',
-				params
 			}).then(res => {
-				this.dispatchbills = res.data.data.records
+				this.dispatchbills = res.records
 				let arr = []
 				let flags = 0
 				for (let i = 0; i < this.dispatchbills.length; i++) {
@@ -356,84 +347,38 @@ export default {
 					flags += this.dispatchbills[i].bizDispatchOrderCargoList.length
 					arr.push(...this.dispatchbills[i].bizDispatchOrderCargoList)
 				}
-				this.dispatchbillsCargoList = arr	
+				this.dispatchbillsCargoList = arr
 			})
 		},
-		AddDispatchBill() {
+		addDispatchBill() {
 			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
 		},
-		EditCarrierbill() {
+		edit() {
 			if (this.dispatchbills.length > 0) {
 				this.dialogReceivableVisible = true
 			} else {
 				this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
 			}
 		},
-		closeCarrierbill() {
-			let data = {
-				carrierOrderIDs: this.$route.query.carrierOrderID
-			}
-			this.$confirm('此操作将关闭, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				request({
-					url: '/biz/carrierOrder/close',
-					method: 'post',
-					data
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '关闭成功!'
-					})
+		close() {
+			closeConfirm(this.$route.query.carrierOrderID, ids => {
+				closeCarrierbill(ids).then(res => {
+					Message({ type: 'success', message: '关闭成功!' })
 					this.getDetail()
 				})
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消关闭'
-				})
 			})
 		},
-		back() {
-			this.$router.go(-1)
-		},
-		deleteCarrierOrder(){
-			this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				this.deleteItem()
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消删除'
+		del() {
+			deleteConfirm(this.$route.query.carrierOrderID, ids => {
+				delCarrierbill(ids).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.$router.push({ name: 'carrierbills'})
 				})
-			})
-		},
-		deleteItem() {
-			let data = {
-				carrierOrderIDs: this.$route.query.carrierOrderID
-			}
-			request({
-				url: '/biz/carrierOrder/delete',
-				method: 'post',
-				data
-			}).then(res => {
-				this.$message({
-					type: 'success',
-					message: '删除成功!'
-				})
-				this.$router.push({ name: 'carrierbills'})
 			})
 		},
 		// 调整应收款弹窗回调
 		receivableCallback(bool, data) {
-			if (data) {
-				this.adjustSum(data)
-			}
+			data && this.adjustSum(data)
 			this.dialogReceivableVisible = bool
 		},
 		// 查看照片弹窗回调
@@ -446,7 +391,7 @@ export default {
 		},
 		// 调整应收款
 		adjustSum(carrierOrder){
-			let data = {
+			updateCarrierbill({
 				carrierOrderID: this.$route.query.carrierOrderID,
 				shipperNo: carrierOrder.shipperNo,
 				cashAmount: carrierOrder.cashAmount,
@@ -456,17 +401,12 @@ export default {
 				porAmount: carrierOrder.porAmount,
 				otherAmount: carrierOrder.otherAmount,
 				remark: carrierOrder.remark
-			}
-			request({
-				url: '/biz/carrierOrder/modify',
-				method: 'post',
-				data
 			}).then(res => {
-				this.$message({
-					type: 'success',
-					message: '调整成功!'
-				})
+				Message.success(res.data.msg)
 			})
+		},
+		back() {
+			this.$router.go(-1)
 		}
 	}
 }
