@@ -25,7 +25,7 @@
 							<el-option value="Committed" label="待执行">待执行</el-option>
 							<el-option value="Running" label="执行中">执行中</el-option>
 							<el-option value="Signed" label="到达签收">到达签收</el-option>
-							<el-option value="Closed" label="关闭">关闭</el-option>
+							<el-option value="Closed" label="已关闭">已关闭</el-option>
 							<el-option value="Canceled" label="作废">作废</el-option>
 						</el-select>
 					</el-form-item>
@@ -61,7 +61,7 @@
 									<span class="tag tag1" v-if="item.status=='Committed'">待执行</span>
 									<span class="tag tag2" v-else-if="item.status=='Running'">执行中</span>
 									<span class="tag tag3" v-else-if="item.status=='Signed'">到达签收</span>
-									<span class="tag tag4" v-else-if="item.status=='Closed'">关闭</span>
+									<span class="tag tag4" v-else-if="item.status=='Closed'">已关闭</span>
 									<span class="tag tag5" v-else-if="item.status=='Canceled'">作废</span>
 								</span>
 							</td>

@@ -8,7 +8,7 @@
 				<span class="status status1" v-if="carrierbillInfo.status=='Commited'">待执行</span>
 				<span class="status status2" v-else-if="carrierbillInfo.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierbillInfo.status=='Signed'">到达签收</span>
-				<span class="status status1" v-else-if="carrierbillInfo.status=='Closed'">关闭</span>
+				<span class="status status1" v-else-if="carrierbillInfo.status=='Closed'">已关闭</span>
 				<span class="status status1" v-else-if="carrierbillInfo.status=='Canceled'">作废</span>
 			</div>
 			<el-row>

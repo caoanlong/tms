@@ -1,8 +1,12 @@
 <template>
 	<div class="scroll-container" ref="scrollContainer" @wheel.prevent="handleScroll">
-		<div class="scroll-wrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
-			<slot></slot>
+		<i class="el-icon-arrow-left scrollBtn scrollLeft" @click="scroll(1)"></i>
+		<div class="scroll-box" id="scroll-box">
+			<div class="scroll-wrapper" id="scroll-wrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
+				<slot></slot>
+			</div>
 		</div>
+		<i class="el-icon-arrow-right scrollBtn scrollRight" @click="scroll(2)"></i>
 	</div>
 </template>
 
@@ -13,10 +17,24 @@ export default {
 	name: 'scrollPane',
 	data() {
 		return {
-			left: 0
+			left: 0,
 		}
 	},
 	methods: {
+		scroll(o){
+			let wrapper = document.getElementById('scroll-wrapper').offsetWidth
+			let box = document.getElementById('scroll-box').offsetWidth
+			let offsetL = document.getElementById('scroll-wrapper').offsetLeft
+			if(o=='1'){
+				if(wrapper>box&& box-wrapper<offsetL){
+					this.left -= 100
+				}
+			}else{
+				if(wrapper>box&&offsetL<0){
+					this.left += 100
+				}
+			}
+		},
 		handleScroll(e) {
 			const eventDelta = e.wheelDelta || -e.deltaY * 3
 			const $container = this.$refs.scrollContainer
@@ -34,7 +52,7 @@ export default {
 						this.left = Math.max(this.left + eventDelta, $containerWidth - $wrapperWidth - padding)
 					}
 				} else {
-					this.left = 0
+					this.left =0
 				}
 			}
 		},
@@ -64,7 +82,30 @@ export default {
 	white-space nowrap
 	position relative
 	overflow hidden
+	padding 0 20px
 	width 100%
+	.scroll-box
+		overflow hidden
+		height 34px
+		width 100%
+		position relative
 	.scroll-wrapper
 		position absolute
+	.scrollBtn
+		width 15px
+		height 34px
+		position absolute
+		background #ddd
+		line-height 34px
+		text-align center
+		cursor pointer
+		font-size 12px
+		z-index 10
+		top 0
+		&.scrollLeft
+			border-radius 0 4px 0 0
+			left 0
+		&.scrollRight
+			border-radius 4px 0 0 0
+			right 0
 </style>

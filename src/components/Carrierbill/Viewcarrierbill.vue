@@ -5,7 +5,7 @@
 				<span class="status status1" v-if="carrierOrder.status=='Committed'">待执行</span>
 				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
-				<span class="status status1" v-else-if="carrierOrder.status=='Closed'">关闭</span>
+				<span class="status status1" v-else-if="carrierOrder.status=='Closed'">已关闭</span>
 				<span class="status status1" v-else-if="carrierOrder.status=='Canceled'">作废</span>
 			</div>
 			<div class="datetime">
