@@ -121,7 +121,7 @@
 import { Message } from 'element-ui'
 import request from "../../common/request"
 import { deleteConfirm, closeConfirm } from '../../common/utils'
-import { getCarrierbills, closeCarrierbill, delCarrierbill } from '../../api/carrierbill'
+import Carrierbill from '../../api/Carrierbill'
 export default {
 	data() {
 		return {
@@ -169,7 +169,7 @@ export default {
 			this.getList() 
 		},
 		getList() {
-			getCarrierbills({
+			Carrierbill.find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				shipperBeginDate: this.findshipperBeginDate,
@@ -177,6 +177,7 @@ export default {
 				searchInfo: this.findsearchInfo,
 				status: this.findStatus
 			}).then(res => {
+				console.log('哈哈')
 				this.tableData = res.records
 				this.total= res.total
 			})
@@ -190,17 +191,17 @@ export default {
 		add() {
 			this.$router.push({ name: 'addcarrierbill' })
 		},
-		close(id) {
-			closeConfirm(id, ids => {
-				closeCarrierbill(ids).then(res => {
+		close(carrierOrderID) {
+			closeConfirm(carrierOrderID, carrierOrderIDs => {
+				Carrierbill.close({ carrierOrderIDs }).then(res => {
 					Message({ type: 'success', message: '关闭成功!' })
 					this.getList()
 				})
 			})
 		},
-		del(id) {
-			deleteConfirm(id, ids => {
-				delCarrierbill(ids).then(res => {
+		del(carrierOrderID) {
+			deleteConfirm(carrierOrderID, carrierOrderIDs => {
+				Carrierbill.del({ carrierOrderIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})

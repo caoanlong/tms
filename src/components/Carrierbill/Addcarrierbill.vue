@@ -298,7 +298,7 @@ import DistPicker from '../CommonComponents/DistPicker'
 import axios from 'axios'
 import request from '../../common/request'
 import requestNode from '../../common/requestNode'
-import { addCarrierbill } from '../../api/carrierbill'
+import Carrierbill from '../../api/Carrierbill'
 import { searchAreaByKey } from '../../common/utils'
 import { checkFloat2, checkTel } from '../../common/validators'
 
@@ -635,7 +635,7 @@ export default {
 						})
 					})
 				}).then(() => {
-					addCarrierbill({
+					Carrierbill.add({
 						carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargo),
 						carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
 						carrierrName: this.carrierbillInfo.carrierrName,
@@ -702,7 +702,8 @@ export default {
 			if(e == 'NotRequired'){
 				this.carrierbillInfo.porRequire = ['NotRequired']
 			} else {
-				this.carrierbillInfo.porRequire.includes('NotRequired') && this.carrierbillInfo.porRequire.splice(this.carrierbillInfo.porRequire.indexOf('NotRequired'), 1)
+				this.carrierbillInfo.porRequire.includes('NotRequired') 
+				&& this.carrierbillInfo.porRequire.splice(this.carrierbillInfo.porRequire.indexOf('NotRequired'), 1)
 			}
 		},
 		getTransportPrice(type) {

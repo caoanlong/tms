@@ -277,7 +277,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { closeConfirm, deleteConfirm } from '../../common/utils'
-import { getCarrierbill, getCarrierbillDispacthBills, updateCarrierbill, closeCarrierbill, delCarrierbill } from '../../api/carrierbill'
+import Carrierbill from '../../api/Carrierbill'
 import ChangeReceivables from './ChangeReceivables'
 import ViewPhotos from './ViewPhotos'
 import ViewCargos from './ViewCargos'
@@ -322,17 +322,19 @@ export default {
 			return sum
 		},
 		getDetail() {
-			getCarrierbill(this.$route.query.carrierOrderID).then(res => {
+			let carrierOrderID = this.$route.query.carrierOrderID
+			Carrierbill.findById({ carrierOrderID }).then(res => {
 				this.carrierOrder = res
 				this.carrierCargo = res.carrierCargo
 				this.porRequire = res.porRequire.split(',')
 			})
 		},
 		getDispacthBills() {
-			getCarrierbillDispacthBills({
+			let carrierOrderID = this.$route.query.carrierOrderID
+			Carrierbill.findDispacthBills({
 				current: this.pageIndex,
 				size: this.pageSize,
-				carrierOrderID: this.$route.query.carrierOrderID
+				carrierOrderID
 			}).then(res => {
 				this.dispatchbills = res.records
 				let arr = []
@@ -361,19 +363,39 @@ export default {
 			}
 		},
 		close() {
-			closeConfirm(this.$route.query.carrierOrderID, ids => {
-				closeCarrierbill(ids).then(res => {
+			let carrierOrderID = this.$route.query.carrierOrderID
+			closeConfirm(carrierOrderID, carrierOrderIDs => {
+				Carrierbill.close({ carrierOrderIDs }).then(res => {
 					Message({ type: 'success', message: '关闭成功!' })
 					this.getDetail()
 				})
 			})
 		},
 		del() {
-			deleteConfirm(this.$route.query.carrierOrderID, ids => {
-				delCarrierbill(ids).then(res => {
+			let carrierOrderID = this.$route.query.carrierOrderID
+			deleteConfirm(carrierOrderID, carrierOrderIDs => {
+				Carrierbill.del({ carrierOrderIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.$router.push({ name: 'carrierbills'})
 				})
+			})
+		},
+		// 调整应收款
+		adjustSum(carrierOrder){
+			let carrierOrderID = this.$route.query.carrierOrderID
+			Carrierbill.update({
+				carrierOrderID,
+				shipperNo: carrierOrder.shipperNo,
+				cashAmount: carrierOrder.cashAmount,
+				monthlyAmount: carrierOrder.monthlyAmount,
+				codAmount: carrierOrder.codAmount,
+				consigneeAmount: carrierOrder.consigneeAmount,
+				porAmount: carrierOrder.porAmount,
+				otherAmount: carrierOrder.otherAmount,
+				remark: carrierOrder.remark
+			}).then(res => {
+				Message.success(res.data.msg)
+				this.getDetail()
 			})
 		},
 		// 调整应收款弹窗回调
@@ -388,22 +410,6 @@ export default {
 		// 查看货物弹窗回调
 		cargoCallback(bool) {
 			this.dialogCargoVisible = bool
-		},
-		// 调整应收款
-		adjustSum(carrierOrder){
-			updateCarrierbill({
-				carrierOrderID: this.$route.query.carrierOrderID,
-				shipperNo: carrierOrder.shipperNo,
-				cashAmount: carrierOrder.cashAmount,
-				monthlyAmount: carrierOrder.monthlyAmount,
-				codAmount: carrierOrder.codAmount,
-				consigneeAmount: carrierOrder.consigneeAmount,
-				porAmount: carrierOrder.porAmount,
-				otherAmount: carrierOrder.otherAmount,
-				remark: carrierOrder.remark
-			}).then(res => {
-				Message.success(res.data.msg)
-			})
 		},
 		back() {
 			this.$router.go(-1)

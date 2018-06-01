@@ -46,7 +46,7 @@
 					</tr>
 					<template v-for="item in 3">
 						<tr class="tit">
-							<td colspan="9"><span class="infoItem ViewDispatchBill" @click="ViewDispatchBill(item.dispatchOrderID)" >调度单号：{{item.dispatchOrderNo}}</span>
+							<td colspan="9"><span class="infoItem ViewDispatchBill" @click="view(item.dispatchOrderID)" >调度单号：{{item.dispatchOrderNo}}</span>
 							<span class="infoItem">车牌号：{{item.plateNo}}</span><span class="infoItem">
 								<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
 								<span class="tag tag2" v-else-if="item.status == 'Loaded'">已装运</span>
@@ -60,7 +60,7 @@
 							</td>
 						</tr>
 						<tr class="list" v-for="taskItem in 4">
-							<td class="text-center"><span @click="ViewTaskDetail" class="ViewTaskDetail">919239801</span></td>
+							<td class="text-center"><span @click="viewTask" class="ViewTaskDetail">919239801</span></td>
 							<td class="text-center" width="80">待装车</td>
 							<td class="text-center" width="80">重货</td>
 							<td>太古咖啡</td>
@@ -99,6 +99,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
+import Dispatchbill from '../../api/dispatchbill'
 import DispatchBillItem from './Common/DispatchBillItem'
 export default {
 	data() {
@@ -109,7 +110,7 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
-			DispatchBillList: []
+			dispatchBillList: []
 		}
 	},
 	created() {
@@ -126,26 +127,22 @@ export default {
 			this.pageIndex = index
 			this.getList()
 		},
-		getList(){
-			let params = {
+		getList () {
+			Dispatchbill.find({
 				current: this.pageIndex,
 				size: this.pageSize
-			}
-			request({
-				url: '/biz/dispatchOrder/list',
-				params
 			}).then(res => {
-				this.DispatchBillList = res.data.data.records
-				this.count = res.data.data.total
+				this.dispatchBillList = res.records
+				this.count = res.total
 			})
 		},
 		add() {
 			this.$router.push({ name: 'adddispatchbill' })
 		},
-		ViewDispatchBill(dispatchOrderID) {
+		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID} })
 		},
-		ViewTaskDetail() {
+		viewTask() {
 			this.$router.push({ name: 'viewtaskdetail'})
 		}
 	},

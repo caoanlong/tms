@@ -279,7 +279,7 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
-import { getCarrierbill, updateCarrierbill } from '../../api/carrierbill'
+import Carrierbill from '../../api/Carrierbill'
 import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import { checkFloat2, checkMobile } from '../../common/validators'
 
@@ -415,7 +415,8 @@ export default {
 	},
 	methods: {
 		getDetail() {
-			getCarrierbill(this.$route.query.carrierOrderID).then(res => {
+			let carrierOrderID = this.$route.query.carrierOrderID
+			Carrierbill.findById({ carrierOrderID }).then(res => {
 				this.carrierbillInfo = res
 				this.carrierbillInfo.porRequire = res.porRequire.split(',')
 				this.selectedArea = areaIdToArrayId(res.shipperAreaID)
@@ -575,7 +576,7 @@ export default {
 						})
 					})
 				}).then(() => {
-					updateCarrierbill({
+					Carrierbill.update({
 						carrierOrderID: this.$route.query.carrierOrderID,
 						carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargo),
 						// carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
