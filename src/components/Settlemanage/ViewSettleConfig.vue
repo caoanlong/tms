@@ -166,6 +166,7 @@
 
 <script type="text/javascript">
 import request from '../../common/request'
+import SettleConfig from '../../api/SettleConfig'
 export default {
 	data() {
 		return {
@@ -177,13 +178,8 @@ export default {
 	},
 	methods: {
 		getInfo() {
-			let params = {
-				transporPriceID: this.$route.query.transporPriceID
-			}
-			request({
-				url: '/transportPrice/findById',
-				params
-			}).then(res => {
+			let transporPriceID = this.$route.query.transporPriceID
+			SettleConfig.findById({ transporPriceID }).then(res => {
 				this.templateFreight = res.data.data
 			})
 		},

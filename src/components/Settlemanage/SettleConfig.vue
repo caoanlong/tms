@@ -38,7 +38,7 @@
 				</el-upload>
 				<!-- <FileUpload class="upload-File" name="excelFile" url="/transportPrice/upload"/> -->
 				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -122,25 +122,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-row type="flex">
-					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{count}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
-							<el-option label="10" :value="10"></el-option>
-							<el-option label="20" :value="20"></el-option>
-							<el-option label="30" :value="30"></el-option>
-							<el-option label="40" :value="40"></el-option>
-							<el-option label="50" :value="50"></el-option>
-							<el-option label="100" :value="100"></el-option>
-						</el-select>
-						<span>条记录</span>
-					</el-col>
-					<el-col :span="12">
-						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="count" @current-change="pageChange"></el-pagination>
-						</div>
-					</el-col>
-				</el-row>
+				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
 	</div>
@@ -148,7 +130,10 @@
 <script type="text/javascript">
 	import { Message } from 'element-ui'
 	import request, { baseURL } from '../../common/request'
+	import SettleConfig from '../../api/SettleConfig'
+	import { deleteConfirm } from '../../common/utils'
 	import FileUpload from '../CommonComponents/FileUpload'
+	import Page from '../CommonComponents/Page'
 	export default {
 		data() {
 			return {
@@ -167,6 +152,9 @@
 				templateTit:'freight.xlsx'
 			}
 		},
+		components: {
+			FileUpload, Page
+		},
 		created() {
 			this.getList()
 		},
@@ -182,7 +170,6 @@
 			},
 			// 上传错误
 			uploadError (response) {
-				console.log(response)
 				Message.error(response.msg)
 			},
 			beforeFileUpload (file) {
@@ -197,23 +184,6 @@
 				}
 				return extension || extension2 && isLt2M
 			},
-			getList() {
-				let params = {
-					current: this.pageIndex,
-					size: this.pageSize,
-					consigneeArea: this.findConsigneeArea,
-					consigneeCompanyName: this.findConsigneeCompanyName,
-					shipperArea: this.findShipperArea,
-					shipperCompanyName: this.findShipperCompanyName
-				}
-				request({
-					url: '/transportPrice/findList',
-					params
-				}).then(res => {
-					this.tableData = res.data.data.records
-					this.count = res.data.data.total
-				})
-			},
 			reset() {
 				this.findConsigneeArea = ''
 				this.findConsigneeCompanyName = ''
@@ -223,9 +193,27 @@
 			},
 			pageChange(index) {
 				this.pageIndex = index
+				this.getList()
+			},
+			pageSizeChange(size) {
+				this.pageSize = size
+				this.getList() 
 			},
 			selectionChange(data) {
 				this.selectedList = data.map(item => item.transporPriceID)
+			},
+			getList() {
+				SettleConfig.find({
+					current: this.pageIndex,
+					size: this.pageSize,
+					consigneeArea: this.findConsigneeArea,
+					consigneeCompanyName: this.findConsigneeCompanyName,
+					shipperArea: this.findShipperArea,
+					shipperCompanyName: this.findShipperCompanyName
+				}).then(res => {
+					this.tableData = res.records
+					this.count = res.total
+				})
 			},
 			handleCommand(e) {
 				if(e.type == 'view'){
@@ -233,51 +221,20 @@
 				} else if(e.type == 'edit'){
 					this.$router.push({ name: 'editsettleconfig' , query: { transporPriceID: e.id }})
 				} else if (e.type == 'delete') {
-					this.deleteConfirm(e.id)
+					this.del(e.id)
 				}
 			},
 			add() {
 				this.$router.push({name: 'addsettleconfig'})
 			},
-			deleteConfirm(id) {
-				let ids = ''
-				if (id && typeof id == 'string') {
-					ids = id
-				} else {
-					ids = this.selectedList.join(',')
-				}
-				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.delItem(ids)
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
+			del(transporPriceID) {
+				deleteConfirm(transporPriceID, transporPriceIDs => {
+					SettleConfig.del({ transporPriceIDs }).then(res => {
+						Message({ type: 'success', message: '删除成功!' })
+						this.getList()
 					})
-				})
-			},
-			delItem(transporPriceIDs) {
-				let data = {
-					transporPriceIDs
-				}
-				request({
-					url: '/transportPrice/deleteBatch',
-					method: 'post',
-					data
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
-					this.getList()
-				})
+				}, this.selectedList)
 			}
-		},
-		components: {
-			FileUpload
 		}
 	}
 </script>

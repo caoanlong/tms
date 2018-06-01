@@ -100,7 +100,6 @@
 							</el-input>
 						</el-form-item>
 					</el-col>
-					</el-col>
 					<el-col :span="8">
 						<el-form-item label="对内TKM" prop="internalUnitPrice">
 							<el-input placeholder="请输入..." v-model="templateFreight.internalUnitPrice" @change="calcInternalAmount"></el-input>
@@ -219,6 +218,7 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
+import SettleConfig from '../../api/SettleConfig'
 import { searchAreaByKey } from '../../common/utils'
 import { checkFloat } from '../../common/validators'
 export default {
@@ -291,8 +291,6 @@ export default {
 			}
 		}
 	},
-	created() {
-	},
 	methods: {
 		getConsignors(queryString, cb) {
 			let params = {
@@ -362,20 +360,20 @@ export default {
 					}
 				})
 			}).then(() => {
-				var internalCashRate = Number(data.internalCashRate)
-				var internalCodRate = Number(data.internalCodRate)
-				var internalPorRate = Number(data.internalPorRate)
-				var internalAbschlussRate = Number(data.internalAbschlussRate)
-				var internalConsigneeCodRate = Number(data.internalConsigneeCodRate)
+				let internalCashRate = Number(data.internalCashRate)
+				let internalCodRate = Number(data.internalCodRate)
+				let internalPorRate = Number(data.internalPorRate)
+				let internalAbschlussRate = Number(data.internalAbschlussRate)
+				let internalConsigneeCodRate = Number(data.internalConsigneeCodRate)
 				if ((internalCashRate + internalCodRate + internalPorRate + internalAbschlussRate + internalConsigneeCodRate) != 100) {
 					Message.error('对内付款方式占比各项之和必须等于100%！')
 					return
 				}
-				var externalCashRate = Number(data.externalCashRate)
-				var externalCodRate = Number(data.externalCodRate)
-				var externalPorRate = Number(data.externalPorRate)
-				var externalAbschlussRate = Number(data.externalAbschlussRate)
-				var externalConsigneeCodRate = Number(data.externalConsigneeCodRate)
+				let externalCashRate = Number(data.externalCashRate)
+				let externalCodRate = Number(data.externalCodRate)
+				let externalPorRate = Number(data.externalPorRate)
+				let externalAbschlussRate = Number(data.externalAbschlussRate)
+				let externalConsigneeCodRate = Number(data.externalConsigneeCodRate)
 				if ((externalCashRate + externalCodRate + externalPorRate + externalAbschlussRate + externalConsigneeCodRate) != 100) {
 					Message.error('对外收款方式占比各项之和必须等于100%！')
 					return
@@ -392,12 +390,7 @@ export default {
 				params.externalPorRate = externalPorRate / 100
 				params.externalAbschlussRate = externalAbschlussRate / 100
 				params.externalConsigneeCodRate = externalConsigneeCodRate / 100
-				request({
-					url: '/transportPrice/add',
-					method:'post',
-					params
-				}).then(res => {
-					console.log(res.data)
+				SettleConfig.add(params).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'settleconfig'})
 				})

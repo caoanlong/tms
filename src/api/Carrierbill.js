@@ -4,8 +4,6 @@ import request from '../common/request'
 class Carrierbill extends Base {
     constructor(url, req) {
         super(url, req)
-        this.baseUrl = url
-        this.request = req
     }
     findDispacthBills(params) {
         return new Promise((resolve, reject) => {

@@ -98,7 +98,6 @@
 							<el-input placeholder="请输入..." v-model="templateFreight.mileage"></el-input>
 						</el-form-item>
 					</el-col>
-					</el-col>
 					<el-col :span="8">
 						<el-form-item label="对内TKM" prop="internalUnitPrice">
 							<el-input placeholder="请输入..." v-model="templateFreight.internalUnitPrice"></el-input>
@@ -215,7 +214,8 @@
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
 import request from '../../common/request'
-import { searchAreaByKey } from '../../common/utils'
+import SettleConfig from '../../api/SettleConfig'
+import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import { checkFloat } from '../../common/validators'
 export default {
 	data() {
@@ -345,31 +345,21 @@ export default {
 			this.templateFreight.consigneeAreaID = data
 		},
 		getInfo() {
-			let params = {
-				transporPriceID: this.$route.query.transporPriceID
-			}
-			request({
-				url: '/transportPrice/findById',
-				params
-			}).then(res => {
-				console.log(res.data.data)
-				this.templateFreight = res.data.data
-
-				let areaID = this.templateFreight.shipperAreaID
-				this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
-
-				let areaID1 = this.templateFreight.consigneeAreaID
-				this.selectedArea1 = [(areaID1.substr(0, 2) + '0000'), (areaID1.substr(0, 4) + '00'), areaID1]
-				this.templateFreight.internalCashRate = this.templateFreight.internalCashRate *100
-				this.templateFreight.internalCodRate = this.templateFreight.internalCodRate *100
-				this.templateFreight.internalPorRate = this.templateFreight.internalPorRate *100
-				this.templateFreight.internalAbschlussRate = this.templateFreight.internalAbschlussRate *100
-				this.templateFreight.internalConsigneeCodRate = this.templateFreight.internalConsigneeCodRate *100
-				this.templateFreight.externalCashRate = this.templateFreight.externalCashRate *100
-				this.templateFreight.externalCodRate = this.templateFreight.externalCodRate *100
-				this.templateFreight.externalPorRate = this.templateFreight.externalPorRate *100
-				this.templateFreight.externalAbschlussRate = this.templateFreight.externalAbschlussRate *100
-				this.templateFreight.externalConsigneeCodRate = this.templateFreight.externalConsigneeCodRate *100
+			let transporPriceID = this.$route.query.transporPriceID
+			SettleConfig.findById({ transporPriceID }).then(res => {
+				this.templateFreight = res
+				this.selectedArea = areaIdToArrayId(res.shipperAreaID)
+				this.selectedArea1 = areaIdToArrayId(res.consigneeAreaID)
+				this.templateFreight.internalCashRate = res.internalCashRate *100
+				this.templateFreight.internalCodRate = res.internalCodRate *100
+				this.templateFreight.internalPorRate = res.internalPorRate *100
+				this.templateFreight.internalAbschlussRate = res.internalAbschlussRate *100
+				this.templateFreight.internalConsigneeCodRate = res.internalConsigneeCodRate *100
+				this.templateFreight.externalCashRate = res.externalCashRate *100
+				this.templateFreight.externalCodRate = res.externalCodRate *100
+				this.templateFreight.externalPorRate = res.externalPorRate *100
+				this.templateFreight.externalAbschlussRate = res.externalAbschlussRate *100
+				this.templateFreight.externalConsigneeCodRate = res.externalConsigneeCodRate *100
 			})
 		},
 		update() {
@@ -383,20 +373,20 @@ export default {
 					}
 				})
 			}).then(() => {
-				var internalCashRate = Number(data.internalCashRate)
-				var internalCodRate = Number(data.internalCodRate)
-				var internalPorRate = Number(data.internalPorRate)
-				var internalAbschlussRate = Number(data.internalAbschlussRate)
-				var internalConsigneeCodRate = Number(data.internalConsigneeCodRate)
+				let internalCashRate = Number(data.internalCashRate)
+				let internalCodRate = Number(data.internalCodRate)
+				let internalPorRate = Number(data.internalPorRate)
+				let internalAbschlussRate = Number(data.internalAbschlussRate)
+				let internalConsigneeCodRate = Number(data.internalConsigneeCodRate)
 				if ((internalCashRate + internalCodRate + internalPorRate + internalAbschlussRate + internalConsigneeCodRate) != 100) {
 					Message.error('对内付款方式占比各项之和必须等于100%！')
 					return
 				}
-				var externalCashRate = Number(data.externalCashRate)
-				var externalCodRate = Number(data.externalCodRate)
-				var externalPorRate = Number(data.externalPorRate)
-				var externalAbschlussRate = Number(data.externalAbschlussRate)
-				var externalConsigneeCodRate = Number(data.externalConsigneeCodRate)
+				let externalCashRate = Number(data.externalCashRate)
+				let externalCodRate = Number(data.externalCodRate)
+				let externalPorRate = Number(data.externalPorRate)
+				let externalAbschlussRate = Number(data.externalAbschlussRate)
+				let externalConsigneeCodRate = Number(data.externalConsigneeCodRate)
 				if ((externalCashRate + externalCodRate + externalPorRate + externalAbschlussRate + externalConsigneeCodRate) != 100) {
 					Message.error('对外收款方式占比各项之和必须等于100%！')
 					return
@@ -413,11 +403,7 @@ export default {
 				params.externalPorRate = externalPorRate / 100
 				params.externalAbschlussRate = externalAbschlussRate / 100
 				params.externalConsigneeCodRate = externalConsigneeCodRate / 100
-				request({
-					url: '/transportPrice/update',
-					method:'post',
-					params
-				}).then(res => {
+				SettleConfig.update(params).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'settleconfig'})
 				})

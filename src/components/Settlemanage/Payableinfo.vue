@@ -129,32 +129,16 @@
 					<el-table-column label="备注"></el-table-column>
 					<el-table-column label="总计" prop="allMoney" align="center" width="120"></el-table-column>
 				</el-table>
-				<el-row type="flex">
-					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{total}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getDetail">
-							<el-option label="10" :value="10"></el-option>
-							<el-option label="20" :value="20"></el-option>
-							<el-option label="30" :value="30"></el-option>
-							<el-option label="40" :value="40"></el-option>
-							<el-option label="50" :value="50"></el-option>
-							<el-option label="100" :value="100"></el-option>
-						</el-select>
-						<span>条记录</span>
-					</el-col>
-					<el-col :span="12">
-						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="total" @current-change="pageChange"></el-pagination>
-						</div>
-					</el-col>
-				</el-row>
+				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request, { baseURL } from '../../common/request'
+import { baseURL } from '../../common/request'
+import Finance from '../../api/Finance'
+import Page from '../CommonComponents/Page'
 export default {
 	data() {
 		return {
@@ -175,6 +159,9 @@ export default {
 			transportRecordID: ''
 		}
 	},
+	components: {
+		Page
+	},
 	created() {
 		let type = this.$route.query.type || ''
 		let shipperBeginDate = this.$route.query.shipperBeginDate || ''
@@ -192,6 +179,10 @@ export default {
 		pageChange(index) {
 			this.pageIndex = index
 			this.getDetail()
+		},
+		pageSizeChange(size) {
+			this.pageSize = size
+			this.getDetail() 
 		},
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
@@ -224,7 +215,7 @@ export default {
 				+ '&transportRecordID=' + this.transportRecordID
 		},
 		getDetail() {
-			let params = {
+			Finance.findPayableinfo({
 				current: this.pageIndex,
 				size: this.pageSize,
 				name: this.findName,
@@ -236,13 +227,9 @@ export default {
 				consigneeCompanyName: this.findconsigneeCompanyName,
 				code: this.findcode,
 				transportRecordID: this.transportRecordID
-			}
-			request({
-				url: '/finance/payableDetail',
-				params
 			}).then(res => {
-				this.tableData = res.data.data.records
-				this.total = res.data.data.total
+				this.tableData = res.records
+				this.total = res.total
 			})
 		},
 		handleTabSelected(tab) {
