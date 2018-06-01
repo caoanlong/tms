@@ -28,7 +28,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList(1)">查询</el-button>
+						<el-button type="primary" @click="getList()">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -49,7 +49,7 @@
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
 				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -80,183 +80,135 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-row type="flex">
-					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{total}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
-							<el-option label="10" :value="10"></el-option>
-							<el-option label="20" :value="20"></el-option>
-							<el-option label="30" :value="30"></el-option>
-							<el-option label="40" :value="40"></el-option>
-							<el-option label="50" :value="50"></el-option>
-							<el-option label="100" :value="100"></el-option>
-						</el-select>
-						<span>条记录</span>
-					</el-col>
-					<el-col :span="12">
-						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="total" @current-change="pageChange"></el-pagination>
-						</div>
-					</el-col>
-				</el-row>
+				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request, { baseURL } from '../../common/request'
-	export default {
-		data() {
-			return {
-				findcompanyName: '',
-				findcompanyArea: '',
-				findcontactName: '',
-				findcontactPhone: '',
-				findRangeDate: [],
-				findcreateTimeBegin: '',
-				findcreateTimeEnd: '',
-				pageIndex: 1,
-				pageSize: 10,
-				total:0,
-				tableData: [],
-				selectedList: [],
-				importFileUrl: baseURL + '/customer/upload',
-				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=shipperAndConsignor.xlsx&&Authorization=' +localStorage.getItem("token"),
-				templateTit:'shipperAndConsignor.xlsx'
-			}
-		},
-		created() {
+import { Message } from 'element-ui'
+import { baseURL } from '../../common/request'
+import Customer from '../../api/Customer'
+import Page from '../CommonComponents/Page'
+import { deleteConfirm } from '../../common/utils'
+export default {
+	data() {
+		return {
+			findcompanyName: '',
+			findcompanyArea: '',
+			findcontactName: '',
+			findcontactPhone: '',
+			findRangeDate: [],
+			findcreateTimeBegin: '',
+			findcreateTimeEnd: '',
+			pageIndex: 1,
+			pageSize: 10,
+			total:0,
+			tableData: [],
+			selectedList: [],
+			importFileUrl: baseURL + '/customer/upload',
+			uploadHeaders: {'Authorization': localStorage.getItem('token')},
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=shipperAndConsignor.xlsx&&Authorization=' +localStorage.getItem("token"),
+			templateTit:'shipperAndConsignor.xlsx'
+		}
+	},
+	components: {
+		Page
+	},
+	created() {
+		this.getList()
+	},
+	methods: {
+		reset() {
+			this.findcompanyArea='',
+			this.findcompanyName='',
+			this.findcontactName='',
+			this.findcontactPhone='',
+			this.findcreateTimeBegin='',
+			this.findcreateTimeEnd='',
+			this.findRangeDate = [],
+			this.pageIndex=1,
 			this.getList()
 		},
-		methods: {
-			reset() {
-				this.findcompanyArea='',
-				this.findcompanyName='',
-				this.findcontactName='',
-				this.findcontactPhone='',
-				this.findcreateTimeBegin='',
-				this.findcreateTimeEnd='',
-				this.findRangeDate = [],
-				this.pageIndex=1,
-				this.getList()
-			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			selectDateRange(date) {
-				this.findcreateTimeBegin = date[0]
-				this.findcreateTimeEnd = date[1]
-			},
-			selectionChange(data) {
-				this.selectedList = data.map(item => item.customerID)
-			},
-			// 导入
-			uploadSuccess (response) {
-				if (response.code != 200) {
-					Message.error(response.msg)
-				} else {
-					Message.success(response.msg)
-					this.getList()
-				}
-			},
-			// 上传错误
-			uploadError (response) {
-				console.log(response)
+		pageChange(index) {
+			this.pageIndex = index
+			this.getList()
+		},
+		pageSizeChange(size) {
+			this.pageSize = size
+			this.getList() 
+		},
+		selectDateRange(date) {
+			this.findcreateTimeBegin = date[0]
+			this.findcreateTimeEnd = date[1]
+		},
+		selectionChange(data) {
+			this.selectedList = data.map(item => item.customerID)
+		},
+		// 导入
+		uploadSuccess (response) {
+			if (response.code != 200) {
 				Message.error(response.msg)
-			},
-			beforeFileUpload (file) {
-				const extension = file.name.split('.')[1] === 'xls'
-				const extension2 = file.name.split('.')[1] === 'xlsx'
-				const isLt2M = file.size / 1024 / 1024 < 10
-				if (!extension && !extension2) {
-					Message.error('上传模板只能是 xls、xlsx格式!')
-				}
-				if (!isLt2M) {
-					Message.error('上传模板大小不能超过 10MB!')
-				}
-				return extension || extension2 && isLt2M
-			},
-			getList() {
-				let params = {
-					current: this.pageIndex,
-					size: this.pageSize,
-					companyArea: this.findcompanyArea,
-					companyName: this.findcompanyName,
-					contactName: this.findcontactName,
-					contactPhone: this.findcontactPhone,
-					createTimeBegin: this.findcreateTimeBegin,
-					createTimeEnd: this.findcreateTimeEnd,
-					type: 'ShipperConsignee',
-				}
-				request({
-					url: '/customer/findList',
-					params
-				}).then(res => {
-					this.tableData = res.data.data.records
-					this.total= res.data.data.total
-				})
-			},
-			add() { 
-				this.$router.push({name: 'addrecdeliverycomp'})
-			},
-			handleCommand(e) {
-				if(e.type=='view'){
-					this.$router.push({name: 'viewrecdeliverycomp', query: { customerID:e.id }})
-				}else if(e.type=='edit'){
-					this.$router.push({ name: 'editrecdeliverycomp' , query: {  customerID:e.id } })
-				}else if(e.type=='delete'){
-					this.deleteConfirm(e.id)
-				}
-			},
-			deleteConfirm(id) {
-				let ids = ''
-				if (id && typeof id == 'string') {
-					ids = id
-				} else {
-					ids = this.selectedList.join(',')
-				}
-				if(!ids) {
-					Message({
-						type: 'warning',
-						message: '请选择'
-					})
-					return
-				}
-				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.delItem(ids)
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					})
-				})
-			},
-			delItem(customerIDs) {
-				console.log(customerIDs)
-				let data = {
-					customerIDs
-				}
-				request({
-					url: '/customer/deleteBatch',
-					method: 'post',
-					data
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
+			} else {
+				Message.success(response.msg)
+				this.getList()
+			}
+		},
+		// 上传错误
+		uploadError (response) {
+			console.log(response)
+			Message.error(response.msg)
+		},
+		beforeFileUpload (file) {
+			const extension = file.name.split('.')[1] === 'xls'
+			const extension2 = file.name.split('.')[1] === 'xlsx'
+			const isLt2M = file.size / 1024 / 1024 < 10
+			if (!extension && !extension2) {
+				Message.error('上传模板只能是 xls、xlsx格式!')
+			}
+			if (!isLt2M) {
+				Message.error('上传模板大小不能超过 10MB!')
+			}
+			return extension || extension2 && isLt2M
+		},
+		getList() {
+			Customer.find({
+				current: this.pageIndex,
+				size: this.pageSize,
+				companyArea: this.findcompanyArea,
+				companyName: this.findcompanyName,
+				contactName: this.findcontactName,
+				contactPhone: this.findcontactPhone,
+				createTimeBegin: this.findcreateTimeBegin,
+				createTimeEnd: this.findcreateTimeEnd,
+				type: 'ShipperConsignee',
+			}).then(res => {
+				this.tableData = res.records
+				this.total= res.total
+			})
+		},
+		add() { 
+			this.$router.push({name: 'addrecdeliverycomp'})
+		},
+		handleCommand(e) {
+			if(e.type=='view'){
+				this.$router.push({name: 'viewrecdeliverycomp', query: { customerID:e.id }})
+			}else if(e.type=='edit'){
+				this.$router.push({ name: 'editrecdeliverycomp' , query: {  customerID:e.id } })
+			}else if(e.type=='delete'){
+				this.del(e.id)
+			}
+		},
+		del(customerID) {
+			deleteConfirm(customerID, customerIDs => {
+				Customer.del({ customerIDs }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})
-			},
+			})
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .upload-File

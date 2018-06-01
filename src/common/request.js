@@ -157,7 +157,9 @@ const ajax = function (json) {
 						return
 					}
 					if (response.code == 2001) {
-						reject(res)
+						reject({
+							data: { code: 2001}
+						})
 						return
 					}
 					Message.error(response.msg)

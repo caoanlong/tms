@@ -295,11 +295,12 @@
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
 import DistPicker from '../CommonComponents/DistPicker'
-import axios from 'axios'
 import request from '../../common/request'
-import requestNode from '../../common/requestNode'
 import Carrierbill from '../../api/Carrierbill'
-import { searchAreaByKey } from '../../common/utils'
+import SettleConfig from '../../api/SettleConfig'
+import Customer from '../../api/Customer'
+import BaiduMap from '../../api/BaiduMap'
+import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import { checkFloat2, checkTel } from '../../common/validators'
 
 export default {
@@ -443,68 +444,51 @@ export default {
 	},
 	methods: {
 		getConsignors(queryString, cb) {
-			let params = {
+			Customer.find({
 				type: 'Consignor',
 				companyName: queryString
-			}
-			request({
-				url: '/customer/findList',
-				params
 			}).then(res => {
-				let list = res.data.data.records
-				cb(list)
+				cb(res.records)
 			})
 		},
 		getRecdeliverycomp(queryString, cb) {
-			let params = {
+			Customer.find({
 				type: 'ShipperConsignee',
 				companyName: queryString
-			}
-			request({
-				url: '/customer/findList',
-				params
 			}).then(res => {
-				cb(res.data.data.records)
+				cb(res.records)
 			})
 		},
 		getShipperLocation(queryString, cb) {
-			let params = {
+			BaiduMap.getLocation({
 				region: this.carrierbillInfo.shipperArea,
 				queryString
-			}
-			requestNode({
-				url: '/baiduMap/getLocation',
-				params
 			}).then(res => {
-				if (res.data.result instanceof Object && res.data.result.name instanceof Array) {
-					let names = res.data.result.name.map((item, i) => { 
-						return { 
-							name: item,
-							location: res.data.result.location[i]
-						} 
-					})
-					cb(names)
-				}
+				let names = res.name.map((item, i) => { 
+					return { 
+						name: item,
+						location: res.location[i]
+					} 
+				})
+				cb(names)
+			}).catch(err => {
+				cb(err)
 			})
 		},
 		getConsigneeLocation(queryString, cb) {
-			let params = {
+			BaiduMap.getLocation({
 				region: this.carrierbillInfo.consigneeArea,
 				queryString
-			}
-			requestNode({
-				url: '/baiduMap/getLocation',
-				params
 			}).then(res => {
-				if (res.data.result instanceof Object && res.data.result.name instanceof Array) {
-					let names = res.data.result.name.map((item, i) => { 
-						return { 
-							name: item,
-							location: res.data.result.location[i]
-						} 
-					})
-					cb(names)
-				}
+				let names = res.name.map((item, i) => { 
+					return { 
+						name: item,
+						location: res.location[i]
+					} 
+				})
+				cb(names)
+			}).catch(err => {
+				cb(err)
 			})
 		},
 		handSelectConsignor(data) {
@@ -519,8 +503,7 @@ export default {
 			this.carrierbillInfo.shipperID = data.customerID
 			this.carrierbillInfo.shipperPhone = data.contactPhone
 			this.carrierbillInfo.shipperAreaID = data.companyAreaID
-			let areaID = String(data.companyAreaID)
-			this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+			this.selectedArea = areaIdToArrayId(String(data.companyAreaID))
 		},
 		handSelectConsignee(data){
 			this.carrierbillInfo.consigneeCompanyName = data.companyName
@@ -530,8 +513,7 @@ export default {
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.carrierbillInfo.consigneePhone = data.contactPhone
 			this.carrierbillInfo.consigneeAreaID = data.companyAreaID
-			let areaID = String(data.companyAreaID)
-			this.selectedArea1 = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+			this.selectedArea1 = areaIdToArrayId(String(data.companyAreaID))
 		},
 		handleSelectedArea(data) {
 			this.carrierbillInfo.shipperAreaID = data
@@ -707,36 +689,31 @@ export default {
 			}
 		},
 		getTransportPrice(type) {
-			let params = {
+			SettleConfig.findOneByAddress({
 				consigneeAreaID: this.carrierbillInfo.consigneeAreaID, //	收货地区ID
 				consigneeArea: this.carrierbillInfo.consigneeArea, //	收货地区
 				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress, //	收货详细地址	
 				shipperAreaID: this.carrierbillInfo.shipperAreaID, //	发货地区ID
 				shipperArea: this.carrierbillInfo.shipperArea, //	发货地区	
 				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress // 发货详细地址
-			}
-			request({
-				url: '/transportPrice/findOneByAddress',
-				method: 'get',
-				params
 			}).then(res => {
-				if (res.data.code == 200) {
-					let result = res.data.data
-					let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
-					let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
-					let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
-					let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
-					if (type) {
-						this.carrierbillInfo.cashAmount = temp * result.externalCashRate
-						this.carrierbillInfo.codAmount = temp * result.externalCodRate
-						this.carrierbillInfo.porAmount = temp * result.externalPorRate
-						this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
-						this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
-					}
-					this.exmile = result.externalMileage
-					this.innermile = result.mileage
-					this.totalPrice = temp
-				} else if (res.data.code == 2001) {
+				let result = res.data.data
+				let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
+				let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
+				let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
+				let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
+				if (type) {
+					this.carrierbillInfo.cashAmount = temp * result.externalCashRate
+					this.carrierbillInfo.codAmount = temp * result.externalCodRate
+					this.carrierbillInfo.porAmount = temp * result.externalPorRate
+					this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
+					this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
+				}
+				this.exmile = result.externalMileage
+				this.innermile = result.mileage
+				this.totalPrice = temp
+			}).catch(err => {
+				if (err.data.code == 2001) {
 					this.$msgbox({
 						message: '请先配置运费模板！',
 						title: '未配置运费模板',

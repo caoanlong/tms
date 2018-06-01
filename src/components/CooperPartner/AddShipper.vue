@@ -31,68 +31,63 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request from '../../common/request'
-	import DistPicker from '../CommonComponents/DistPicker'
-	export default {
-		data() {
-			return {
-				shipper: {
-					companyAreaID: '',
-					companyName: '',
-					contactName: '',
-					contactPhone: '',
-					detailAddress: ''
-				},
-				rules: {
-					companyName: [
-						{required: true, message: '请输入名称', trigger: 'blur'}
-					],
-					companyAreaID: [
-						{ required: true, message: '请选择区域', trigger: 'change' }
-					],
-					detailAddress: [
-						{required: true, message: '请输入详细地址', trigger: 'blur'}
-					]
-				}
-			}
-		},
-		methods: {
-			handleSelectedArea(data) {
-				this.shipper.companyAreaID = data
+import { Message } from 'element-ui'
+import Customer from '../../api/Customer'
+import DistPicker from '../CommonComponents/DistPicker'
+export default {
+	data() {
+		return {
+			shipper: {
+				companyAreaID: '',
+				companyName: '',
+				contactName: '',
+				contactPhone: '',
+				detailAddress: ''
 			},
-			add() {
-				this.$refs['ruleForm'].validate(valid => {
-					if (valid) {
-						let data = {
-							companyAreaID: this.shipper.companyAreaID,
-							companyName: this.shipper.companyName,
-							contactName: this.shipper.contactName,
-							contactPhone: this.shipper.contactPhone,
-							detailAddress: this.shipper.detailAddress,
-							type: 'Consignor',
-						}
-						request({
-							url: '/customer/add',
-							method:'post',
-							data
-						}).then(res => {
-							Message.success('保存成功！')
-							this.$router.push({name: 'shipper'})
-						})
-					} else {
-						return
-					}
-				})
-			},
-			back() {
-				this.$router.go(-1)
+			rules: {
+				companyName: [
+					{required: true, message: '请输入名称', trigger: 'blur'}
+				],
+				companyAreaID: [
+					{ required: true, message: '请选择区域', trigger: 'change' }
+				],
+				detailAddress: [
+					{required: true, message: '请输入详细地址', trigger: 'blur'}
+				]
 			}
-		},
-		components: {
-			DistPicker
 		}
+	},
+	methods: {
+		handleSelectedArea(data) {
+			this.shipper.companyAreaID = data
+		},
+		add() {
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					Customer.add({
+						companyAreaID: this.shipper.companyAreaID,
+						companyName: this.shipper.companyName,
+						contactName: this.shipper.contactName,
+						contactPhone: this.shipper.contactPhone,
+						detailAddress: this.shipper.detailAddress,
+						type: 'Consignor'
+					}).then(res => {
+						Message.success('保存成功！')
+						this.$router.push({name: 'shipper'})
+					})
+				} else {
+					return
+				}
+			})
+		},
+		back() {
+			this.$router.go(-1)
+		}
+	},
+	components: {
+		DistPicker
 	}
+}
 </script>
 <style lang="stylus" scoped>
 

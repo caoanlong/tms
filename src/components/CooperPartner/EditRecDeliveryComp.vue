@@ -31,86 +31,76 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request from '../../common/request'
-	import DistPicker from '../CommonComponents/DistPicker'
-	export default {
-		data() {
-			return {
-				recdeliverycomp: {
-					companyAreaID: '',
-					companyName: '',
-					contactName: '',
-					contactPhone: '',
-					detailAddress: ''
-				},
-				selectedArea: [],
-				rules: {
-					companyName: [
-						{required: true, message: '请输入名称', trigger: 'blur'}
-					],
-					companyAreaID: [
-						{ required: true, message: '请选择区域', trigger: 'change' }
-					],
-					detailAddress: [
-						{required: true, message: '请输入详细地址', trigger: 'blur'}
-					]
-				}
+import { Message } from 'element-ui'
+import Customer from '../../api/Customer'
+import { areaIdToArrayId } from '../../common/utils'
+import DistPicker from '../CommonComponents/DistPicker'
+export default {
+	data() {
+		return {
+			recdeliverycomp: {
+				companyAreaID: '',
+				companyName: '',
+				contactName: '',
+				contactPhone: '',
+				detailAddress: ''
+			},
+			selectedArea: [],
+			rules: {
+				companyName: [
+					{required: true, message: '请输入名称', trigger: 'blur'}
+				],
+				companyAreaID: [
+					{ required: true, message: '请选择区域', trigger: 'change' }
+				],
+				detailAddress: [
+					{required: true, message: '请输入详细地址', trigger: 'blur'}
+				]
 			}
-		},
-		created() {
-			this.getDetail()
-		},
-		methods: {
-			handleSelectedArea(data) {
-				this.recdeliverycomp.companyAreaID = data
-			},
-			getDetail() {
-				let params = {
-					customerID:this.$route.query.customerID
-				}
-				request({
-					url: '/customer/findById',
-					params
-				}).then(res => {
-					this.recdeliverycomp = res.data.data
-					let areaID = String(res.data.data.companyAreaID)
-					this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
-				})
-			},
-			edit() {
-				this.$refs['ruleForm'].validate(valid => {
-					if (valid) {
-						let data = {
-							companyAreaID: this.recdeliverycomp.companyAreaID,
-							companyName: this.recdeliverycomp.companyName,
-							contactName: this.recdeliverycomp.contactName,
-							contactPhone: this.recdeliverycomp.contactPhone,
-							detailAddress: this.recdeliverycomp.detailAddress,
-							customerID: this.$route.query.customerID
-						}
-						request({
-							url: '/customer/update',
-							method:'post',
-							data
-						}).then(res => {
-							console.log(res.data)
-							Message.success('保存成功！')
-							this.$router.push({name: 'recdeliverycomp'})
-						})
-					} else {
-						return
-					}
-				})
-			},
-			back() {
-				this.$router.go(-1)
-			}
-		},
-		components: {
-			DistPicker
 		}
+	},
+	created() {
+		this.getDetail()
+	},
+	methods: {
+		handleSelectedArea(data) {
+			this.recdeliverycomp.companyAreaID = data
+		},
+		getDetail() {
+			let customerID = this.$route.query.customerID
+			Customer.findById({ customerID }).then(res => {
+				this.recdeliverycomp = res
+				this.selectedArea = areaIdToArrayId(String(res.companyAreaID))
+			})
+		},
+		edit() {
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					let customerID = this.$route.query.customerID
+					Customer.update({
+						customerID,
+						companyAreaID: this.recdeliverycomp.companyAreaID,
+						companyName: this.recdeliverycomp.companyName,
+						contactName: this.recdeliverycomp.contactName,
+						contactPhone: this.recdeliverycomp.contactPhone,
+						detailAddress: this.recdeliverycomp.detailAddress
+					}).then(res => {
+						Message.success('保存成功！')
+						this.$router.push({name: 'recdeliverycomp'})
+					})
+				} else {
+					return
+				}
+			})
+		},
+		back() {
+			this.$router.go(-1)
+		}
+	},
+	components: {
+		DistPicker
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .avatar-uploader

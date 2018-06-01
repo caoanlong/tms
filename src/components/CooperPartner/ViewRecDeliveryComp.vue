@@ -31,35 +31,29 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request from '../../common/request'
-	export default {
-		data() {
-			return {
-				recdeliverycomp: []
-			}
+import { Message } from 'element-ui'
+import Customer from '../../api/Customer'
+export default {
+	data() {
+		return {
+			recdeliverycomp: {}
+		}
+	},
+	created() {
+		this.getDetail()
+	},
+	methods: {
+		getDetail() {
+			let customerID = this.$route.query.customerID
+			Customer.findById({ customerID }).then(res => {
+				this.recdeliverycomp = res
+			})
 		},
-		created() {
-			this.getDetail()
-		},
-		methods: {
-			getDetail() {
-				let params = {
-					customerID:this.$route.query.customerID
-				}
-				request({
-					url: '/customer/findById',
-					params
-				}).then(res => {
-					console.log(res.data.data)
-					this.recdeliverycomp =res.data.data
-				})
-			},
-			back() {
-				this.$router.go(-1)
-			}
+		back() {
+			this.$router.go(-1)
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .el-form-item__content

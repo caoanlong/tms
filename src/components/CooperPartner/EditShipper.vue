@@ -31,69 +31,59 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request from '../../common/request'
-	import DistPicker from '../CommonComponents/DistPicker'
-	export default {
-		data() {
-			return {
-				shipper: {
-					companyAreaID: '',
-					companyName: '',
-					contactName: '',
-					contactPhone: '',
-					detailAddress: ''
-				},
-				selectedArea: [],
-			}
-		},
-		created() {
-			this.getDetail()
-		},
-		methods: {
-			handleSelectedArea(data) {
-				this.shipper.companyAreaID = data
+import { Message } from 'element-ui'
+import Customer from '../../api/Customer'
+import { areaIdToArrayId } from '../../common/utils'
+import DistPicker from '../CommonComponents/DistPicker'
+export default {
+	data() {
+		return {
+			shipper: {
+				companyAreaID: '',
+				companyName: '',
+				contactName: '',
+				contactPhone: '',
+				detailAddress: ''
 			},
-			getDetail() {
-				let params = {
-					customerID:this.$route.query.customerID
-				}
-				request({
-					url: '/customer/findById',
-					params
-				}).then(res => {
-					this.shipper = res.data.data
-					let areaID = String(res.data.data.companyAreaID)
-					this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
-				})
-			},
-			edit() {
-				let data = {
-					companyAreaID: this.shipper.companyAreaID,
-					companyName: this.shipper.companyName,
-					contactName: this.shipper.contactName,
-					contactPhone: this.shipper.contactPhone,
-					detailAddress: this.shipper.detailAddress,
-					customerID: this.$route.query.customerID
-				}
-				request({
-					url: '/customer/update',
-					method:'post',
-					data
-				}).then(res => {
-					console.log(res.data)
-					Message.success('保存成功！')
-					this.$router.push({name: 'shipper'})
-				})
-			},
-			back() {
-				this.$router.go(-1)
-			}
-		},
-		components: {
-			DistPicker
+			selectedArea: []
 		}
+	},
+	created() {
+		this.getDetail()
+	},
+	methods: {
+		handleSelectedArea(data) {
+			this.shipper.companyAreaID = data
+		},
+		getDetail() {
+			let customerID = this.$route.query.customerID
+			Customer.findById({ customerID }).then(res => {
+				this.shipper = res
+				this.selectedArea = areaIdToArrayId(String(res.companyAreaID))
+			})
+		},
+		edit() {
+			let customerID = this.$route.query.customerID
+			Customer.update({
+				customerID,
+				companyAreaID: this.shipper.companyAreaID,
+				companyName: this.shipper.companyName,
+				contactName: this.shipper.contactName,
+				contactPhone: this.shipper.contactPhone,
+				detailAddress: this.shipper.detailAddress
+			}).then(res => {
+				Message.success('保存成功！')
+				this.$router.push({name: 'shipper'})
+			})
+		},
+		back() {
+			this.$router.go(-1)
+		}
+	},
+	components: {
+		DistPicker
 	}
+}
 </script>
 <style lang="stylus" scoped>
 
