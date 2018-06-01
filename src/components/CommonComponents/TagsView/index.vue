@@ -154,10 +154,10 @@ export default {
 			background #ddd
 			padding 0 8px 0 15px
 			font-size 12px
-			margin-left 5px
+			margin-right 5px
 			border-radius 4px 4px 0 0
-			&:first-of-type
-				margin-left 15px
+			// &:first-of-type
+			// 	margin-left 15px
 			&.active
 				background-color #fff
 				color #409EFF
