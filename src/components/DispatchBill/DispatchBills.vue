@@ -99,7 +99,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
-import Dispatchbill from '../../api/dispatchbill'
+import Dispatchbill from '../../api/Dispatchbill'
 import DispatchBillItem from './Common/DispatchBillItem'
 export default {
 	data() {
