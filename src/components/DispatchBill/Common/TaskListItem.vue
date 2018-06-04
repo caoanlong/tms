@@ -22,7 +22,7 @@
 					</tr>
 					<tr>
 						<td class="area">广东深圳</td>
-						<td></td>
+						<td><img src="../../../assets/imgs/arrowBig.png" width="100"/></td>
 						<td class="area">云南昆明</td>
 					</tr>
 					<tr>
