@@ -3,44 +3,10 @@ import request from '../common/request'
 
 class Driver extends Base {
     constructor(url, req) {
-        super(url, req)
-    }
-    /**
-     * 
-     * @param {keyword} params 关键字
-     * @param {cooperateRelation} params 车辆归属 Self自有车辆; PersonalAttach个人挂靠; CompanyAttach单位挂靠; Null对象 全部）
-     * @param {current} params 第几页
-     * @param {size} params 每页记录数
-     */
-    find(params) {
-        return new Promise((resolve, reject) => {
-            this.request({
-                url: this.baseUrl + '/findList',
-                params
-            }).then(res => {
-                resolve(res.data.data)
-            })
-        })
-    }
-    /**
-     * 
-     * @param {comDriverID} params 公司司机ID
-     */
-    findById(params) {
-        return new Promise((resolve, reject) => {
-            this.request({
-                url: this.baseUrl + '/findById',
-                params
-            }).then(res => {
-                resolve(res.data.data)
-            })
-        })
-    }
-    update(data) {
-        return this.request({
-            url: this.baseUrl + '/update',
-            method: 'post',
-            data
+        super(url, req).initURI({
+            find: '/findList',
+            findById: '/findById',
+            update: '/update'
         })
     }
     /**
