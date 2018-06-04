@@ -101,6 +101,19 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
+				<el-row>
+					<el-col :span="12">
+						<el-form-item label="发货位置" prop="shipperLocation">
+							<el-autocomplete  style="width:100%"
+								value-key="name" 
+								v-model="carrierbillInfo.shipperLocation"
+								:fetch-suggestions="getShipperLocation"
+								placeholder="请输入内容"
+								@select="handSelectShipperLocation">
+							</el-autocomplete>
+						</el-form-item>
+					</el-col>
+				</el-row>
 				<el-row style="margin-top:20px">
 					<el-col :span="8">
 						<el-form-item label="收货单位" prop="consigneeCompanyName">
@@ -140,6 +153,19 @@
 					<el-col :span="12">
 						<el-form-item label="详细地址" prop="consigneeDetailAddress">
 							<el-input placeholder="卸货详细地址" v-model="carrierbillInfo.consigneeDetailAddress"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="12">
+						<el-form-item label="卸货位置" prop="consigneeLocation">
+							<el-autocomplete  style="width:100%"
+								value-key="name" 
+								v-model="carrierbillInfo.consigneeLocation"
+								:fetch-suggestions="getConsigneeLocation"
+								placeholder="请输入内容"
+								@select="handSelectConsigneeLocation">
+							</el-autocomplete>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -282,6 +308,7 @@ import request from '../../common/request'
 import Carrierbill from '../../api/Carrierbill'
 import SettleConfig from '../../api/SettleConfig'
 import Customer from '../../api/Customer'
+import BaiduMap from '../../api/BaiduMap'
 import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import { checkFloat2, checkMobile } from '../../common/validators'
 
@@ -314,6 +341,9 @@ export default {
 				consigneeAmount:'',
 				consigneeArea:'',
 				consigneeAreaID:'',
+				consigneeLocationAddress:'',  // 新增定位
+				consigneeLocationLng:'',  // 新增定位
+				consigneeLocationLat:'',  // 新增定位
 				consigneeCompanyName:'',
 				consigneeDate:'',
 				consigneeDetailAddress:'',
@@ -328,6 +358,9 @@ export default {
 				shipperAddressID:'',
 				shipperArea:'',
 				shipperAreaID: '',
+				shipperLocationAddress: '',  // 新增定位
+				shipperLocationLng: '',  // 新增定位
+				shipperLocationLat: '',  // 新增定位
 				shipperCompanyName:'',
 				shipperDate:'',
 				shipperDetailAddress:'',
@@ -365,6 +398,10 @@ export default {
 				shipperAreaID: [
 					{required: true, message: '请选择发货地'}
 				],
+				// 新增定位
+				shipperLocationAddress: [
+					{required: true, message: '请选择定位地址'}
+				],
 				shipperDetailAddress: [
 					{ required: true, message: '请输入发货详细地址'}
 				],
@@ -382,6 +419,10 @@ export default {
 				],
 				consigneeAreaID: [
 					{required: true, message: '请选择收货地'}
+				],
+				// 新增定位
+				consigneeLocationAddress: [
+					{required: true, message: '请选择定位地址'}
 				],
 				consigneeDetailAddress: [
 					{required: true, message: '请输入收货详细地址'}
@@ -439,6 +480,38 @@ export default {
 				companyName: queryString
 			}).then(res => {
 				cb(res.records)
+			})
+		},
+		getShipperLocation(queryString, cb) {
+			BaiduMap.getLocation({
+				region: this.carrierbillInfo.shipperArea,
+				queryString
+			}).then(res => {
+				let names = res.name.map((item, i) => { 
+					return { 
+						name: item,
+						location: res.location[i]
+					} 
+				})
+				cb(names)
+			}).catch(err => {
+				cb(err)
+			})
+		},
+		getConsigneeLocation(queryString, cb) {
+			BaiduMap.getLocation({
+				region: this.carrierbillInfo.consigneeArea,
+				queryString
+			}).then(res => {
+				let names = res.name.map((item, i) => { 
+					return { 
+						name: item,
+						location: res.location[i]
+					} 
+				})
+				cb(names)
+			}).catch(err => {
+				cb(err)
 			})
 		},
 		handSelectConsignor(data) {
@@ -535,6 +608,14 @@ export default {
 				this.getTransportPrice(false)
 			}
 		},
+		handSelectShipperLocation(data) {
+			this.carrierbillInfo.shipperLocationLng = data.location.lng
+			this.carrierbillInfo.shipperLocationLat = data.location.lat
+		},
+		handSelectConsigneeLocation(data) {
+			this.carrierbillInfo.consigneeLocationLng = data.location.lng
+			this.carrierbillInfo.consigneeLocationLat = data.location.lat
+		},
 		save() {
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
@@ -580,6 +661,9 @@ export default {
 						consigneeAmount: this.carrierbillInfo.consigneeAmount,
 						// consigneeArea: this.carrierbillInfo.consigneeArea ,
 						consigneeAreaID: this.carrierbillInfo.consigneeAreaID,
+						consigneeLocationAddress: this.carrierbillInfo.consigneeLocationAddress,  // 新增定位
+						consigneeLocationLng: this.carrierbillInfo.consigneeLocationLng,  // 新增定位
+						consigneeLocationLat: this.carrierbillInfo.consigneeLocationLat,  // 新增定位
 						consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
 						consigneeDate: this.carrierbillInfo.consigneeDate,
 						consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
@@ -595,6 +679,9 @@ export default {
 						// shipperAddressID: '',
 						// shipperArea: this.carrierbillInfo.shipperArea,
 						shipperAreaID: this.carrierbillInfo.shipperAreaID,
+						shipperLocationAddress: this.carrierbillInfo.shipperLocationAddress,  // 新增定位
+						shipperLocationLng: this.carrierbillInfo.shipperLocationLng,  // 新增定位
+						shipperLocationLat: this.carrierbillInfo.shipperLocationLat,  // 新增定位
 						shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
 						shipperDate: this.carrierbillInfo.shipperDate,
 						shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,

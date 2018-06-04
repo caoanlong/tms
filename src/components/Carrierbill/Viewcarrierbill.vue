@@ -203,14 +203,14 @@
 					<th>配载货量</th>
 					<th>运输照片</th>
 				</tr>
-				<tr>
+				<tr v-for="(transport, index) in transports" :key="index">
+					<td>{{transport.plateNo}}/{{transport.trailerPlateNo}}</td>
+					<td>{{transport.driverName}}</td>
+					<td>{{transport.superCargoName}}</td>
+					<td>{{transport.taskNo}}</td>
 					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td>{{transport.cargoName}}</td>
+					<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.loadNumSum + '件'}}</td>
 					<td style="text-align: center">
 						<el-button type="primary" size="mini" @click="dialogPhotoVisible = true">查看</el-button>
 						<!-- <el-button type="primary" size="mini" @click="dialogCargoVisible = true">查看货物</el-button> -->
@@ -292,7 +292,8 @@ export default {
 			carrierCargo: [],
 			porRequire: [],
 			dispatchbills: [],
-			dispatchbillsCargoList: []
+			dispatchbillsCargoList: [],
+			transports: []
 		}
 	},
 	computed:{
@@ -350,6 +351,12 @@ export default {
 					arr.push(...this.dispatchbills[i].bizDispatchOrderCargoList)
 				}
 				this.dispatchbillsCargoList = arr
+			})
+		},
+		// 查询运输列表
+		getTransports() {
+			Carrierbill.findTransports({ carrierOrderID }).then(res => {
+				this.transports = res
 			})
 		},
 		addDispatchBill() {

@@ -95,12 +95,13 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="发货位置" prop="shipperLocation">
+						<el-form-item label="发货位置" prop="shipperLocationAddress">
 							<el-autocomplete  style="width:100%"
 								value-key="name" 
-								v-model="carrierbillInfo.shipperLocation"
+								v-model="carrierbillInfo.shipperLocationAddress"
 								:fetch-suggestions="getShipperLocation"
-								placeholder="请输入内容">
+								placeholder="请输入内容"
+								@select="handSelectShipperLocation">
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
@@ -149,12 +150,13 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="卸货位置" prop="consigneeLocation">
+						<el-form-item label="卸货位置" prop="consigneeLocationAddress">
 							<el-autocomplete  style="width:100%"
 								value-key="name" 
-								v-model="carrierbillInfo.consigneeLocation"
+								v-model="carrierbillInfo.consigneeLocationAddress"
 								:fetch-suggestions="getConsigneeLocation"
-								placeholder="请输入内容">
+								placeholder="请输入内容"
+								@select="handSelectConsigneeLocation">
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
@@ -332,6 +334,9 @@ export default {
 				consigneeAmount:'',
 				consigneeArea:'',
 				consigneeAreaID:'',
+				consigneeLocationAddress:'',  // 新增定位
+				consigneeLocationLng:'',  // 新增定位
+				consigneeLocationLat:'',  // 新增定位
 				consigneeCompanyName:'',
 				consigneeDate:'',
 				consigneeDetailAddress:'',
@@ -346,6 +351,9 @@ export default {
 				shipperAddressID:'',
 				shipperArea:'',
 				shipperAreaID: '',
+				shipperLocationAddress: '',  // 新增定位
+				shipperLocationLng: '',  // 新增定位
+				shipperLocationLat: '',  // 新增定位
 				shipperCompanyName:'',
 				shipperDate:'',
 				shipperDetailAddress:'',
@@ -383,7 +391,8 @@ export default {
 				shipperAreaID: [
 					{required: true, message: '请选择发货地'}
 				],
-				shipperLocation: [
+				// 新增定位
+				shipperLocationAddress: [
 					{required: true, message: '请选择定位地址'}
 				],
 				shipperDetailAddress: [
@@ -404,7 +413,8 @@ export default {
 				consigneeAreaID: [
 					{required: true, message: '请选择收货地'}
 				],
-				consigneeLocation: [
+				// 新增定位
+				consigneeLocationAddress: [
 					{required: true, message: '请选择定位地址'}
 				],
 				consigneeDetailAddress: [
@@ -585,6 +595,14 @@ export default {
 				this.getTransportPrice(false)
 			}
 		},
+		handSelectShipperLocation(data) {
+			this.carrierbillInfo.shipperLocationLng = data.location.lng
+			this.carrierbillInfo.shipperLocationLat = data.location.lat
+		},
+		handSelectConsigneeLocation(data) {
+			this.carrierbillInfo.consigneeLocationLng = data.location.lng
+			this.carrierbillInfo.consigneeLocationLat = data.location.lat
+		},
 		save() {
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
@@ -629,6 +647,9 @@ export default {
 						consigneeAmount: this.carrierbillInfo.consigneeAmount,
 						consigneeArea: this.carrierbillInfo.consigneeArea ,
 						consigneeAreaID: this.carrierbillInfo.consigneeAreaID,
+						consigneeLocationAddress: this.carrierbillInfo.consigneeLocationAddress,  // 新增定位
+						consigneeLocationLng: this.carrierbillInfo.consigneeLocationLng,  // 新增定位
+						consigneeLocationLat: this.carrierbillInfo.consigneeLocationLat,  // 新增定位
 						consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
 						consigneeDate: this.carrierbillInfo.consigneeDate,
 						consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
@@ -644,6 +665,9 @@ export default {
 						shipperAddressID: '',
 						shipperArea: this.carrierbillInfo.shipperArea,
 						shipperAreaID: this.carrierbillInfo.shipperAreaID,
+						shipperLocationAddress: this.carrierbillInfo.shipperLocationAddress,  // 新增定位
+						shipperLocationLng: this.carrierbillInfo.shipperLocationLng,  // 新增定位
+						shipperLocationLat: this.carrierbillInfo.shipperLocationLat,  // 新增定位
 						shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
 						shipperDate: this.carrierbillInfo.shipperDate,
 						shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
