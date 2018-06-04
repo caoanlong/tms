@@ -21,6 +21,9 @@ export default {
 		}
 	},
 	methods: {
+		scrollSHow(){
+			
+		},
 		scroll(o){
 			let wrapper = document.getElementById('scroll-wrapper').offsetWidth
 			let box = document.getElementById('scroll-box').offsetWidth

@@ -1,33 +1,38 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-		<div class="dispatchbillInfo">
-			<span class="infoItem">调度单号：20170603002464001</span>
-			<span class="infoItem">状态：未接单</span>
-			<span class="infoItem">车牌号/挂车号：粤A08H9L/F0009挂</span>
-			<span class="infoItem">司机：孙洪</span>
-			<span class="infoItem">押运员：吴相博</span>
-			<span class="infoItem">创建人：石艳娇</span>
-			<span class="infoItem">创建时间：2018-04-20 18:33:15</span>
+		<div class="dispatchbillTit">
+			<span class="fl">调度单号：20170603002464001</span>
+			<span class="fr status">未接单</span>
 		</div>
-		<TaskItem></TaskItem>
-		<table class="dispatch">
-			<tr>
-				<td colspan="6" class="tit">运力调度</td>
-			</tr>
-			<tr>
-				<th>档案编号</th><td>YS001</td><th>车牌号</th><td>晋A0098LK</td><th>随行人员</th><td>林祥林</td>
-			</tr>
-			<tr>
-				<th>司机</th><td>黄有龙</td><th>挂车牌号</th><td>FA0098L挂</td><th>角色</th><td>安全员</td>
-			</tr>
-			<tr>
-				<th>联系方式</th><td>13456780011</td><th>车型/车长</th><td>集装箱挂车/5.8米</td><th>联系方式</th><td>13811701654</td>
-			</tr>
-		</table>
+		<div class="dispatchbillInfo">
+			<table>
+				<tr>
+					<td><span class="labels">货物名称：</span>可乐，啤酒</td>
+					<td><span class="labels">货量：</span>2315kg/3.6m³</td>
+					<td><span class="labels">件数：</span>3445</td>
+				</tr>
+				<tr>
+					<td><span class="labels">调度员：</span>吴正平</td>
+					<td><span class="labels">调度电话：</span>12345669</td>
+					<td><span class="labels">调度时间：</span>2014-03-33 23:33</td>
+				</tr>
+				<tr>
+					<td><span class="labels">司机：</span>罗凯</td>
+					<td><span class="labels">司机电话：</span>12345669</td>
+					<td><span class="labels">接单时间：</span>2014-03-33 23:33</td>
+				</tr>
+				<tr>
+					<td><span class="labels">押运员：</span>晓晓</td>
+					<td><span class="labels">押运电话：</span>12345669</td>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<TaskListItem v-for="(i,index) in 3" :key="index" :index="index"></TaskListItem>
 		<div class="handle text-center">
 			<el-button>取消</el-button>
-			<el-button>删除</el-button>
+			<el-button>关闭</el-button>
 			<el-button @click="back">返回</el-button>
 		</div>
 	</div>
@@ -36,7 +41,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
-import TaskItem from './Common/TaskItem'
+import TaskListItem from './Common/TaskListItem'
 export default {
 	data() {
 		return {
@@ -53,23 +58,37 @@ export default {
 		}
 	},
 	components: {
-		TaskItem
+		TaskListItem
 	}
 }
 
 </script>
 <style lang="stylus" scoped>
 
-.dispatchbillInfo
+.dispatchbillTit
 	background #e2ecf6
 	padding 5px 15px
 	line-height 30px
-	font-size 13px
-	margin-bottom 10px
-	.infoItem
+	font-size 14px
+	height 40px
+	span
 		display inline-block
 		color #3582d0
-		margin-right 20px
+.dispatchbillInfo
+	border 1px solid #e2ecf6
+	border-top none
+	padding 10px 15px
+	margin-bottom 10px
+	table
+		width 100%
+		border-spacing 0
+		td
+			font-size 13px
+			padding 8px 0
+			width 33.33333333%
+			color #666
+			.labels
+				color #999
 .dispatch
 	width 100%
 	background #e2ecf6
