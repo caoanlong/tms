@@ -317,7 +317,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
-import request from '../../common/request'
+import Staff from '../../api/Staff'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
 export default {
@@ -481,12 +481,7 @@ export default {
 			}
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					request({
-						url: '/staff/add',
-						method: 'post',
-						data
-					}).then(res => {
-						console.log(res.data)
+					Staff.add(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'person'})
 					})

@@ -1,7 +1,7 @@
 import Base from './Base'
 import request from '../common/request'
 
-class SettleConfig extends Base {
+class Truck extends Base {
     constructor(url, req) {
         super(url, req)
     }
@@ -18,17 +18,11 @@ class SettleConfig extends Base {
     findById(params) {
         return new Promise((resolve, reject) => {
             this.request({
-                url: this.baseUrl + '/findById',
+                url: this.baseUrl + '/info',
                 params
             }).then(res => {
                 resolve(res.data.data)
             })
-        })
-    }
-    findOneByAddress(params) {
-        return this.request({
-            url: this.baseUrl + '/findOneByAddress',
-            params
         })
     }
     update(data) {
@@ -38,13 +32,6 @@ class SettleConfig extends Base {
             data
         })
     }
-    del(data) {
-        return this.request({
-            url: this.baseUrl + '/deleteBatch',
-            method: 'post',
-            data
-        })
-    }
 }
 
-export default new SettleConfig('/transportPrice', request)
+export default new Truck('/truck', request)

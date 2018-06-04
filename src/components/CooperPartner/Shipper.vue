@@ -205,7 +205,7 @@ export default {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})
-			})
+			}, this.selectedList)
 		}
 	}
 }

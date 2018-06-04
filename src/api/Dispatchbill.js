@@ -63,6 +63,38 @@ class Dispatchbill extends Base {
             })
         })
     }
+    /**
+     * 可调度司机列表
+     * @param {keyword} params 关键字（档案编号、司机姓名、车牌号、车长、车型）
+     * @param {shipperDate} params 装车日期
+     * @param {workStatus} params 车辆行驶状态 Working/运输中 Empty/空车
+     */
+    findTrucksanddrivers(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/trucksanddrivers',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
+    /**
+     * 可调度押运员列表
+     * @param {keyword} params 关键字（押运员姓名、角色）
+     * @param {shipperDate} params 装车日期
+     * @param {workStatus} params 车辆行驶状态 Working/已有任务 Free/空闲
+     */
+    findTrucksanddrivers(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/staffs',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
 }
 
 export default new Dispatchbill('/biz/dispatchOrder', request)

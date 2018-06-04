@@ -54,7 +54,7 @@
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
 				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -164,217 +164,167 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-row type="flex">
-					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{count}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
-							<el-option label="10" :value="10"></el-option>
-							<el-option label="20" :value="20"></el-option>
-							<el-option label="30" :value="30"></el-option>
-							<el-option label="40" :value="40"></el-option>
-							<el-option label="50" :value="50"></el-option>
-							<el-option label="100" :value="100"></el-option>
-						</el-select>
-						<span>条记录</span>
-					</el-col>
-					<el-col :span="12">
-						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="count" @current-change="pageChange"></el-pagination>
-						</div>
-					</el-col>
-				</el-row>
+				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import { mapGetters } from 'vuex'
-	import request, { baseURL } from '../../common/request'
-	import { limitLength20, checkInt2 } from '../../common/validators'
-	export default {
-		data() {
-			return {
-				find: {
-					high: '',
-					length: '',
-					plateNo: '',
-					code: '',
-					width: '',
-					tractiveTonnage: '',
-					date: [],
-				},
-				startDate: '',
-				endDate: '',
-				pageIndex: 1,
-				pageSize: 10,
-				count: 0,
-				tableData: [],
-				selectedList: [],
-				importFileUrl: baseURL + '/truck/upload',
-				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' + localStorage.getItem('token'),
-				templateTit: 'vehicleInfo.xlsx',
-				rules: {
-					plateNo: [
-						{ validator: limitLength20 }
-					],
-					code: [
-						{ validator: limitLength20 }
-					],
-					tractiveTonnage: [
-						{ validator: checkInt2 },
-						{ validator: limitLength20 }
-					]
-				}
-			}
-		},
-		computed: {
-			...mapGetters([
-				'token'
-			])
-		},
-		created() {
-			this.getList()
-		},
-		methods: {
-			reset() {
-				this.find.high = ''
-				this.find.length = ''
-				this.find.plateNo = ''
-				this.find.code = ''
-				this.find.width = ''
-				this.find.tractiveTonnage = ''
-				this.find.date = []
-				this.startDate = ''
-				this.endDate = ''
-				this.getList()
+import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
+import request, { baseURL } from '../../common/request'
+import { deleteConfirm } from '../../common/utils'
+import Truck from '../../api/Truck'
+import Page from '../CommonComponents/Page'
+import { limitLength20, checkInt2 } from '../../common/validators'
+export default {
+	data() {
+		return {
+			find: {
+				high: '',
+				length: '',
+				plateNo: '',
+				code: '',
+				width: '',
+				tractiveTonnage: '',
+				date: [],
 			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			selectionChange(data) {
-				this.selectedList = data.map(item => item.truckID)
-			},
-			selectDateRange(date) {
-				this.startDate = date[0]
-				this.endDate = date[1]
-			},
-			search() {
-				this.$refs['ruleForm'].validate(valid => {
-					if (valid) {
-						this.getList()
-					}
-				})
-			},
-			// 导入
-			uploadSuccess (response) {
-				if (response.code != 200) {
-					Message.error(response.msg)
-				} else {
-					Message.success(response.msg)
-					this.getList()
-				}
-			},
-			// 上传错误
-			uploadError (response) {
-				console.log(response)
-				Message.error(response.msg)
-			},
-			beforeFileUpload (file) {
-				const extension = file.name.split('.')[1] === 'xls'
-				const extension2 = file.name.split('.')[1] === 'xlsx'
-				const isLt2M = file.size / 1024 / 1024 < 10
-				if (!extension && !extension2) {
-					Message.error('上传模板只能是 xls、xlsx格式!')
-				}
-				if (!isLt2M) {
-					Message.error('上传模板大小不能超过 10MB!')
-				}
-				return extension || extension2 && isLt2M
-			},
-			getList() {
-				let params = {
-					current: this.pageIndex,
-					size: this.pageSize,
-					high: this.find.high,
-					length: this.find.length,
-					plateNo: this.find.plateNo,
-					code: this.find.code,
-					width: this.find.width,
-					tractiveTonnage: this.find.tractiveTonnage,
-					createTimeBegin: this.startDate,
-					createTimeEnd: this.endDate
-				}
-				request({
-					url: '/truck/findList',
-					params
-				}).then(res => {
-					if (res.data.code == 200) {
-						this.tableData = res.data.data.records
-						this.count = res.data.data.total
-					}
-				})
-			},
-			handleCommand(e) {
-				if(e.type == 'view'){
-					this.$router.push({name: 'viewtruck', query: { truckID: e.id }})
-				} else if(e.type == 'edit'){
-					this.$router.push({ name: 'edittruck' , query: { truckID: e.id }})
-				} else if (e.type == 'delete') {
-					this.deleteConfirm(e.id)
-				}
-			},
-			add() {
-				this.$router.push({name: 'addtruck'})
-			},
-			deleteConfirm(id) {
-				let ids = ''
-				if (id && typeof id == 'string') {
-					ids = id
-				} else {
-					ids = this.selectedList.join(',')
-				}
-				if(!ids) {
-					Message({
-						type: 'warning',
-						message: '请选择'
-					})
-					return
-				}
-				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.delItem(ids)
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					})
-				})
-			},
-			delItem(truckIDs) {
-				console.log(truckIDs)
-				let data = {
-					truckIDs
-				}
-				request({
-					url: '/truck/del',
-					method: 'post',
-					data
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
-					this.getList()
-				})
+			startDate: '',
+			endDate: '',
+			pageIndex: 1,
+			pageSize: 10,
+			count: 0,
+			tableData: [],
+			selectedList: [],
+			importFileUrl: baseURL + '/truck/upload',
+			uploadHeaders: {'Authorization': localStorage.getItem('token')},
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' + localStorage.getItem('token'),
+			templateTit: 'vehicleInfo.xlsx',
+			rules: {
+				plateNo: [
+					{ validator: limitLength20 }
+				],
+				code: [
+					{ validator: limitLength20 }
+				],
+				tractiveTonnage: [
+					{ validator: checkInt2 },
+					{ validator: limitLength20 }
+				]
 			}
 		}
+	},
+	computed: {
+		...mapGetters([
+			'token'
+		])
+	},
+	components: {
+		Page
+	},
+	created() {
+		this.getList()
+	},
+	methods: {
+		reset() {
+			this.find.high = ''
+			this.find.length = ''
+			this.find.plateNo = ''
+			this.find.code = ''
+			this.find.width = ''
+			this.find.tractiveTonnage = ''
+			this.find.date = []
+			this.startDate = ''
+			this.endDate = ''
+			this.getList()
+		},
+		pageChange(index) {
+			this.pageIndex = index
+			this.getList()
+		},
+		pageSizeChange(size) {
+			this.pageSize = size
+			this.getList() 
+		},
+		selectionChange(data) {
+			this.selectedList = data.map(item => item.truckID)
+		},
+		selectDateRange(date) {
+			this.startDate = date[0]
+			this.endDate = date[1]
+		},
+		search() {
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					this.getList()
+				}
+			})
+		},
+		// 导入
+		uploadSuccess (response) {
+			if (response.code != 200) {
+				Message.error(response.msg)
+			} else {
+				Message.success(response.msg)
+				this.getList()
+			}
+		},
+		// 上传错误
+		uploadError (response) {
+			console.log(response)
+			Message.error(response.msg)
+		},
+		beforeFileUpload (file) {
+			const extension = file.name.split('.')[1] === 'xls'
+			const extension2 = file.name.split('.')[1] === 'xlsx'
+			const isLt2M = file.size / 1024 / 1024 < 10
+			if (!extension && !extension2) {
+				Message.error('上传模板只能是 xls、xlsx格式!')
+			}
+			if (!isLt2M) {
+				Message.error('上传模板大小不能超过 10MB!')
+			}
+			return extension || extension2 && isLt2M
+		},
+		getList() {
+			Truck.find({
+				current: this.pageIndex,
+				size: this.pageSize,
+				high: this.find.high,
+				length: this.find.length,
+				plateNo: this.find.plateNo,
+				code: this.find.code,
+				width: this.find.width,
+				tractiveTonnage: this.find.tractiveTonnage,
+				createTimeBegin: this.startDate,
+				createTimeEnd: this.endDate
+			}).then(res => {
+				this.tableData = res.records
+				this.count = res.total
+			})
+		},
+		handleCommand(e) {
+			if(e.type == 'view'){
+				this.$router.push({name: 'viewtruck', query: { truckID: e.id }})
+			} else if(e.type == 'edit'){
+				this.$router.push({ name: 'edittruck' , query: { truckID: e.id }})
+			} else if (e.type == 'delete') {
+				this.del(e.id)
+			}
+		},
+		add() {
+			this.$router.push({name: 'addtruck'})
+		},
+		del(truckID) {
+			deleteConfirm(truckID, truckIDs => {
+				Staff.del({ truckIDs }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.getList()
+				})
+			}, this.selectedList)
+		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .upload-File

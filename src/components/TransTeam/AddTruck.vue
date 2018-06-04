@@ -569,10 +569,10 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../common/request'
+import Truck from '../../api/Truck'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
 import { searchAreaByKey } from '../../common/utils'
-// import { getConsts } from '../../api/consts'
 import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../common/validators'
 export default {
 	data() {
@@ -797,15 +797,6 @@ export default {
 		}
 	},
 	created() {
-		// getConsts({ 
-		// 	params: {
-		// 		'type': 'TruckType'
-		// 	}
-		// }).then(res => {
-		// 	this.truckTypes = res.data.data.records
-		// }).catch(err => {
-		// 	console.log(err)
-		// })
 	},
 	methods: {
 		disabledDate(curDate) {
@@ -886,16 +877,9 @@ export default {
 				Message.error('二级维护日期不能早于下次二级维护日期！')
 				return
 			}
-
-			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					request({
-						url: '/truck/add',
-						method: 'post',
-						data
-					}).then(res => {
-						console.log(res.data)
+					Truck.add(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'truck'})
 					})

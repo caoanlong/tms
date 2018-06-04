@@ -20,14 +20,13 @@ class Carrierbill extends Base {
         })
     }
     /**
-     * 根据承运单查询运输列表
+     * 根据承运单查询运输列表(查询任务进度)
      * @param {carrierOrderID} params 承运单ID
      */
     findTransports(params) {
         return new Promise((resolve, reject) => {
             this.request({
-                // todo url
-                url: this.baseUrl + '',
+                url: this.baseUrl + '/tasks',
                 params
             }).then(res => {
                 resolve(res.data.data)

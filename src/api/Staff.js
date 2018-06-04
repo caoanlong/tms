@@ -1,7 +1,7 @@
 import Base from './Base'
 import request from '../common/request'
 
-class SettleConfig extends Base {
+class Staff extends Base {
     constructor(url, req) {
         super(url, req)
     }
@@ -25,12 +25,6 @@ class SettleConfig extends Base {
             })
         })
     }
-    findOneByAddress(params) {
-        return this.request({
-            url: this.baseUrl + '/findOneByAddress',
-            params
-        })
-    }
     update(data) {
         return this.request({
             url: this.baseUrl + '/update',
@@ -47,4 +41,4 @@ class SettleConfig extends Base {
     }
 }
 
-export default new SettleConfig('/transportPrice', request)
+export default new Staff('/staff', request)

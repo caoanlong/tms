@@ -92,7 +92,8 @@
 				}else {
 					return true
 				}
-			}
+			},
+			defaultImg: () => defaultImg
 		},
 		watch: {
 			files(newval) {

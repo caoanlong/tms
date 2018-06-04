@@ -299,7 +299,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
-import request from '../../common/request'
+import Staff from '../../api/Staff'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
 export default {
@@ -435,54 +435,48 @@ export default {
 			this.person.position = e.join(',')
 		},
 		getInfo() {
-			let params = {
-				staffID: this.$route.query.staffID
-			}
-			request({
-				url: '/staff/findById',
-				params
-			}).then(res => {
-				let data = res.data.data
+			let staffID = this.$route.query.staffID
+			Staff.findById({ staffID }).then(res => {
 				this.person = {
-					createName: data.createName,
-					status: data.status,
-					auditName: data.auditName,
-					auditTime: data.auditTime,
-					realName: data.realName,
-					homeAddress: data.comStaffIdentification.homeAddress,
-					mobile: data.mobile,
-					sex: data.comStaffIdentification.sex,
-					driverLicenseFirstTime: data.comStaffIdentification.driverLicenseFirstTime || '',
-					integrityExamineGrade: data.comStaffIdentification.integrityExamineGrade,
-					position: data.position,
-					integrityExamineEndTime: data.comStaffIdentification.integrityExamineEndTime || '',
-					idCardNum: data.comStaffIdentification.idCardNum,
-					quasiDrivingType: data.comStaffIdentification.quasiDrivingType,
-					laborContractBeginTime: data.comStaffIdentification.laborContractBeginTime || '',
-					laborContractEndTime: data.comStaffIdentification.laborContractEndTime || '',
-					driverLicExamineBeginTime: data.comStaffIdentification.driverLicExamineBeginTime || '',
-					driverLicExamineEndTime: data.comStaffIdentification.driverLicExamineEndTime || '',
-					driverLicenseCode: data.comStaffIdentification.driverLicenseCode,
-					titleLever: data.comStaffIdentification.titleLever,
-					qualificationCode: data.comStaffIdentification.qualificationCode,
-					qualificationType: data.comStaffIdentification.qualificationType,
-					qualificationExpirationTime: data.comStaffIdentification.qualificationExpirationTime || '',
-					remark: data.remark,
-					headPic: data.headPic,
-					idCardFrontUrl: data.comStaffPic.idCardFrontUrl,
-					idCardBackUrl: data.comStaffPic.idCardBackUrl,
-					driverLicFrontUrl: data.comStaffPic.driverLicFrontUrl,
-					driverLicBackUrl: data.comStaffPic.driverLicBackUrl,
-					qualificationFirstPage: data.comStaffPic.qualificationFirstPage,
-					qualificationSecondPage: data.comStaffPic.qualificationSecondPage,
-					otherStaffPic1: data.comStaffPic.otherStaffPic1,
-					otherStaffPic2: data.comStaffPic.otherStaffPic2,
-					otherStaffPic3: data.comStaffPic.otherStaffPic3,
-					otherStaffPic4: data.comStaffPic.otherStaffPic4,
-					otherStaffPic5: data.comStaffPic.otherStaffPic5
+					createName: res.createName,
+					status: res.status,
+					auditName: res.auditName,
+					auditTime: res.auditTime,
+					realName: res.realName,
+					homeAddress: res.comStaffIdentification.homeAddress,
+					mobile: res.mobile,
+					sex: res.comStaffIdentification.sex,
+					driverLicenseFirstTime: res.comStaffIdentification.driverLicenseFirstTime || '',
+					integrityExamineGrade: res.comStaffIdentification.integrityExamineGrade,
+					position: res.position,
+					integrityExamineEndTime: res.comStaffIdentification.integrityExamineEndTime || '',
+					idCardNum: res.comStaffIdentification.idCardNum,
+					quasiDrivingType: res.comStaffIdentification.quasiDrivingType,
+					laborContractBeginTime: res.comStaffIdentification.laborContractBeginTime || '',
+					laborContractEndTime: res.comStaffIdentification.laborContractEndTime || '',
+					driverLicExamineBeginTime: res.comStaffIdentification.driverLicExamineBeginTime || '',
+					driverLicExamineEndTime: res.comStaffIdentification.driverLicExamineEndTime || '',
+					driverLicenseCode: res.comStaffIdentification.driverLicenseCode,
+					titleLever: res.comStaffIdentification.titleLever,
+					qualificationCode: res.comStaffIdentification.qualificationCode,
+					qualificationType: res.comStaffIdentification.qualificationType,
+					qualificationExpirationTime: res.comStaffIdentification.qualificationExpirationTime || '',
+					remark: res.remark,
+					headPic: res.headPic,
+					idCardFrontUrl: res.comStaffPic.idCardFrontUrl,
+					idCardBackUrl: res.comStaffPic.idCardBackUrl,
+					driverLicFrontUrl: res.comStaffPic.driverLicFrontUrl,
+					driverLicBackUrl: res.comStaffPic.driverLicBackUrl,
+					qualificationFirstPage: res.comStaffPic.qualificationFirstPage,
+					qualificationSecondPage: res.comStaffPic.qualificationSecondPage,
+					otherStaffPic1: res.comStaffPic.otherStaffPic1,
+					otherStaffPic2: res.comStaffPic.otherStaffPic2,
+					otherStaffPic3: res.comStaffPic.otherStaffPic3,
+					otherStaffPic4: res.comStaffPic.otherStaffPic4,
+					otherStaffPic5: res.comStaffPic.otherStaffPic5
 				}
-				this.position = data.position.split(',')
-				let resDataComStaffPic = data.comStaffPic
+				this.position = res.position.split(',')
+				let resDataComStaffPic = res.comStaffPic
 				let i = 1
 				while (i < 6) {
 					this.otherImgs.push(resDataComStaffPic['otherStaffPic' + i])
@@ -548,12 +542,7 @@ export default {
 			}
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					request({
-						url: '/staff/update',
-						method: 'post',
-						data
-					}).then(res => {
-						console.log(res.data)
+					Staff.update(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'person'})
 					})

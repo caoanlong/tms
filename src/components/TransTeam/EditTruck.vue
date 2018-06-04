@@ -567,11 +567,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from '../../common/request'
+import Truck from '../../api/Truck'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
-import { searchAreaByKey } from '../../common/utils'
-// import { getConsts } from '../../api/consts'
+import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../common/validators'
 export default {
 	data() {
@@ -796,36 +795,20 @@ export default {
 		}
 	},
 	created() {
-		// getConsts({ 
-		// 	params: {
-		// 		'type': 'TruckType'
-		// 	}
-		// }).then(res => {
-		// 	this.truckTypes = res.data.data.records
-		// }).catch(err => {
-		// 	console.log(err)
-		// })
 		this.getInfo()
 	},
 	methods: {
 		getInfo() {
-			let params = {
-				truckID: this.$route.query.truckID
-			}
-			request({
-				url: '/truck/info',
-				params
-			}).then(res => {
-				console.log(res.data.data)
-				this.truck = res.data.data
+			let truckID = this.$route.query.truckID
+			Truck.findById({ truckID }).then(res => {
+				this.truck = res
 				if (this.truck.plateNo) {
 					this.plateNoType = '车牌号'
 				} else {
 					this.plateNoType = '挂车车牌'
 				}
-				let areaID = res.data.data.areaID
-				this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
-				let resDataComStaffPic = res.data.data
+				this.selectedArea = areaIdToArrayId(res.areaID)
+				let resDataComStaffPic = res
 				let i = 1
 				while (i < 6) {
 					this.otherImgs.push(resDataComStaffPic['otherTruckPic' + i])
@@ -932,16 +915,9 @@ export default {
 			if(!data.roadTransportSidePic) {
 				data.roadTransportSidePic = ''
 			}
-			
-			console.log(data)
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					request({
-						url: '/truck/update',
-						method: 'post',
-						data
-					}).then(res => {
-						console.log(res.data)
+					Truck.update(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'truck'})
 					})

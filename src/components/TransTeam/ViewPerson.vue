@@ -69,7 +69,7 @@
 					<el-col :span="8">
 						<el-form-item label="聘用岗位">
 							<p>
-								<span v-for="item in (person.position ? person.position.split(',') : 0)">{{postMap[item]}},</span>
+								<span v-for="item in (person.position ? person.position.split(',') : 0)" :key="item">{{postMap[item]}},</span>
 							</p>
 						</el-form-item>
 					</el-col>
@@ -215,7 +215,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
-import request from '../../common/request'
+import Staff from '../../api/Staff'
 import ImageUpload from '../CommonComponents/ImageUpload'
 export default {
 	data() {
@@ -241,16 +241,10 @@ export default {
 	},
 	methods: {
 		getInfo() {
-			let params = {
-				staffID: this.$route.query.staffID
-			}
-			request({
-				url: '/staff/findById',
-				params
-			}).then(res => {
-				console.log(res.data.data)
-				this.person = res.data.data
-				let resDataComStaffPic = res.data.data.comStaffPic
+			let staffID = this.$route.query.staffID
+			Staff.findById({ staffID }).then(res => {
+				this.person = res
+				let resDataComStaffPic = res.comStaffPic
 				let i = 1
 				while (i < 6) {
 					this.otherImgs.push(resDataComStaffPic['otherStaffPic' + i])

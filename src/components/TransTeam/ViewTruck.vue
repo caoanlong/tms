@@ -411,7 +411,7 @@
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
 import ImageUpload from '../CommonComponents/ImageUpload'
-import request from '../../common/request'
+import Truck from '../../api/Truck'
 export default {
 	data() {
 		return {
@@ -425,15 +425,10 @@ export default {
 	},
 	methods: {
 		getInfo() {
-			let params = {
-				truckID: this.$route.query.truckID
-			}
-			request({
-				url: '/truck/info',
-				params
-			}).then(res => {
-				this.truck = res.data.data
-				let resDataComStaffPic = res.data.data
+			let truckID = this.$route.query.truckID
+			Truck.findById({ truckID }).then(res => {
+				this.truck = res
+				let resDataComStaffPic = res
 				let i = 1
 				while (i < 6) {
 					this.otherImgs.push(resDataComStaffPic['otherTruckPic' + i])
