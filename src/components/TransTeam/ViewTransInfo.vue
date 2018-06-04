@@ -464,11 +464,10 @@
 	import { Message } from 'element-ui'
 	import DistPicker from '../CommonComponents/DistPicker'
 	import ImageUpload from '../CommonComponents/ImageUpload'
-	import { getdatefromtimestamp } from '../../common/utils'
+	import { getdatefromtimestamp,deleteConfirm } from '../../common/utils'
 	import request from "../../common/request"
 	import TransportRecord from '../../api/TransportRecord'
 	import Truck from '../../api/Truck'
-	import { deleteConfirm } from '../../common/utils'
 	export default {
 		data() {
 			return {
