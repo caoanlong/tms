@@ -26,4 +26,4 @@ class Task extends Base {
         })
     }
 }
-export default new Dispatchbill('/task', request)
+export default new Task('/task', request)
