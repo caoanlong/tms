@@ -117,6 +117,7 @@
 <script type="text/javascript">
 	import { Message } from 'element-ui'
 	import request, { baseURL } from '../../common/request'
+	import TransportRecord from '../../api/TransportRecord'
 	export default {
 		data() {
 			return {
@@ -187,7 +188,7 @@
 				return extension || extension2 && isLt2M
 			},
 			getList() {
-				let params = {
+				TransportRecord.find({
 					current: this.pageIndex,
 					size: this.pageSize,
 					code: this.findSelfNum,
@@ -195,14 +196,11 @@
 					plateNo: this.findPlateNum,
 					createTimeBegin: this.startDate,
 					createTimeEnd: this.endDate
-				}
-				request({
-					url: '/transportRecord/findList',
-					params
 				}).then(res => {
-					this.tableData = res.data.data.records
-					this.count = res.data.data.total
+					this.tableData = res.records
+					this.count = res.total
 				})
+				
 			},
 			handleCommand(e) {
 				if (e.type == 'view') {

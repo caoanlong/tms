@@ -5,9 +5,9 @@
  * @authors coolia (coolia@qq.com)
  * @date    2018-03-20 09:59:18
  * @Last Modified by:   coolia
- * @Last Modified time: 2018-06-01 09:53:30
+ * @Last Modified time: 2018-06-04 14:16:03
  */
-
+#app{height: 100%}
 .top-bar .el-menu--horizontal{border:none}
 .tags-view-container .tags-view-wrapper{border:none}
 .top-bar .el-dropdown{color:#fff;}

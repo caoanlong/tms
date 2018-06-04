@@ -472,6 +472,7 @@
 	import ImageUpload from '../CommonComponents/ImageUpload'
 	import { getdatefromtimestamp } from '../../common/utils'
 	import request from "../../common/request"
+	import TransportRecord from '../../api/TransportRecord'
 	export default {
 		data() {
 			return {
@@ -512,15 +513,9 @@
 		methods: {
 			// 获取运输登记表
 			getDetail() {
-				let params = {
-					transportRecordID: this.$route.query.transportRecordID
-				}
-				request({
-					url: '/transportRecord/detail',
-					params
-				}).then(res => {
-					console.log(res.data.data)
-					this.transportRecordDetail = res.data.data
+				let transportRecordID =this.$route.query.transportRecordID
+				TransportRecord.findById({ transportRecordID }).then(res => {
+					this.transportRecordDetail = res
 				})
 			},
 			getTrafficList(){
