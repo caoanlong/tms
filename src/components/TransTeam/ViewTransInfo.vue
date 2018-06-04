@@ -378,25 +378,24 @@
 			</el-tabs>
 		</div>
 		<el-dialog title="添加记录" width="45%" :visible.sync="isShowAddDialog">
-			<el-form label-width="120px">
-				<el-form-item label="时间">
+			<el-form label-width="120px" :model="traffic" :rules="rules" ref="ruleForm" size="mini">
+				<el-form-item label="时间" prop="occurredTime">
 					<el-date-picker style="width: 100%"  v-model="traffic.occurredTime" value-format="timestamp" type="date" placeholder="选择日期">
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item label="地区">
-					<el-cascader style="width: 100%" :options="distData" v-model="selectedArea" @change="handleSelectedArea">
-					</el-cascader>
+				<el-form-item label="地区" prop="areaID">
+					<DistPicker @selectChange="handleSelectedArea"/>
 				</el-form-item>
-				<el-form-item label="详细地址">
+				<el-form-item label="详细地址" prop="detailAddress">
 					<el-input v-model="traffic.detailAddress"></el-input>
 				</el-form-item>
 				<el-form-item label="驾驶人">
 					<el-input v-model="transportRecordDetail.realName" disabled></el-input>
 				</el-form-item>
-				<el-form-item label="违法行为描述">
+				<el-form-item label="违法行为描述" prop="endorseDesc">
 					<el-input type="textarea" v-model="traffic.endorseDesc" resize="none"></el-input>
 				</el-form-item>
-				<el-form-item label="处理情况">
+				<el-form-item label="处理情况" prop="handleResult">
 					<el-input type="textarea" v-model="traffic.handleResult" resize="none"></el-input>
 				</el-form-item>
 			</el-form>
@@ -412,12 +411,7 @@
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="地区">
-					<el-cascader 
-						style="width: 100%" 
-						:options="distData" 
-						v-model="selectedArea" 
-						@change="handleSelectedArea">
-					</el-cascader>
+					<DistPicker @selectChange="handleSelectedArea"/>
 				</el-form-item>
 				<el-form-item label="详细地址">
 					<el-input v-model="traffic.detailAddress"></el-input>
@@ -449,7 +443,7 @@
 						<span>{{scope.row.areaName + scope.row.detailAddress}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="驾驶人">
+				<el-table-column label="驾驶人" width="100">
 					<template slot-scope="scope">
 						<span>{{transportRecordDetail.realName}}</span>
 					</template>
@@ -459,7 +453,7 @@
 				<el-table-column label="操作" align="center" width="230">
 					<template slot-scope="scope">
 						<el-button size="mini" icon="el-icon-edit" @click="update(scope.row)">编辑</el-button>
-						<el-button size="mini" icon="el-icon-delete" @click="deleteConfirm(scope.row.endorsementID)">删除</el-button>
+						<el-button size="mini" icon="el-icon-delete" @click="del(scope.row.endorsementID)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -468,15 +462,16 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import { regionData } from 'element-china-area-data'
+	import DistPicker from '../CommonComponents/DistPicker'
 	import ImageUpload from '../CommonComponents/ImageUpload'
 	import { getdatefromtimestamp } from '../../common/utils'
 	import request from "../../common/request"
 	import TransportRecord from '../../api/TransportRecord'
+	import Truck from '../../api/Truck'
+	import { deleteConfirm } from '../../common/utils'
 	export default {
 		data() {
 			return {
-				distData: regionData,
 				tabSelected: 'first',
 				ownership: 1,
 				buisnessNature: 1,
@@ -502,7 +497,24 @@
 					endorseDesc: '',
 					handleResult: ''
 				},
-				trafficList: []
+				trafficList: [],
+				rules: {
+					occurredTime: [
+						{required: true, message: '请选择时间', trigger: 'blur'}
+					],
+					areaID: [
+						{ required: true, message: '请选择地区', trigger: 'change' }
+					],
+					detailAddress: [
+						{required: true, message: '请输入详细地址', trigger: 'blur'}
+					],
+					endorseDesc: [
+						{required: true, message: '请输入违法行为描述', trigger: 'blur'}
+					],
+					handleResult: [
+						{required: true, message: '请输入处理情况', trigger: 'blur'}
+					]
+				}
 			}
 		},
 		created() {
@@ -515,25 +527,20 @@
 			getDetail() {
 				let transportRecordID =this.$route.query.transportRecordID
 				TransportRecord.findById({ transportRecordID }).then(res => {
+
 					this.transportRecordDetail = res
 				})
 			},
-			getTrafficList(){
-				let params = {
-					transportRecordID:this.$route.query.transportRecordID
-				}
-				request({
-					url: '/truck/endorsement/findList',
-					params
-				}).then(res => {
-					console.log(res.data.data)
-					let areaID = String(res.data.data.areaID)
+			getTrafficList() {
+				let transportRecordID =this.$route.query.transportRecordID
+				Truck.findEndorsements({ transportRecordID }).then(res => {
+					let areaID = String(res.areaID)
 					this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
-					this.trafficList = res.data.data
+					this.trafficList = res
 				})
 			},
 			handleSelectedArea(data) {
-				this.traffic.areaID = data[data.length-1]
+				this.traffic.areaID = data
 			},
 			add() {
 				this.traffic = {
@@ -555,27 +562,27 @@
 			},
 			// 添加记录
 			addTraffic() {
-				let data = {
-					transportRecordID:this.$route.query.transportRecordID,
-					occurredTime:this.traffic.occurredTime,
-					areaID:this.traffic.areaID,
-					detailAddress:this.traffic.detailAddress,
-					endorseDesc:this.traffic.endorseDesc,
-					handleResult:this.traffic.handleResult
-				}
-				console.log(data)
-				request({
-					url: '/truck/endorsement/add',
-					data,
-					method: 'post',
-				}).then(res => {
-					Message.success('添加记录成功！')
-					this.isShowAddDialog = false
-					this.getTrafficList()
-				})			
+				this.$refs['ruleForm'].validate(valid => {
+					if (valid) {
+						Truck.addEndorsement({
+							transportRecordID:this.$route.query.transportRecordID,
+							occurredTime:this.traffic.occurredTime,
+							areaID:this.traffic.areaID,
+							detailAddress:this.traffic.detailAddress,
+							endorseDesc:this.traffic.endorseDesc,
+							handleResult:this.traffic.handleResult
+						}).then(res => {
+							Message.success('保存成功！')
+							this.isShowAddDialog = false
+							this.getTrafficList()
+						})
+					} else {
+						return
+					}
+				})
 			},
 			updataTraffic() {
-				let data = {
+				Truck.updateEndorsement({
 					endorsementID: this.traffic.endorsementID,
 					transportRecordID: this.$route.query.transportRecordID,
 					occurredTime: this.traffic.occurredTime,
@@ -583,70 +590,39 @@
 					detailAddress: this.traffic.detailAddress,
 					endorseDesc: this.traffic.endorseDesc,
 					handleResult: this.traffic.handleResult
-				}
-				request({
-					url: '/truck/endorsement/update',
-					data,
-					method: 'post',
 				}).then(res => {
-					Message.success('修改记录成功！')
-					this.isShowEditDialog = false
-					this.isShowListDialog = false
-					this.getTrafficList()
-				})			
-			},
-			deleteConfirm(id) {
-				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.delItem(id)
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					})
-				})
-			},
-			delItem(endorsementIDs) {
-				let data = {
-					endorsementIDs
-				}
-				request({
-					url: '/truck/endorsement/deleteBatch',
-					method: 'post',
-					data
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
+					Message.success('保存成功！')
 					this.isShowEditDialog = false
 					this.isShowListDialog = false
 					this.getTrafficList()
 				})
 			},
+			del(endorsementID) {
+				deleteConfirm(endorsementID, endorsementIDs => {
+					Truck.deleteEndorsement({ endorsementIDs }).then(res => {
+						Message({ type: 'success', message: '删除成功!' })
+						this.getTrafficList()
+						this.isShowEditDialog = false
+						this.isShowListDialog = false
+					})
+				}, this.selectedList)
+			},
+			
 			// 获取运输单位备案
 			getRecordDetail() {
-				let params = {
-					transportRecordID: this.$route.query.transportRecordID
-				}
-				request({
-					url: '/transportRecord/recordDetail',
-					params
-				}).then(res => {
-					console.log(res.data.data)
-					this.transportRecordDetail2 = res.data.data
+				let transportRecordID = this.$route.query.transportRecordID
+				TransportRecord.findRecordDetailById({ transportRecordID }).then(res => {
+					console.log(res)
+					this.transportRecordDetail2 = res
 				})
 			},
-
 			back() {
 				this.$router.go(-1)
 			}
 		},
 		components: {
-			ImageUpload
+			ImageUpload,
+			DistPicker
 		}
 	}
 </script>
