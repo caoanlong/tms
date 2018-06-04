@@ -42,7 +42,7 @@ class Dispatchbill extends Base {
      * 关闭调度单
      * @param {dispatchOrderID} params 调度单ID
      */
-    cancel(data) {
+    close(data) {
         this.request({
             url: this.baseUrl + '/close',
             method: 'post',

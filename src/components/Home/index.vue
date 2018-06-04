@@ -231,7 +231,7 @@
 							</el-table-column>
 							<el-table-column label="聘用岗位" width="100">
 								<template slot-scope="scope">
-									<span v-for="item in scope.row.position.split(',')">{{postMap[item]}},</span>
+									<span v-for="item in scope.row.position.split(',')" :key="item">{{postMap[item]}},</span>
 								</template>
 							</el-table-column>
 							<el-table-column label="身份证号" prop="idCardNum" width="160"></el-table-column>
@@ -327,7 +327,6 @@ export default {
 		}
 	},
 	created() {
-		this.$store.dispatch('getUserInfo')
 		this.getCarrierOrder()
 		this.getDispatchOrder()
 		this.getTruckList()
