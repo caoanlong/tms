@@ -69,7 +69,7 @@
 							<td>广东广州</td>
 							<td class="text-center" width="160">2018-04-22  18:33:15</td>
 							<td>湖南常德</td>
-							<td class="text-center"><el-button type="text" size="mini">查看</el-button></td>
+							<td class="text-center"><el-button type="text" size="mini">上传照片</el-button><el-button type="text" size="mini">编辑</el-button></td>
 						</tr>
 					</template>
 				</table>
@@ -189,4 +189,5 @@ export default {
 			.ViewTaskDetail
 				cursor pointer
 				display block
+				color #3582d0
 </style>
