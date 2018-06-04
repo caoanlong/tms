@@ -304,7 +304,10 @@
 	</div>
 </template>
 <script type="text/javascript">
-import request from "../../common/request"
+import Carrierbill from "../../api/Carrierbill"
+import Dispatchbill from "../../api/Dispatchbill"
+import Truck from "../../api/Truck"
+import Staff from "../../api/Staff"
 export default {
 	name: 'home',
 	data() {
@@ -332,52 +335,36 @@ export default {
 	},
 	methods: {
 		getCarrierOrder() {
-			let params ={
+			Carrierbill.find({
 				status: 'Committed',
 				pageSize: 5
-			}
-			request({
-				url: '/biz/carrierOrder/list',
-				params
 			}).then(res => {
-				this.tableData = res.data.data.records
+				this.tableData = res.records
 			})
 		},
 		getDispatchOrder() {
-			let params ={
+			Dispatchbill.find({
 				status: 'Loaded',
 				pageSize: 5
-			}
-			request({
-				url: '/biz/dispatchOrder/list',
-				params
 			}).then(res => {
-				this.tableData1 = res.data.data.records
+				this.tableData1 = res.records
 			})
 		},
 		getTruckList() {
-			let params ={
+			Truck.find({
 				WorkStatus: 'Free',
 				isLoadStatus: 'Y',
 				pageSize: 5
-			}
-			request({
-				url: '/truck/findList',
-				params
 			}).then(res => {
-				this.tableData2 = res.data.data.records
+				this.tableData2 = res.records
 			})
 		},
 		getStaffList() {
-			let params ={
+			Staff.find({
 				WorkStatus: 'Free',
 				pageSize: 5
-			}
-			request({
-				url: '/staff/findList',
-				params
 			}).then(res => {
-				this.tableData3 = res.data.data.records
+				this.tableData3 = res.records
 			})
 		},
 		ViewCarrierbill(carrierOrderID) {

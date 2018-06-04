@@ -32,6 +32,53 @@ class Truck extends Base {
             data
         })
     }
+    /**
+     * 查询车辆违章记录
+     * @param {*} params 
+     */
+    findEndorsements(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/findList',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
+    /**
+     * 添加车辆违章记录
+     * @param {*} data 
+     */
+    addEndorsement(data) {
+        return this.request({
+            url: this.baseUrl + '/endorsement/add',
+            method: 'post',
+            data
+        })
+    }
+    /**
+     * 修改车辆违章记录
+     * @param {*} data 
+     */
+    updateEndorsement(data) {
+        return this.request({
+            url: this.baseUrl + '/endorsement/update',
+            method: 'post',
+            data
+        })
+    }
+    /**
+     * 删除车辆违章记录
+     * @param {*} data 
+     */
+    deleteEndorsement(data) {
+        return this.request({
+            url: this.baseUrl + '/endorsement/deleteBatch',
+            method: 'post',
+            data
+        })
+    }
 }
 
 export default new Truck('/truck', request)
