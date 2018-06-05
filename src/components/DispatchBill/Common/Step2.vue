@@ -127,16 +127,16 @@
 				this.$emit('prevStep', 0)
 			},
 			nextStep() {
-				if (!this.selectedDriver.truckID) {
-					Message.error('请选择司机车辆！')
-					return
-				}
-				if (this.selectedDriver.loadStatus == 'Empty') {
-					if(!this.selectedEscort.staffID) {
-						Message.error('该车辆需要随车人员！')
-						return
-					}
-				}
+				// if (!this.selectedDriver.truckID) {
+				// 	Message.error('请选择司机车辆！')
+				// 	return
+				// }
+				// if (this.selectedDriver.loadStatus == 'Empty') {
+				// 	if(!this.selectedEscort.staffID) {
+				// 		Message.error('该车辆需要随车人员！')
+				// 		return
+				// 	}
+				// }
 				this.$emit('nextStep', 2, this.selectedDriver, this.selectedEscort)
 			},
 

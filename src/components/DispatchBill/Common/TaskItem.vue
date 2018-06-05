@@ -70,28 +70,32 @@
 			</tr>
 			<tr class="text-center">
 				<td>司机</td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
 			</tr>
 			<tr class="text-center">
 				<td>随行人员</td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
-				<td><el-input size="mini"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
 			</tr>
 		</table>
 	</div>
 </template>
 <script type="text/javascript">
 export default {
-
+	data() {
+		return {
+			isEdit: true
+		}
+	}
 }
 
 </script>
