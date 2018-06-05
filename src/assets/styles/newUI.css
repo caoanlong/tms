@@ -5,7 +5,7 @@
  * @authors coolia (coolia@qq.com)
  * @date    2018-03-20 09:59:18
  * @Last Modified by:   coolia
- * @Last Modified time: 2018-06-04 14:16:03
+ * @Last Modified time: 2018-06-05 10:57:18
  */
 #app{height: 100%}
 .top-bar .el-menu--horizontal{border:none}
@@ -60,3 +60,5 @@
 
 
 .fare .el-input input{text-align:center;}
+.ViewPhotosDialog .el-dialog__header{border-bottom:1px solid #dcdfe6;}
+.ViewPhotosDialog .el-dialog__body{padding-top:0}
