@@ -33,65 +33,53 @@
 			<div class="table">
 				<table class="wfTable">
 					<tr>
-						<th width="200">任务单号</th>
-						<th width="80">任务状态</th>
-						<th width="80">货物类型</th>
-						<th>货物名称</th>
-						<th>配载货量</th>
-						<th width="160">收货时间</th>
+						<th width="200">任务编号</th>
+						<th width="80">状态</th>
+						<th width="80">货物</th>
+						<th>货量</th>
+						<th width="140">收货时间</th>
 						<th>收货地</th>
-						<th width="160">发货时间</th>
+						<th width="140">发货时间</th>
 						<th>发货地</th>
 						<th>操作</th>
 					</tr>
 					<template v-for="item in 3">
-						<tr class="tit">
-							<td colspan="9"><span class="infoItem ViewDispatchBill" @click="view(item.dispatchOrderID)" >调度单号：{{item.dispatchOrderNo}}</span>
-							<span class="infoItem">车牌号：{{item.plateNo}}</span><span class="infoItem">
-								<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
-								<span class="tag tag2" v-else-if="item.status == 'Loaded'">已装运</span>
-								<span class="tag tag3" v-else-if="item.status == 'Signed'">已签收</span>
-								<span class="tag tag4" v-else-if="item.status == 'Canceled'">已作废</span>
-							</span></td>
-							<td class="text-center" width="160">
-								<el-button type="text" size="mini">编辑</el-button>
-								<el-button type="text" size="mini">取消</el-button>
+						<tr class="tit" :key="item">
+							<td colspan="6">
+								<span class="infoItem ViewDispatchBill" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
+								<span class="infoItem">车牌号：{{item.plateNo}}</span><span class="infoItem">
+									<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
+									<span class="tag tag2" v-else-if="item.status == 'Loaded'">已装运</span>
+									<span class="tag tag3" v-else-if="item.status == 'Signed'">已签收</span>
+									<span class="tag tag4" v-else-if="item.status == 'Canceled'">已作废</span>
+								</span>
+							</td>
+							<td colspan="3" class="text-center" width="140">
+								<el-button type="text" size="mini">重新调度</el-button>
+								<el-button type="text" size="mini">取消调度</el-button>
 								<el-button type="text" size="mini">关闭</el-button>
+								<el-button type="text" size="mini">删除</el-button>
 							</td>
 						</tr>
-						<tr class="list" v-for="taskItem in 4">
-							<td class="text-center"><span @click="viewTask" class="ViewTaskDetail">919239801</span></td>
+						<tr class="list" v-for="taskItem in 4" :key="item + taskItem * 1000">
+							<td class="text-center">
+								<span @click="viewTask" class="ViewTaskDetail">919239801</span>
+							</td>
 							<td class="text-center" width="80">待装车</td>
-							<td class="text-center" width="80">重货</td>
 							<td>太古咖啡</td>
-							<td class="text-center">6吨/40方/1000件</td>
-							<td class="text-center" width="160">2018-04-22  18:33:15</td>
+							<td class="text-center">6kg/40m³/1000kg</td>
+							<td class="text-center" width="140">2018-04-22 18:33:15</td>
 							<td>广东广州</td>
-							<td class="text-center" width="160">2018-04-22  18:33:15</td>
+							<td class="text-center" width="140">2018-04-22 18:33:15</td>
 							<td>湖南常德</td>
-							<td class="text-center"><el-button type="text" size="mini">上传照片</el-button><el-button type="text" size="mini">编辑</el-button></td>
+							<td class="text-center">
+								<el-button type="text" size="mini">上传照片</el-button>
+								<el-button type="text" size="mini" @click="viewTask">编辑</el-button>
+							</td>
 						</tr>
 					</template>
 				</table>
-				<el-row type="flex">
-					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{count}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
-							<el-option label="10" :value="10"></el-option>
-							<el-option label="20" :value="20"></el-option>
-							<el-option label="30" :value="30"></el-option>
-							<el-option label="40" :value="40"></el-option>
-							<el-option label="50" :value="50"></el-option>
-							<el-option label="100" :value="100"></el-option>
-						</el-select>
-						<span>条记录</span>
-					</el-col>
-					<el-col :span="12">
-						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="count" @current-change="pageChange"></el-pagination>
-						</div>
-					</el-col>
-				</el-row>
+				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
 	</div>
@@ -101,6 +89,7 @@ import { Message } from 'element-ui'
 import request from '../../common/request'
 import Dispatchbill from '../../api/Dispatchbill'
 import DispatchBillItem from './Common/DispatchBillItem'
+import Page from '../CommonComponents/Page'
 export default {
 	data() {
 		return {
@@ -127,6 +116,10 @@ export default {
 			this.pageIndex = index
 			this.getList()
 		},
+		pageSizeChange(size) {
+			this.pageSize = size
+			this.getList() 
+		},
 		getList () {
 			Dispatchbill.find({
 				current: this.pageIndex,
@@ -140,14 +133,15 @@ export default {
 			this.$router.push({ name: 'adddispatchbill' })
 		},
 		view(dispatchOrderID) {
-			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID} })
+			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
 		},
 		viewTask() {
-			this.$router.push({ name: 'viewtaskdetail'})
+			this.$router.push({ name: 'viewtaskdetail' })
 		}
 	},
 	components:{
-		DispatchBillItem
+		DispatchBillItem,
+		Page
 	}
 }
 

@@ -1,4 +1,4 @@
-import {getMenus, addMenu, updateMenu, delMenu} from '../../api/menu'
+import Menu from '../../api/Menu'
 
 const menu = {
 	state: {
@@ -6,35 +6,32 @@ const menu = {
 	},
 	mutations: {
 		GET_MENU: (state) => {
-			getMenus().then(res => {
-				state.menus = res.data.data
-				sessionStorage.setItem('menus', JSON.stringify(res.data.data))
+			Menu.find().then(res => {
+				state.menus = res
+				sessionStorage.setItem('menus', JSON.stringify(res))
 			})
 		},
 		ADD_MENU: (state, menu, callback) => {
-			addMenu(menu).then(res => {
-				console.log(res.data)
-				getMenus().then(res => {
-					state.menus = res.data.data
-					sessionStorage.setItem('menus', JSON.stringify(res.data.data))
+			Menu.add(menu).then(() => {
+				Menu.find().then(res => {
+					state.menus = res
+					sessionStorage.setItem('menus', JSON.stringify(res))
 				})
 			})
 		},
 		EDIT_MENU: (state, menu, callback) => {
-			updateMenu(menu).then(res => {
-				console.log(res.data)
-				getMenus().then(res => {
-					state.menus = res.data.data
-					sessionStorage.setItem('menus', JSON.stringify(res.data.data))
+			Menu.update(menu).then(() => {
+				Menu.find().then(res => {
+					state.menus = res
+					sessionStorage.setItem('menus', JSON.stringify(res))
 				})
 			})
 		},
 		DELETE_MENU: (state, menu, callback) => {
-			delMenu({Menu_ID: menu.Menu_ID}).then(res => {
-				console.log(res.data)
-				getMenus().then(res => {
-					state.menus = res.data.data
-					sessionStorage.setItem('menus', JSON.stringify(res.data.data))
+			Menu.del({Menu_ID: menu.Menu_ID}).then(() => {
+				Menu.find().then(res => {
+					state.menus = res
+					sessionStorage.setItem('menus', JSON.stringify(res))
 				})
 			})
 		}

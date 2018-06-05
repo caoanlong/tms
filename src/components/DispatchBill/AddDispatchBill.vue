@@ -8,6 +8,7 @@
 				<el-step title="装车信息&amp;结算方式"></el-step>
 				<el-step title="完成"></el-step>
 			</el-steps>
+			<!-- <component :is="currentStepView" @nextStep="nextStep"></component> -->
 			<Step1 v-show="stepActive == 0" @nextStep="nextStep"/>
 			<Step2 v-show="stepActive == 1" @nextStep="nextStep" @prevStep="prevStep" :carrierBills="selectedCarrierBills" />
 			<Step3 v-show="stepActive == 2" @nextStep="nextStep" @prevStep="prevStep" :truck="selectedTruck" :person="selectedPerson" />
@@ -30,14 +31,17 @@ export default {
 			selectedCarrierBillIDs:[],
 			selectedTruck: {},
 			selectedPerson: {},
+			currentStepView: 'Step1'
 		}
 	},
 	created() {
 	},
 	methods: {
-		nextStep(x,data,data1) {
+		nextStep(x, data, data1) {
+			console.log(x + 1)
+			this.currentStepView = 'Step' + (x + 1)
 			this.stepActive = x
-			if(x==1){
+			if(x == 1){
 				this.selectedCarrierBillIDs = data
 				for (let i = 0; i < this.selectedCarrierBillIDs.length; i++) {
 					this.getDetail(this.selectedCarrierBillIDs[i])
