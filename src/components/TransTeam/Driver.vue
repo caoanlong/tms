@@ -102,168 +102,168 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request, { baseURL } from '../../common/request'
-	export default {
-		data() {
-			return {
-				findName: '',
-				findMobile: '',
-				findLevel: '',
-				findPost: '',
-				findDate: [],
-				startDate: '',
-				endDate: '',
-				pageIndex: 1,
-				pageSize: 10,
-				count: 0,
-				selectedList: [],
-				tableData: [],
-				importFileUrl: baseURL + '/staff/upload',
-				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				postMap: {
-					"Operator": "操作员",
-					"Driver": "驾驶员",
-					"Supercargo": "押运员",
-					"SafetyOfficer": "专职安全员",
-					"Stevedore": "装卸管理人员",
-					"Other": "其他人员"
-				},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xlsx&&Authorization=' +localStorage.getItem("token"),
-				templateTit:'employee.xlsx'
-			}
-		},
-		created() {
+import { Message } from 'element-ui'
+import request, { baseURL } from '../../common/request'
+export default {
+	data() {
+		return {
+			findName: '',
+			findMobile: '',
+			findLevel: '',
+			findPost: '',
+			findDate: [],
+			startDate: '',
+			endDate: '',
+			pageIndex: 1,
+			pageSize: 10,
+			count: 0,
+			selectedList: [],
+			tableData: [],
+			importFileUrl: baseURL + '/staff/upload',
+			uploadHeaders: {'Authorization': localStorage.getItem('token')},
+			postMap: {
+				"Operator": "操作员",
+				"Driver": "驾驶员",
+				"Supercargo": "押运员",
+				"SafetyOfficer": "专职安全员",
+				"Stevedore": "装卸管理人员",
+				"Other": "其他人员"
+			},
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xlsx&&Authorization=' +localStorage.getItem("token"),
+			templateTit:'employee.xlsx'
+		}
+	},
+	created() {
+		this.getList()
+	},
+	methods: {
+		reset() {
+			this.findName = ''
+			this.findMobile = ''
+			this.findLevel = ''
+			this.findPost = ''
+			this.findDate = []
+			this.startDate = ''
+			this.endDate = ''
 			this.getList()
 		},
-		methods: {
-			reset() {
-				this.findName = ''
-				this.findMobile = ''
-				this.findLevel = ''
-				this.findPost = ''
-				this.findDate = []
-				this.startDate = ''
-				this.endDate = ''
-				this.getList()
-			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			selectionChange(data) {
-				this.selectedList = data.map(item => item.staffID)
-			},
-			selectDateRange(date) {
-				this.startDate = date[0]
-				this.endDate = date[1]
-			},
-			// 导入
-			uploadSuccess (response) {
-				if (response.code != 200) {
-					Message.error(response.msg)
-				} else {
-					Message.success(response.msg)
-					this.getList()
-				}
-			},
-			// 上传错误
-			uploadError (response) {
-				console.log(response)
+		pageChange(index) {
+			this.pageIndex = index
+			this.getList()
+		},
+		selectionChange(data) {
+			this.selectedList = data.map(item => item.staffID)
+		},
+		selectDateRange(date) {
+			this.startDate = date[0]
+			this.endDate = date[1]
+		},
+		// 导入
+		uploadSuccess (response) {
+			if (response.code != 200) {
 				Message.error(response.msg)
-			},
-			beforeFileUpload (file) {
-				const extension = file.name.split('.')[1] === 'xls'
-				const extension2 = file.name.split('.')[1] === 'xlsx'
-				const isLt2M = file.size / 1024 / 1024 < 10
-				if (!extension && !extension2) {
-					Message.error('上传模板只能是 xls、xlsx格式!')
-				}
-				if (!isLt2M) {
-					Message.error('上传模板大小不能超过 10MB!')
-				}
-				return extension || extension2 && isLt2M
-			},
-			getList() {
-				let params = {
-					current: this.pageIndex,
-					size: this.pageSize,
-					mobile: this.findMobile,
-					position: this.findPost,
-					realName: this.findName,
-					integrityExamineGrade: this.findLevel,
-					createTimeBegin: this.startDate,
-					createTimeEnd: this.endDate
-				}
-				request({
-					url: '/staff/findList',
-					params
-				}).then(res => {
-					if (res.data.code == 200) {
-						this.tableData = res.data.data.records
-						this.count = res.data.data.total
-					}
-				})
-			},
-			handleCommand(e) {
-				console.log(e)
-				if (e.type == 'view') {
-					this.$router.push({name: 'viewdriver', query: {staffID: e.id}})
-				} else if (e.type == 'edit') {
-					this.$router.push({name: 'editdriver', query: {staffID: e.id}})
-				} else if (e.type == 'delete') {
-					this.deleteConfirm(e.id)
-				}
-			},
-			add() {
-				this.$router.push({name: 'adddriver'})
-			},
-			deleteConfirm(id) {
-				let ids = ''
-				if (id && typeof id == 'string') {
-					ids = id
-				} else {
-					ids = this.selectedList.join(',')
-				}
-				if(!ids) {
-					Message({
-						type: 'warning',
-						message: '请选择'
-					})
-					return
-				}
-				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.delItem(ids)
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					})
-				})
-			},
-			delItem(staffIDs) {
-				console.log(staffIDs)
-				let data = {
-					staffIDs
-				}
-				request({
-					url: '/staff/deleteBatch',
-					method: 'post',
-					data
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
-					this.getList()
-				})
+			} else {
+				Message.success(response.msg)
+				this.getList()
 			}
+		},
+		// 上传错误
+		uploadError (response) {
+			console.log(response)
+			Message.error(response.msg)
+		},
+		beforeFileUpload (file) {
+			const extension = file.name.split('.')[1] === 'xls'
+			const extension2 = file.name.split('.')[1] === 'xlsx'
+			const isLt2M = file.size / 1024 / 1024 < 10
+			if (!extension && !extension2) {
+				Message.error('上传模板只能是 xls、xlsx格式!')
+			}
+			if (!isLt2M) {
+				Message.error('上传模板大小不能超过 10MB!')
+			}
+			return extension || extension2 && isLt2M
+		},
+		getList() {
+			let params = {
+				current: this.pageIndex,
+				size: this.pageSize,
+				mobile: this.findMobile,
+				position: this.findPost,
+				realName: this.findName,
+				integrityExamineGrade: this.findLevel,
+				createTimeBegin: this.startDate,
+				createTimeEnd: this.endDate
+			}
+			request({
+				url: '/staff/findList',
+				params
+			}).then(res => {
+				if (res.data.code == 200) {
+					this.tableData = res.data.data.records
+					this.count = res.data.data.total
+				}
+			})
+		},
+		handleCommand(e) {
+			console.log(e)
+			if (e.type == 'view') {
+				this.$router.push({name: 'viewdriver', query: {staffID: e.id}})
+			} else if (e.type == 'edit') {
+				this.$router.push({name: 'editdriver', query: {staffID: e.id}})
+			} else if (e.type == 'delete') {
+				this.deleteConfirm(e.id)
+			}
+		},
+		add() {
+			this.$router.push({name: 'adddriver'})
+		},
+		deleteConfirm(id) {
+			let ids = ''
+			if (id && typeof id == 'string') {
+				ids = id
+			} else {
+				ids = this.selectedList.join(',')
+			}
+			if(!ids) {
+				Message({
+					type: 'warning',
+					message: '请选择'
+				})
+				return
+			}
+			this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				this.delItem(ids)
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				})
+			})
+		},
+		delItem(staffIDs) {
+			console.log(staffIDs)
+			let data = {
+				staffIDs
+			}
+			request({
+				url: '/staff/deleteBatch',
+				method: 'post',
+				data
+			}).then(res => {
+				this.$message({
+					type: 'success',
+					message: '删除成功!'
+				})
+				this.getList()
+			})
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .upload-File
