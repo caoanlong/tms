@@ -21,20 +21,18 @@ export default {
 		}
 	},
 	methods: {
-		scrollSHow(){
-			
-		},
+
 		scroll(o){
 			let wrapper = document.getElementById('scroll-wrapper').offsetWidth
 			let box = document.getElementById('scroll-box').offsetWidth
 			let offsetL = document.getElementById('scroll-wrapper').offsetLeft
 			if(o){
-				if(wrapper>box&& box-wrapper<offsetL){
-					this.left -= 100
-				}
-			}else{
 				if(wrapper>box&&offsetL<0){
 					this.left += 100
+				}
+			}else{
+				if(wrapper>box&& box-wrapper<offsetL){
+					this.left -= 100
 				}
 			}
 		},
