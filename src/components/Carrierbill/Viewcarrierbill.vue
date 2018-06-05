@@ -204,13 +204,19 @@
 					<th>运输照片</th>
 				</tr>
 				<tr v-for="(transport, index) in transports" :key="index">
-					<td>{{transport.plateNo}}/{{transport.trailerPlateNo}}</td>
+					<td>{{transport.plateNo}}{{transport.trailerPlateNo ? ('/' + transport.trailerPlateNo) : ''}}</td>
 					<td>{{transport.driverName}}</td>
 					<td>{{transport.superCargoName}}</td>
 					<td>{{transport.taskNo}}</td>
-					<td></td>
+					<td>
+						<span v-if="transport.status == 'Committed'">待执行</span>
+						<span v-else-if="transport.status == 'Running'">执行中</span>
+						<span v-else-if="transport.status == 'Signed'">已到达签收</span>
+						<span v-else-if="transport.status == 'Closed'">已关闭</span>
+						<span v-else-if="transport.status == 'Canceled'">已作废</span>
+					</td>
 					<td>{{transport.cargoName}}</td>
-					<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.loadNumSum + '件'}}</td>
+					<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.LoadNumSum + '件'}}</td>
 					<td style="text-align: center">
 						<el-button type="primary" size="mini" @click="dialogPhotoVisible = true">查看</el-button>
 						<!-- <el-button type="primary" size="mini" @click="dialogCargoVisible = true">查看货物</el-button> -->
@@ -328,6 +334,7 @@ export default {
 				this.carrierOrder = res
 				this.carrierCargo = res.carrierCargo
 				this.porRequire = res.porRequire.split(',')
+				this.getTransports(carrierOrderID)
 			})
 		},
 		getDispacthBills() {
@@ -354,7 +361,7 @@ export default {
 			})
 		},
 		// 查询运输列表
-		getTransports() {
+		getTransports(carrierOrderID) {
 			Carrierbill.findTransports({ carrierOrderID }).then(res => {
 				this.transports = res
 			})

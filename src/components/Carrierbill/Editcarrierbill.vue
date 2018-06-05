@@ -85,7 +85,13 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发货时间" prop="shipperDate">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择发货时间" v-model="carrierbillInfo.shipperDate" value-format="timestamp"></el-date-picker>
+							<el-date-picker 
+								type="date" 
+								style="width:100%" 
+								placeholder="选择发货时间" 
+								v-model="carrierbillInfo.shipperDate" 
+								value-format="timestamp">
+							</el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -103,10 +109,10 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="发货位置" prop="shipperLocation">
+						<el-form-item label="发货位置" prop="shipperLocationAddress">
 							<el-autocomplete  style="width:100%"
 								value-key="name" 
-								v-model="carrierbillInfo.shipperLocation"
+								v-model="carrierbillInfo.shipperLocationAddress"
 								:fetch-suggestions="getShipperLocation"
 								placeholder="请输入内容"
 								@select="handSelectShipperLocation">
@@ -140,7 +146,13 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="到货时间" prop="consigneeDate">
-							<el-date-picker type="datetime" style="width:100%" placeholder="选择到货时间" v-model="carrierbillInfo.consigneeDate" value-format="timestamp"></el-date-picker>
+							<el-date-picker 
+								type="date" 
+								style="width:100%" 
+								placeholder="选择到货时间" 
+								v-model="carrierbillInfo.consigneeDate" 
+								value-format="timestamp">
+							</el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -158,10 +170,10 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="卸货位置" prop="consigneeLocation">
+						<el-form-item label="卸货位置" prop="consigneeLocationAddress">
 							<el-autocomplete  style="width:100%"
 								value-key="name" 
-								v-model="carrierbillInfo.consigneeLocation"
+								v-model="carrierbillInfo.consigneeLocationAddress"
 								:fetch-suggestions="getConsigneeLocation"
 								placeholder="请输入内容"
 								@select="handSelectConsigneeLocation">
@@ -300,7 +312,6 @@
 		</div>
 	</div>
 </template>
-
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import DistPicker from '../CommonComponents/DistPicker'
@@ -311,7 +322,6 @@ import Customer from '../../api/Customer'
 import BaiduMap from '../../api/BaiduMap'
 import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import { checkFloat2, checkMobile } from '../../common/validators'
-
 export default {
 	data() {
 		return {
