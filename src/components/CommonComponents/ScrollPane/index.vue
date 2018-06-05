@@ -12,7 +12,6 @@
 
 <script>
 const padding = 15 // tag's padding
-
 export default {
 	name: 'scrollPane',
 	data() {
@@ -21,7 +20,9 @@ export default {
 		}
 	},
 	methods: {
-
+		clearPos() {
+			this.left = 0
+		},
 		scroll(o){
 			let wrapper = document.getElementById('scroll-wrapper').offsetWidth
 			let box = document.getElementById('scroll-box').offsetWidth

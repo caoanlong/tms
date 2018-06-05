@@ -19,7 +19,6 @@
 
 <script>
 import ScrollPane from '../ScrollPane'
-
 export default {
 	data() {
 		return {
@@ -71,7 +70,7 @@ export default {
 			const tags = this.$refs.tag
 			this.$nextTick(() => {
 				for (const tag of tags) {
-					if (tag.to === this.$route.path) {
+					if (tag.to.path === this.$route.path) {
 						this.$refs.scrollPane.moveToTarget(tag.$el)
 						break
 					}
@@ -119,10 +118,12 @@ export default {
 			this.$store.dispatch('delOthersViews', this.selectedTag).then(() => {
 				this.moveToCurrentTag()
 			})
+			this.$refs.scrollPane.clearPos()
 		},
 		closeAllTags() {
 			this.$store.dispatch('delAllViews')
 			this.$router.push('/')
+			this.$refs.scrollPane.clearPos()
 		},
 		openMenu(tag, e) {
 			this.visible = true
