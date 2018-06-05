@@ -31,12 +31,12 @@
 				</div>
 				<div class="escort">
 					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">吴郑平<span class="tag">司机</span></p>
+					<p class="name">吴郑平<span class="tag">押运</span></p>
 					<p>13424389894</p>
 				</div>
 				<div class="dispatcher">
 					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">吴郑平<span class="tag">司机</span></p>
+					<p class="name">吴郑平<span class="tag">调度</span></p>
 					<p>13424389894</p>
 				</div>
 			</div>
@@ -57,7 +57,7 @@
 		</table>
 		<table class="fare">
 			<tr>
-				<td class="tit" colspan="7">付款费用</td>
+				<td class="tit" colspan="7">付款费用 <span class="fr editBtn" v-if="isEdit" @click="editFare">编辑</span><span class="fr editBtn" v-else @click="saveFare">保存</span></td>
 			</tr>
 			<tr>
 				<th width="100">付给人员</th>
@@ -95,6 +95,14 @@ export default {
 		return {
 			isEdit: true
 		}
+	},
+	methods:{
+		editFare(){
+			this.isEdit = false
+		},
+		saveFare(){
+			this.isEdit = true
+		}
 	}
 }
 
@@ -118,6 +126,15 @@ export default {
 			&.tit
 				background #e2ecf6
 				color #3582d0
+				.editBtn
+					background #409eff
+					color #FFF
+					cursor pointer
+					border-radius 4px
+					padding 0 12px
+					font-size 12px
+					line-height 24px
+					height 24px
 			.justify
 				width 80px
 				height 24px
