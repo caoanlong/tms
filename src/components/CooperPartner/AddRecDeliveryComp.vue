@@ -14,6 +14,15 @@
 						<el-form-item label="详细地址" prop="detailAddress" :maxlength="100">
 							<el-input v-model="recdeliverycomp.detailAddress"></el-input>
 						</el-form-item>
+						<el-form-item label="位置" prop="locationAddress">
+							<el-autocomplete  style="width:100%"
+								value-key="name" 
+								v-model="recdeliverycomp.locationAddress"
+								:fetch-suggestions="getLocation"
+								placeholder="请输入内容"
+								@select="handSelectLocation">
+							</el-autocomplete>
+						</el-form-item>
 						<el-form-item label="联系人">
 							<el-input v-model="recdeliverycomp.contactName"></el-input>
 						</el-form-item>
@@ -33,6 +42,8 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Customer from '../../api/Customer'
+import BaiduMap from '../../api/BaiduMap'
+import { searchAreaByKey } from '../../common/utils'
 import DistPicker from '../CommonComponents/DistPicker'
 export default {
 	data() {
@@ -42,7 +53,10 @@ export default {
 				companyName: '',
 				contactName: '',
 				contactPhone: '',
-				detailAddress: ''
+				detailAddress: '',
+				locationAddress: '',
+				locationLng: '',
+				locationLat: '',
 			},
 			selectedArea: [],
 			rules: {
@@ -54,6 +68,9 @@ export default {
 				],
 				detailAddress: [
 					{required: true, message: '请输入详细地址', trigger: 'blur'}
+				],
+				locationAddress: [
+					{required: true, message: '请输入位置', trigger: 'blur'}
 				]
 			}
 		}
@@ -61,6 +78,27 @@ export default {
 	methods: {
 		handleSelectedArea(data) {
 			this.recdeliverycomp.companyAreaID = data
+			this.recdeliverycomp.companyArea = searchAreaByKey(data)
+		},
+		handSelectLocation(data) {
+			this.recdeliverycomp.locationLng = data.location.lng
+			this.recdeliverycomp.locationLat = data.location.lat
+		},
+		getLocation(queryString, cb) {
+			BaiduMap.getLocation({
+				region: this.recdeliverycomp.companyArea,
+				queryString
+			}).then(res => {
+				let names = res.name.map((item, i) => { 
+					return { 
+						name: item,
+						location: res.location[i]
+					} 
+				})
+				cb(names)
+			}).catch(err => {
+				cb(err)
+			})
 		},
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
@@ -71,6 +109,9 @@ export default {
 						contactName: this.recdeliverycomp.contactName,
 						contactPhone: this.recdeliverycomp.contactPhone,
 						detailAddress: this.recdeliverycomp.detailAddress,
+						locationAddress: this.recdeliverycomp.locationAddress,
+						locationLng: this.recdeliverycomp.locationLng,
+						locationLat: this.recdeliverycomp.locationLat,
 						type: 'ShipperConsignee'
 					}).then(res => {
 						Message.success('保存成功！')
