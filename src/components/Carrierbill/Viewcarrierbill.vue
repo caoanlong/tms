@@ -55,6 +55,10 @@
 					</td>
 				</tr>
 				<tr>
+					<td><span class="justify">发货位置</span>{{carrierOrder.shipperLocationAddress}}</td>
+					<td><span class="justify">收货位置</span>{{carrierOrder.consigneeLocationAddress}}</td>
+				</tr>
+				<tr>
 					<td>
 						<span class="justify">发货时间</span>
 						<span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp()}}</span>
