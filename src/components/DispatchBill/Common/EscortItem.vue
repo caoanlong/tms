@@ -1,15 +1,12 @@
 <template>
 	<div class="EscortItem">
-		<div class="pic inlineBlock">
-			<img :src="person.headPic&&person.headPic!='undefined'?(imgUrl + person.headPic):defaultImg">
+		<div class="status">
+			<span v-if="person.workStatus == 'Free'">空闲中</span>
+			<span v-else-if="person.workStatus == 'Working'">工作中</span>
 		</div>
-		<div class="status" v-if="person.workStatus == 'Free'">空闲中</div>
-		<div class="status" v-else-if="person.workStatus == 'Working'">工作中</div>
 		<div class="driverName">{{person.realName}}</div>
 		<div class="phone">{{person.mobile}}</div>
-		<div class="lineInfo inlineBlock">
-			<p v-for="item in person.runInfo">{{item.info}}</p>
-		</div>
+		<div class="role">角色：押运员</div>
 		<svg-icon icon-class="select-icon" class="icon" :class="{selected: isSelected}"></svg-icon>
 	</div>
 </template>
@@ -49,46 +46,32 @@ export default {
 		margin-top -1px
 		padding 10px
 		font-size 12px
-		hiehgt 60px
+		height 50px
 		position relative
+		display flex
 		p
 			margin 0
 			line-height 30px
-		.pic
-			width 40px
-			vertical-align top
-			height 40px
-			img
-				width 40px
-				height 40px
-				vertical-align top
-		.status
-			margin-left 10px
+		
 		.status
 		.driverName
 		.phone
-			width 120px
+		.role
+			flex 1
 			text-align center
-			height 40px
-			line-height 20px
+			height 30px
+			line-height 30px
 			display inline-block
 			vertical-align top
 			padding 0 20px
 			border-left 1px solid #ebeef5
+		.status
+			border-left none
 		.info
 			width 220px
 			padding-left 10px
 			vertical-align top
-		.lineInfo
-			vertical-align top
-			height 40px
-			padding-left 15px
-			border-left 1px solid #ebeef5
-			p
-				overflow hidden
-				white-space nowrap
-				text-overflow ellipsis
-				line-height 20px
+		
 		.icon
 			font-size 36px
 			position absolute
