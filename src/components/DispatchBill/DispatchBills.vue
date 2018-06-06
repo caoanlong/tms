@@ -45,7 +45,7 @@
 					</tr>
 					<template v-for="item in 3">
 						<tr class="tit" :key="item">
-							<td colspan="6">
+							<td colspan="9">
 								<span class="infoItem ViewDispatchBill" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
 								<span class="infoItem">车牌号：{{item.plateNo}}</span><span class="infoItem">
 									<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
@@ -53,12 +53,12 @@
 									<span class="tag tag3" v-else-if="item.status == 'Signed'">已签收</span>
 									<span class="tag tag4" v-else-if="item.status == 'Canceled'">已作废</span>
 								</span>
-							</td>
-							<td colspan="3" class="text-center" width="140">
-								<el-button type="text" size="mini">重新调度</el-button>
-								<el-button type="text" size="mini">取消调度</el-button>
-								<el-button type="text" size="mini">关闭</el-button>
-								<el-button type="text" size="mini">删除</el-button>
+								<span class="fr">
+									<el-button type="text" size="mini">重新调度</el-button>
+									<el-button type="text" size="mini">取消调度</el-button>
+									<el-button type="text" size="mini">关闭</el-button>
+									<el-button type="text" size="mini">删除</el-button>
+								</span>
 							</td>
 						</tr>
 						<tr class="list" v-for="taskItem in 4" :key="item + taskItem * 1000">
