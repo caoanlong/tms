@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<el-form label-width="155px" size="small" :model="person" :rules="rules" ref="ruleForm">
+			<el-form label-width="155px" size="small">
 				<el-row>
 					<el-col :span="24">
 						<p class="divided"><svg-icon icon-class="list-tag"></svg-icon>基本信息</p>
@@ -9,73 +9,77 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="姓名" prop="realName">
-							<p>111</p>
+						<el-form-item label="姓名">
+							<p>{{driver.realName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="性别" prop="sex">
-							<p>111</p>
+						<el-form-item label="性别">
+							<p>{{driver.sex == 'M' ? '男' : '女'}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="手机号" prop="mobile">
-							<p>111</p>
+						<el-form-item label="手机号">
+							<p>{{driver.mobile}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="合作关系">
-							<p>111</p>
+							<p>{{driver.cooperateRelation == 'Attach' ? '挂靠' : '自有车辆'}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="16">
 						<el-form-item label="合同有效期">
-							<p>111</p>
+							<p v-if="driver.idCardBeginTime">{{driver.laborContractBeginTime | getdatefromtimestamp(true)}} 
+								- {{driver.laborContractEndTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="身份证号" prop="idCardNum">
-							<p>111</p>
+						<el-form-item label="身份证号">
+							<p>{{driver.idCardNum}}</p>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="16">
 						<el-form-item label="身份证有效期">
-							<p>111</p>
+							<p v-if="driver.idCardBeginTime">{{driver.idCardBeginTime | getdatefromtimestamp(true)}} 
+								- {{driver.idCardExpirationTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
-						<el-form-item label="家庭地址" prop="homeAddress">
-							<p>111</p>
+						<el-form-item label="家庭地址">
+							<p>{{driver.homeAddress}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="备注说明">
-							<p>111</p>
+							<p>{{driver.remark}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="头像">
-							<ImageUpload :files="[person.headPic]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
+							<ImageUpload :files="[driver.headPic]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="身份证正面">
-							<ImageUpload :files="[person.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
+							<ImageUpload :files="[driver.idCardFrontUrl]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="身份证反面">
-							<ImageUpload :files="[person.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
+							<ImageUpload :files="[driver.idCardBackUrl]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -87,36 +91,39 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="驾驶证档案编号">
-							<p>111</p>
+							<p>{{driver.driverLicenseCode}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="准驾车型">
-							<p>111</p>
+							<p>{{driver.quasiDrivingType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="初次领证日期">
-							<p>111</p>
+							<p v-if="driver.driverLicenseFirstTime">{{driver.driverLicenseFirstTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="驾驶证有效期">
-							<p>111</p>
+							<p v-if="driver.driverLicenseBeginTime">{{driver.driverLicenseBeginTime | getdatefromtimestamp(true)}} 
+								- {{driver.driverLicenseEndTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="驾驶证正面">
-							<ImageUpload :files="[person.driverLicFrontUrl]" @imgUrlBack="handleDriverFrontSuccess"/>
+							<ImageUpload :files="[driver.driverLicFrontUrl]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="驾驶证反面">
-							<ImageUpload :files="[person.driverLicBackUrl]" @imgUrlBack="handleDriverBackSuccess"/>
+							<ImageUpload :files="[driver.driverLicBackUrl]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -128,32 +135,31 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="从业资格证编号">
-							<p>111</p>
+							<p>{{driver.qualificationCode}}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="从业资格证类别">
-							<p>111</p>
+							<p>{{driver.qualificationType}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="从业资格证有效期">
-							<p>111</p>
+							<p v-if="driver.qualificationBeginTime">{{driver.qualificationBeginTime | getdatefromtimestamp(true)}} 
+								- {{driver.qualificationExpirationTime | getdatefromtimestamp(true)}}</p>
+							<p v-else></p>
 						</el-form-item>
 					</el-col>
-					
 				</el-row>
-				
-				
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="从业资格证正">
-							<ImageUpload :files="[person.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
+							<ImageUpload :files="[driver.qualificationFirstPage]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="从业资格证副">
-							<ImageUpload :files="[person.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
+							<ImageUpload :files="[driver.qualificationSecondPage]" :isPreview="true"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -170,54 +176,24 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { mapGetters } from 'vuex'
-import request from '../../common/request'
+import Driver from '../../api/Driver'
 import ImageUpload from '../CommonComponents/ImageUpload'
-import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
 export default {
 	data() {
 		return {
-			person: {
-				createName: '',
-				status: '',
-				auditName: '',
-				auditTime: '',
-				realName: '',
-				homeAddress: '',
-				mobile: '',
-				sex: '',
-				driverLicenseFirstTime: '',
-				integrityExamineGrade: '',
-				position: '',
-				integrityExamineEndTime: '',
-				idCardNum: '',
-				quasiDrivingType: '',
-				laborContractBeginTime: '',
-				laborContractEndTime: '',
-				driverLicExamineBeginTime: '',
-				driverLicExamineEndTime: '',
-				driverLicenseCode: '',
-				titleLever: '',
-				qualificationCode: '',
-				qualificationType: '',
-				qualificationExpirationTime: '',
-				remark: '',
-				headPic: '',
-				idCardFrontUrl: '',
-				idCardBackUrl: '',
-				driverLicFrontUrl: '',
-				driverLicBackUrl: '',
-				qualificationFirstPage: '',
-				qualificationSecondPage: '',
-				otherStaffPic1: '',
-				otherStaffPic2: '',
-				otherStaffPic3: '',
-				otherStaffPic4: '',
-				otherStaffPic5: ''
-			},
+			driver: {}
 		}
 	},
+	created() {
+		this.getInfo()
+	},
 	methods:{
+		getInfo() {
+			let comDriverID = this.$route.query.comDriverID
+			Driver.findById({ comDriverID }).then(res => {
+				this.driver = res
+			})
+		},
 		back() {
 			this.$router.go(-1)
 		}
