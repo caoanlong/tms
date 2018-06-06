@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<el-form label-width="155px" size="small" :model="person" :rules="rules" ref="ruleForm">
+			<el-form label-width="155px" size="small" :model="driver" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="24">
 						<p class="divided"><svg-icon icon-class="list-tag"></svg-icon>基本信息</p>
@@ -10,12 +10,12 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="姓名" prop="realName">
-							<el-input v-model="person.realName"></el-input>
+							<el-input v-model="driver.realName"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="性别" prop="sex">
-							<el-select style="width: 100%" v-model="person.sex" placeholder="请选择">
+							<el-select style="width: 100%" v-model="driver.sex" placeholder="请选择">
 								<el-option label="男" value="M"></el-option>
 								<el-option label="女" value="F"></el-option>
 							</el-select>
@@ -23,23 +23,29 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="手机号" prop="mobile">
-							<el-input v-model="person.mobile"></el-input>
+							<el-input v-model="driver.mobile"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="合作关系">
-							<el-select style="width: 100%" v-model="person.integrityExamineGrade" placeholder="请选择">
-								<el-option label="单位挂靠" value="单位挂靠"></el-option>
-								<el-option label="个人挂靠" value="个人挂靠"></el-option>
-								<el-option label="自有车辆" value="自有车辆"></el-option>
+						<el-form-item label="合作关系" prop="cooperateRelation">
+							<el-select style="width: 100%" v-model="driver.cooperateRelation" placeholder="请选择">
+								<el-option label="挂靠" value="Attach"></el-option>
+								<el-option label="自有车辆" value="Self"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
-						<el-form-item label="合同有效期">
-							<el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%">
+					<el-col :span="16">
+						<el-form-item label="合同有效期" prop="laborContractBeginTime">
+							<el-date-picker 
+								v-model="laborContractDate"
+								type="daterange" 
+								range-separator="至" 
+								start-placeholder="开始日期" 
+								end-placeholder="结束日期" 
+								style="width:100%"
+								@change="handSelectLaborContractDate">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
@@ -47,12 +53,19 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="身份证号" prop="idCardNum">
-							<el-input v-model="person.idCardNum"></el-input>
+							<el-input v-model="driver.idCardNum"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+					<el-col :span="16">
 						<el-form-item label="身份证有效期">
-							<el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%">
+							<el-date-picker 
+								v-model="idCardDate"
+								type="daterange" 
+								range-separator="至" 
+								start-placeholder="开始日期" 
+								end-placeholder="结束日期" 
+								style="width:100%"
+								@change="handSelectIdCardDate">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
@@ -60,31 +73,31 @@
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="家庭地址" prop="homeAddress">
-							<el-input v-model="person.homeAddress"></el-input>
+							<el-input v-model="driver.homeAddress"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="24">
 						<el-form-item label="备注说明">
-							<el-input type="textarea" v-model="person.remark"></el-input>
+							<el-input type="textarea" v-model="driver.remark"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="头像">
-							<ImageUpload :files="[person.headPic]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
+							<ImageUpload :files="[driver.headPic]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="身份证正面">
-							<ImageUpload :files="[person.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
+							<ImageUpload :files="[driver.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="身份证反面">
-							<ImageUpload :files="[person.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
+							<ImageUpload :files="[driver.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -96,12 +109,12 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="驾驶证档案编号">
-							<el-input v-model="person.driverLicenseCode"></el-input>
+							<el-input v-model="driver.driverLicenseCode"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="准驾车型">
-							<el-select style="width: 100%" v-model="person.quasiDrivingType" placeholder="请选择">
+						<el-form-item label="准驾车型" prop="quasiDrivingType">
+							<el-select style="width: 100%" v-model="driver.quasiDrivingType" placeholder="请选择">
 								<el-option label="A1" value="A1"></el-option>
 								<el-option label="A2" value="A2"></el-option>
 								<el-option label="A3" value="A3"></el-option>
@@ -127,7 +140,7 @@
 								:picker-options="{disabledDate}"
 								:editable="false"
 								style="width: 100%" 
-								v-model="person.driverLicenseFirstTime"
+								v-model="driver.driverLicenseFirstTime"
 								type="date"
 								value-format="timestamp"
 								placeholder="选择日期">
@@ -136,23 +149,29 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="8">
+					<el-col :span="16">
 						<el-form-item label="驾驶证有效期">
-							<el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%">
+							<el-date-picker 
+								v-model="driverLicenseDate"
+								type="daterange" 
+								range-separator="至" 
+								start-placeholder="开始日期" 
+								end-placeholder="结束日期" 
+								style="width:100%" 
+								@change="handSelectDriverLicenseDate">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="驾驶证正面">
-							<ImageUpload :files="[person.driverLicFrontUrl]" @imgUrlBack="handleDriverFrontSuccess"/>
+							<ImageUpload :files="[driver.driverLicFrontUrl]" @imgUrlBack="handleDriverFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="驾驶证反面">
-							<ImageUpload :files="[person.driverLicBackUrl]" @imgUrlBack="handleDriverBackSuccess"/>
+							<ImageUpload :files="[driver.driverLicBackUrl]" @imgUrlBack="handleDriverBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -164,33 +183,39 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="从业资格证编号">
-							<el-input v-model="person.qualificationCode"></el-input>
+							<el-input v-model="driver.qualificationCode"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="从业资格证类别">
-							<el-input v-model="person.qualificationType"></el-input>
+							<el-input v-model="driver.qualificationType"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
+				</el-row>
+				<el-row>
+					<el-col :span="16">
 						<el-form-item label="从业资格证有效期">
-							<el-date-picker type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%">
+							<el-date-picker 
+								v-model="qualificationDate"
+								type="daterange" 
+								range-separator="至" 
+								start-placeholder="开始日期" 
+								end-placeholder="结束日期" 
+								style="width:100%" 
+								@change="handSelectQualificationDate">
 							</el-date-picker>
 						</el-form-item>
 					</el-col>
-					
 				</el-row>
-				
-				
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="从业资格证正">
-							<ImageUpload :files="[person.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
+							<ImageUpload :files="[driver.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="从业资格证副">
-							<ImageUpload :files="[person.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
+							<ImageUpload :files="[driver.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -208,179 +233,139 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { mapGetters } from 'vuex'
-import request from '../../common/request'
+import Driver from '../../api/Driver'
 import ImageUpload from '../CommonComponents/ImageUpload'
-import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
+import { checkMobile, checkIDCard } from '../../common/validators'
 export default {
 	data() {
 		return {
-			person: {
-				createName: '',
-				status: '',
-				auditName: '',
-				auditTime: '',
+			driver: {
 				realName: '',
-				homeAddress: '',
-				mobile: '',
 				sex: '',
-				driverLicenseFirstTime: '',
-				integrityExamineGrade: '',
-				position: '',
-				integrityExamineEndTime: '',
-				idCardNum: '',
-				quasiDrivingType: '',
+				mobile: '',
+				cooperateRelation: '',
 				laborContractBeginTime: '',
 				laborContractEndTime: '',
-				driverLicExamineBeginTime: '',
-				driverLicExamineEndTime: '',
-				driverLicenseCode: '',
-				titleLever: '',
-				qualificationCode: '',
-				qualificationType: '',
-				qualificationExpirationTime: '',
+				idCardNum: '',
+				idCardBeginTime: '',
+				idCardExpirationTime: '',
+				homeAddress: '',
 				remark: '',
 				headPic: '',
 				idCardFrontUrl: '',
 				idCardBackUrl: '',
+				driverLicenseCode: '',
+				quasiDrivingType: '',
+				driverLicenseFirstTime: '',
+				driverLicenseBeginTime: '',
+				driverLicenseEndTime: '',
 				driverLicFrontUrl: '',
 				driverLicBackUrl: '',
+				qualificationCode: '',
+				qualificationType: '',
+				qualificationBeginTime: '',
+				qualificationExpirationTime: '',
 				qualificationFirstPage: '',
 				qualificationSecondPage: '',
-				otherStaffPic1: '',
-				otherStaffPic2: '',
-				otherStaffPic3: '',
-				otherStaffPic4: '',
-				otherStaffPic5: ''
 			},
-			quasiDrivingType: [],
-			position: [],
-			otherImgs: [],
+			laborContractDate: [],
+			idCardDate: [],
+			driverLicenseDate: [],
+			qualificationDate: [],
 			rules: {
-				createName: [
-					{required: true, message: '请输入创建人', trigger: 'blur'},
-					{validator: limitLength50, trigger: 'blur'},
-				],
-				status: [
-					{ required: true, message: '请选择状态', trigger: 'change' }
-				],
-				auditName: [
-					{required: true, message: '请输入审核人', trigger: 'blur'},
-					{validator: limitLength50, trigger: 'blur'},
-				],
-				auditTime: [
-					{required: true, message: '请输入审核时间', trigger: 'blur'}
-				],
 				realName: [
-					{ required: true, message: '请选择姓名', trigger: 'blur' },
-					{validator: limitLength50, trigger: 'blur'},
-				],
-				homeAddress: [
-					{required: true, message: '请输入家庭地址', trigger: 'blur'},
-					{validator: limitLength100, trigger: 'blur'}
-				],
-				mobile: [
-					{required: true, validator: checkMobile, trigger: 'blur'},
+					{required: true, message: '请输入姓名'},
+					{min: 2, max: 10, message: '长度在 2 到 10 个字符'}
 				],
 				sex: [
-					{ required: true, message: '请选择性别', trigger: 'change' }
+					{ required: true, message: '请选择性别'}
 				],
-				position: [
-					{required: true, message: '请选择岗位', trigger: 'change'}
+				mobile: [
+					{required: true, message: '请输入手机号'},
+					{validator: checkMobile},
+				],
+				laborContractBeginTime: [
+					{required: true, message: '请选择合作关系'}
+				],
+				laborContractDate: [
+					{ required: true, message: '请选择合同有效期' },
 				],
 				idCardNum: [
-					{required: true, validator: checkIDCard, trigger: 'blur'}
+					{required: true, message: '请输入身份证号'},
+					{validator: checkIDCard}
+				],
+				homeAddress: [
+					{required: true, message: '请输入住址'},
+				],
+				quasiDrivingType: [
+					{ required: true, message: '请选择准驾车型'}
 				]
 			}
 		}
 	},
-	computed: {
-		...mapGetters(['name', 'mobile'])
-	},
-	watch: {
-		position: {
-			handler(newVal) {
-				if (newVal.includes('Operator')) {
-					this.person.auditName = this.name
-					this.person.mobile = this.mobile
-				}
-			},
-			deep: true
-		}
-	},
 	methods: {
+		handSelectLaborContractDate(date) {
+			this.driver.laborContractBeginTime = date[0].getTime()
+			this.driver.laborContractEndTime = date[1].getTime()
+		},
+		handSelectIdCardDate(date) {
+			this.driver.idCardBeginTime = date[0].getTime()
+			this.driver.idCardExpirationTime = date[1].getTime()
+		},
+		handSelectDriverLicenseDate(date) {
+			this.driver.driverLicenseBeginTime = date[0].getTime()
+			this.driver.driverLicenseEndTime = date[1].getTime()
+		},
+		handSelectQualificationDate(date) {
+			this.driver.qualificationBeginTime = date[0].getTime()
+			this.driver.qualificationExpirationTime = date[1].getTime()
+		},
 		disabledDate(curDate) {
 			return new Date() < curDate
 		},
 		handleAvatarSuccess(res) {
-			this.person.headPic = res[0]
+			this.driver.headPic = res[0]
 		},
 		handleCardFrontSuccess(res) {
-			this.person.idCardFrontUrl = res[0]
+			this.driver.idCardFrontUrl = res[0]
 		},
 		handleCardBackSuccess(res) {
-			this.person.idCardBackUrl = res[0]
+			this.driver.idCardBackUrl = res[0]
 		},
 		handleDriverFrontSuccess(res) {
-			this.person.driverLicFrontUrl = res[0]
+			this.driver.driverLicFrontUrl = res[0]
 		},
 		handleDriverBackSuccess(res) {
-			this.person.driverLicBackUrl = res[0]
+			this.driver.driverLicBackUrl = res[0]
 		},
 		handleQualifCerFrontSuccess(res) {
-			this.person.qualificationFirstPage = res[0]
+			this.driver.qualificationFirstPage = res[0]
 		},
 		handleQualifCerBackSuccess(res) {
-			this.person.qualificationSecondPage = res[0]
-		},
-		imgUrlBack(files) {
-			this.otherImgs = files
-			for (let i = 0; i < files.length; i++) {
-				this.person['otherStaffPic' + (i + 1)] = files[i]
-			}
-		},
-		changePost(e) {
-			this.person.position = e.join(',')
+			this.driver.qualificationSecondPage = res[0]
 		},
 		createItem() {
-			let data = this.person
-			if(!data.integrityExamineEndTime) {
-				data.integrityExamineEndTime = ''
-			}
-			if(!data.driverLicenseFirstTime) {
-				data.driverLicenseFirstTime = ''
-			}
-			if(!data.laborContractBeginTime) {
-				data.laborContractBeginTime = ''
-			}
-			if(!data.laborContractEndTime) {
-				data.laborContractEndTime = ''
-			}
-			if(!data.laborContractBeginTime) {
-				data.laborContractBeginTime = ''
-			}
-			if(!data.laborContractEndTime) {
-				data.laborContractEndTime = ''
-			}
-			if(!data.driverLicExamineBeginTime) {
-				data.driverLicExamineBeginTime = ''
-			}
-			if(!data.driverLicExamineEndTime) {
-				data.driverLicExamineEndTime = ''
-			}
-			if(!data.qualificationExpirationTime) {
-				data.qualificationExpirationTime = ''
-			}
+			let data = this.driver
+			!data.laborContractBeginTime && (data.laborContractBeginTime = '')
+			!data.laborContractEndTime && (data.laborContractEndTime = '')
+			!data.idCardBeginTime && (data.idCardBeginTime = '')
+			!data.idCardExpirationTime && (data.idCardExpirationTime = '')
+			!data.driverLicenseBeginTime && (data.driverLicenseBeginTime = '')
+			!data.driverLicenseEndTime && (data.driverLicenseEndTime = '')
+			!data.qualificationBeginTime && (data.qualificationBeginTime = '')
+			!data.qualificationExpirationTime && (data.qualificationExpirationTime = '')
+			!data.headPic && (data.headPic = '')
+			!data.idCardFrontUrl && (data.idCardFrontUrl = '')
+			!data.idCardBackUrl && (data.idCardBackUrl = '')
+			!data.driverLicFrontUrl && (data.driverLicFrontUrl = '')
+			!data.driverLicBackUrl && (data.driverLicBackUrl = '')
+			!data.qualificationFirstPage && (data.qualificationFirstPage = '')
+			!data.qualificationSecondPage && (data.qualificationSecondPage = '')
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					request({
-						url: '/staff/add',
-						method: 'post',
-						data
-					}).then(res => {
-						console.log(res.data)
+					Driver.add(data).then(res => {
 						Message.success(res.data.msg)
-						this.$router.push({name: 'person'})
+						this.$router.push({name: 'driver'})
 					})
 				}
 			})

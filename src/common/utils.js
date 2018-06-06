@@ -118,3 +118,8 @@ export function closeConfirm (id, callback) {
 		Message({ type: 'info', message: '已取消关闭'})
 	})
 }
+
+export function resizeImg (url, size) {
+	let arr = url.split('.')
+	return process.env.IMG_API + arr[0] + size + arr[1]
+}
