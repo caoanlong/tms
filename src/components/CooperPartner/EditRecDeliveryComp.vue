@@ -33,7 +33,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Customer from '../../api/Customer'
-import { areaIdToArrayId } from '../../common/utils'
+import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import DistPicker from '../CommonComponents/DistPicker'
 export default {
 	data() {
@@ -43,7 +43,10 @@ export default {
 				companyName: '',
 				contactName: '',
 				contactPhone: '',
-				detailAddress: ''
+				detailAddress: '',
+				locationAddress: '',
+				locationLng: '',
+				locationLat: '',
 			},
 			selectedArea: [],
 			rules: {
@@ -55,6 +58,9 @@ export default {
 				],
 				detailAddress: [
 					{required: true, message: '请输入详细地址', trigger: 'blur'}
+				],
+				locationAddress: [
+					{required: true, message: '请输入位置', trigger: 'blur'}
 				]
 			}
 		}
@@ -65,6 +71,27 @@ export default {
 	methods: {
 		handleSelectedArea(data) {
 			this.recdeliverycomp.companyAreaID = data
+			this.recdeliverycomp.companyArea = searchAreaByKey(data)
+		},
+		handSelectLocation(data) {
+			this.recdeliverycomp.locationLng = data.location.lng
+			this.recdeliverycomp.locationLat = data.location.lat
+		},
+		getLocation(queryString, cb) {
+			BaiduMap.getLocation({
+				region: this.recdeliverycomp.companyArea,
+				queryString
+			}).then(res => {
+				let names = res.name.map((item, i) => { 
+					return { 
+						name: item,
+						location: res.location[i]
+					} 
+				})
+				cb(names)
+			}).catch(err => {
+				cb(err)
+			})
 		},
 		getDetail() {
 			let customerID = this.$route.query.customerID
@@ -83,7 +110,10 @@ export default {
 						companyName: this.recdeliverycomp.companyName,
 						contactName: this.recdeliverycomp.contactName,
 						contactPhone: this.recdeliverycomp.contactPhone,
-						detailAddress: this.recdeliverycomp.detailAddress
+						detailAddress: this.recdeliverycomp.detailAddress,
+						locationAddress: this.recdeliverycomp.locationAddress,
+						locationLng: this.recdeliverycomp.locationLng,
+						locationLat: this.recdeliverycomp.locationLat
 					}).then(res => {
 						Message.success('保存成功！')
 						this.$router.push({name: 'recdeliverycomp'})
