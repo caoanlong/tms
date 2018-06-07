@@ -5,9 +5,9 @@
  * @authors coolia (coolia@qq.com)
  * @date    2018-03-20 09:59:18
  * @Last Modified by:   coolia
- * @Last Modified time: 2018-06-05 10:57:18
+ * @Last Modified time: 2018-06-07 16:08:03
  */
-#app{height: 100%}
+#app{height:100%}
 .top-bar .el-menu--horizontal{border:none}
 .tags-view-container .tags-view-wrapper{border:none}
 .top-bar .el-dropdown{color:#fff;}
@@ -52,13 +52,16 @@
 .plain.btn-success{color:#78c618;background:#fff;border-color:#78c618;}
 .plain.btn-warning{color:#f87229;background:#fff;border-color:#f87229;}
 .plain.btn-danger{color:#f74370;background:#fff;border-color:#f74370;}
-
-.distpicker.normal,.distpicker.normal .level{display: inline-block;}
+.distpicker.normal,.distpicker.normal .level{display:inline-block;}
 .download-btn{font-size:12px;color:#606266;height:29px;line-height:27px;padding:0 15px;border:1px solid #dcdfe6;-moz-border-radius:3px;border-radius:3px;background:#fff;margin:0 10px 0 0;display:inline-block;vertical-align:top;}
 .download-btn:hover{border-color:#c6e2ff;color:#409eff;background:#ecf5ff;}
 .download-btn:active{border-color:#3a8ee6;color:#3a8ee6;}
-
-
 .fare .el-input input{text-align:center;}
 .ViewPhotosDialog .el-dialog__header{border-bottom:1px solid #dcdfe6;}
 .ViewPhotosDialog .el-dialog__body{padding-top:0}
+.wfCheck {width: 20px;height: 14px;padding:0 3px;}
+.wfCheck span{position:relative;margin:0 auto;}
+.wfCheck .checkbox{position:absolute;width:14px;height:14px;z-index: 1;left:0;top:0;opacity: 0}
+.wfCheck .checkbox+label{display:block;width:14px;height:14px;position:absolute;left:0;top:0;z-index: 0; background: url(../imgs/checkbox.png) no-repeat 0 0}
+.wfCheck .checkbox:hover+label{background-position:-14px 0;}       
+.wfCheck .checkbox:checked+label{background-position:-28px 0;}

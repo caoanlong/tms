@@ -29,7 +29,7 @@
 		<div class="table">
 			<table class="wfTable">
 					<tr>
-						<th width="40"><el-checkbox @change="handleCheckAllChange"></el-checkbox></th>
+						<th width="40"><el-checkbox :indeterminate="isIndeterminate" v-model="checked" @change="handleCheckAllChange"></el-checkbox></th>
 						<th>货物</th>
 						<th>货量</th>
 						<th>件数</th>
@@ -42,9 +42,17 @@
 						<th>收货地</th>
 						<th width="160">收货时间</th>
 					</tr>
+
 					<template v-for="item in carrierList">
 					<tr class="tit">
-						<td class="text-center"><el-checkbox ref="checkCarrier" :checked='checkedList.includes(item.carrierOrderID)'></el-checkbox></td>
+						<td>
+							<div class="wfCheck">
+								<span>
+									<input type="checkbox"  class="checkbox" ref="checkCarrier" :checked='checkedList.includes(item.carrierOrderID)' @change="selectCarrier($event,item.carrierOrderID)"/>
+									<label></label>
+								</span>
+							</div>
+						</td>
 						<td colspan="11">
 							<span class="infoItem ViewDispatchBill" @click="ViewCarrierbills(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 							<span class="infoItem">
@@ -111,21 +119,22 @@
 				findshipperBeginDate: '',
 				findshipperEndDate: '',
 				checkedList: [],
-				checked:false
+				checked:false,
+				isIndeterminate:false
 			}
 		},
 		created(){
 			this.getList()
 		},
+
 		methods: {
 			nextStep(){
-				console.log(this.checkedList)
-				let selectedCarrierBillIDs = this.checkedList.map(item => item.carrierOrderID)
-				if (selectedCarrierBillIDs.length == 0) {
+				if (this.checkedList.length == 0) {
 					Message.error('请选择！')
 					return
 				}
-				this.$emit('nextStep', 1,selectedCarrierBillIDs)
+				this.$emit('nextStep', 1,this.checkedList)
+				console.log(this.checkedList)
 			},
 			back() {
 				this.$router.go(-1)
@@ -165,16 +174,42 @@
 			handleCheckAllChange(val) {
 				if(val){
 					this.checkedList = this.carrierList.map(item => item.carrierOrderID)
+					this.isIndeterminate = false
+					this.checked = true
 				}else{
 					this.checkedList = []
+					this.checked = false
 				}
-				console.log(this.checkedList)
 				return
 				this.$refs.checkCarrier.forEach(item =>{
 					console.log(item)
 					item.checked = true
 				})
 			},
+			selectCarrier(e,carrierOrderID){
+				if(e.target.checked){
+					this.checkedList.push(carrierOrderID)
+				}else{
+					this.checkedList.splice(this.checkedList.indexOf(carrierOrderID),1)
+				}
+			}
+		},
+		watch:{
+			checkedList:{
+				handler:function(){  
+					let checkLength = this.checkedList.length
+					let carrierListLength = this.carrierList.length
+					if(checkLength == carrierListLength){
+						this.isIndeterminate = false
+						this.checked = true
+					}else if(checkLength>0 && checkLength < carrierListLength){
+						this.isIndeterminate = true
+					}else{
+						this.isIndeterminate = false
+						this.checked = false
+					}
+                }
+			}
 		}
 	}
 </script>
@@ -238,4 +273,6 @@
 		margin-top 0
 .step-footer
 	margin-top 10px
+
+			
 </style>
