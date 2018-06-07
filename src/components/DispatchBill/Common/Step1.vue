@@ -29,7 +29,8 @@
 		<div class="table">
 			<table class="wfTable">
 					<tr>
-						<th colspan="2">货物</th>
+						<th width="40"><el-checkbox @change="handleCheckAllChange"></el-checkbox></th>
+						<th>货物</th>
 						<th>货量</th>
 						<th>件数</th>
 						<th>发货公司</th>
@@ -41,55 +42,53 @@
 						<th>收货地</th>
 						<th width="160">收货时间</th>
 					</tr>
-					<template>
+					<template v-for="item in carrierList">
 					<tr class="tit">
-						<td colspan="12">
-							<span class="infoItem ViewDispatchBill">承运单号：234567888899</span>
+						<td class="text-center"><el-checkbox ref="checkCarrier" :checked='checkedList.includes(item.carrierOrderID)'></el-checkbox></td>
+						<td colspan="11">
+							<span class="infoItem ViewDispatchBill" @click="ViewCarrierbills(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 							<span class="infoItem">
-								<span class="tag tag1">待执行</span>
-								<!-- <span class="tag tag1" v-if="item.status == 'Committed'">待执行</span> -->
-								<!-- <span class="tag tag2" v-else-if="item.status == 'Loaded'">已装运</span>
-								<span class="tag tag3" v-else-if="item.status == 'Signed'">已签收</span>
-								<span class="tag tag4" v-else-if="item.status == 'Canceled'">作废</span> -->
+								<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
+								<span class="tag tag2" v-else-if="item.status == 'Running'">执行中</span>
 							</span>
 						</td>
 					</tr>
-					<tr class="list">
-						<td class="text-center" width="40"><el-checkbox></el-checkbox></td>
-						<td>啤酒、可乐...</td>
-						<td>3000kg/3.5m³</td>
-						<td class="text-center">556</td>
-						<td>昆明天龙</td>
-						<td class="text-center" width="160">周俊1342438994</td>
-						<td>云南昆明</td>
-						<td class="text-center" width="160">2018-04-22 18:33:15</td>
-						<td>广东天龙</td>
-						<td class="text-center" width="160">董戡134455666</td>
-						<td>广东广州</td>
-						<td class="text-center" width="160">2018-04-22 18:33:15</td>
+					<tr class="list" v-for="cargoItem in item.carrierCargo">
+						<td colspan="2">{{cargoItem.cargoName}}</td>
+						<td class="text-center">{{cargoItem.cargoWeight}}kg{{cargoItem.cargoWeight&&cargoItem.cargoVolume?'/':''}}{{cargoItem.cargoVolume?cargoItem.cargoVolume+'m³':''}}</td>
+						<td class="text-center">{{cargoItem.cargoNum?cargoItem.cargoNum:''}}</td>
+						<td>{{item.shipperCompanyName}}</td>
+						<td class="text-center" width="160">{{item.shipperName}}<span class="phone">{{item.shipperPhone}}</span></td>
+						<td class="text-center">{{item.shipperArea}}</td>
+						<td class="text-center" width="140">{{item.shipperDate | getdatefromtimestamp()}}</td>
+						<td>{{item.consigneeCompanyName}}</td>
+						<td class="text-center" width="160">{{item.consigneeName}}<span class="phone">{{item.consigneePhone}}</span></td>
+						<td class="text-center">{{item.consigneeArea}}</td>
+						<td class="text-center" width="140">{{item.consigneeDate | getdatefromtimestamp()}}</td>
 					</tr>
 					</template>
 				</table>
-				<el-row type="flex">
-					<el-col :span="12" style="font-size: 12px; color: #909399">
-						<span>总共 {{count}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
-							<el-option label="10" :value="10"></el-option>
-							<el-option label="20" :value="20"></el-option>
-							<el-option label="30" :value="30"></el-option>
-							<el-option label="40" :value="40"></el-option>
-							<el-option label="50" :value="50"></el-option>
-							<el-option label="100" :value="100"></el-option>
-						</el-select>
-						<span>条记录</span>
-					</el-col>
-					<el-col :span="12">
-						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="count" @current-change="pageChange" size="small"></el-pagination>
-						</div>
-					</el-col>
-				</el-row>
+				
 		</div>
+		<el-row type="flex">
+			<el-col :span="12" style="font-size: 12px; color: #909399">
+				<span>总共 {{total}} 条记录每页显示</span>
+				<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
+					<el-option label="10" :value="10"></el-option>
+					<el-option label="20" :value="20"></el-option>
+					<el-option label="30" :value="30"></el-option>
+					<el-option label="40" :value="40"></el-option>
+					<el-option label="50" :value="50"></el-option>
+					<el-option label="100" :value="100"></el-option>
+				</el-select>
+				<span>条记录</span>
+			</el-col>
+			<el-col :span="12">
+				<div class="pagination">
+					<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="total" @current-change="pageChange" size="small"></el-pagination>
+				</div>
+			</el-col>
+		</el-row>
 		<div class="step-footer text-center">
 			<el-button type="primary" @click="nextStep">下一步</el-button>
 			<el-button @click="back">返回</el-button>
@@ -98,20 +97,21 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import request from '../../../common/request'
+	import Carrierbill from '../../../api/Carrierbill'
 	export default {
 		data() {
 			return {
 				pageIndex: 1,
 				pageSize: 10,
-				count: 0,
+				total: 0,
 				carrierList:[],
-				selected: [],
 				findsearchInfo:'',
 				findrecdeliverycomp:'',
 				findRangeDate: [],
 				findshipperBeginDate: '',
-				findshipperEndDate: ''
+				findshipperEndDate: '',
+				checkedList: [],
+				checked:false
 			}
 		},
 		created(){
@@ -119,11 +119,12 @@
 		},
 		methods: {
 			nextStep(){
-				let selectedCarrierBillIDs = this.selected.map(item => item.carrierOrderID)
-				// if (selectedCarrierBillIDs.length == 0) {
-				// 	Message.error('请选择！')
-				// 	return
-				// }
+				console.log(this.checkedList)
+				let selectedCarrierBillIDs = this.checkedList.map(item => item.carrierOrderID)
+				if (selectedCarrierBillIDs.length == 0) {
+					Message.error('请选择！')
+					return
+				}
 				this.$emit('nextStep', 1,selectedCarrierBillIDs)
 			},
 			back() {
@@ -133,21 +134,21 @@
 				this.pageIndex = index
 				this.getList()
 			},
-			getList(){
-				let params = {
+			getList() {
+				Carrierbill.find({
 					current: this.pageIndex,
 					size: this.pageSize,
 					shipperBeginDate: this.findshipperBeginDate,
 					shipperEndDate: this.findshipperEndDate,
 					searchInfo: this.findsearchInfo,
-				}
-				request({
-					url: '/biz/carrierOrder/list',
-					params
+					status: this.findStatus
 				}).then(res => {
-					this.carrierList = res.data.data.records
-					this.count = res.data.data.total
+					this.carrierList = res.records
+					this.total= res.total
 				})
+			},
+			ViewCarrierbills(carrierOrderID){
+				this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
 			},
 			reset() {
 				this.findsearchInfo='',
@@ -161,16 +162,28 @@
 				this.findshipperBeginDate = date[0]
 				this.findshipperEndDate = date[1]
 			},
-			selectionChange(data) {
-				// this.selectedList = data.map(item => item.carrierOrderID)
-				this.selected = data
+			handleCheckAllChange(val) {
+				if(val){
+					this.checkedList = this.carrierList.map(item => item.carrierOrderID)
+				}else{
+					this.checkedList = []
+				}
+				console.log(this.checkedList)
+				return
+				this.$refs.checkCarrier.forEach(item =>{
+					console.log(item)
+					item.checked = true
+				})
 			},
 		}
 	}
 </script>
 <style lang="stylus" scoped>
+.table
+	overflow hidden
+	overflow-x auto
 .wfTable
-	width 100%
+	min-width 100%
 	background #e2ecf6
 	border-spacing 1px
 	font-size 14px
@@ -182,6 +195,10 @@
 		line-height 24px
 		color #666
 		position relative
+		white-space nowrap
+		max-width 180px
+		overflow hidden
+		text-overflow ellipsis
 	.tit
 		td
 			border-top 1px solid #bbb
@@ -191,16 +208,31 @@
 				margin-right 40px
 				&.ViewDispatchBill
 					cursor pointer
+				.tag
+					padding 0 8px
+					color #fff
+					border-radius 4px
+					font-size 12px
+					height 19px
+					line-height 19px
+					display inline-block
+					&.tag1
+						background #409EFF
+					&.tag2
+						background #909399
 	th
 		padding 6px 10px
 		height 36px
 		line-height 24px
 		background #f0f0f0
 		color #666
-		width 100px
+		white-space nowrap
 	.list
 		td
 			font-size 12px
+			.phone
+				// color #67C23A
+				margin-left 10px
 .main-content
 	.pagination
 		margin-top 0
