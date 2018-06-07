@@ -55,6 +55,10 @@
 					</td>
 				</tr>
 				<tr>
+					<td><span class="justify">发货位置</span>{{carrierOrder.shipperLocationAddress}}</td>
+					<td><span class="justify">收货位置</span>{{carrierOrder.consigneeLocationAddress}}</td>
+				</tr>
+				<tr>
 					<td>
 						<span class="justify">发货时间</span>
 						<span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp()}}</span>
@@ -144,53 +148,6 @@
 					</td>
 				</tr>
 			</table>
-			<!-- <table class="wf-table">
-				<caption>调度单</caption>
-				<tr>
-					<th>调度单号</th>
-					<th>状态</th>
-					<th>车辆</th>
-					<th>付款金额</th>
-					<th>货物规格/名称</th>
-					<th>数量(件)</th>
-					<th>体积(方)</th>
-					<th>重量(吨)</th>
-				</tr>
-				<tr class="is-center" v-for="(item, index) in dispatchbillsCargoList" :key="index">
-					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.dispatchOrderNo}}</td>
-					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
-						<span v-if="item.dispatchbill.status == 'Committed'">待执行</span>
-						<span v-else-if="item.dispatchbill.status == 'Loaded'">已装运</span>
-						<span v-else-if="item.dispatchbill.status == 'Signed'">已签收</span>
-						<span v-else-if="item.dispatchbill.status == 'Canceled'">作废</span>
-					</td>
-					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">{{item.dispatchbill.plateNo}}</td>
-					<td v-if="index == item.dispatchbill.isShow" :rowspan="item.dispatchbill.bizDispatchOrderCargoList.length">
-						{{Number(item.dispatchbill.driverCashAmount) 
-						+ Number(item.dispatchbill.driverCodAmount) 
-						+ Number(item.dispatchbill.driverCosigneeAmount) 
-						+ Number(item.dispatchbill.driverDetoursAmount) 
-						+ Number(item.dispatchbill.driverMonthlyAmont)
-						+ Number(item.dispatchbill.driverOtherAmount)
-						+ Number(item.dispatchbill.driverPorAmount)
-						+ Number(item.dispatchbill.superCargoCashAmount)
-						+ Number(item.dispatchbill.superCargoCodAmount)
-						+ Number(item.dispatchbill.superCargoCorAmount)
-						+ Number(item.dispatchbill.superCargoDetoursAmount)
-						+ Number(item.dispatchbill.superCargoMonthlyAmount)
-						+ Number(item.dispatchbill.superCargoOtherAmount)
-						+ Number(item.dispatchbill.superCosigneeAmount)}}
-						<span>元</span>
-					</td>
-					<td>
-						{{item.cargoType}}
-						{{item.cargoName ? '/' + item.cargoName : ''}}
-					</td>
-					<td>{{item.cargoNum}}</td>
-					<td>{{item.cargoVolume}}</td>
-					<td>{{item.cargoWeight}}</td>
-				</tr>
-			</table> -->
 			<table class="wf-table">
 				<caption>运输进展</caption>
 				<tr>
@@ -224,52 +181,13 @@
 				</tr>
 			</table>
 			<div class="wf-footer clearfix">
-				<div class="btn-group fl">
-					<button 
-						type="button" class="wf-btn btn-success" 
-						@click="edit" 
-						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed' && carrierOrder.status != 'Closed'">
-						<svg-icon icon-class="edit"></svg-icon>修改
-					</button>
-					<button 
-						type="button" class="wf-btn btn-danger" 
-						@click="close" 
-						v-if="carrierOrder.status=='Running' || carrierOrder.status == 'Signed' && carrierOrder.status != 'Closed'">
-						<svg-icon icon-class="edit"></svg-icon>关闭
-					</button>
-					<button 
-						type="button" class="wf-btn btn-primary" 
-						@click="addDispatchBill" 
-						v-if="carrierOrder.status!='Running' && carrierOrder.status != 'Signed' && carrierOrder.status != 'Closed'">
-						<svg-icon icon-class="dispatchbill"></svg-icon>调度
-					</button>
-					<button 
-						type="button" class="wf-btn btn-warning" 
-						@click="dialogReceivableVisible = true" 
-						v-if="carrierOrder.status!='Committed' && carrierOrder.status != 'Closed'">
-						<svg-icon icon-class="money1"></svg-icon>调整应收款
-					</button>
-				</div>
 				<div class="btn-group fr">
-					<button 
-						type="button" class="wf-btn btn-danger plain" 
-						@click="del" 
-						v-if="carrierOrder.status == 'Committed'">
-						<svg-icon icon-class="delete" ></svg-icon>删除
-					</button>
-					<button 
-						type="button" class="wf-btn btn-default" 
-						@click="back">
+					<button type="button" class="wf-btn btn-default" @click="back">
 						<svg-icon icon-class="back"></svg-icon>返回
 					</button>
 				</div>
 			</div>
 		</div>
-		<ChangeReceivables 
-			:carrierOrder="carrierOrder" 
-			:visible="dialogReceivableVisible" 
-			@callback="receivableCallback">
-		</ChangeReceivables>
 		<ViewPhotos 
 			:visible="dialogPhotoVisible" 
 			@callback="photoCallback">
@@ -284,7 +202,6 @@
 import { Message } from 'element-ui'
 import { closeConfirm, deleteConfirm } from '../../common/utils'
 import Carrierbill from '../../api/Carrierbill'
-import ChangeReceivables from './ChangeReceivables'
 import ViewPhotos from './ViewPhotos'
 import ViewCargos from './ViewCargos'
 export default {
@@ -292,13 +209,10 @@ export default {
 		return {
 			isShow: false,
 			carrierOrder: {},
-			dialogReceivableVisible: false,
 			dialogPhotoVisible: false,
 			dialogCargoVisible: false,
 			carrierCargo: [],
 			porRequire: [],
-			dispatchbills: [],
-			dispatchbillsCargoList: [],
 			transports: []
 		}
 	},
@@ -312,13 +226,11 @@ export default {
 		}
 	},
 	components: {
-		ChangeReceivables,
 		ViewPhotos,
 		ViewCargos
 	},
 	created() {
 		this.getDetail()
-		this.getDispacthBills()
 	},
 	methods: {
 		sum(o) {
@@ -337,85 +249,11 @@ export default {
 				this.getTransports(carrierOrderID)
 			})
 		},
-		getDispacthBills() {
-			let carrierOrderID = this.$route.query.carrierOrderID
-			Carrierbill.findDispacthBills({
-				current: this.pageIndex,
-				size: this.pageSize,
-				carrierOrderID
-			}).then(res => {
-				this.dispatchbills = res.records
-				let arr = []
-				let flags = 0
-				for (let i = 0; i < this.dispatchbills.length; i++) {
-					for (let x = 0; x < this.dispatchbills[i].bizDispatchOrderCargoList.length; x++) {
-						this.dispatchbills[i].bizDispatchOrderCargoList[x].dispatchbill = this.dispatchbills[i]
-						if (x == 0) {
-							this.dispatchbills[i].isShow = flags
-						}
-					}
-					flags += this.dispatchbills[i].bizDispatchOrderCargoList.length
-					arr.push(...this.dispatchbills[i].bizDispatchOrderCargoList)
-				}
-				this.dispatchbillsCargoList = arr
-			})
-		},
 		// 查询运输列表
 		getTransports(carrierOrderID) {
 			Carrierbill.findTransports({ carrierOrderID }).then(res => {
 				this.transports = res
 			})
-		},
-		addDispatchBill() {
-			this.$router.push({ name: 'adddispatchbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
-		},
-		edit() {
-			if (this.dispatchbills.length > 0) {
-				this.dialogReceivableVisible = true
-			} else {
-				this.$router.push({ name: 'editcarrierbill', query: { carrierOrderID: this.$route.query.carrierOrderID } })
-			}
-		},
-		close() {
-			let carrierOrderID = this.$route.query.carrierOrderID
-			closeConfirm(carrierOrderID, carrierOrderIDs => {
-				Carrierbill.close({ carrierOrderIDs }).then(res => {
-					Message({ type: 'success', message: '关闭成功!' })
-					this.getDetail()
-				})
-			})
-		},
-		del() {
-			let carrierOrderID = this.$route.query.carrierOrderID
-			deleteConfirm(carrierOrderID, carrierOrderIDs => {
-				Carrierbill.del({ carrierOrderIDs }).then(res => {
-					Message({ type: 'success', message: '删除成功!' })
-					this.$router.push({ name: 'carrierbills'})
-				})
-			})
-		},
-		// 调整应收款
-		adjustSum(carrierOrder){
-			let carrierOrderID = this.$route.query.carrierOrderID
-			Carrierbill.update({
-				carrierOrderID,
-				shipperNo: carrierOrder.shipperNo,
-				cashAmount: carrierOrder.cashAmount,
-				monthlyAmount: carrierOrder.monthlyAmount,
-				codAmount: carrierOrder.codAmount,
-				consigneeAmount: carrierOrder.consigneeAmount,
-				porAmount: carrierOrder.porAmount,
-				otherAmount: carrierOrder.otherAmount,
-				remark: carrierOrder.remark
-			}).then(res => {
-				Message.success(res.data.msg)
-				this.getDetail()
-			})
-		},
-		// 调整应收款弹窗回调
-		receivableCallback(bool, data) {
-			data && this.adjustSum(data)
-			this.dialogReceivableVisible = bool
 		},
 		// 查看照片弹窗回调
 		photoCallback(bool) {
