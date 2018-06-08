@@ -2,34 +2,39 @@
 	<div class="main-content">
 		<div class="wf-card">
 		<div class="dispatchbillTit">
-			<span class="fl">调度单号：20170603002464001</span>
-			<span class="fr status">未接单</span>
+			<span class="fl">调度单号：{{dispatchOrder.dispatchOrderNo}}</span>
+			<span class="fr" v-if="dispatchOrder.status == 'Committed'">未接单</span>
+			<span class="fr" v-else-if="dispatchOrder.status == 'Ordered'">已接单</span>
+			<span class="fr" v-else-if="dispatchOrder.status == 'Canceled'">已取消</span>
+			<span class="fr" v-else-if="dispatchOrder.status == 'Rejected'">已拒绝</span>
+			<span class="fr" v-else-if="dispatchOrder.status == 'Closed'">已关闭</span>
+			<span class="fr" v-else-if="dispatchOrder.status == 'Finished'">已完成</span>
 		</div>
 		<div class="dispatchbillInfo">
 			<table>
 				<tr>
-					<td><span class="labels">货物名称：</span>可乐，啤酒</td>
-					<td><span class="labels">货量：</span>2315kg/3.6m³</td>
-					<td><span class="labels">件数：</span>3445</td>
+					<td><span class="labels">货物名称：</span>{{dispatchOrder.cargoName}}</td>
+					<td><span class="labels">货量：</span>{{dispatchOrder.loadWeightSum?dispatchOrder.loadWeightSum+'kg':''}}{{dispatchOrder.loadVolumeSum?('/'+dispatchOrder.loadVolumeSum+'m³'):''}}</td>
+					<td><span class="labels">件数：</span>{{dispatchOrder.loadNumSum?dispatchOrder.loadNumSum+'件':''}}</td>
 				</tr>
 				<tr>
-					<td><span class="labels">调度员：</span>吴正平</td>
-					<td><span class="labels">调度电话：</span>12345669</td>
-					<td><span class="labels">调度时间：</span>2014-03-33 23:33</td>
+					<td><span class="labels">调度员：</span>{{dispatchOrder.dispatchName}}</td>
+					<td><span class="labels">调度电话：</span>{{dispatchOrder.dispatchMobile}}</td>
+					<td><span class="labels">调度时间：</span><span v-if="dispatchOrder.dispatchTime">{{dispatchOrder.dispatchTime | getdatefromtimestamp()}}</span></td>
 				</tr>
 				<tr>
-					<td><span class="labels">司机：</span>罗凯</td>
-					<td><span class="labels">司机电话：</span>12345669</td>
-					<td><span class="labels">接单时间：</span>2014-03-33 23:33</td>
+					<td><span class="labels">司机：</span>{{dispatchOrder.driverName}}</td>
+					<td><span class="labels">司机电话：</span>{{dispatchOrder.driverMobile}}</td>
+					<td><span class="labels">接单时间：</span><span v-if="dispatchOrder.orderedTime">{{dispatchOrder.orderedTime | getdatefromtimestamp()}}</span></td>
 				</tr>
 				<tr>
-					<td><span class="labels">押运员：</span>晓晓</td>
-					<td><span class="labels">押运电话：</span>12345669</td>
+					<td><span class="labels">押运员：</span>{{dispatchOrder.superCargoName}}</td>
+					<td><span class="labels">押运电话：</span>{{dispatchOrder.superCargoMobile}}</td>
 					<td></td>
 				</tr>
 			</table>
 		</div>
-		<TaskListItem v-for="(i,index) in 3" :key="index" :index="index"></TaskListItem>
+		<TaskListItem :taskItem="item" v-for="(item,index) in dispatchOrder.dispatchTaskList" :index="index" :key="index" :plateNo="dispatchOrder.plateNo" :trailerPlateNo="dispatchOrder.trailerPlateNo"></TaskListItem>
 		<div class="handle text-center">
 			<el-button>取消</el-button>
 			<el-button>关闭</el-button>
@@ -40,19 +45,24 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from '../../common/request'
+import Dispatchbill from '../../api/Dispatchbill'
 import TaskListItem from './Common/TaskListItem'
 export default {
 	data() {
 		return {
-
+			dispatchOrder:{}
 		}
 	},
 	created() {
-		
+		this.getDetail()
 	},
 	methods: {
-		
+		getDetail() {
+			let dispatchOrderID = this.$route.query.dispatchOrderID
+			Dispatchbill.findById({ dispatchOrderID }).then(res => {
+				this.dispatchOrder = res
+			})
+		},
 		back() {
 			this.$router.go(-1)
 		}
