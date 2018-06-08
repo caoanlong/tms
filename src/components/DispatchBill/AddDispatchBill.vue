@@ -18,7 +18,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from '../../common/request'
+import Carrierbill from '../../api/Carrierbill'
 import Step1 from './Common/Step1'
 import Step2 from './Common/Step2'
 import Step3 from './Common/Step3'
@@ -41,7 +41,14 @@ export default {
 			this.currentStepView = 'Step' + (x + 1)
 			this.stepActive = x
 			if(x == 1){
-				this.selectedCarrierBills = data
+				this.selectedCarrierBillIDs = data
+				
+				for (let i = 0; i < this.selectedCarrierBillIDs.length; i++) {
+					this.getDetail(this.selectedCarrierBillIDs[i])
+				}
+
+
+				console.log(this.selectedCarrierBillIDs)
 			}else if (x == 2) {
 				this.selectedTruck = data
 				this.selectedPerson = data1
@@ -55,14 +62,8 @@ export default {
 		},
 		// 单个承运单详情
 		getDetail(carrierOrderID) {
-			let params = {
-				carrierOrderID,
-			}
-			request({
-				url: '/biz/carrierOrder/detail',
-				params
-			}).then(res => {
-				let carrierBill = res.data.data
+			Carrierbill.findById({ carrierOrderID }).then(res => {
+				let carrierBill = res
 				this.selectedCarrierBills.push(carrierBill)	
 			})
 		},

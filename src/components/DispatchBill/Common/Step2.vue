@@ -11,6 +11,10 @@
 				<el-table-column type="selection" width="40" align="center">
 				</el-table-column>
 				<el-table-column label="货物类型" align="center">
+					<template slot-scope="scope">
+						<span v-if="scope.row.weightType='Heavy'">重货</span>
+						<span v-else>轻货</span>
+					</template>
 				</el-table-column>
 				<el-table-column label="货物名称" align="center" prop="cargoName">	
 				</el-table-column>

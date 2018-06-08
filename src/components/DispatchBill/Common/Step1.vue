@@ -28,22 +28,21 @@
 		</div>
 		<div class="table">
 			<table class="wfTable">
-					<tr>
-						<th width="40"><el-checkbox :indeterminate="isIndeterminate" v-model="checked" @change="handleCheckAllChange"></el-checkbox></th>
-						<th>货物</th>
-						<th>货量</th>
-						<th>件数</th>
-						<th>发货公司</th>
-						<th width="160">发货人</th>
-						<th>发货地</th>
-						<th width="160">发货时间</th>
-						<th>收货公司</th>
-						<th width="160">收货人</th>
-						<th>收货地</th>
-						<th width="160">收货时间</th>
-					</tr>
-
-					<template v-for="item in carrierList">
+				<tr>
+					<th width="40"><el-checkbox :indeterminate="isIndeterminate" v-model="checked" @change="handleCheckAllChange"></el-checkbox></th>
+					<th>货物</th>
+					<th>货量</th>
+					<th>件数</th>
+					<th>发货公司</th>
+					<th width="160">发货人</th>
+					<th>发货地</th>
+					<th width="160">发货时间</th>
+					<th>收货公司</th>
+					<th width="160">收货人</th>
+					<th>收货地</th>
+					<th width="160">收货时间</th>
+				</tr>
+				<template v-for="item in carrierList">
 					<tr class="tit">
 						<td>
 							<div class="wfCheck">

@@ -13,21 +13,21 @@
 				<el-form-item label="装车日期">
 					<el-date-picker type="date" placeholder="选择日期"></el-date-picker>
 				</el-form-item>
-				<el-form-item label="车辆状态">
-					<!-- <el-select placeholder="全部">
-						<el-option label="全部" value=""></el-option>
+				<!-- <el-form-item label="车辆状态">
+					<el-select placeholder="全部">
+						<el-option label="全部" value="全部"></el-option>
 						<el-option label="空闲" value="空闲"></el-option>
 						<el-option label="工作中" value="工作中"></el-option>
-					</el-select> -->
+					</el-select>
 				</el-form-item>
 				<el-form-item label="车辆归属">
-					<!-- <el-select placeholder="全部">
-						<el-option label="全部" value=""></el-option>
+					<el-select placeholder="全部">
+						<el-option label="全部" value="全部"></el-option>
 						<el-option label="单位挂靠" value="单位挂靠"></el-option>
 						<el-option label="个人挂靠" value="个人挂靠"></el-option>
 						<el-option label="自有车辆" value="自有车辆"></el-option>
-					</el-select> -->
-				</el-form-item>
+					</el-select>
+				</el-form-item> -->
 				<el-form-item>
 					<el-button type="primary" @click="getTruckList">搜索</el-button>
 					<el-button type="default" @click="resetTruck">重置</el-button>
