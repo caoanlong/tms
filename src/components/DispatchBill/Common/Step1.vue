@@ -3,7 +3,7 @@
 		<div class="search">
 			<el-form :inline="true" size="small">
 				<el-form-item label="关键字" >
-					<el-input placeholder="承运单号/货物名称/起始地/目的地" style="width:150px" v-model="findsearchInfo"></el-input>
+					<el-input placeholder="承运单号/货物名称/起始地/目的地" style="width:250px" v-model="findsearchInfo"></el-input>
 				</el-form-item>
 				<el-form-item label="收发货单位">
 					<el-input placeholder="收发货单位" v-model="findrecdeliverycomp"></el-input>
@@ -29,7 +29,13 @@
 		<div class="table">
 			<table class="wfTable">
 				<tr>
-					<th width="40"><el-checkbox :indeterminate="isIndeterminate" v-model="checked" @change="handleCheckAllChange"></el-checkbox></th>
+					<th width="40">
+						<el-checkbox 
+							:indeterminate="(selectedCarrierBill.length > 0) && (selectedCarrierBill.length < carrierList.length)" 
+							v-model="checked" 
+							@change="handleCheckAllChange">
+						</el-checkbox>
+					</th>
 					<th>货物</th>
 					<th>货量</th>
 					<th>件数</th>
@@ -43,11 +49,17 @@
 					<th width="160">收货时间</th>
 				</tr>
 				<template v-for="item in carrierList">
-					<tr class="tit">
+					<tr class="tit" :key="item.carrierOrderID">
 						<td>
 							<div class="wfCheck">
 								<span>
-									<input type="checkbox" class="checkbox" ref="checkCarrier" :checked='checkedList.includes(item.carrierOrderID)' @change="selectCarrier($event,item.carrierOrderID)"/>
+									<input 
+										type="checkbox" 
+										class="checkbox" 
+										ref="checkCarrier" 
+										:checked='selectedCarrierBill.includes(item.carrierOrderID)' 
+										@change="selectCarrier($event,item.carrierOrderID)"
+									/>
 									<label></label>
 								</span>
 							</div>
@@ -84,116 +96,104 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import Carrierbill from '../../../api/Carrierbill'
-	import Page from '../../CommonComponents/Page'
-	export default {
-		data() {
-			return {
-				pageIndex: 1,
-				pageSize: 10,
-				total: 0,
-				carrierList:[],
-				findsearchInfo:'',
-				findrecdeliverycomp:'',
-				findRangeDate: [],
-				findshipperBeginDate: '',
-				findshipperEndDate: '',
-				checkedList: [],
-				checked:false,
-				isIndeterminate:false
+import { mapGetters } from 'vuex'
+import { Message } from 'element-ui'
+import Carrierbill from '../../../api/Carrierbill'
+import Page from '../../CommonComponents/Page'
+export default {
+	data() {
+		return {
+			pageIndex: 1,
+			pageSize: 10,
+			total: 0,
+			carrierList:[],
+			findsearchInfo:'',
+			findrecdeliverycomp:'',
+			findRangeDate: [],
+			findshipperBeginDate: '',
+			findshipperEndDate: '',
+			checkedList: [],
+			checked: false,
+			isIndeterminate: false
+		}
+	},
+	computed: {
+		...mapGetters(['selectedCarrierBill'])
+	},
+	created() {
+		this.getList()
+	},
+	methods: {
+		nextStep() {
+			if (this.selectedCarrierBill.length == 0) {
+				Message.error('请选择！')
+				return
 			}
+			this.$emit('nextStep', 2)
 		},
-		created(){
+		pageChange(index) {
+			this.pageIndex = index
+			this.getList() 
+		},
+		pageSizeChange(size) {
+			this.pageSize = size
+			this.getList() 
+		},
+		getList() {
+			Carrierbill.find({
+				current: this.pageIndex,
+				size: this.pageSize,
+				shipperBeginDate: this.findshipperBeginDate,
+				shipperEndDate: this.findshipperEndDate,
+				searchInfo: this.findsearchInfo,
+				status: this.findStatus
+			}).then(res => {
+				this.carrierList = res.records
+				this.total= res.total
+			})
+		},
+		ViewCarrierbills(carrierOrderID) {
+			this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
+		},
+		reset() {
+			this.findsearchInfo = ''
+			this.findshipperBeginDate = ''
+			this.findshipperEndDate = ''
+			this.findRangeDate = []
+			this.pageIndex = 1
 			this.getList()
 		},
-
-		methods: {
-			nextStep(){
-				if (this.checkedList.length == 0) {
-					Message.error('请选择！')
-					return
-				}
-				this.$emit('nextStep', 1,this.checkedList)
-			},
-			back() {
-				this.$router.go(-1)
-			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList() 
-			},
-			pageSizeChange(size) {
-				this.pageSize = size
-				this.getList() 
-			},
-			getList() {
-				Carrierbill.find({
-					current: this.pageIndex,
-					size: this.pageSize,
-					shipperBeginDate: this.findshipperBeginDate,
-					shipperEndDate: this.findshipperEndDate,
-					searchInfo: this.findsearchInfo,
-					status: this.findStatus
-				}).then(res => {
-					this.carrierList = res.records
-					this.total= res.total
-				})
-			},
-			ViewCarrierbills(carrierOrderID){
-				this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
-			},
-			reset() {
-				this.findsearchInfo='',
-				this.findshipperBeginDate='',
-				this.findshipperEndDate='',
-				this.findRangeDate = [],
-				this.pageIndex=1,
-				this.getList()
-			},
-			selectDateRange(date) {
-				this.findshipperBeginDate = date[0]
-				this.findshipperEndDate = date[1]
-			},
-			handleCheckAllChange(val) {
-				if(val){
-					this.checkedList = this.carrierList.map(item => item.carrierOrderID)
-					this.isIndeterminate = false
-					this.checked = true
-				}else{
-					this.checkedList = []
-					this.checked = false
-				}
-			},
-			selectCarrier(e,carrierOrderID){
-				if(e.target.checked){
-					this.checkedList.push(carrierOrderID)
-				}else{
-					this.checkedList.splice(this.checkedList.indexOf(carrierOrderID),1)
-				}
+		selectDateRange(date) {
+			this.findshipperBeginDate = date[0]
+			this.findshipperEndDate = date[1]
+		},
+		// 全选
+		handleCheckAllChange(val) {
+			let list = this.carrierList.map(item => item.carrierOrderID)
+			if(val) {
+				this.$store.dispatch('addCarrierBill', list)
+				this.checked = true
+			}else{
+				this.$store.dispatch('delCarrierBill', list)
+				this.checked = false
 			}
 		},
-		watch:{
-			checkedList:{
-				handler:function(){  
-					let checkLength = this.checkedList.length
-					let carrierListLength = this.carrierList.length
-					if(checkLength == carrierListLength){
-						this.isIndeterminate = false
-						this.checked = true
-					}else if(checkLength>0 && checkLength < carrierListLength){
-						this.isIndeterminate = true
-					}else{
-						this.isIndeterminate = false
-						this.checked = false
-					}
-                }
+		// 单选
+		selectCarrier(e, carrierOrderID){
+			if(e.target.checked) {
+				this.$store.dispatch('addCarrierBill', [carrierOrderID])
+			}else{
+				this.$store.dispatch('delCarrierBill', [carrierOrderID])
 			}
 		},
-		components: {
-			Page
-		},
-	}
+		back() {
+			this.$router.go(-1)
+		}
+	},
+	components: {
+		Page
+	},
+}
 </script>
 <style lang="stylus" scoped>
 .table

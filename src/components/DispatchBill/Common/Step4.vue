@@ -19,7 +19,7 @@
 		},
 		methods: {
 			prevStep(){
-				this.$emit('prevStep', 2)
+				this.$emit('prevStep', 3)
 			},
 			back() {
 				this.$router.go(-1)

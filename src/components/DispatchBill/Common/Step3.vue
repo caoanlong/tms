@@ -142,7 +142,7 @@
 		},
 		methods: {
 			prevStep() {
-				this.$emit('prevStep', 1)
+				this.$emit('prevStep', 2)
 			},
 			nextStep() {
 				// if (!this.selectedDriver.truckID) {
@@ -155,7 +155,8 @@
 				// 		return
 				// 	}
 				// }
-				this.$emit('nextStep', 3, this.selectedDriver, this.selectedEscort)
+				// this.$emit('nextStep', 3, this.selectedDriver, this.selectedEscort)
+				this.$emit('nextStep', 4)
 			},
 
 			pageTruckChange(index) {
