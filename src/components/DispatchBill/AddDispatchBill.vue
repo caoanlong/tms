@@ -26,9 +26,9 @@ import Step4 from './Common/Step4'
 export default {
 	data() {
 		return {
-			stepActive: 0,
+			// stepActive: 0,
 			selectedCarrierBills:[],
-			selectedCarrierBillIDs:[],
+			// selectedCarrierBillIDs:[],
 			selectedTruck: {},
 			selectedPerson: {},
 			currentStepView: 'Step1'
@@ -37,25 +37,23 @@ export default {
 	created() {
 	},
 	methods: {
-		nextStep(x, data, data1) {
-			this.currentStepView = 'Step' + (x + 1)
-			this.stepActive = x
+		nextStep(step, data, data1) {
+			this.currentStepView = step
+			// this.stepActive = x
 			if(x == 1){
-				this.selectedCarrierBillIDs = data
-				
-				for (let i = 0; i < this.selectedCarrierBillIDs.length; i++) {
-					this.getDetail(this.selectedCarrierBillIDs[i])
-				}
-
-
-				console.log(this.selectedCarrierBillIDs)
+				// this.selectedCarrierBillIDs = data
+				// for (let i = 0; i < this.selectedCarrierBillIDs.length; i++) {
+				// 	this.getDetail(this.selectedCarrierBillIDs[i])
+				// }
+				// console.log(this.selectedCarrierBillIDs)
 			}else if (x == 2) {
 				this.selectedTruck = data
 				this.selectedPerson = data1
 			}
 		},
 		prevStep(x) {
-			this.stepActive = x
+			this.currentStepView = 'Step' + (x + 1)
+			// this.stepActive = x
 		},
 		back() {
 			this.$router.go(-1)
