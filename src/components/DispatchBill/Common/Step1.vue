@@ -129,10 +129,7 @@ export default {
 				Message.error('请选择！')
 				return
 			}
-			this.$emit('nextStep', 'Step2')
-		},
-		back() {
-			this.$router.go(-1)
+			this.$emit('nextStep', 2)
 		},
 		pageChange(index) {
 			this.pageIndex = index
@@ -155,7 +152,7 @@ export default {
 				this.total= res.total
 			})
 		},
-		ViewCarrierbills(carrierOrderID){
+		ViewCarrierbills(carrierOrderID) {
 			this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
 		},
 		reset() {
@@ -188,6 +185,9 @@ export default {
 			}else{
 				this.$store.dispatch('delCarrierBill', [carrierOrderID])
 			}
+		},
+		back() {
+			this.$router.go(-1)
 		}
 	},
 	components: {

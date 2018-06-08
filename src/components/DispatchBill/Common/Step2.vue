@@ -1,6 +1,6 @@
 <template>
 	<div class="step step2">
-		<div class="stowageItem" v-for="item in carrierBills">
+		<div class="stowageItem" v-for="item in carrierBills" :key="item.carrierOrderNo">
 			<div class="tit">
 				<span class="infoItem">承运单号：{{item.carrierOrderNo}}</span>
 				<span class="infoItem">{{item.shipperArea}}</span>
@@ -66,32 +66,41 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	export default {
-		props: {
-			carrierBills: {
-				type: Array,
-				default: () => []
-			}
+import { mapGetters } from 'vuex'
+import { Message } from 'element-ui'
+import Carrierbill from '../../../api/Carrierbill'
+export default {
+	data() {
+		return {
+			carrierBills: []
+		}
+	},
+	computed: {
+		...mapGetters(['selectedCarrierBill'])
+	},
+	created() {
+		let list = this.selectedCarrierBill
+		list.forEach(item => {
+			this.getDetail(item)
+		})
+	},
+	methods: {
+		getDetail(carrierOrderID) {
+			Carrierbill.findById({ carrierOrderID }).then(res => {
+				this.carrierBills.push(res)
+			})
 		},
-		data() {
-			return {
-				cargoInfo:[]
-			}
+		nextStep(){
+			this.$emit('nextStep', 3)
 		},
-		methods: {
-			nextStep(){
-				this.$emit('nextStep',2)
-			},
-			prevStep(){
-				this.$emit('prevStep',0)
-			},
-			back() {
-				this.$router.go(-1)
-			},
-			
+		prevStep(){
+			this.$emit('prevStep', 1)
+		},
+		back() {
+			this.$router.go(-1)
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 	.stowageItem
