@@ -5,13 +5,13 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="findKeyword"></el-input>
+						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="findkeyword"></el-input>
 					</el-form-item>
 					<el-form-item label="收发货单位">
-						<el-input placeholder="收发货单位" v-model="findrecdeliverycomp"></el-input>
+						<el-input placeholder="收发货单位" v-model="findcustomerID"></el-input>
 					</el-form-item>
 					<el-form-item label="调度状态">
-						<el-select v-model="findStatus" placeholder="请选择">
+						<el-select v-model="findstatus" placeholder="请选择">
 							<el-option label="全部" value="全部"></el-option>
 							<el-option label="未接单" value="未接单"></el-option>
 							<el-option label="已接单" value="已接单"></el-option>
@@ -37,41 +37,50 @@
 						<th width="80">状态</th>
 						<th width="80">货物</th>
 						<th>货量</th>
+						<th>装车地</th>
 						<th width="140">收货时间</th>
-						<th>收货地</th>
-						<th width="140">发货时间</th>
-						<th>发货地</th>
+						<th>送货地</th>
+						<th width="140">送货时间</th>
 						<th>操作</th>
 					</tr>
-					<template v-for="item in 3">
+					<template v-for="item in dispatchBillList">
 						<tr class="tit" :key="item">
 							<td colspan="9">
 								<span class="infoItem ViewDispatchBill" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
-								<span class="infoItem">车牌号：{{item.plateNo}}</span><span class="infoItem">
-									<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
-									<span class="tag tag2" v-else-if="item.status == 'Loaded'">已装运</span>
-									<span class="tag tag3" v-else-if="item.status == 'Signed'">已签收</span>
-									<span class="tag tag4" v-else-if="item.status == 'Canceled'">已作废</span>
+								<span class="infoItem">车牌号：{{item.plateNo}}</span>
+								<span class="infoItem" v-if="item.trailerPlateNo">挂车：{{item.trailerPlateNo}}</span>
+								<span class="infoItem">
+									<span class="tag" v-if="item.status == 'Committed'">未接单</span>
+									<span class="tag" v-else-if="item.status == 'Ordered'">已接单</span>
+									<span class="tag" v-else-if="item.status == 'Canceled'">已取消</span>
+									<span class="tag" v-else-if="item.status == 'Rejected'">已拒绝</span>
+									<span class="tag" v-else-if="item.status == 'Closed'">已关闭</span>
+									<span class="tag" v-else-if="item.status == 'Finished'">已完成</span>
 								</span>
 								<span class="fr">
-									<el-button type="text" size="mini">重新调度</el-button>
+									<el-button type="text" size="mini">编辑</el-button>
 									<el-button type="text" size="mini">取消调度</el-button>
 									<el-button type="text" size="mini">关闭</el-button>
 									<el-button type="text" size="mini">删除</el-button>
 								</span>
 							</td>
 						</tr>
-						<tr class="list" v-for="taskItem in 4" :key="item + taskItem * 1000">
+						<tr class="list" v-for="taskItem in item.dispatchTaskList">
 							<td class="text-center">
-								<span @click="viewTask" class="ViewTaskDetail">919239801</span>
+								<span @click="viewTask" class="ViewTaskDetail">{{taskItem.taskNo}}</span>
 							</td>
-							<td class="text-center" width="80">待装车</td>
-							<td>太古咖啡</td>
-							<td class="text-center">6kg/40m³/1000kg</td>
-							<td class="text-center" width="140">2018-04-22 18:33:15</td>
-							<td>广东广州</td>
-							<td class="text-center" width="140">2018-04-22 18:33:15</td>
-							<td>湖南常德</td>
+							<td class="text-center" width="80">
+								<span v-if="taskItem.status='Committed'">待执行</span>
+								<span v-else-if="taskItem.status='Loaded'">已装运</span>
+								<span v-else-if="taskItem.status='Signed'">已签收</span>
+								<span v-else>已作废</span>
+							</td>
+							<td>{{taskItem.cargoName}}</td>
+							<td class="text-center">{{taskItem.loadWeightSum?taskItem.loadWeightSum+'kg/':''}}{{taskItem.loadVolumeSum?taskItem.loadVolumeSum+'m³/':''}}{{taskItem.loadNumSum?taskItem.loadNumSum+'件':''}}</td>
+							<td>{{taskItem.shipperArea}}</td>
+							<td class="text-center" width="140">{{taskItem.shipperDate | getdatefromtimestamp()}}</td>
+							<td>{{taskItem.consigneeArea}}</td>
+							<td class="text-center" width="140">{{taskItem.consigneeDate | getdatefromtimestamp()}}</td>
 							<td class="text-center">
 								<el-button type="text" size="mini">上传照片</el-button>
 								<el-button type="text" size="mini" @click="viewTask">编辑</el-button>
@@ -86,16 +95,15 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from '../../common/request'
 import Dispatchbill from '../../api/Dispatchbill'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 export default {
 	data() {
 		return {
-			findKeyword: '',
-			findrecdeliverycomp: '',
-			findStatus: '',
+			findkeyword: '',
+			findcustomerID: '',
+			findstatus: '',
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
@@ -107,9 +115,9 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.findDispatchOrderNo = ''
-			this.findShipperAddress = ''
-			this.findConsigneeAddress = ''
+			this.findKeyword=''
+			this.findcustomerID=''
+			this.findstatus=''
 			this.getList()
 		},
 		pageChange(index) {
@@ -122,6 +130,9 @@ export default {
 		},
 		getList () {
 			Dispatchbill.find({
+				keyword:this.findKeyword,
+				customerID:this.findcustomerID,
+				status:this.findstatus,
 				current: this.pageIndex,
 				size: this.pageSize
 			}).then(res => {
@@ -164,11 +175,17 @@ export default {
 		td
 			border-top 1px solid #bbb
 			background #f8f8f8
-			color #3582d0
 			.infoItem
-				margin-right 40px
+				font-size 12px
+				margin-right 10px
 				&.ViewDispatchBill
 					cursor pointer
+					color #3582d0
+				.tag
+					background #ccc
+					padding 2px 10px
+					border-radius 4px
+					color #fff
 	
 	th
 		padding 6px 10px

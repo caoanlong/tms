@@ -1,43 +1,71 @@
 <template>
 	<div class="item">
 		<div class="lineInfo">
-			<div class="tit"><span>任务{{index+1}}</span> <span class="status fr">待装车</span></div>
+			<div class="tit"><span>任务{{index+1}}</span> 
+				<span class="status fr" v-if="taskItem.status='Committed'">待执行</span>
+				<span class="status fr" v-else-if="taskItem.status='Loaded'">已装运</span>
+				<span class="status fr" v-else-if="taskItem.status='Signed'">已签收</span>
+				<span class="status fr" v-else>已作废</span>
+			</div>
 			<div class="con">
 				<table>
 					<tr>
 						<td class="from">
 							<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-							<p class="companyName">深圳飞天贸易</p>
-							<p>13424389894</p>
+							<p class="companyName">{{taskItem.shipperCompanyName}}</p>
+							<p>{{taskItem.shipperName}}{{taskItem.shipperPhone?('/'+taskItem.shipperPhone):''}}</p>
 						</td>
 						<td>
-							<p>啤酒、饮料、花生</p>
-							<p>36吨/240方/6000件</p>
+							<p>{{taskItem.cargoName}}</p>
+							<p>{{taskItem.loadWeightSum?(taskItem.loadWeightSum+'kg/'):''}}{{taskItem.loadVolumeSum?(taskItem.loadVolumeSum+'m³/'):''}}{{taskItem.loadNumSum?(taskItem.loadNumSum+'件'):''}}</p>
 						</td>
 						<td class="to">
 							<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-							<p class="companyName">库那天交运贸易</p>
-							<p>13424389894</p>
+							<p class="companyName">{{taskItem.consigneeCompanyName}}</p>
+							<p>{{taskItem.consigneeName}}{{taskItem.consigneePhone?('/'+taskItem.consigneePhone):''}}</p>
 						</td>
 					</tr>
 					<tr>
-						<td class="area">广东深圳</td>
+						<td class="area">{{taskItem.shipperArea}}</td>
 						<td><img src="../../../assets/imgs/arrowBig.png" width="100"/></td>
-						<td class="area">云南昆明</td>
+						<td class="area">{{taskItem.consigneeArea}}</td>
 					</tr>
 					<tr>
 						<td>
-							<p class="datetime">2018-06-13 17:51（预计发货）</p>
-							<p class="datetime c2">2018-06-25 14:24（实际发货）</p>
+							<p class="datetime">{{taskItem.shipperDate | getdatefromtimestamp()}}（预计发货）</p>
+							<p class="datetime c2" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp()}}（实际发货）</p>
 						</td>
-						<td><span>粤BT63Y6</span></td>
-						<td><p class="datetime">2018-06-15 13:24（预计到货）</p></td>
+						<td><span>{{plateNo}}{{trailerPlateNo?('/'+trailerPlateNo):''}}</span></td>
+						<td>
+							<p class="datetime">{{taskItem.consigneeDate | getdatefromtimestamp()}}（预计到货）</p>
+							<p class="datetime c2" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</p>
+						</td>
 					</tr>
 					<tr>
-						<td colspan="3">实付运费 ¥2630.00元（预付现金2000.00，到付630.00）</td>
+						<td colspan="3">实付运费:¥{{taskItem.amountSum}}（
+							<span v-if="(taskItem.driverCashAmount+taskItem.superCargoCashAmount)>0">现付:￥{{taskItem.driverCashAmount+taskItem.superCargoCashAmount}}</span>
+							<span v-if="(taskItem.driverCodAmount+taskItem.superCargoCodAmount)>0">,到付:￥{{taskItem.driverCodAmount+taskItem.superCargoCodAmount}}</span>
+							<span v-if="(taskItem.driverPorAmount+taskItem.superCargoCorAmount)>0">,回单:￥{{taskItem.driverPorAmount+taskItem.superCargoCorAmount}}</span>
+							<span v-if="(taskItem.driverMonthlyAmont+taskItem.superCargoMonthlyAmount)>0">,月结:￥{{taskItem.driverMonthlyAmont+taskItem.superCargoMonthlyAmount}}</span>
+							<span v-if="(taskItem.driverCosigneeAmount+taskItem.superCosigneeAmount)>0">,收货方到付:￥{{taskItem.driverCosigneeAmount+taskItem.superCosigneeAmount}}</span>
+							<span v-if="(taskItem.driverDetoursAmount+taskItem.superCargoDetoursAmount)>0">,绕路费:￥{{taskItem.driverDetoursAmount+taskItem.superCargoDetoursAmount}}</span>
+							<span v-if="(taskItem.driverOtherAmount+taskItem.superCargoOtherAmount)>0">,其他:￥{{taskItem.driverOtherAmount+taskItem.superCargoOtherAmount}}</span>
+							)
+						</td>
 					</tr>
 					<tr>
 						<td colspan="3">任务照片</td>
+					</tr>
+					<tr>
+						<td colspan="3">
+							<div class="picItem" v-for="(pic,index) in taskItem.dispatchTaskPicList" :key="index">
+								<img src="pic.minURL"/>
+								<p class="text-center" v-if="pic.type='Loaded'">装车照片</p>
+								<p class="text-center" v-else-if="pic.type='Arrived'">送达照片</p>
+								<p class="text-center" v-else-if="pic.type='Received'">回单照片</p>
+								<p class="text-center" v-else-if="pic.type='Unusual'">异常照片</p>
+							</div>
+						</td>
 					</tr>
 			</table>
 			</div>
@@ -51,6 +79,15 @@ export default {
 		index:{
 			type: Number,
 			default: 1
+		},
+		taskItem:{
+			type: Object
+		},
+		plateNo:{
+			type: String
+		},
+		trailerPlateNo:{
+			type: String
 		}
 	},
 	data(){
