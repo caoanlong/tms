@@ -55,7 +55,7 @@
 					</tr>
 					<template v-for="(item, index) in tableData">
 						<tr class="tit" :key="index">
-							<td colspan="10">
+							<td colspan="9">
 								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 								<span class="infoItem">
 									<span class="tag tag1" v-if="item.status=='Committed'">待执行</span>
@@ -65,7 +65,7 @@
 									<span class="tag tag5" v-else-if="item.status=='Canceled'">作废</span>
 								</span>
 							</td>
-							<td class="text-center" width="140">
+							<td colspan="2" class="text-center" width="140">
 								<el-button type="text" size="mini" 
 									:disabled="item.status != 'Committed'" 
 									@click="edit(item.carrierOrderID)">
@@ -86,11 +86,11 @@
 							<td>{{item.shipperCompanyName}}</td>
 							<td>{{item.shipperName}}</td>
 							<td>{{item.shipperArea}}</td>
-							<td width="140">{{item.shipperDate | getdatefromtimestamp()}}</td>
+							<td width="140">{{item.shipperDate | getdatefromtimestamp(true)}}</td>
 							<td>{{item.consigneeCompanyName}}</td>
 							<td>{{item.consigneeName}}</td>
 							<td>{{item.consigneeArea}}</td>
-							<td width="140">{{item.consigneeDate | getdatefromtimestamp()}}</td>
+							<td width="140">{{item.consigneeDate | getdatefromtimestamp(true)}}</td>
 						</tr>
 					</template>
 				</table>
