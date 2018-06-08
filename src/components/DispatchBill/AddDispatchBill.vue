@@ -41,9 +41,7 @@ export default {
 			this.currentStepView = 'Step' + (x + 1)
 			this.stepActive = x
 			if(x == 1){
-				console.log(data)
 				this.selectedCarrierBills = data
-				
 			}else if (x == 2) {
 				this.selectedTruck = data
 				this.selectedPerson = data1
