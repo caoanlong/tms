@@ -78,25 +78,7 @@
 				</table>
 				
 		</div>
-		<el-row type="flex">
-			<el-col :span="12" style="font-size: 12px; color: #909399">
-				<span>总共 {{total}} 条记录每页显示</span>
-				<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
-					<el-option label="10" :value="10"></el-option>
-					<el-option label="20" :value="20"></el-option>
-					<el-option label="30" :value="30"></el-option>
-					<el-option label="40" :value="40"></el-option>
-					<el-option label="50" :value="50"></el-option>
-					<el-option label="100" :value="100"></el-option>
-				</el-select>
-				<span>条记录</span>
-			</el-col>
-			<el-col :span="12">
-				<div class="pagination">
-					<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="total" @current-change="pageChange" size="small"></el-pagination>
-				</div>
-			</el-col>
-		</el-row>
+		<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		<div class="step-footer text-center">
 			<el-button type="primary" @click="nextStep">下一步</el-button>
 			<el-button @click="back">返回</el-button>
@@ -106,6 +88,7 @@
 <script type="text/javascript">
 	import { Message } from 'element-ui'
 	import Carrierbill from '../../../api/Carrierbill'
+	import Page from '../../CommonComponents/Page'
 	export default {
 		data() {
 			return {
@@ -140,7 +123,11 @@
 			},
 			pageChange(index) {
 				this.pageIndex = index
-				this.getList()
+				this.getList() 
+			},
+			pageSizeChange(size) {
+				this.pageSize = size
+				this.getList() 
 			},
 			getList() {
 				Carrierbill.find({
@@ -179,11 +166,6 @@
 					this.checkedList = []
 					this.checked = false
 				}
-				return
-				this.$refs.checkCarrier.forEach(item =>{
-					console.log(item)
-					item.checked = true
-				})
 			},
 			selectCarrier(e,carrierOrderID){
 				if(e.target.checked){
@@ -209,7 +191,10 @@
 					}
                 }
 			}
-		}
+		},
+		components: {
+			Page
+		},
 	}
 </script>
 <style lang="stylus" scoped>
