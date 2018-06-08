@@ -44,7 +44,7 @@
 						<th>操作</th>
 					</tr>
 					<template v-for="item in dispatchBillList">
-						<tr class="tit" :key="item">
+						<tr class="tit" :key="item.dispatchOrderID">
 							<td colspan="9">
 								<span class="infoItem ViewDispatchBill" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
 								<span class="infoItem">车牌号：{{item.plateNo}}</span>
@@ -65,7 +65,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr class="list" v-for="taskItem in item.dispatchTaskList">
+						<tr class="list" v-for="taskItem in item.dispatchTaskList" :key="taskItem.taskNo">
 							<td class="text-center">
 								<span @click="viewTask" class="ViewTaskDetail">{{taskItem.taskNo}}</span>
 							</td>
