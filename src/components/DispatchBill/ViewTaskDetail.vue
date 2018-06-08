@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<TaskItem></TaskItem>
+			<TaskItem :taskDetail="taskDetail" :task="task" :carrier="carrier"></TaskItem>
 			<div class="tit">运输照片<span class="fr uploadPicBtn" @click="dialogPhotoVisible = true">上传照片</span></div>
 			<div class="picList">
 				<div class="title">装车照片<span>(5)</span></div>
@@ -49,19 +49,30 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from '../../common/request'
+import Task from '../../api/Task'
 import TaskItem from './Common/TaskItem'
 import ImageUpload from '../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {
-			dialogPhotoVisible:false
+			dialogPhotoVisible:false,
+			taskDetail:{},
+			task:{},
+			carrier:{}
 		}
 	},
 	created() {
-		
+		this.getDetail()
 	},
 	methods: {
+		getDetail() {
+			let dispatchTaskID = this.$route.query.dispatchTaskID
+			Task.findById({ dispatchTaskID }).then(res => {
+				this.taskDetail = res
+				this.task = res.task
+				this.carrier = res.carrier
+			})
+		},
 		back() {
 			this.$router.go(-1)
 		},

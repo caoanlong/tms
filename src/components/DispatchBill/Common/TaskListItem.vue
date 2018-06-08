@@ -72,24 +72,28 @@
 				<span class="viewtaskdetailBtn" @click="viewtaskdetail(taskItem.dispatchTaskID)"><img src="../../../assets/imgs/viewtaskdetailBtn.png" /></span>
 			</div>
 		</div>
-		<!-- <el-dialog
+		<el-dialog
 		title="任务照片"
 		:visible.sync="dialogVisible"
-		width="60%"
-		:before-close="handleClose">
-		<img src="picItem.maxURL">
-		<div class="picdes">
-			<p>{{picItem.description}}</p>
-			<p>{{picItem.detailAddress}}</p>
-			<span class="statusTag" v-if="picItem.type='Loaded'">装车</span>
-			<span class="statusTag" v-else-if="picItem.type='Arrived'">送达</span>
-			<span class="statusTag" v-else-if="picItem.type='Received'">回单</span>
-			<span class="statusTag" v-else-if="picItem.type='Unusual'">异常</span>
+		width="60%" custom-class="viewPicDetail">
+		<div class="dialogBody">
+			<div class="text-center">
+				<img src="../../../assets/imgs/avatar.gif" class="bigPic">
+			</div>
+			<div class="picdes">
+				<p>补齐上月单据</p>
+				<p>广东省深圳市南山区 海天二路</p>
+				<span class="statusTag">装车</span>
+				<!-- <span class="statusTag" v-if="picItem.type='Loaded'">装车</span>
+				<span class="statusTag" v-else-if="picItem.type='Arrived'">送达</span>
+				<span class="statusTag" v-else-if="picItem.type='Received'">回单</span>
+				<span class="statusTag" v-else-if="picItem.type='Unusual'">异常</span> -->
+			</div>
 		</div>
 		<span slot="footer" class="dialog-footer">
-			<el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+			<el-button type="primary" @click="dialogVisible = false" size="small">关闭</el-button>
 		</span>
-		</el-dialog> -->
+		</el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
@@ -119,7 +123,7 @@ export default {
 			this.$router.push({ name: 'viewtaskdetail' , query: { dispatchTaskID } })
 		},
 		viewPicDetail(){
-
+			this.dialogVisible=true
 		}
 	}
 }
@@ -242,4 +246,34 @@ export default {
 			text-align center
 			font-size 12px
 			color #999
+.dialogBody
+	position relative
+	width 100%
+	height 400px
+	padding 20px
+	.bigPic
+		max-width 100%
+		max-height 100%
+	.picdes
+		position absolute
+		bottom 0
+		background rgba(0,0,0,.3)
+		height 60px
+		left 0
+		right 0
+		padding 0 10px
+		p
+			color #fff
+			margin 0
+			line-height 30px
+		.statusTag
+			position absolute
+			right 10px
+			top 10px
+			padding 2px 10px
+			background #f80
+			color #fff
+			border-radius 4px	
+			height 22px
+			line-height 18px
 </style>

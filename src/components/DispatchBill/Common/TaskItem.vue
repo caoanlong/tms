@@ -1,23 +1,29 @@
 <template>
 	<div class="item">
 		<div class="lineInfo">
-			<div class="tit"><span>任务单号：919239801</span> <span class="status fr">待装车</span></div>
+			<div class="tit"><span>任务单号：{{task.taskNo}}</span>
+				<span class="status fr" v-if="task.status='Committed'">待执行</span>
+				<span class="status fr" v-else-if="task.status='Loaded'">已装运</span>
+				<span class="status fr" v-else-if="task.status='Signed'">已签收</span>
+				<span class="status fr" v-else>已作废</span>
+			</div>
 			<div class="con">
 				<div class="from">
 					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="companyName">深圳飞天贸易</p>
-					<p>13424389894</p>
-					<p class="area">广东深圳</p>
-					<p class="datetime">2018-06-13 17:51（预计发货）</p>
-					<p class="datetime c2">2018-06-25 14:24（实际发货）</p>
+					<p class="companyName">{{carrier.shipperCompanyName}}</p>
+					<p>{{carrier.shipperName}}{{carrier.shipperPhone?('/'+carrier.shipperPhone):''}}</p>
+					<p class="area">{{carrier.shipperArea}}</p>
+					<p class="datetime">{{carrier.shipperDate | getdatefromtimestamp()}}（预计发货）</p>
+					<p class="datetime c2" v-if="carrier.shipperActualDate">{{carrier.shipperActualDate | getdatefromtimestamp()}}（实际发货）</p>
 				</div>
-				<div class="platNo"><span>粤BT63Y6</span></div>
+				<div class="platNo"><span>{{taskDetail.plateNo}}{{taskDetail.trailerPlateNo?('/'+taskDetail.trailerPlateNo):''}}</span></div>
 				<div class="to">
 					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="companyName">库那天交运贸易</p>
-					<p>13424389894</p>
-					<p class="area">云南昆明</p>
-					<p class="datetime">2018-06-15 13:24（预计到货）</p>
+					<p class="companyName">{{carrier.consigneeCompanyName}}</p>
+					<p>{{carrier.consigneeName}}{{carrier.consigneePhone?('/'+carrier.consigneePhone):''}}</p>
+					<p class="area">{{carrier.consigneeArea}}</p>
+					<p class="datetime">{{carrier.consigneeDate | getdatefromtimestamp()}}（预计到货）</p>
+					<p class="datetime c2" v-if="carrier.consigneeActualDate">{{carrier.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</p>
 				</div>
 			</div>
 		</div>
@@ -26,18 +32,18 @@
 			<div class="con">
 				<div class="driver">
 					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">吴郑平<span class="tag">司机</span></p>
-					<p>13424389894</p>
+					<p class="name">{{taskDetail.driverName}}<span class="tag">司机</span></p>
+					<p>{{taskDetail.driverPhone}}</p>
 				</div>
 				<div class="escort">
 					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">吴郑平<span class="tag">押运</span></p>
-					<p>13424389894</p>
+					<p class="name">{{taskDetail.superCargoName}}<span class="tag">押运</span></p>
+					<p>{{taskDetail.superCargoPhone}}</p>
 				</div>
 				<div class="dispatcher">
 					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">吴郑平<span class="tag">调度</span></p>
-					<p>13424389894</p>
+					<p class="name">{{taskDetail.dispatcheName}}<span class="tag">调度</span></p>
+					<p>{{taskDetail.dispatchePhone}}</p>
 				</div>
 			</div>
 		</div>
@@ -70,30 +76,50 @@
 			</tr>
 			<tr class="text-center">
 				<td>司机</td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverCashAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverCodAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverPorAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverMonthlyAmont"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverCosigneeAmount"></el-input></td>
+				<td><el-input size="mini" disabled :value="totalDriver"></el-input></td>
 			</tr>
 			<tr class="text-center">
 				<td>随行人员</td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCargoCashAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCargoCodAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCargoCorAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCargoMonthlyAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCosigneeAmount"></el-input></td>
+				<td><el-input size="mini" disabled v-model="totalsuperCargo"></el-input></td>
 			</tr>
 		</table>
 	</div>
 </template>
 <script type="text/javascript">
 export default {
+	props:{
+		taskDetail:{
+			type:Object
+		},
+		task:{
+			type:Object
+		},
+		carrier:{
+			type:Object
+		}
+		
+	},
 	data() {
 		return {
-			isEdit: true
+			isEdit: true,
+		}
+	},
+	computed:{
+		totalDriver:function(){
+			return Number(this.taskDetail.driverCashAmount?this.taskDetail.driverCashAmount:0)+Number(this.taskDetail.driverCodAmount?this.taskDetail.driverCodAmount:0)+Number(this.taskDetail.driverPorAmount?this.taskDetail.driverPorAmount:0)+Number(this.taskDetail.driverMonthlyAmont?this.taskDetail.driverMonthlyAmont:0)+Number(this.taskDetail.driverCosigneeAmount?this.taskDetail.driverCosigneeAmount:0)
+		},
+		totalsuperCargo:function(){
+			return Number(this.taskDetail.superCargoCashAmount?this.taskDetail.superCargoCashAmount:0)+Number(this.taskDetail.superCargoCodAmount?this.taskDetail.superCargoCodAmount:0)+Number(this.taskDetail.superCargoCorAmount?this.taskDetail.superCargoCorAmount:0)+Number(this.taskDetail.superCargoMonthlyAmount?this.taskDetail.superCargoMonthlyAmount:0)+Number(this.taskDetail.superCosigneeAmount?this.taskDetail.superCosigneeAmount:0)
 		}
 	},
 	methods:{
