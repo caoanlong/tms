@@ -5,6 +5,7 @@ const getters = {
 	mobile: state => state.user.mobile,
 	companyName: state => state.user.companyName,
 	sidebar: state => state.app.sidebar,
-	menus: state => state.menus.menus
+	menus: state => state.menus.menus,
+	selectedCarrierBill: state => state.dispatch.selectedCarrierBill
 }
 export default getters

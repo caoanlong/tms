@@ -14,7 +14,7 @@
 				<span v-if="carrierOrder.createTime">{{carrierOrder.createTime | getdatefromtimestamp()}}</span>
 				<span v-else></span>
 				<span class="label">委托时间：</span>
-				<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp()}}</span>
+				<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
 				<span v-else></span>
 			</div>
 			<table class="wf-table">
@@ -61,11 +61,11 @@
 				<tr>
 					<td>
 						<span class="justify">发货时间</span>
-						<span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp()}}</span>
+						<span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp(true)}}</span>
 					</td>
 					<td>
 						<span class="justify">到货时间</span>
-						<span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | getdatefromtimestamp()}}</span>
+						<span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | getdatefromtimestamp(true)}}</span>
 					</td>
 				</tr>
 			</table>

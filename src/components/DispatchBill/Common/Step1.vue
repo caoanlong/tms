@@ -47,7 +47,7 @@
 						<td>
 							<div class="wfCheck">
 								<span>
-									<input type="checkbox"  class="checkbox" ref="checkCarrier" :checked='checkedList.includes(item.carrierOrderID)' @change="selectCarrier($event,item.carrierOrderID)"/>
+									<input type="checkbox" class="checkbox" ref="checkCarrier" :checked='checkedList.includes(item.carrierOrderID)' @change="selectCarrier($event,item.carrierOrderID)"/>
 									<label></label>
 								</span>
 							</div>
@@ -60,22 +60,21 @@
 							</span>
 						</td>
 					</tr>
-					<tr class="list" v-for="cargoItem in item.carrierCargo">
+					<tr class="list" v-for="cargoItem in item.carrierCargo" :key="cargoItem.carrierCargoID">
 						<td colspan="2">{{cargoItem.cargoName}}</td>
 						<td class="text-center">{{cargoItem.cargoWeight}}kg{{cargoItem.cargoWeight&&cargoItem.cargoVolume?'/':''}}{{cargoItem.cargoVolume?cargoItem.cargoVolume+'m³':''}}</td>
 						<td class="text-center">{{cargoItem.cargoNum?cargoItem.cargoNum:''}}</td>
 						<td>{{item.shipperCompanyName}}</td>
 						<td class="text-center" width="160">{{item.shipperName}}<span class="phone">{{item.shipperPhone}}</span></td>
 						<td class="text-center">{{item.shipperArea}}</td>
-						<td class="text-center" width="140">{{item.shipperDate | getdatefromtimestamp()}}</td>
+						<td class="text-center" width="140">{{item.shipperDate | getdatefromtimestamp(true)}}</td>
 						<td>{{item.consigneeCompanyName}}</td>
 						<td class="text-center" width="160">{{item.consigneeName}}<span class="phone">{{item.consigneePhone}}</span></td>
 						<td class="text-center">{{item.consigneeArea}}</td>
-						<td class="text-center" width="140">{{item.consigneeDate | getdatefromtimestamp()}}</td>
+						<td class="text-center" width="140">{{item.consigneeDate | getdatefromtimestamp(true)}}</td>
 					</tr>
-					</template>
-				</table>
-				
+				</template>
+			</table>
 		</div>
 		<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		<div class="step-footer text-center">
