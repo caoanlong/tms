@@ -58,19 +58,38 @@
 					</tr>
 					<tr>
 						<td colspan="3">
-							<div class="picItem" v-for="(pic,index) in taskItem.dispatchTaskPicList" :key="index">
-								<img src="pic.minURL"/>
-								<p class="text-center" v-if="pic.type='Loaded'">装车照片</p>
-								<p class="text-center" v-else-if="pic.type='Arrived'">送达照片</p>
-								<p class="text-center" v-else-if="pic.type='Received'">回单照片</p>
-								<p class="text-center" v-else-if="pic.type='Unusual'">异常照片</p>
+							<div class="picItem"  @click="viewPicDetail" v-for="(i,index) in 3" :key="index">
+								<img src="../../../assets/imgs/avatar.gif" />
+								<p>装车照片</p>
+								<!-- <p v-if="picItem.type='Loaded'">装车照片</p> -->
+								<!-- <p v-else-if="picItem.type='Arrived'">送达照片</p>
+								<p v-else-if="picItem.type='Received'">回单照片</p>
+								<p v-else-if="picItem.type='Unusual'">异常照片</p> -->
 							</div>
 						</td>
 					</tr>
-			</table>
+				</table>
+				<span class="viewtaskdetailBtn" @click="viewtaskdetail(taskItem.dispatchTaskID)"><img src="../../../assets/imgs/viewtaskdetailBtn.png" /></span>
 			</div>
 		</div>
-		
+		<!-- <el-dialog
+		title="任务照片"
+		:visible.sync="dialogVisible"
+		width="60%"
+		:before-close="handleClose">
+		<img src="picItem.maxURL">
+		<div class="picdes">
+			<p>{{picItem.description}}</p>
+			<p>{{picItem.detailAddress}}</p>
+			<span class="statusTag" v-if="picItem.type='Loaded'">装车</span>
+			<span class="statusTag" v-else-if="picItem.type='Arrived'">送达</span>
+			<span class="statusTag" v-else-if="picItem.type='Received'">回单</span>
+			<span class="statusTag" v-else-if="picItem.type='Unusual'">异常</span>
+		</div>
+		<span slot="footer" class="dialog-footer">
+			<el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+		</span>
+		</el-dialog> -->
 	</div>
 </template>
 <script type="text/javascript">
@@ -92,6 +111,14 @@ export default {
 	},
 	data(){
 		return{
+			dialogVisible:false
+		}
+	},
+	methods:{
+		viewtaskdetail(dispatchTaskID){
+			this.$router.push({ name: 'viewtaskdetail' , query: { dispatchTaskID } })
+		},
+		viewPicDetail(){
 
 		}
 	}
@@ -125,7 +152,8 @@ export default {
 		.con
 			margin-bottom 10px
 			color #666
-			padding 10px
+			padding 10px 40px 10px 10px
+			position relative
 			p
 				margin 0
 				line-height 30px
@@ -189,5 +217,29 @@ export default {
 					left 50%
 					transform translate(-50%,-50%)
 					font-size 18px
+			.viewtaskdetailBtn
+				width 20px
+				height 75px
+				position absolute
+				top 50%
+				right 10px
+				cursor pointer
+				transform translateY(-50%)
 				
+	.picItem
+		width 80px
+		height 100px
+		margin-right 5px
+		cursor pointer
+		display inline-block
+		img
+			width 80px
+			height 80px
+			vertical-align top
+		p
+			height 20px
+			line-height 20px
+			text-align center
+			font-size 12px
+			color #999
 </style>
