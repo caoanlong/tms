@@ -10,11 +10,11 @@
 			<el-table border style="width: 100%" size="mini" :data="item.carrierCargo">
 				<el-table-column type="selection" width="40" align="center">
 				</el-table-column>
-				<el-table-column label="货物类型" align="center" prop="cargoType">
+				<el-table-column label="货物类型" align="center">
 				</el-table-column>
 				<el-table-column label="货物名称" align="center" prop="cargoName">	
 				</el-table-column>
-				<el-table-column label="货物规格" align="center">
+				<el-table-column label="货物规格" align="center" prop="cargoType">
 				</el-table-column>
 				<el-table-column label="待配货量" align="center" >
 					<template slot-scope="scope">
@@ -29,21 +29,21 @@
 				</el-table-column>
 				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange">
+						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" >
 							<span slot="append">吨</span>
 						</el-input>
 					</template>	
 				</el-table-column>
 				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange">
+						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" >
 							<span slot="append">方</span>
 						</el-input>
 					</template>					
 				</el-table-column>
 				<el-table-column label="配载数量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange">
+						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" >
 							<span slot="append">件</span>
 						</el-input>
 					</template>

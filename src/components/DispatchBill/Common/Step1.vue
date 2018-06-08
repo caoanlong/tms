@@ -134,7 +134,6 @@
 					return
 				}
 				this.$emit('nextStep', 1,this.checkedList)
-				console.log(this.checkedList)
 			},
 			back() {
 				this.$router.go(-1)

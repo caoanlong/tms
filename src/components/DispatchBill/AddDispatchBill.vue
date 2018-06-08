@@ -38,14 +38,12 @@ export default {
 	},
 	methods: {
 		nextStep(x, data, data1) {
-			console.log(x + 1)
 			this.currentStepView = 'Step' + (x + 1)
 			this.stepActive = x
 			if(x == 1){
-				this.selectedCarrierBillIDs = data
-				for (let i = 0; i < this.selectedCarrierBillIDs.length; i++) {
-					this.getDetail(this.selectedCarrierBillIDs[i])
-				}
+				console.log(data)
+				this.selectedCarrierBills = data
+				
 			}else if (x == 2) {
 				this.selectedTruck = data
 				this.selectedPerson = data1

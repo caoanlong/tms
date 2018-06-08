@@ -8,25 +8,25 @@
 		<div class="search">
 			<el-form :inline="true" class="demo-form-inline" size="small">
 				<el-form-item label="关键字">
-					<el-input placeholder="编号/姓名/车牌号/车长/车型" v-model="findTruckSelfNum"></el-input>
+					<el-input placeholder="编号/姓名/车牌号/车长/车型"></el-input>
 				</el-form-item>
 				<el-form-item label="装车日期">
-					<el-date-picker  type="date" placeholder="选择日期"></el-date-picker>
+					<el-date-picker type="date" placeholder="选择日期"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="车辆状态">
-					<el-select placeholder="全部">
+					<!-- <el-select placeholder="全部">
 						<el-option label="全部" value=""></el-option>
 						<el-option label="空闲" value="空闲"></el-option>
 						<el-option label="工作中" value="工作中"></el-option>
-					</el-select>
+					</el-select> -->
 				</el-form-item>
 				<el-form-item label="车辆归属">
-					<el-select placeholder="全部">
+					<!-- <el-select placeholder="全部">
 						<el-option label="全部" value=""></el-option>
 						<el-option label="单位挂靠" value="单位挂靠"></el-option>
 						<el-option label="个人挂靠" value="个人挂靠"></el-option>
 						<el-option label="自有车辆" value="自有车辆"></el-option>
-					</el-select>
+					</el-select> -->
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="getTruckList">搜索</el-button>
@@ -35,13 +35,13 @@
 			</el-form>
 		</div>
 		<div class="list">
-			<DriverItem 
+			<!-- <DriverItem 
 				:isSelected="selectedDriver.truckID == item.truckID" 
 				:index="index" 
 				v-for="(item, index) in truckList" 
 				:key="index" 
 				:truck="item" 
-				@click.native.stop="selectDriverItem(item)"/>
+				@click.native.stop="selectDriverItem(item)"/> -->
 		</div>
 		<div class="pagination">
 			<el-pagination :page-size="truckPageSize" align="right" background layout="prev, pager, next" :total="truckCount" @current-change="pageTruckChange"></el-pagination>
@@ -60,11 +60,11 @@
 					<el-date-picker  type="date" placeholder="选择日期"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="人员状态">
-					<el-select placeholder="全部">
+					<!-- <el-select placeholder="全部">
 						<el-option label="全部" value=""></el-option>
 						<el-option label="空闲" value="空闲"></el-option>
 						<el-option label="工作中" value="工作中"></el-option>
-					</el-select>
+					</el-select> -->
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="getPersonList">搜索</el-button>
@@ -73,13 +73,13 @@
 			</el-form>
 		</div>
 		<div class="list">
-			<EscortItem 
+			<!-- <EscortItem 
 				:isSelected="selectedEscort.staffID == item.staffID" 
 				:index="index" 
 				v-for="(item,index) in personList" 
 				:key="index" 
 				:person="item"
-				@click.native.stop="selectEscortItem(item)" />
+				@click.native.stop="selectEscortItem(item)" /> -->
 		</div>
 		<div class="pagination">
 			<el-pagination :page-size="personPageSize" align="right" background layout="prev, pager, next" :total="personCount" @current-change="pagePersonChange"></el-pagination>
@@ -97,20 +97,20 @@
 	import DriverItem from './DriverItem'
 	import EscortItem from './EscortItem'
 	export default {
-		props: {
-			startLoad: {
-				type: Boolean,
-				default: false
-			},
-			totalList: {
-				type: Array,
-				default: () => []
-			},
-			cargoNum: {
-				type: Number,
-				default: 0
-			}
-		},
+		// props: {
+		// 	startLoad: {
+		// 		type: Boolean,
+		// 		default: false
+		// 	},
+		// 	totalList: {
+		// 		type: Array,
+		// 		default: () => []
+		// 	},
+		// 	cargoNum: {
+		// 		type: Number,
+		// 		default: 0
+		// 	}
+		// },
 		data() {
 			return {
 				selectedDriver: {},
