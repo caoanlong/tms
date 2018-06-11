@@ -95,6 +95,7 @@ class Dispatchbill extends Base {
             })
         })
     }
+
 }
 
 export default new Dispatchbill('/biz/dispatchOrder', request)
