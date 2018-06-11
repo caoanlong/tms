@@ -7,7 +7,12 @@
 				<span class="infoItem">{{item.consigneeArea}}</span>
 				<span class="infoItem">{{item.consigneeDate | getdatefromtimestamp()}}（预约达到）</span>
 			</div>
-			<el-table border style="width: 100%" size="mini" :data="item.carrierCargo">
+			<el-table border 
+				style="width: 100%" 
+				size="mini" 
+				:data="item.carrierCargo" 
+				@select="selectionSimple" 
+				@select-all="selectionAll($event, item)">
 				<el-table-column type="selection" width="40" align="center">
 				</el-table-column>
 				<el-table-column label="货物类型" align="center">
@@ -72,7 +77,8 @@ import Carrierbill from '../../../api/Carrierbill'
 export default {
 	data() {
 		return {
-			carrierBills: []
+			carrierBills: [],
+			selectedCargoList: []
 		}
 	},
 	computed: {
@@ -89,6 +95,35 @@ export default {
 			Carrierbill.findById({ carrierOrderID }).then(res => {
 				this.carrierBills.push(res)
 			})
+		},
+		selectionAll(data, carrierBill) {
+			let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
+			if (data.length > 0) {
+				for (let i = 0; i < data.length; i++) {
+					if (!data[i].cargoWeightNew) data[i].cargoWeightNew = data[i].remainingCargoWeight
+					if (!data[i].cargoVolumeNew) data[i].cargoVolumeNew = data[i].remainingCargoVolume
+					if (!data[i].cargoNumNew) data[i].cargoNumNew = data[i].remainingCargoNum
+				}
+				list.push(...data)
+			}
+			this.selectedCargoList = list
+			this.$store.dispatch('setCargo', this.selectedCargoList)
+		},
+		selectionSimple(data, row) {
+			let flag = true
+			for (let i = 0; i < this.selectedCargoList.length; i++) {
+				if (this.selectedCargoList[i].carrierCargoID == row.carrierCargoID) {
+					this.selectedCargoList.splice(i, 1)
+					flag = false
+				}
+			}
+			if (!row.cargoWeightNew) row.cargoWeightNew = row.remainingCargoWeight
+			if (!row.cargoVolumeNew) row.cargoVolumeNew = row.remainingCargoVolume
+			if (!row.cargoNumNew) row.cargoNumNew = row.remainingCargoNum
+			if (flag) {
+				this.selectedCargoList.push(row)
+			}
+			this.$store.dispatch('setCargo', this.selectedCargoList)
 		},
 		nextStep(){
 			this.$emit('nextStep', 3)

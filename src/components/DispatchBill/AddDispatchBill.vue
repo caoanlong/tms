@@ -8,7 +8,7 @@
 				<el-step title="装车信息&amp;结算方式"></el-step>
 				<el-step title="完成"></el-step>
 			</el-steps>
-			<component :is="currentStepView" @nextStep="nextStep"></component>
+			<component :is="currentStepView" @nextStep="nextStep" @prevStep="prevStep"></component>
 		</div>
 	</div>
 </template>

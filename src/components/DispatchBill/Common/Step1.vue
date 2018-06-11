@@ -140,7 +140,7 @@ export default {
 			this.getList() 
 		},
 		getList() {
-			Carrierbill.find({
+			Carrierbill.findPreDispatch({
 				current: this.pageIndex,
 				size: this.pageSize,
 				shipperBeginDate: this.findshipperBeginDate,

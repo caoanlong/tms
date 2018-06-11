@@ -17,5 +17,15 @@ class TransportRecord extends Base {
             })
         })
     }
+    findSelectDriver(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/selectDriver',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
 }
 export default new TransportRecord('/transportRecord', request)

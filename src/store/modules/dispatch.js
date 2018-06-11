@@ -1,6 +1,7 @@
 const dispatch = {
 	state: {
-        selectedCarrierBill: []
+		selectedCarrierBill: [],
+		selectedCargos: []
 	},
 	mutations: {
         ADD_CARRIERBILL: (state, list) => {
@@ -17,6 +18,9 @@ const dispatch = {
 				selectedCarrierBill.splice(selectedCarrierBill.indexOf(item), 1)
 			})
 		},
+		SET_CARGO: (state, list) => {
+			state.selectedCargos = list
+		}
 	},
 	actions: {
 		addCarrierBill({ commit }, list) {
@@ -24,6 +28,9 @@ const dispatch = {
 		},
 		delCarrierBill({ commit }, list) {
 			commit('DEL_CARRIERBILL', list)
+		},
+		setCargo({ commit }, list) {
+			commit('SET_CARGO', list)
 		},
 	}
 }
