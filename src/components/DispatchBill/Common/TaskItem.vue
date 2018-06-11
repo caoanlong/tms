@@ -42,8 +42,8 @@
 				</div>
 				<div class="dispatcher">
 					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">{{taskDetail.dispatcheName}}<span class="tag">调度</span></p>
-					<p>{{taskDetail.dispatchePhone}}</p>
+					<p class="name">{{taskDetail.dispatcherName}}<span class="tag">调度</span></p>
+					<p>{{taskDetail.dispatcherMobile}}</p>
 				</div>
 			</div>
 		</div>
@@ -51,17 +51,11 @@
 			<tr>
 				<td class="tit" colspan="4">货物清单</td>
 			</tr>
-			<tr>
-				<td>重货</td><td>纸箱，16盒/箱</td><td>太古咖啡</td><td>6吨/40方/1000件</td>
-			</tr>
-			<tr>
-				<td>轻货</td><td>纸箱，16盒/箱</td><td>雀巢咖啡</td><td>6吨/40方/1000件</td>
-			</tr>
-			<tr>
-				<td>重货</td><td>易拉罐，12听/件</td><td>金威啤酒</td><td>6吨/40方/1000件</td>
+			<tr v-for="cargoItem in cargoList">
+				<td class="text-center" width="100"><span v-if="cargoItem.weightType='Heavy'">重货</span><span v-else>轻货</span></td><td>{{cargoItem.cargoType}}</td><td>{{cargoItem.cargoName}}</td><td>{{cargoItem.cargoWeight?(cargoItem.cargoWeight+'kg/'+''):''}}{{cargoItem.cargoVolume?cargoItem.cargoVolume+'m³/':''}}{{cargoItem.cargoNum?cargoItem.cargoNum+'件':''}}</td>
 			</tr>
 		</table>
-		<table class="fare">
+		<table class="fare" v-if="detailType=='edit'">
 			<tr>
 				<td class="tit" colspan="7">付款费用 <span class="fr editBtn" v-if="isEdit" @click="editFare">编辑</span><span class="fr editBtn" v-else @click="saveFare">保存</span></td>
 			</tr>
@@ -76,26 +70,27 @@
 			</tr>
 			<tr class="text-center">
 				<td>司机</td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverCashAmount"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverCodAmount"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverPorAmount"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverMonthlyAmont"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.driverCosigneeAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.driverCashAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.driverCodAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.driverPorAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.driverMonthlyAmont"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.driverCosigneeAmount"></el-input></td>
 				<td><el-input size="mini" disabled :value="totalDriver"></el-input></td>
 			</tr>
 			<tr class="text-center">
 				<td>随行人员</td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCargoCashAmount"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCargoCodAmount"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCargoCorAmount"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCargoMonthlyAmount"></el-input></td>
-				<td><el-input size="mini" :disabled="isEdit" v-model="taskDetail.superCosigneeAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.superCargoCashAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.superCargoCodAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.superCargoCorAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.superCargoMonthlyAmount"></el-input></td>
+				<td><el-input size="mini" :disabled="isEdit" v-model="task.superCosigneeAmount"></el-input></td>
 				<td><el-input size="mini" disabled v-model="totalsuperCargo"></el-input></td>
 			</tr>
 		</table>
 	</div>
 </template>
 <script type="text/javascript">
+import Task from '../../../api/Task'
 export default {
 	props:{
 		taskDetail:{
@@ -106,8 +101,13 @@ export default {
 		},
 		carrier:{
 			type:Object
+		},
+		cargoList:{
+			type:Array
+		},
+		detailType:{
+			type:String
 		}
-		
 	},
 	data() {
 		return {
@@ -116,10 +116,10 @@ export default {
 	},
 	computed:{
 		totalDriver:function(){
-			return Number(this.taskDetail.driverCashAmount?this.taskDetail.driverCashAmount:0)+Number(this.taskDetail.driverCodAmount?this.taskDetail.driverCodAmount:0)+Number(this.taskDetail.driverPorAmount?this.taskDetail.driverPorAmount:0)+Number(this.taskDetail.driverMonthlyAmont?this.taskDetail.driverMonthlyAmont:0)+Number(this.taskDetail.driverCosigneeAmount?this.taskDetail.driverCosigneeAmount:0)
+			return Number(this.task.driverCashAmount?this.task.driverCashAmount:0)+Number(this.task.driverCodAmount?this.task.driverCodAmount:0)+Number(this.task.driverPorAmount?this.task.driverPorAmount:0)+Number(this.task.driverMonthlyAmont?this.task.driverMonthlyAmont:0)+Number(this.task.driverCosigneeAmount?this.task.driverCosigneeAmount:0)
 		},
 		totalsuperCargo:function(){
-			return Number(this.taskDetail.superCargoCashAmount?this.taskDetail.superCargoCashAmount:0)+Number(this.taskDetail.superCargoCodAmount?this.taskDetail.superCargoCodAmount:0)+Number(this.taskDetail.superCargoCorAmount?this.taskDetail.superCargoCorAmount:0)+Number(this.taskDetail.superCargoMonthlyAmount?this.taskDetail.superCargoMonthlyAmount:0)+Number(this.taskDetail.superCosigneeAmount?this.taskDetail.superCosigneeAmount:0)
+			return Number(this.task.superCargoCashAmount?this.task.superCargoCashAmount:0)+Number(this.task.superCargoCodAmount?this.task.superCargoCodAmount:0)+Number(this.task.superCargoCorAmount?this.task.superCargoCorAmount:0)+Number(this.task.superCargoMonthlyAmount?this.task.superCargoMonthlyAmount:0)+Number(this.task.superCosigneeAmount?this.task.superCosigneeAmount:0)
 		}
 	},
 	methods:{

@@ -25,5 +25,13 @@ class Task extends Base {
             data
         })
     }
+
+    modifyTransportCosts(data) {
+        return this.request({
+            url: this.baseUrl + '/modifyTransportCosts',
+            method: 'post',
+            data
+        })
+    }
 }
 export default new Task('/bizDispatchTask', request)

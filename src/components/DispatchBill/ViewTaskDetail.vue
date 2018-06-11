@@ -1,8 +1,8 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<TaskItem :taskDetail="taskDetail" :task="task" :carrier="carrier"></TaskItem>
-			<div class="tit">运输照片<span class="fr uploadPicBtn" @click="dialogPhotoVisible = true">上传照片</span></div>
+			<TaskItem :taskDetail="taskDetail" :task="task" :carrier="carrier" :cargoList="cargoList" :detailType="detailType"></TaskItem>
+			<div class="tit">运输照片<span class="fr uploadPicBtn" @click="dialogPhotoVisible = true" v-if="detailType=='edit'">上传照片</span></div>
 			<div class="picList">
 				<div class="title">装车照片<span>(5)</span></div>
 				<div class="con"></div>
@@ -58,7 +58,9 @@ export default {
 			dialogPhotoVisible:false,
 			taskDetail:{},
 			task:{},
-			carrier:{}
+			carrier:{},
+			cargoList:[],
+			detailType:''
 		}
 	},
 	created() {
@@ -67,10 +69,12 @@ export default {
 	methods: {
 		getDetail() {
 			let dispatchTaskID = this.$route.query.dispatchTaskID
+			this.detailType = this.$route.query.type
 			Task.findById({ dispatchTaskID }).then(res => {
 				this.taskDetail = res
 				this.task = res.task
 				this.carrier = res.carrier
+				this.cargoList= res.cargoList
 			})
 		},
 		back() {

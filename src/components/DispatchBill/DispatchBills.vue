@@ -67,7 +67,7 @@
 						</tr>
 						<tr class="list" v-for="taskItem in item.dispatchTaskList" :key="taskItem.taskNo">
 							<td class="text-center">
-								<span @click="viewTask" class="ViewTaskDetail">{{taskItem.taskNo}}</span>
+								<span @click="viewTask(taskItem.dispatchTaskID,'view')" class="ViewTaskDetail">{{taskItem.taskNo}}</span>
 							</td>
 							<td class="text-center" width="80">
 								<span v-if="taskItem.status='Committed'">待执行</span>
@@ -83,7 +83,7 @@
 							<td class="text-center" width="140">{{taskItem.consigneeDate | getdatefromtimestamp()}}</td>
 							<td class="text-center">
 								<el-button type="text" size="mini">上传照片</el-button>
-								<el-button type="text" size="mini" @click="viewTask">编辑</el-button>
+								<el-button type="text" size="mini" @click="viewTask(taskItem.dispatchTaskID,'edit')">编辑</el-button>
 							</td>
 						</tr>
 					</template>
@@ -146,8 +146,8 @@ export default {
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
 		},
-		viewTask() {
-			this.$router.push({ name: 'viewtaskdetail' })
+		viewTask(dispatchTaskID,type) {
+			this.$router.push({ name: 'viewtaskdetail' , query: {dispatchTaskID,type}})
 		}
 	},
 	components:{
