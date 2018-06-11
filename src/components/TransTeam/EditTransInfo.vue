@@ -5,7 +5,7 @@
 			<el-form label-width="120px" :model="transInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="14" :offset="5">
-						<el-form-item label="姓名" prop="staffID">
+						<el-form-item label="姓名" prop="comDriverID">
 							<el-autocomplete style="width:100%"
 								value-key="realName" 
 								v-model="transInfo.realName"
@@ -69,7 +69,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from '../../common/request'
+import Staff from '../../api/Staff'
+import Truck from '../../api/Truck'
+import TransportRecord from '../../api/TransportRecord'
 export default {
 	data() {
 		return {
@@ -77,12 +79,12 @@ export default {
 			transInfo: {
 				archiveTime: '',
 				code: '',
-				staffID: '',
+				comDriverID: '',
 				trailerID: '',
 				truckID: ''
 			},
 			rules: {
-				staffID: [
+				comDriverID: [
 					{required: true, message: '请选择姓名'}
 				],
 				truckID: [
@@ -106,43 +108,28 @@ export default {
 			return new Date() < curDate
 		},
 		getStaffs(queryString, cb) {
-			let params = {
+			Staff.findByDriverSuggest({
 				realName: queryString
-			}
-			request({
-				url: '/staff/driver/suggest',
-				params
 			}).then(res => {
-				let list = res.data.data
-				cb(list)
+				cb(res)
 			})
 		},
 		getTrucks(queryString, cb) {
-			let params = {
+			Truck.findByPlateNoSuggest({
 				plateNo: queryString
-			}
-			request({
-				url: '/truck/plateNo/suggest',
-				params
 			}).then(res => {
-				let list = res.data.data
-				cb(list)
+				cb(res)
 			})
 		},
 		getTrailers(queryString, cb) {
-			let params = {
+			Truck.findByTrailerPlateNoSuggest({
 				trailerPlateNo: queryString
-			}
-			request({
-				url: '/truck/trailerPlateNo/suggest',
-				params
 			}).then(res => {
-				let list = res.data.data
-				cb(list)
+				cb(res)
 			})
 		},
 		handSelectStaff(data) {
-			this.transInfo.staffID = data.staffID
+			this.transInfo.comDriverID = data.comDriverID
 			this.transInfo.realName = data.realName
 		},
 		handSelectTruck(data) {
@@ -154,30 +141,17 @@ export default {
 			this.transInfo.trailerPlateNo = data.trailerPlateNo
 		},
 		getInfo() {
-			let params = {
-				transportRecordID: this.$route.query.transportRecordID
-			}
-			request({
-				url: '/transportRecord/findById',
-				params
-			}).then(res => {
-				this.transInfo = res.data.data
+			let transportRecordID = this.$route.query.transportRecordID
+			TransportRecord.findById({ transportRecordID }).then(res => {
+				this.transInfo = res
 			})
 		},
 		updateItem() {
 			let data = this.transInfo
-			if (!data.trailerPlateNo) {
-				data.trailerID = ''
-			}
-			console.log(data)
+			!data.trailerPlateNo && (data.trailerID = '')
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					request({
-						url: '/transportRecord/update',
-						method: 'post',
-						data
-					}).then(res => {
-						console.log(res.data)
+					TransportRecord.update(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'transinfo'})
 					})

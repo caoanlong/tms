@@ -59,7 +59,7 @@ class Dispatchbill extends Base {
                 url: this.baseUrl + '/preLoad',
                 params
             }).then(res => {
-                resolve({data: res.data.data, cargos: res.data.cargos})
+                resolve(res.data.data)
             })
         })
     }

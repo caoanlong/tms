@@ -4,7 +4,9 @@ import request from '../common/request'
 class TransportRecord extends Base {
     constructor(url, req) {
         super(url, req).initURI({
-            find: '/findList'
+            find: '/findList',
+            findById: '/findById',
+            update: '/update',
         })
     }
     findRecordDetailById(params) {

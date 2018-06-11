@@ -72,10 +72,10 @@
 							</span>
 						</td>
 					</tr>
-					<tr class="list" v-for="cargoItem in item.carrierCargo" :key="cargoItem.carrierCargoID">
-						<td colspan="2">{{cargoItem.cargoName}}</td>
-						<td class="text-center">{{cargoItem.cargoWeight}}kg{{cargoItem.cargoWeight&&cargoItem.cargoVolume?'/':''}}{{cargoItem.cargoVolume?cargoItem.cargoVolume+'m³':''}}</td>
-						<td class="text-center">{{cargoItem.cargoNum?cargoItem.cargoNum:''}}</td>
+					<tr class="list" :key="item.carrierOrderID + 1">
+						<td colspan="2">{{item.cargoName}}</td>
+						<td class="text-center">{{item.cargoWeightSum}}kg{{item.cargoWeightSum&&item.cargoVolumeSum?'/':''}}{{item.cargoVolumeSum?item.cargoVolumeSum+'m³':''}}</td>
+						<td class="text-center">{{item.cargoNumSum?item.cargoNumSum:''}}</td>
 						<td>{{item.shipperCompanyName}}</td>
 						<td class="text-center" width="160">{{item.shipperName}}<span class="phone">{{item.shipperPhone}}</span></td>
 						<td class="text-center">{{item.shipperArea}}</td>

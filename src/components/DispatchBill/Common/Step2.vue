@@ -10,7 +10,7 @@
 			<el-table border 
 				style="width: 100%" 
 				size="mini" 
-				:data="item.carrierCargo" 
+				:data="item.cargo" 
 				@select="selectionSimple" 
 				@select-all="selectionAll($event, item)">
 				<el-table-column type="selection" width="40" align="center">
@@ -27,8 +27,8 @@
 				</el-table-column>
 				<el-table-column label="待配货量" align="center" >
 					<template slot-scope="scope">
-						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}} 
-						{{scope.row.remainingCargoVolume ? ('/' + scope.row.remainingCargoVolume + '方') : ''}} 
+						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + 'kg') : ''}} 
+						{{scope.row.remainingCargoVolume ? ('/' + scope.row.remainingCargoVolume + 'm³') : ''}} 
 					</template>
 				</el-table-column>
 				<el-table-column label="待配件数" align="center" prop="remainingCargoNum">
@@ -74,6 +74,7 @@
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import Carrierbill from '../../../api/Carrierbill'
+import Dispatchbill from '../../../api/Dispatchbill'
 export default {
 	data() {
 		return {
@@ -85,15 +86,21 @@ export default {
 		...mapGetters(['selectedCarrierBill'])
 	},
 	created() {
-		let list = this.selectedCarrierBill
-		list.forEach(item => {
-			this.getDetail(item)
-		})
+		let carrierOrderIDs = this.selectedCarrierBill.join(',')
+		this.getList(carrierOrderIDs)
+		// list.forEach(item => {
+		// 	this.getDetail(item)
+		// })
 	},
 	methods: {
 		getDetail(carrierOrderID) {
 			Carrierbill.findById({ carrierOrderID }).then(res => {
 				this.carrierBills.push(res)
+			})
+		},
+		getList(carrierOrderIDs) {
+			Dispatchbill.findPreLoad({ carrierOrderIDs }).then(res => {
+				this.carrierBills = res
 			})
 		},
 		selectionAll(data, carrierBill) {

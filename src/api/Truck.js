@@ -9,6 +9,26 @@ class Truck extends Base {
             update: '/update'
         })
     }
+    findByPlateNoSuggest(params) {
+		return new Promise((resolve, reject) => {
+			this.request({
+				url: this.baseUrl + '/plateNo/suggest',
+				params
+			}).then(res => {
+				resolve(res.data.data)
+			})
+		})
+	}
+	findByTrailerPlateNoSuggest(params) {
+		return new Promise((resolve, reject) => {
+			this.request({
+				url: this.baseUrl + '/trailerPlateNo/suggest',
+				params
+			}).then(res => {
+				resolve(res.data.data)
+			})
+		})
+	}
     /**
      * 查询车辆违章记录
      * @param {*} params 
