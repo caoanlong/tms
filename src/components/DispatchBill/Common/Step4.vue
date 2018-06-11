@@ -55,9 +55,9 @@
 					<td>{{cargoItem.cargoType}}</td>
 					<td>{{cargoItem.cargoName}}</td>
 					<td>
-						{{cargoItem.cargoWeight?(cargoItem.cargoWeight+'kg/'+''):''}}
-						{{cargoItem.cargoVolume?cargoItem.cargoVolume+'m³/':''}}
-						{{cargoItem.cargoNum?cargoItem.cargoNum+'件':''}}
+						{{cargoItem.cargoWeightNew?(cargoItem.cargoWeightNew+'kg/'+''):''}}
+						{{cargoItem.cargoVolumeNew?cargoItem.cargoVolumeNew+'m³/':''}}
+						{{cargoItem.cargoNumNew?cargoItem.cargoNumNew+'件':''}}
 					</td>
 				</tr>
 			</table>
@@ -108,11 +108,27 @@
 						</el-input>
 					</td>
 				</tr>
+				<tr>
+					<td colspan="6"></td>
+					<td style="font-weight:bold">任务运费：￥{{
+						Number(task.driverCashAmount ? task.driverCashAmount : 0) 
+						+ Number(task.driverCodAmount ? task.driverCodAmount : 0) 
+						+ Number(task.driverPorAmount ? task.driverPorAmount : 0) 
+						+ Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
+						+ Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0)
+						+ Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
+						+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
+						+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
+						+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
+						+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)
+					}}</td>
+				</tr>
 			</table>
 		</div>
+		<div class="totalAmount">本次调度总运费：￥{{totalAmount}}</div>
 		<div class="text-center">
 			<el-button @click="prevStep">上一步</el-button>
-			<el-button type="primary" >完成</el-button>
+			<el-button type="primary" @click="add">完成</el-button>
 			<el-button @click="back">返回</el-button>
 		</div>
 	</div>
@@ -128,7 +144,24 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['selectedCarrierBill', 'selectedDriver', 'selectedStaff'])
+		...mapGetters(['selectedCarrierBill', 'selectedDriver', 'selectedStaff', 'selectedCargos']),
+		totalAmount() {
+			let amount = 0
+			this.taskList.forEach(item => {
+				let itemAmount = Number(item.driverCashAmount ? item.driverCashAmount : 0) 
+					+ Number(item.driverCodAmount ? item.driverCodAmount : 0) 
+					+ Number(item.driverPorAmount ? item.driverPorAmount : 0) 
+					+ Number(item.driverMonthlyAmont ? item.driverMonthlyAmont : 0) 
+					+ Number(item.driverCosigneeAmount ? item.driverCosigneeAmount : 0)
+					+ Number(item.superCargoCashAmount ? item.superCargoCashAmount : 0) 
+					+ Number(item.superCargoCodAmount ? item.superCargoCodAmount : 0) 
+					+ Number(item.superCargoCorAmount ? item.superCargoCorAmount : 0) 
+					+ Number(item.superCargoMonthlyAmount ? item.superCargoMonthlyAmount : 0) 
+					+ Number(item.superCosigneeAmount ? item.superCosigneeAmount : 0)
+				amount += itemAmount
+			})
+			return amount
+		}
 	},
 	created() {
 		let carrierOrderIDs = this.selectedCarrierBill.join(',')
@@ -137,21 +170,56 @@ export default {
 	methods: {
 		getList(carrierOrderIDs) {
 			Dispatchbill.findPreLoad({ carrierOrderIDs }).then(res => {
+				res.forEach(item => {
+					let cargos = this.selectedCargos.filter(cargo => cargo.carrierOrderID == item.carrierOrderID)
+					item.cargo = cargos
+				})
 				this.taskList = res
 			})
 		},
 		add() {
+			let dispatchTaskCargoInfo = this.selectedCargos.map(item => {
+				return {
+					'carrierCargoID': item.carrierCargoID,
+					'carrierOrderID': item.carrierOrderID,
+					'cargoWeight': item.cargoWeightNew,
+					'cargoVolume': item.cargoVolumeNew,
+					'cargoNum': item.cargoNumNew
+				}
+			})
+			let dispatchTaskInfo = this.taskList.map(item => {
+				return {
+					'carrierOrderID': item.carrierOrderID,
+					'amountSum': Number(item.driverCashAmount ? item.driverCashAmount : 0) 
+					+ Number(item.driverCodAmount ? item.driverCodAmount : 0) 
+					+ Number(item.driverPorAmount ? item.driverPorAmount : 0) 
+					+ Number(item.driverMonthlyAmont ? item.driverMonthlyAmont : 0) 
+					+ Number(item.driverCosigneeAmount ? item.driverCosigneeAmount : 0)
+					+ Number(item.superCargoCashAmount ? item.superCargoCashAmount : 0) 
+					+ Number(item.superCargoCodAmount ? item.superCargoCodAmount : 0) 
+					+ Number(item.superCargoCorAmount ? item.superCargoCorAmount : 0) 
+					+ Number(item.superCargoMonthlyAmount ? item.superCargoMonthlyAmount : 0) 
+					+ Number(item.superCosigneeAmount ? item.superCosigneeAmount : 0),
+					'driverCashAmount': item.driverCashAmount,
+					'driverCodAmount': item.driverCodAmount,
+					'driverPorAmount': item.driverPorAmount,
+					'driverMonthlyAmont': item.driverMonthlyAmont,
+					'driverCosigneeAmount': item.driverCosigneeAmount,
+					'superCargoCashAmount': item.superCargoCashAmount,
+					'superCargoCodAmount': item.superCargoCodAmount,
+					'superCargoCorAmount': item.superCargoCorAmount,
+					'superCargoMonthlyAmount': item.superCargoMonthlyAmount,
+					'superCosigneeAmount': item.superCosigneeAmount
+				}
+			})
 			Dispatchbill.add({
-				'dispatchTaskCargoInfo': '',
-				'dispatchTaskInfo': '',
-				'sumAmount': '',
-				'loadWeightSum': '',
-				'loadVolumeSum': '',
-				'loadNumSum': '',
-				'transportRecordID': '',
+				'dispatchTaskCargoInfo': JSON.stringify(dispatchTaskCargoInfo),
+				'dispatchTaskInfo': JSON.stringify(dispatchTaskInfo),
+				'sumAmount': this.totalAmount,
+				'transportRecordID': this.selectedStaff.transportRecordID,
 				'truckID': this.selectedDriver.truckID,
-				'trailerID': '',
-				'driverID': '',
+				'trailerID': this.selectedDriver.trailerID,
+				'driverID': this.selectedDriver.driverID,
 				'superCargoID': this.selectedStaff.staffID
 			}).then(res => {
 				Message.success('保存成功！')
@@ -168,6 +236,10 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.totalAmount
+	color #ff6900
+	font-weight bold
+	text-align right
 .item
 	margin-bottom 10px
 	table
