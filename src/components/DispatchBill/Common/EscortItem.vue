@@ -4,9 +4,9 @@
 			<span v-if="person.workStatus == 'Free'">空闲中</span>
 			<span v-else-if="person.workStatus == 'Working'">工作中</span>
 		</div>
-		<div class="driverName">{{person.realName}}</div>
-		<div class="phone">{{person.mobile}}</div>
-		<div class="role">角色：押运员</div>
+		<div class="driverName">{{person.staffName}}</div>
+		<div class="phone">{{person.staffPhone}}</div>
+		<div class="role">{{person.staffRole}}</div>
 		<svg-icon icon-class="select-icon" class="icon" :class="{selected: isSelected}"></svg-icon>
 	</div>
 </template>

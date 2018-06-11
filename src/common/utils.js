@@ -123,3 +123,19 @@ export function resizeImg (url, size) {
 	let arr = url.split('.')
 	return process.env.IMG_API + arr[0] + size + arr[1]
 }
+
+export function transNum (number, count=2) {
+	function ss (n) {
+		let str = ''
+		for (let i = 0; i < n; i++) {
+			str += '0'
+		}
+	}
+	if (number < 10) {
+		return ss(count) + number
+	} else if (number < 100 && number >= 10) {
+		return ss(count-1) + number
+	} else if (number >= 100) {
+		return ss(count-2) + number
+	}
+}

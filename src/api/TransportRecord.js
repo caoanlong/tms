@@ -7,6 +7,7 @@ class TransportRecord extends Base {
             find: '/findList',
             findById: '/findById',
             update: '/update',
+            del: '/deleteBatch'
         })
     }
     findRecordDetailById(params) {

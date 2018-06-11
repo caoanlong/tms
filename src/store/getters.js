@@ -6,6 +6,9 @@ const getters = {
 	companyName: state => state.user.companyName,
 	sidebar: state => state.app.sidebar,
 	menus: state => state.menus.menus,
-	selectedCarrierBill: state => state.dispatch.selectedCarrierBill
+	selectedCarrierBill: state => state.dispatch.selectedCarrierBill,
+	selectedCargos: state => state.dispatch.selectedCargos,
+	selectedDriver: state => state.dispatch.selectedDriver,
+	selectedStaff: state => state.dispatch.selectedStaff,
 }
 export default getters

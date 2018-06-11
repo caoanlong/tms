@@ -1,4 +1,4 @@
-export { searchAreaByKey } from '../common/utils'
+export { searchAreaByKey, transNum } from '../common/utils'
 
 export const getdatefromtimestamp = function (input, bool) {
 	let now = new Date(Number(input))

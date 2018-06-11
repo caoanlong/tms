@@ -45,7 +45,7 @@
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
 				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -115,151 +115,116 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request, { baseURL } from '../../common/request'
-	import TransportRecord from '../../api/TransportRecord'
-	export default {
-		data() {
-			return {
-				findName: '',
-				findPlateNum: '',
-				findSelfNum: '',
-				findDate: [],
-				startDate: '',
-				endDate: '',
-				pageIndex: 1,
-				pageSize: 10,
-				count: 0,
-				selectedList:[],
-				tableData: [],
-				importFileUrl: baseURL + '/transportRecord/upload',
-				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=transport.xlsx&&Authorization=' +localStorage.getItem("token"),
-				templateTit: 'transport.xlsx',
-			}
+import { Message } from 'element-ui'
+import { baseURL } from '../../common/request'
+import { deleteConfirm } from '../../common/utils'
+import TransportRecord from '../../api/TransportRecord'
+export default {
+	data() {
+		return {
+			findName: '',
+			findPlateNum: '',
+			findSelfNum: '',
+			findDate: [],
+			startDate: '',
+			endDate: '',
+			pageIndex: 1,
+			pageSize: 10,
+			count: 0,
+			selectedList:[],
+			tableData: [],
+			importFileUrl: baseURL + '/transportRecord/upload',
+			uploadHeaders: {'Authorization': localStorage.getItem('token')},
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=transport.xlsx&&Authorization=' +localStorage.getItem("token"),
+			templateTit: 'transport.xlsx',
+		}
+	},
+	created() {
+		this.getList()
+	},
+	methods: {
+		reset() {
+			this.findName = ''
+			this.findPlateNum = ''
+			this.findSelfNum = ''
+			this.findDate = []
+			this.startDate = ''
+			this.endDate = ''
 		},
-		created() {
+		pageChange(index) {
+			this.pageIndex = index
 			this.getList()
 		},
-		methods: {
-			reset() {
-				this.findName = ''
-				this.findPlateNum = ''
-				this.findSelfNum = ''
-				this.findDate = []
-				this.startDate = ''
-				this.endDate = ''
-			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			selectionChange(data) {
-				this.selectedList = data.map(item => item.transportRecordID)
-			},
-			selectDateRange(date) {
-				this.startDate = date[0]
-				this.endDate = date[1]
-			},
-			// 导入
-			uploadSuccess (response) {
-				if (response.code != 200) {
-					Message.error(response.msg)
-				} else {
-					Message.success(response.msg)
-					this.getList()
-				}
-			},
-			// 上传错误
-			uploadError (response) {
-				console.log(response)
+		selectionChange(data) {
+			this.selectedList = data.map(item => item.transportRecordID)
+		},
+		selectDateRange(date) {
+			this.startDate = date[0]
+			this.endDate = date[1]
+		},
+		// 导入
+		uploadSuccess (response) {
+			if (response.code != 200) {
 				Message.error(response.msg)
-			},
-			beforeFileUpload (file) {
-				const extension = file.name.split('.')[1] === 'xls'
-				const extension2 = file.name.split('.')[1] === 'xlsx'
-				const isLt2M = file.size / 1024 / 1024 < 10
-				if (!extension && !extension2) {
-					Message.error('上传模板只能是 xls、xlsx格式!')
-				}
-				if (!isLt2M) {
-					Message.error('上传模板大小不能超过 10MB!')
-				}
-				return extension || extension2 && isLt2M
-			},
-			getList() {
-				TransportRecord.find({
-					current: this.pageIndex,
-					size: this.pageSize,
-					code: this.findSelfNum,
-					realName: this.findName,
-					plateNo: this.findPlateNum,
-					createTimeBegin: this.startDate,
-					createTimeEnd: this.endDate
-				}).then(res => {
-					this.tableData = res.records
-					this.count = res.total
-				})
-				
-			},
-			handleCommand(e) {
-				if (e.type == 'view') {
-					this.$router.push({name: 'viewtransinfo', query: {transportRecordID: e.id}})
-				} else if (e.type == 'edit') {
-					this.$router.push({name: 'edittransinfo', query: {transportRecordID: e.id}})
-				} else if (e.type == 'delete') {
-					this.deleteConfirm(e.id)
-				}
-			},
-			add() {
-				this.$router.push({name: 'addtransinfo'})
-			},
-			deleteConfirm(id) {
-				let ids = ''
-				if (id && typeof id == 'string') {
-					ids = id
-				} else {
-					ids = this.selectedList.join(',')
-				}
-				if(!ids) {
-					Message({
-						type: 'warning',
-						message: '请选择'
-					})
-					return
-				}
-				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.delItem(ids)
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					})
-				})
-			},
-			delItem(transportRecordIDs) {
-				console.log(transportRecordIDs)
-				let data = {
-					transportRecordIDs
-				}
-				request({
-					url: '/transportRecord/deleteBatch',
-					method: 'post',
-					data
-				}).then(res => {
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
+			} else {
+				Message.success(response.msg)
+				this.getList()
+			}
+		},
+		// 上传错误
+		uploadError (response) {
+			console.log(response)
+			Message.error(response.msg)
+		},
+		beforeFileUpload (file) {
+			const extension = file.name.split('.')[1] === 'xls'
+			const extension2 = file.name.split('.')[1] === 'xlsx'
+			const isLt2M = file.size / 1024 / 1024 < 10
+			if (!extension && !extension2) {
+				Message.error('上传模板只能是 xls、xlsx格式!')
+			}
+			if (!isLt2M) {
+				Message.error('上传模板大小不能超过 10MB!')
+			}
+			return extension || extension2 && isLt2M
+		},
+		getList() {
+			TransportRecord.find({
+				current: this.pageIndex,
+				size: this.pageSize,
+				code: this.findSelfNum,
+				realName: this.findName,
+				plateNo: this.findPlateNum,
+				createTimeBegin: this.startDate,
+				createTimeEnd: this.endDate
+			}).then(res => {
+				this.tableData = res.records
+				this.count = res.total
+			})
+			
+		},
+		handleCommand(e) {
+			if (e.type == 'view') {
+				this.$router.push({name: 'viewtransinfo', query: {transportRecordID: e.id}})
+			} else if (e.type == 'edit') {
+				this.$router.push({name: 'edittransinfo', query: {transportRecordID: e.id}})
+			} else if (e.type == 'delete') {
+				this.del(e.id)
+			}
+		},
+		add() {
+			this.$router.push({name: 'addtransinfo'})
+		},
+		del(transportRecordID) {
+			deleteConfirm(transportRecordID, transportRecordIDs => {
+				TransportRecord.del({ transportRecordIDs }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})
-			}
+			}, this.selectedList)
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .upload-File

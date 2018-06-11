@@ -27,26 +27,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="personInfo">
-			<div class="tit">人员信息</div>
-			<div class="con">
-				<div class="driver">
-					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">{{taskDetail.driverName}}<span class="tag">司机</span></p>
-					<p>{{taskDetail.driverPhone}}</p>
-				</div>
-				<div class="escort">
-					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">{{taskDetail.superCargoName}}<span class="tag">押运</span></p>
-					<p>{{taskDetail.superCargoPhone}}</p>
-				</div>
-				<div class="dispatcher">
-					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
-					<p class="name">{{taskDetail.dispatcherName}}<span class="tag">调度</span></p>
-					<p>{{taskDetail.dispatcherMobile}}</p>
-				</div>
-			</div>
-		</div>
 		<table class="cargoList">
 			<tr>
 				<td class="tit" colspan="4">货物清单</td>

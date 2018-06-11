@@ -866,6 +866,8 @@ export default {
 		},
 		updateItem() {
 			let data = this.truck
+			delete data.plateNo
+			delete data.truckType
 			if (!data.tankQCExpires) {
 				data.tankQCExpires = ''
 			}

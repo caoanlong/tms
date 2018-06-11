@@ -69,10 +69,10 @@ class Dispatchbill extends Base {
      * @param {shipperDate} params 装车日期
      * @param {workStatus} params 车辆行驶状态 Working/运输中 Empty/空车
      */
-    findTrucksanddrivers(params) {
+    findTrucksAndDrivers(params) {
         return new Promise((resolve, reject) => {
             this.request({
-                url: this.baseUrl + '/trucksanddrivers',
+                url: this.baseUrl + '/trucksAndDrivers',
                 params
             }).then(res => {
                 resolve(res.data.data)
@@ -85,7 +85,7 @@ class Dispatchbill extends Base {
      * @param {shipperDate} params 装车日期
      * @param {workStatus} params 车辆行驶状态 Working/已有任务 Free/空闲
      */
-    findTrucksanddrivers(params) {
+    findTruckstaffs(params) {
         return new Promise((resolve, reject) => {
             this.request({
                 url: this.baseUrl + '/staffs',

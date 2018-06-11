@@ -461,169 +461,167 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import DistPicker from '../CommonComponents/DistPicker'
-	import ImageUpload from '../CommonComponents/ImageUpload'
-	import { getdatefromtimestamp,deleteConfirm } from '../../common/utils'
-	import request from "../../common/request"
-	import TransportRecord from '../../api/TransportRecord'
-	import Truck from '../../api/Truck'
-	export default {
-		data() {
-			return {
-				tabSelected: 'first',
-				ownership: 1,
-				buisnessNature: 1,
-				isShowAddDialog: false,
-				isShowListDialog: false,
-				isShowEditDialog: false,
-				selectedArea: [],
-				selectedDate: '',
-				areaProps: {
-					label: 'label',
-					value: 'label'
-				},
-				transportRecordDetail: {},
-				transportRecordDetail2: {
-					staff: {},
-					trailer: {},
-					truck: {}
-				},
-				traffic: {
-					occurredTime: '',
-					areaID: '',
-					detailAddress: '',
-					endorseDesc: '',
-					handleResult: ''
-				},
-				trafficList: [],
-				rules: {
-					occurredTime: [
-						{required: true, message: '请选择时间', trigger: 'blur'}
-					],
-					areaID: [
-						{ required: true, message: '请选择地区', trigger: 'change' }
-					],
-					detailAddress: [
-						{required: true, message: '请输入详细地址', trigger: 'blur'}
-					],
-					endorseDesc: [
-						{required: true, message: '请输入违法行为描述', trigger: 'blur'}
-					],
-					handleResult: [
-						{required: true, message: '请输入处理情况', trigger: 'blur'}
-					]
-				}
+import { Message } from 'element-ui'
+import DistPicker from '../CommonComponents/DistPicker'
+import ImageUpload from '../CommonComponents/ImageUpload'
+import { getdatefromtimestamp,deleteConfirm } from '../../common/utils'
+import TransportRecord from '../../api/TransportRecord'
+import Truck from '../../api/Truck'
+export default {
+	data() {
+		return {
+			tabSelected: 'first',
+			ownership: 1,
+			buisnessNature: 1,
+			isShowAddDialog: false,
+			isShowListDialog: false,
+			isShowEditDialog: false,
+			selectedArea: [],
+			selectedDate: '',
+			areaProps: {
+				label: 'label',
+				value: 'label'
+			},
+			transportRecordDetail: {},
+			transportRecordDetail2: {
+				staff: {},
+				trailer: {},
+				truck: {}
+			},
+			traffic: {
+				occurredTime: '',
+				areaID: '',
+				detailAddress: '',
+				endorseDesc: '',
+				handleResult: ''
+			},
+			trafficList: [],
+			rules: {
+				occurredTime: [
+					{required: true, message: '请选择时间', trigger: 'blur'}
+				],
+				areaID: [
+					{ required: true, message: '请选择地区', trigger: 'change' }
+				],
+				detailAddress: [
+					{required: true, message: '请输入详细地址', trigger: 'blur'}
+				],
+				endorseDesc: [
+					{required: true, message: '请输入违法行为描述', trigger: 'blur'}
+				],
+				handleResult: [
+					{required: true, message: '请输入处理情况', trigger: 'blur'}
+				]
 			}
+		}
+	},
+	created() {
+		this.getDetail()
+		this.getTrafficList()
+		this.getRecordDetail()
+	},
+	methods: {
+		// 获取运输登记表
+		getDetail() {
+			let transportRecordID =this.$route.query.transportRecordID
+			TransportRecord.findById({ transportRecordID }).then(res => {
+				this.transportRecordDetail = res
+			})
 		},
-		created() {
-			this.getDetail()
-			this.getTrafficList()
-			this.getRecordDetail()
+		getTrafficList() {
+			let transportRecordID =this.$route.query.transportRecordID
+			Truck.findEndorsements({ transportRecordID }).then(res => {
+				let areaID = String(res.areaID)
+				this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
+				this.trafficList = res
+			})
 		},
-		methods: {
-			// 获取运输登记表
-			getDetail() {
-				let transportRecordID =this.$route.query.transportRecordID
-				TransportRecord.findById({ transportRecordID }).then(res => {
-
-					this.transportRecordDetail = res
-				})
-			},
-			getTrafficList() {
-				let transportRecordID =this.$route.query.transportRecordID
-				Truck.findEndorsements({ transportRecordID }).then(res => {
-					let areaID = String(res.areaID)
-					this.selectedArea = [(areaID.substr(0, 2) + '0000'), (areaID.substr(0, 4) + '00'), areaID]
-					this.trafficList = res
-				})
-			},
-			handleSelectedArea(data) {
-				this.traffic.areaID = data
-			},
-			add() {
-				this.traffic = {
-					occurredTime: '',
-					areaID: '',
-					detailAddress: '',
-					endorseDesc: '',
-					handleResult: ''
+		handleSelectedArea(data) {
+			this.traffic.areaID = data
+		},
+		add() {
+			this.traffic = {
+				occurredTime: '',
+				areaID: '',
+				detailAddress: '',
+				endorseDesc: '',
+				handleResult: ''
+			}
+			this.isShowAddDialog = true
+		},
+		edit() {
+			this.isShowListDialog = true
+		},
+		update(obj) {
+			this.traffic = obj
+			this.selectedArea = [(String(obj.areaID).substr(0,2) + '0000'), (String(obj.areaID).substr(0,4) + '00'), obj.areaID]
+			this.isShowEditDialog = true
+		},
+		// 添加记录
+		addTraffic() {
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					Truck.addEndorsement({
+						transportRecordID:this.$route.query.transportRecordID,
+						occurredTime:this.traffic.occurredTime,
+						areaID:this.traffic.areaID,
+						detailAddress:this.traffic.detailAddress,
+						endorseDesc:this.traffic.endorseDesc,
+						handleResult:this.traffic.handleResult
+					}).then(res => {
+						Message.success('保存成功！')
+						this.isShowAddDialog = false
+						this.getTrafficList()
+					})
+				} else {
+					return
 				}
-				this.isShowAddDialog = true
-			},
-			edit() {
-				this.isShowListDialog = true
-			},
-			update(obj) {
-				this.traffic = obj
-				this.selectedArea = [(String(obj.areaID).substr(0,2) + '0000'), (String(obj.areaID).substr(0,4) + '00'), obj.areaID]
-				this.isShowEditDialog = true
-			},
-			// 添加记录
-			addTraffic() {
-				this.$refs['ruleForm'].validate(valid => {
-					if (valid) {
-						Truck.addEndorsement({
-							transportRecordID:this.$route.query.transportRecordID,
-							occurredTime:this.traffic.occurredTime,
-							areaID:this.traffic.areaID,
-							detailAddress:this.traffic.detailAddress,
-							endorseDesc:this.traffic.endorseDesc,
-							handleResult:this.traffic.handleResult
-						}).then(res => {
-							Message.success('保存成功！')
-							this.isShowAddDialog = false
-							this.getTrafficList()
-						})
-					} else {
-						return
-					}
-				})
-			},
-			updataTraffic() {
-				Truck.updateEndorsement({
-					endorsementID: this.traffic.endorsementID,
-					transportRecordID: this.$route.query.transportRecordID,
-					occurredTime: this.traffic.occurredTime,
-					areaID: this.traffic.areaID,
-					detailAddress: this.traffic.detailAddress,
-					endorseDesc: this.traffic.endorseDesc,
-					handleResult: this.traffic.handleResult
-				}).then(res => {
-					Message.success('保存成功！')
+			})
+		},
+		updataTraffic() {
+			Truck.updateEndorsement({
+				endorsementID: this.traffic.endorsementID,
+				transportRecordID: this.$route.query.transportRecordID,
+				occurredTime: this.traffic.occurredTime,
+				areaID: this.traffic.areaID,
+				detailAddress: this.traffic.detailAddress,
+				endorseDesc: this.traffic.endorseDesc,
+				handleResult: this.traffic.handleResult
+			}).then(res => {
+				Message.success('保存成功！')
+				this.isShowEditDialog = false
+				this.isShowListDialog = false
+				this.getTrafficList()
+			})
+		},
+		del(endorsementID) {
+			deleteConfirm(endorsementID, endorsementIDs => {
+				Truck.deleteEndorsement({ endorsementIDs }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.getTrafficList()
 					this.isShowEditDialog = false
 					this.isShowListDialog = false
-					this.getTrafficList()
 				})
-			},
-			del(endorsementID) {
-				deleteConfirm(endorsementID, endorsementIDs => {
-					Truck.deleteEndorsement({ endorsementIDs }).then(res => {
-						Message({ type: 'success', message: '删除成功!' })
-						this.getTrafficList()
-						this.isShowEditDialog = false
-						this.isShowListDialog = false
-					})
-				}, this.selectedList)
-			},
-			
-			// 获取运输单位备案
-			getRecordDetail() {
-				let transportRecordID = this.$route.query.transportRecordID
-				TransportRecord.findRecordDetailById({ transportRecordID }).then(res => {
-					console.log(res)
-					this.transportRecordDetail2 = res
-				})
-			},
-			back() {
-				this.$router.go(-1)
-			}
+			}, this.selectedList)
 		},
-		components: {
-			ImageUpload,
-			DistPicker
+		
+		// 获取运输单位备案
+		getRecordDetail() {
+			let transportRecordID = this.$route.query.transportRecordID
+			TransportRecord.findRecordDetailById({ transportRecordID }).then(res => {
+				console.log(res)
+				this.transportRecordDetail2 = res
+			})
+		},
+		back() {
+			this.$router.go(-1)
 		}
+	},
+	components: {
+		ImageUpload,
+		DistPicker
 	}
+}
 </script>
 <style lang="stylus" scoped>
 

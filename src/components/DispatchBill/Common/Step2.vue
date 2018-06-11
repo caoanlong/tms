@@ -88,9 +88,6 @@ export default {
 	created() {
 		let carrierOrderIDs = this.selectedCarrierBill.join(',')
 		this.getList(carrierOrderIDs)
-		// list.forEach(item => {
-		// 	this.getDetail(item)
-		// })
 	},
 	methods: {
 		getDetail(carrierOrderID) {

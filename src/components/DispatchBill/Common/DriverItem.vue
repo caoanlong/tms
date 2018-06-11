@@ -6,8 +6,8 @@
 				<span v-if="truck.workStatus == 'Free'">空闲中</span>
 				<span v-else-if="truck.workStatus == 'Working'">工作中</span>
 			</p>
-			<p><span class="labels">司机：</span>{{truck.realName}}</p>
-			<p><span class="labels">联系电话：</span>{{truck.mobile}}</p>
+			<p><span class="labels">司机：</span>{{truck.driverName}}</p>
+			<p><span class="labels">联系电话：</span>{{truck.driverPhone}}</p>
 		</div>
 		<div class="truckInfo">
 			<p><span class="labels">车牌号/挂车号：</span>{{truck.plateNo}}<span v-if="truck.trailerPlateNo">/{{truck.trailerPlateNo}}</span></p>
@@ -19,13 +19,23 @@
 			<div class="control">
 				<div class="sliderSelect">
 					<span class="labels">已配载重量</span>
-					<el-progress :percentage="parseInt(totalWeight/Number(truck.loads/1000) *100)" style="margin-top:13px"></el-progress>
-					<span class="surplus">剩{{(Number(truck.loads/1000) - totalWeight)}}吨</span>
+					<el-progress 
+						:text-inside="true" 
+						:stroke-width="18" 
+						:percentage="parseInt(truck.loadedCargoWeight/Number(truck.loads/1000) *100)" 
+						style="margin-top:13px">
+					</el-progress>
+					<span class="surplus">剩{{(Number(truck.loads/1000) - truck.loadedCargoWeight)}}吨</span>
 				</div>
 				<div class="sliderSelect">
 					<span class="labels">已配载体积</span>
-					<el-progress :percentage="parseInt(totalVolume/Number(truck.loadVolume) * 100)" style="margin-top:13px"></el-progress>
-					<span class="surplus">剩{{(Number(truck.loadVolume) - totalVolume)}}方</span>
+					<el-progress 
+						:text-inside="true" 
+						:stroke-width="18" 
+						:percentage="parseInt(truck.loadedCargoVolume/Number(truck.loadVolume) * 100)" 
+						style="margin-top:13px">
+					</el-progress>
+					<span class="surplus">剩{{(Number(truck.loadVolume) - truck.loadedCargoVolume)}}方</span>
 				</div>
 			</div>
 		</div>
@@ -54,14 +64,6 @@ export default {
 		}
 	},
 	computed: {
-		totalWeight() {
-			let values = this.truck.cargos.map(item => item.cargoWeight ? Number(item.cargoWeight) : 0)
-			return values.reduce((prev, next) => prev + next, 0)
-		},
-		totalVolume() {
-			let values = this.truck.cargos.map(item => item.cargoVolume ? Number(item.cargoVolume) : 0)
-			return values.reduce((prev, next) => prev + next, 0)
-		},
 		defaultImg: () => defaultImg
 	},
 	methods:{

@@ -51,7 +51,7 @@
 				@click.native.stop="selectDriverItem(item)">
 			</DriverItem>
 		</div>
-		<Page :total="truck.count" :pageSize="truck.pageSize" @pageChange="truckPageChange" @pageSizeChange="truckPageSizeChange"/>
+		<!-- <Page :total="truck.count" :pageSize="truck.pageSize" @pageChange="truckPageChange" @pageSizeChange="truckPageSizeChange"/> -->
 		<el-row>
 			<div class="split-item">
 				<span class="tit">随车人员</span>
@@ -95,7 +95,7 @@
 				@click.native.stop="selectEscortItem(item)">
 			</EscortItem>
 		</div>
-		<Page :total="person.count" :pageSize="person.pageSize" @pageChange="personPageChange" @pageSizeChange="personPageSizeChange"/>
+		<!-- <Page :total="person.count" :pageSize="person.pageSize" @pageChange="personPageChange" @pageSizeChange="personPageSizeChange"/> -->
 		<div class="step-footer">
 			<el-button @click="prevStep">上一步</el-button>
 			<el-button type="primary" @click="nextStep">下一步</el-button>
@@ -106,32 +106,19 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import TransportRecord from '../../../api/TransportRecord'
+import Dispatchbill from '../../../api/Dispatchbill'
 import Staff from '../../../api/Staff'
 import DriverItem from './DriverItem'
 import EscortItem from './EscortItem'
 import Page from '../../CommonComponents/Page'
 export default {
-	// props: {
-	// 	startLoad: {
-	// 		type: Boolean,
-	// 		default: false
-	// 	},
-	// 	totalList: {
-	// 		type: Array,
-	// 		default: () => []
-	// 	},
-	// 	cargoNum: {
-	// 		type: Number,
-	// 		default: 0
-	// 	}
-	// },
 	data() {
 		return {
 			truck: {
 				count: 0,
 				pageSize: 10,
 				pageIndex: 1,
-				selected: [],
+				selected: {},
 				keywords: '',
 				loadDate: '',
 				workStatus: '',
@@ -142,35 +129,14 @@ export default {
 				count: 0,
 				pageSize: 10,
 				pageIndex: 1,
-				selected: [],
+				selected: {},
 				keywords: '',
 				loadDate: '',
 				status: '',
 				list: []
 			}
-			// selectedDriver: {},
-			// selectedEscort: {},
-			// findTruckSelfNum: '',
-			// findTruckName: '',
-			// findTruckPlateNum: '',
-			// findTruckType: '',
-			// truckPageIndex: 1,
-			// truckPageSize: 10,
-			// truckCount: 0,
-			// truckList: [],
-			// findPersonName: '',
-			// personPageIndex: 1,
-			// personPageSize: 10,
-			// personCount: 0,
-			// personList: [],
 		}
 	},
-	// watch: {
-	// 	startLoad: function(newVal) {
-	// 		newVal && this.getTruckList()
-	// 		newVal && this.getPersonList()
-	// 	}
-	// },
 	created() {
 		this.getTruckList()
 		this.getPersonList()
@@ -216,6 +182,7 @@ export default {
 				return
 			}
 			this.truck.selected = data
+			this.$store.dispatch('setDriver', data)
 		},
 		selectEscortItem(data) {
 			// if (this.selectedDriver.loadStatus == 'NotFull') {
@@ -231,6 +198,7 @@ export default {
 				return
 			}
 			this.person.selected = data
+			this.$store.dispatch('setStaff', data)
 		},
 		resetTruck() {
 			this.truck.keywords = ''
@@ -264,26 +232,25 @@ export default {
 			this.getPersonList() 
 		},
 		getTruckList() {
-			TransportRecord.findSelectDriver({
+			Dispatchbill.findTrucksAndDrivers({
 				current: this.truck.pageIndex,
 				size: this.truck.pageSize,
-				// code: this.findTruckSelfNum,
-				// realName: this.findTruckName,
-				// plateNo: this.findTruckPlateNum,
-				// truckType: this.findTruckType
+				keyword: this.truck.keywords,
+				workStatus: this.truck.workStatus,
+				shipperDate: this.truck.loadDate
 			}).then(res => {
-				this.truck.list = res.records
-				this.truck.count = res.total
+				this.truck.list = res
 			})
 		},
 		getPersonList() {
-			Staff.find({
+			Dispatchbill.findTruckstaffs({
 				current: this.person.pageIndex,
 				size: this.person.pageSize,
-				// realName: this.findPersonName
+				keyword: this.person.keywords,
+				workStatus: this.person.status,
+				shipperDate: this.person.loadDate || new Date().getTime()
 			}).then(res => {
-				this.person.list = res.records
-				this.person.count = res.total
+				this.person.list = res
 			})
 		},
 		back() {
