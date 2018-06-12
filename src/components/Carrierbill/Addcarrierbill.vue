@@ -219,12 +219,12 @@
 							</el-form-item>
 							<el-form-item prop="cargoWeight">
 								<el-input placeholder="货物重量" style="width: 130px" v-model="item.cargoWeight">
-									<span slot="suffix">吨</span>
+									<span slot="suffix">kg</span>
 								</el-input>
 							</el-form-item>
 							<el-form-item prop="cargoVolume">
 								<el-input placeholder="货物体积" style="width: 130px" v-model="item.cargoVolume">
-									<span slot="suffix">方</span>
+									<span slot="suffix">m³</span>
 								</el-input>
 							</el-form-item>
 							<el-form-item prop="cargoNum">
