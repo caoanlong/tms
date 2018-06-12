@@ -217,12 +217,11 @@ export default {
 .el-form-item__content
 	p
 		margin 0
-		border 1px solid #fff
-		border-bottom-color #dcdfe6
+		border-bottom 1px solid #dcdfe6
 		padding 0 15px
-		min-height 40px
+		min-height 32px
 		font-family 'sans-serif'
-		line-height 40px
+		line-height 32px
 		color #999
 		font-size 12px
 </style>
