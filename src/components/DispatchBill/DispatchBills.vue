@@ -65,7 +65,7 @@
 								</span>
 								<!-- 未接单 -->
 								<span class="fr" v-if="item.status == 'Committed'">
-									<el-button type="text" size="mini" :disabled="true">重新调度</el-button>
+									<el-button type="text" size="mini" :disabled="true">编辑</el-button>
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
@@ -78,12 +78,12 @@
 								</span>
 								<!-- 已接单 -->
 								<span class="fr" v-else-if="item.status == 'Ordered'">
-									<el-button type="text" size="mini" :disabled="true">重新调度</el-button>
+									<el-button type="text" size="mini" :disabled="true">编辑</el-button>
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
 									">取消调度</el-button>
-									<el-button type="text" size="mini">关闭</el-button>
+									<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="true">删除</el-button>
 								</span>
 								<!-- 已取消 -->
@@ -91,7 +91,7 @@
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">重新调度</el-button>
+									">编辑</el-button>
 									<el-button type="text" size="mini" :disabled="true">取消调度</el-button>
 									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
@@ -104,7 +104,7 @@
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">重新调度</el-button>
+									">编辑</el-button>
 									<el-button type="text" size="mini" :disabled="true">取消调度</el-button>
 									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
@@ -163,7 +163,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../api/Dispatchbill'
-import { deleteConfirm } from '../../common/utils'
+import { deleteConfirm,closeConfirm } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 import UploadPhoto from './Common/UploadPhoto'
@@ -248,6 +248,14 @@ export default {
 		del(id) {
 			deleteConfirm(id, dispatchTaskID => {
 				Dispatchbill.del({ dispatchTaskID }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.getList()
+				})
+			})
+		},
+		closeDispatchOrder(id){
+			closeConfirm(id, dispatchOrderID => {
+				Dispatchbill.close({ dispatchOrderID }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})

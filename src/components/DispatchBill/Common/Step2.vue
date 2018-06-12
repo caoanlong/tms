@@ -17,8 +17,8 @@
 				</el-table-column>
 				<el-table-column label="货物类型" align="center">
 					<template slot-scope="scope">
-						<span v-if="scope.row.weightType='Heavy'">重货</span>
-						<span v-else-if="scope.row.weightType='Light'">轻货</span>
+						<span v-if="scope.row.weightType=='Heavy'">重货</span>
+						<span v-else-if="scope.row.weightType=='Light'">轻货</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="货物名称" align="center" prop="cargoName">	
