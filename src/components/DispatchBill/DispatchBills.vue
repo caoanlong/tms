@@ -58,8 +58,8 @@
 									<span class="tag" v-else-if="item.status == 'Finished'">已完成</span>
 								</span>
 								<span class="fr">
-									<el-button type="text" size="mini">重新调度</el-button>
-									<el-button type="text" size="mini">取消调度</el-button>
+									<el-button type="text" size="mini" v-if="item.status == 'Canceled'|| item.status == 'Rejected' ">编辑</el-button>
+									<el-button type="text" size="mini" v-if="item.status == 'Committed' || item.status == 'Ordered'">取消</el-button>
 									<el-button type="text" size="mini">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
 								</span>
@@ -70,8 +70,8 @@
 								<span @click="viewTask(taskItem.dispatchTaskID,'view')" class="ViewTaskDetail">{{taskItem.taskNo}}</span>
 							</td>
 							<td class="text-center" width="80">
-								<span v-if="taskItem.status='Committed'">待执行</span>
-								<span v-else-if="taskItem.status='Loaded'">已装运</span>
+								<span v-if="taskItem.status='Committed'">待装车</span>
+								<span v-else-if="taskItem.status='Loaded'">已装车</span>
 								<span v-else-if="taskItem.status='Signed'">已签收</span>
 								<span v-else>已作废</span>
 							</td>
@@ -82,7 +82,7 @@
 							<td>{{taskItem.consigneeArea}}</td>
 							<td class="text-center" width="140">{{taskItem.consigneeDate | getdatefromtimestamp()}}</td>
 							<td class="text-center">
-								<el-button type="text" size="mini">上传照片</el-button>
+								<el-button type="text" size="mini" v-if="">上传照片</el-button>
 								<el-button type="text" size="mini" @click="viewTask(taskItem.dispatchTaskID,'edit')">编辑</el-button>
 							</td>
 						</tr>
