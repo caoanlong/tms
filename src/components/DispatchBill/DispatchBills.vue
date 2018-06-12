@@ -61,44 +61,50 @@
 								<span class="fr" v-if="item.status == 'Committed'">
 									<el-button type="text" size="mini" :disabled="true">重新调度</el-button>
 									<el-button type="text" size="mini" :disabled="
-										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
-										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
+										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
 									">取消调度</el-button>
 									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
-										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
-										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
+										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
 									">删除</el-button>
 								</span>
 								<!-- 已接单 -->
 								<span class="fr" v-else-if="item.status == 'Ordered'">
-									<el-button type="text" size="mini">重新调度</el-button>
-									<el-button type="text" size="mini" v-if="
-										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
-										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
+									<el-button type="text" size="mini" :disabled="true">重新调度</el-button>
+									<el-button type="text" size="mini" :disabled="
+										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
 									">取消调度</el-button>
 									<el-button type="text" size="mini">关闭</el-button>
-									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
+									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="true">删除</el-button>
 								</span>
 								<!-- 已取消 -->
 								<span class="fr" v-else-if="item.status == 'Canceled'">
-									<el-button type="text" size="mini">重新调度</el-button>
-									<el-button type="text" size="mini" v-if="
-										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
-										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">取消调度</el-button>
-									<el-button type="text" size="mini">关闭</el-button>
-									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
+									<el-button type="text" size="mini" :disabled="
+										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
+									">重新调度</el-button>
+									<el-button type="text" size="mini" :disabled="true">取消调度</el-button>
+									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
+									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
+										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
+									">删除</el-button>
 								</span>
 								<!-- 已拒绝 -->
 								<span class="fr" v-else-if="item.status == 'Rejected'">
-									<el-button type="text" size="mini">重新调度</el-button>
-									<el-button type="text" size="mini" v-if="
-										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
-										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">取消调度</el-button>
-									<el-button type="text" size="mini">关闭</el-button>
-									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
+									<el-button type="text" size="mini" :disabled="
+										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
+									">重新调度</el-button>
+									<el-button type="text" size="mini" :disabled="true">取消调度</el-button>
+									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
+									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
+										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
+									">删除</el-button>
 								</span>
 							</td>
 						</tr>
@@ -123,8 +129,15 @@
 							<td>{{taskItem.consigneeArea}}</td>
 							<td class="text-center" width="120">{{taskItem.consigneeDate | getdatefromtimestamp(true)}}</td>
 							<td class="text-center">
-								<el-button type="text" size="mini" @click="upload(taskItem)">上传照片</el-button>
-								<el-button type="text" size="mini" @click="viewTask(taskItem.dispatchTaskID,'edit')">编辑</el-button>
+								<el-button type="text" size="mini" @click="upload(taskItem)" :disabled="
+									item.status == 'Committed' || item.status == 'Canceled' || item.status == 'Rejected' 
+									|| (item.status == 'Finished' && taskItem.status != 'Signed')
+								">上传照片</el-button>
+								<el-button type="text" size="mini" @click="viewTask(taskItem.dispatchTaskID,'edit')" :disabled="
+									(item.status == 'Committed' &&  taskItem.status != 'Committed') 
+									|| item.status == 'Canceled' || item.status == 'Rejected' 
+									|| (item.status == 'Finished' && taskItem.status != 'Signed')
+								">编辑</el-button>
 							</td>
 						</tr>
 					</template>
