@@ -29,7 +29,7 @@
 					<template slot-scope="scope">
 						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + 'kg') : ''}} 
 						{{scope.row.remainingCargoVolume ? ('/' + scope.row.remainingCargoVolume + 'm³') : ''}} 
-					</template>
+					</template> 
 				</el-table-column>
 				<el-table-column label="待配件数" align="center" prop="remainingCargoNum">
 					<template slot-scope="scope">
