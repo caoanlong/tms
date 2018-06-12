@@ -82,7 +82,7 @@
 							<td>{{taskItem.consigneeArea}}</td>
 							<td class="text-center" width="140">{{taskItem.consigneeDate | getdatefromtimestamp()}}</td>
 							<td class="text-center">
-								<el-button type="text" size="mini">上传照片</el-button>
+								<el-button type="text" size="mini" @click="isPhotoVisible = true">上传照片</el-button>
 								<el-button type="text" size="mini" @click="viewTask(taskItem.dispatchTaskID,'edit')">编辑</el-button>
 							</td>
 						</tr>
@@ -91,6 +91,7 @@
 				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
+		<UploadPhoto :isVisible="isPhotoVisible" @control="handUploadPhoto"></UploadPhoto>
 	</div>
 </template>
 <script type="text/javascript">
@@ -99,6 +100,7 @@ import Dispatchbill from '../../api/Dispatchbill'
 import { deleteConfirm } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
+import UploadPhoto from './Common/UploadPhoto'
 export default {
 	data() {
 		return {
@@ -108,7 +110,8 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
-			dispatchBillList: []
+			dispatchBillList: [],
+			isPhotoVisible: false
 		}
 	},
 	created() {
@@ -150,6 +153,9 @@ export default {
 		viewTask(dispatchTaskID,type) {
 			this.$router.push({ name: 'viewtaskdetail' , query: {dispatchTaskID,type}})
 		},
+		handUploadPhoto(bool) {
+			this.isPhotoVisible = false
+		},
 		del(id) {
 			deleteConfirm(id, dispatchTaskID => {
 				Dispatchbill.del({ dispatchTaskID }).then(res => {
@@ -161,7 +167,8 @@ export default {
 	},
 	components:{
 		DispatchBillItem,
-		Page
+		Page,
+		UploadPhoto
 	}
 }
 
