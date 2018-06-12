@@ -136,7 +136,6 @@
 import { Message } from 'element-ui'
 import Task from '../../api/Task'
 import TaskPic from '../../api/TaskPic'
-import TaskItem from './Common/TaskItem'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import UploadPhoto from './Common/UploadPhoto'
 export default {
@@ -232,7 +231,6 @@ export default {
 		}
 	},
 	components: {
-		TaskItem,
 		ImageUpload,
 		UploadPhoto
 	}

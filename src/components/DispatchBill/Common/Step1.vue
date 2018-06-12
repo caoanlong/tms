@@ -140,14 +140,17 @@ export default {
 			this.getList() 
 		},
 		getList() {
-			Carrierbill.findPreDispatch({
+			let dispatchOrderID = this.$route.query.dispatchOrderID
+			let params = {
 				current: this.pageIndex,
 				size: this.pageSize,
 				shipperBeginDate: this.findshipperBeginDate,
 				shipperEndDate: this.findshipperEndDate,
 				searchInfo: this.findsearchInfo,
 				status: this.findStatus
-			}).then(res => {
+			}
+			dispatchOrderID && (params['dispatchOrderID'] = dispatchOrderID)
+			Carrierbill.findPreDispatch(params).then(res => {
 				this.carrierList = res.records
 				this.total= res.total
 			})

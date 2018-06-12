@@ -83,7 +83,7 @@
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
 									">取消调度</el-button>
-									<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)">关闭</el-button>
+									<el-button type="text" size="mini" @click="close(item.dispatchOrderID)">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="true">删除</el-button>
 								</span>
 								<!-- 已取消 -->
@@ -91,7 +91,7 @@
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">编辑</el-button>
+									" @click="edit(item.dispatchOrderID)">编辑</el-button>
 									<el-button type="text" size="mini" :disabled="true">取消调度</el-button>
 									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
@@ -104,7 +104,7 @@
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">编辑</el-button>
+									" @click="edit(item.dispatchOrderID)">编辑</el-button>
 									<el-button type="text" size="mini" :disabled="true">取消调度</el-button>
 									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
@@ -233,6 +233,9 @@ export default {
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
 		},
+		edit(dispatchOrderID) {
+			this.$router.push({ name: 'editdispatchbill' , query: { dispatchOrderID } })
+		},
 		viewTask(dispatchTaskID,type) {
 			this.$router.push({ name: 'viewtaskdetail' , query: {dispatchTaskID,type}})
 		},
@@ -253,7 +256,7 @@ export default {
 				})
 			})
 		},
-		closeDispatchOrder(id){
+		close(id){
 			closeConfirm(id, dispatchOrderID => {
 				Dispatchbill.close({ dispatchOrderID }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })

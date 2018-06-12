@@ -114,7 +114,8 @@ export function closeConfirm (id, callback) {
 		type: 'warning'
 	}).then(() => {
 		callback && callback(id)
-	}).catch(() => {
+	}).catch(err => {
+		console.log(err)
 		Message({ type: 'info', message: '已取消关闭'})
 	})
 }

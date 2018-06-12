@@ -11,7 +11,7 @@
 					<th>运载量/方</th>
 					<th>运载量/件</th>
 				</tr>
-				<tr class="is-center" v-for="(item, index) in cargoInfo">
+				<tr class="is-center" v-for="(item, index) in cargoInfo" :key="index">
 					<td>{{index+1}}</td>
 					<td>{{item.carrierOrderNo}}</td>
 					<td>{{item.cargoType}}/{{item.cargoName}}</td>

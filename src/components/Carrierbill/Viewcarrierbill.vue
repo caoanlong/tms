@@ -176,7 +176,6 @@
 					<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.LoadNumSum + '件'}}</td>
 					<td style="text-align: center">
 						<el-button type="primary" size="mini" @click="dialogPhotoVisible = true">查看</el-button>
-						<!-- <el-button type="primary" size="mini" @click="dialogCargoVisible = true">查看货物</el-button> -->
 					</td>
 				</tr>
 			</table>
