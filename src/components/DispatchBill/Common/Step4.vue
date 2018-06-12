@@ -216,7 +216,7 @@ export default {
 				'dispatchTaskCargoInfo': JSON.stringify(dispatchTaskCargoInfo),
 				'dispatchTaskInfo': JSON.stringify(dispatchTaskInfo),
 				'sumAmount': this.totalAmount,
-				'transportRecordID': this.selectedStaff.transportRecordID,
+				'transportRecordID': this.selectedDriver.transportRecordID,
 				'truckID': this.selectedDriver.truckID,
 				'trailerID': this.selectedDriver.trailerID,
 				'driverID': this.selectedDriver.driverID,
