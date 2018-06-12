@@ -163,7 +163,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../api/Dispatchbill'
-import { deleteConfirm } from '../../common/utils'
+import { deleteConfirm,closeConfirm } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 import UploadPhoto from './Common/UploadPhoto'
@@ -253,10 +253,12 @@ export default {
 				})
 			})
 		},
-		closeDispatchOrder(dispatchOrderID){
-			Dispatchbill.close(dispatchOrderID).then(res => {
-				Message({ type: 'success', message: '关闭调度单成功!' })
-				this.getList()
+		closeDispatchOrder(id){
+			closeConfirm(id, dispatchOrderID => {
+				Dispatchbill.close({ dispatchOrderID }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.getList()
+				})
 			})
 		}
 	},
