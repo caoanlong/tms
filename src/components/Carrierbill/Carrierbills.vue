@@ -79,10 +79,13 @@
 								<el-button type="text" size="mini" @click="del(item.carrierOrderID)">删除</el-button>
 							</td>
 						</tr>
-						<tr class="list" :key="index+100">
-							<td>{{item.carrierCargo[0].cargoName}}</td>
-							<td width="80">{{item.carrierCargo[0].cargoWeight + 'kg'}}/{{item.carrierCargo[0].cargoVolume + 'm³'}}</td>
-							<td width="80">{{item.carrierCargo[0].cargoNum}}</td>
+						<tr class="list" :key="index+100" v-if="item.carrierCargo">
+							<td>{{item.cargoName}}</td>
+							<td width="80">
+								{{item.cargoWeightSum + 'kg'}}
+								{{item.cargoVolumeSum ? ('/' + item.cargoVolumeSum) : 0 + 'm³'}}
+							</td>
+							<td width="80">{{item.cargoNumSum}}</td>
 							<td>{{item.shipperCompanyName}}</td>
 							<td>{{item.shipperName}}</td>
 							<td>{{item.shipperArea}}</td>

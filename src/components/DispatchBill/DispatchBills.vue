@@ -61,7 +61,7 @@
 									<el-button type="text" size="mini">重新调度</el-button>
 									<el-button type="text" size="mini">取消调度</el-button>
 									<el-button type="text" size="mini">关闭</el-button>
-									<el-button type="text" size="mini">删除</el-button>
+									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
 								</span>
 							</td>
 						</tr>
@@ -96,6 +96,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../api/Dispatchbill'
+import { deleteConfirm } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 export default {
@@ -148,6 +149,14 @@ export default {
 		},
 		viewTask(dispatchTaskID,type) {
 			this.$router.push({ name: 'viewtaskdetail' , query: {dispatchTaskID,type}})
+		},
+		del(id) {
+			deleteConfirm(id, dispatchTaskID => {
+				Dispatchbill.del({ dispatchTaskID }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.getList()
+				})
+			})
 		}
 	},
 	components:{

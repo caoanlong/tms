@@ -12,7 +12,7 @@
 		<div class="truckInfo">
 			<p><span class="labels">车牌号/挂车号：</span>{{truck.plateNo}}<span v-if="truck.trailerPlateNo">/{{truck.trailerPlateNo}}</span></p>
 			<p><span class="labels">车型/车长：</span>{{truck.truckType}}/{{truck.length ? (truck.length/1000 + '米') : ''}}</p>
-			<p><span class="labels">载重/容积：</span>{{truck.loads/1000 + '吨'}}/{{truck.loadVolume + '方'}}</p>
+			<p><span class="labels">载重/容积：</span>{{truck.loads/1000 + 'T'}}/{{truck.loadVolume + 'm³'}}</p>
 			<p><span class="labels">车辆性质：</span>单位挂靠</p>
 		</div>
 		<div class="statusInfo ">
@@ -25,7 +25,7 @@
 						:percentage="parseInt(truck.loadedCargoWeight/Number(truck.loads/1000) *100)" 
 						style="margin-top:13px">
 					</el-progress>
-					<span class="surplus">剩{{(Number(truck.loads/1000) - truck.loadedCargoWeight)}}吨</span>
+					<span class="surplus">剩{{(Number(truck.loads/1000) - truck.loadedCargoWeight)}}T</span>
 				</div>
 				<div class="sliderSelect">
 					<span class="labels">已配载体积</span>
@@ -35,7 +35,7 @@
 						:percentage="parseInt(truck.loadedCargoVolume/Number(truck.loadVolume) * 100)" 
 						style="margin-top:13px">
 					</el-progress>
-					<span class="surplus">剩{{(Number(truck.loadVolume) - truck.loadedCargoVolume)}}方</span>
+					<span class="surplus">剩{{(Number(truck.loadVolume) - truck.loadedCargoVolume)}}m³</span>
 				</div>
 			</div>
 		</div>

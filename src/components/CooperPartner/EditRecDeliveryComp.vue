@@ -14,6 +14,15 @@
 						<el-form-item label="详细地址" prop="detailAddress">
 							<el-input v-model="recdeliverycomp.detailAddress"></el-input>
 						</el-form-item>
+						<el-form-item label="位置" prop="locationAddress">
+							<el-autocomplete  style="width:100%"
+								value-key="name" 
+								v-model="recdeliverycomp.locationAddress"
+								:fetch-suggestions="getLocation"
+								placeholder="请输入内容"
+								@select="handSelectLocation">
+							</el-autocomplete>
+						</el-form-item>
 						<el-form-item label="联系人">
 							<el-input v-model="recdeliverycomp.contactName"></el-input>
 						</el-form-item>
@@ -33,6 +42,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Customer from '../../api/Customer'
+import BaiduMap from '../../api/BaiduMap'
 import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
 import DistPicker from '../CommonComponents/DistPicker'
 export default {

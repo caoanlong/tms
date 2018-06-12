@@ -39,14 +39,14 @@
 				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
 						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" >
-							<span slot="append">吨</span>
+							<span slot="append">kg</span>
 						</el-input>
 					</template>	
 				</el-table-column>
 				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
 						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" >
-							<span slot="append">方</span>
+							<span slot="append">m³</span>
 						</el-input>
 					</template>					
 				</el-table-column>
@@ -60,8 +60,13 @@
 			</el-table>
 		</div>
 		<div class="total">
-			<span class="fl">已配载0个货物</span>
-			<div class="fr total-count"><b>合计：</b><span>0吨</span><span>0方</span><span>0件</span></div>
+			<span class="fl">已配载{{selectedCargos.length}}个货物</span>
+			<div class="fr total-count">
+				<b>合计：</b>
+				<span>{{totalWeight}}吨</span>
+				<span>{{totalVolume}}方</span>
+				<span>{{totalNum}}件</span>
+			</div>
 		</div>
 		<div class="text-center">
 			<el-button @click="prevStep">上一步</el-button>
@@ -83,7 +88,25 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['selectedCarrierBill'])
+		...mapGetters(['selectedCarrierBill', 'selectedCargos']),
+		totalWeight() {
+			let values = this.selectedCargos.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
+			return values.reduce((prev, curr) => {
+				return prev + curr
+			}, 0).toFixed(2)
+		},
+		totalVolume() {
+			let values = this.selectedCargos.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
+			return values.reduce((prev, curr) => {
+				return prev + curr
+			}, 0).toFixed(2)
+		},
+		totalNum() {
+			let values = this.selectedCargos.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
+			return values.reduce((prev, curr) => {
+				return prev + curr
+			}, 0).toFixed(2)
+		},
 	},
 	created() {
 		let carrierOrderIDs = this.selectedCarrierBill.join(',')
