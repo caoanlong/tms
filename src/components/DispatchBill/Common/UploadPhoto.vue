@@ -8,25 +8,25 @@
             <div class="photo">
                 <div class="left">装车照片：</div>
                 <div class="right">
-                    <ImageUpload :files="loadImgs" :limitNum="5" @imgUrlBack="imgLoadUrlBack" :isUseCropper="false"/>
+                    <ImageUpload :files="loadImgs" :limitNum="10" @imgUrlBack="imgLoadUrlBack" :isUseCropper="false"/>
                 </div>
             </div>
             <div class="photo">
                 <div class="left">到货照片：</div>
                 <div class="right">
-                    <ImageUpload :files="arriveImgs" :limitNum="5" @imgUrlBack="imgArriveUrlBack" :isUseCropper="false"/>
+                    <ImageUpload :files="arriveImgs" :limitNum="10" @imgUrlBack="imgArriveUrlBack" :isUseCropper="false"/>
                 </div>
             </div>
             <div class="photo">
                 <div class="left">回单照片：</div>
                 <div class="right">
-                    <ImageUpload :files="backImgs" :limitNum="5" @imgUrlBack="imgBackUrlBack" :isUseCropper="false"/>
+                    <ImageUpload :files="backImgs" :limitNum="10" @imgUrlBack="imgBackUrlBack" :isUseCropper="false"/>
                 </div>
             </div>
             <div class="photo">
                 <div class="left">异常照片：</div>
                 <div class="right">
-                    <ImageUpload :files="exceptImgs" :limitNum="5" @imgUrlBack="imgExceptUrlBack" :isUseCropper="false"/>
+                    <ImageUpload :files="exceptImgs" :limitNum="10" @imgUrlBack="imgExceptUrlBack" :isUseCropper="false"/>
                 </div>
             </div>
         </div>
