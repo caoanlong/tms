@@ -8,7 +8,13 @@
 						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="findkeyword"></el-input>
 					</el-form-item>
 					<el-form-item label="收发货单位">
-						<el-input placeholder="收发货单位" v-model="findcustomerID"></el-input>
+						<el-autocomplete
+							value-key="companyName" 
+							v-model="recdeliverycomp.companyName"
+							:fetch-suggestions="getRecdeliverycomp"
+							placeholder="请输入收发货单位"
+							@select="handSelectShipper">
+						</el-autocomplete>
 					</el-form-item>
 					<el-form-item label="调度状态">
 						<el-select v-model="findstatus" placeholder="请选择">
@@ -101,6 +107,7 @@ import { deleteConfirm } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 import UploadPhoto from './Common/UploadPhoto'
+import Customer from '../../api/Customer'
 export default {
 	data() {
 		return {
@@ -111,11 +118,13 @@ export default {
 			pageSize: 10,
 			count: 0,
 			dispatchBillList: [],
-			isPhotoVisible: false
+			isPhotoVisible: false,
+			recdeliverycomp:{}
 		}
 	},
 	created() {
-		this.getList()
+		this.getList(),
+		this.getRecdeliverycomp()
 	},
 	methods: {
 		reset() {
@@ -143,6 +152,19 @@ export default {
 				this.dispatchBillList = res.records
 				this.count = res.total
 			})
+		},
+		getRecdeliverycomp(queryString) {
+			Customer.find({
+				type: 'ShipperConsignee',
+				companyName: queryString
+			}).then(res => {
+				this.recdeliverycomp.companyName = res.records.companyName
+				this.recdeliverycomp.customerID = res.records.customerID
+			})
+		},
+		handSelectShipper(data){
+			this.recdeliverycomp.companyName = data.companyName
+			this.recdeliverycomp.customerID = data.customerID
 		},
 		add() {
 			this.$router.push({ name: 'adddispatchbill' })
