@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<div class="wf-card">
 			<div class="header clearfix">查看车辆</div>
-			<el-form label-width="155px">
+			<el-form label-width="155px" size="small">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="状态">
@@ -472,11 +472,10 @@ export default {
 	p
 		margin 0
 		box-sizing border-box
-		border 1px solid #fff
-		border-bottom-color #dcdfe6
+		border-bottom 1px solid #dcdfe6
 		padding 0 15px
-		height 40px
-		line-height 40px
+		height 32px
+		line-height 32px
 		color #999
 		font-size 14px
 		overflow hidden
