@@ -22,17 +22,17 @@
 					<el-progress 
 						:text-inside="true" 
 						:stroke-width="18" 
-						:percentage="parseInt(truck.loadedCargoWeight/Number(truck.loads/1000) *100)" 
+						:percentage="(truck.loads > truck.loadedCargoWeight) ? parseInt(truck.loadedCargoWeight/Number(truck.loads) *100) : 100" 
 						style="margin-top:13px">
 					</el-progress>
-					<span class="surplus">剩{{(Number(truck.loads/1000) - truck.loadedCargoWeight)}}T</span>
+					<span class="surplus">剩{{(Number(truck.loads) - truck.loadedCargoWeight)/1000}}T</span>
 				</div>
 				<div class="sliderSelect">
 					<span class="labels">已配载体积</span>
 					<el-progress 
 						:text-inside="true" 
 						:stroke-width="18" 
-						:percentage="parseInt(truck.loadedCargoVolume/Number(truck.loadVolume) * 100)" 
+						:percentage="(truck.loadVolume > truck.loadedCargoVolume) ? parseInt(truck.loadedCargoVolume/Number(truck.loadVolume) * 100) : 100" 
 						style="margin-top:13px">
 					</el-progress>
 					<span class="surplus">剩{{(Number(truck.loadVolume) - truck.loadedCargoVolume)}}m³</span>
