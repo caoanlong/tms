@@ -59,7 +59,11 @@
 				</table>
 				<table class="fare">
 					<tr>
-						<td class="tit" colspan="7">付款费用 <span class="fr editBtn" v-if="isEdit" @click="editFare">编辑</span><span class="fr editBtn" v-else @click="saveFare">保存</span></td>
+						<td class="tit" colspan="7">
+							付款费用 
+							<span class="fr editBtn" v-show="type == 'edit'" v-if="!isEdit" @click="editFare">编辑</span>
+							<span class="fr editBtn" v-show="type == 'edit'" v-else @click="saveFare">保存</span>
+						</td>
 					</tr>
 					<tr>
 						<th width="100">付给人员</th>
@@ -72,69 +76,100 @@
 					</tr>
 					<tr class="text-center">
 						<td>司机</td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.driverCashAmount"></el-input></td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.driverCodAmount"></el-input></td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.driverPorAmount"></el-input></td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.driverMonthlyAmont"></el-input></td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.driverCosigneeAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCashAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCodAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverPorAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverMonthlyAmont"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCosigneeAmount"></el-input></td>
 						<td><el-input size="mini" disabled :value="totalDriver"></el-input></td>
 					</tr>
 					<tr class="text-center">
 						<td>随行人员</td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.superCargoCashAmount"></el-input></td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.superCargoCodAmount"></el-input></td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.superCargoCorAmount"></el-input></td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.superCargoMonthlyAmount"></el-input></td>
-						<td><el-input size="mini" :disabled="isEdit" v-model="task.superCosigneeAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCashAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCodAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCorAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoMonthlyAmount"></el-input></td>
+						<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCosigneeAmount"></el-input></td>
 						<td><el-input size="mini" disabled v-model="totalsuperCargo"></el-input></td>
 					</tr>
 				</table>
 			</div>
-			<div class="tit">运输照片<span class="fr uploadPicBtn" v-if="detailType=='edit'">上传照片</span></div>
+			<div class="tit">运输照片<span class="fr uploadPicBtn" v-if="type == 'edit'" @click="upload()">上传照片</span></div>
 			<div class="picList">
 				<div class="title">装车照片<span>(5)</span></div>
-				<div class="con"></div>
+				<div class="con">
+					<ImageUpload :files="loadImgs" :isPreview="true"/>
+				</div>
 			</div>
 			<div class="picList">
 				<div class="title">到货照片<span>(5)</span></div>
-				<div class="con"></div>
+				<div class="con">
+					<ImageUpload :files="arriveImgs" :isPreview="true"/>
+				</div>
 			</div>
 			<div class="picList">
 				<div class="title">回单照片<span>(5)</span></div>
-				<div class="con"></div>
+				<div class="con">
+					<ImageUpload :files="backImgs" :isPreview="true"/>
+				</div>
 			</div>
 			<div class="picList">
 				<div class="title">异常上报<span>(5)</span></div>
-				<div class="con"></div>
+				<div class="con">
+					<ImageUpload :files="exceptImgs" :isPreview="true"/>
+				</div>
 			</div>
 			<div class="handle text-center">
 				<el-button @click="back">返回</el-button>
 			</div>
 		</div>
+		<UploadPhoto 
+			:isVisible="isPhotoVisible" 
+			@control="handUploadPhoto" 
+			:dispatchTaskID="task.dispatchTaskID" 
+			:shipperArea="carrier.shipperArea" 
+			:consigneeArea="carrier.consigneeArea">
+		</UploadPhoto>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Task from '../../api/Task'
+import TaskPic from '../../api/TaskPic'
 import TaskItem from './Common/TaskItem'
 import ImageUpload from '../CommonComponents/ImageUpload'
+import UploadPhoto from './Common/UploadPhoto'
 export default {
 	data() {
 		return {
-			taskDetail:{},
-			task:{},
-			carrier:{},
-			cargoList:[],
-			detailType:'',
-			isEdit: this.$route.query.type
+			taskDetail: {},
+			task: {},
+			carrier: {},
+			cargoList: [],
+			loadImgs: [],
+			arriveImgs: [],
+			backImgs: [],
+			exceptImgs: [],
+			isEdit: false,
+			type: this.$route.query.type,
+			currentDispatchTaskID: '',
+			isPhotoVisible: false
 		}
 	},
 	computed:{
 		totalDriver:function(){
-			return Number(this.task.driverCashAmount?this.task.driverCashAmount:0)+Number(this.task.driverCodAmount?this.task.driverCodAmount:0)+Number(this.task.driverPorAmount?this.task.driverPorAmount:0)+Number(this.task.driverMonthlyAmont?this.task.driverMonthlyAmont:0)+Number(this.task.driverCosigneeAmount?this.task.driverCosigneeAmount:0)
+			return Number(this.task.driverCashAmount ? this.task.driverCashAmount : 0) 
+			+ Number(this.task.driverCodAmount ? this.task.driverCodAmount : 0) 
+			+ Number(this.task.driverPorAmount ? this.task.driverPorAmount : 0) 
+			+ Number(this.task.driverMonthlyAmont ? this.task.driverMonthlyAmont : 0) 
+			+ Number(this.task.driverCosigneeAmount ? this.task.driverCosigneeAmount : 0)
 		},
 		totalsuperCargo:function(){
-			return Number(this.task.superCargoCashAmount?this.task.superCargoCashAmount:0)+Number(this.task.superCargoCodAmount?this.task.superCargoCodAmount:0)+Number(this.task.superCargoCorAmount?this.task.superCargoCorAmount:0)+Number(this.task.superCargoMonthlyAmount?this.task.superCargoMonthlyAmount:0)+Number(this.task.superCosigneeAmount?this.task.superCosigneeAmount:0)
+			return Number(this.task.superCargoCashAmount ? this.task.superCargoCashAmount : 0) 
+			+ Number(this.task.superCargoCodAmount ? this.task.superCargoCodAmount : 0) 
+			+ Number(this.task.superCargoCorAmount ? this.task.superCargoCorAmount : 0) 
+			+ Number(this.task.superCargoMonthlyAmount ? this.task.superCargoMonthlyAmount : 0) 
+			+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)
 		}
 	},
 	created() {
@@ -142,20 +177,36 @@ export default {
 	},
 	methods: {
 		editFare(){
-			this.isEdit = false
+			this.isEdit = true
 		},
 		saveFare(){
-			this.isEdit = true
+			this.isEdit = false
 		},
 		getDetail() {
 			let dispatchTaskID = this.$route.query.dispatchTaskID
-			this.detailType = this.$route.query.type
 			Task.findById({ dispatchTaskID }).then(res => {
 				this.taskDetail = res
 				this.task = res.task
 				this.carrier = res.carrier
 				this.cargoList= res.cargoList
+				this.getImgs()
 			})
+		},
+		getImgs() {
+			let dispatchTaskID = this.$route.query.dispatchTaskID
+            TaskPic.find({ dispatchTaskID }).then(res => {
+                this.loadImgs = res.Loaded.map(item => item.maxURL)
+                this.arriveImgs = res.Arrived.map(item => item.maxURL)
+                this.backImgs = res.Received.map(item => item.maxURL)
+                this.exceptImgs = res.Unusual.map(item => item.maxURL)
+            })
+		},
+		upload() {
+			this.isPhotoVisible = true
+		},
+		handUploadPhoto(bool) {
+			this.isPhotoVisible = false
+			this.getImgs()
 		},
 		back() {
 			this.$router.go(-1)
@@ -163,7 +214,8 @@ export default {
 	},
 	components: {
 		TaskItem,
-		ImageUpload
+		ImageUpload,
+		UploadPhoto
 	}
 }
 
