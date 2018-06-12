@@ -125,7 +125,34 @@ export default {
         },
         getImgs(dispatchTaskID) {
             TaskPic.find({ dispatchTaskID }).then(res => {
-                console.log(res)
+                this.loadImgs = res.Loaded.map(item => item.maxURL)
+                this.arriveImgs = res.Arrived.map(item => item.maxURL)
+                this.backImgs = res.Received.map(item => item.maxURL)
+                this.exceptImgs = res.Unusual.map(item => item.maxURL)
+                this.Loaded = res.Loaded.map(item => {
+                    return {
+                        'dispatchTaskID': this.dispatchTaskID,
+                        'maxURL': item.maxURL
+                    }
+                })
+                this.Arrived = res.Arrived.map(item => {
+                    return {
+                        'dispatchTaskID': this.dispatchTaskID,
+                        'maxURL': item.maxURL
+                    }
+                })
+                this.Received = res.Received.map(item => {
+                    return {
+                        'dispatchTaskID': this.dispatchTaskID,
+                        'maxURL': item.maxURL
+                    }
+                })
+                this.Unusual = res.Unusual.map(item => {
+                    return {
+                        'dispatchTaskID': this.dispatchTaskID,
+                        'maxURL': item.maxURL
+                    }
+                })
             })
         }
     }

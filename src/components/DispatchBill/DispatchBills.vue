@@ -57,7 +57,34 @@
 									<span class="tag" v-else-if="item.status == 'Closed'">已关闭</span>
 									<span class="tag" v-else-if="item.status == 'Finished'">已完成</span>
 								</span>
-								<span class="fr">
+								<span class="fr" v-if="item.status == 'Committed'">
+									<el-button type="text" size="mini">重新调度</el-button>
+									<el-button type="text" size="mini" v-if="
+										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
+									">取消调度</el-button>
+									<el-button type="text" size="mini">关闭</el-button>
+									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
+								</span>
+								<span class="fr" v-else-if="item.status == 'Ordered'">
+									<el-button type="text" size="mini">重新调度</el-button>
+									<el-button type="text" size="mini" v-if="
+										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
+									">取消调度</el-button>
+									<el-button type="text" size="mini">关闭</el-button>
+									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
+								</span>
+								<span class="fr" v-else-if="item.status == 'Canceled'">
+									<el-button type="text" size="mini">重新调度</el-button>
+									<el-button type="text" size="mini" v-if="
+										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
+									">取消调度</el-button>
+									<el-button type="text" size="mini">关闭</el-button>
+									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
+								</span>
+								<span class="fr" v-else-if="item.status == 'Rejected'">
 									<el-button type="text" size="mini">重新调度</el-button>
 									<el-button type="text" size="mini" v-if="
 										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
