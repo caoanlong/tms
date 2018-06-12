@@ -8,16 +8,22 @@
 						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="findkeyword"></el-input>
 					</el-form-item>
 					<el-form-item label="收发货单位">
-						<el-input placeholder="收发货单位" v-model="findcustomerID"></el-input>
+						<el-autocomplete
+							value-key="companyName" 
+							v-model="recdeliverycomp.companyName"
+							:fetch-suggestions="getRecdeliverycomp"
+							placeholder="请输入收发货单位"
+							@select="handSelectShipper">
+						</el-autocomplete>
 					</el-form-item>
 					<el-form-item label="调度状态">
 						<el-select v-model="findstatus" placeholder="请选择">
-							<el-option label="全部" value="全部"></el-option>
-							<el-option label="未接单" value="未接单"></el-option>
-							<el-option label="已接单" value="已接单"></el-option>
-							<el-option label="已关闭" value="已关闭"></el-option>
-							<el-option label="已取消" value="已取消"></el-option>
-							<el-option label="已完成" value="已完成"></el-option>
+							<el-option label="全部" value=""></el-option>
+							<el-option label="未接单" value="Committed"></el-option>
+							<el-option label="已接单" value="Ordered"></el-option>
+							<el-option label="已关闭" value="Canceled"></el-option>
+							<el-option label="已取消" value="Rejected"></el-option>
+							<el-option label="已完成" value="Finished"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -161,6 +167,7 @@ import { deleteConfirm } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 import UploadPhoto from './Common/UploadPhoto'
+import Customer from '../../api/Customer'
 export default {
 	data() {
 		return {
@@ -174,7 +181,8 @@ export default {
 			currentDispatchTaskID: '',
 			currentShipperArea: '',
 			currentConsigneeArea: '',
-			isPhotoVisible: false
+			isPhotoVisible: false,
+			recdeliverycomp:{}
 		}
 	},
 	created() {
@@ -182,7 +190,7 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.findKeyword=''
+			this.findkeyword=''
 			this.findcustomerID=''
 			this.findstatus=''
 			this.getList()
@@ -197,8 +205,8 @@ export default {
 		},
 		getList () {
 			Dispatchbill.find({
-				keyword:this.findKeyword,
-				customerID:this.findcustomerID,
+				keyword:this.findkeyword,
+				customerID:this.recdeliverycomp.customerID,
 				status:this.findstatus,
 				current: this.pageIndex,
 				size: this.pageSize
@@ -206,6 +214,18 @@ export default {
 				this.dispatchBillList = res.records
 				this.count = res.total
 			})
+		},
+		getRecdeliverycomp(queryString, cb) {
+			Customer.find({
+				type: 'ShipperConsignee',
+				companyName: queryString
+			}).then(res => {
+				cb(res.records)
+			})
+		},
+		handSelectShipper(data){
+			this.recdeliverycomp.companyName = data.companyName
+			this.recdeliverycomp.customerID = data.customerID
 		},
 		add() {
 			this.$router.push({ name: 'adddispatchbill' })
