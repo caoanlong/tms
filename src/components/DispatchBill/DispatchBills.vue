@@ -69,8 +69,8 @@
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">取消调度</el-button>
-									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
+									" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
+									<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
@@ -82,7 +82,7 @@
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">取消调度</el-button>
+									" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
 									<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="true">删除</el-button>
 								</span>
@@ -92,8 +92,8 @@
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
 									">编辑</el-button>
-									<el-button type="text" size="mini" :disabled="true">取消调度</el-button>
-									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
+									<el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
+									<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
@@ -105,8 +105,8 @@
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
 									">编辑</el-button>
-									<el-button type="text" size="mini" :disabled="true">取消调度</el-button>
-									<el-button type="text" size="mini" :disabled="true">关闭</el-button>
+									<el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
+									<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
@@ -163,7 +163,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../api/Dispatchbill'
-import { deleteConfirm,closeConfirm } from '../../common/utils'
+import { deleteConfirm,closeConfirm,cancelDispatchOrder } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 import UploadPhoto from './Common/UploadPhoto'
@@ -246,8 +246,8 @@ export default {
 			this.isPhotoVisible = false
 		},
 		del(id) {
-			deleteConfirm(id, dispatchTaskID => {
-				Dispatchbill.del({ dispatchTaskID }).then(res => {
+			deleteConfirm(id, dispatchOrderID => {
+				Dispatchbill.del({ dispatchOrderID }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})
@@ -256,7 +256,15 @@ export default {
 		closeDispatchOrder(id){
 			closeConfirm(id, dispatchOrderID => {
 				Dispatchbill.close({ dispatchOrderID }).then(res => {
-					Message({ type: 'success', message: '删除成功!' })
+					Message({ type: 'success', message: '关闭调度成功!' })
+					this.getList()
+				})
+			})
+		},
+		cancelDispatchOrder(id){
+			cancelConfirm(id, dispatchOrderID => {
+				Dispatchbill.cancel({ dispatchOrderID }).then(res => {
+					Message({ type: 'success', message: '取消调度成功!' })
 					this.getList()
 				})
 			})

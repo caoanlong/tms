@@ -119,6 +119,18 @@ export function closeConfirm (id, callback) {
 	})
 }
 
+export function cancelConfirm (id, callback) {
+	vueInstance.$confirm('此操作将做取消操作, 是否继续?', '提示', {
+		confirmButtonText: '确定',
+		cancelButtonText: '取消',
+		type: 'warning'
+	}).then(() => {
+		callback && callback(id)
+	}).catch(() => {
+		Message({ type: 'info', message: '已取消操作'})
+	})
+}
+
 export function resizeImg (url, size) {
 	let arr = url.split('.')
 	return process.env.IMG_API + arr[0] + size + arr[1]
