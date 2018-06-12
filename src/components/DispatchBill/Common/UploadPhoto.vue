@@ -1,8 +1,8 @@
 <template>
     <el-dialog title="上传照片" :visible="isVisible" :show-close="false" custom-class="table" width="70%">
         <div class="area">
-            <div class="area-item label">装车地：{{shipperArea}}</div>
-            <div class="area-item label">送货地：{{consigneeArea}}</div>
+            <div class="area-item">装车地：{{shipperArea}}</div>
+            <div class="area-item">送货地：{{consigneeArea}}</div>
         </div>
         <div class="pic">
             <div class="photo">
