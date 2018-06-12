@@ -19,7 +19,7 @@ class Task extends Base {
      * @param {superCargoMonthlyAmount} data 押运人月结金额
      */
     modifyFreight(data) {
-        this.request({
+        return this.request({
             url: this.baseUrl + '/modifyFreight',
             method: 'post',
             data

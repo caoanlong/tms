@@ -174,12 +174,14 @@ export default {
 	},
 	created() {
 		this.getDetail()
+		this.getImgs()
 	},
 	methods: {
-		editFare(){
+		editFare() {
 			this.isEdit = true
 		},
-		saveFare(){
+		saveFare() {
+			this.modifyFreight()
 			this.isEdit = false
 		},
 		getDetail() {
@@ -189,7 +191,6 @@ export default {
 				this.task = res.task
 				this.carrier = res.carrier
 				this.cargoList= res.cargoList
-				this.getImgs()
 			})
 		},
 		getImgs() {
@@ -200,6 +201,24 @@ export default {
                 this.backImgs = res.Received.map(item => item.maxURL)
                 this.exceptImgs = res.Unusual.map(item => item.maxURL)
             })
+		},
+		modifyFreight() {
+			let dispatchTaskID = this.$route.query.dispatchTaskID
+			Task.modifyFreight({
+				'dispatchTaskID': dispatchTaskID,
+				'driverCashAmount': this.task.driverCashAmount,
+				'driverCodAmount': this.task.driverCodAmount,
+				'driverPorAmount': this.task.driverPorAmount,
+				'driverMonthlyAmont': this.task.driverMonthlyAmont,
+				'driverCosigneeAmount': this.task.driverCosigneeAmount,
+				'superCargoCashAmount': this.task.superCargoCashAmount,
+				'superCargoCodAmount': this.task.superCargoCodAmount,
+				'superCargoCorAmount': this.task.superCargoCorAmount,
+				'superCargoMonthlyAmount': this.task.superCargoMonthlyAmount
+			}).then(res => {
+				Message.success(res.data.msg)
+				this.getDetail()
+			})
 		},
 		upload() {
 			this.isPhotoVisible = true
