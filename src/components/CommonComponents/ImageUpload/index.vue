@@ -40,124 +40,137 @@
 	</div>
 </template>
 <script>
-	import axios from 'axios'
-	import { Message } from 'element-ui'
-	import { baseURL } from '../../../common/request'
-	import { formDataReq } from '../../../common/utils'
-	import VueCropper from 'vue-cropper'
-	import { defaultImg } from '../../../assets/icons/icons'
-	export default {
-		props: {
-			width: {
-				type: Number,
-				default: 100
-			},
-			height: {
-				type: Number,
-				default: 100
-			},
-			limitNum: {
-				type: Number,
-				default: 1
-			},
-			files: {
-				type: Array,
-				default: () => []
-			},
-			isPreview: {
-				type: Boolean,
-				default: false
-			},
-			fixed: {
-				type: Boolean,
-				default: false
-			},
-			fixedNumber: {
-				type: Array,
-				default: () => [1,1]
+import axios from 'axios'
+import { Message } from 'element-ui'
+import { baseURL } from '../../../common/request'
+import { formDataReq } from '../../../common/utils'
+import VueCropper from 'vue-cropper'
+import { defaultImg } from '../../../assets/icons/icons'
+export default {
+	props: {
+		width: {
+			type: Number,
+			default: 100
+		},
+		height: {
+			type: Number,
+			default: 100
+		},
+		limitNum: {
+			type: Number,
+			default: 1
+		},
+		files: {
+			type: Array,
+			default: () => []
+		},
+		isPreview: {
+			type: Boolean,
+			default: false
+		},
+		isUseCropper: {
+			type: Boolean,
+			default: true
+		},
+		fixed: {
+			type: Boolean,
+			default: false
+		},
+		fixedNumber: {
+			type: Array,
+			default: () => [1,1]
+		}
+	},
+	data() {
+		return {
+			fileUrl: this.files[0] ? this.files : [],
+			localImgUrl: '',
+			isShowCropper: false,
+			isUploaded: false
+		}
+	},
+	computed: {
+		isLimit() {
+			if (this.fileUrl.length > this.limitNum - 1) {
+				return false
+			}else {
+				return true
 			}
 		},
-		data() {
-			return {
-				fileUrl: this.files[0] ? this.files : [],
-				localImgUrl: '',
-				isShowCropper: false,
-				isUploaded: false
+		defaultImg: () => defaultImg
+	},
+	watch: {
+		files(newval) {
+			if (newval.length > 0 && newval[0]) {
+				this.fileUrl = this.files
 			}
-		},
-		computed: {
-			isLimit() {
-				if (this.fileUrl.length > this.limitNum - 1) {
-					return false
-				}else {
-					return true
+		}
+	},
+	methods: {
+		addImg(e) {
+			if (this.$refs.uploadFile.value != '') {
+				let arr = this.$refs.uploadFile.files[0].name.split('.')
+				let suffix = arr[arr.length-1].toLowerCase()
+				if (suffix != 'jpg' && suffix != 'jpeg' && suffix != 'png' && suffix != 'gif') {
+					Message.error('图片格式只支持jpg、png和gif！')
+					return
 				}
-			},
-			defaultImg: () => defaultImg
-		},
-		watch: {
-			files(newval) {
-				if (newval.length > 0 && newval[0]) {
-					this.fileUrl = this.files
-				}
-			}
-		},
-		methods: {
-			addImg(e) {
-				if (this.$refs.uploadFile.value != '') {
-					let arr = this.$refs.uploadFile.files[0].name.split('.')
-					let suffix = arr[arr.length-1].toLowerCase()
-					if (suffix != 'jpg' && suffix != 'jpeg' && suffix != 'png' && suffix != 'gif') {
-						Message.error('图片格式只支持jpg、png和gif！')
-						return
-					}
+				if (this.isUseCropper) {
 					this.localImgUrl = window.URL.createObjectURL(this.$refs.uploadFile.files[0])
 					this.isShowCropper = true
-					this.$refs.uploadFile.value = ''
+				} else {
+					this.uploadFile(this.$refs.uploadFile.files[0])
 				}
-			},
-			upload() {
-				if (this.isUploaded) {
-					Message.error('正在上传,请稍等！')
-					return
-				}
-				if (this.fileUrl.length > this.limitNum) {
-					return
-				}
-				this.isUploaded = true
-				this.$refs.cropper.getCropBlob((data) => {
-					let url = baseURL + "/sys/picture/upload"
-					let headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
-					let params = formDataReq({
-						"file": data
-					})
-					axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
-					axios.post(url, params, headers).then(res => {
-						this.fileUrl.push(res.data.data)
-						this.$emit('imgUrlBack', this.fileUrl)
-						this.isShowCropper = false
-						this.isUploaded = false
-					}).catch(err => {
-						console.log('服务器异常' + err)
-					})
-				})
-			},
-			delImg(i) {
-				this.fileUrl.splice(i, 1)
-				this.$emit('imgUrlBack', this.fileUrl)
-			},
-			showImgModal(url) {
-				this.$alert(`<img style="width: 100%" src=${this.imgUrl + url} />`, '图片预览', {
-					dangerouslyUseHTMLString: true,
-					showConfirmButton: false,
-					customClass: 'img-preview'
-				})
+				this.$refs.uploadFile.value = ''
 			}
 		},
-		components: {
-			VueCropper
+		upload() {
+			if (this.isUploaded) {
+				Message.error('正在上传,请稍等！')
+				return
+			}
+			if (this.fileUrl.length > this.limitNum) {
+				return
+			}
+			this.isUploaded = true
+			this.$refs.cropper.getCropBlob((data) => {
+				this.uploadFile(data, () => {
+					this.isShowCropper = false
+				})
+			})
+		},
+		uploadFile(data, cb) {
+			let url = baseURL + "/sys/picture/upload"
+			let headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
+			let params = formDataReq({
+				"file": data
+			})
+			axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+			axios.post(url, params, headers).then(res => {
+				this.fileUrl.push(res.data.data)
+				this.$emit('imgUrlBack', this.fileUrl)
+				this.isUploaded = false
+				cb && cb()
+			}).catch(err => {
+				console.log('服务器异常' + err)
+			})
+		},
+		delImg(i) {
+			this.fileUrl.splice(i, 1)
+			this.$emit('imgUrlBack', this.fileUrl)
+		},
+		showImgModal(url) {
+			this.$alert(`<img style="width: 100%" src=${this.imgUrl + url} />`, '图片预览', {
+				dangerouslyUseHTMLString: true,
+				showConfirmButton: false,
+				customClass: 'img-preview'
+			})
 		}
+	},
+	components: {
+		VueCropper
 	}
+}
 </script>
 <style lang="stylus" scoped>
 	.imgUpload
