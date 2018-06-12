@@ -1,5 +1,5 @@
 import Base from './Base'
-import request from '../common/request'
+import request from '../common/requestByJson'
 
 class TaskPic extends Base {
     constructor(url, req) {
@@ -20,4 +20,4 @@ class TaskPic extends Base {
     }
 }
 
-export default new Task('/dispatchTaskPic', request)
+export default new TaskPic('/dispatchTaskPic', request)

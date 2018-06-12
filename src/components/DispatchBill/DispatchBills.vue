@@ -59,7 +59,10 @@
 								</span>
 								<span class="fr">
 									<el-button type="text" size="mini">重新调度</el-button>
-									<el-button type="text" size="mini">取消调度</el-button>
+									<el-button type="text" size="mini" v-if="
+										!item.dispatchTaskList.map(item => item.status).includes('Loaded') 
+										&& !item.dispatchTaskList.map(item => item.status).includes('Signed')
+									">取消调度</el-button>
 									<el-button type="text" size="mini">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)">删除</el-button>
 								</span>
@@ -76,13 +79,17 @@
 								<span v-else>已作废</span>
 							</td>
 							<td>{{taskItem.cargoName}}</td>
-							<td class="text-center">{{taskItem.loadWeightSum?taskItem.loadWeightSum+'kg/':''}}{{taskItem.loadVolumeSum?taskItem.loadVolumeSum+'m³/':''}}{{taskItem.loadNumSum?taskItem.loadNumSum+'件':''}}</td>
-							<td>{{taskItem.shipperArea}}</td>
-							<td class="text-center" width="140">{{taskItem.shipperDate | getdatefromtimestamp()}}</td>
-							<td>{{taskItem.consigneeArea}}</td>
-							<td class="text-center" width="140">{{taskItem.consigneeDate | getdatefromtimestamp()}}</td>
 							<td class="text-center">
-								<el-button type="text" size="mini" @click="isPhotoVisible = true">上传照片</el-button>
+								{{taskItem.loadWeightSum?taskItem.loadWeightSum+'kg/':''}}
+								{{taskItem.loadVolumeSum?taskItem.loadVolumeSum+'m³/':''}}
+								{{taskItem.loadNumSum?taskItem.loadNumSum+'件':''}}
+							</td>
+							<td>{{taskItem.shipperArea}}</td>
+							<td class="text-center" width="120">{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
+							<td>{{taskItem.consigneeArea}}</td>
+							<td class="text-center" width="120">{{taskItem.consigneeDate | getdatefromtimestamp(true)}}</td>
+							<td class="text-center">
+								<el-button type="text" size="mini" @click="upload(taskItem)">上传照片</el-button>
 								<el-button type="text" size="mini" @click="viewTask(taskItem.dispatchTaskID,'edit')">编辑</el-button>
 							</td>
 						</tr>
@@ -91,7 +98,13 @@
 				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
-		<UploadPhoto :isVisible="isPhotoVisible" @control="handUploadPhoto"></UploadPhoto>
+		<UploadPhoto 
+			:isVisible="isPhotoVisible" 
+			@control="handUploadPhoto" 
+			:dispatchTaskID="currentDispatchTaskID" 
+			:shipperArea="currentShipperArea" 
+			:consigneeArea="currentConsigneeArea">
+		</UploadPhoto>
 	</div>
 </template>
 <script type="text/javascript">
@@ -111,6 +124,9 @@ export default {
 			pageSize: 10,
 			count: 0,
 			dispatchBillList: [],
+			currentDispatchTaskID: '',
+			currentShipperArea: '',
+			currentConsigneeArea: '',
 			isPhotoVisible: false
 		}
 	},
@@ -152,6 +168,12 @@ export default {
 		},
 		viewTask(dispatchTaskID,type) {
 			this.$router.push({ name: 'viewtaskdetail' , query: {dispatchTaskID,type}})
+		},
+		upload(task) {
+			this.currentDispatchTaskID = task.dispatchTaskID
+			this.currentShipperArea = task.shipperArea
+			this.currentConsigneeArea = task.consigneeArea
+			this.isPhotoVisible = true
 		},
 		handUploadPhoto(bool) {
 			this.isPhotoVisible = false
