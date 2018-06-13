@@ -96,7 +96,7 @@
 									<el-dropdown-item :command="{type: 'view', id: scope.row.comDriverID}" icon="el-icon-view">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.comDriverID}">编辑</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'relieve', id: scope.row.comDriverID}" v-if="scope.row.cooperateStatus == 'Agreed'">解除合作</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'invite', id: scope.row.comDriverID}" v-else>发送邀请</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'invite', id: scope.row.comDriverID}" v-else-if="scope.row.cooperateStatus == 'Rejected' || scope.row.cooperateStatus == 'Relieved'">发送邀请</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -223,12 +223,29 @@ export default {
 				Driver.changeCooperateStatus({
 					comDriverID:comDriverID,
 					cooperateStatus:'Invited'
+				}).then(res => {
+					Message({ type: 'success', message: '发送邀请成功!' })
 				})
 			}else{
-				Driver.changeCooperateStatus({
-					comDriverID:comDriverID,
-					cooperateStatus:'Relieved'
-				})
+				this.$confirm('此操作将解除与司机的合作, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					Driver.changeCooperateStatus({
+						comDriverID:comDriverID,
+						cooperateStatus:'Relieved'
+					})
+					this.$message({
+						type: 'success',
+						message: '已成功解除合作!'
+					});
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消'
+					});          
+				});
 			}
 		}	
 	}
