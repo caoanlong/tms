@@ -123,7 +123,8 @@ export default {
 			count: 0,
 			selectedList: [],
 			tableData: [],
-			importFileUrl: baseURL + '/staff/upload',
+
+			importFileUrl: baseURL + '/driver/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			postMap: {
 				"Operator": "操作员",
