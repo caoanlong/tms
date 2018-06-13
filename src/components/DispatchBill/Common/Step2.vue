@@ -8,13 +8,13 @@
 				<span class="infoItem">{{item.consigneeDate | getdatefromtimestamp()}}（预约达到）</span>
 			</div>
 			<el-table border 
+				ref="multipleTable" 
 				style="width: 100%" 
 				size="mini" 
 				:data="item.cargo" 
 				@select="selectionSimple" 
 				@select-all="selectionAll($event, item)">
-				<el-table-column type="selection" width="40" align="center">
-				</el-table-column>
+				<el-table-column type="selection" width="40" align="center" :selectable="() => dispatchOrderID ? false : true"></el-table-column>
 				<el-table-column label="货物类型" align="center">
 					<template slot-scope="scope">
 						<span v-if="scope.row.weightType=='Heavy'">重货</span>
@@ -38,21 +38,21 @@
 				</el-table-column>
 				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" >
+						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange">
 							<span slot="append">kg</span>
 						</el-input>
 					</template>	
 				</el-table-column>
 				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" >
+						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange">
 							<span slot="append">m³</span>
 						</el-input>
 					</template>					
 				</el-table-column>
 				<el-table-column label="配载数量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" >
+						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange">
 							<span slot="append">件</span>
 						</el-input>
 					</template>
@@ -78,52 +78,84 @@
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
-import Carrierbill from '../../../api/Carrierbill'
 import Dispatchbill from '../../../api/Dispatchbill'
 export default {
 	data() {
 		return {
 			carrierBills: [],
-			selectedCargoList: []
+			selectedCargoList: [],
+			totalWeight: 0,
+			totalVolume: 0,
+			totalNum: 0,
+			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
 	},
 	computed: {
-		...mapGetters(['selectedCarrierBill', 'selectedCargos']),
-		totalWeight() {
-			let values = this.selectedCargos.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
-			return values.reduce((prev, curr) => {
-				return prev + curr
-			}, 0).toFixed(2)
-		},
-		totalVolume() {
-			let values = this.selectedCargos.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
-			return values.reduce((prev, curr) => {
-				return prev + curr
-			}, 0).toFixed(2)
-		},
-		totalNum() {
-			let values = this.selectedCargos.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
-			return values.reduce((prev, curr) => {
-				return prev + curr
-			}, 0).toFixed(2)
-		},
+		...mapGetters(['selectedCarrierBill', 'selectedCargos'])
 	},
 	created() {
 		let carrierOrderIDs = this.selectedCarrierBill.join(',')
 		this.getList(carrierOrderIDs)
 	},
 	methods: {
-		getDetail(carrierOrderID) {
-			Carrierbill.findById({ carrierOrderID }).then(res => {
-				this.carrierBills.push(res)
+		handTotalWeight() {
+			let values = this.selectedCargos.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
+			this.totalWeight = values.reduce((prev, curr) => {
+				return prev + curr
+			}, 0).toFixed(2)
+		},
+		handTotalVolume() {
+			let values = this.selectedCargos.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
+			this.totalVolume = values.reduce((prev, curr) => {
+				return prev + curr
+			}, 0).toFixed(2)
+		},
+		handTotalNum() {
+			let values = this.selectedCargos.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
+			this.totalNum = values.reduce((prev, curr) => {
+				return prev + curr
+			}, 0)
+		},
+		handInputChange() {
+			this.handTotalWeight()
+			this.handTotalVolume()
+			this.handTotalNum()
+			this.autoSetInput()
+		},
+		autoSetInput() {
+			let cargoList = []
+			this.carrierBills.forEach((carrierBill, index) => {
+				let cargo = carrierBill.cargo.filter(item => item.dispatchOrderID ? (item.dispatchOrderID == this.dispatchOrderID) : item)
+				cargoList.push(...cargo)
 			})
+			this.$store.dispatch('setCargo', cargoList)
 		},
 		getList(carrierOrderIDs) {
-			Dispatchbill.findPreLoad({ carrierOrderIDs }).then(res => {
+			let params = { carrierOrderIDs }
+			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
+			Dispatchbill.findPreLoad(params).then(res => {
 				this.carrierBills = res
+				if (this.dispatchOrderID) {
+					let cargoList = []
+					res.forEach((carrierBill, index) => {
+						let cargo = carrierBill.cargo.filter(item => item.dispatchOrderID && item.dispatchOrderID == this.dispatchOrderID)
+						this.$nextTick(() => {
+							cargo.forEach(row => {
+								if (!row.cargoWeightNew) row.cargoWeightNew = row.loadCargoWeight
+								if (!row.cargoVolumeNew) row.cargoVolumeNew = row.loadCargoVolume
+								if (!row.cargoNumNew) row.cargoNumNew = row.loadCargoNum
+								this.$refs.multipleTable[index].toggleRowSelection(row)
+							})
+							cargoList.push(...cargo)
+							this.$store.dispatch('setCargo', cargoList)
+							this.handInputChange()
+						})
+					})
+				}
 			})
 		},
 		selectionAll(data, carrierBill) {
+			if (this.dispatchOrderID) return
 			let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
 			if (data.length > 0) {
 				for (let i = 0; i < data.length; i++) {
