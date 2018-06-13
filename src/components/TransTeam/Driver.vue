@@ -58,10 +58,10 @@
 					</el-table-column>
 					<el-table-column label="关联账号"  width="100" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.cooperateStatus == 'Agreed'">已同意</span>
+							<span v-if="scope.row.cooperateStatus == 'Agreed'" style="color:#67C23A">已同意</span>
 							<span v-else-if="scope.row.cooperateStatus == 'Invited'">已邀请</span>
-							<span v-else-if="scope.row.cooperateStatus == 'Rejected'">已拒绝</span>
-							<span v-else-if="scope.row.cooperateStatus == 'Relieved'">已解除</span>
+							<span v-else-if="scope.row.cooperateStatus == 'Rejected'" style="color:#f80">已拒绝</span>
+							<span v-else-if="scope.row.cooperateStatus == 'Relieved'" style="color:#f80">已解除</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="备注" prop="remark"></el-table-column>
@@ -122,7 +122,7 @@ export default {
 			count: 0,
 			selectedList: [],
 			tableData: [],
-			importFileUrl: Driver.baseURL + '/staff/upload',
+			importFileUrl: Driver.baseURL + '/driver/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			postMap: {
 				"Operator": "操作员",
@@ -225,6 +225,7 @@ export default {
 					cooperateStatus:'Invited'
 				}).then(res => {
 					Message({ type: 'success', message: '发送邀请成功!' })
+					this.getList()
 				})
 			}else{
 				this.$confirm('此操作将解除与司机的合作, 是否继续?', '提示', {
@@ -235,11 +236,10 @@ export default {
 					Driver.changeCooperateStatus({
 						comDriverID:comDriverID,
 						cooperateStatus:'Relieved'
+					}).then(res =>{
+						Message({ type: 'success', message: '已成功解除合作!' })
+						this.getList()
 					})
-					this.$message({
-						type: 'success',
-						message: '已成功解除合作!'
-					});
 				}).catch(() => {
 					this.$message({
 						type: 'info',
