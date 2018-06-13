@@ -94,7 +94,7 @@ export default {
 		...mapGetters(['selectedCarrierBill', 'selectedCargos'])
 	},
 	created() {
-		let carrierOrderIDs = this.selectedCarrierBill.join(',')
+		let carrierOrderIDs = this.selectedCarrierBill.map(item => item.carrierOrderID).join(',')
 		this.getList(carrierOrderIDs)
 	},
 	methods: {

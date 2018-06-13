@@ -43,7 +43,7 @@
 		</div>
 		<div class="list">
 			<DriverItem 
-				:isSelected="truck.selected.truckID == item.truckID" 
+				:isSelected="selectedDriver.truckID == item.truckID" 
 				:index="index" 
 				v-for="(item, index) in truck.list" 
 				:key="index" 
@@ -87,7 +87,7 @@
 		</div>
 		<div class="list">
 			<EscortItem 
-				:isSelected="person.selected.staffID == item.staffID" 
+				:isSelected="selectedStaff.staffID == item.staffID" 
 				:index="index" 
 				v-for="(item,index) in person.list" 
 				:key="index" 
@@ -104,6 +104,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import TransportRecord from '../../../api/TransportRecord'
 import Dispatchbill from '../../../api/Dispatchbill'
@@ -137,6 +138,9 @@ export default {
 			},
 			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
+	},
+	computed: {
+		...mapGetters(['selectedDriver', 'selectedStaff'])
 	},
 	created() {
 		this.getTruckList()
@@ -243,6 +247,13 @@ export default {
 			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Dispatchbill.findTrucksAndDrivers(params).then(res => {
 				this.truck.list = res
+				if (this.dispatchOrderID) {
+					res.forEach(item => {
+						if (item.dispatchOrderID &&  item.dispatchOrderID == this.dispatchOrderID) {
+							this.$store.dispatch('setDriver', item)
+						}
+					})
+				}
 			})
 		},
 		getPersonList() {
@@ -256,6 +267,13 @@ export default {
 			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Dispatchbill.findTruckstaffs(params).then(res => {
 				this.person.list = res
+				if (this.dispatchOrderID) {
+					res.forEach(item => {
+						if (item.dispatchOrderID &&  item.dispatchOrderID == this.dispatchOrderID) {
+							this.$store.dispatch('setStaff', item)
+						}
+					})
+				}
 			})
 		},
 		back() {

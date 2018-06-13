@@ -164,19 +164,19 @@ export default {
 		}
 	},
 	created() {
-		let carrierOrderIDs = this.selectedCarrierBill.join(',')
-		this.getList(carrierOrderIDs)
+		// let carrierOrderIDs = this.selectedCarrierBill.join(',')
+		// this.getList(carrierOrderIDs)
 	},
 	methods: {
-		getList(carrierOrderIDs) {
-			Dispatchbill.findPreLoad({ carrierOrderIDs }).then(res => {
-				res.forEach(item => {
-					let cargos = this.selectedCargos.filter(cargo => cargo.carrierOrderID == item.carrierOrderID)
-					item.cargo = cargos
-				})
-				this.taskList = res
-			})
-		},
+		// getList(carrierOrderIDs) {
+		// 	Dispatchbill.findPreLoad({ carrierOrderIDs }).then(res => {
+		// 		res.forEach(item => {
+		// 			let cargos = this.selectedCargos.filter(cargo => cargo.carrierOrderID == item.carrierOrderID)
+		// 			item.cargo = cargos
+		// 		})
+		// 		this.taskList = res
+		// 	})
+		// },
 		add() {
 			let dispatchTaskCargoInfo = this.selectedCargos.map(item => {
 				return {

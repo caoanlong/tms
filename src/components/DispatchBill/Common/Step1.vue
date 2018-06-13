@@ -61,7 +61,7 @@
 										class="checkbox" 
 										ref="checkCarrier" 
 										:checked='selectedCarrierBill.includes(item.carrierOrderID)' 
-										@change="selectCarrier($event,item.carrierOrderID)"
+										@change="selectCarrier($event, item)"
 									/>
 									<label></label>
 								</span>
@@ -179,21 +179,20 @@ export default {
 		},
 		// 全选
 		handleCheckAllChange(val) {
-			let list = this.carrierList.map(item => item.carrierOrderID)
 			if(val) {
-				this.$store.dispatch('addCarrierBill', list)
+				this.$store.dispatch('addCarrierBill', this.carrierList)
 				this.checked = true
 			}else{
-				this.$store.dispatch('delCarrierBill', list)
+				this.$store.dispatch('delCarrierBill', this.carrierList)
 				this.checked = false
 			}
 		},
 		// 单选
-		selectCarrier(e, carrierOrderID){
+		selectCarrier(e, carrierOrder){
 			if(e.target.checked) {
-				this.$store.dispatch('addCarrierBill', [carrierOrderID])
+				this.$store.dispatch('addCarrierBill', [carrierOrder])
 			}else{
-				this.$store.dispatch('delCarrierBill', [carrierOrderID])
+				this.$store.dispatch('delCarrierBill', [carrierOrder])
 			}
 		},
 		back() {
