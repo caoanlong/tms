@@ -91,7 +91,7 @@
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">编辑</el-button>
+									" @click="edit(item.dispatchOrderID)">编辑</el-button>
 									<el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
 									<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
@@ -104,7 +104,7 @@
 									<el-button type="text" size="mini" :disabled="
 										item.dispatchTaskList.map(item => item.status).includes('Loaded') 
 										|| item.dispatchTaskList.map(item => item.status).includes('Signed')
-									">编辑</el-button>
+									" @click="edit(item.dispatchOrderID)">编辑</el-button>
 									<el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
 									<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)">关闭</el-button>
 									<el-button type="text" size="mini" @click="del(item.dispatchOrderID)" :disabled="
@@ -163,7 +163,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../api/Dispatchbill'
-import { deleteConfirm,closeConfirm,cancelConfirm } from '../../common/utils'
+import { deleteConfirm, closeConfirm, cancelConfirm } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 import UploadPhoto from './Common/UploadPhoto'
@@ -232,6 +232,9 @@ export default {
 		},
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
+		},
+		edit(dispatchOrderID) {
+			this.$router.push({ name: 'editdispatchbill' , query: { dispatchOrderID } })
 		},
 		viewTask(dispatchTaskID,type) {
 			this.$router.push({ name: 'viewtaskdetail' , query: {dispatchTaskID,type}})
