@@ -2,13 +2,13 @@
 	<div class="imgUpload clearfix">
 		<div class="imgLi" 
 		:style="{'width': width+'px','height': height+'px'}" 
-		v-for="(file,i) in fileUrl"
+		v-for="(file, i) in fileUrl"
 		:key="i">
 			<img v-if="file" :src="imgUrl + file">
 			<img v-else :src="defaultImg">
 			<div class="controller">
 				<div class="controllerBtn">
-					<div class="perviewBtn" @click.stop="showImgModal(file)"></div>
+					<div class="perviewBtn" @click.stop="showImgModal(file, i)"></div>
 					<div class="delBtn" v-show="!isPreview" @click.stop="delImg(i)"></div>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import { baseURL } from '../../../common/request'
-import { formDataReq } from '../../../common/utils'
+import { formDataReq, getdatefromtimestamp } from '../../../common/utils'
 import VueCropper from 'vue-cropper'
 import { defaultImg } from '../../../assets/icons/icons'
 export default {
@@ -63,7 +63,11 @@ export default {
 		files: {
 			type: Array,
 			default: () => []
-		},
+        },
+        objs: {
+            type: Array,
+            default: () => []
+        },
 		isPreview: {
 			type: Boolean,
 			default: false
@@ -159,8 +163,12 @@ export default {
 			this.fileUrl.splice(i, 1)
 			this.$emit('imgUrlBack', this.fileUrl)
 		},
-		showImgModal(url) {
-			this.$alert(`<img style="width: 100%" src=${this.imgUrl + url} />`, '图片预览', {
+		showImgModal(url, index) {
+			this.$alert(
+                `<div>
+                    <div style="height:40px;line-height:40px">${this.objs[index].createName}（${this.objs[index].createMobile}）${getdatefromtimestamp(this.objs[index].createTime)}</div>
+                    <img style="width: 100%" src=${this.imgUrl + url} />
+                </div>`, '图片预览', {
 				dangerouslyUseHTMLString: true,
 				showConfirmButton: false,
 				customClass: 'img-preview'

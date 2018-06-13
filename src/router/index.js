@@ -95,6 +95,14 @@ let routerMap = [
 						component: () => import ('../components/DispatchBill/AddDispatchBill'),
 					},
 					{
+						path: '/editdispatchbill',
+						name: 'editdispatchbill',
+						meta: {
+							title: '编辑调度单'
+						},
+						component: () => import ('../components/DispatchBill/EditDispatchBill'),
+					},
+					{
 						path: '/viewdispatchbill',
 						name: 'viewdispatchbill',
 						meta: {

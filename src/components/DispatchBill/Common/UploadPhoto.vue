@@ -8,29 +8,32 @@
             <div class="photo">
                 <div class="left">装车照片：</div>
                 <div class="right">
-                    <ImageUpload :files="loadImgs" :limitNum="10" @imgUrlBack="imgLoadUrlBack" :isUseCropper="false"/>
+                    <ImageUpload :objs="loadImgObjs" :files="loadImgs" :limitNum="10" @imgUrlBack="imgLoadUrlBack" :isUseCropper="false" :isPreview="isPreview"/>
                 </div>
             </div>
             <div class="photo">
                 <div class="left">到货照片：</div>
                 <div class="right">
-                    <ImageUpload :files="arriveImgs" :limitNum="10" @imgUrlBack="imgArriveUrlBack" :isUseCropper="false"/>
+                    <ImageUpload :objs="arriveImgObjs" :files="arriveImgs" :limitNum="10" @imgUrlBack="imgArriveUrlBack" :isUseCropper="false" :isPreview="isPreview"/>
                 </div>
             </div>
             <div class="photo">
                 <div class="left">回单照片：</div>
                 <div class="right">
-                    <ImageUpload :files="backImgs" :limitNum="10" @imgUrlBack="imgBackUrlBack" :isUseCropper="false"/>
+                    <ImageUpload :objs="backImgObjs" :files="backImgs" :limitNum="10" @imgUrlBack="imgBackUrlBack" :isUseCropper="false" :isPreview="isPreview"/>
                 </div>
             </div>
             <div class="photo">
                 <div class="left">异常照片：</div>
                 <div class="right">
-                    <ImageUpload :files="exceptImgs" :limitNum="10" @imgUrlBack="imgExceptUrlBack" :isUseCropper="false"/>
+                    <ImageUpload :objs="exceptImgObjs" :files="exceptImgs" :limitNum="10" @imgUrlBack="imgExceptUrlBack" :isUseCropper="false" :isPreview="isPreview"/>
                 </div>
             </div>
         </div>
-        <span slot="footer" class="dialog-footer">
+        <span slot="footer" class="dialog-footer" v-if="isPreview">
+            <el-button @click="control(false)">返回</el-button>
+        </span>
+        <span slot="footer" class="dialog-footer" v-else>
             <el-button @click="control(false)">取消</el-button>
             <el-button type="primary" @click="control(true)">确认</el-button>
         </span>
@@ -39,10 +42,14 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import TaskPic from '../../../api/TaskPic'
-import ImageUpload from '../../CommonComponents/ImageUpload'
+import ImageUpload from '../../CommonComponents/ImageUpload2'
 export default {
     props: {
         isVisible: {
+            type: Boolean,
+            default: false
+        },
+        isPreview: {
             type: Boolean,
             default: false
         },
@@ -56,6 +63,10 @@ export default {
             arriveImgs: [],
             backImgs: [],
             exceptImgs: [],
+            loadImgObjs: [],
+            arriveImgObjs: [],
+            backImgObjs: [],
+            exceptImgObjs: [],
             Loaded: [],
             Arrived: [],
             Received: [],
@@ -125,6 +136,10 @@ export default {
         },
         getImgs(dispatchTaskID) {
             TaskPic.find({ dispatchTaskID }).then(res => {
+                this.loadImgObjs = res.Loaded
+                this.arriveImgObjs = res.Arrived
+                this.backImgObjs = res.Received
+                this.exceptImgObjs = res.Unusual
                 this.loadImgs = res.Loaded.map(item => item.maxURL)
                 this.arriveImgs = res.Arrived.map(item => item.maxURL)
                 this.backImgs = res.Received.map(item => item.maxURL)
