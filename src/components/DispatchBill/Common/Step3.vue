@@ -134,7 +134,8 @@ export default {
 				loadDate: '',
 				status: '',
 				list: []
-			}
+			},
+			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
 	},
 	created() {
@@ -232,24 +233,28 @@ export default {
 			this.getPersonList() 
 		},
 		getTruckList() {
-			Dispatchbill.findTrucksAndDrivers({
+			let params = {
 				current: this.truck.pageIndex,
 				size: this.truck.pageSize,
 				keyword: this.truck.keywords,
 				workStatus: this.truck.workStatus,
 				shipperDate: this.truck.loadDate
-			}).then(res => {
+			}
+			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
+			Dispatchbill.findTrucksAndDrivers(params).then(res => {
 				this.truck.list = res
 			})
 		},
 		getPersonList() {
-			Dispatchbill.findTruckstaffs({
+			let params = {
 				current: this.person.pageIndex,
 				size: this.person.pageSize,
 				keyword: this.person.keywords,
 				workStatus: this.person.status,
 				shipperDate: this.person.loadDate || new Date().getTime()
-			}).then(res => {
+			}
+			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
+			Dispatchbill.findTruckstaffs(params).then(res => {
 				this.person.list = res
 			})
 		},

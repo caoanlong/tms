@@ -31,6 +31,8 @@
 				<tr>
 					<th width="40">
 						<el-checkbox 
+							:disabled="!!dispatchOrderID" 
+							:checked="!!dispatchOrderID" 
 							:indeterminate="(selectedCarrierBill.length > 0) && (selectedCarrierBill.length < carrierList.length)" 
 							v-model="checked" 
 							@change="handleCheckAllChange">
@@ -54,6 +56,7 @@
 							<div class="wfCheck">
 								<span>
 									<input 
+										:disabled="!!dispatchOrderID" 
 										type="checkbox" 
 										class="checkbox" 
 										ref="checkCarrier" 
@@ -114,7 +117,8 @@ export default {
 			findshipperEndDate: '',
 			checkedList: [],
 			checked: false,
-			isIndeterminate: false
+			isIndeterminate: false,
+			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
 	},
 	computed: {
@@ -140,7 +144,6 @@ export default {
 			this.getList() 
 		},
 		getList() {
-			let dispatchOrderID = this.$route.query.dispatchOrderID
 			let params = {
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -149,10 +152,14 @@ export default {
 				searchInfo: this.findsearchInfo,
 				status: this.findStatus
 			}
-			dispatchOrderID && (params['dispatchOrderID'] = dispatchOrderID)
+			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Carrierbill.findPreDispatch(params).then(res => {
 				this.carrierList = res.records
 				this.total= res.total
+				if (this.dispatchOrderID) {
+					let list = this.carrierList.map(item => item.carrierOrderID)
+					this.$store.dispatch('addCarrierBill', list)
+				}
 			})
 		},
 		ViewCarrierbills(carrierOrderID) {
