@@ -163,7 +163,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../api/Dispatchbill'
-import { deleteConfirm,closeConfirm,cancelDispatchOrder } from '../../common/utils'
+import { deleteConfirm,closeConfirm,cancelConfirm } from '../../common/utils'
 import DispatchBillItem from './Common/DispatchBillItem'
 import Page from '../CommonComponents/Page'
 import UploadPhoto from './Common/UploadPhoto'
