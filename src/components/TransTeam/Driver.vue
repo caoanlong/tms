@@ -45,38 +45,45 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="姓名" prop="realName"></el-table-column>
-					<el-table-column label="性别" width="46">
+					<el-table-column label="性别" width="46" align="center">
 						<template slot-scope="scope">
 							<span >{{scope.row.sex == 'M' ? '男' : '女'}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="手机" width="100" prop="mobile"></el-table-column>
-					<el-table-column label="合作关系" width="80">
+					<el-table-column label="手机" width="100" prop="mobile" align="center"></el-table-column>
+					<el-table-column label="合作关系" width="80" align="center">
 						<template slot-scope="scope">
 							<span >{{scope.row.cooperateRelation == 'Attach' ? '挂靠' : '自有车辆'}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="关联账号" prop="cooperateStatus" width="80"></el-table-column>
+					<el-table-column label="关联账号"  width="100" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.cooperateStatus == 'Agreed'">已同意</span>
+							<span v-else-if="scope.row.cooperateStatus == 'Invited'">已邀请</span>
+							<span v-else-if="scope.row.cooperateStatus == 'Rejected'">已拒绝</span>
+							<span v-else-if="scope.row.cooperateStatus == 'Relieved'">已解除</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="备注" prop="remark"></el-table-column>
-					<el-table-column label="身份证" width="100">
+					<el-table-column label="身份证" width="100" align="center">
 						<template slot-scope="scope">
 							<img class="mini-img" :src="resizeImg(scope.row.idCardFrontUrl, '_40x20.')" v-if="scope.row.idCardFrontUrl">
 							<img class="mini-img" :src="resizeImg(scope.row.idCardBackUrl, '_40x20.')" v-if="scope.row.idCardBackUrl">
 						</template>
 					</el-table-column>
-					<el-table-column label="驾驶证" width="100">
+					<el-table-column label="驾驶证" width="100" align="center">
 						<template slot-scope="scope">
 							<img class="mini-img" :src="resizeImg(scope.row.driverLicFrontUrl, '_40x20.')" v-if="scope.row.driverLicFrontUrl">
 							<img class="mini-img" :src="resizeImg(scope.row.driverLicBackUrl, '_40x20.')" v-if="scope.row.driverLicBackUrl">
 						</template>
 					</el-table-column>
-					<el-table-column label="从业资格证" width="100">
+					<el-table-column label="从业资格证" width="100" align="center">
 						<template slot-scope="scope">
 							<img class="mini-img" :src="resizeImg(scope.row.qualificationFirstPage, '_40x20.')" v-if="scope.row.qualificationFirstPage">
 							<img class="mini-img" :src="resizeImg(scope.row.qualificationSecondPage, '_40x20.')" v-if="scope.row.qualificationSecondPage">
 						</template>
 					</el-table-column>
-					<el-table-column label="更新时间" width="140">
+					<el-table-column label="更新时间" width="140" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.updateTime">{{scope.row.updateTime | getdatefromtimestamp()}}</span>
 						</template>
@@ -88,7 +95,8 @@
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item :command="{type: 'view', id: scope.row.comDriverID}" icon="el-icon-view">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.comDriverID}">编辑</el-dropdown-item>
-									<!-- <el-dropdown-item :command="{type: 'delete', id: scope.row.comDriverID}">删除</el-dropdown-item> -->
+									<el-dropdown-item :command="{type: 'relieve', id: scope.row.comDriverID}" v-if="scope.row.cooperateStatus == 'Agreed'">解除合作</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'invite', id: scope.row.comDriverID}" v-else>发送邀请</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -201,11 +209,28 @@ export default {
 				this.$router.push({name: 'viewdriver', query: {comDriverID: e.id}})
 			} else if (e.type == 'edit') {
 				this.$router.push({name: 'editdriver', query: {comDriverID: e.id}})
+			} else if (e.type == 'relieve'){
+				this.changeCooperateStatus(e.id,'relieve')
+			} else if (e.type == 'invite'){
+				this.changeCooperateStatus(e.id,'invite')
 			}
 		},
 		add() {
 			this.$router.push({name: 'adddriver'})
-		}
+		},
+		changeCooperateStatus(comDriverID,CooperateStatus){
+			if(CooperateStatus =='invite'){
+				Driver.changeCooperateStatus({
+					comDriverID:comDriverID,
+					cooperateStatus:'Invited'
+				})
+			}else{
+				Driver.changeCooperateStatus({
+					comDriverID:comDriverID,
+					cooperateStatus:'Relieved'
+				})
+			}
+		}	
 	}
 }
 </script>
