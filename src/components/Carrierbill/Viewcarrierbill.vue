@@ -175,7 +175,13 @@
 					<td>{{transport.cargoName}}</td>
 					<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.LoadNumSum + '件'}}</td>
 					<td style="text-align: center">
-						<el-button type="primary" size="mini" @click="dialogPhotoVisible = true">查看</el-button>
+						<el-button 
+							:disabled="transport.taskPicNum == 0"
+							type="primary" 
+							size="mini" 
+							@click="viewPhotos(transport.dispatchTaskID)">
+							查看({{transport.taskPicNum}})
+						</el-button>
 					</td>
 				</tr>
 			</table>
@@ -187,10 +193,14 @@
 				</div>
 			</div>
 		</div>
-		<ViewPhotos 
-			:visible="dialogPhotoVisible" 
-			@callback="photoCallback">
-		</ViewPhotos>
+		<UploadPhoto 
+			:isPreview="true" 
+			:isVisible="isPhotoVisible" 
+			@control="handUploadPhoto" 
+			:dispatchTaskID="currentDispatchTaskID" 
+			:shipperArea="currentShipperArea" 
+			:consigneeArea="currentConsigneeArea">
+		</UploadPhoto>
 		<ViewCargos 
 			:visible="dialogCargoVisible" 
 			@callback="cargoCallback">
@@ -201,14 +211,17 @@
 import { Message } from 'element-ui'
 import { closeConfirm, deleteConfirm } from '../../common/utils'
 import Carrierbill from '../../api/Carrierbill'
-import ViewPhotos from './ViewPhotos'
+import UploadPhoto from '../DispatchBill/Common/UploadPhoto'
 import ViewCargos from './ViewCargos'
 export default {
 	data() {
 		return {
 			isShow: false,
 			carrierOrder: {},
-			dialogPhotoVisible: false,
+			isPhotoVisible: false,
+			currentDispatchTaskID: '',
+			currentShipperArea: '',
+			currentConsigneeArea: '',
 			dialogCargoVisible: false,
 			carrierCargo: [],
 			porRequire: [],
@@ -225,7 +238,7 @@ export default {
 		}
 	},
 	components: {
-		ViewPhotos,
+		UploadPhoto,
 		ViewCargos
 	},
 	created() {
@@ -255,8 +268,14 @@ export default {
 			})
 		},
 		// 查看照片弹窗回调
-		photoCallback(bool) {
-			this.dialogPhotoVisible = bool
+		viewPhotos(dispatchTaskID) {
+			this.currentDispatchTaskID = dispatchTaskID
+			this.currentShipperArea = this.carrierOrder.shipperArea
+			this.currentConsigneeArea = this.carrierOrder.consigneeArea
+			this.isPhotoVisible = true
+		},
+		handUploadPhoto(bool) {
+			this.isPhotoVisible = false
 		},
 		// 查看货物弹窗回调
 		cargoCallback(bool) {
