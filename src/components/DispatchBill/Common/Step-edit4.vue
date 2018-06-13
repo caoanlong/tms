@@ -164,17 +164,19 @@ export default {
 		}
 	},
 	created() {
-		this.taskList = this.selectedCarrierBill
-		this.taskList.forEach(carrierBill => {
-			!carrierBill.cargo && (carrierBill.cargo = [])
-			this.selectedCargos.forEach(cargo => {
-				if (cargo.carrierOrderID == carrierBill.carrierOrderID) {
-					carrierBill.cargo.push(cargo)
-				}
-			})
-		})
+		let carrierOrderIDs = this.selectedCarrierBill.map(item => item.carrierOrderID).join(',')
+		this.getList(carrierOrderIDs)
 	},
 	methods: {
+		getList(carrierOrderIDs) {
+			Dispatchbill.findPreLoad({ carrierOrderIDs }).then(res => {
+				res.forEach(item => {
+					let cargos = this.selectedCargos.filter(cargo => cargo.carrierOrderID == item.carrierOrderID)
+					item.cargo = cargos
+				})
+				this.taskList = res
+			})
+		},
 		add() {
 			let dispatchTaskCargoInfo = this.selectedCargos.map(item => {
 				return {

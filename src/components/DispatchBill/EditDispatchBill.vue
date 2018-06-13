@@ -14,10 +14,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Step1 from './Common/Step1'
-import Step2 from './Common/Step2'
-import Step3 from './Common/Step3'
-import Step4 from './Common/Step4'
+import Step1 from './Common/Step-edit1'
+import Step2 from './Common/Step-edit2'
+import Step3 from './Common/Step-edit3'
+import Step4 from './Common/Step-edit4'
 export default {
 	data() {
 		return {
