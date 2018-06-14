@@ -251,6 +251,7 @@ export default {
 					res.forEach(item => {
 						if (item.dispatchOrderID &&  item.dispatchOrderID == this.dispatchOrderID) {
 							this.$store.dispatch('setDriver', item)
+							this.truck.selected = item
 						}
 					})
 				}
@@ -271,6 +272,7 @@ export default {
 					res.forEach(item => {
 						if (item.dispatchOrderID &&  item.dispatchOrderID == this.dispatchOrderID) {
 							this.$store.dispatch('setStaff', item)
+							this.person.selected = item
 						}
 					})
 				}
