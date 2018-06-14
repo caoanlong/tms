@@ -169,7 +169,7 @@ export default {
 			+ Number(this.task.superCargoCorAmount ? this.task.superCargoCorAmount : 0) 
 			+ Number(this.task.superCargoMonthlyAmount ? this.task.superCargoMonthlyAmount : 0) 
 			+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)
-		}
+		},
 	},
 	created() {
 		this.getDetail()

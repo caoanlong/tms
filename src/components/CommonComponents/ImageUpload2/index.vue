@@ -45,7 +45,7 @@ import { Message } from 'element-ui'
 import { baseURL } from '../../../common/request'
 import { formDataReq, getdatefromtimestamp } from '../../../common/utils'
 import VueCropper from 'vue-cropper'
-import { defaultImg } from '../../../assets/icons/icons'
+import { defaultImg,positionImg } from '../../../assets/icons/icons'
 export default {
 	props: {
 		width: {
@@ -169,8 +169,8 @@ export default {
                     <div style="height:30px;line-height:30px">${this.objs[index].createName}（${this.objs[index].createMobile}）${getdatefromtimestamp(this.objs[index].createTime)}</div>
                     <img style="width: 100%" src=${this.imgUrl + url} />
                     <div style="height:60px;padding:10px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
-						<p style="height:20px;line-height:20px">${this.objs[index].description}</p>
-						<p style="height:20px;line-height:20px">${this.objs[index].detailAddress}</p>
+						<p style="height:20px;line-height:20px">${this.objs[index].description?this.objs[index].description:''}</p>
+						<p style="height:20px;line-height:20px"><img src="${positionImg}" style="vertical-align:middle;height:16px;display:${this.objs[index].detailAddress?'':'none'}"/>${this.objs[index].detailAddress?this.objs[index].detailAddress:''}</p>
 						<span style="position:absolute;top:10px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
 							${this.objs[index].type == 'Loaded' ? '装车' 
 							: (this.objs[index].type == 'Arrived' ? '送达' 

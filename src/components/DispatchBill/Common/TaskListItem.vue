@@ -1,5 +1,5 @@
 <template>
-	<div class="item">
+	<div class="item" @click="viewtaskdetail(taskItem.dispatchTaskID)">
 		<div class="lineInfo">
 			<div class="tit"><span>任务{{index+1}}</span> 
 				<span class="status fr" v-if="taskItem.status='Committed'">待执行</span>
@@ -53,23 +53,22 @@
 							)
 						</td>
 					</tr>
-					<tr>
+					<tr v-if="taskItem.dispatchTaskPicList.length>0">
 						<td colspan="3">任务照片</td>
 					</tr>
-					<tr>
+					<tr v-if="taskItem.dispatchTaskPicList.length>0">
 						<td colspan="3">
-							<div class="picItem"  @click="viewPicDetail" v-for="(i,index) in 3" :key="index">
-								<img src="../../../assets/imgs/avatar.gif" />
-								<p>装车照片</p>
-								<!-- <p v-if="picItem.type='Loaded'">装车照片</p> -->
-								<!-- <p v-else-if="picItem.type='Arrived'">送达照片</p>
-								<p v-else-if="picItem.type='Received'">回单照片</p>
-								<p v-else-if="picItem.type='Unusual'">异常照片</p> -->
+							<div class="picItem" v-for="(picItem,index) in taskItem.dispatchTaskPicList" :key="index">
+								<img :src="resizeImg(picItem.minURL, '_100x100.')"/>
+								<p v-if="picItem.type =='Loaded'">装车照片</p>
+								<p v-else-if="picItem.type =='Arrived'">送达照片</p>
+								<p v-else-if="picItem.type =='Received'">回单照片</p>
+								<p v-else>异常照片</p>
 							</div>
 						</td>
 					</tr>
 				</table>
-				<span class="viewtaskdetailBtn" @click="viewtaskdetail(taskItem.dispatchTaskID)"><img src="../../../assets/imgs/viewtaskdetailBtn.png" /></span>
+				<span class="viewtaskdetailBtn"><img src="../../../assets/imgs/viewtaskdetailBtn.png" /></span>
 			</div>
 		</div>
 		<el-dialog
@@ -97,6 +96,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import { resizeImg } from '../../../common/utils'
 export default {
 	props:{
 		index:{
@@ -112,6 +112,9 @@ export default {
 		trailerPlateNo:{
 			type: String
 		}
+	},
+	computed: {
+		resizeImg: () => resizeImg
 	},
 	data(){
 		return{
