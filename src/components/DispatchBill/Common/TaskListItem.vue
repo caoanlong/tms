@@ -2,10 +2,10 @@
 	<div class="item" @click="viewtaskdetail(taskItem.dispatchTaskID)">
 		<div class="lineInfo">
 			<div class="tit"><span>任务{{index+1}}</span> 
-				<span class="status fr" v-if="taskItem.status='Committed'">待执行</span>
-				<span class="status fr" v-else-if="taskItem.status='Loaded'">已装运</span>
-				<span class="status fr" v-else-if="taskItem.status='Signed'">已签收</span>
-				<span class="status fr" v-else>已作废</span>
+				<span class="status status1 fr" v-if="taskItem.status='Committed'">待执行</span>
+				<span class="status status2 fr" v-else-if="taskItem.status='Loaded'">已装运</span>
+				<span class="status status3 fr" v-else-if="taskItem.status='Signed'">已签收</span>
+				<span class="status status4 fr" v-else>已作废</span>
 			</div>
 			<div class="con">
 				<table>
@@ -152,10 +152,27 @@ export default {
 		border 1px solid #e2ecf6
 		.tit
 			color #3582d0
-			padding 6px 10px
-			height 36px
-			line-height 24px
+			padding 5px 10px
+			height 40px
+			line-height 30px
 			border-bottom 1px solid #e2ecf6
+			.status
+				background #ccc
+				padding 0 10px
+				height 20px
+				line-height 20px
+				border-radius 4px
+				color #fff
+				font-size 12px
+				margin-top 5px
+				&.status1
+					background #909399
+				&.status2
+					background #409EFF
+				&.status3
+					background #67C23A
+				&.status4
+					background #E6A23C
 		.con
 			margin-bottom 10px
 			color #666

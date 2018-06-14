@@ -70,9 +70,8 @@
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
 					<el-table-column label="姓名" prop="realName"></el-table-column>
-					<el-table-column label="性别">
+					<el-table-column label="性别" align="center">
 						<template slot-scope="scope">
 							<span >{{scope.row.sex == 'M' ? '男' : '女'}}</span>
 						</template>
@@ -84,11 +83,11 @@
 					</el-table-column>
 					<el-table-column label="身份证号" prop="idCardNum" width="160"></el-table-column>
 					<el-table-column label="创建人" prop="createName" width="100"></el-table-column>
-					<el-table-column label="状态">
+					<el-table-column label="状态" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.status == 'Passed'">通过</span>
-							<span v-else-if="scope.row.status == 'NotPassed'">未通过</span>
-							<span v-else-if="scope.row.status == 'Other'">其他</span>
+							<span v-if="scope.row.status == 'Passed'" style="color:'#67C23A'">通过</span>
+							<span v-else-if="scope.row.status == 'NotPassed'"  style="color:'#E6A23C'">未通过</span>
+							<span v-else-if="scope.row.status == 'Other'" style="color:#409EFF">其他</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="审核人" prop="auditName" width="100"></el-table-column>

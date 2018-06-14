@@ -55,7 +55,7 @@
 					</tr>
 					<template v-for="(item, index) in tableData">
 						<tr class="tit" :key="index">
-							<td colspan="9">
+							<td colspan="11">
 								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 								<span class="infoItem">
 									<span class="tag tag1" v-if="item.status=='Committed'">待执行</span>
@@ -64,19 +64,19 @@
 									<span class="tag tag4" v-else-if="item.status=='Closed'">已关闭</span>
 									<span class="tag tag5" v-else-if="item.status=='Canceled'">作废</span>
 								</span>
-							</td>
-							<td colspan="2" class="text-center" width="140">
-								<el-button type="text" size="mini" 
-									:disabled="item.status != 'Committed'" 
-									@click="edit(item.carrierOrderID)">
-									编辑
-								</el-button>
-								<el-button type="text" size="mini" 
-									:disabled="item.status != 'Running' && item.status != 'Signed'"
-									@click="close(item.carrierOrderID)">
-									关闭
-								</el-button>
-								<el-button type="text" size="mini" @click="del(item.carrierOrderID)">删除</el-button>
+								<span class="fr">
+									<el-button type="text" size="mini" 
+										:disabled="item.status != 'Committed'" 
+										@click="edit(item.carrierOrderID)">
+										编辑
+									</el-button>
+									<el-button type="text" size="mini" 
+										:disabled="item.status != 'Running' && item.status != 'Signed'"
+										@click="close(item.carrierOrderID)">
+										关闭
+									</el-button>
+									<el-button type="text" size="mini" @click="del(item.carrierOrderID)">删除</el-button>
+								</span>
 							</td>
 						</tr>
 						<tr class="list" :key="index+100" v-if="item.carrierCargo">
@@ -218,14 +218,35 @@ export default {
 		position relative
 	.tit
 		td
-			border-top 1px solid #bbb
+			border-top 10px solid #fff
 			background #f8f8f8
 			color #3582d0
 			.infoItem
 				margin-right 40px
+				height 24px
+				line-height 24px
+				display inline-block
 				&.ViewDispatchBill
 					cursor pointer
-	
+			.tag
+				padding 0 10px
+				border-radius 4px
+				color #fff
+				vertical-align top
+				font-size 12px
+				display inline-block
+				height 20px
+				line-height 20px
+				margin-top 2px
+				&.tag1
+				&.tag5
+					background #909399
+				&.tag2
+					background #409EFF
+				&.tag3
+					background #67C23A
+				&.tag4
+					background #E6A23C
 	th
 		padding 6px 10px
 		height 36px

@@ -3,12 +3,12 @@
 		<div class="wf-card">
 		<div class="dispatchbillTit">
 			<span class="fl">调度单号：{{dispatchOrder.dispatchOrderNo}}</span>
-			<span class="fr" v-if="dispatchOrder.status == 'Committed'">未接单</span>
-			<span class="fr" v-else-if="dispatchOrder.status == 'Ordered'">已接单</span>
-			<span class="fr" v-else-if="dispatchOrder.status == 'Canceled'">已取消</span>
-			<span class="fr" v-else-if="dispatchOrder.status == 'Rejected'">已拒绝</span>
-			<span class="fr" v-else-if="dispatchOrder.status == 'Closed'">已关闭</span>
-			<span class="fr" v-else-if="dispatchOrder.status == 'Finished'">已完成</span>
+			<span class="fr status status1" v-if="dispatchOrder.status == 'Committed'">未接单</span>
+			<span class="fr status status2" v-else-if="dispatchOrder.status == 'Ordered'">已接单</span>
+			<span class="fr status status4" v-else-if="dispatchOrder.status == 'Canceled'">已取消</span>
+			<span class="fr status status4" v-else-if="dispatchOrder.status == 'Rejected'">已拒绝</span>
+			<span class="fr status status1" v-else-if="dispatchOrder.status == 'Closed'">已关闭</span>
+			<span class="fr status status3" v-else-if="dispatchOrder.status == 'Finished'">已完成</span>
 		</div>
 		<div class="dispatchbillInfo">
 			<table>
@@ -84,6 +84,23 @@ export default {
 	span
 		display inline-block
 		color #3582d0
+	.status
+		background #ccc
+		padding 0 10px
+		height 20px
+		line-height 20px
+		border-radius 4px
+		color #fff
+		font-size 12px
+		margin-top 5px
+		&.status1
+			background #909399
+		&.status2
+			background #409EFF
+		&.status3
+			background #67C23A
+		&.status4
+			background #E6A23C
 .dispatchbillInfo
 	border 1px solid #e2ecf6
 	border-top none

@@ -55,25 +55,25 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="姓名" prop="realName"></el-table-column>
-					<el-table-column label="身份证号" prop="idCardNum" width="150"></el-table-column>
-					<el-table-column label="联系电话" prop="mobile" width="100"></el-table-column>
-					<el-table-column label="从业资格证件号" prop="qualificationCode" width="120"></el-table-column>
-					<el-table-column label="车牌号" width="120">
+					<el-table-column label="身份证号" prop="idCardNum" width="150" align="center"></el-table-column>
+					<el-table-column label="联系电话" prop="mobile" width="100" align="center"></el-table-column>
+					<el-table-column label="从业资格证件号" prop="qualificationCode" width="120" align="center"></el-table-column>
+					<el-table-column label="车牌号" width="120" align="center">
 						<template slot-scope="scope">
 							<span>{{scope.row.plateNo}}</span>
 							<span v-if="scope.row.trailerPlateNo">{{'/' + scope.row.trailerPlateNo}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="自编号" prop="code"></el-table-column>
-					<el-table-column label="道路运输证号" prop="transportLicenceCode" width="120"></el-table-column>
+					<el-table-column label="自编号" prop="code" align="center"></el-table-column>
+					<el-table-column label="道路运输证号" prop="transportLicenceCode" width="120" align="center"></el-table-column>
 					<el-table-column label="载重" prop="loads" width="100"></el-table-column>
 					<el-table-column label="备注" prop="remark"></el-table-column>
-					<el-table-column label="创建时间" width="100">
+					<el-table-column label="创建时间" width="100" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="建档时间" width="100">
+					<el-table-column label="建档时间" width="100" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.archiveTime">{{scope.row.archiveTime | getdatefromtimestamp(true)}}</span>
 						</template>

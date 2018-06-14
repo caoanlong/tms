@@ -4,10 +4,10 @@
 			<div class="item">
 				<div class="lineInfo">
 					<div class="tit"><span>任务单号：{{task.taskNo}}</span>
-						<span class="status fr" v-if="task.status='Committed'">待执行</span>
-						<span class="status fr" v-else-if="task.status='Loaded'">已装运</span>
-						<span class="status fr" v-else-if="task.status='Signed'">已签收</span>
-						<span class="status fr" v-else>已作废</span>
+						<span class="status status1 fr" v-if="task.status='Committed'">待执行</span>
+						<span class="status status2 fr" v-else-if="task.status='Loaded'">已装运</span>
+						<span class="status status3 fr" v-else-if="task.status='Signed'">已签收</span>
+						<span class="status status4 fr" v-else>已作废</span>
 					</div>
 					<div class="con">
 						<div class="from">
@@ -247,12 +247,28 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .tit
-	padding 6px 10px
-	height 36px
-	line-height 24px
+	padding 5px 10px
+	height 10px
+	line-height 30px
 	background #e2ecf6
 	color #3582d0
 	font-size 13px
+	.status
+		padding 0 10px
+		height 20px
+		line-height 20px
+		border-radius 4px
+		color #fff
+		font-size 12px
+		margin-top 5px
+		&.status1
+			background #909399
+		&.status2
+			background #409EFF
+		&.status3
+			background #67C23A
+		&.status4
+			background #E6A23C
 	.uploadPicBtn
 		background #409eff
 		color #FFF
@@ -305,6 +321,7 @@ export default {
 					font-size 12px
 					line-height 24px
 					height 24px
+			
 			.justify
 				width 80px
 				height 24px
