@@ -191,7 +191,13 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="委托时间">
-							<el-date-picker style="width:100%" type="datetime" placeholder="请选择" value-format="timestamp" v-model="carrierbillInfo.commissionDate"></el-date-picker>
+							<el-date-picker 
+								style="width:100%" 
+								type="date" 
+								placeholder="请选择" 
+								value-format="timestamp" 
+								v-model="carrierbillInfo.commissionDate">
+							</el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -375,7 +381,7 @@ export default {
 				shipperPhone:'',
 				invoice:'N',
 				porRequire: ['NotRequired'],
-				transportType: '',
+				transportType: '公路运输',
 				commissionDate: ''
 			},
 			totalPrice: 0,

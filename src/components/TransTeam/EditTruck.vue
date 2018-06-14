@@ -48,7 +48,7 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="车辆类别" prop="truckCategory">
-							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择" disabled>
+							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
 								<el-option label="挂车" value="挂车"></el-option>
 								<el-option label="牵引车" value="牵引车"></el-option>
 								<el-option label="整车" value="整车"></el-option>
@@ -69,7 +69,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="车牌颜色" prop="plateNoColor">
-							<el-select style="width: 100%" v-model="truck.plateNoColor" placeholder="请选择" disabled>
+							<el-select style="width: 100%" v-model="truck.plateNoColor" placeholder="请选择">
 								<el-option label="黄" value="黄"></el-option>
 								<el-option label="蓝" value="蓝"></el-option>
 							</el-select>
@@ -881,14 +881,6 @@ export default {
 			if (!data.gpSSetupTime) {
 				data.gpSSetupTime = ''
 			}
-			// if (!data.trailerPlateNo && !data.plateNo) {
-			// 	Message.error('车牌号或挂车牌不能为空！')
-			// 	return 
-			// }
-			// if (data.trailerPlateNo.length > 10 || data.plateNo.length > 10) {
-			// 	Message.error('车牌号或挂车牌长度不能超过10位！')
-			// 	return 
-			// }
 			if (data.driverLicRegisterTime > data.driverLicIssueTime) {
 				Message.error('行驶证注册日期不能早于行驶证发证日期！')
 				return
@@ -920,8 +912,6 @@ export default {
 			}
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					console.log(data)
-					// return
 					Truck.update(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'truck'})

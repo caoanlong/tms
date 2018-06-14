@@ -40,7 +40,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="姓名" prop="realName">
-							<el-input v-model="person.realName"></el-input>
+							<el-input v-model="person.realName" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -117,7 +117,7 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="身份证号" prop="idCardNum">
-							<el-input v-model="person.idCardNum"></el-input>
+							<el-input v-model="person.idCardNum" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -487,61 +487,29 @@ export default {
 		updateItem() {
 			let data = this.person
 			data.staffID = this.$route.query.staffID
-			if(!data.integrityExamineEndTime) {
-				data.integrityExamineEndTime = ''
-			}
-			if(!data.driverLicenseFirstTime) {
-				data.driverLicenseFirstTime = ''
-			}
-			if(!data.laborContractBeginTime) {
-				data.laborContractBeginTime = ''
-			}
-			if(!data.laborContractEndTime) {
-				data.laborContractEndTime = ''
-			}
-			if(!data.laborContractBeginTime) {
-				data.laborContractBeginTime = ''
-			}
-			if(!data.laborContractEndTime) {
-				data.laborContractEndTime = ''
-			}
-			if(!data.driverLicExamineBeginTime) {
-				data.driverLicExamineBeginTime = ''
-			}
-			if(!data.driverLicExamineEndTime) {
-				data.driverLicExamineEndTime = ''
-			}
-			if(!data.qualificationExpirationTime) {
-				data.qualificationExpirationTime = ''
-			}
-			if(!data.headPic) {
-				data.headPic = ''
-			}
-			if(!data.idCardFrontUrl) {
-				data.idCardFrontUrl = ''
-			}
-			if(!data.idCardBackUrl) {
-				data.idCardBackUrl = ''
-			}
-			if(!data.driverLicFrontUrl) {
-				data.driverLicFrontUrl = ''
-			}
-			if(!data.driverLicBackUrl) {
-				data.driverLicBackUrl = ''
-			}
-			if(!data.qualificationFirstPage) {
-				data.qualificationFirstPage = ''
-			}
-			if(!data.qualificationSecondPage) {
-				data.qualificationSecondPage = ''
-			}
+			if(!data.integrityExamineEndTime) data.integrityExamineEndTime = ''
+			if(!data.driverLicenseFirstTime) data.driverLicenseFirstTime = ''
+			if(!data.laborContractBeginTime) data.laborContractBeginTime = ''
+			if(!data.laborContractEndTime) data.laborContractEndTime = ''
+			if(!data.laborContractBeginTime) data.laborContractBeginTime = ''
+			if(!data.laborContractEndTime) data.laborContractEndTime = ''
+			if(!data.driverLicExamineBeginTime) data.driverLicExamineBeginTime = ''
+			if(!data.driverLicExamineEndTime) data.driverLicExamineEndTime = ''
+			if(!data.qualificationExpirationTime) data.qualificationExpirationTime = ''
+			if(!data.headPic) data.headPic = ''
+			if(!data.idCardFrontUrl) data.idCardFrontUrl = ''
+			if(!data.idCardBackUrl) data.idCardBackUrl = ''
+			if(!data.driverLicFrontUrl) data.driverLicFrontUrl = ''
+			if(!data.driverLicBackUrl) data.driverLicBackUrl = ''
+			if(!data.qualificationFirstPage) data.qualificationFirstPage = ''
+			if(!data.qualificationSecondPage) data.qualificationSecondPage = ''
 			for (let i = 1; i < 6; i++) {
-				if(!data['otherStaffPic' + i]) {
-					data['otherStaffPic' + i] = ''
-				}
+				if(!data['otherStaffPic' + i]) data['otherStaffPic' + i] = ''
 			}
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
+					delete data.realName
+					delete data.idCardNum
 					Staff.update(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'person'})
