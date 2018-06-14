@@ -38,21 +38,21 @@
 				</el-table-column>
 				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange">
+						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange(true)">
 							<span slot="append">kg</span>
 						</el-input>
 					</template>	
 				</el-table-column>
 				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange">
+						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange(true)">
 							<span slot="append">m³</span>
 						</el-input>
 					</template>					
 				</el-table-column>
 				<el-table-column label="配载数量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange">
+						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange(true)">
 							<span slot="append">件</span>
 						</el-input>
 					</template>
@@ -115,16 +115,21 @@ export default {
 				return prev + curr
 			}, 0)
 		},
-		handInputChange() {
+		handInputChange(bool) {
 			this.handTotalWeight()
 			this.handTotalVolume()
 			this.handTotalNum()
-			this.autoSetInput()
+			bool && this.autoSetInput()
 		},
 		autoSetInput() {
 			let cargoList = []
 			this.carrierBills.forEach((carrierBill, index) => {
-				cargoList.push(...carrierBill.cargo)
+				let selectCargoIDs = this.selectedCargos.map(item => item.carrierCargoID)
+				carrierBill.cargo.forEach(cargo => {
+					if (selectCargoIDs.includes(cargo.carrierCargoID)) {
+						cargoList.push(cargo)
+					}
+				})
 			})
 			this.$store.dispatch('setCargo', cargoList)
 		},
@@ -145,9 +150,7 @@ export default {
 			}
 			this.selectedCargoList = list
 			this.$store.dispatch('setCargo', this.selectedCargoList)
-			this.handTotalWeight()
-			this.handTotalVolume()
-			this.handTotalNum()
+			this.handInputChange()
 		},
 		selectionSimple(data, row) {
 			let flag = true
@@ -164,9 +167,7 @@ export default {
 				this.selectedCargoList.push(row)
 			}
 			this.$store.dispatch('setCargo', this.selectedCargoList)
-			this.handTotalWeight()
-			this.handTotalVolume()
-			this.handTotalNum()
+			this.handInputChange()
 		},
 		nextStep(){
 			this.$emit('nextStep', 3)

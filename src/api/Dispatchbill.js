@@ -21,7 +21,7 @@ class Dispatchbill extends Base {
      * @param {superCargoID} params 押运员ID
      */
     reLoad(data) {
-        this.request({
+        return this.request({
             url: this.baseUrl + '/anew',
             method: 'post',
             data
@@ -32,7 +32,7 @@ class Dispatchbill extends Base {
      * @param {dispatchOrderID} params 调度单ID
      */
     cancel(data) {
-        this.request({
+        return this.request({
             url: this.baseUrl + '/cancel',
             method: 'post',
             data
@@ -43,7 +43,7 @@ class Dispatchbill extends Base {
      * @param {dispatchOrderID} params 调度单ID
      */
     close(data) {
-        this.request({
+        return this.request({
             url: this.baseUrl + '/close',
             method: 'post',
             data
