@@ -166,12 +166,22 @@ export default {
 		showImgModal(url, index) {
 			this.$alert(
                 `<div>
-                    <div style="height:40px;line-height:40px">${this.objs[index].createName}（${this.objs[index].createMobile}）${getdatefromtimestamp(this.objs[index].createTime)}</div>
+                    <div style="height:30px;line-height:30px">${this.objs[index].createName}（${this.objs[index].createMobile}）${getdatefromtimestamp(this.objs[index].createTime)}</div>
                     <img style="width: 100%" src=${this.imgUrl + url} />
+                    <div style="height:60px;padding:10px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
+						<p style="height:20px;line-height:20px">${this.objs[index].description}</p>
+						<p style="height:20px;line-height:20px">${this.objs[index].detailAddress}</p>
+						<span style="position:absolute;top:10px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
+							${this.objs[index].type=='Loaded'}?装车:''
+							${this.objs[index].type}
+							${this.objs[index].type}
+							${this.objs[index].type}
+						</span>
+                    </div>
                 </div>`, '图片预览', {
 				dangerouslyUseHTMLString: true,
 				showConfirmButton: false,
-				customClass: 'img-preview'
+				customClass: 'viewPicDetail'
 			}).catch(err => {})
 		}
 	},

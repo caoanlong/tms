@@ -677,15 +677,15 @@ export default {
 				code: [
 					{min: 1, max: 20, message: '长度在 1 到 20 个字符'}
 				],
-				truckCategory: [
-					{required: true, message: '请选择车辆类别', trigger: 'change'},
-				],
-				truckType: [
-					{ required: true, message: '请选择车辆类型', trigger: 'change' }
-				],
-				plateNoColor: [
-					{required: true, message: '请选择车牌颜色', trigger: 'change'}
-				],
+				// truckCategory: [
+				// 	{required: true, message: '请选择车辆类别', trigger: 'change'},
+				// ],
+				// truckType: [
+				// 	{ required: true, message: '请选择车辆类型', trigger: 'change' }
+				// ],
+				// plateNoColor: [
+				// 	{required: true, message: '请选择车牌颜色', trigger: 'change'}
+				// ],
 				length: [
 					{required: true, validator: checkInt, trigger: 'blur'}
 				],
@@ -868,6 +868,7 @@ export default {
 			let data = this.truck
 			delete data.plateNo
 			delete data.truckType
+			delete data.plateNoType
 			if (!data.tankQCExpires) {
 				data.tankQCExpires = ''
 			}
@@ -880,14 +881,14 @@ export default {
 			if (!data.gpSSetupTime) {
 				data.gpSSetupTime = ''
 			}
-			if (!data.trailerPlateNo && !data.plateNo) {
-				Message.error('车牌号或挂车牌不能为空！')
-				return 
-			}
-			if (data.trailerPlateNo.length > 10 || data.plateNo.length > 10) {
-				Message.error('车牌号或挂车牌长度不能超过10位！')
-				return 
-			}
+			// if (!data.trailerPlateNo && !data.plateNo) {
+			// 	Message.error('车牌号或挂车牌不能为空！')
+			// 	return 
+			// }
+			// if (data.trailerPlateNo.length > 10 || data.plateNo.length > 10) {
+			// 	Message.error('车牌号或挂车牌长度不能超过10位！')
+			// 	return 
+			// }
 			if (data.driverLicRegisterTime > data.driverLicIssueTime) {
 				Message.error('行驶证注册日期不能早于行驶证发证日期！')
 				return
@@ -919,6 +920,8 @@ export default {
 			}
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
+					console.log(data)
+					// return
 					Truck.update(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'truck'})
