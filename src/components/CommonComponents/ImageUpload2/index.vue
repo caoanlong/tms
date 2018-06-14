@@ -172,10 +172,9 @@ export default {
 						<p style="height:20px;line-height:20px">${this.objs[index].description}</p>
 						<p style="height:20px;line-height:20px">${this.objs[index].detailAddress}</p>
 						<span style="position:absolute;top:10px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
-							${this.objs[index].type=='Loaded'}?装车:''
-							${this.objs[index].type}
-							${this.objs[index].type}
-							${this.objs[index].type}
+							${this.objs[index].type == 'Loaded' ? '装车' 
+							: (this.objs[index].type == 'Arrived' ? '送达' 
+							: (this.objs[index].type == 'Received' ? '回单' : '异常'))}
 						</span>
                     </div>
                 </div>`, '图片预览', {
