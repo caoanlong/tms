@@ -145,7 +145,9 @@ export default {
 			}
 			this.selectedCargoList = list
 			this.$store.dispatch('setCargo', this.selectedCargoList)
-			this.handInputChange()
+			this.handTotalWeight()
+			this.handTotalVolume()
+			this.handTotalNum()
 		},
 		selectionSimple(data, row) {
 			let flag = true
@@ -162,7 +164,9 @@ export default {
 				this.selectedCargoList.push(row)
 			}
 			this.$store.dispatch('setCargo', this.selectedCargoList)
-			this.handInputChange()
+			this.handTotalWeight()
+			this.handTotalVolume()
+			this.handTotalNum()
 		},
 		nextStep(){
 			this.$emit('nextStep', 3)

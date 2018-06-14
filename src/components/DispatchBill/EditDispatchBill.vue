@@ -40,6 +40,9 @@ export default {
 			this.$router.go(-1)
 		}
 	},
+	beforeDestroy() {
+		this.$store.dispatch('clearCarrierBill')
+	},
 	components: {
 		Step1,
 		Step2,

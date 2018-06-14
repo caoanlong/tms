@@ -20,6 +20,9 @@ const dispatch = {
 				selectedCarrierBill.splice(selectedCarrierBill.indexOf(item), 1)
 			})
 		},
+		CLEAR_CARRIERBILL: (state) => {
+			state.selectedCarrierBill = []
+		},
 		SET_CARGO: (state, list) => {
 			state.selectedCargos = list
 		},
@@ -36,6 +39,9 @@ const dispatch = {
 		},
 		delCarrierBill({ commit }, list) {
 			commit('DEL_CARRIERBILL', list)
+		},
+		clearCarrierBill({ commit }) {
+			commit('CLEAR_CARRIERBILL')
 		},
 		setCargo({ commit }, list) {
 			commit('SET_CARGO', list)
