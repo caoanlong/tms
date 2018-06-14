@@ -2,11 +2,11 @@
 	<div class="main-content" >
 		<div class="wf-card">
 			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}
-				<span class="status status1" v-if="carrierOrder.status=='Committed'">待执行</span>
-				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
-				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
-				<span class="status status4" v-else-if="carrierOrder.status=='Closed'">已关闭</span>
-				<span class="status status5" v-else-if="carrierOrder.status=='Canceled'">作废</span>
+				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="warning" v-if="carrierOrder.status=='Committed'">待执行</el-tag>
+				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" v-else-if="carrierOrder.status=='Running'">执行中</el-tag>
+				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="success" v-else-if="carrierOrder.status=='Signed'">到达签收</el-tag>
+				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="info" v-else-if="carrierOrder.status=='Closed'">已关闭</el-tag>
+				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="info" v-else-if="carrierOrder.status=='Canceled'">作废</el-tag>
 			</div>
 			<div class="datetime">
 				<span class="label">发货单号：</span><span>{{carrierOrder.shipperNo}}</span>
@@ -294,30 +294,7 @@ export default {
 	.wf-card
 		.header
 			margin-bottom 0
-			span
-				font-size 12px
-				margin-left 40px
-				&.status
-					position absolute
-					margin-right 0
-					right 20px
-					top 15px
-					height 24px
-					line-height 24px
-					color #fff
-					padding 0 15px
-					font-size 12px
-					-moz-border-radius 4px
-					     border-radius 4px
-				&.status1
-				&.status5
-					background #909399
-				&.status2
-					background #409EFF
-				&.status3
-					background #67C23A
-				&.status4
-					background #E6A23C
+			position relative
 		.datetime
 			font-size 12px
 			padding 10px 15px 

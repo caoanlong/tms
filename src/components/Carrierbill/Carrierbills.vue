@@ -58,11 +58,12 @@
 							<td colspan="11">
 								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 								<span class="infoItem">
-									<span class="tag tag1" v-if="item.status=='Committed'">待执行</span>
-									<span class="tag tag2" v-else-if="item.status=='Running'">执行中</span>
-									<span class="tag tag3" v-else-if="item.status=='Signed'">到达签收</span>
-									<span class="tag tag4" v-else-if="item.status=='Closed'">已关闭</span>
-									<span class="tag tag5" v-else-if="item.status=='Canceled'">作废</span>
+									<el-tag size="mini" type="warning" v-if="item.status=='Committed'">待执行</el-tag>
+									<el-tag size="mini" v-else-if="item.status=='Running'">执行中</el-tag>
+									<el-tag size="mini" type="success" v-else-if="item.status=='Signed'">到达签收</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status=='Closed'">已关闭</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status=='Canceled'">作废</el-tag>
+
 								</span>
 								<span class="fr">
 									<el-button type="text" size="mini" 
@@ -239,14 +240,13 @@ export default {
 				line-height 20px
 				margin-top 2px
 				&.tag1
-				&.tag5
-					background #909399
+					background #E6A23C
 				&.tag2
 					background #409EFF
 				&.tag3
 					background #67C23A
 				&.tag4
-					background #E6A23C
+					background #909399
 	th
 		padding 6px 10px
 		height 36px

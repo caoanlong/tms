@@ -2,10 +2,10 @@
 	<div class="item" @click="viewtaskdetail(taskItem.dispatchTaskID)">
 		<div class="lineInfo">
 			<div class="tit"><span>任务{{index+1}}</span> 
-				<span class="status status1 fr" v-if="taskItem.status='Committed'">待执行</span>
-				<span class="status status2 fr" v-else-if="taskItem.status='Loaded'">已装运</span>
-				<span class="status status3 fr" v-else-if="taskItem.status='Signed'">已签收</span>
-				<span class="status status4 fr" v-else>已作废</span>
+				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" type="warning" v-if="taskItem.status='Committed'">待执行</el-tag>
+				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="taskItem.status='Loaded'">已装运</el-tag>
+				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" type="success" v-else-if="taskItem.status='Signed'">已签收</el-tag>
+				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" type="info" v-else>已作废</el-tag>
 			</div>
 			<div class="con">
 				<table>
@@ -166,13 +166,13 @@ export default {
 				font-size 12px
 				margin-top 5px
 				&.status1
-					background #909399
+					background #E6A23C
 				&.status2
 					background #409EFF
 				&.status3
 					background #67C23A
 				&.status4
-					background #E6A23C
+					background #909399
 		.con
 			margin-bottom 10px
 			color #666

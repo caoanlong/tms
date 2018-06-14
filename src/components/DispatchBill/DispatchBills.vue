@@ -56,12 +56,12 @@
 								<span class="infoItem">车牌号：{{item.plateNo}}</span>
 								<span class="infoItem" v-if="item.trailerPlateNo">挂车：{{item.trailerPlateNo}}</span>
 								<span class="infoItem">
-									<span class="tag tag1" v-if="item.status == 'Committed'">未接单</span>
-									<span class="tag tag2" v-else-if="item.status == 'Ordered'">已接单</span>
-									<span class="tag tag4" v-else-if="item.status == 'Canceled'">已取消</span>
-									<span class="tag tag4" v-else-if="item.status == 'Rejected'">已拒绝</span>
-									<span class="tag tag1" v-else-if="item.status == 'Closed'">已关闭</span>
-									<span class="tag tag3" v-else-if="item.status == 'Finished'">已完成</span>
+									<el-tag size="mini" type="warning" v-if="item.status == 'Committed'">未接单</el-tag>
+									<el-tag size="mini" v-else-if="item.status == 'Ordered'">已接单</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status == 'Canceled'">已取消</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status == 'Rejected'">已拒绝</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status == 'Closed'">已关闭</el-tag>
+									<el-tag size="mini" type="success" v-else-if="item.status == 'Finished'">已完成</el-tag>
 								</span>
 								<!-- 未接单 -->
 								<span class="fr" v-if="item.status == 'Committed'">
@@ -310,13 +310,13 @@ export default {
 					border-radius 4px
 					color #fff
 					&.tag1
-						background #909399
+						background #E6A23C
 					&.tag2
 						background #409EFF
 					&.tag3
 						background #67C23A
 					&.tag4
-						background #E6A23C
+						background #909399
 	
 	th
 		padding 6px 10px

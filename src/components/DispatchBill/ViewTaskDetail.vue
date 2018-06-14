@@ -4,10 +4,10 @@
 			<div class="item">
 				<div class="lineInfo">
 					<div class="tit"><span>任务单号：{{task.taskNo}}</span>
-						<span class="status status1 fr" v-if="task.status='Committed'">待执行</span>
-						<span class="status status2 fr" v-else-if="task.status='Loaded'">已装运</span>
-						<span class="status status3 fr" v-else-if="task.status='Signed'">已签收</span>
-						<span class="status status4 fr" v-else>已作废</span>
+						<el-tag type="warning" size="mini"style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-if="task.status='Committed'">待执行</el-tag>
+						<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="task.status='Loaded'">已装运</el-tag>
+						<el-tag type="success" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="task.status='Signed'">已签收</el-tag>
+						<el-tag type="info" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else>已作废</el-tag>
 					</div>
 					<div class="con">
 						<div class="from">
@@ -248,27 +248,11 @@ export default {
 <style lang="stylus" scoped>
 .tit
 	padding 5px 10px
-	height 10px
+	height 40px
 	line-height 30px
 	background #e2ecf6
 	color #3582d0
 	font-size 13px
-	.status
-		padding 0 10px
-		height 20px
-		line-height 20px
-		border-radius 4px
-		color #fff
-		font-size 12px
-		margin-top 5px
-		&.status1
-			background #909399
-		&.status2
-			background #409EFF
-		&.status3
-			background #67C23A
-		&.status4
-			background #E6A23C
 	.uploadPicBtn
 		background #409eff
 		color #FFF
@@ -351,9 +335,9 @@ export default {
 		.tit
 			background #e2ecf6
 			color #3582d0
-			padding 6px 10px
-			height 36px
-			line-height 24px
+			padding 5px 10px
+			height 40px
+			line-height 30px
 		.con
 			display flex
 			border 1px solid #e2ecf6
