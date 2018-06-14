@@ -31,11 +31,10 @@
 				<tr>
 					<th width="40">
 						<el-checkbox 
-							:disabled="!!dispatchOrderID" 
-							:checked="!!dispatchOrderID" 
+							:disabled="true" 
+							:checked="true" 
 							:indeterminate="(selectedCarrierBill.length > 0) && (selectedCarrierBill.length < carrierList.length)" 
-							v-model="checked" 
-							@change="handleCheckAllChange">
+							v-model="checked">
 						</el-checkbox>
 					</th>
 					<th>货物</th>
@@ -56,12 +55,11 @@
 							<div class="wfCheck">
 								<span>
 									<input 
-										:disabled="!!dispatchOrderID" 
+										:disabled="true" 
 										type="checkbox" 
 										class="checkbox" 
 										ref="checkCarrier" 
-										:checked='selectedCarrierBill.includes(item.carrierOrderID)' 
-										@change="selectCarrier($event, item)"
+										:checked="true"
 									/>
 									<label></label>
 								</span>
@@ -155,10 +153,9 @@ export default {
 			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Carrierbill.findPreDispatch(params).then(res => {
 				this.carrierList = res.records
-				this.total= res.total
+				this.total = res.total
 				if (this.dispatchOrderID) {
-					let list = this.carrierList.map(item => item.carrierOrderID)
-					this.$store.dispatch('addCarrierBill', list)
+					this.$store.dispatch('addCarrierBill', this.carrierList)
 				}
 			})
 		},
@@ -176,24 +173,6 @@ export default {
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
-		},
-		// 全选
-		handleCheckAllChange(val) {
-			if(val) {
-				this.$store.dispatch('addCarrierBill', this.carrierList)
-				this.checked = true
-			}else{
-				this.$store.dispatch('delCarrierBill', this.carrierList)
-				this.checked = false
-			}
-		},
-		// 单选
-		selectCarrier(e, carrierOrder){
-			if(e.target.checked) {
-				this.$store.dispatch('addCarrierBill', [carrierOrder])
-			}else{
-				this.$store.dispatch('delCarrierBill', [carrierOrder])
-			}
 		},
 		back() {
 			this.$router.go(-1)
