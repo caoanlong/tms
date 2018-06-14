@@ -157,6 +157,7 @@ export default {
 				this.isUploaded = false
 				cb && cb()
 			}).catch(err => {
+				this.isUploaded = false
 				console.log('服务器异常' + err)
 			})
 		},

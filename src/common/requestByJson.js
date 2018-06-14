@@ -1,6 +1,6 @@
 import axios from 'axios'
-
 import { Message, MessageBox } from 'element-ui'
+import { href, msgBox } from './request'
 
 export const baseURL = process.env.BASE_API
 
@@ -20,16 +20,6 @@ service.interceptors.request.use(config => {
 	Promise.reject(error)
 })
 
-let href = ''
-
-if (process.env.ENV_CONFIG == 'test') {
-	href = '/tms/#/login' // 测试
-} else if (process.env.ENV_CONFIG == 'practice') {
-	href = '/tms-h5/login' // 演练
-} else {
-	href = '/login'  // 生产
-}
-
 // respone interceptor
 service.interceptors.response.use(
 response => {
@@ -41,30 +31,11 @@ response => {
 			|| response.data.code == 5202) { // 帐号已在其它地方登录!
 			localStorage.clear()
 			Message.error(response.data.msg)
-			window.location.href = href
+			window.location.href = href()
 			return Promise.reject('error')
 		}
 		if (response.data.code == 104) {
-			MessageBox({
-				title: '温馨提示！',
-				customClass: 'msg-info',
-				message: `
-				<div style="text-align: center;">
-					<p style="margin-top: 40px">
-						您已提交申请，请等待审核！
-					</p>
-					<p style="margin-top: 40px;color: #aaa">
-						一般客户处理时间为24小时内；客服联系电话，13529005327
-					</p>
-					<button style="margin-top: 20px" onclick="localStorage.clear();location.href=${href}">退出当前账户</button>
-				</div>
-				`,
-				dangerouslyUseHTMLString: true,
-				closeOnPressEscape: false,
-				showClose: false,
-				closeOnClickModal: false,
-				showConfirmButton: false
-			})
+			MessageBox(msgBox)
 			return
 		}
 		if (response.data.code == 2001) {

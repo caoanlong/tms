@@ -15,6 +15,9 @@
 						<el-form-item label="详细地址">
 							<p>{{recdeliverycomp.detailAddress}}</p>
 						</el-form-item>
+						<el-form-item label="位置">
+							<p>{{recdeliverycomp.locationAddress}}</p>
+						</el-form-item>
 						<el-form-item label="联系人">
 							<p>{{recdeliverycomp.contactName}}</p>
 						</el-form-item>

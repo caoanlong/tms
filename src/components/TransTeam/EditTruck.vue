@@ -866,21 +866,17 @@ export default {
 		},
 		updateItem() {
 			let data = this.truck
-			delete data.plateNo
-			delete data.truckType
-			delete data.plateNoType
-			if (!data.tankQCExpires) {
-				data.tankQCExpires = ''
-			}
-			if (!data.safetyValvesQCExpires) {
-				data.safetyValvesQCExpires = ''
-			}
-			if (!data.pressureGaugeQCExpires) {
-				data.pressureGaugeQCExpires = ''
-			}
-			if (!data.gpSSetupTime) {
-				data.gpSSetupTime = ''
-			}
+			if (!data.tankQCExpires) data.tankQCExpires = ''
+			if (!data.safetyValvesQCExpires) data.safetyValvesQCExpires = ''
+			if (!data.pressureGaugeQCExpires) data.pressureGaugeQCExpires = ''
+			if (!data.gpSSetupTime) data.gpSSetupTime = ''
+			if(!data.truckFrontPic) data.truckFrontPic = ''
+			if(!data.truckSidePic1) data.truckSidePic1 = ''
+			if(!data.truckSidePic2) data.truckSidePic2 = ''
+			if(!data.driverLicPic) data.driverLicPic = ''
+			if(!data.driverLicSidePic) data.driverLicSidePic = ''
+			if(!data.roadTransportPic) data.roadTransportPic = ''
+			if(!data.roadTransportSidePic) data.roadTransportSidePic = ''
 			if (data.driverLicRegisterTime > data.driverLicIssueTime) {
 				Message.error('行驶证注册日期不能早于行驶证发证日期！')
 				return
@@ -889,29 +885,11 @@ export default {
 				Message.error('二级维护日期不能早于下次二级维护日期！')
 				return
 			}
-			if(!data.truckFrontPic) {
-				data.truckFrontPic = ''
-			}
-			if(!data.truckSidePic1) {
-				data.truckSidePic1 = ''
-			}
-			if(!data.truckSidePic2) {
-				data.truckSidePic2 = ''
-			}
-			if(!data.driverLicPic) {
-				data.driverLicPic = ''
-			}
-			if(!data.driverLicSidePic) {
-				data.driverLicSidePic = ''
-			}
-			if(!data.roadTransportPic) {
-				data.roadTransportPic = ''
-			}
-			if(!data.roadTransportSidePic) {
-				data.roadTransportSidePic = ''
-			}
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
+					delete data.plateNo
+					delete data.truckType
+					delete data.plateNoType
 					Truck.update(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'truck'})
