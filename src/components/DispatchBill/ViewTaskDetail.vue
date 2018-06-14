@@ -98,25 +98,25 @@
 			<div class="picList">
 				<div class="title">装车照片<span>(5)</span></div>
 				<div class="con">
-					<ImageUpload :files="loadImgs" :isPreview="true"/>
+					<ImageUpload :objs="loadImgObjs" :files="loadImgs" :isPreview="true"/>
 				</div>
 			</div>
 			<div class="picList">
 				<div class="title">到货照片<span>(5)</span></div>
 				<div class="con">
-					<ImageUpload :files="arriveImgs" :isPreview="true"/>
+					<ImageUpload :objs="arriveImgObjs" :files="arriveImgs" :isPreview="true"/>
 				</div>
 			</div>
 			<div class="picList">
 				<div class="title">回单照片<span>(5)</span></div>
 				<div class="con">
-					<ImageUpload :files="backImgs" :isPreview="true"/>
+					<ImageUpload :objs="backImgObjs" :files="backImgs" :isPreview="true"/>
 				</div>
 			</div>
 			<div class="picList">
 				<div class="title">异常上报<span>(5)</span></div>
 				<div class="con">
-					<ImageUpload :files="exceptImgs" :isPreview="true"/>
+					<ImageUpload :objs="exceptImgObjs" :files="exceptImgs" :isPreview="true"/>
 				</div>
 			</div>
 			<div class="handle text-center">
@@ -136,7 +136,7 @@
 import { Message } from 'element-ui'
 import Task from '../../api/Task'
 import TaskPic from '../../api/TaskPic'
-import ImageUpload from '../CommonComponents/ImageUpload'
+import ImageUpload from '../CommonComponents/ImageUpload2'
 import UploadPhoto from './Common/UploadPhoto'
 export default {
 	data() {
@@ -149,6 +149,10 @@ export default {
 			arriveImgs: [],
 			backImgs: [],
 			exceptImgs: [],
+			loadImgObjs: [],
+			arriveImgObjs: [],
+			backImgObjs: [],
+			exceptImgObjs: [],
 			isEdit: false,
 			type: this.$route.query.type,
 			currentDispatchTaskID: '',
@@ -195,6 +199,10 @@ export default {
 		getImgs() {
 			let dispatchTaskID = this.$route.query.dispatchTaskID
             TaskPic.find({ dispatchTaskID }).then(res => {
+				this.loadImgObjs = res.Loaded
+                this.arriveImgObjs = res.Arrived
+                this.backImgObjs = res.Received
+                this.exceptImgObjs = res.Unusual
                 this.loadImgs = res.Loaded.map(item => item.maxURL)
                 this.arriveImgs = res.Arrived.map(item => item.maxURL)
                 this.backImgs = res.Received.map(item => item.maxURL)

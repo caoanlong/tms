@@ -4,7 +4,7 @@
 		:style="{'width': width+'px','height': height+'px'}" 
 		v-for="(file, i) in fileUrl"
 		:key="i">
-			<img v-if="file" :src="imgUrl + file">
+			<img v-if="file" :src="resizeImg(file, '_150x150.')">
 			<img v-else :src="defaultImg">
 			<div class="controller">
 				<div class="controllerBtn">
@@ -43,9 +43,9 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import { baseURL } from '../../../common/request'
-import { formDataReq, getdatefromtimestamp } from '../../../common/utils'
+import { formDataReq, getdatefromtimestamp, resizeImg } from '../../../common/utils'
 import VueCropper from 'vue-cropper'
-import { defaultImg,positionImg } from '../../../assets/icons/icons'
+import { defaultImg, positionImg } from '../../../assets/icons/icons'
 export default {
 	props: {
 		width: {
@@ -101,7 +101,8 @@ export default {
 				return true
 			}
 		},
-		defaultImg: () => defaultImg
+		defaultImg: () => defaultImg,
+		resizeImg: () => resizeImg
 	},
 	watch: {
 		files(newval) {
