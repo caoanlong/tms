@@ -251,39 +251,26 @@ export default {
 		del(id) {
 			deleteConfirm(id, dispatchOrderID => {
 				Dispatchbill.del({ dispatchOrderID }).then(res => {
-					Message({ type: 'success', message: '删除成功!' })
+					Message.success('删除成功!')
 					this.getList()
 				})
 			})
 		},
 		closeDispatchOrder(id){
 			closeConfirm(id, dispatchOrderID => {
-				Dispatchbill.close({ 
-					dispatchOrderID 
-				}).then(res => {
-					Message({ type: 'success', message: '关闭调度成功!' })
+				Dispatchbill.close({ dispatchOrderID }).then(res => {
+					Message.success('关闭调度成功!')
 					this.getList()
 				})
 			})
 		},
-		cancelDispatchOrder(dispatchOrderID){
-			this.$confirm('此操作将取消调度单, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				Dispatchbill.cancel({
-					dispatchOrderID,
-				}).then(res =>{
-					Message({ type: 'success', message: '已成功取消调度单!' })
+		cancelDispatchOrder(id) {
+			cancelConfirm(id, dispatchOrderID => {
+				Dispatchbill.cancel({ dispatchOrderID }).then(res =>{
+					Message.success('已成功取消调度单!')
 					this.getList()
 				})
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消操作'
-				});          
-			});
+			})
 		}
 	},
 	components:{
