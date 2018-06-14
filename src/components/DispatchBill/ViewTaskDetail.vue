@@ -94,26 +94,26 @@
 					</tr>
 				</table>
 			</div>
-			<div class="tit">运输照片<span class="fr uploadPicBtn" v-if="type == 'edit'" @click="upload()">上传照片</span></div>
-			<div class="picList">
+			<div class="tit" v-if="loadImgs.length>0 || arriveImgs.length>0 || backImgs.length>0 || exceptImgs.length>0">运输照片<span class="fr uploadPicBtn" v-if="type == 'edit'" @click="upload()">上传照片</span></div>
+			<div class="picList" v-if="loadImgs.length>0">
 				<div class="title">装车照片<span>({{loadImgs.length}})</span></div>
 				<div class="con">
 					<ImageUpload :objs="loadImgObjs" :files="loadImgs" :isPreview="true"/>
 				</div>
 			</div>
-			<div class="picList">
+			<div class="picList" v-if="arriveImgs.length>0">
 				<div class="title">到货照片<span>({{arriveImgs.length}})</span></div>
 				<div class="con">
 					<ImageUpload :objs="arriveImgObjs" :files="arriveImgs" :isPreview="true"/>
 				</div>
 			</div>
-			<div class="picList">
+			<div class="picList" v-if="backImgs.length>0">
 				<div class="title">回单照片<span>({{backImgs.length}})</span></div>
 				<div class="con">
 					<ImageUpload :objs="backImgObjs" :files="backImgs" :isPreview="true"/>
 				</div>
 			</div>
-			<div class="picList">
+			<div class="picList" v-if="exceptImgs.length>0">
 				<div class="title">异常上报<span>({{exceptImgs.length}})</span></div>
 				<div class="con">
 					<ImageUpload :objs="exceptImgObjs" :files="exceptImgs" :isPreview="true"/>
