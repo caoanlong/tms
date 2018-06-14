@@ -96,25 +96,25 @@
 			</div>
 			<div class="tit">运输照片<span class="fr uploadPicBtn" v-if="type == 'edit'" @click="upload()">上传照片</span></div>
 			<div class="picList">
-				<div class="title">装车照片<span>(5)</span></div>
+				<div class="title">装车照片<span>({{loadImgs.length}})</span></div>
 				<div class="con">
 					<ImageUpload :objs="loadImgObjs" :files="loadImgs" :isPreview="true"/>
 				</div>
 			</div>
 			<div class="picList">
-				<div class="title">到货照片<span>(5)</span></div>
+				<div class="title">到货照片<span>({{arriveImgs.length}})</span></div>
 				<div class="con">
 					<ImageUpload :objs="arriveImgObjs" :files="arriveImgs" :isPreview="true"/>
 				</div>
 			</div>
 			<div class="picList">
-				<div class="title">回单照片<span>(5)</span></div>
+				<div class="title">回单照片<span>({{backImgs.length}})</span></div>
 				<div class="con">
 					<ImageUpload :objs="backImgObjs" :files="backImgs" :isPreview="true"/>
 				</div>
 			</div>
 			<div class="picList">
-				<div class="title">异常上报<span>(5)</span></div>
+				<div class="title">异常上报<span>({{exceptImgs.length}})</span></div>
 				<div class="con">
 					<ImageUpload :objs="exceptImgObjs" :files="exceptImgs" :isPreview="true"/>
 				</div>
