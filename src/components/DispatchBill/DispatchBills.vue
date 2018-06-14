@@ -297,7 +297,7 @@ export default {
 		position relative
 	.tit
 		td
-			border-top 1px solid #bbb
+			border-top 10px solid #fff
 			background #f8f8f8
 			.infoItem
 				font-size 12px
