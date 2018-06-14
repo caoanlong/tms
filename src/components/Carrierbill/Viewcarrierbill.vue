@@ -5,8 +5,8 @@
 				<span class="status status1" v-if="carrierOrder.status=='Committed'">待执行</span>
 				<span class="status status2" v-else-if="carrierOrder.status=='Running'">执行中</span>
 				<span class="status status3" v-else-if="carrierOrder.status=='Signed'">到达签收</span>
-				<span class="status status1" v-else-if="carrierOrder.status=='Closed'">已关闭</span>
-				<span class="status status1" v-else-if="carrierOrder.status=='Canceled'">作废</span>
+				<span class="status status4" v-else-if="carrierOrder.status=='Closed'">已关闭</span>
+				<span class="status status5" v-else-if="carrierOrder.status=='Canceled'">作废</span>
 			</div>
 			<div class="datetime">
 				<span class="label">发货单号：</span><span>{{carrierOrder.shipperNo}}</span>
@@ -310,11 +310,14 @@ export default {
 					-moz-border-radius 4px
 					     border-radius 4px
 				&.status1
-					background #F56C6C
+				&.status5
+					background #909399
 				&.status2
 					background #409EFF
 				&.status3
-					background #909399
+					background #67C23A
+				&.status4
+					background #E6A23C
 		.datetime
 			font-size 12px
 			padding 10px 15px 

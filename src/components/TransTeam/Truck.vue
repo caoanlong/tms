@@ -63,7 +63,6 @@
 					@selection-change="selectionChange" 
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
 					<el-table-column label="所属地区" prop="area" width="140">
 						<template slot-scope="scope">
 							<span v-if="scope.row.areaID">{{scope.row.areaID | searchAreaByKey()}}</span>

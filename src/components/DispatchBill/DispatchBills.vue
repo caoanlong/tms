@@ -56,12 +56,12 @@
 								<span class="infoItem">车牌号：{{item.plateNo}}</span>
 								<span class="infoItem" v-if="item.trailerPlateNo">挂车：{{item.trailerPlateNo}}</span>
 								<span class="infoItem">
-									<span class="tag" v-if="item.status == 'Committed'">未接单</span>
-									<span class="tag" v-else-if="item.status == 'Ordered'">已接单</span>
-									<span class="tag" v-else-if="item.status == 'Canceled'">已取消</span>
-									<span class="tag" v-else-if="item.status == 'Rejected'">已拒绝</span>
-									<span class="tag" v-else-if="item.status == 'Closed'">已关闭</span>
-									<span class="tag" v-else-if="item.status == 'Finished'">已完成</span>
+									<span class="tag tag1" v-if="item.status == 'Committed'">未接单</span>
+									<span class="tag tag2" v-else-if="item.status == 'Ordered'">已接单</span>
+									<span class="tag tag4" v-else-if="item.status == 'Canceled'">已取消</span>
+									<span class="tag tag4" v-else-if="item.status == 'Rejected'">已拒绝</span>
+									<span class="tag tag1" v-else-if="item.status == 'Closed'">已关闭</span>
+									<span class="tag tag3" v-else-if="item.status == 'Finished'">已完成</span>
 								</span>
 								<!-- 未接单 -->
 								<span class="fr" v-if="item.status == 'Committed'">
@@ -306,10 +306,17 @@ export default {
 					cursor pointer
 					color #3582d0
 				.tag
-					background #ccc
 					padding 2px 10px
 					border-radius 4px
 					color #fff
+					&.tag1
+						background #909399
+					&.tag2
+						background #409EFF
+					&.tag3
+						background #67C23A
+					&.tag4
+						background #E6A23C
 	
 	th
 		padding 6px 10px
