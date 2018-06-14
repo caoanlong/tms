@@ -305,19 +305,6 @@ export default {
 				&.ViewDispatchBill
 					cursor pointer
 					color #3582d0
-				.tag
-					padding 2px 10px
-					border-radius 4px
-					color #fff
-					&.tag1
-						background #E6A23C
-					&.tag2
-						background #409EFF
-					&.tag3
-						background #67C23A
-					&.tag4
-						background #909399
-	
 	th
 		padding 6px 10px
 		height 36px

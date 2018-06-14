@@ -84,23 +84,6 @@ export default {
 	.labels
 		display inline-block
 		color #3582d0
-	.status
-		background #ccc
-		padding 0 10px
-		height 20px
-		line-height 20px
-		border-radius 4px
-		color #fff
-		font-size 12px
-		margin-top 5px
-		&.status1
-			background #E6A23C
-		&.status2
-			background #409EFF
-		&.status3
-			background #67C23A
-		&.status4
-			background #909399
 .dispatchbillInfo
 	border 1px solid #e2ecf6
 	border-top none

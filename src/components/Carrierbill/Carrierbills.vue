@@ -229,24 +229,6 @@ export default {
 				display inline-block
 				&.ViewDispatchBill
 					cursor pointer
-			.tag
-				padding 0 10px
-				border-radius 4px
-				color #fff
-				vertical-align top
-				font-size 12px
-				display inline-block
-				height 20px
-				line-height 20px
-				margin-top 2px
-				&.tag1
-					background #E6A23C
-				&.tag2
-					background #409EFF
-				&.tag3
-					background #67C23A
-				&.tag4
-					background #909399
 	th
 		padding 6px 10px
 		height 36px

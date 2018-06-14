@@ -156,23 +156,6 @@ export default {
 			height 40px
 			line-height 30px
 			border-bottom 1px solid #e2ecf6
-			.status
-				background #ccc
-				padding 0 10px
-				height 20px
-				line-height 20px
-				border-radius 4px
-				color #fff
-				font-size 12px
-				margin-top 5px
-				&.status1
-					background #E6A23C
-				&.status2
-					background #409EFF
-				&.status3
-					background #67C23A
-				&.status4
-					background #909399
 		.con
 			margin-bottom 10px
 			color #666
