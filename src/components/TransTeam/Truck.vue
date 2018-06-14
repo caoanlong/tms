@@ -172,7 +172,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
-import request, { baseURL } from '../../common/request'
+import { baseURL } from '../../common/request'
 import { deleteConfirm } from '../../common/utils'
 import Truck from '../../api/Truck'
 import Page from '../CommonComponents/Page'

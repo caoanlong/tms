@@ -165,6 +165,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { deleteConfirm } from '../../common/utils'
+import { baseURL } from '../../common/request'
 import Staff from '../../api/Staff'
 import Page from '../CommonComponents/Page'
 export default {
@@ -182,7 +183,7 @@ export default {
 			count: 0,
 			selectedList: [],
 			tableData: [],
-			importFileUrl: Staff.baseURL + '/staff/upload',
+			importFileUrl: baseURL + '/staff/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			postMap: {
 				"Operator": "操作员",
@@ -192,7 +193,7 @@ export default {
 				"Stevedore": "装卸管理人员",
 				"Other": "其他人员"
 			},
-			templateUrl: Staff.baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xlsx&&Authorization=' +localStorage.getItem("token"),
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xlsx&&Authorization=' +localStorage.getItem("token"),
 			templateTit:'employee.xlsx'
 		}
 	},

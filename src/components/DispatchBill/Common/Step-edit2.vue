@@ -14,7 +14,7 @@
 				:data="item.cargo" 
 				@select="selectionSimple" 
 				@select-all="selectionAll($event, item)">
-				<el-table-column type="selection" width="40" align="center"></el-table-column>
+				<el-table-column type="selection" width="40" align="center" :selectable="() => dispatchOrderID ? false : true"></el-table-column>
 				<el-table-column label="货物类型" align="center">
 					<template slot-scope="scope">
 						<span v-if="scope.row.weightType=='Heavy'">重货</span>
@@ -86,7 +86,8 @@ export default {
 			selectedCargoList: [],
 			totalWeight: 0,
 			totalVolume: 0,
-			totalNum: 0
+			totalNum: 0,
+			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
 	},
 	computed: {
@@ -124,16 +125,37 @@ export default {
 		autoSetInput() {
 			let cargoList = []
 			this.carrierBills.forEach((carrierBill, index) => {
-				cargoList.push(...carrierBill.cargo)
+				let cargo = carrierBill.cargo.filter(item => item.dispatchOrderID ? (item.dispatchOrderID == this.dispatchOrderID) : item)
+				cargoList.push(...cargo)
 			})
 			this.$store.dispatch('setCargo', cargoList)
 		},
 		getList(carrierOrderIDs) {
-			Dispatchbill.findPreLoad({ carrierOrderIDs }).then(res => {
+			let params = { carrierOrderIDs }
+			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
+			Dispatchbill.findPreLoad(params).then(res => {
 				this.carrierBills = res
+				if (this.dispatchOrderID) {
+					let cargoList = []
+					res.forEach((carrierBill, index) => {
+						let cargo = carrierBill.cargo.filter(item => item.dispatchOrderID && item.dispatchOrderID == this.dispatchOrderID)
+						this.$nextTick(() => {
+							cargo.forEach(row => {
+								if (!row.cargoWeightNew) row.cargoWeightNew = row.loadCargoWeight
+								if (!row.cargoVolumeNew) row.cargoVolumeNew = row.loadCargoVolume
+								if (!row.cargoNumNew) row.cargoNumNew = row.loadCargoNum
+								this.$refs.multipleTable[index].toggleRowSelection(row)
+							})
+							cargoList.push(...cargo)
+							this.$store.dispatch('setCargo', cargoList)
+							this.handInputChange()
+						})
+					})
+				}
 			})
 		},
 		selectionAll(data, carrierBill) {
+			if (this.dispatchOrderID) return
 			let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
 			if (data.length > 0) {
 				for (let i = 0; i < data.length; i++) {
@@ -145,7 +167,6 @@ export default {
 			}
 			this.selectedCargoList = list
 			this.$store.dispatch('setCargo', this.selectedCargoList)
-			this.handInputChange()
 		},
 		selectionSimple(data, row) {
 			let flag = true
@@ -162,7 +183,6 @@ export default {
 				this.selectedCargoList.push(row)
 			}
 			this.$store.dispatch('setCargo', this.selectedCargoList)
-			this.handInputChange()
 		},
 		nextStep(){
 			this.$emit('nextStep', 3)

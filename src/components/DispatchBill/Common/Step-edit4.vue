@@ -128,7 +128,7 @@
 		<div class="totalAmount">本次调度总运费：￥{{totalAmount}}</div>
 		<div class="text-center">
 			<el-button @click="prevStep">上一步</el-button>
-			<el-button type="primary" @click="add">完成</el-button>
+			<el-button type="primary" @click="update">完成</el-button>
 			<el-button @click="back">返回</el-button>
 		</div>
 	</div>
@@ -140,7 +140,8 @@ import Dispatchbill from '../../../api/Dispatchbill'
 export default {
 	data() {
 		return {
-			taskList: []
+			taskList: [],
+			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
 	},
 	computed: {
@@ -175,14 +176,14 @@ export default {
 		})
 	},
 	methods: {
-		add() {
+		update() {
 			let dispatchTaskCargoInfo = this.selectedCargos.map(item => {
 				return {
 					'carrierCargoID': item.carrierCargoID,
 					'carrierOrderID': item.carrierOrderID,
-					'cargoWeight': item.cargoWeightNew,
-					'cargoVolume': item.cargoVolumeNew,
-					'cargoNum': item.cargoNumNew
+					'cargoWeight': Number(item.cargoWeightNew),
+					'cargoVolume': Number(item.cargoVolumeNew),
+					'cargoNum': Number(item.cargoNumNew)
 				}
 			})
 			let dispatchTaskInfo = this.taskList.map(item => {
@@ -210,7 +211,8 @@ export default {
 					'superCosigneeAmount': item.superCosigneeAmount
 				}
 			})
-			Dispatchbill.add({
+			Dispatchbill.update({
+				'dispatchOrderID': this.dispatchOrderID,
 				'dispatchTaskCargoInfo': JSON.stringify(dispatchTaskCargoInfo),
 				'dispatchTaskInfo': JSON.stringify(dispatchTaskInfo),
 				'sumAmount': this.totalAmount,

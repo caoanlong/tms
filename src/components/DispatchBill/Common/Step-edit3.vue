@@ -135,7 +135,8 @@ export default {
 				loadDate: '',
 				status: '',
 				list: []
-			}
+			},
+			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
 	},
 	computed: {
@@ -243,8 +244,17 @@ export default {
 				workStatus: this.truck.workStatus,
 				shipperDate: this.truck.loadDate
 			}
+			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Dispatchbill.findTrucksAndDrivers(params).then(res => {
 				this.truck.list = res
+				if (this.dispatchOrderID) {
+					res.forEach(item => {
+						if (item.dispatchOrderID &&  item.dispatchOrderID == this.dispatchOrderID) {
+							this.$store.dispatch('setDriver', item)
+							this.truck.selected = item
+						}
+					})
+				}
 			})
 		},
 		getPersonList() {
@@ -255,8 +265,17 @@ export default {
 				workStatus: this.person.status,
 				shipperDate: this.person.loadDate || new Date().getTime()
 			}
+			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Dispatchbill.findTruckstaffs(params).then(res => {
 				this.person.list = res
+				if (this.dispatchOrderID) {
+					res.forEach(item => {
+						if (item.dispatchOrderID &&  item.dispatchOrderID == this.dispatchOrderID) {
+							this.$store.dispatch('setStaff', item)
+							this.person.selected = item
+						}
+					})
+				}
 			})
 		},
 		back() {
