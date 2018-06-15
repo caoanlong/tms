@@ -63,8 +63,8 @@
 			<span class="fl">已配载{{selectedCargos.length}}个货物</span>
 			<div class="fr total-count">
 				<b>合计：</b>
-				<span>{{totalWeight}}吨</span>
-				<span>{{totalVolume}}方</span>
+				<span>{{totalWeight}}kg</span>
+				<span>{{totalVolume}}m³</span>
 				<span>{{totalNum}}件</span>
 			</div>
 		</div>

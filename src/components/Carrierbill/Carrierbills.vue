@@ -84,7 +84,7 @@
 							<td>{{item.cargoName}}</td>
 							<td width="80">
 								{{item.cargoWeightSum + 'kg'}}
-								{{item.cargoVolumeSum ? ('/' + item.cargoVolumeSum) : 0 + 'm³'}}
+								{{(item.cargoVolumeSum ? ('/' + item.cargoVolumeSum) : 0) + 'm³'}}
 							</td>
 							<td width="80">{{item.cargoNumSum}}</td>
 							<td>{{item.shipperCompanyName}}</td>

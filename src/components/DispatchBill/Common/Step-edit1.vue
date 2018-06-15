@@ -68,8 +68,8 @@
 						<td colspan="11">
 							<span class="infoItem ViewDispatchBill" @click="ViewCarrierbills(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 							<span class="infoItem">
-								<span class="tag tag1" v-if="item.status == 'Committed'">待执行</span>
-								<span class="tag tag2" v-else-if="item.status == 'Running'">执行中</span>
+								<el-tag size="mini" type="warning" v-if="item.status=='Committed'">待执行</el-tag>
+								<el-tag size="mini" v-else-if="item.status=='Running'">执行中</el-tag>
 							</span>
 						</td>
 					</tr>

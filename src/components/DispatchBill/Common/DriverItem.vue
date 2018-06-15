@@ -13,7 +13,6 @@
 			<p><span class="labels">车牌号/挂车号：</span>{{truck.plateNo}}<span v-if="truck.trailerPlateNo">/{{truck.trailerPlateNo}}</span></p>
 			<p><span class="labels">车型/车长：</span>{{truck.truckType}}/{{truck.length ? (truck.length/1000 + '米') : ''}}</p>
 			<p><span class="labels">载重/容积：</span>{{truck.loads + 'kg'}}/{{truck.loadVolume + 'm³'}}</p>
-			<p><span class="labels">车辆性质：</span>单位挂靠</p>
 		</div>
 		<div class="statusInfo ">
 			<div class="control">
@@ -142,6 +141,7 @@ export default {
 					width 80px
 		.truckInfo
 			flex 1
+			padding-top 10px
 		.icon
 			font-size 36px
 			position absolute

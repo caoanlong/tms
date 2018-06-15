@@ -81,8 +81,8 @@
 					<th>货物规格</th>
 					<th>货物名称</th>
 					<th>数量(件)</th>
-					<th>体积(方)</th>
-					<th>重量(吨)</th>
+					<th>体积(m³)</th>
+					<th>重量(kg)</th>
 					<th>剩余货量</th>
 				</tr>
 				<tr class="is-center" v-for="item in carrierCargo" :key="item.carrierCargoID">
@@ -96,7 +96,11 @@
 					<td>{{item.cargoNum}}</td>
 					<td>{{item.cargoVolume}}</td>
 					<td>{{item.cargoWeight}}</td>
-					<td>{{item.remainingCargoNum?item.remainingCargoNum+'件':''}}{{item.remainingCargoNum?'/':''}}{{item.remainingCargoVolume?item.remainingCargoVolume+'方':''}}{{item.remainingCargoVolume?'/':''}}{{item.remainingCargoWeight?item.remainingCargoWeight+'吨':''}}</td>
+					<td>
+						{{item.remainingCargoNum ? item.remainingCargoNum + '件' : ''}}
+						{{item.remainingCargoVolume ? ('/' + item.remainingCargoVolume + 'm³') : ''}}
+						{{item.remainingCargoWeight ? ('/' + item.remainingCargoWeight + 'kg') : ''}}
+					</td>
 				</tr>
 				<tr class="total is-center">
 					<td>合计</td>
@@ -106,8 +110,8 @@
 					<td>{{sum('cargoWeight')}}</td>
 					<td>
 						<span v-if="sum('remainingCargoNum')>0">{{sum('remainingCargoNum')}}件/</span>
-						<span v-if="sum('remainingCargoVolume')>0">{{sum('remainingCargoVolume')}}方/</span>
-						<span v-if="sum('remainingCargoWeight')>0">{{sum('remainingCargoWeight')}}吨</span>	
+						<span v-if="sum('remainingCargoVolume')>0">{{sum('remainingCargoVolume')}}m³/</span>
+						<span v-if="sum('remainingCargoWeight')>0">{{sum('remainingCargoWeight')}}kg</span>	
 					</td>
 				</tr>
 			</table>
@@ -173,7 +177,7 @@
 						<span v-else-if="transport.status == 'Canceled'">已作废</span>
 					</td>
 					<td>{{transport.cargoName}}</td>
-					<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.LoadNumSum + '件'}}</td>
+					<td>{{transport.loadWeightSum + 'kg'}}/{{transport.loadVolumeSum + 'm³'}}/{{transport.LoadNumSum + '件'}}</td>
 					<td style="text-align: center">
 						<el-button 
 							:disabled="transport.taskPicNum == 0"

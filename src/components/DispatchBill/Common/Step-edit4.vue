@@ -29,17 +29,22 @@
 						<p class="companyName">{{task.shipperCompanyName}}</p>
 						<p>{{task.shipperName}}{{task.shipperPhone?('/'+task.shipperPhone):''}}</p>
 						<p class="area">{{task.shipperArea}}</p>
-						<p class="datetime">{{task.shipperDate | getdatefromtimestamp()}}（预计发货）</p>
-						<p class="datetime c2" v-if="task.shipperActualDate">{{task.shipperActualDate | getdatefromtimestamp()}}（实际发货）</p>
+						<p class="datetime">{{task.shipperDate | getdatefromtimestamp(true)}}（预计发货）</p>
+						<p class="datetime c2" v-if="task.shipperActualDate">{{task.shipperActualDate | getdatefromtimestamp(true)}}（实际发货）</p>
 					</div>
-					<div class="platNo"><span>{{selectedDriver.plateNo}}{{selectedDriver.trailerPlateNo?('/'+selectedDriver.trailerPlateNo):''}}</span></div>
+					<div class="platNo">
+						<span>
+							{{selectedDriver.plateNo}}
+							{{selectedDriver.trailerPlateNo ? ('/' + selectedDriver.trailerPlateNo) : ''}}
+						</span>
+					</div>
 					<div class="to">
 						<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
 						<p class="companyName">{{task.consigneeCompanyName}}</p>
 						<p>{{task.consigneeName}}{{task.consigneePhone?('/'+task.consigneePhone):''}}</p>
 						<p class="area">{{task.consigneeArea}}</p>
-						<p class="datetime">{{task.consigneeDate | getdatefromtimestamp()}}（预计到货）</p>
-						<p class="datetime c2" v-if="task.consigneeActualDate">{{task.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</p>
+						<p class="datetime">{{task.consigneeDate | getdatefromtimestamp(true)}}（预计到货）</p>
+						<p class="datetime c2" v-if="task.consigneeActualDate">{{task.consigneeActualDate | getdatefromtimestamp(true)}}（实际到货）</p>
 					</div>
 				</div>
 			</div>

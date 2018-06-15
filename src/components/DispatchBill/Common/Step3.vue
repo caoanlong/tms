@@ -27,14 +27,6 @@
 						<el-option label="工作中" value="工作中"></el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="车辆归属">
-					<el-select placeholder="全部" v-model="truck.own">
-						<el-option label="全部" value="全部"></el-option>
-						<el-option label="单位挂靠" value="单位挂靠"></el-option>
-						<el-option label="个人挂靠" value="个人挂靠"></el-option>
-						<el-option label="自有车辆" value="自有车辆"></el-option>
-					</el-select>
-				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="getTruckList">搜索</el-button>
 					<el-button type="default" @click="resetTruck">重置</el-button>
@@ -123,7 +115,6 @@ export default {
 				keywords: '',
 				loadDate: '',
 				workStatus: '',
-				own: '',
 				list: []
 			},
 			person: {
@@ -208,7 +199,6 @@ export default {
 			this.truck.keywords = ''
 			this.truck.loadDate = ''
 			this.truck.workStatus = ''
-			this.truck.own = ''
 			this.person.pageIndex = 1
 			this.getTruckList()
 		},

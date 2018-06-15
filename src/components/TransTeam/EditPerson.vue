@@ -360,10 +360,10 @@ export default {
 				auditTime: [
 					{required: true, message: '请输入审核时间', trigger: 'blur'}
 				],
-				realName: [
-					{ required: true, message: '请选择姓名', trigger: 'blur' },
-					{validator: limitLength50, trigger: 'blur'},
-				],
+				// realName: [
+				// 	{ required: true, message: '请选择姓名', trigger: 'blur' },
+				// 	{validator: limitLength50, trigger: 'blur'},
+				// ],
 				homeAddress: [
 					{required: true, message: '请输入家庭地址', trigger: 'blur'},
 					{validator: limitLength100, trigger: 'blur'}
@@ -377,9 +377,9 @@ export default {
 				position: [
 					{required: true, message: '请选择岗位', trigger: 'change'}
 				],
-				idCardNum: [
-					{required: true, validator: checkIDCard, trigger: 'blur'}
-				]
+				// idCardNum: [
+				// 	{required: true, validator: checkIDCard, trigger: 'blur'}
+				// ]
 			}
 		}
 	},
