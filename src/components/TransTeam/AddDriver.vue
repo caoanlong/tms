@@ -284,6 +284,9 @@ export default {
 					{required: true, message: '请输入手机号'},
 					{validator: checkMobile},
 				],
+				cooperateRelation: [
+					{required: true, message: '请选择合作关系'}
+				],
 				laborContractBeginTime: [
 					{required: true, message: '请选择合作关系'}
 				],

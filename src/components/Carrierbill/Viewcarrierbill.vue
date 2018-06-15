@@ -189,12 +189,8 @@
 					</td>
 				</tr>
 			</table>
-			<div class="wf-footer clearfix">
-				<div class="btn-group fr">
-					<button type="button" class="wf-btn btn-default" @click="back">
-						<svg-icon icon-class="back"></svg-icon>返回
-					</button>
-				</div>
+			<div class="wf-footer clearfix text-center">
+				<el-button @click="back">返回</el-button>
 			</div>
 		</div>
 		<UploadPhoto 

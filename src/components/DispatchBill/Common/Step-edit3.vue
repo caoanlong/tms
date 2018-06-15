@@ -14,7 +14,7 @@
 					<el-date-picker 
 						:editable="false"
 						style="width: 100%" 
-						v-model="truck.loadDate"
+						v-model="truck.shipperDate"
 						type="date"
 						value-format="timestamp"
 						placeholder="选择日期">
@@ -58,14 +58,14 @@
 					<el-date-picker 
 						:editable="false"
 						style="width: 100%" 
-						v-model="person.loadDate"
+						v-model="person.shipperDate"
 						type="date"
 						value-format="timestamp"
 						placeholder="选择日期">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item label="人员状态">
-					<el-select placeholder="全部" v-model="person.status">
+					<el-select placeholder="全部" v-model="person.workStatus">
 						<el-option label="全部" value=""></el-option>
 						<el-option label="空闲" value="空闲"></el-option>
 						<el-option label="工作中" value="工作中"></el-option>
@@ -113,7 +113,7 @@ export default {
 				pageIndex: 1,
 				selected: {},
 				keywords: '',
-				loadDate: '',
+				shipperDate: new Date().getTime(),
 				workStatus: '',
 				list: []
 			},
@@ -123,8 +123,8 @@ export default {
 				pageIndex: 1,
 				selected: {},
 				keywords: '',
-				loadDate: '',
-				status: '',
+				shipperDate: new Date().getTime(),
+				workStatus: '',
 				list: []
 			},
 			dispatchOrderID: this.$route.query.dispatchOrderID
@@ -198,7 +198,7 @@ export default {
 		},
 		resetTruck() {
 			this.truck.keywords = ''
-			this.truck.loadDate = ''
+			this.truck.shipperDate = new Date().getTime()
 			this.truck.workStatus = ''
 			this.person.pageIndex = 1
 			this.getTruckList()
@@ -213,7 +213,7 @@ export default {
 		},
 		resetPerson() {
 			this.person.keywords = ''
-			this.person.loadDate = ''
+			this.person.shipperDate = new Date().getTime()
 			this.person.status = ''
 			this.person.pageIndex = 1
 			this.getPersonList()
@@ -227,12 +227,16 @@ export default {
 			this.getPersonList() 
 		},
 		getTruckList() {
+			if (!this.truck.shipperDate) {
+				Message.error('装车时间必填！')
+				return
+			}
 			let params = {
 				current: this.truck.pageIndex,
 				size: this.truck.pageSize,
 				keyword: this.truck.keywords,
 				workStatus: this.truck.workStatus,
-				shipperDate: this.truck.loadDate
+				shipperDate: this.truck.shipperDate
 			}
 			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Dispatchbill.findTrucksAndDrivers(params).then(res => {
@@ -248,12 +252,16 @@ export default {
 			})
 		},
 		getPersonList() {
+			if (!this.person.shipperDate) {
+				Message.error('装车时间必填！')
+				return
+			}
 			let params = {
 				current: this.person.pageIndex,
 				size: this.person.pageSize,
 				keyword: this.person.keywords,
-				workStatus: this.person.status,
-				shipperDate: this.person.loadDate || new Date().getTime()
+				workStatus: this.person.workStatus,
+				shipperDate: this.person.shipperDate
 			}
 			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Dispatchbill.findTruckstaffs(params).then(res => {

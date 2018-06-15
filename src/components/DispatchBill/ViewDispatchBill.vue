@@ -34,10 +34,20 @@
 				</tr>
 			</table>
 		</div>
-		<TaskListItem :taskItem="item" v-for="(item,index) in dispatchOrder.dispatchTaskList" :index="index" :key="index" :plateNo="dispatchOrder.plateNo" :trailerPlateNo="dispatchOrder.trailerPlateNo"></TaskListItem>
+		<TaskListItem 
+			:taskItem="item" 
+			v-for="(item,index) in dispatchOrder.dispatchTaskList" 
+			:index="index" 
+			:key="index" 
+			:plateNo="dispatchOrder.plateNo" 
+			:trailerPlateNo="dispatchOrder.trailerPlateNo">
+		</TaskListItem>
 		<div class="handle text-center">
-			<el-button>取消</el-button>
-			<el-button>关闭</el-button>
+			<el-button v-if="(dispatchOrder.status == 'Ordered' || dispatchOrder.status == 'Committed')
+			&& (!dispatchOrder.dispatchTaskList.map(item => item.status).includes('Loaded') 
+			&& !dispatchOrder.dispatchTaskList.map(item => item.status).includes('Signed'))" 
+			@click="cancelDispatchOrder()">取消</el-button>
+			<el-button v-if="dispatchOrder.status == 'Ordered'" @click="closeDispatchOrder()">关闭</el-button>
 			<el-button @click="back">返回</el-button>
 		</div>
 	</div>
@@ -46,6 +56,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../api/Dispatchbill'
+import { closeConfirm, cancelConfirm } from '../../common/utils'
 import TaskListItem from './Common/TaskListItem'
 export default {
 	data() {
@@ -61,6 +72,24 @@ export default {
 			let dispatchOrderID = this.$route.query.dispatchOrderID
 			Dispatchbill.findById({ dispatchOrderID }).then(res => {
 				this.dispatchOrder = res
+			})
+		},
+		cancelDispatchOrder() {
+			let id = this.$route.query.dispatchOrderID
+			cancelConfirm(id, dispatchOrderID => {
+				Dispatchbill.cancel({ dispatchOrderID }).then(res =>{
+					Message.success('已成功取消调度单!')
+					this.getDetail()
+				})
+			})
+		},
+		closeDispatchOrder() {
+			let id = this.$route.query.dispatchOrderID
+			closeConfirm(id, dispatchOrderID => {
+				Dispatchbill.close({ dispatchOrderID }).then(res => {
+					Message.success('关闭调度成功!')
+					this.getDetail()
+				})
 			})
 		},
 		back() {
