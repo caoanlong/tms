@@ -166,24 +166,57 @@ export default {
 			this.$emit('imgUrlBack', this.fileUrl)
 		},
 		showImgModal(url, index) {
-			this.$alert(
-                `<div>
-                    <div style="height:30px;line-height:30px">${this.objs[index].createName}（${this.objs[index].createMobile}）${getdatefromtimestamp(this.objs[index].createTime)}</div>
-                    <img style="width: 100%" src=${this.imgUrl + url} />
-                    <div style="height:60px;padding:10px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
+			let elem = document.createElement('div')
+			elem.id = 'imgView'
+			elem.innerHTML = `
+			<div style="position:fixed;left:0;top:0;right:0;height:100%;display:flex;justify-content:center;align-items:center;background-color:rgba(0,0,0,.5);z-index:9998;overflow:scroll" 
+				onclick="function(ev){var oEvent = ev||event;oEvent.cancelBubble = true;oEvent.stopPropagation();document.getElementById('app').removeChild(document.getElementById('imgView'))}">
+				<div style="width:35%;margin-top: 50px;position:relative;background-color:#fff;z-index:9999;border-radius:5px;overflow:hidden">
+					<div style="width:100%;height:60px;line-height:60px;padding: 0 16px;font-size:16px;position:relative">
+						图片预览
+						<div style="position:absolute;right:0;top:0;width:60px;height:60px;pointer:cursor" onclick="document.getElementById('app').removeChild(document.getElementById('imgView'))">
+							<i class="el-message-box__close el-icon-close" style="color:#999;margin-left:25px"></i>
+						</div>
+					</div>
+					<div style="height:36px;line-height:36px;padding: 0 16px;">
+						<span>${this.objs[index].createName}</span>
+						<span style="color:#999">（${this.objs[index].createMobile}）</span>
+						<span style="color:#999">${getdatefromtimestamp(this.objs[index].createTime)}</span>
+					</div>
+					<img style="width: 100%; height:1400px" src=${this.imgUrl + url} />
+					<div style="height:60px;padding:10px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
 						<p style="height:20px;line-height:20px">${this.objs[index].description?this.objs[index].description:''}</p>
-						<p style="height:20px;line-height:20px"><img src="${positionImg}" style="vertical-align:middle;height:16px;display:${this.objs[index].detailAddress?'':'none'}"/>${this.objs[index].detailAddress?this.objs[index].detailAddress:''}</p>
+						<p style="height:20px;line-height:20px">
+							<img src="${positionImg}" style="vertical-align:middle;height:16px;display:${this.objs[index].detailAddress?'':'none'}"/>
+							${this.objs[index].detailAddress?this.objs[index].detailAddress:''}
+						</p>
 						<span style="position:absolute;top:10px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
 							${this.objs[index].type == 'Loaded' ? '装车' 
 							: (this.objs[index].type == 'Arrived' ? '送达' 
 							: (this.objs[index].type == 'Received' ? '回单' : '异常'))}
 						</span>
-                    </div>
-                </div>`, '图片预览', {
-				dangerouslyUseHTMLString: true,
-				showConfirmButton: false,
-				customClass: 'viewPicDetail'
-			}).catch(err => {})
+					</div>
+				</div>
+			</div>`
+			document.getElementById('app').appendChild(elem)
+			// this.$alert(
+            //     `<div>
+            //         <div style="height:30px;line-height:30px">${this.objs[index].createName}（${this.objs[index].createMobile}）${getdatefromtimestamp(this.objs[index].createTime)}</div>
+            //         <img style="width: 100%" src=${this.imgUrl + url} />
+            //         <div style="height:60px;padding:10px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
+			// 			<p style="height:20px;line-height:20px">${this.objs[index].description?this.objs[index].description:''}</p>
+			// 			<p style="height:20px;line-height:20px"><img src="${positionImg}" style="vertical-align:middle;height:16px;display:${this.objs[index].detailAddress?'':'none'}"/>${this.objs[index].detailAddress?this.objs[index].detailAddress:''}</p>
+			// 			<span style="position:absolute;top:10px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
+			// 				${this.objs[index].type == 'Loaded' ? '装车' 
+			// 				: (this.objs[index].type == 'Arrived' ? '送达' 
+			// 				: (this.objs[index].type == 'Received' ? '回单' : '异常'))}
+			// 			</span>
+            //         </div>
+            //     </div>`, '图片预览', {
+			// 	dangerouslyUseHTMLString: true,
+			// 	showConfirmButton: false,
+			// 	customClass: 'viewPicDetail'
+			// }).catch(err => {})
 		}
 	},
 	components: {

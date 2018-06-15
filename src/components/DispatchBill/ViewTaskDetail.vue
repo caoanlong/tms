@@ -4,7 +4,7 @@
 			<div class="item">
 				<div class="lineInfo">
 					<div class="tit"><span>任务单号：{{task.taskNo}}</span>
-						<el-tag type="warning" size="mini"style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-if="task.status='Committed'">待执行</el-tag>
+						<el-tag type="warning" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-if="task.status='Committed'">待执行</el-tag>
 						<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="task.status='Loaded'">已装运</el-tag>
 						<el-tag type="success" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="task.status='Signed'">已签收</el-tag>
 						<el-tag type="info" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else>已作废</el-tag>

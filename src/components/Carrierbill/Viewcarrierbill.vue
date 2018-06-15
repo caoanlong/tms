@@ -31,16 +31,34 @@
 			<table class="wf-table">
 				<caption>收发货信息</caption>
 				<tr>
-					<td width="50%"><span class="justify">发货单位</span>{{carrierOrder.shipperCompanyName}}</td>
-					<td width="50%"><span class="justify">收货单位</span>{{carrierOrder.consigneeCompanyName}}</td>
+					<td width="50%">
+						<span class="justify">发货单位</span>
+						{{carrierOrder.shipperCompanyName}}
+					</td>
+					<td width="50%">
+						<span class="justify">收货单位</span>
+						{{carrierOrder.consigneeCompanyName}}
+					</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货人</span>{{carrierOrder.shipperName}}</td>
-					<td><span class="justify">收货人</span>{{carrierOrder.consigneeName}}</td>
+					<td>
+						<span class="justify">发货人</span>
+						{{carrierOrder.shipperName}}
+					</td>
+					<td>
+						<span class="justify">收货人</span>
+						{{carrierOrder.consigneeName}}
+					</td>
 				</tr>
 				<tr>
-					<td><span class="justify">联系方式</span>{{carrierOrder.shipperPhone}}</td>
-					<td><span class="justify">联系方式</span>{{carrierOrder.consigneePhone}}</td>
+					<td>
+						<span class="justify">联系方式</span>
+						{{carrierOrder.shipperPhone}}
+					</td>
+					<td>
+						<span class="justify">联系方式</span>
+						{{carrierOrder.consigneePhone}}
+					</td>
 				</tr>
 				<tr>
 					<td>
@@ -55,8 +73,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td><span class="justify">发货位置</span>{{carrierOrder.shipperLocationAddress}}</td>
-					<td><span class="justify">收货位置</span>{{carrierOrder.consigneeLocationAddress}}</td>
+					<td>
+						<span class="justify">发货位置</span>
+						{{carrierOrder.shipperLocationAddress}}
+					</td>
+					<td>
+						<span class="justify">收货位置</span>
+						{{carrierOrder.consigneeLocationAddress}}
+					</td>
 				</tr>
 				<tr>
 					<td>
@@ -164,17 +188,18 @@
 					<th>配载货量</th>
 					<th>运输照片</th>
 				</tr>
-				<tr v-for="(transport, index) in transports" :key="index">
-					<td>{{transport.plateNo}}{{transport.trailerPlateNo ? ('/' + transport.trailerPlateNo) : ''}}</td>
+				<tr class="is-center" v-for="(transport, index) in transports" :key="index">
+					<td>
+						{{transport.plateNo}}
+						{{transport.trailerPlateNo ? ('/' + transport.trailerPlateNo) : ''}}
+					</td>
 					<td>{{transport.driverName}}</td>
 					<td>{{transport.superCargoName}}</td>
-					<td>{{transport.taskNo}}</td>
+					<td><span class="link" @click="viewTask(transport.dispatchTaskID)">{{transport.taskNo}}</span></td>
 					<td>
-						<span v-if="transport.status == 'Committed'">待执行</span>
-						<span v-else-if="transport.status == 'Running'">执行中</span>
-						<span v-else-if="transport.status == 'Signed'">已到达签收</span>
-						<span v-else-if="transport.status == 'Closed'">已关闭</span>
-						<span v-else-if="transport.status == 'Canceled'">已作废</span>
+						<el-tag size="mini" type="warning" v-if="transport.status == 'Committed'">待装车</el-tag>
+						<el-tag size="mini" v-if="transport.status == 'Running'">已装车</el-tag>
+						<el-tag size="mini" type="success" v-if="transport.status == 'Signed'">已签收</el-tag>
 					</td>
 					<td>{{transport.cargoName}}</td>
 					<td>{{transport.loadWeightSum + 'kg'}}/{{transport.loadVolumeSum + 'm³'}}/{{transport.LoadNumSum + '件'}}</td>
@@ -280,6 +305,9 @@ export default {
 		// 查看货物弹窗回调
 		cargoCallback(bool) {
 			this.dialogCargoVisible = bool
+		},
+		viewTask(dispatchTaskID) {
+			this.$router.push({name: 'viewtaskdetail', query: { dispatchTaskID, type: 'view' }})
 		},
 		back() {
 			this.$router.go(-1)

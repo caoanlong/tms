@@ -1,6 +1,11 @@
 @charset "UTF-8";
-body{
+html,body,#app{
 	height:100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-font-smoothing: antialiased;
 	text-rendering: optimizeLegibility;
@@ -147,3 +152,8 @@ input:-webkit-autofill {
     }
 }
 .el-input-group__append, .el-input-group__prepend{padding:0 10px;}
+
+.link {
+	cursor: pointer;
+	color: #3582d0;
+}

@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="车牌号/挂车号/姓名" v-model="findKeyword"></el-input>
+						<el-input placeholder="姓名/手机号" v-model="findKeyword"></el-input>
 					</el-form-item>
 					<el-form-item label="车辆归属">
 						<el-select v-model="findCooperateRelation" placeholder="全部">
@@ -109,6 +109,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { baseURL } from '../../common/request'
 import Driver from '../../api/Driver'
 import { resizeImg } from '../../common/utils'
 import Page from '../CommonComponents/Page'
@@ -122,7 +123,7 @@ export default {
 			count: 0,
 			selectedList: [],
 			tableData: [],
-			importFileUrl: Driver.baseURL + '/driver/upload',
+			importFileUrl:baseURL + '/driver/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			postMap: {
 				"Operator": "操作员",
@@ -132,8 +133,8 @@ export default {
 				"Stevedore": "装卸管理人员",
 				"Other": "其他人员"
 			},
-			templateUrl: Driver.baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xlsx&&Authorization=' +localStorage.getItem("token"),
-			templateTit:'employee.xlsx'
+			templateUrl:baseURL + '/base/filetemplate/downLoadTemplate?fileName=driver.xlsx&&Authorization=' +localStorage.getItem("token"),
+			templateTit:'driver.xlsx'
 		}
 	},
 	computed: {

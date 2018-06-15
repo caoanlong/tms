@@ -32,25 +32,27 @@
 					</tr>
 					<tr>
 						<td>
-							<p class="datetime">{{taskItem.shipperDate | getdatefromtimestamp()}}（预计发货）</p>
-							<p class="datetime c2" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp()}}（实际发货）</p>
+							<p class="datetime">{{taskItem.shipperDate | getdatefromtimestamp(true)}}（预计发货）</p>
+							<p class="datetime c2" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp(true)}}（实际发货）</p>
 						</td>
 						<td><span>{{plateNo}}{{trailerPlateNo?('/'+trailerPlateNo):''}}</span></td>
 						<td>
-							<p class="datetime">{{taskItem.consigneeDate | getdatefromtimestamp()}}（预计到货）</p>
-							<p class="datetime c2" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</p>
+							<p class="datetime">{{taskItem.consigneeDate | getdatefromtimestamp(true)}}（预计到货）</p>
+							<p class="datetime c2" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp(true)}}（实际到货）</p>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3">实付运费:¥{{taskItem.amountSum}}（
-							<span v-if="(taskItem.driverCashAmount+taskItem.superCargoCashAmount)>0">现付:￥{{taskItem.driverCashAmount+taskItem.superCargoCashAmount}}</span>
-							<span v-if="(taskItem.driverCodAmount+taskItem.superCargoCodAmount)>0">,到付:￥{{taskItem.driverCodAmount+taskItem.superCargoCodAmount}}</span>
-							<span v-if="(taskItem.driverPorAmount+taskItem.superCargoCorAmount)>0">,回单:￥{{taskItem.driverPorAmount+taskItem.superCargoCorAmount}}</span>
-							<span v-if="(taskItem.driverMonthlyAmont+taskItem.superCargoMonthlyAmount)>0">,月结:￥{{taskItem.driverMonthlyAmont+taskItem.superCargoMonthlyAmount}}</span>
-							<span v-if="(taskItem.driverCosigneeAmount+taskItem.superCosigneeAmount)>0">,收货方到付:￥{{taskItem.driverCosigneeAmount+taskItem.superCosigneeAmount}}</span>
-							<span v-if="(taskItem.driverDetoursAmount+taskItem.superCargoDetoursAmount)>0">,绕路费:￥{{taskItem.driverDetoursAmount+taskItem.superCargoDetoursAmount}}</span>
-							<span v-if="(taskItem.driverOtherAmount+taskItem.superCargoOtherAmount)>0">,其他:￥{{taskItem.driverOtherAmount+taskItem.superCargoOtherAmount}}</span>
-							)
+						<td colspan="3">
+							实付运费:¥{{taskItem.amountSum}}
+							（{{[
+								(taskItem.driverCashAmount+taskItem.superCargoCashAmount) > 0 ? '现付:￥' + (taskItem.driverCashAmount+taskItem.superCargoCashAmount) : '',
+								(taskItem.driverCodAmount+taskItem.superCargoCodAmount) > 0 ? '到付:￥' + (taskItem.driverCodAmount+taskItem.superCargoCodAmount) : '',
+								(taskItem.driverPorAmount+taskItem.superCargoCorAmount) > 0 ? '回单:￥' + (taskItem.driverPorAmount+taskItem.superCargoCorAmount) : '',
+								(taskItem.driverMonthlyAmont+taskItem.superCargoMonthlyAmount) > 0 ? '月结:￥' + (taskItem.driverMonthlyAmont+taskItem.superCargoMonthlyAmount) : '',
+								(taskItem.driverCosigneeAmount+taskItem.superCosigneeAmount) > 0 ? '收货方到付:￥' + (taskItem.driverCosigneeAmount+taskItem.superCosigneeAmount) : '',
+								(taskItem.driverDetoursAmount+taskItem.superCargoDetoursAmount) > 0 ? '绕路费:￥' + (taskItem.driverDetoursAmount+taskItem.superCargoDetoursAmount) : '',
+								(taskItem.driverOtherAmount+taskItem.superCargoOtherAmount) > 0 ? '其他:￥' + (taskItem.driverOtherAmount+taskItem.superCargoOtherAmount) : '',
+							].filter(item => item).join('，')}})
 						</td>
 					</tr>
 					<tr v-if="taskItem.dispatchTaskPicList.length>0">

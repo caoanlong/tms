@@ -34,7 +34,6 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-upload2" @click="add">导入</el-button>
 			</div>
 			<div class="table">
 				<table class="wfTable">

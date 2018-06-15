@@ -87,11 +87,11 @@
 							</td>
 							<td width="80">{{item.cargoNumSum}}</td>
 							<td>{{item.shipperCompanyName}}</td>
-							<td>{{item.shipperName}}</td>
+							<td>{{item.shipperName}}({{item.shipperPhone}})</td>
 							<td>{{item.shipperArea}}</td>
 							<td width="140">{{item.shipperDate | getdatefromtimestamp(true)}}</td>
 							<td>{{item.consigneeCompanyName}}</td>
-							<td>{{item.consigneeName}}</td>
+							<td>{{item.consigneeName}}({{item.consigneePhone}})</td>
 							<td>{{item.consigneeArea}}</td>
 							<td width="140">{{item.consigneeDate | getdatefromtimestamp(true)}}</td>
 						</tr>

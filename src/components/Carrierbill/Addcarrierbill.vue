@@ -528,6 +528,9 @@ export default {
 			this.carrierbillInfo.shipperName = data.contactName
 			this.carrierbillInfo.shipperArea = data.companyArea
 			this.carrierbillInfo.shipperDetailAddress = data.detailAddress
+			this.carrierbillInfo.shipperLocationAddress = data.locationAddress
+			this.carrierbillInfo.shipperLocationLng = data.locationLng
+			this.carrierbillInfo.shipperLocationLat = data.locationLat
 			this.carrierbillInfo.shipperID = data.customerID
 			this.carrierbillInfo.shipperPhone = data.contactPhone
 			this.carrierbillInfo.shipperAreaID = data.companyAreaID
@@ -538,6 +541,9 @@ export default {
 			this.carrierbillInfo.consigneeName = data.contactName
 			this.carrierbillInfo.consigneeArea = data.companyArea
 			this.carrierbillInfo.consigneeDetailAddress = data.detailAddress
+			this.carrierbillInfo.consigneeLocationAddress = data.locationAddress
+			this.carrierbillInfo.consigneeLocationLng = data.locationLng
+			this.carrierbillInfo.consigneeLocationLat = data.locationLat
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.carrierbillInfo.consigneePhone = data.contactPhone
 			this.carrierbillInfo.consigneeAreaID = data.companyAreaID
