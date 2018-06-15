@@ -336,9 +336,9 @@ export default {
 						'weightType': 'Heavy',
 						'cargoName': '',
 						'cargoType': '',
-						'cargoWeight': '',
-						'cargoVolume': '',
-						'cargoNum': ''
+						'cargoWeight': 0,
+						'cargoVolume': 0,
+						'cargoNum': 0
 					}
 				],
 				carrierOrderNo:'',
@@ -653,8 +653,18 @@ export default {
 						})
 					})
 				}).then(() => {
+					let cargos = this.carrierbillInfo.carrierCargo.map(item => {
+						return {
+							'weightType': item.weightType,
+							'cargoName': item.cargoName,
+							'cargoType': item.cargoType,
+							'cargoWeight': item.cargoWeight ? item.cargoWeight : 0,
+							'cargoVolume': item.cargoVolume ? item.cargoVolume : 0,
+							'cargoNum': item.cargoNum ? item.cargoNum : 0
+						}
+					})
 					Carrierbill.add({
-						carrierCargoInfo: JSON.stringify(this.carrierbillInfo.carrierCargo),
+						carrierCargoInfo: JSON.stringify(cargos),
 						carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
 						carrierrName: this.carrierbillInfo.carrierrName,
 						navicertNo: this.carrierbillInfo.navicertNo,
@@ -709,9 +719,9 @@ export default {
 				'cargoType': '',
 				'cargoName': '',
 				'weightType': 'Heavy',
-				'cargoWeight': '',
-				'cargoVolume': '',
-				'cargoNum': ''
+				'cargoWeight': 0,
+				'cargoVolume': 0,
+				'cargoNum': 0
 			})
 		},
 		removeItem(index) {
