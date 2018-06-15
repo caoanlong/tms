@@ -23,8 +23,8 @@
 				<el-form-item label="空闲状态">
 					<el-select placeholder="全部" v-model="truck.workStatus">
 						<el-option label="全部" value=""></el-option>
-						<el-option label="空闲" value="空闲"></el-option>
-						<el-option label="工作中" value="工作中"></el-option>
+						<el-option label="空闲" value="Free"></el-option>
+						<el-option label="工作中" value="Working"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item>
@@ -67,8 +67,8 @@
 				<el-form-item label="人员状态">
 					<el-select placeholder="全部" v-model="person.workStatus">
 						<el-option label="全部" value=""></el-option>
-						<el-option label="空闲" value="空闲"></el-option>
-						<el-option label="工作中" value="工作中"></el-option>
+						<el-option label="空闲" value="Free"></el-option>
+						<el-option label="工作中" value="Working"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item>
@@ -114,7 +114,7 @@ export default {
 				selected: {},
 				keywords: '',
 				shipperDate: new Date().getTime(),
-				workStatus: '',
+				workStatus: 'Free',
 				list: []
 			},
 			person: {
@@ -124,7 +124,7 @@ export default {
 				selected: {},
 				keywords: '',
 				shipperDate: new Date().getTime(),
-				workStatus: '',
+				workStatus: 'Free',
 				list: []
 			}
 		}

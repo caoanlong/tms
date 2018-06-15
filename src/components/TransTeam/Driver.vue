@@ -58,10 +58,10 @@
 					</el-table-column>
 					<el-table-column label="关联账号"  width="100" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.cooperateStatus == 'Agreed'" style="color:#67C23A">已同意</span>
-							<span v-else-if="scope.row.cooperateStatus == 'Invited'">已邀请</span>
-							<span v-else-if="scope.row.cooperateStatus == 'Rejected'" style="color:#f80">已拒绝</span>
-							<span v-else-if="scope.row.cooperateStatus == 'Relieved'" style="color:#f80">已解除</span>
+							<el-tag size="mini" type="success" v-if="scope.row.cooperateStatus == 'Agreed'">已同意</el-tag>
+							<el-tag size="mini" v-else-if="scope.row.cooperateStatus == 'Invited'">已邀请</el-tag>
+							<el-tag size="mini" type="danger" v-else-if="scope.row.cooperateStatus == 'Rejected'">已拒绝</el-tag>
+							<el-tag size="mini" type="info" v-else-if="scope.row.cooperateStatus == 'Relieved'">已解除</el-tag>
 						</template>
 					</el-table-column>
 					<el-table-column label="备注" prop="remark"></el-table-column>

@@ -63,7 +63,6 @@
 									<el-tag size="mini" type="success" v-else-if="item.status=='Signed'">到达签收</el-tag>
 									<el-tag size="mini" type="info" v-else-if="item.status=='Closed'">已关闭</el-tag>
 									<el-tag size="mini" type="info" v-else-if="item.status=='Canceled'">作废</el-tag>
-
 								</span>
 								<span class="fr">
 									<el-button type="text" size="mini" 

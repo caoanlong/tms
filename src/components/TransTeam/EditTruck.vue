@@ -888,6 +888,7 @@ export default {
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					delete data.plateNo
+					delete data.trailerPlateNo
 					delete data.truckType
 					delete data.plateNoType
 					Truck.update(data).then(res => {
