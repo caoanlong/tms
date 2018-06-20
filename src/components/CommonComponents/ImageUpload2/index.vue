@@ -12,6 +12,12 @@
 					<div class="delBtn" v-show="!isPreview" @click.stop="delImg(i)"></div>
 				</div>
 			</div>
+			<div v-if="isShowType">
+				<div v-if="objs[i].type =='Loaded'">装车照片</div>
+				<div v-else-if="objs[i].type =='Arrived'">送达照片</div>
+				<div v-else-if="objs[i].type =='Received'">回单照片</div>
+				<div v-else>异常照片</div>
+			</div>
 		</div>
 		<div class="addBtn" :style="{'width':width+'px','height':height+'px'}" v-show="isLimit && !isPreview">
 			<div class="addIcon">
@@ -83,6 +89,10 @@ export default {
 		fixedNumber: {
 			type: Array,
 			default: () => [1,1]
+		},
+		isShowType: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data() {
@@ -105,10 +115,11 @@ export default {
 		resizeImg: () => resizeImg
 	},
 	watch: {
-		files(newval) {
-			if (newval.length > 0 && newval[0]) {
+		files: {
+			handler(newval) {
 				this.fileUrl = this.files
-			}
+			},
+			deep: true
 		}
 	},
 	methods: {
@@ -183,40 +194,26 @@ export default {
 						<span style="color:#999">（${this.objs[index].createMobile}）</span>
 						<span style="color:#999">${getdatefromtimestamp(this.objs[index].createTime)}</span>
 					</div>
-					<img style="width: 100%; height:1400px" src=${this.imgUrl + url} />
-					<div style="height:60px;padding:10px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
-						<p style="height:20px;line-height:20px">${this.objs[index].description?this.objs[index].description:''}</p>
-						<p style="height:20px;line-height:20px">
-							<img src="${positionImg}" style="vertical-align:middle;height:16px;display:${this.objs[index].detailAddress?'':'none'}"/>
-							${this.objs[index].detailAddress?this.objs[index].detailAddress:''}
-						</p>
-						<span style="position:absolute;top:10px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
-							${this.objs[index].type == 'Loaded' ? '装车' 
-							: (this.objs[index].type == 'Arrived' ? '送达' 
-							: (this.objs[index].type == 'Received' ? '回单' : '异常'))}
-						</span>
+					<img style="width: 100%;" src=${this.imgUrl + url} />
+					<div style="height:60px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
+						<div style="position:relative;height:30px;line-height:30px;padding: 0 100px 0 10px;">
+							<div>${this.objs[index].description?this.objs[index].description:''}</div>
+							<div>
+								<span style="position:absolute;top:5px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
+									${this.objs[index].type == 'Loaded' ? '装车' 
+									: (this.objs[index].type == 'Arrived' ? '送达' 
+									: (this.objs[index].type == 'Received' ? '回单' : '异常'))}
+								</span>
+							</div>
+						</div>
+						<div style="padding: 0 10px">
+							<img src="${positionImg}" style="vertical-align:middle;height:16px;${this.objs[index].detailAddress?'display:inline-block':'display:none'}"/>
+							${this.objs[index].detailAddress ? this.objs[index].detailAddress : ''}
+						</div>
 					</div>
 				</div>
 			</div>`
 			document.getElementById('app').appendChild(elem)
-			// this.$alert(
-            //     `<div>
-            //         <div style="height:30px;line-height:30px">${this.objs[index].createName}（${this.objs[index].createMobile}）${getdatefromtimestamp(this.objs[index].createTime)}</div>
-            //         <img style="width: 100%" src=${this.imgUrl + url} />
-            //         <div style="height:60px;padding:10px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
-			// 			<p style="height:20px;line-height:20px">${this.objs[index].description?this.objs[index].description:''}</p>
-			// 			<p style="height:20px;line-height:20px"><img src="${positionImg}" style="vertical-align:middle;height:16px;display:${this.objs[index].detailAddress?'':'none'}"/>${this.objs[index].detailAddress?this.objs[index].detailAddress:''}</p>
-			// 			<span style="position:absolute;top:10px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
-			// 				${this.objs[index].type == 'Loaded' ? '装车' 
-			// 				: (this.objs[index].type == 'Arrived' ? '送达' 
-			// 				: (this.objs[index].type == 'Received' ? '回单' : '异常'))}
-			// 			</span>
-            //         </div>
-            //     </div>`, '图片预览', {
-			// 	dangerouslyUseHTMLString: true,
-			// 	showConfirmButton: false,
-			// 	customClass: 'viewPicDetail'
-			// }).catch(err => {})
 		}
 	},
 	components: {

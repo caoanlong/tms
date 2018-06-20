@@ -146,11 +146,9 @@ export default {
 				Message.error('请选择司机车辆！')
 				return
 			}
-			if (this.truck.selected.loadStatus == 'Empty') {
-				if(!this.person.selected.staffID) {
-					Message.error('该车辆需要随车人员！')
-					return
-				}
+			if(!this.person.selected.staffID) {
+				Message.error('请选择随车人员！')
+				return
 			}
 			this.$emit('nextStep', 4)
 		},

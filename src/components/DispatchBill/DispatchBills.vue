@@ -43,7 +43,7 @@
 						<th width="80">货物</th>
 						<th>货量</th>
 						<th>装车地</th>
-						<th width="140">收货时间</th>
+						<th width="140">装车时间</th>
 						<th>送货地</th>
 						<th width="140">送货时间</th>
 						<th>操作</th>
@@ -118,9 +118,9 @@
 								<span @click="viewTask(taskItem.dispatchTaskID,'view')" class="ViewTaskDetail">{{taskItem.taskNo}}</span>
 							</td>
 							<td class="text-center" width="80">
-								<span v-if="taskItem.status='Committed'">待执行</span>
-								<span v-else-if="taskItem.status='Loaded'">已装运</span>
-								<span v-else-if="taskItem.status='Signed'">已签收</span>
+								<span v-if="taskItem.status == 'Committed'">待装车</span>
+								<span v-else-if="taskItem.status == 'Loaded'">已装运</span>
+								<span v-else-if="taskItem.status == 'Signed'">已签收</span>
 								<span v-else>已作废</span>
 							</td>
 							<td>{{taskItem.cargoName}}</td>
@@ -192,6 +192,8 @@ export default {
 			this.findkeyword=''
 			this.findcustomerID=''
 			this.findstatus=''
+			this.recdeliverycomp.companyName = ''
+			this.recdeliverycomp.customerID = ''
 			this.getList()
 		},
 		pageChange(index) {

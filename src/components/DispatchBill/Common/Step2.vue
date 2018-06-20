@@ -4,8 +4,9 @@
 			<div class="tit">
 				<span class="infoItem">承运单号：{{item.carrierOrderNo}}</span>
 				<span class="infoItem">{{item.shipperArea}}</span>
+				<span class="infoItem">-></span>
 				<span class="infoItem">{{item.consigneeArea}}</span>
-				<span class="infoItem">{{item.consigneeDate | getdatefromtimestamp()}}（预约达到）</span>
+				<span class="infoItem">{{item.consigneeDate | getdatefromtimestamp(true)}}（预约到达）</span>
 			</div>
 			<el-table border 
 				ref="multipleTable" 
@@ -136,6 +137,20 @@ export default {
 		getList(carrierOrderIDs) {
 			Dispatchbill.findPreLoad({ carrierOrderIDs }).then(res => {
 				this.carrierBills = res
+				res.forEach((carrierBill, index) => {
+					this.$nextTick(() => {
+						carrierBill.cargo.forEach(cargo => {
+							const x = this.selectedCargos.map(item => item.carrierCargoID).indexOf(cargo.carrierCargoID)
+							if (x > -1) {
+								cargo.cargoWeightNew = this.selectedCargos[x].cargoWeightNew
+								cargo.cargoVolumeNew = this.selectedCargos[x].cargoVolumeNew
+								cargo.cargoNumNew = this.selectedCargos[x].cargoNumNew
+								this.$refs.multipleTable[index].toggleRowSelection(cargo)
+							}
+						})
+						this.handInputChange()
+					})
+				})
 			})
 		},
 		selectionAll(data, carrierBill) {
@@ -153,6 +168,9 @@ export default {
 			this.handInputChange()
 		},
 		selectionSimple(data, row) {
+			if (this.selectedCargos.length > 0) {
+				this.selectedCargoList = this.selectedCargos
+			}
 			let flag = true
 			for (let i = 0; i < this.selectedCargoList.length; i++) {
 				if (this.selectedCargoList[i].carrierCargoID == row.carrierCargoID) {
@@ -170,6 +188,37 @@ export default {
 			this.handInputChange()
 		},
 		nextStep(){
+			if (this.selectedCargos.length == 0) {
+				Message.error(`请选择货物！`)
+				return
+			}
+			for (let i = 0; i < this.selectedCargos.length; i++) {
+				const cargo = this.selectedCargos[i]
+				if (!cargo.cargoWeightNew || cargo.cargoWeightNew == '0') {
+					Message.error(`货物“${cargo.cargoName}”的配载重量必填！`)
+					return
+				}
+				if (cargo.cargoWeightNew > cargo.remainingCargoWeight) {
+					Message.error(`货物“${cargo.cargoName}”的配载重量不能大于待配载重量！`)
+					return
+				}
+				if (!cargo.cargoVolumeNew || cargo.cargoVolumeNew == '0') {
+					Message.error(`货物“${cargo.cargoName}”的配载体积必填！`)
+					return
+				}
+				if (cargo.cargoVolumeNew > cargo.remainingCargoVolume) {
+					Message.error(`货物“${cargo.cargoName}”的配载体积不能大于待配载体积！`)
+					return
+				}
+				if (!cargo.cargoNumNew || cargo.cargoNumNew == '0') {
+					Message.error(`货物“${cargo.cargoName}”的配载数量必填！`)
+					return
+				}
+				if (cargo.cargoNumNew > cargo.remainingCargoNum) {
+					Message.error(`货物“${cargo.cargoName}”的配载数量不能大于待配载数量！`)
+					return
+				}
+			}
 			this.$emit('nextStep', 3)
 		},
 		prevStep(){
@@ -182,23 +231,31 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-	.stowageItem
-		margin-bottom 10px
-		.tit
-			background #e2ecf6
-			padding 5px 15px
-			line-height 30px
-			font-size 13px
-			.infoItem
-				display inline-block
-				color #3582d0
-				margin-right 20px
-	.total
+.stowageItem
+	margin-bottom 10px
+	.tit
 		background #e2ecf6
 		padding 5px 15px
 		line-height 30px
-		height 40px
 		font-size 13px
-		color #3582d0
-		margin-bottom 10px
+		.infoItem
+			display inline-block
+			color #3582d0
+			margin-right 20px
+.total
+	background #e2ecf6
+	padding 5px 15px
+	line-height 30px
+	height 40px
+	font-size 13px
+	color #3582d0
+	margin-bottom 10px
+.text-input-append
+	height 40px
+	line-height 1
+	color #606266
+	-webkit-appearance none
+	background-color #fff
+	border 1px solid #dcdfe6
+	border-radius 4px
 </style>

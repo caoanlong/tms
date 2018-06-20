@@ -25,7 +25,7 @@ export const msgBox = {
 		<p style="margin-top: 40px;color: #aaa">
 			一般客户处理时间为24小时内；客服电话：0871 - 67366889
 		</p>
-		<button style="margin-top: 20px" onclick="localStorage.clear();location.href=${href()}">退出当前账户</button>
+		<button style="margin-top: 20px" onclick="localStorage.clear();location.href='${href()}'">退出当前账户</button>
 	</div>
 	`,
 	dangerouslyUseHTMLString: true,

@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card hasTit">
-			<el-steps :active="stepActive" finish-status="success" simple style="margin-bottom:20px;" class="stepBar">
+			<el-steps :active="stepActive" finish-status="success" process-status="finish" simple style="margin-bottom:20px;" class="stepBar">
 				<el-step title="选择承运单"></el-step>
 				<el-step title="货物配载"></el-step>
 				<el-step title="车辆&amp;人员调度"></el-step>

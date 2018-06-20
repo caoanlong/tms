@@ -30,7 +30,7 @@
 				<tr>
 					<td><span class="labels">押运员：</span>{{dispatchOrder.superCargoName}}</td>
 					<td><span class="labels">押运电话：</span>{{dispatchOrder.superCargoMobile}}</td>
-					<td></td>
+					<td><span class="labels">任务总数：</span>{{dispatchOrder.dispatchTaskList && dispatchOrder.dispatchTaskList.length}}</td>
 				</tr>
 			</table>
 		</div>

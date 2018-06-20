@@ -4,8 +4,9 @@
 			<div class="tit">
 				<span class="infoItem">承运单号：{{item.carrierOrderNo}}</span>
 				<span class="infoItem">{{item.shipperArea}}</span>
+				<span class="infoItem">-></span>
 				<span class="infoItem">{{item.consigneeArea}}</span>
-				<span class="infoItem">{{item.consigneeDate | getdatefromtimestamp()}}（预约达到）</span>
+				<span class="infoItem">{{item.consigneeDate | getdatefromtimestamp(true)}}（预约达到）</span>
 			</div>
 			<el-table border 
 				ref="multipleTable" 
@@ -173,6 +174,9 @@ export default {
 			this.$store.dispatch('setCargo', this.selectedCargoList)
 		},
 		selectionSimple(data, row) {
+			if (this.selectedCargos.length > 0) {
+				this.selectedCargoList = this.selectedCargos
+			}
 			let flag = true
 			for (let i = 0; i < this.selectedCargoList.length; i++) {
 				if (this.selectedCargoList[i].carrierCargoID == row.carrierCargoID) {
@@ -189,6 +193,37 @@ export default {
 			this.$store.dispatch('setCargo', this.selectedCargoList)
 		},
 		nextStep(){
+			if (this.selectedCargos.length == 0) {
+				Message.error(`请选择货物！`)
+				return
+			}
+			for (let i = 0; i < this.selectedCargos.length; i++) {
+				const cargo = this.selectedCargos[i]
+				if (!cargo.cargoWeightNew || cargo.cargoWeightNew == '0') {
+					Message.error(`货物“${cargo.cargoName}”的配载重量必填！`)
+					return
+				}
+				if (cargo.cargoWeightNew > cargo.remainingCargoWeight) {
+					Message.error(`货物“${cargo.cargoName}”的配载重量不能大于待配载重量！`)
+					return
+				}
+				if (!cargo.cargoVolumeNew || cargo.cargoVolumeNew == '0') {
+					Message.error(`货物“${cargo.cargoName}”的配载体积必填！`)
+					return
+				}
+				if (cargo.cargoVolumeNew > cargo.remainingCargoVolume) {
+					Message.error(`货物“${cargo.cargoName}”的配载体积不能大于待配载体积！`)
+					return
+				}
+				if (!cargo.cargoNumNew || cargo.cargoNumNew == '0') {
+					Message.error(`货物“${cargo.cargoName}”的配载数量必填！`)
+					return
+				}
+				if (cargo.cargoNumNew > cargo.remainingCargoNum) {
+					Message.error(`货物“${cargo.cargoName}”的配载数量不能大于待配载数量！`)
+					return
+				}
+			}
 			this.$emit('nextStep', 3)
 		},
 		prevStep(){

@@ -12,6 +12,10 @@
 								:fetch-suggestions="getStaffs"
 								placeholder="请选择内容"
 								@select="handSelectStaff">
+								<template slot-scope="{ item }">
+									<span class="name">{{ item.realName }}</span>
+									<span class="mobile">{{ item.mobile }}</span>
+								</template>
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>

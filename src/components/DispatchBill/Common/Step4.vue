@@ -4,12 +4,12 @@
 			<div class="tit">人员信息</div>
 			<div class="con">
 				<div class="driver">
-					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
+					<img :src="selectedDriver.driverHeadPic ? resizeImg(selectedDriver.driverHeadPic, '_80x80.') : require('../../../assets/imgs/avatar.gif')" class="headPic"/>
 					<p class="name">{{selectedDriver.driverName}}<span class="tag">司机</span></p>
 					<p>{{selectedDriver.driverPhone}}</p>
 				</div>
 				<div class="escort">
-					<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
+					<img :src="selectedStaff.staffHeadPic ? resizeImg(selectedStaff.staffHeadPic, '_80x80.') : require('../../../assets/imgs/avatar.gif')" class="headPic"/>
 					<p class="name">{{selectedStaff.staffName}}<span class="tag">押运</span></p>
 					<p>{{selectedStaff.staffPhone}}</p>
 				</div>
@@ -54,7 +54,7 @@
 				</tr>
 				<tr v-for="cargoItem in task.cargo" :key="cargoItem.carrierCargoID">
 					<td class="text-center" width="100">
-						<span v-if="cargoItem.weightType='Heavy'">重货</span>
+						<span v-if="cargoItem.weightType == 'Heavy'">重货</span>
 						<span v-else>轻货</span>
 					</td>
 					<td>{{cargoItem.cargoType}}</td>
@@ -142,6 +142,7 @@
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import Dispatchbill from '../../../api/Dispatchbill'
+import { resizeImg } from '../../../common/utils'
 export default {
 	data() {
 		return {
@@ -166,9 +167,13 @@ export default {
 				amount += itemAmount
 			})
 			return amount
-		}
+		},
+		resizeImg: () => resizeImg
 	},
 	created() {
+		this.selectedCarrierBill.forEach(item => {
+			item.cargo = []
+		})
 		this.taskList = this.selectedCarrierBill
 		this.taskList.forEach(carrierBill => {
 			!carrierBill.cargo && (carrierBill.cargo = [])
@@ -181,6 +186,17 @@ export default {
 	},
 	methods: {
 		add() {
+			for (let i = 0; i < this.taskList.length; i++) {
+				const item = this.taskList[i]
+				if (!item.driverCashAmount && !item.driverCodAmount && !item.driverPorAmount && !item.driverMonthlyAmont && !item.driverCosigneeAmount ) {
+					Message.error(`任务单号：${i+1} 司机费用必填一项！`)
+					return
+				}
+				if (!item.superCargoCashAmount && !item.superCargoCodAmount && !item.superCargoCorAmount && !item.superCargoMonthlyAmount && !item.superCosigneeAmount ) {
+					Message.error(`任务单号：${i+1} 随车人员费用必填一项！`)
+					return
+				}
+			}
 			let dispatchTaskCargoInfo = this.selectedCargos.map(item => {
 				return {
 					'carrierCargoID': item.carrierCargoID,

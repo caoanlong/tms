@@ -17,7 +17,7 @@
 						<el-form-item label="联系人">
 							<el-input v-model="shipper.contactName"></el-input>
 						</el-form-item>
-						<el-form-item label="联系电话">
+						<el-form-item label="联系电话" prop="contactPhone">
 							<el-input v-model="shipper.contactPhone"></el-input>
 						</el-form-item>
 						<el-form-item>
@@ -34,6 +34,7 @@
 import { Message } from 'element-ui'
 import Customer from '../../api/Customer'
 import DistPicker from '../CommonComponents/DistPicker'
+import { checkTel } from '../../common/validator'
 export default {
 	data() {
 		return {
@@ -53,6 +54,9 @@ export default {
 				],
 				detailAddress: [
 					{required: true, message: '请输入详细地址', trigger: 'blur'}
+				],
+				contactPhone: [
+					{validator: checkTel}
 				]
 			}
 		}

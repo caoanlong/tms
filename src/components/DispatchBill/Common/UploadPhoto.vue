@@ -1,32 +1,60 @@
 <template>
-    <el-dialog title="上传照片" :visible="isVisible" :show-close="false" custom-class="table" width="70%">
+    <el-dialog title="上传照片" :visible.sync="isVisible" :show-close="false" custom-class="table" width="70%">
         <div class="area">
             <div class="area-item">装车地：{{shipperArea}}</div>
             <div class="area-item">送货地：{{consigneeArea}}</div>
         </div>
         <div class="pic">
-            <div class="photo">
+            <div class="photo" v-if="loadImgs.length > 0">
                 <div class="left">装车照片：</div>
                 <div class="right">
-                    <ImageUpload :objs="loadImgObjs" :files="loadImgs" :limitNum="10" @imgUrlBack="imgLoadUrlBack" :isUseCropper="false" :isPreview="isPreview"/>
+                    <ImageUpload 
+                        :objs="loadImgObjs" 
+                        :files="loadImgs" 
+                        :limitNum="10" 
+                        @imgUrlBack="imgLoadUrlBack" 
+                        :isUseCropper="false" 
+                        :isPreview="isPreview">
+                    </ImageUpload>
                 </div>
             </div>
-            <div class="photo">
+            <div class="photo" v-if="arriveImgs.length > 0">
                 <div class="left">到货照片：</div>
                 <div class="right">
-                    <ImageUpload :objs="arriveImgObjs" :files="arriveImgs" :limitNum="10" @imgUrlBack="imgArriveUrlBack" :isUseCropper="false" :isPreview="isPreview"/>
+                    <ImageUpload 
+                        :objs="arriveImgObjs" 
+                        :files="arriveImgs" 
+                        :limitNum="10" 
+                        @imgUrlBack="imgArriveUrlBack" 
+                        :isUseCropper="false" 
+                        :isPreview="isPreview">
+                    </ImageUpload>
                 </div>
             </div>
-            <div class="photo">
+            <div class="photo" v-if="backImgs.length > 0">
                 <div class="left">回单照片：</div>
                 <div class="right">
-                    <ImageUpload :objs="backImgObjs" :files="backImgs" :limitNum="10" @imgUrlBack="imgBackUrlBack" :isUseCropper="false" :isPreview="isPreview"/>
+                    <ImageUpload 
+                        :objs="backImgObjs" 
+                        :files="backImgs" 
+                        :limitNum="10" 
+                        @imgUrlBack="imgBackUrlBack" 
+                        :isUseCropper="false" 
+                        :isPreview="isPreview">
+                    </ImageUpload>
                 </div>
             </div>
-            <div class="photo">
+            <div class="photo" v-if="exceptImgs.length > 0">
                 <div class="left">异常照片：</div>
                 <div class="right">
-                    <ImageUpload :objs="exceptImgObjs" :files="exceptImgs" :limitNum="10" @imgUrlBack="imgExceptUrlBack" :isUseCropper="false" :isPreview="isPreview"/>
+                    <ImageUpload 
+                        :objs="exceptImgObjs" 
+                        :files="exceptImgs" 
+                        :limitNum="10" 
+                        @imgUrlBack="imgExceptUrlBack" 
+                        :isUseCropper="false" 
+                        :isPreview="isPreview">
+                    </ImageUpload>
                 </div>
             </div>
         </div>

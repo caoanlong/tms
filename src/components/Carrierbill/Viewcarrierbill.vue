@@ -2,11 +2,11 @@
 	<div class="main-content" >
 		<div class="wf-card">
 			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}
-				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="warning" v-if="carrierOrder.status=='Committed'">待执行</el-tag>
+				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="warning" v-if="carrierOrder.status=='Committed'">未执行</el-tag>
 				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" v-else-if="carrierOrder.status=='Running'">执行中</el-tag>
-				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="success" v-else-if="carrierOrder.status=='Signed'">到达签收</el-tag>
+				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="success" v-else-if="carrierOrder.status=='Signed'">已完成</el-tag>
 				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="info" v-else-if="carrierOrder.status=='Closed'">已关闭</el-tag>
-				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="info" v-else-if="carrierOrder.status=='Canceled'">作废</el-tag>
+				<!-- <el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="info" v-else-if="carrierOrder.status=='Canceled'">作废</el-tag> -->
 			</div>
 			<div class="datetime">
 				<span class="label">发货单号：</span><span>{{carrierOrder.shipperNo}}</span>
@@ -198,8 +198,8 @@
 					<td><span class="link" @click="viewTask(transport.dispatchTaskID)">{{transport.taskNo}}</span></td>
 					<td>
 						<el-tag size="mini" type="warning" v-if="transport.status == 'Committed'">待装车</el-tag>
-						<el-tag size="mini" v-if="transport.status == 'Running'">已装车</el-tag>
-						<el-tag size="mini" type="success" v-if="transport.status == 'Signed'">已签收</el-tag>
+						<el-tag size="mini" v-else-if="transport.status == 'Loaded'">已装车</el-tag>
+						<el-tag size="mini" type="success" v-else-if="transport.status == 'Signed'">已签收</el-tag>
 					</td>
 					<td>{{transport.cargoName}}</td>
 					<td>{{transport.loadWeightSum + 'kg'}}/{{transport.loadVolumeSum + 'm³'}}/{{transport.LoadNumSum + '件'}}</td>
@@ -307,7 +307,7 @@ export default {
 			this.dialogCargoVisible = bool
 		},
 		viewTask(dispatchTaskID) {
-			this.$router.push({name: 'viewtaskdetail', query: { dispatchTaskID, type: 'view' }})
+			this.$router.push({name: 'viewtaskdetail', query: { dispatchTaskID, type: 'view', isHideAmount: true }})
 		},
 		back() {
 			this.$router.go(-1)

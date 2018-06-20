@@ -5,11 +5,11 @@
 				<span>发货单号：{{carrierbillInfo.shipperNo}}</span>
 				<span>创建时间：{{carrierbillInfo.createTime | getdatefromtimestamp()}}</span>
 				<span>委托时间：<span v-if="carrierbillInfo.commissionDate">{{carrierbillInfo.commissionDate | getdatefromtimestamp(true)}}</span></span>
-				<span class="status status1" v-if="carrierbillInfo.status=='Commited'">待执行</span>
+				<span class="status status1" v-if="carrierbillInfo.status=='Commited'">未执行</span>
 				<span class="status status2" v-else-if="carrierbillInfo.status=='Running'">执行中</span>
-				<span class="status status3" v-else-if="carrierbillInfo.status=='Signed'">到达签收</span>
+				<span class="status status3" v-else-if="carrierbillInfo.status=='Signed'">已完成</span>
 				<span class="status status1" v-else-if="carrierbillInfo.status=='Closed'">已关闭</span>
-				<span class="status status1" v-else-if="carrierbillInfo.status=='Canceled'">作废</span>
+				<!-- <span class="status status1" v-else-if="carrierbillInfo.status=='Canceled'">作废</span> -->
 			</div>
 			<el-row>
 				<div class="split-item">

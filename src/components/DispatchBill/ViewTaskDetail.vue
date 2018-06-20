@@ -4,10 +4,9 @@
 			<div class="item">
 				<div class="lineInfo">
 					<div class="tit"><span>任务单号：{{task.taskNo}}</span>
-						<el-tag type="warning" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-if="task.status='Committed'">待执行</el-tag>
-						<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="task.status='Loaded'">已装运</el-tag>
-						<el-tag type="success" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="task.status='Signed'">已签收</el-tag>
-						<el-tag type="info" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else>已作废</el-tag>
+						<el-tag type="warning" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-if="task.status == 'Committed'">待装车</el-tag>
+						<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="task.status == 'Loaded'">已装运</el-tag>
+						<el-tag type="success" size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="task.status == 'Signed'">已签收</el-tag>
 					</div>
 					<div class="con">
 						<div class="from">
@@ -57,7 +56,7 @@
 						<td class="text-center" width="100"><span v-if="cargoItem.weightType='Heavy'">重货</span><span v-else>轻货</span></td><td>{{cargoItem.cargoType}}</td><td>{{cargoItem.cargoName}}</td><td>{{cargoItem.cargoWeight?(cargoItem.cargoWeight+'kg/'+''):''}}{{cargoItem.cargoVolume?cargoItem.cargoVolume+'m³/':''}}{{cargoItem.cargoNum?cargoItem.cargoNum+'件':''}}</td>
 					</tr>
 				</table>
-				<table class="fare">
+				<table class="fare" v-if="!isHideAmount">
 					<tr>
 						<td class="tit" colspan="7">
 							付款费用 
@@ -155,6 +154,7 @@ export default {
 			exceptImgObjs: [],
 			isEdit: false,
 			type: this.$route.query.type,
+			isHideAmount: this.$route.query.isHideAmount,
 			currentDispatchTaskID: '',
 			isPhotoVisible: false
 		}
@@ -185,7 +185,6 @@ export default {
 		},
 		saveFare() {
 			this.modifyFreight()
-			this.isEdit = false
 		},
 		getDetail() {
 			let dispatchTaskID = this.$route.query.dispatchTaskID
@@ -210,6 +209,22 @@ export default {
             })
 		},
 		modifyFreight() {
+			if (!Number(this.task.driverCashAmount) 
+				&& !Number(this.task.driverCodAmount) 
+				&& !Number(this.task.driverPorAmount) 
+				&& !Number(this.task.driverMonthlyAmont) 
+				&& !Number(this.task.driverCosigneeAmount)) {
+				Message.error('司机付款费用必填一项！')
+				return
+			}
+			if (!Number(this.task.superCargoCashAmount) 
+				&& !Number(this.task.superCargoCodAmount) 
+				&& !Number(this.task.superCargoCorAmount) 
+				&& !Number(this.task.superCargoMonthlyAmount) 
+				&& !Number(this.task.superCosigneeAmount)) {
+				Message.error('随车人员付款费用必填一项！')
+				return
+			}
 			let dispatchTaskID = this.$route.query.dispatchTaskID
 			Task.modifyFreight({
 				'dispatchTaskID': dispatchTaskID,
@@ -221,8 +236,10 @@ export default {
 				'superCargoCashAmount': this.task.superCargoCashAmount,
 				'superCargoCodAmount': this.task.superCargoCodAmount,
 				'superCargoCorAmount': this.task.superCargoCorAmount,
-				'superCargoMonthlyAmount': this.task.superCargoMonthlyAmount
+				'superCargoMonthlyAmount': this.task.superCargoMonthlyAmount,
+				'superCosigneeAmount': this.task.superCosigneeAmount
 			}).then(res => {
+				this.isEdit = false
 				Message.success(res.data.msg)
 				this.getDetail()
 			})

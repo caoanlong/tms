@@ -22,11 +22,10 @@
 					<el-form-item label="运单状态" class="customerSelect">
 						<el-select v-model="findStatus" placeholder="运单状态" style="width:140px">
 							<el-option value="" label="全部订单">全部订单</el-option>
-							<el-option value="Committed" label="待执行">待执行</el-option>
+							<el-option value="Committed" label="未执行">未执行</el-option>
 							<el-option value="Running" label="执行中">执行中</el-option>
-							<el-option value="Signed" label="到达签收">到达签收</el-option>
+							<el-option value="Signed" label="已完成">已完成</el-option>
 							<el-option value="Closed" label="已关闭">已关闭</el-option>
-							<el-option value="Canceled" label="作废">作废</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -58,9 +57,9 @@
 							<td colspan="11">
 								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 								<span class="infoItem">
-									<el-tag size="mini" type="warning" v-if="item.status=='Committed'">待执行</el-tag>
+									<el-tag size="mini" type="warning" v-if="item.status=='Committed'">未执行</el-tag>
 									<el-tag size="mini" v-else-if="item.status=='Running'">执行中</el-tag>
-									<el-tag size="mini" type="success" v-else-if="item.status=='Signed'">到达签收</el-tag>
+									<el-tag size="mini" type="success" v-else-if="item.status=='Signed'">已完成</el-tag>
 									<el-tag size="mini" type="info" v-else-if="item.status=='Closed'">已关闭</el-tag>
 									<el-tag size="mini" type="info" v-else-if="item.status=='Canceled'">作废</el-tag>
 								</span>
@@ -75,7 +74,11 @@
 										@click="close(item.carrierOrderID)">
 										关闭
 									</el-button>
-									<el-button type="text" size="mini" @click="del(item.carrierOrderID)">删除</el-button>
+									<el-button type="text" size="mini"
+										:disabled="item.status == 'Running' || item.status == 'Signed' || item.status == 'Closed'" 
+										@click="del(item.carrierOrderID)">
+										删除
+									</el-button>
 								</span>
 							</td>
 						</tr>

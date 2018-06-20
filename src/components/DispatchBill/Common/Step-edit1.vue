@@ -145,8 +145,8 @@ export default {
 			let params = {
 				current: this.pageIndex,
 				size: this.pageSize,
-				shipperBeginDate: this.findshipperBeginDate,
-				shipperEndDate: this.findshipperEndDate,
+				beginDate: this.findshipperBeginDate,
+				endDate: this.findshipperEndDate,
 				searchInfo: this.findsearchInfo,
 				status: this.findStatus
 			}

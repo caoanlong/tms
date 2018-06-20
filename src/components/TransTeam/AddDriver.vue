@@ -288,7 +288,7 @@ export default {
 					{required: true, message: '请选择合作关系'}
 				],
 				laborContractBeginTime: [
-					{required: true, message: '请选择合作关系'}
+					{required: true, message: '请选择合同有效期'}
 				],
 				laborContractDate: [
 					{ required: true, message: '请选择合同有效期' },

@@ -2,10 +2,9 @@
 	<div class="item" @click="viewtaskdetail(taskItem.dispatchTaskID)">
 		<div class="lineInfo">
 			<div class="tit"><span>任务{{index+1}}</span> 
-				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" type="warning" v-if="taskItem.status='Committed'">待执行</el-tag>
-				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="taskItem.status='Loaded'">已装运</el-tag>
-				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" type="success" v-else-if="taskItem.status='Signed'">已签收</el-tag>
-				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" type="info" v-else>已作废</el-tag>
+				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" type="warning" v-if="taskItem.status == 'Committed'">待装车</el-tag>
+				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
+				<el-tag size="mini" style="float:right;position:relative;top:50%;transform:translateY(-50%)" type="success" v-else-if="taskItem.status == 'Signed'">已签收</el-tag>
 			</div>
 			<div class="con">
 				<table>
@@ -60,45 +59,18 @@
 					</tr>
 					<tr v-if="taskItem.dispatchTaskPicList.length>0">
 						<td colspan="3">
-							<div class="picItem" v-for="(picItem,index) in taskItem.dispatchTaskPicList" :key="index">
-								<img :src="resizeImg(picItem.minURL, '_100x100.')"/>
-								<p v-if="picItem.type =='Loaded'">装车照片</p>
-								<p v-else-if="picItem.type =='Arrived'">送达照片</p>
-								<p v-else-if="picItem.type =='Received'">回单照片</p>
-								<p v-else>异常照片</p>
-							</div>
+							<ImageUpload :isShowType="true" :objs="taskItem.dispatchTaskPicList" :files="taskItem.dispatchTaskPicList.map(item => item.minURL)" :isPreview="true"/>
 						</td>
 					</tr>
 				</table>
 				<span class="viewtaskdetailBtn"><img src="../../../assets/imgs/viewtaskdetailBtn.png" /></span>
 			</div>
 		</div>
-		<el-dialog
-		title="任务照片"
-		:visible.sync="dialogVisible"
-		width="60%" custom-class="viewPicDetail">
-		<div class="dialogBody">
-			<div class="text-center">
-				<img src="../../../assets/imgs/avatar.gif" class="bigPic">
-			</div>
-			<div class="picdes">
-				<p>补齐上月单据</p>
-				<p>广东省深圳市南山区 海天二路</p>
-				<span class="statusTag">装车</span>
-				<!-- <span class="statusTag" v-if="picItem.type='Loaded'">装车</span>
-				<span class="statusTag" v-else-if="picItem.type='Arrived'">送达</span>
-				<span class="statusTag" v-else-if="picItem.type='Received'">回单</span>
-				<span class="statusTag" v-else-if="picItem.type='Unusual'">异常</span> -->
-			</div>
-		</div>
-		<span slot="footer" class="dialog-footer">
-			<el-button type="primary" @click="dialogVisible = false" size="small">关闭</el-button>
-		</span>
-		</el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
 import { resizeImg } from '../../../common/utils'
+import ImageUpload from '../../CommonComponents/ImageUpload2'
 export default {
 	props:{
 		index:{
@@ -120,15 +92,12 @@ export default {
 	},
 	data(){
 		return{
-			dialogVisible:false
 		}
 	},
+	components: {ImageUpload},
 	methods:{
 		viewtaskdetail(dispatchTaskID){
 			this.$router.push({ name: 'viewtaskdetail' , query: { dispatchTaskID } })
-		},
-		viewPicDetail(){
-			this.dialogVisible=true
 		}
 	}
 }

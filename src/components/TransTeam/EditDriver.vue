@@ -292,6 +292,9 @@ export default {
 				laborContractBeginTime: [
 					{ required: true, message: '请选择合同有效期' },
 				],
+				laborContractDate: [
+					{ required: true, message: '请选择合同有效期' },
+				],
 				// idCardNum: [
 				// 	{required: true, message: '请输入身份证号'},
 				// 	{validator: checkIDCard}
