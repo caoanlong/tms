@@ -1,31 +1,5 @@
 <template>
 	<div class="step step1">
-		<div class="search">
-			<el-form :inline="true" size="small">
-				<el-form-item label="关键字" >
-					<el-input placeholder="承运单号/货物名称/起始地/目的地" style="width:250px" v-model="findsearchInfo"></el-input>
-				</el-form-item>
-				<el-form-item label="收发货单位">
-					<el-input placeholder="收发货单位" v-model="findrecdeliverycomp"></el-input>
-				</el-form-item>
-				<el-form-item label="发货时间">
-					<el-date-picker
-						v-model="findRangeDate"
-						type="daterange"
-						range-separator="至"
-						start-placeholder="开始日期"
-						end-placeholder="结束日期"
-						value-format="timestamp"
-						:clearable="false"
-						@change="selectDateRange">
-					</el-date-picker>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getList">搜索</el-button>
-					<el-button type="default" @click="reset">重置</el-button>
-				</el-form-item>
-			</el-form>
-		</div>
 		<div class="table">
 			<table class="wfTable">
 				<tr>
@@ -108,14 +82,10 @@ export default {
 			pageSize: 10,
 			total: 0,
 			carrierList:[],
-			findsearchInfo:'',
-			findrecdeliverycomp:'',
-			findRangeDate: [],
-			findshipperBeginDate: '',
-			findshipperEndDate: '',
 			checkedList: [],
 			checked: false,
 			isIndeterminate: false,
+			recdeliverycomp: {},
 			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
 	},
@@ -144,11 +114,7 @@ export default {
 		getList() {
 			let params = {
 				current: this.pageIndex,
-				size: this.pageSize,
-				beginDate: this.findshipperBeginDate,
-				endDate: this.findshipperEndDate,
-				keyword: this.findsearchInfo,
-				customerID: ''
+				size: this.pageSize
 			}
 			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Carrierbill.findPreDispatch(params).then(res => {

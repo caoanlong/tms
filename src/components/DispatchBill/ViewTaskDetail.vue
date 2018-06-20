@@ -32,17 +32,17 @@
 					<div class="tit">人员信息</div>
 					<div class="con">
 						<div class="driver">
-							<img src="../../assets/imgs/avatar.gif" class="headPic"/>
+							<img :src="taskDetail.driverHeadPic ? resizeImg(taskDetail.driverHeadPic, '_80x80.') : require('../../assets/imgs/avatar.gif')" class="headPic"/>
 							<p class="name">{{taskDetail.driverName}}<span class="tag">司机</span></p>
 							<p>{{taskDetail.driverPhone}}</p>
 						</div>
 						<div class="escort">
-							<img src="../../assets/imgs/avatar.gif" class="headPic"/>
+							<img :src="taskDetail.superCargoHeadPic ? resizeImg(taskDetail.superCargoHeadPic, '_80x80.') : require('../../assets/imgs/avatar.gif')" class="headPic"/>
 							<p class="name">{{taskDetail.superCargoName}}<span class="tag">押运</span></p>
 							<p>{{taskDetail.superCargoPhone}}</p>
 						</div>
 						<div class="escort">
-							<img src="../../assets/imgs/avatar.gif" class="headPic"/>
+							<img :src="taskDetail.dispatcherLogoUrl ? resizeImg(taskDetail.dispatcherLogoUrl, '_80x80.') : require('../../assets/imgs/avatar.gif')" class="headPic"/>
 							<p class="name">{{taskDetail.dispatcherName}}<span class="tag">调度</span></p>
 							<p>{{taskDetail.dispatcherMobile}}</p>
 						</div>
@@ -137,6 +137,7 @@ import Task from '../../api/Task'
 import TaskPic from '../../api/TaskPic'
 import ImageUpload from '../CommonComponents/ImageUpload2'
 import UploadPhoto from './Common/UploadPhoto'
+import { resizeImg } from '../../common/utils'
 export default {
 	data() {
 		return {
@@ -174,6 +175,7 @@ export default {
 			+ Number(this.task.superCargoMonthlyAmount ? this.task.superCargoMonthlyAmount : 0) 
 			+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)
 		},
+		resizeImg: () => resizeImg
 	},
 	created() {
 		this.getDetail()
