@@ -78,14 +78,23 @@
 				</el-row>
 				<el-row>
 					<el-col :span="16">
-						<el-form-item>
+						<el-form-item prop="plateNo" v-if="plateNoType == '车牌号'">
 							<span style="color: red" slot="label">*</span>
 							<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType">
 								<el-option label="车牌号" value="车牌号"></el-option>
 								<el-option label="挂车车牌" value="挂车车牌"></el-option>
 							</el-select>
 							<div style="display: inline-block">
-								<el-input placeholder="请输入车牌号" v-model="truck.plateNo" v-if="plateNoType == '车牌号'"></el-input>
+								<el-input placeholder="请输入车牌号" v-model="truck.plateNo"></el-input>
+							</div>
+						</el-form-item>
+						<el-form-item prop="trailerPlateNo" v-if="plateNoType == '挂车车牌'">
+							<span style="color: red" slot="label">*</span>
+							<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType">
+								<el-option label="车牌号" value="车牌号"></el-option>
+								<el-option label="挂车车牌" value="挂车车牌"></el-option>
+							</el-select>
+							<div style="display: inline-block">
 								<el-input placeholder="请输入挂车车牌" v-model="truck.trailerPlateNo" v-if="plateNoType == '挂车车牌'"></el-input>
 							</div>
 						</el-form-item>
@@ -573,6 +582,7 @@ import Truck from '../../api/Truck'
 import ImageUpload from '../CommonComponents/ImageUpload'
 import DistPicker from '../CommonComponents/DistPicker'
 import { searchAreaByKey } from '../../common/utils'
+import { checkPlateNo } from '../../common/validator'
 import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../common/validators'
 export default {
 	data() {
@@ -684,6 +694,12 @@ export default {
 				],
 				truckType: [
 					{ required: true, message: '请选择车辆类型', trigger: 'change' }
+				],
+				plateNo: [
+					{validator: checkPlateNo}
+				],
+				trailerPlateNo: [
+					{validator: checkPlateNo}
 				],
 				plateNoColor: [
 					{required: true, message: '请选择车牌颜色', trigger: 'change'}

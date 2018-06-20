@@ -26,6 +26,9 @@ const dispatch = {
 		SET_CARGO: (state, list) => {
 			state.selectedCargos = list
 		},
+		CLEAR_CARGO: (state) => {
+			state.selectedCargos = []
+		},
 		SET_DRIVER: (state, data) => {
 			state.selectedDriver = data
 		},
@@ -45,6 +48,9 @@ const dispatch = {
 		},
 		setCargo({ commit }, list) {
 			commit('SET_CARGO', list)
+		},
+		clearCargo({ commit }) {
+			commit('CLEAR_CARGO')
 		},
 		setDriver({ commit }, data) {
 			commit('SET_DRIVER', data)

@@ -92,6 +92,15 @@ export function checkURL(rule, value, callback) {
 	}
 }
 
+// 验证车牌号
+export const checkPlateNo = (rule, value, callback) => {
+	const re = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/
+	if (!re.test(value) && value) {  
+		callback(new Error('请输入正确的车牌号'))
+	} else {  
+		callback()
+	} 
+}
 
 // 验证非负浮点数（正浮点数 + 0） 2位小数
 export const checkFloat2 = (rule, value, callback) => {

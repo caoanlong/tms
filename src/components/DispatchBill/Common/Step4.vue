@@ -242,6 +242,7 @@ export default {
 				'superCargoID': this.selectedStaff.staffID
 			}).then(res => {
 				Message.success('保存成功！')
+				this.$store.dispatch('clearCargo')
 				this.$store.dispatch('clearCarrierBill')
 				this.$router.push({name: 'dispatchbills'})
 			})
