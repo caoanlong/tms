@@ -192,7 +192,7 @@ export default {
 						<span style="color:#999">（${this.objs[index].createMobile}）</span>
 						<span style="color:#999">${getdatefromtimestamp(this.objs[index].createTime)}</span>
 					</div>
-					<img style="width: 100%;" src=${this.imgUrl + url} />
+					<img style="width: 100%;vertical-align:top" src=${this.imgUrl + url} />
 					<div style="height:60px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
 						<div style="position:relative;height:30px;line-height:30px;padding: 0 100px 0 10px;">
 							<div>${this.objs[index].description?this.objs[index].description:''}</div>

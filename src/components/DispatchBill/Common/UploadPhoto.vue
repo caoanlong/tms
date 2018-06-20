@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="上传照片" :visible.sync="isVisible" :show-close="false" custom-class="table" width="70%">
+    <el-dialog title="上传照片" :visible.sync="isVisible" :show-close="false" custom-class="table" width="70%" :close-on-click-modal="false">
         <div class="area">
             <div class="area-item">装车地：{{shipperArea}}</div>
             <div class="area-item">送货地：{{consigneeArea}}</div>
@@ -208,6 +208,7 @@ export default {
     .photo
         position relative
         padding-left 90px
+        min-height 30px
         .left
             position absolute
             left 0
