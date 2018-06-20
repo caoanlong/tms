@@ -30,10 +30,11 @@
 				<tr>
 					<td><span class="labels">押运员：</span>{{dispatchOrder.superCargoName}}</td>
 					<td><span class="labels">押运电话：</span>{{dispatchOrder.superCargoMobile}}</td>
-					<td><span class="labels">任务总数：</span>{{dispatchOrder.dispatchTaskList && dispatchOrder.dispatchTaskList.length}}</td>
+					<td></td>
 				</tr>
 			</table>
 		</div>
+		<div class="header clearfix">共有{{dispatchOrder.dispatchTaskList && dispatchOrder.dispatchTaskList.length}}个任务</div>
 		<TaskListItem 
 			:taskItem="item" 
 			v-for="(item,index) in dispatchOrder.dispatchTaskList" 

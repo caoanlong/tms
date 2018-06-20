@@ -21,8 +21,9 @@
 							<el-option label="全部" value=""></el-option>
 							<el-option label="未接单" value="Committed"></el-option>
 							<el-option label="已接单" value="Ordered"></el-option>
-							<el-option label="已关闭" value="Canceled"></el-option>
-							<el-option label="已取消" value="Rejected"></el-option>
+							<el-option label="已关闭" value="Closed"></el-option>
+							<el-option label="已取消" value="Canceled"></el-option>
+							<el-option label="已拒绝" value="Rejected"></el-option>
 							<el-option label="已完成" value="Finished"></el-option>
 						</el-select>
 					</el-form-item>
@@ -206,9 +207,9 @@ export default {
 		},
 		getList () {
 			Dispatchbill.find({
-				keyword:this.findkeyword,
-				customerID:this.recdeliverycomp.customerID,
-				status:this.findstatus,
+				keyword: this.findkeyword,
+				consigneeAndShipper: this.recdeliverycomp.companyName,
+				status: this.findstatus,
 				current: this.pageIndex,
 				size: this.pageSize
 			}).then(res => {

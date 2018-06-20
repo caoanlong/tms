@@ -6,7 +6,13 @@
 					<el-input placeholder="承运单号/货物名称/起始地/目的地" style="width:250px" v-model="findsearchInfo"></el-input>
 				</el-form-item>
 				<el-form-item label="收发货单位">
-					<el-input placeholder="收发货单位" v-model="findrecdeliverycomp"></el-input>
+					<el-autocomplete
+						value-key="companyName" 
+						v-model="recdeliverycomp.companyName"
+						:fetch-suggestions="getRecdeliverycomp"
+						placeholder="请输入收发货单位"
+						@select="handSelectShipper">
+					</el-autocomplete>
 				</el-form-item>
 				<el-form-item label="发货时间">
 					<el-date-picker
@@ -100,6 +106,7 @@ import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import Carrierbill from '../../../api/Carrierbill'
 import Page from '../../CommonComponents/Page'
+import Customer from '../../../api/Customer'
 export default {
 	data() {
 		return {
@@ -108,13 +115,13 @@ export default {
 			total: 0,
 			carrierList:[],
 			findsearchInfo:'',
-			findrecdeliverycomp:'',
 			findRangeDate: [],
 			findshipperBeginDate: '',
 			findshipperEndDate: '',
 			checkedList: [],
 			checked: false,
-			isIndeterminate: false
+			isIndeterminate: false,
+			recdeliverycomp: {}
 		}
 	},
 	computed: {
@@ -131,6 +138,18 @@ export default {
 			}
 			this.$emit('nextStep', 2)
 		},
+		getRecdeliverycomp(queryString, cb) {
+			Customer.find({
+				type: 'ShipperConsignee',
+				companyName: queryString
+			}).then(res => {
+				cb(res.records)
+			})
+		},
+		handSelectShipper(data){
+			this.recdeliverycomp.companyName = data.companyName
+			this.recdeliverycomp.customerID = data.customerID
+		},
 		pageChange(index) {
 			this.pageIndex = index
 			this.getList() 
@@ -146,7 +165,7 @@ export default {
 				beginDate: this.findshipperBeginDate,
 				endDate: this.findshipperEndDate,
 				keyword: this.findsearchInfo,
-				customerID: ''
+				consigneeAndShipper: this.recdeliverycomp.companyName
 			}
 			Carrierbill.findPreDispatch(params).then(res => {
 				this.carrierList = res.records
@@ -158,7 +177,6 @@ export default {
 		},
 		reset() {
 			this.findsearchInfo = ''
-			this.findrecdeliverycomp = ''
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
 			this.findRangeDate = []
