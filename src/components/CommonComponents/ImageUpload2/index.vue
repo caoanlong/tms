@@ -179,13 +179,11 @@ export default {
 		showImgModal(url, index) {
 			let elem = document.createElement('div')
 			elem.id = 'imgView'
-			elem.innerHTML = `
-			<div style="position:fixed;left:0;top:0;right:0;height:100%;display:flex;justify-content:center;align-items:center;background-color:rgba(0,0,0,.5);z-index:9998;overflow:scroll" 
-				onclick="function(ev){var oEvent = ev||event;oEvent.cancelBubble = true;oEvent.stopPropagation();document.getElementById('app').removeChild(document.getElementById('imgView'))}">
-				<div style="width:35%;margin-top: 50px;position:relative;background-color:#fff;z-index:9999;border-radius:5px;overflow:hidden">
-					<div style="width:100%;height:60px;line-height:60px;padding: 0 16px;font-size:16px;position:relative">
+			elem.innerHTML = `<div style="position:fixed;left:0;top:0;right:0;height:100%;background-color:rgba(0,0,0,.5);z-index:9998;overflow:auto" onclick="function(ev){var oEvent = ev||event;oEvent.cancelBubble = true;oEvent.stopPropagation();document.getElementById('app').removeChild(document.getElementById('imgView'))}">
+				<div style="width:40%;margin: 50px auto;position:relative;background-color:#fff;z-index:9999;border-radius:5px;padding-top:60px;overflow:hidden">
+					<div style="width:100%;height:60px;line-height:60px;padding: 0 16px;font-size:16px;position:absolute;top:0">
 						图片预览
-						<div style="position:absolute;right:0;top:0;width:60px;height:60px;pointer:cursor" onclick="document.getElementById('app').removeChild(document.getElementById('imgView'))">
+						<div style="position:absolute;right:0;top:0;width:60px;height:60px;cursor:pointer;" onclick="document.getElementById('app').removeChild(document.getElementById('imgView'))">
 							<i class="el-message-box__close el-icon-close" style="color:#999;margin-left:25px"></i>
 						</div>
 					</div>
@@ -200,15 +198,14 @@ export default {
 							<div>${this.objs[index].description?this.objs[index].description:''}</div>
 							<div>
 								<span style="position:absolute;top:5px;right:10px;padding:0 10px;background:#f80;border-radius:4px;height:20px;line-height:20px">
-									${this.objs[index].type == 'Loaded' ? '装车' 
-									: (this.objs[index].type == 'Arrived' ? '送达' 
-									: (this.objs[index].type == 'Received' ? '回单' : '异常'))}
-								</span>
+												${this.objs[index].type == 'Loaded' ? '装车' 
+												: (this.objs[index].type == 'Arrived' ? '送达' 
+												: (this.objs[index].type == 'Received' ? '回单' : '异常'))}
+											</span>
 							</div>
 						</div>
 						<div style="padding: 0 10px">
-							<img src="${positionImg}" style="vertical-align:middle;height:16px;${this.objs[index].detailAddress?'display:inline-block':'display:none'}"/>
-							${this.objs[index].detailAddress ? this.objs[index].detailAddress : ''}
+							<img src="${positionImg}" style="vertical-align:middle;height:16px;${this.objs[index].detailAddress?'display:inline-block':'display:none'}" /> ${this.objs[index].detailAddress ? this.objs[index].detailAddress : ''}
 						</div>
 					</div>
 				</div>
