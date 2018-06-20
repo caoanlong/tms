@@ -145,8 +145,8 @@ export default {
 				size: this.pageSize,
 				beginDate: this.findshipperBeginDate,
 				endDate: this.findshipperEndDate,
-				searchInfo: this.findsearchInfo,
-				status: this.findStatus
+				keyword: this.findsearchInfo,
+				customerID: ''
 			}
 			Carrierbill.findPreDispatch(params).then(res => {
 				this.carrierList = res.records
@@ -158,6 +158,7 @@ export default {
 		},
 		reset() {
 			this.findsearchInfo = ''
+			this.findrecdeliverycomp = ''
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
 			this.findRangeDate = []

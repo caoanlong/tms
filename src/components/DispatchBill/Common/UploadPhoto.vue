@@ -5,7 +5,7 @@
             <div class="area-item">送货地：{{consigneeArea}}</div>
         </div>
         <div class="pic">
-            <div class="photo" v-if="loadImgs.length > 0">
+            <div class="photo">
                 <div class="left">装车照片：</div>
                 <div class="right">
                     <ImageUpload 
@@ -18,7 +18,7 @@
                     </ImageUpload>
                 </div>
             </div>
-            <div class="photo" v-if="arriveImgs.length > 0">
+            <div class="photo">
                 <div class="left">到货照片：</div>
                 <div class="right">
                     <ImageUpload 
@@ -31,7 +31,7 @@
                     </ImageUpload>
                 </div>
             </div>
-            <div class="photo" v-if="backImgs.length > 0">
+            <div class="photo">
                 <div class="left">回单照片：</div>
                 <div class="right">
                     <ImageUpload 
@@ -44,7 +44,7 @@
                     </ImageUpload>
                 </div>
             </div>
-            <div class="photo" v-if="exceptImgs.length > 0">
+            <div class="photo">
                 <div class="left">异常照片：</div>
                 <div class="right">
                     <ImageUpload 

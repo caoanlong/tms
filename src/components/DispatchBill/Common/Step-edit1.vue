@@ -147,8 +147,8 @@ export default {
 				size: this.pageSize,
 				beginDate: this.findshipperBeginDate,
 				endDate: this.findshipperEndDate,
-				searchInfo: this.findsearchInfo,
-				status: this.findStatus
+				keyword: this.findsearchInfo,
+				customerID: ''
 			}
 			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
 			Carrierbill.findPreDispatch(params).then(res => {
@@ -164,6 +164,7 @@ export default {
 		},
 		reset() {
 			this.findsearchInfo = ''
+			this.findrecdeliverycomp = ''
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
 			this.findRangeDate = []

@@ -199,27 +199,39 @@ export default {
 			}
 			for (let i = 0; i < this.selectedCargos.length; i++) {
 				const cargo = this.selectedCargos[i]
-				if (!cargo.cargoWeightNew || cargo.cargoWeightNew == '0') {
-					Message.error(`货物“${cargo.cargoName}”的配载重量必填！`)
-					return
+				if (cargo.weightType == 'Heavy') {
+					if (!cargo.cargoWeightNew || Number(cargo.cargoWeightNew) <= 0) {
+						Message.error(`货物“${cargo.cargoName}”的配载重量必填！`)
+						return
+					}
+					if (Number(cargo.cargoVolumeNew) < 0) {
+						Message.error(`货物“${cargo.cargoName}”的配载体积不能小于0！`)
+						return
+					}
+				} else if (cargo.weightType == 'Light') {
+					if (Number(cargo.cargoWeightNew) < 0) {
+						Message.error(`货物“${cargo.cargoName}”的配载重量不能小于0！`)
+						return
+					}
+					if (!cargo.cargoVolumeNew || Number(cargo.cargoVolumeNew) <= 0) {
+						Message.error(`货物“${cargo.cargoName}”的配载体积必填！`)
+						return
+					}
 				}
-				if (cargo.cargoWeightNew > cargo.remainingCargoWeight) {
+				if (Number(cargo.cargoWeightNew) > Number(cargo.remainingCargoWeight)) {
 					Message.error(`货物“${cargo.cargoName}”的配载重量不能大于待配载重量！`)
 					return
 				}
-				if (!cargo.cargoVolumeNew || cargo.cargoVolumeNew == '0') {
-					Message.error(`货物“${cargo.cargoName}”的配载体积必填！`)
-					return
-				}
-				if (cargo.cargoVolumeNew > cargo.remainingCargoVolume) {
+				
+				if (Number(cargo.cargoVolumeNew) > Number(cargo.remainingCargoVolume)) {
 					Message.error(`货物“${cargo.cargoName}”的配载体积不能大于待配载体积！`)
 					return
 				}
-				if (!cargo.cargoNumNew || cargo.cargoNumNew == '0') {
-					Message.error(`货物“${cargo.cargoName}”的配载数量必填！`)
+				if (Number(cargo.cargoNumNew) < 0) {
+					Message.error(`货物“${cargo.cargoName}”的配载数量不能小于0！`)
 					return
 				}
-				if (cargo.cargoNumNew > cargo.remainingCargoNum) {
+				if (Number(cargo.cargoNumNew) > Number(cargo.remainingCargoNum)) {
 					Message.error(`货物“${cargo.cargoName}”的配载数量不能大于待配载数量！`)
 					return
 				}
