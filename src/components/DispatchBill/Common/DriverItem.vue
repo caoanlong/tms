@@ -11,7 +11,7 @@
 		</div>
 		<div class="truckInfo">
 			<p><span class="labels">车牌号/挂车号：</span>{{truck.plateNo}}<span v-if="truck.trailerPlateNo">/{{truck.trailerPlateNo}}</span></p>
-			<p><span class="labels">车型/车长：</span>{{truck.truckType}}/{{truck.length ? (truck.length/1000 + '米') : ''}}</p>
+			<p><span class="labels">车型/车长：</span>{{truck.truckType}}/{{truck.length + 'mm'}}</p>
 			<p><span class="labels">载重/容积：</span>{{truck.loads + 'kg'}}/{{truck.loadVolume + 'm³'}}</p>
 		</div>
 		<div class="statusInfo ">

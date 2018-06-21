@@ -160,5 +160,5 @@ const ajax = function (json) {
 	})
 }
 
-export default ajax
-// export default service
+// export default ajax
+export default service
