@@ -114,7 +114,7 @@ export default {
         control(bool) {
             if (bool) {
                 TaskPic.add({
-                    'dispatchTaskID': [this.dispatchTaskID],
+                    'dispatchTaskID': [{dispatchTaskID: this.dispatchTaskID}],
                     'Loaded': this.Loaded,
                     'Arrived': this.Arrived,
                     'Received': this.Received,
