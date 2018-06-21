@@ -26,7 +26,7 @@
 					</tr>
 					<tr>
 						<td class="area">{{taskItem.shipperArea}}</td>
-						<td><img src="../../../assets/imgs/arrowBig.png" width="100"/></td>
+						<td rowspan="2"><p class="plateNo">{{plateNo}}{{trailerPlateNo?('/'+trailerPlateNo):''}}</p></td>
 						<td class="area">{{taskItem.consigneeArea}}</td>
 					</tr>
 					<tr>
@@ -34,7 +34,7 @@
 							<p class="datetime">{{taskItem.shipperDate | getdatefromtimestamp(true)}}（预计发货）</p>
 							<p class="datetime c2" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp(true)}}（实际发货）</p>
 						</td>
-						<td><span>{{plateNo}}{{trailerPlateNo?('/'+trailerPlateNo):''}}</span></td>
+						<!-- <td><p></p></td> -->
 						<td>
 							<p class="datetime">{{taskItem.consigneeDate | getdatefromtimestamp(true)}}（预计到货）</p>
 							<p class="datetime c2" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp(true)}}（实际到货）</p>
@@ -118,6 +118,7 @@ export default {
 			line-height 24px
 			color #666
 			position relative
+			
 	.lineInfo
 		font-size 14px
 		border 1px solid #e2ecf6
@@ -132,6 +133,7 @@ export default {
 			color #666
 			padding 10px 40px 10px 10px
 			position relative
+			
 			p
 				margin 0
 				line-height 30px
@@ -141,6 +143,9 @@ export default {
 					color #999
 				&.c2
 					color #f90
+				&.plateNo
+					display block
+					background url('../../../assets/imgs/arrowBig2.png') no-repeat left bottom
 			.area
 				font-weight bold
 				color #000
@@ -185,16 +190,6 @@ export default {
 				border-right 1px solid #f8f8f8
 				.tag
 					background #69c
-			.platNo
-				position relative
-				border-left 1px solid #f8f8f8
-				border-right 1px solid #f8f8f8
-				span
-					position absolute
-					top 50%
-					left 50%
-					transform translate(-50%,-50%)
-					font-size 18px
 			.viewtaskdetailBtn
 				width 20px
 				height 75px

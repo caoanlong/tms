@@ -3,7 +3,7 @@
 		<div class="imgLi" 
 		:style="{'width': width+'px','height': height+'px'}" 
 		v-for="(file, i) in fileUrl"
-		:key="i">
+		:key="i" >
 			<img v-if="file" :src="resizeImg(file, '_150x150.')">
 			<img v-else :src="defaultImg">
 			<div class="controller">
@@ -13,10 +13,10 @@
 				</div>
 			</div>
 			<div v-if="isShowType">
-				<div v-if="objs[i].type =='Loaded'">装车照片</div>
-				<div v-else-if="objs[i].type =='Arrived'">送达照片</div>
-				<div v-else-if="objs[i].type =='Received'">回单照片</div>
-				<div v-else>异常照片</div>
+				<p class="picType" v-if="objs[i].type =='Loaded'">装车照片</p>
+				<p class="picType" v-else-if="objs[i].type =='Arrived'">送达照片</p>
+				<p class="picType" v-else-if="objs[i].type =='Received'">回单照片</p>
+				<p class="picType" v-else>异常照片</p>
 			</div>
 		</div>
 		<div class="addBtn" :style="{'width':width+'px','height':height+'px'}" v-show="isLimit && !isPreview">
@@ -227,6 +227,7 @@ export default {
 			text-align center
 			position relative
 			margin 0 5px 5px 0
+			overflow hidden
 			.controller
 				position absolute
 				top 0
@@ -268,9 +269,21 @@ export default {
 				width 100%
 				height 100%
 				border-radius 6px
+			.picType
+				height 18px
+				line-height 18px
+				margin 0
+				font-size 12px
+				position absolute
+				bottom 0
+				width 100%
+				background rgba(0,0,0,.3)
+				color #f8f8f8
 			&:hover
 				.controller
 					display block
+				.picType
+					color #fff
 		.addBtn
 			float left
 			border 1px dashed #d9d9d9

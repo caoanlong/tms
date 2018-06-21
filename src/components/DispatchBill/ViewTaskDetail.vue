@@ -17,7 +17,9 @@
 							<p class="datetime">{{carrier.shipperDate | getdatefromtimestamp(true)}}（预计发货）</p>
 							<p class="datetime c2" v-if="carrier.shipperActualDate">{{carrier.shipperActualDate | getdatefromtimestamp()}}（实际发货）</p>
 						</div>
-						<div class="platNo"><span>{{taskDetail.plateNo}}{{taskDetail.trailerPlateNo?('/'+taskDetail.trailerPlateNo):''}}</span></div>
+						<div class="platNo">
+							<p>{{taskDetail.plateNo}}{{taskDetail.trailerPlateNo?('/'+taskDetail.trailerPlateNo):''}}</p>
+							</div>
 						<div class="to">
 							<img src="../../assets/imgs/avatar.gif" class="headPic"/>
 							<p class="companyName">{{carrier.consigneeCompanyName}}</p>
@@ -41,7 +43,7 @@
 							<p class="name">{{taskDetail.superCargoName}}<span class="tag">押运</span></p>
 							<p>{{taskDetail.superCargoPhone}}</p>
 						</div>
-						<div class="escort">
+						<div class="dispatcher">
 							<img :src="taskDetail.dispatcherLogoUrl ? resizeImg(taskDetail.dispatcherLogoUrl, '_80x80.') : require('../../assets/imgs/avatar.gif')" class="headPic"/>
 							<p class="name">{{taskDetail.dispatcherName}}<span class="tag">调度</span></p>
 							<p>{{taskDetail.dispatcherMobile}}</p>
@@ -420,12 +422,15 @@ export default {
 					background #69c
 			.platNo
 				position relative
+				padding 0 50px 0 10px
 				border-left 1px solid #f8f8f8
 				border-right 1px solid #f8f8f8
-				span
+				p
 					position absolute
+					width 100%
 					top 50%
-					left 50%
-					transform translate(-50%,-50%)
+					padding-bottom 5px
+					transform translateY(-50%)
 					font-size 18px
+					background url('../../assets/imgs/arrowBig2.png') no-repeat left bottom
 </style>
