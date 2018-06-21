@@ -35,14 +35,11 @@
 		<div class="table">
 			<table class="wfTable">
 				<tr>
-					<th width="40">
-						<el-checkbox 
+					<th><el-checkbox class="fl"
 							:indeterminate="(selectedCarrierBill.length > 0) && (selectedCarrierBill.length < carrierList.length)" 
 							v-model="checked" 
 							@change="handleCheckAllChange">
-						</el-checkbox>
-					</th>
-					<th>货物</th>
+						</el-checkbox>货物</th>
 					<th>货量</th>
 					<th>件数</th>
 					<th>发货公司</th>
@@ -56,8 +53,8 @@
 				</tr>
 				<template v-for="item in carrierList">
 					<tr class="tit" :key="item.carrierOrderID">
-						<td>
-							<div class="wfCheck">
+						<td colspan="12">
+							<div class="wfCheck fl">
 								<span>
 									<input 
 										type="checkbox" 
@@ -69,8 +66,6 @@
 									<label></label>
 								</span>
 							</div>
-						</td>
-						<td colspan="11">
 							<span class="infoItem ViewDispatchBill" @click="ViewCarrierbills(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
 							<span class="infoItem">
 								<el-tag size="mini" type="warning" v-if="item.status=='Committed'">待执行</el-tag>
@@ -79,7 +74,7 @@
 						</td>
 					</tr>
 					<tr class="list" :key="item.carrierOrderID + 1">
-						<td colspan="2">{{item.cargoName}}</td>
+						<td>{{item.cargoName}}</td>
 						<td class="text-center">{{item.cargoWeightSum}}kg{{item.cargoWeightSum&&item.cargoVolumeSum?'/':''}}{{item.cargoVolumeSum?item.cargoVolumeSum+'m³':''}}</td>
 						<td class="text-center">{{item.cargoNumSum?item.cargoNumSum:''}}</td>
 						<td>{{item.shipperCompanyName}}</td>
@@ -235,9 +230,11 @@ export default {
 		max-width 180px
 		overflow hidden
 		text-overflow ellipsis
+		.wfCheck
+			padding 5px 0
 	.tit
 		td
-			border-top 1px solid #bbb
+			border-top 10px solid #fff
 			background #f8f8f8
 			color #3582d0
 			.infoItem

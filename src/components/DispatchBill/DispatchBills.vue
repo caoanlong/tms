@@ -148,8 +148,8 @@
 						</tr>
 					</template>
 				</table>
-				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
+			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</div>
 		<UploadPhoto 
 			:isVisible="isPhotoVisible" 
@@ -284,12 +284,18 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
+.table
+	overflow hidden
+	overflow-x auto
 .wfTable
 	width 100%
 	background #e2ecf6
 	border-spacing 1px
 	font-size 14px
 	margin-bottom 10px
+	th
+	td
+		white-space  nowrap 
 	td
 		background #fff
 		padding 6px 10px
