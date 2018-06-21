@@ -268,9 +268,9 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .tit
-	padding 5px 10px
-	height 40px
-	line-height 30px
+	padding 6px 10px
+	height 36px
+	line-height 24px
 	background #e2ecf6
 	color #3582d0
 	font-size 13px
@@ -356,9 +356,9 @@ export default {
 		.tit
 			background #e2ecf6
 			color #3582d0
-			padding 5px 10px
-			height 40px
-			line-height 30px
+			padding 6px 10px
+			height 36px
+			line-height 24px
 		.con
 			display flex
 			border 1px solid #e2ecf6
