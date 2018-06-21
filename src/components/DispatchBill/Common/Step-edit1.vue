@@ -128,19 +128,6 @@ export default {
 		ViewCarrierbills(carrierOrderID) {
 			this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
 		},
-		reset() {
-			this.findsearchInfo = ''
-			this.findrecdeliverycomp = ''
-			this.findshipperBeginDate = ''
-			this.findshipperEndDate = ''
-			this.findRangeDate = []
-			this.pageIndex = 1
-			this.getList()
-		},
-		selectDateRange(date) {
-			this.findshipperBeginDate = date[0]
-			this.findshipperEndDate = date[1]
-		},
 		back() {
 			this.$router.go(-1)
 		}

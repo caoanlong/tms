@@ -177,6 +177,8 @@ export default {
 		},
 		reset() {
 			this.findsearchInfo = ''
+			this.recdeliverycomp.companyName = ''
+			this.recdeliverycomp.customerID = ''
 			this.findshipperBeginDate = ''
 			this.findshipperEndDate = ''
 			this.findRangeDate = []
