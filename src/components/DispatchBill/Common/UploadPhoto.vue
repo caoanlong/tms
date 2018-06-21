@@ -114,7 +114,7 @@ export default {
         control(bool) {
             if (bool) {
                 TaskPic.add({
-                    'dispatchTaskID': [{dispatchTaskID: this.dispatchTaskID}],
+                    'dispatchTaskID': [{dispatchTaskID: this.dispatchTaskID}], // 由于后台List泛型的原因，才这样传参
                     'Loaded': this.Loaded,
                     'Arrived': this.Arrived,
                     'Received': this.Received,
