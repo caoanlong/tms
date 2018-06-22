@@ -197,7 +197,7 @@ export default {
 			selectedList: [],
 			importFileUrl: baseURL + '/truck/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&&Authorization=' + localStorage.getItem('token'),
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=vehicleInfo.xlsx&Authorization=' + localStorage.getItem('token'),
 			templateTit: 'vehicleInfo.xlsx',
 			rules: {
 				plateNo: [
@@ -316,7 +316,7 @@ export default {
 		},
 		del(truckID) {
 			deleteConfirm(truckID, truckIDs => {
-				Staff.del({ truckIDs }).then(res => {
+				Truck.del({ truckIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})

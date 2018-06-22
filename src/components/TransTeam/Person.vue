@@ -192,7 +192,7 @@ export default {
 				"Stevedore": "装卸管理人员",
 				"Other": "其他人员"
 			},
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xlsx&&Authorization=' +localStorage.getItem("token"),
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=employee.xlsx&Authorization=' +localStorage.getItem("token"),
 			templateTit:'employee.xlsx'
 		}
 	},

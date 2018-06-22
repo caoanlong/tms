@@ -99,7 +99,8 @@ export function deleteConfirm (id, callback, idList) {
 		type: 'warning'
 	}).then(() => {
 		callback && callback(ids)
-	}).catch(() => {
+	}).catch((err) => {
+		console.log(err)
 		Message({
 			type: 'info',
 			message: '已取消删除'

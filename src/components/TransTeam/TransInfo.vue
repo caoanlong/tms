@@ -135,7 +135,7 @@ export default {
 			tableData: [],
 			importFileUrl: baseURL + '/transportRecord/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=transport.xlsx&&Authorization=' +localStorage.getItem("token"),
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=transport.xlsx&Authorization=' +localStorage.getItem("token"),
 			templateTit: 'transport.xlsx',
 		}
 	},

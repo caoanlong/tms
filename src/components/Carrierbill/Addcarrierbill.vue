@@ -755,23 +755,7 @@ export default {
 				shipperArea: this.carrierbillInfo.shipperArea, //	发货地区	
 				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress // 发货详细地址
 			}).then(res => {
-				let result = res.data.data
-				let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
-				let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
-				let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
-				let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
-				if (type) {
-					this.carrierbillInfo.cashAmount = temp * result.externalCashRate
-					this.carrierbillInfo.codAmount = temp * result.externalCodRate
-					this.carrierbillInfo.porAmount = temp * result.externalPorRate
-					this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
-					this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
-				}
-				this.exmile = result.externalMileage
-				this.innermile = result.mileage
-				this.totalPrice = temp
-			}).catch(err => {
-				if (err.data.code == 2001) {
+				if (res.data.code == 2001) {
 					this.$msgbox({
 						message: '请先配置运费模板！',
 						title: '未配置运费模板',
@@ -783,8 +767,24 @@ export default {
 							}
 						}
 					})
+				} else {
+					let result = res.data.data
+					let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
+					let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
+					let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
+					let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
+					if (type) {
+						this.carrierbillInfo.cashAmount = temp * result.externalCashRate
+						this.carrierbillInfo.codAmount = temp * result.externalCodRate
+						this.carrierbillInfo.porAmount = temp * result.externalPorRate
+						this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
+						this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
+					}
+					this.exmile = result.externalMileage
+					this.innermile = result.mileage
+					this.totalPrice = temp
 				}
-			})
+			}).catch(err => {})
 		},
 		back() {
 			this.$router.go(-1)
