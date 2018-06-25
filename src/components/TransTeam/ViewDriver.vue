@@ -32,7 +32,7 @@
 					</el-col>
 					<el-col :span="16">
 						<el-form-item label="合同有效期">
-							<p v-if="driver.idCardBeginTime">{{driver.laborContractBeginTime | getdatefromtimestamp(true)}} 
+							<p v-if="driver.laborContractBeginTime">{{driver.laborContractBeginTime | getdatefromtimestamp(true)}} 
 								- {{driver.laborContractEndTime | getdatefromtimestamp(true)}}</p>
 							<p v-else></p>
 						</el-form-item>
