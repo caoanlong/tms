@@ -410,9 +410,9 @@ export default {
 					{required: true, message: '请选择发货地'}
 				],
 				// 新增定位
-				shipperLocationAddress: [
-					{required: true, message: '请选择定位地址'}
-				],
+				// shipperLocationAddress: [
+				// 	{required: true, message: '请选择定位地址'}
+				// ],
 				shipperDetailAddress: [
 					{ required: true, message: '请输入发货详细地址'}
 				],
@@ -432,9 +432,9 @@ export default {
 					{required: true, message: '请选择收货地'}
 				],
 				// 新增定位
-				consigneeLocationAddress: [
-					{required: true, message: '请选择定位地址'}
-				],
+				// consigneeLocationAddress: [
+				// 	{required: true, message: '请选择定位地址'}
+				// ],
 				consigneeDetailAddress: [
 					{required: true, message: '请输入收货详细地址'}
 				],
@@ -681,9 +681,9 @@ export default {
 						consigneeAmount: this.carrierbillInfo.consigneeAmount,
 						consigneeArea: this.carrierbillInfo.consigneeArea ,
 						consigneeAreaID: this.carrierbillInfo.consigneeAreaID,
-						consigneeLocationAddress: this.carrierbillInfo.consigneeLocationAddress,  // 新增定位
-						consigneeLocationLng: this.carrierbillInfo.consigneeLocationLng,  // 新增定位
-						consigneeLocationLat: this.carrierbillInfo.consigneeLocationLat,  // 新增定位
+						consigneeLocationAddress: this.carrierbillInfo.consigneeLocationAddress || '云南昆明',  // 新增定位
+						consigneeLocationLng: this.carrierbillInfo.consigneeLocationLng || 25.05,  // 新增定位
+						consigneeLocationLat: this.carrierbillInfo.consigneeLocationLat || 102.72,  // 新增定位
 						consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
 						consigneeDate: this.carrierbillInfo.consigneeDate,
 						consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
@@ -699,9 +699,9 @@ export default {
 						shipperAddressID: '',
 						shipperArea: this.carrierbillInfo.shipperArea,
 						shipperAreaID: this.carrierbillInfo.shipperAreaID,
-						shipperLocationAddress: this.carrierbillInfo.shipperLocationAddress,  // 新增定位
-						shipperLocationLng: this.carrierbillInfo.shipperLocationLng,  // 新增定位
-						shipperLocationLat: this.carrierbillInfo.shipperLocationLat,  // 新增定位
+						shipperLocationAddress: this.carrierbillInfo.shipperLocationAddress || '云南昆明',  // 新增定位
+						shipperLocationLng: this.carrierbillInfo.shipperLocationLng || 25.05,  // 新增定位
+						shipperLocationLat: this.carrierbillInfo.shipperLocationLat || 102.72,  // 新增定位
 						shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
 						shipperDate: this.carrierbillInfo.shipperDate,
 						shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,

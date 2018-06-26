@@ -69,9 +69,9 @@ export default {
 				detailAddress: [
 					{required: true, message: '请输入详细地址', trigger: 'blur'}
 				],
-				locationAddress: [
-					{required: true, message: '请输入位置', trigger: 'blur'}
-				]
+				// locationAddress: [
+				// 	{required: true, message: '请输入位置', trigger: 'blur'}
+				// ]
 			}
 		}
 	},
@@ -109,9 +109,9 @@ export default {
 						contactName: this.recdeliverycomp.contactName,
 						contactPhone: this.recdeliverycomp.contactPhone,
 						detailAddress: this.recdeliverycomp.detailAddress,
-						locationAddress: this.recdeliverycomp.locationAddress,
-						locationLng: this.recdeliverycomp.locationLng,
-						locationLat: this.recdeliverycomp.locationLat,
+						locationAddress: this.recdeliverycomp.locationAddress || '云南昆明',
+						locationLng: this.recdeliverycomp.locationLng || 25.05,
+						locationLat: this.recdeliverycomp.locationLat || 102.72,
 						type: 'ShipperConsignee'
 					}).then(res => {
 						Message.success('保存成功！')
