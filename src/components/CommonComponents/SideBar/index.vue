@@ -1,9 +1,5 @@
 <template>
 	<div class="lside">
-		<div class="logo">
-			<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
-			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180">
-		</div>
 		<el-menu 
 			mode="vertical"  :style="{'height':fullHeight+'px'}" class="sidenav"
 			background-color="#4f4f4f" 
@@ -32,7 +28,6 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-			'userInfo',
 			// 'menus',
 			'sidebar'
 		]),

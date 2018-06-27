@@ -1,29 +1,38 @@
 <template>
-	<el-menu class="navbar" mode="horizontal">
-		<div class="misName">运输管理后台</div>
-		<div class="right-menu">
-			<el-tooltip effect="dark" content="navbar.theme" placement="bottom"></el-tooltip>
-			<el-dropdown class="avatar-container right-menu-item">
-				<div class="avatar-wrapper">
-					<img class="user-avatar" src="errorImg" @error="errorImg">
-					<span class="user-text">你好！{{name}}</span>
-					<i class="el-icon-caret-bottom"></i>
-				</div>
-				<el-dropdown-menu slot="dropdown">
-					<!-- <router-link :to="{name: 'userprofile'}">
-						<el-dropdown-item>个人资料</el-dropdown-item>
-					</router-link>
-					<el-dropdown-item divided>
-						<span @click="logout" style="display:block;">退出</span>
-					</el-dropdown-item> -->
-
-					<el-dropdown-item>
-						<span @click="logout" style="display:block;">退出</span>
-					</el-dropdown-item>
-				</el-dropdown-menu>
-			</el-dropdown>
+	<div class="fixHead">
+		<div class="logo" @click="sendToParent('companyInfo')">
+			<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
+			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180">
+			<span class="companyName">{{userInfo.companyName}}</span>
 		</div>
-	</el-menu>
+		<el-menu class="navbar" mode="horizontal">
+			<div class="right-menu">
+				<el-tooltip effect="dark" content="navbar.theme" placement="bottom"></el-tooltip>
+				<el-dropdown class="avatar-container right-menu-item">
+					<div class="avatar-wrapper">
+						<img class="user-avatar" src="errorImg" @error="errorImg">
+						<span class="user-text">你好！{{name}}</span>
+						<i class="el-icon-caret-bottom"></i>
+					</div>
+					<el-dropdown-menu slot="dropdown">
+						<!-- <router-link :to="{name: 'userprofile'}">
+							<el-dropdown-item>个人资料</el-dropdown-item>
+						</router-link>
+						<el-dropdown-item divided>
+							<span @click="logout" style="display:block;">退出</span>
+						</el-dropdown-item> -->
+						<el-dropdown-item>
+							<span style="display:block;">账号设置</span>
+						</el-dropdown-item>
+						<el-dropdown-item>
+							<span @click="logout" style="display:block;">退出</span>
+						</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+			</div>
+		</el-menu>
+		
+	</div>
 </template>
 
 <script>
@@ -32,7 +41,8 @@ import { mapGetters } from 'vuex'
 export default {
 	computed: {
 		...mapGetters([
-			'name'
+			'name',
+			'userInfo',
 		])
 	},
 	methods: {
@@ -44,23 +54,20 @@ export default {
 		errorImg (e) {
 			e.target.src = require('../../../assets/imgs/avatar.gif')
 			e.target.onerror = null
+		},
+		sendToParent(type){
+			this.$emit('listenToChild',type,true);
 		}
 	}
 }
 </script>
-
 <style lang="stylus" scoped>
 .navbar
-	width 100%
+	float right
 	height 50px
 	line-height 50px
 	border-radius 0px !important
 	background #424242
-	.misName
-		display inline-block
-		color #ebebeb
-		margin-left 15px
-		font-size 18px
 	.right-menu
 		float right
 		height 100%
@@ -96,4 +103,23 @@ export default {
 					vertical-align middle
 				.el-icon-caret-bottom
 					font-size 12px
+.logo
+	padding 9px
+	position absolute
+	left 0
+	top 0
+	cursor pointer
+	img
+		width 32px
+		height 32px
+		border-radius 8px
+		vertical-align top
+	.companyName
+		font-size 18px
+		line-height 32px
+		margin-left 9px
+		color #fff
+
+		
 </style>
+
