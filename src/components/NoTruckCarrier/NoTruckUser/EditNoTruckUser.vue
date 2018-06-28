@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>编辑无车承运接口配置</span>
-			</div>
+		<div class="wf-card">
+			<div class="header clearfix">编辑无车承运接口配置</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
@@ -39,7 +37,7 @@
 					</el-form>
 				</el-col>
 			</el-row>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
