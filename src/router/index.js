@@ -121,6 +121,145 @@ let routerMap = [
 				]
 			},
 			{
+				path: '/notruckcarrier',
+				name: 'notruckcarrier',
+				meta: {
+					title: '无车承运人'
+				},
+				component: () => import('../components/NoTruckCarrier'),
+				redirect: '/notruckcargosource',
+				children: [
+					{
+						path: '/notruckcargosource',
+						name: 'notruckcargosource',
+						meta: {
+							title: '货源上传'
+						},
+						component: () => import('../components/NoTruckCarrier/NotruckCargosource')
+					},
+					{
+						path: '/addnotruckcargosource',
+						name: 'addnotruckcargosource',
+						meta: {
+							title: '添加货源'
+						},
+						component: () => import('../components/NoTruckCarrier/NotruckCargosource/AddNotruckCargosource')
+					},
+					{
+						path: '/viewnotruckcargosource',
+						name: 'viewnotruckcargosource',
+						meta: {
+							title: '查看货源'
+						},
+						component: () => import('../components/NoTruckCarrier/NotruckCargosource/ViewNotruckCargosource')
+					},
+					{
+						path: '/editnotruckcargosource',
+						name: 'editnotruckcargosource',
+						meta: {
+							title: '编辑货源'
+						},
+						component: () => import('../components/NoTruckCarrier/NotruckCargosource/EditNotruckCargosource')
+					},
+					{
+						path: '/notrucksource',
+						name: 'notrucksource',
+						meta: {
+							title: '车源上传'
+						},
+						component: () => import('../components/NoTruckCarrier/NoTruckSource')
+					},
+					{
+						path: '/addnotrucksource',
+						name: 'addnotrucksource',
+						meta: {
+							title: '添加车源'
+						},
+						component: () => import('../components/NoTruckCarrier/NoTruckSource/AddNoTruckSource')
+					},
+					{
+						path: '/viewnotrucksource',
+						name: 'viewnotrucksource',
+						meta: {
+							title: '查看车源'
+						},
+						component: () => import('../components/NoTruckCarrier/NoTruckSource/ViewNoTruckSource')
+					},
+					{
+						path: '/editnotrucksource',
+						name: 'editnotrucksource',
+						meta: {
+							title: '编辑车源'
+						},
+						component: () => import('../components/NoTruckCarrier/NoTruckSource/EditNoTruckSource')
+					},
+					{
+						path: '/notruckwaybill',
+						name: 'notruckwaybill',
+						meta: {
+							title: '运单上传'
+						},
+						component: () => import('../components/NoTruckCarrier/NotruckWaybill')
+					},
+					{
+						path: '/addnotruckwaybill',
+						name: 'addnotruckwaybill',
+						meta: {
+							title: '添加运单'
+						},
+						component: () => import('../components/NoTruckCarrier/NotruckWaybill/AddNotruckWaybill')
+					},
+					{
+						path: '/viewnotruckwaybill',
+						name: 'viewnotruckwaybill',
+						meta: {
+							title: '查看运单'
+						},
+						component: () => import('../components/NoTruckCarrier/NotruckWaybill/ViewNotruckWaybill')
+					},
+					{
+						path: '/editnotruckwaybill',
+						name: 'editnotruckwaybill',
+						meta: {
+							title: '编辑运单'
+						},
+						component: () => import('../components/NoTruckCarrier/NotruckWaybill/EditNotruckWaybill')
+					},
+					{
+						path: '/notruckuser',
+						name: 'notruckuser',
+						meta: {
+							title: '接口配置'
+						},
+						component: () => import('../components/NoTruckCarrier/NoTruckUser')
+					},
+					{
+						path: '/addnotruckuser',
+						name: 'addnotruckuser',
+						meta: {
+							title: '添加接口配置'
+						},
+						component: () => import('../components/NoTruckCarrier/NoTruckUser/AddNoTruckUser')
+					},
+					{
+						path: '/editnotruckuser',
+						name: 'editnotruckuser',
+						meta: {
+							title: '编辑接口配置'
+						},
+						component: () => import('../components/NoTruckCarrier/NoTruckUser/EditNoTruckUser')
+					},
+					{
+						path: '/viewnotruckuser',
+						name: 'viewnotruckuser',
+						meta: {
+							title: '查看接口配置'
+						},
+						component: () => import('../components/NoTruckCarrier/NoTruckUser/ViewNoTruckUser')
+					},
+				]
+			},
+			{
 				path: '/settlemanage',
 				name: 'settlemanage',
 				meta: {

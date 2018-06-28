@@ -83,13 +83,8 @@ response => {
 	}
 },
 error => {
-	console.log(error)// for debug
-	Message({
-		message: error,
-		type: 'error',
-		duration: 5 * 1000
-	})
-	return Promise.reject(error)
+	Message.error(error.toString())
+	return
 })
 
 // jquery ajax

@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<div class="wf-card menu-list">
 			<div class="header clearfix">菜单列表</div>
-			<div class="tableControl" v-if="false">
+			<div class="tableControl">
 				<el-button type="success" plain size="mini" icon="el-icon-plus" @click="addRoot">添加顶级节点</el-button>
 			</div>
 			<el-tree
@@ -20,33 +20,33 @@
 			<div class="header clearfix">菜单详情</div>
 			<el-form ref="form" :model="currentNode" label-width="80px">
 				<el-form-item label="标题">
-					<el-input v-model="currentNode.Name" disabled></el-input>
+					<el-input v-model="currentNode.Name"></el-input>
 				</el-form-item>
 				<el-form-item label="名字">
-					<el-input v-model="currentNode.Target" disabled></el-input>
+					<el-input v-model="currentNode.Target"></el-input>
 				</el-form-item>
 				<el-form-item label="路径">
-					<el-input v-model="currentNode.Href" disabled></el-input>
+					<el-input v-model="currentNode.Href"></el-input>
 				</el-form-item>
 				<el-form-item label="图标">
-					<el-button type="primary" plain @click="selectIcondialog = true" disabled>
+					<el-button type="primary" plain @click="selectIcondialog = true">
 						<svg-icon :iconClass="currentNode.Icon ? currentNode.Icon : 'add-icon'"></svg-icon> 
 						{{currentNode.Icon ? currentNode.Icon : iconTxt}}
 					</el-button>
 				</el-form-item>
 				<el-form-item label="排序">
-					<el-input-number v-model="currentNode.SortNumber" :min="1" disabled></el-input-number>
+					<el-input-number v-model="currentNode.SortNumber" :min="1"></el-input-number>
 				</el-form-item>
 				<el-form-item label="是否显示">
-					<el-switch v-model="isShow" disabled></el-switch>
+					<el-switch v-model="isShow"></el-switch>
 				</el-form-item>
 				<el-form-item label="角色权限">
-					<el-select style="width: 100%" v-model="selectedRoles" multiple placeholder="请选择" disabled>
+					<el-select style="width: 100%" v-model="selectedRoles" multiple placeholder="请选择">
 						<el-option v-for="role in roles" :key="role.Role_ID" :label="role.RoleName" :value="role.Role_ID">
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item v-if="false">
+				<el-form-item>
 					<el-button type="primary" @click.native="submitForm(button)">{{button}}</el-button>
 					<el-button>取消</el-button>
 				</el-form-item>
