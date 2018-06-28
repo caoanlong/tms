@@ -5,7 +5,7 @@
  * @authors coolia (coolia@qq.com)
  * @date    2018-03-20 09:59:18
  * @Last Modified by:   coolia
- * @Last Modified time: 2018-06-13 15:30:22
+ * @Last Modified time: 2018-06-27 12:46:35
  */
 #app{height:100%}
 .top-bar .el-menu--horizontal{border:none}
@@ -68,3 +68,10 @@
 .viewPicDetail {width: 540px;padding-bottom: 0}
 .viewPicDetail .el-dialog__footer{text-align: center;padding:10px}
 .viewPicDetail .el-message-box__btns{padding:0;}
+
+.agreementDialog{width: 60%;background: #fff;-moz-border-radius:8px;border-radius:8px;overflow: hidden;}
+.agreementDialog .el-message-box__header{height: 50px;line-height: 50px;text-align:center;}
+.agreementDialog .el-message-box__btns{text-align:center;padding-top: 15px}
+.agreementDialog .el-message-box__btns button{margin:0;}
+.agreementDialog .el-message-box__content{height: 600px;overflow-y: auto;color:#666;padding-bottom: 20px;
+		line-height:24px;}

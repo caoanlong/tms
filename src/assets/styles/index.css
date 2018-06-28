@@ -17,6 +17,12 @@ body{
 	/*-ms-user-select: none; *//*IE10*/ /*早期浏览器*/
 	/*-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;*/
 }
+.fixHead .logo{
+	-moz-user-select: none;
+	-webkit-user-select: none; 
+	-ms-user-select: none;
+	user-select: none;
+}
 label{font-weight:700;}
 html{height:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
 *,*:before,*:after{-webkit-box-sizing:inherit;-moz-box-sizing:inherit;box-sizing:inherit;}
