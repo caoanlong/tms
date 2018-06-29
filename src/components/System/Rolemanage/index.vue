@@ -8,14 +8,14 @@
 						<el-input placeholder="角色名称" v-model="findRoleName"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click.native="getRoles(1)">查询</el-button>
-						<el-button type="default" @click.native="reset">重置</el-button>
+						<el-button type="primary" @click="getList">查询</el-button>
+						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click.native="addRole">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click.native="deleteConfirm">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="addRole">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -50,25 +50,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-row type="flex">
-					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{count}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getRoles()">
-							<el-option label="10" value="10"></el-option>
-							<el-option label="20" value="20"></el-option>
-							<el-option label="30" value="30"></el-option>
-							<el-option label="40" value="40"></el-option>
-							<el-option label="50" value="50"></el-option>
-							<el-option label="100" value="100"></el-option>
-						</el-select>
-						<span>条记录</span>
-					</el-col>
-					<el-col :span="12">
-						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="count" @current-change="pageChange"></el-pagination>
-						</div>
-					</el-col>
-				</el-row>
+				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
 		<el-dialog title="权限设置" :visible.sync="showSetAuth" width="30%">
@@ -90,7 +72,7 @@
 		<el-dialog title="分配用户" :visible.sync="showSetUser" width="600px">
 			<el-table 
 				ref="usersTable"
-				:data="users" 
+				:data="staffs" 
 				height="400"
 				@selection-change="selectUserChange" 
 				border style="width: 100%" 
@@ -107,276 +89,277 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { mapGetters } from 'vuex'
-	import requestNode from '../../../common/requestNode'
-	import { Message } from 'element-ui'
-	export default {
-		data() {
-			return {
-				refreshing: false,
-				roles: [],
-				role: {},
-				pageIndex: 1,
-				pageSize: 10,
-				count: 0,
-				findRoleName: '',
-				selectedRoles: [],
-				setAuthId: '',
-				setUserId: '',
-				// 所有的用户
-				users:[],
-				showSetAuth: false,
-				showSetUser:false,
-				defaultProps: {
-					children: 'children',
-					label: 'Name'
-				},
-				selectedMenuId: [],
-				selectedUsers: [],
-				sysDataScopes: [],
-				menus: []
+import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
+import requestNode from '../../../common/requestNode'
+import Page from '../../CommonComponents/Page'
+export default {
+	data() {
+		return {
+			refreshing: false,
+			roles: [],
+			role: {},
+			pageIndex: 1,
+			pageSize: 10,
+			count: 0,
+			findRoleName: '',
+			selectedRoles: [],
+			setAuthId: '',
+			setUserId: '',
+			// 所有的用户
+			staffs:[],
+			showSetAuth: false,
+			showSetUser:false,
+			defaultProps: {
+				children: 'children',
+				label: 'Name'
+			},
+			selectedMenuId: [],
+			selectedUsers: [],
+			sysDataScopes: [],
+			menus: []
+		}
+	},
+	components: { Page },
+	created() {
+		this.getList()
+	},
+	methods: {
+		addRole() {
+			this.$router.push({name: 'addrole'})
+		},
+		handleCommand(e) {
+			if(e.type=='view'){
+				this.$router.push({name: 'viewrole', query: { Role_ID:e.id }})
+			}else if(e.type=='edit'){
+				this.$router.push({ name: 'editrole' , query: {  Role_ID:e.id } })
+			}else if(e.type=='setAuth'){
+				this.setAuth(e)
+			}else if(e.type=='setUser'){
+				this.setUser(e)
+			}else if(e.type=='delete'){
+				this.deleteConfirm(e.id)
 			}
 		},
-		created() {
-			this.getRoles()
+		pageChange(index) {
+			this.pageIndex = index
+			this.getList()
 		},
-		methods: {
-			addRole() {
-				this.$router.push({name: 'addrole'})
-			},
-			handleCommand(e) {
-				if(e.type=='view'){
-					this.$router.push({name: 'viewrole', query: { Role_ID:e.id }})
-				}else if(e.type=='edit'){
-					this.$router.push({ name: 'editrole' , query: {  Role_ID:e.id } })
-				}else if(e.type=='setAuth'){
-					this.setAuth(e)
-				}else if(e.type=='setUser'){
-					this.setUser(e)
-				}else if(e.type=='delete'){
-					this.deleteConfirm(e.id)
-				}
-			},
-			pageChange(index) {
-				this.getRoles(index)
-			},
-			selectRoleChange(data) {
-				this.selectedRoles = data.map(item => item.Role_ID)
-			},
-			selectUserChange(data) {
-				this.selectedUsers = data
-			},
-			// 重置搜索表单
-			reset() {
-				this.findRoleName = ''
-				this.getRoles()
-			},
-			// 获取所有菜单
-			getMenus() {
-				return new Promise((resolve, reject) => {
-					requestNode({
-						url: '/sys_menu/list/all',
-						method: 'get'
-					}).then(res => {
-						if (res.data.code == 0) {
-							this.menus = res.data.data
-							resolve()
-						} else {
-							Message.error(res.data.msg)
-							reject(res.data.msg)
-						}
-					})
-				})
-			},
-			getRoles(pageIndex) {
-				let params = {
-					pageIndex: pageIndex || 1,
-					pageSize: this.pageSize,
-					RoleName: this.findRoleName
-				}
+		pageSizeChange(size) {
+			this.pageSize = size
+			this.getList() 
+		},
+		selectRoleChange(data) {
+			this.selectedRoles = data.map(item => item.Role_ID)
+		},
+		selectUserChange(data) {
+			this.selectedUsers = data
+		},
+		// 重置搜索表单
+		reset() {
+			this.findRoleName = ''
+			this.getList()
+		},
+		// 获取所有菜单
+		getMenus() {
+			return new Promise((resolve, reject) => {
 				requestNode({
-					url: '/sys_role/list',
-					method: 'get',
-					params
+					url: '/sys_menu/list/all',
+					method: 'get'
 				}).then(res => {
 					if (res.data.code == 0) {
-						this.count = res.data.data.count
-						this.roles = res.data.data.rows
+						this.menus = res.data.data
+						resolve()
 					} else {
 						Message.error(res.data.msg)
+						reject(res.data.msg)
 					}
 				})
-			},
-			deleteConfirm(id) {
-				let ids = []
-				if (id && typeof id == 'string') {
-					ids = [].concat(id)
-				} else {
-					if (this.selectedRoles.length == 0) {
-						this.$message({
-							type: 'warning',
-							message: '请选择'
-						})
-						return
-					}
-					ids = this.selectedRoles
-				}
-				this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.delRole(ids)
-					this.$message({
-						type: 'success',
-						message: '删除成功!'
-					})
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					})
-				})
-			},
-			delRole(ids) {
-				let data = {
-					ids: ids
-				}
-				requestNode({
-					url: '/sys_role/delete',
-					method: 'post',
-					data
-				}).then(res => {
-					if (res.data.code == 0) {
-						this.getRoles()
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			setAuth(data) {
-				this.getMenus().then(() => {
-					this.setAuthId = data.id
-					this.showSetAuth = true
-					this.getRole(data.id, res => {
-						let menusID = res.sys_menus.map(item => item.Menu_ID)
-						for (let i = 0; i < menusID.length; i++) {
-							this.$refs.tree.setChecked(menusID[i], true)
-						}
-						this.getRoles()
-						this.$store.dispatch('getMenu')
-					})
-				})
-			},
-			submitSetAuth() {
-				let data = {
-					Role_ID: this.setAuthId,
-					sys_menus: this.selectedMenuId
-				}
-				requestNode({
-					url: '/sys_role/update/menu',
-					method: 'post',
-					data
-				}).then(res => {
-					if (res.data.code == 0) {
-						Message.success(res.data.msg)
-					} else {
-						Message.error(res.data.msg)
-					}
-					this.showSetAuth = false
-				})
-			},
-			selectMenu(data, isSelected) {
-				if (isSelected) {
-					this.selectedMenuId.push(data.Menu_ID)
-				} else {
-					this.selectedMenuId.splice(this.selectedMenuId.indexOf(data.Menu_ID), 1)
-				}
-			},
-			// 获取当前角色详情
-			getRole(Role_ID, callback) {
-				let params = {
-					Role_ID
-				}
-				requestNode({
-					url: '/sys_role/info',
-					method: 'get',
-					params
-				}).then(res => {
-					if (res.data.code == 0) {
-						this.role = res.data.data
-						callback && callback(res.data.data)
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			// 获取所有用户
-			getUsers(callback) {
-				let params = {
-					pageSize: 100
-				}
-				requestNode({
-					url: '/com_staff/list',
-					method: 'get',
-					params
-				}).then(res => {
-					if (res.data.code == 0) {
-						this.users = res.data.data.rows
-						callback && callback()
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			setUser(data) {
-				this.setUserId = data.id
-				this.showSetUser = true
-				this.getUsers(() => {
-					this.getRole(data.Role_ID, res => {
-						let usersID = res.sys_users.map(item => item.User_ID)
-						let users = this.users.filter(user => {
-							return usersID.includes(user.User_ID)
-						})
-						console.log(users)
-						users.forEach(user => {
-							this.$refs.usersTable.toggleRowSelection(user)
-						})
-						this.getRoles()
-					})
-				})
-			},
-			handleChange(value, direction, movedKeys) {
-				console.log(value, direction, movedKeys)
-			},
-			submitSetUser() {
-				this.showSetUser = false
-				let Staff_IDs = this.selectedUsers.map(item => item.Staff_ID)
-				let data = {
-					Role_ID: this.setUserId,
-					sys_users: Staff_IDs
-				}
-				requestNode({
-					url: '/sys_role/update/user',
-					method: 'post',
-					data
-				}).then(res => {
-					if (res.data.code == 0) {
-						Message.success(res.data.msg)
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			refresh() {
-				this.refreshing = true
-				this.getRoles()
-				setTimeout(() => {
-					this.refreshing = false
-				}, 500)
+			})
+		},
+		getList() {
+			const params = {
+				pageIndex: this.pageIndex,
+				pageSize: this.pageSize,
+				RoleName: this.findRoleName
 			}
+			requestNode({
+				url: '/sys_role/list',
+				method: 'get',
+				params
+			}).then(res => {
+				if (res.data.code == 0) {
+					this.count = res.data.data.count
+					this.roles = res.data.data.rows
+				} else {
+					Message.error(res.data.msg)
+				}
+			})
+		},
+		deleteConfirm(id) {
+			let ids = []
+			if (id && typeof id == 'string') {
+				ids = [].concat(id)
+			} else {
+				if (this.selectedRoles.length == 0) {
+					this.$message({
+						type: 'warning',
+						message: '请选择'
+					})
+					return
+				}
+				ids = this.selectedRoles
+			}
+			this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				this.delRole(ids)
+				this.$message({
+					type: 'success',
+					message: '删除成功!'
+				})
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消删除'
+				})
+			})
+		},
+		delRole(ids) {
+			let data = {
+				ids: ids
+			}
+			requestNode({
+				url: '/sys_role/delete',
+				method: 'post',
+				data
+			}).then(res => {
+				if (res.data.code == 0) {
+					this.getList()
+				} else {
+					Message.error(res.data.msg)
+				}
+			})
+		},
+		setAuth(data) {
+			this.getMenus().then(() => {
+				this.setAuthId = data.id
+				this.showSetAuth = true
+				this.getRole(data.id, res => {
+					let menusID = res.sys_menus.map(item => item.Menu_ID)
+					for (let i = 0; i < menusID.length; i++) {
+						this.$refs.tree.setChecked(menusID[i], true)
+					}
+					this.getList()
+					this.$store.dispatch('getMenu')
+				})
+			})
+		},
+		submitSetAuth() {
+			let data = {
+				Role_ID: this.setAuthId,
+				sys_menus: this.selectedMenuId
+			}
+			requestNode({
+				url: '/sys_role/update/menu',
+				method: 'post',
+				data
+			}).then(res => {
+				if (res.data.code == 0) {
+					Message.success(res.data.msg)
+				} else {
+					Message.error(res.data.msg)
+				}
+				this.showSetAuth = false
+			})
+		},
+		selectMenu(data, isSelected) {
+			if (isSelected) {
+				this.selectedMenuId.push(data.Menu_ID)
+			} else {
+				this.selectedMenuId.splice(this.selectedMenuId.indexOf(data.Menu_ID), 1)
+			}
+		},
+		// 获取当前角色详情
+		getRole(Role_ID, callback) {
+			const params = { Role_ID }
+			requestNode({
+				url: '/sys_role/info',
+				method: 'get',
+				params
+			}).then(res => {
+				if (res.data.code == 0) {
+					this.role = res.data.data
+					callback && callback(this.role)
+				} else {
+					Message.error(res.data.msg)
+				}
+			})
+		},
+		// 获取所有用户
+		getStaffs(callback) {
+			const params = { pageSize: 100 }
+			requestNode({
+				url: '/com_staff/list',
+				method: 'get',
+				params
+			}).then(res => {
+				if (res.data.code == 0) {
+					this.staffs = res.data.data.rows
+					callback && callback(this.staffs)
+				} else {
+					Message.error(res.data.msg)
+				}
+			})
+		},
+		setUser(data) {
+			this.setUserId = data.id
+			this.showSetUser = true
+			this.getList()
+			this.getStaffs(staffList => {
+				this.getRole(data.id, res => {
+					const Staff_IDs = res.com_staffs.map(item => item.Staff_ID)
+					const staffs = staffList.filter(item => Staff_IDs.includes(item.Staff_ID))
+					staffs.forEach(staff => {
+						this.$refs.usersTable.toggleRowSelection(staff)
+					})
+					this.getList()
+				})
+			})
+		},
+		handleChange(value, direction, movedKeys) {
+			console.log(value, direction, movedKeys)
+		},
+		submitSetUser() {
+			this.showSetUser = false
+			let Staff_IDs = this.selectedUsers.map(item => item.Staff_ID)
+			let data = {
+				Role_ID: this.setUserId,
+				sys_users: Staff_IDs
+			}
+			requestNode({
+				url: '/sys_role/update/user',
+				method: 'post',
+				data
+			}).then(res => {
+				if (res.data.code == 0) {
+					Message.success(res.data.msg)
+				} else {
+					Message.error(res.data.msg)
+				}
+			})
+		},
+		refresh() {
+			this.refreshing = true
+			this.getList()
+			setTimeout(() => {
+				this.refreshing = false
+			}, 500)
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 
