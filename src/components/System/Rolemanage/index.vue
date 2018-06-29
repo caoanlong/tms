@@ -14,8 +14,8 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="addRole">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="deleteConfirm">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -92,18 +92,19 @@
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
 import requestNode from '../../../common/requestNode'
+import SysRole from '../../../api/SysRole'
 import Page from '../../CommonComponents/Page'
+import { deleteConfirm } from '../../../common/utils'
 export default {
 	data() {
 		return {
-			refreshing: false,
 			roles: [],
 			role: {},
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
 			findRoleName: '',
-			selectedRoles: [],
+			selectedList: [],
 			setAuthId: '',
 			setUserId: '',
 			// 所有的用户
@@ -125,20 +126,20 @@ export default {
 		this.getList()
 	},
 	methods: {
-		addRole() {
+		add() {
 			this.$router.push({name: 'addrole'})
 		},
 		handleCommand(e) {
-			if(e.type=='view'){
+			if(e.type == 'view'){
 				this.$router.push({name: 'viewrole', query: { Role_ID:e.id }})
-			}else if(e.type=='edit'){
+			} else if (e.type == 'edit'){
 				this.$router.push({ name: 'editrole' , query: {  Role_ID:e.id } })
-			}else if(e.type=='setAuth'){
+			} else if (e.type == 'setAuth'){
 				this.setAuth(e)
-			}else if(e.type=='setUser'){
+			} else if (e.type == 'setUser'){
 				this.setUser(e)
-			}else if(e.type=='delete'){
-				this.deleteConfirm(e.id)
+			} else if (e.type == 'delete'){
+				this.del(e.id)
 			}
 		},
 		pageChange(index) {
@@ -150,15 +151,24 @@ export default {
 			this.getList() 
 		},
 		selectRoleChange(data) {
-			this.selectedRoles = data.map(item => item.Role_ID)
+			this.selectedList = data.map(item => item.Role_ID)
 		},
 		selectUserChange(data) {
 			this.selectedUsers = data
 		},
-		// 重置搜索表单
 		reset() {
 			this.findRoleName = ''
 			this.getList()
+		},
+		getList() {
+			SysRole.find({
+				pageIndex: this.pageIndex,
+				pageSize: this.pageSize,
+				RoleName: this.findRoleName
+			}).then(res => {
+				this.count = res.count
+				this.roles = res.rows
+			})
 		},
 		// 获取所有菜单
 		getMenus() {
@@ -177,71 +187,13 @@ export default {
 				})
 			})
 		},
-		getList() {
-			const params = {
-				pageIndex: this.pageIndex,
-				pageSize: this.pageSize,
-				RoleName: this.findRoleName
-			}
-			requestNode({
-				url: '/sys_role/list',
-				method: 'get',
-				params
-			}).then(res => {
-				if (res.data.code == 0) {
-					this.count = res.data.data.count
-					this.roles = res.data.data.rows
-				} else {
-					Message.error(res.data.msg)
-				}
-			})
-		},
-		deleteConfirm(id) {
-			let ids = []
-			if (id && typeof id == 'string') {
-				ids = [].concat(id)
-			} else {
-				if (this.selectedRoles.length == 0) {
-					this.$message({
-						type: 'warning',
-						message: '请选择'
-					})
-					return
-				}
-				ids = this.selectedRoles
-			}
-			this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				this.delRole(ids)
-				this.$message({
-					type: 'success',
-					message: '删除成功!'
-				})
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消删除'
-				})
-			})
-		},
-		delRole(ids) {
-			let data = {
-				ids: ids
-			}
-			requestNode({
-				url: '/sys_role/delete',
-				method: 'post',
-				data
-			}).then(res => {
-				if (res.data.code == 0) {
+		del(Role_ID) {
+			deleteConfirm(Role_ID, ids => {
+				SysRole.del({ ids }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
-				} else {
-					Message.error(res.data.msg)
-				}
-			})
+				})
+			}, this.selectedList)
 		},
 		setAuth(data) {
 			this.getMenus().then(() => {
@@ -350,13 +302,6 @@ export default {
 					Message.error(res.data.msg)
 				}
 			})
-		},
-		refresh() {
-			this.refreshing = true
-			this.getList()
-			setTimeout(() => {
-				this.refreshing = false
-			}, 500)
 		}
 	}
 }

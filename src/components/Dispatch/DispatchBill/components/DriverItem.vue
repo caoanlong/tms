@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import {defaultImg} from '../../../assets/icons/icons'
+import {defaultImg} from '../../../../assets/icons/icons'
 export default {
 	props: {
 		isSelected: {

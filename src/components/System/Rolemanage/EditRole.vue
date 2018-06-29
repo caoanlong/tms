@@ -26,8 +26,8 @@
 							<el-input type="textarea" resize="none" v-model="role.Remark"></el-input>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click.native="editRole">提交修改</el-button>
-							<el-button @click.native="back">返回</el-button>
+							<el-button type="primary" @click="update">提交修改</el-button>
+							<el-button @click="back">返回</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -36,69 +36,48 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import requestNode from '../../../common/requestNode'
-	import { Message } from 'element-ui'
-	export default {
-		data() {
-			return {
-				role: {
-					RoleName: '',
-					RoleEnName: '',
-					RoleCode: '',
-					RoleType: '',
-					Remark: ''
-				},
-			}
-		},
-		created() {
-			this.getRole()
-		},
-		methods: {
-			getRole() {
-				let params = {
-					Role_ID: this.$route.query.Role_ID
-				}
-				requestNode({
-					url: '/sys_role/info',
-					method: 'get',
-					params
-				}).then(res => {
-					if (res.data.code == 0) {
-						this.role = res.data.data
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
+import { Message } from 'element-ui'
+import SysRole from '../../../api/SysRole'
+export default {
+	data() {
+		return {
+			role: {
+				RoleName: '',
+				RoleEnName: '',
+				RoleCode: '',
+				RoleType: '',
+				Remark: ''
 			},
-			editRole() {
-				let data = {
-					Role_ID: this.$route.query.Role_ID,
-					RoleName: this.role.RoleName,
-					RoleEnName: this.role.RoleEnName,
-					RoleCode: this.role.RoleCode,
-					RoleType: this.role.RoleType,
-					Remark: this.role.Remark
-				}
-				console.log(JSON.stringify(data))
-				requestNode({
-					url: '/sys_role/update',
-					method: 'post',
-					data
-				}).then(res => {
-					if (res.data.code == 0) {
-						console.log(res.data)
-						Message.success(res.data.msg)
-						this.$router.push({name: 'rolemanage'})
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			back() {
-				this.$router.go(-1)
-			}
+		}
+	},
+	created() {
+		this.getInfo()
+	},
+	methods: {
+		getInfo() {
+			const Role_ID = this.$route.query.Role_ID
+			SysRole.findById({ Role_ID }).then(res => {
+				this.role = res
+			})
+		},
+		update() {
+			SysRole.update({
+				Role_ID: this.$route.query.Role_ID,
+				RoleName: this.role.RoleName,
+				RoleEnName: this.role.RoleEnName,
+				RoleCode: this.role.RoleCode,
+				RoleType: this.role.RoleType,
+				Remark: this.role.Remark
+			}).then(res => {
+				Message.success(res.data.msg)
+				this.$router.push({name: 'rolemanage'})
+			})
+		},
+		back() {
+			this.$router.go(-1)
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 	

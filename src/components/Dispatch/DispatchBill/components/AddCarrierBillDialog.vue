@@ -82,114 +82,114 @@
 	</el-dialog>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request from '../../../common/request'
-	export default {
-		props: {
-			dialogTableVisible: {
-				type: Boolean,
-				default: false
-			},
-			selectedCarrierBillIDs: {
-				type: Array,
-				default: () => []
-			}
+import { Message } from 'element-ui'
+import request from '../../../../common/request'
+export default {
+	props: {
+		dialogTableVisible: {
+			type: Boolean,
+			default: false
 		},
-		watch: {
-			dialogTableVisible: function(newVal) {
-				this.isVisible = newVal
-				if (newVal) {
-					this.getList()
-				}
-			}
-		},
-		data() {
-			return {
-				isVisible: false,
-				count: 0,
-				pageIndex: 1,
-				pageSize: 10,
-				tableData: [],
-				selectedList: [],
-				findsearchInfo:'',
-				findRangeDate: [],
-				findshipperBeginDate: '',
-				findshipperEndDate: ''
-			}
-		},
-		methods: {
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			changeGetList(size) {
-				this.pageSize = size
-				this.getList()
-			},
-			reset() {
-				this.findsearchInfo='',
-				this.findshipperBeginDate='',
-				this.findshipperEndDate='',
-				this.findRangeDate = [],
-				this.pageIndex=1,
-				this.getList()
-			},
-			selectDateRange(date) {
-				this.findshipperBeginDate = date[0]
-				this.findshipperEndDate = date[1]
-			},
-			selectionChange(data) {
-				// this.selectedList = data.map(item => item.carrierOrderID)
-				this.selectedList = data
-			},
-			getList(){
-				let params = {
-					current: this.pageIndex,
-					size: this.pageSize,
-					shipperBeginDate: this.findshipperBeginDate,
-					shipperEndDate: this.findshipperEndDate,
-					searchInfo: this.findsearchInfo,
-					status: 'Committed'
-				}
-				request({
-					url: '/biz/carrierOrder/list',
-					params
-				}).then(res => {
-					this.tableData = res.data.data.records
-					this.count = res.data.data.total
-				})
-			},
-			add() {
-				let selectedList = this.selectedList.map(item => item.carrierOrderID)
-				if (selectedList.length == 0) {
-					Message.error('请选择！')
-					return
-				}
-				let mutipleSelect = []
-				for (let i = 0; i < selectedList.length; i++) {
-					if (this.selectedCarrierBillIDs.includes(selectedList[i])) {
-						mutipleSelect.push(this.selectedList[i].carrierOrderNo)
-					}
-				}
-				if (mutipleSelect.length > 0) {
-					Message.error('承运单号为“' + mutipleSelect.join(',') + '”已经选择了！')
-					return
-				}
-				this.isVisible = false
-				this.$emit('selectCarrierBills', selectedList, false)
-			},
-			tableRowClassName({row, rowIndex}) {
-				if (this.selectedCarrierBillIDs.includes(row.carrierOrderID)) {
-				  return 'warning-row'
-				}
-				return ''
-			},
-			cancel() {
-				this.isVisible = false
-				this.$emit('selectCarrierBills')
-			},
+		selectedCarrierBillIDs: {
+			type: Array,
+			default: () => []
 		}
+	},
+	watch: {
+		dialogTableVisible: function(newVal) {
+			this.isVisible = newVal
+			if (newVal) {
+				this.getList()
+			}
+		}
+	},
+	data() {
+		return {
+			isVisible: false,
+			count: 0,
+			pageIndex: 1,
+			pageSize: 10,
+			tableData: [],
+			selectedList: [],
+			findsearchInfo:'',
+			findRangeDate: [],
+			findshipperBeginDate: '',
+			findshipperEndDate: ''
+		}
+	},
+	methods: {
+		pageChange(index) {
+			this.pageIndex = index
+			this.getList()
+		},
+		changeGetList(size) {
+			this.pageSize = size
+			this.getList()
+		},
+		reset() {
+			this.findsearchInfo='',
+			this.findshipperBeginDate='',
+			this.findshipperEndDate='',
+			this.findRangeDate = [],
+			this.pageIndex=1,
+			this.getList()
+		},
+		selectDateRange(date) {
+			this.findshipperBeginDate = date[0]
+			this.findshipperEndDate = date[1]
+		},
+		selectionChange(data) {
+			// this.selectedList = data.map(item => item.carrierOrderID)
+			this.selectedList = data
+		},
+		getList(){
+			let params = {
+				current: this.pageIndex,
+				size: this.pageSize,
+				shipperBeginDate: this.findshipperBeginDate,
+				shipperEndDate: this.findshipperEndDate,
+				searchInfo: this.findsearchInfo,
+				status: 'Committed'
+			}
+			request({
+				url: '/biz/carrierOrder/list',
+				params
+			}).then(res => {
+				this.tableData = res.data.data.records
+				this.count = res.data.data.total
+			})
+		},
+		add() {
+			let selectedList = this.selectedList.map(item => item.carrierOrderID)
+			if (selectedList.length == 0) {
+				Message.error('请选择！')
+				return
+			}
+			let mutipleSelect = []
+			for (let i = 0; i < selectedList.length; i++) {
+				if (this.selectedCarrierBillIDs.includes(selectedList[i])) {
+					mutipleSelect.push(this.selectedList[i].carrierOrderNo)
+				}
+			}
+			if (mutipleSelect.length > 0) {
+				Message.error('承运单号为“' + mutipleSelect.join(',') + '”已经选择了！')
+				return
+			}
+			this.isVisible = false
+			this.$emit('selectCarrierBills', selectedList, false)
+		},
+		tableRowClassName({row, rowIndex}) {
+			if (this.selectedCarrierBillIDs.includes(row.carrierOrderID)) {
+				return 'warning-row'
+			}
+			return ''
+		},
+		cancel() {
+			this.isVisible = false
+			this.$emit('selectCarrierBills')
+		},
 	}
+}
 </script>
 <style lang="stylus">
 .el-table .warning-row

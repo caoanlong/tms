@@ -162,12 +162,12 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Dispatchbill from '../../api/Dispatchbill'
-import { deleteConfirm, closeConfirm, cancelConfirm } from '../../common/utils'
-import DispatchBillItem from './Common/DispatchBillItem'
-import Page from '../CommonComponents/Page'
-import UploadPhoto from './Common/UploadPhoto'
-import Customer from '../../api/Customer'
+import Dispatchbill from '../../../api/Dispatchbill'
+import { deleteConfirm, closeConfirm, cancelConfirm } from '../../../common/utils'
+import Page from '../../CommonComponents/Page'
+import Customer from '../../../api/Customer'
+import UploadPhoto from './components/UploadPhoto'
+import DispatchBillItem from './components/DispatchBillItem'
 export default {
 	data() {
 		return {

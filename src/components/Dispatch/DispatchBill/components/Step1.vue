@@ -99,9 +99,9 @@
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
-import Carrierbill from '../../../api/Carrierbill'
-import Page from '../../CommonComponents/Page'
-import Customer from '../../../api/Customer'
+import Carrierbill from '../../../../api/Carrierbill'
+import Customer from '../../../../api/Customer'
+import Page from '../../../CommonComponents/Page'
 export default {
 	data() {
 		return {

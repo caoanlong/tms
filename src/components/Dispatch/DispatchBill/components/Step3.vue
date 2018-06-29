@@ -98,12 +98,12 @@
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
-import TransportRecord from '../../../api/TransportRecord'
-import Dispatchbill from '../../../api/Dispatchbill'
-import Staff from '../../../api/Staff'
+import TransportRecord from '../../../../api/TransportRecord'
+import Dispatchbill from '../../../../api/Dispatchbill'
+import Staff from '../../../../api/Staff'
 import DriverItem from './DriverItem'
 import EscortItem from './EscortItem'
-import Page from '../../CommonComponents/Page'
+import Page from '../../../CommonComponents/Page'
 export default {
 	data() {
 		return {

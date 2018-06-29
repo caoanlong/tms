@@ -73,8 +73,8 @@
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
-import Carrierbill from '../../../api/Carrierbill'
-import Page from '../../CommonComponents/Page'
+import Carrierbill from '../../../../api/Carrierbill'
+import Page from '../../../CommonComponents/Page'
 export default {
 	data() {
 		return {
