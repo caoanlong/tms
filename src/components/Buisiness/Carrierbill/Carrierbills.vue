@@ -107,9 +107,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { deleteConfirm, closeConfirm } from '../../common/utils'
-import Carrierbill from '../../api/Carrierbill'
-import Page from '../CommonComponents/Page'
+import { deleteConfirm, closeConfirm } from '../../../common/utils'
+import Carrierbill from '../../../api/Carrierbill'
+import Page from '../../CommonComponents/Page'
 export default {
 	data() {
 		return {

@@ -10,7 +10,7 @@
 				<table>
 					<tr>
 						<td class="from">
-							<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
+							<img src="../../../../assets/imgs/avatar.gif" class="headPic"/>
 							<p class="companyName">{{taskItem.shipperCompanyName}}</p>
 							<p>{{taskItem.shipperName}}{{taskItem.shipperPhone?('/'+taskItem.shipperPhone):''}}</p>
 						</td>
@@ -19,7 +19,7 @@
 							<p>{{taskItem.loadWeightSum?(taskItem.loadWeightSum+'kg/'):''}}{{taskItem.loadVolumeSum?(taskItem.loadVolumeSum+'m³/'):''}}{{taskItem.loadNumSum?(taskItem.loadNumSum+'件'):''}}</p>
 						</td>
 						<td class="to">
-							<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
+							<img src="../../../../assets/imgs/avatar.gif" class="headPic"/>
 							<p class="companyName">{{taskItem.consigneeCompanyName}}</p>
 							<p>{{taskItem.consigneeName}}{{taskItem.consigneePhone?('/'+taskItem.consigneePhone):''}}</p>
 						</td>
@@ -63,14 +63,14 @@
 						</td>
 					</tr>
 				</table>
-				<span class="viewtaskdetailBtn"><img src="../../../assets/imgs/viewtaskdetailBtn.png" /></span>
+				<span class="viewtaskdetailBtn"><img src="../../../../assets/imgs/viewtaskdetailBtn.png" /></span>
 			</div>
 		</div>
 	</div>
 </template>
 <script type="text/javascript">
-import { resizeImg } from '../../../common/utils'
-import ImageUpload from '../../CommonComponents/ImageUpload2'
+import { resizeImg } from '../../../../common/utils'
+import ImageUpload from '../../../CommonComponents/ImageUpload2'
 export default {
 	props:{
 		index:{
@@ -145,7 +145,7 @@ export default {
 					color #f90
 				&.plateNo
 					display block
-					background url('../../../assets/imgs/arrowBig2.png') no-repeat left bottom
+					background url('../../../../assets/imgs/arrowBig2.png') no-repeat left bottom
 			.area
 				font-weight bold
 				color #000

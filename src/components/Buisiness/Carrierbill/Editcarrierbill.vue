@@ -1,8 +1,16 @@
 <template>
 	<div class="main-content">
-		<div id="cb"></div>
 		<div class="wf-card hasTit">
-			<div class="header clearfix">添加承运单</div>
+			<div class="header clearfix">承运单编号：{{carrierbillInfo.carrierOrderNo}}
+				<span>发货单号：{{carrierbillInfo.shipperNo}}</span>
+				<span>创建时间：{{carrierbillInfo.createTime | getdatefromtimestamp()}}</span>
+				<span>委托时间：<span v-if="carrierbillInfo.commissionDate">{{carrierbillInfo.commissionDate | getdatefromtimestamp(true)}}</span></span>
+				<span class="status status1" v-if="carrierbillInfo.status=='Commited'">未执行</span>
+				<span class="status status2" v-else-if="carrierbillInfo.status=='Running'">执行中</span>
+				<span class="status status3" v-else-if="carrierbillInfo.status=='Signed'">已完成</span>
+				<span class="status status1" v-else-if="carrierbillInfo.status=='Closed'">已关闭</span>
+				<!-- <span class="status status1" v-else-if="carrierbillInfo.status=='Canceled'">作废</span> -->
+			</div>
 			<el-row>
 				<div class="split-item">
 					<span class="num">1</span>
@@ -49,7 +57,7 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="发货单位" prop="shipperCompanyName">
-							<el-autocomplete  style="width:100%"
+							<el-autocomplete style="width:100%"
 								value-key="companyName" 
 								v-model="carrierbillInfo.shipperCompanyName"
 								:fetch-suggestions="getRecdeliverycomp"
@@ -115,7 +123,7 @@
 				<el-row style="margin-top:20px">
 					<el-col :span="8">
 						<el-form-item label="收货单位" prop="consigneeCompanyName">
-							<el-autocomplete  style="width:100%"
+							<el-autocomplete
 								value-key="companyName" 
 								v-model="carrierbillInfo.consigneeCompanyName"
 								:fetch-suggestions="getRecdeliverycomp"
@@ -193,7 +201,6 @@
 						<el-form-item label="委托时间">
 							<el-date-picker 
 								style="width:100%" 
-								type="date" 
 								placeholder="请选择" 
 								value-format="timestamp" 
 								v-model="carrierbillInfo.commissionDate">
@@ -310,19 +317,16 @@
 		</div>
 	</div>
 </template>
-
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { mapGetters } from 'vuex'
-import DistPicker from '../CommonComponents/DistPicker'
-import request from '../../common/request'
-import Carrierbill from '../../api/Carrierbill'
-import SettleConfig from '../../api/SettleConfig'
-import Customer from '../../api/Customer'
-import BaiduMap from '../../api/BaiduMap'
-import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
-import { checkFloat2, checkTel } from '../../common/validators'
-
+import DistPicker from '../../CommonComponents/DistPicker'
+import request from '../../../common/request'
+import Carrierbill from '../../../api/Carrierbill'
+import SettleConfig from '../../../api/SettleConfig'
+import Customer from '../../../api/Customer'
+import BaiduMap from '../../../api/BaiduMap'
+import { searchAreaByKey, areaIdToArrayId } from '../../../common/utils'
+import { checkFloat2, checkMobile } from '../../../common/validators'
 export default {
 	data() {
 		return {
@@ -342,7 +346,7 @@ export default {
 					}
 				],
 				carrierOrderNo:'',
-				carrierrName: '',
+				carrierrName:'',
 				navicertNo: '',   // 新增
 				electronicWaybill: '',   // 新增
 				cashAmount:'',
@@ -381,7 +385,7 @@ export default {
 				shipperPhone:'',
 				invoice:'N',
 				porRequire: ['NotRequired'],
-				transportType: '公路运输',
+				transportType: '',
 				commissionDate: ''
 			},
 			totalPrice: 0,
@@ -401,7 +405,7 @@ export default {
 					{ required: true, message: '请输入发货人'}
 				],
 				shipperPhone: [
-					{ required: true, validator: checkTel}
+					{ required: true, validator: checkMobile, trigger: 'blur'}
 				],
 				shipperDate: [
 					{required: true, message: '请选择发货时间', trigger: 'change'}
@@ -423,7 +427,7 @@ export default {
 					{ required: true, message: '请输入收货人'}
 				],
 				consigneePhone: [
-					{ required: true, validator: checkTel}
+					{ required: true, validator: checkMobile, trigger: 'blur'}
 				],
 				consigneeDate: [
 					{required: true, message: '请选择收货时间', trigger: 'change'}
@@ -464,13 +468,19 @@ export default {
 			}
 		}
 	},
-	computed: {
-		...mapGetters(['companyName'])
-	},
 	created() {
-		this.carrierbillInfo.carrierrName = this.companyName
+		this.getDetail()
 	},
 	methods: {
+		getDetail() {
+			let carrierOrderID = this.$route.query.carrierOrderID
+			Carrierbill.findById({ carrierOrderID }).then(res => {
+				this.carrierbillInfo = res
+				this.carrierbillInfo.porRequire = res.porRequire.split(',')
+				this.selectedArea = areaIdToArrayId(res.shipperAreaID)
+				this.selectedArea1 = areaIdToArrayId(res.consigneeAreaID)
+			})
+		},
 		getConsignors(queryString, cb) {
 			Customer.find({
 				type: 'Consignor',
@@ -669,17 +679,18 @@ export default {
 							'cargoNum': item.cargoNum ? item.cargoNum : 0
 						}
 					})
-					Carrierbill.add({
+					Carrierbill.update({
+						carrierOrderID: this.$route.query.carrierOrderID,
 						carrierCargoInfo: JSON.stringify(cargos),
-						carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
+						// carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
 						carrierrName: this.carrierbillInfo.carrierrName,
 						navicertNo: this.carrierbillInfo.navicertNo,
 						electronicWaybill: this.carrierbillInfo.electronicWaybill,
 						cashAmount: this.carrierbillInfo.cashAmount,
 						codAmount: this.carrierbillInfo.codAmount,
-						consigneeAddressID: '',
+						// consigneeAddressID: '',
 						consigneeAmount: this.carrierbillInfo.consigneeAmount,
-						consigneeArea: this.carrierbillInfo.consigneeArea ,
+						// consigneeArea: this.carrierbillInfo.consigneeArea ,
 						consigneeAreaID: this.carrierbillInfo.consigneeAreaID,
 						consigneeLocationAddress: this.carrierbillInfo.consigneeLocationAddress || '云南昆明',  // 新增定位
 						consigneeLocationLng: this.carrierbillInfo.consigneeLocationLng || 25.05,  // 新增定位
@@ -687,7 +698,7 @@ export default {
 						consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
 						consigneeDate: this.carrierbillInfo.consigneeDate,
 						consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
-						consigneeID: this.carrierbillInfo.consigneeID,
+						consigneeID: this.carrierbillInfo.consigneeID || '',
 						consigneeName: this.carrierbillInfo.consigneeName,
 						consigneePhone: this.carrierbillInfo.consigneePhone,
 						consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
@@ -696,8 +707,8 @@ export default {
 						paymentMethod: this.carrierbillInfo.paymentMethod,
 						porAmount: this.carrierbillInfo.porAmount,
 						receiptMethod: this.carrierbillInfo.receiptMethod,	
-						shipperAddressID: '',
-						shipperArea: this.carrierbillInfo.shipperArea,
+						// shipperAddressID: '',
+						// shipperArea: this.carrierbillInfo.shipperArea,
 						shipperAreaID: this.carrierbillInfo.shipperAreaID,
 						shipperLocationAddress: this.carrierbillInfo.shipperLocationAddress || '云南昆明',  // 新增定位
 						shipperLocationLng: this.carrierbillInfo.shipperLocationLng || 25.05,  // 新增定位
@@ -705,14 +716,15 @@ export default {
 						shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
 						shipperDate: this.carrierbillInfo.shipperDate,
 						shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
-						shipperID: this.carrierbillInfo.shipperID,
-						shipperName: this.carrierbillInfo.shipperName,
+						shipperID: this.carrierbillInfo.shipperID || '',  // 收货人ID
+						shipperName: this.carrierbillInfo.shipperName,    // 收货人名
 						shipperNo: this.carrierbillInfo.shipperNo,
 						shipperPhone: this.carrierbillInfo.shipperPhone,
 						porRequire: this.carrierbillInfo.porRequire.join(','),
 						invoice: this.carrierbillInfo.invoice,
 						transportType: this.carrierbillInfo.transportType,
-						commissionDate: this.carrierbillInfo.commissionDate
+						commissionDate: this.carrierbillInfo.commissionDate || '',
+						status: this.carrierbillInfo.status
 					}).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'carrierbills'})

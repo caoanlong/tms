@@ -50,8 +50,6 @@ service.interceptors.request.use(config => {
 	}
 	return config
 }, error => {
-	// Do something with request error
-	console.log(error) // for debug
 	Promise.reject(error)
 })
 
@@ -87,73 +85,4 @@ error => {
 	return
 })
 
-// jquery ajax
-// jQuery.support.cors = true
-const ajax = function (json) {
-	let data = null
-	if (json.data) {
-		data = json.data
-	} else {
-		data = json.params
-	}
-	return new Promise((resolve, reject) => {
-		$.ajax({
-			url: baseURL + json.url,
-			type: json.method || 'get',
-			dataType: 'json',
-			processData: false,
-			data: !json.contentType ? qs.stringify(data) : data,
-			headers: {
-				'contentType': json.contentType || 'application/x-www-form-urlencoded;charset=utf-8',
-				'Authorization': localStorage.getItem('token')
-			},
-			beforeSend: (res) => {
-			},
-			complete: (res) => {
-				let response = res.responseJSON
-				if (response.code != 200) {
-					if (response.code == 100 // 用户未登录
-						|| response.code == 101 // 用户不存在
-						|| response.code == 403 // 拒绝访问
-						|| response.code == 5201 // Token验证失败, 请求重新登录!
-						|| response.code == 5202) { // 帐号已在其它地方登录!
-						localStorage.clear()
-						Message.error(response.msg)
-						window.location.href = href()
-						reject(res)
-						return
-					}
-					if (response.code == 104) {
-						MessageBox(msgBox)
-						reject(res)
-						return
-					}
-					if (response.code == 2001) {
-						reject({
-							data: { code: 2001}
-						})
-						return
-					}
-					Message.error(response.msg)
-					reject(res)
-					return
-				} else {
-					let resData = {}
-					let authorization = res.getResponseHeader('authorization')
-					if (authorization) resData.headers = {'authorization': authorization}
-					resData.data = response
-					resolve(resData)
-				}
-			},
-			success: (res) => {
-			},
-			error: (res) => {
-				reject(res)
-				return
-			}
-		})
-	})
-}
-
-// export default ajax
 export default service

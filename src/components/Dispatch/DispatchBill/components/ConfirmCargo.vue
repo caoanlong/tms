@@ -12,7 +12,7 @@
 					<th width="90">签收量/方</th>
 					<th width="90">签收量/件</th>
 				</tr>
-				<tr class="is-center" v-for="(item, index) in cargoInfo">
+				<tr class="is-center" v-for="(item, index) in cargoInfo" :key="index">
 					<td>{{index+1}}</td>
 					<td>{{item.carrierOrderNo}}</td>
 					<td>{{item.cargoType}}/{{item.cargoName}}</td>
@@ -147,89 +147,89 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import { isFloat, isInt } from '../../../common/validators'
-	export default {
-		props: {
-			isVisible: {
-				type: Boolean,
-				default: false
-			},
-			cargoInfo: {
-				type: Array,
-				default: () => []
-			},
-			payInfo: {
-				type: Object,
-				default: () => {}
-			}
+import { Message } from 'element-ui'
+import { isFloat, isInt } from '../../../../common/validators'
+export default {
+	props: {
+		isVisible: {
+			type: Boolean,
+			default: false
 		},
-		computed: {
-			totalSignWeight() {
-				let values = this.cargoInfo.map(item => Number(item.signWeight ? item.signWeight : 0))
-				return values.reduce((prev, next) => {
-					return prev + next
-				}, 0)
-			},
-			totalSignVolume() {
-				let values = this.cargoInfo.map(item => Number(item.signVolume ? item.signVolume : 0))
-				return values.reduce((prev, next) => {
-					return prev + next
-				}, 0)
-			},
-			totalSignNum() {
-				let values = this.cargoInfo.map(item => Number(item.signNum ? item.signNum : 0))
-				return values.reduce((prev, next) => {
-					return prev + next
-				}, 0)
-			},
+		cargoInfo: {
+			type: Array,
+			default: () => []
 		},
-		methods: {
-			control(bool) {
-				if (bool) {
-					for (let i = 0; i < this.cargoInfo.length; i++) {
-						if (this.cargoInfo[i].weightType == 'Heavy') {
-							if (!Number(this.cargoInfo[i].signWeight)) {
-								Message.error('重货签收重量不能为空！')
-								return
-							}
-							if (!isFloat(this.cargoInfo[i].signWeight)) {
-								Message.error('输入载重数据非法！')
-								return
-							}
-						}
-						if (this.cargoInfo[i].weightType == 'Light') {
-							if (!Number(this.cargoInfo[i].signVolume)) {
-								Message.error('轻货签收体积不能为空！')
-								return
-							}
-							if (!isFloat(this.cargoInfo[i].signVolume)) {
-								Message.error('输入体积数据非法！')
-								return
-							}
-						}
-						if (this.cargoInfo[i].signWeight > this.cargoInfo[i].loadWeight) {
-							Message.error('签收重量不能超过运载重量！')
+		payInfo: {
+			type: Object,
+			default: () => {}
+		}
+	},
+	computed: {
+		totalSignWeight() {
+			let values = this.cargoInfo.map(item => Number(item.signWeight ? item.signWeight : 0))
+			return values.reduce((prev, next) => {
+				return prev + next
+			}, 0)
+		},
+		totalSignVolume() {
+			let values = this.cargoInfo.map(item => Number(item.signVolume ? item.signVolume : 0))
+			return values.reduce((prev, next) => {
+				return prev + next
+			}, 0)
+		},
+		totalSignNum() {
+			let values = this.cargoInfo.map(item => Number(item.signNum ? item.signNum : 0))
+			return values.reduce((prev, next) => {
+				return prev + next
+			}, 0)
+		},
+	},
+	methods: {
+		control(bool) {
+			if (bool) {
+				for (let i = 0; i < this.cargoInfo.length; i++) {
+					if (this.cargoInfo[i].weightType == 'Heavy') {
+						if (!Number(this.cargoInfo[i].signWeight)) {
+							Message.error('重货签收重量不能为空！')
 							return
 						}
-						if (this.cargoInfo[i].signVolume > this.cargoInfo[i].loadVolume) {
-							Message.error('签收体积不能超过运载体积！')
-							return
-						}
-						if (this.cargoInfo[i].signNum && !isInt(Number(this.cargoInfo[i].signNum))) {
-							Message.error('输入数量非法！')
-							return
-						}
-						if (this.cargoInfo[i].signNum > this.cargoInfo[i].loadNum) {
-							Message.error('签收数量不能超过运载数量！')
+						if (!isFloat(this.cargoInfo[i].signWeight)) {
+							Message.error('输入载重数据非法！')
 							return
 						}
 					}
-					this.$emit('control', false, this.cargoInfo, this.payInfo)
-				} else {
-					this.$emit('control', false)
+					if (this.cargoInfo[i].weightType == 'Light') {
+						if (!Number(this.cargoInfo[i].signVolume)) {
+							Message.error('轻货签收体积不能为空！')
+							return
+						}
+						if (!isFloat(this.cargoInfo[i].signVolume)) {
+							Message.error('输入体积数据非法！')
+							return
+						}
+					}
+					if (this.cargoInfo[i].signWeight > this.cargoInfo[i].loadWeight) {
+						Message.error('签收重量不能超过运载重量！')
+						return
+					}
+					if (this.cargoInfo[i].signVolume > this.cargoInfo[i].loadVolume) {
+						Message.error('签收体积不能超过运载体积！')
+						return
+					}
+					if (this.cargoInfo[i].signNum && !isInt(Number(this.cargoInfo[i].signNum))) {
+						Message.error('输入数量非法！')
+						return
+					}
+					if (this.cargoInfo[i].signNum > this.cargoInfo[i].loadNum) {
+						Message.error('签收数量不能超过运载数量！')
+						return
+					}
 				}
+				this.$emit('control', false, this.cargoInfo, this.payInfo)
+			} else {
+				this.$emit('control', false)
 			}
 		}
 	}
+}
 </script>

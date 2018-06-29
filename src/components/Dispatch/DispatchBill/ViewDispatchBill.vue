@@ -56,9 +56,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Dispatchbill from '../../api/Dispatchbill'
-import { closeConfirm, cancelConfirm } from '../../common/utils'
-import TaskListItem from './Common/TaskListItem'
+import Dispatchbill from '../../../api/Dispatchbill'
+import { closeConfirm, cancelConfirm } from '../../../common/utils'
+import TaskListItem from './components/TaskListItem'
 export default {
 	data() {
 		return {

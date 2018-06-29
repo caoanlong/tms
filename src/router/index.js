@@ -21,103 +21,117 @@ let routerMap = [
 			{
 				path: '/',
 				name: 'home',
-				meta: {
-					title: '首页'
-				},
+				meta: { title: '首页' },
 				component: () => import ('../components/Home')
 			},
 			{
-				path: '/carrierbill',
-				name: 'carrierbill',
-				meta: {
-					title: '承运单'
-				},
-				component: () => import ('../components/Carrierbill'),
-				redirect: '/carrierbills',
+				path: '/buisiness',
+				name: 'buisiness',
+				meta: { title: '业务' },
+				component: () => import ('../components/Buisiness'),
+				redirect: '/carrierbill',
 				children: [
 					{
-						path: '/carrierbills',
-						name: 'carrierbills',
-						meta: {
-							title: '承运单列表'
-						},
-						component: () => import ('../components/Carrierbill/Carrierbills'),
+						path: '/carrierbill',
+						name: 'carrierbill',
+						meta: { title: '承运单' },
+						component: () => import ('../components/Buisiness/Carrierbill'),
+						redirect: '/carrierbills',
+						children: [
+							{
+								path: '/carrierbills',
+								name: 'carrierbills',
+								meta: {
+									title: '承运单列表'
+								},
+								component: () => import ('../components/Buisiness/Carrierbill/Carrierbills'),
+							},
+							{
+								path: '/addcarrierbill',
+								name: 'addcarrierbill',
+								meta: {
+									title: '添加承运单'
+								},
+								component: () => import ('../components/Buisiness/Carrierbill/Addcarrierbill'),
+							},
+							{
+								path: '/viewcarrierbill',
+								name: 'viewcarrierbill',
+								meta: {
+									title: '承运单详情'
+								},
+								component: () => import ('../components/Buisiness/Carrierbill/Viewcarrierbill')
+							},
+							{
+								path: '/editcarrierbill',
+								name: 'editcarrierbill',
+								meta: {
+									title: '编辑承运单'
+								},
+								component: () => import ('../components/Buisiness/Carrierbill/Editcarrierbill')
+							}
+						]
 					},
-					{
-						path: '/addcarrierbill',
-						name: 'addcarrierbill',
-						meta: {
-							title: '添加承运单'
-						},
-						component: () => import ('../components/Carrierbill/Addcarrierbill'),
-					},
-					{
-						path: '/viewcarrierbill',
-						name: 'viewcarrierbill',
-						meta: {
-							title: '承运单详情'
-						},
-						component: () => import ('../components/Carrierbill/Viewcarrierbill')
-					},
-					{
-						path: '/editcarrierbill',
-						name: 'editcarrierbill',
-						meta: {
-							title: '编辑承运单'
-						},
-						component: () => import ('../components/Carrierbill/Editcarrierbill')
-					}
 				]
 			},
 			{
-				path: '/dispatchbill',
-				name: 'dispatchbill',
-				meta: {
-					title: '调度单'
-				},
-				component: () => import ('../components/DispatchBill'),
-				redirect: '/dispatchbills',
+				path: '/dispatch',
+				name: 'dispatch',
+				meta: { title: '调度' },
+				component: () => import ('../components/Dispatch'),
+				redirect: '/dispatchbill',
 				children: [
 					{
-						path: '/dispatchbills',
-						name: 'dispatchbills',
+						path: '/dispatchbill',
+						name: 'dispatchbill',
 						meta: {
-							title: '调度单列表'
+							title: '调度单'
 						},
-						component: () => import ('../components/DispatchBill/DispatchBills'),
+						component: () => import ('../components/Dispatch/DispatchBill'),
+						redirect: '/dispatchbills',
+						children: [
+							{
+								path: '/dispatchbills',
+								name: 'dispatchbills',
+								meta: {
+									title: '调度单列表'
+								},
+								component: () => import ('../components/Dispatch/DispatchBill/DispatchBills'),
+							},
+							{
+								path: '/adddispatchbill',
+								name: 'adddispatchbill',
+								meta: {
+									title: '添加调度单'
+								},
+								component: () => import ('../components/Dispatch/DispatchBill/AddDispatchBill'),
+							},
+							{
+								path: '/editdispatchbill',
+								name: 'editdispatchbill',
+								meta: {
+									title: '编辑调度单'
+								},
+								component: () => import ('../components/Dispatch/DispatchBill/EditDispatchBill'),
+							},
+							{
+								path: '/viewdispatchbill',
+								name: 'viewdispatchbill',
+								meta: {
+									title: '调度单详情'
+								},
+								component: () => import ('../components/Dispatch/DispatchBill/ViewDispatchBill')
+							},
+							{
+								path: '/viewtaskdetail',
+								name: 'viewtaskdetail',
+								meta: {
+									title: '任务单详情'
+								},
+								component: () => import ('../components/Dispatch/DispatchBill/ViewTaskDetail')
+							}
+						]
 					},
-					{
-						path: '/adddispatchbill',
-						name: 'adddispatchbill',
-						meta: {
-							title: '添加调度单'
-						},
-						component: () => import ('../components/DispatchBill/AddDispatchBill'),
-					},
-					{
-						path: '/editdispatchbill',
-						name: 'editdispatchbill',
-						meta: {
-							title: '编辑调度单'
-						},
-						component: () => import ('../components/DispatchBill/EditDispatchBill'),
-					},
-					{
-						path: '/viewdispatchbill',
-						name: 'viewdispatchbill',
-						meta: {
-							title: '调度单详情'
-						},
-						component: () => import ('../components/DispatchBill/ViewDispatchBill')
-					},
-					{
-						path: '/viewtaskdetail',
-						name: 'viewtaskdetail',
-						meta: {
-							title: '任务单详情'
-						},
-						component: () => import ('../components/DispatchBill/ViewTaskDetail')
-					}
 				]
 			},
 			{
@@ -260,12 +274,12 @@ let routerMap = [
 				]
 			},
 			{
-				path: '/settlemanage',
-				name: 'settlemanage',
+				path: '/finance',
+				name: 'finance',
 				meta: {
-					title: '结算管理'
+					title: '财务'
 				},
-				component: () => import ('../components/Settlemanage'),
+				component: () => import ('../components/Finance'),
 				redirect: '/receivablesum',
 				children: [
 					{
@@ -274,7 +288,7 @@ let routerMap = [
 						meta: {
 							title: '应收汇总'
 						},
-						component: () => import ('../components/Settlemanage/Receivablesum'),
+						component: () => import ('../components/Finance/Receivablesum'),
 					},
 					{
 						path: '/receivableinfo',
@@ -282,7 +296,7 @@ let routerMap = [
 						meta: {
 							title: '应收明细'
 						},
-						component: () => import ('../components/Settlemanage/Receivableinfo'),
+						component: () => import ('../components/Finance/Receivableinfo'),
 					},
 					{
 						path: '/payablesum',
@@ -290,7 +304,7 @@ let routerMap = [
 						meta: {
 							title: '应付汇总'
 						},
-						component: () => import ('../components/Settlemanage/Payablesum'),
+						component: () => import ('../components/Finance/Payablesum'),
 					},
 					{
 						path: '/payableinfo',
@@ -298,7 +312,7 @@ let routerMap = [
 						meta: {
 							title: '应付明细'
 						},
-						component: () => import ('../components/Settlemanage/Payableinfo'),
+						component: () => import ('../components/Finance/Payableinfo'),
 					},
 					{
 						path: '/settleconfig',
@@ -306,7 +320,7 @@ let routerMap = [
 						meta: {
 							title: '结算设置'
 						},
-						component: () => import ('../components/Settlemanage/SettleConfig'),
+						component: () => import ('../components/Finance/SettleConfig'),
 					},
 					{
 						path: '/addsettleconfig',
@@ -314,7 +328,7 @@ let routerMap = [
 						meta: {
 							title: '添加运费模板'
 						},
-						component: () => import ('../components/Settlemanage/AddSettleConfig'),
+						component: () => import ('../components/Finance/AddSettleConfig'),
 					},
 					{
 						path: '/editsettleconfig',
@@ -322,7 +336,7 @@ let routerMap = [
 						meta: {
 							title: '编辑运费模板'
 						},
-						component: () => import ('../components/Settlemanage/EditSettleConfig'),
+						component: () => import ('../components/Finance/EditSettleConfig'),
 					},
 					{
 						path: '/viewsettleconfig',
@@ -330,7 +344,7 @@ let routerMap = [
 						meta: {
 							title: '查看运费模板'
 						},
-						component: () => import ('../components/Settlemanage/ViewSettleConfig'),
+						component: () => import ('../components/Finance/ViewSettleConfig'),
 					},
 				]
 			},
@@ -338,7 +352,7 @@ let routerMap = [
 				path: '/transteam',
 				name: 'transteam',
 				meta: {
-					title: '运输队'
+					title: '运输档案'
 				},
 				component: () => import ('../components/TransTeam'),
 				redirect: '/truck',
@@ -474,12 +488,12 @@ let routerMap = [
 				]
 			},
 			{
-				path: '/cooperpartner',
-				name: 'cooperpartner',
+				path: '/basedata',
+				name: 'basedata',
 				meta: {
-					title: '合作伙伴'
+					title: '基础资料'
 				},
-				component: () => import ('../components/CooperPartner'),
+				component: () => import ('../components/Basedata'),
 				redirect: '/shipper',
 				children: [
 					{
@@ -488,7 +502,7 @@ let routerMap = [
 						meta: {
 							title: '托运人'
 						},
-						component: () => import ('../components/CooperPartner/Shipper'),
+						component: () => import ('../components/Basedata/Shipper'),
 					},
 					{
 						path: '/addshipper',
@@ -496,7 +510,7 @@ let routerMap = [
 						meta: {
 							title: '添加托运人'
 						},
-						component: () => import ('../components/CooperPartner/AddShipper'),
+						component: () => import ('../components/Basedata/AddShipper'),
 					},
 					{
 						path: '/editshipper',
@@ -504,7 +518,7 @@ let routerMap = [
 						meta: {
 							title: '编辑托运人'
 						},
-						component: () => import ('../components/CooperPartner/EditShipper'),
+						component: () => import ('../components/Basedata/EditShipper'),
 					},
 					{
 						path: '/viewshipper',
@@ -512,7 +526,7 @@ let routerMap = [
 						meta: {
 							title: '托运人详情'
 						},
-						component: () => import ('../components/CooperPartner/ViewShipper'),
+						component: () => import ('../components/Basedata/ViewShipper'),
 					},
 					{
 						path: '/recdeliverycomp',
@@ -520,7 +534,7 @@ let routerMap = [
 						meta: {
 							title: '收发货单位'
 						},
-						component: () => import ('../components/CooperPartner/RecDeliveryComp'),
+						component: () => import ('../components/Basedata/RecDeliveryComp'),
 					},
 					{
 						path: '/addrecdeliverycomp',
@@ -528,7 +542,7 @@ let routerMap = [
 						meta: {
 							title: '添加收发货单位'
 						},
-						component: () => import ('../components/CooperPartner/AddRecDeliveryComp'),
+						component: () => import ('../components/Basedata/AddRecDeliveryComp'),
 					},
 					{
 						path: '/editrecdeliverycomp',
@@ -536,7 +550,7 @@ let routerMap = [
 						meta: {
 							title: '编辑收发货单位'
 						},
-						component: () => import ('../components/CooperPartner/EditRecDeliveryComp'),
+						component: () => import ('../components/Basedata/EditRecDeliveryComp'),
 					},
 					{
 						path: '/viewrecdeliverycomp',
@@ -544,7 +558,7 @@ let routerMap = [
 						meta: {
 							title: '收发货单位详情'
 						},
-						component: () => import ('../components/CooperPartner/ViewRecDeliveryComp'),
+						component: () => import ('../components/Basedata/ViewRecDeliveryComp'),
 					}
 				]
 			},

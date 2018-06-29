@@ -47,31 +47,21 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click.native="submitForm(button)">{{button}}</el-button>
+					<el-button type="primary" @click="submitForm(button)">{{button}}</el-button>
 					<el-button>取消</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
-		<el-dialog title="选择图标" :visible.sync="selectIcondialog" width="30%">
-			<ul class="iconList clearfix">
-				<li v-for="icon in svgicons" :key="icon" :class="{'selected':selectedIcon == icon}" @click="selectIcon(icon)">
-					<svg-icon :iconClass="icon"></svg-icon>
-				</li>
-			</ul>
-			<span slot="footer" class="dialog-footer">
-				<el-button @click="selectIcondialog = false">取 消</el-button>
-				<el-button type="primary" @click="submitSelect">确 定</el-button>
-			</span>
-		</el-dialog>
+		<select-icon :selectIcondialog="selectIcondialog" @select-icon="handleSelectIcon"></select-icon>
 	</div>
 </template>
 <script type="text/javascript">
-import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import TreeRender from '../../CommonComponents/TreeRender'
-import { requireAllName, req } from '../../../assets/icons'
-import requestNode from '../../../common/requestNode'
-
+import SelectIcon from './components/SelectIcon'
+import Menu from '../../../api/Menu'
+import SysRole from '../../../api/SysRole'
 export default {
 	data() {
 		return {
@@ -94,33 +84,21 @@ export default {
 			title: '添加顶级节点',
 			button: '立即创建',
 			selectIcondialog: false,
-			selectedIcon: '',
 			iconTxt: '添加图标'
 		}
 	},
 	computed: {
-		...mapGetters([
-			'menus'
-		]),
-		svgicons: () => requireAllName(req)
+		...mapGetters([ 'menus' ])
 	},
+	components: { SelectIcon },
 	created() {
 		this.getRoles()
 	},
 	methods: {
 		addRoot() {
-			console.log(this.menus)
 			this.title = '添加顶级节点'
 			this.button = '立即创建'
-			this.currentNode = {
-				Target: '',
-				Name: '',
-				SortNumber: '',
-				Href: '',
-				Icon: '',
-				IsShow: '',
-				sys_roles: []
-			}
+			this.currentNode = { Target: '', Name: '', SortNumber: '', Href: '', Icon: '', IsShow: '', sys_roles: [] }
 			this.iconTxt='添加图标'
 		},
 		handleNodeClick(d) {
@@ -129,7 +107,7 @@ export default {
 			this.getMenu(d.Menu_ID)
 		},
 		renderContent(h, {node, data, store}) {
-			let that = this //指向vue
+			const that = this //指向vue
 			return h(TreeRender, {
 				props: {
 					DATA: data, //节点数据
@@ -143,22 +121,18 @@ export default {
 				}
 			})
 		},
-		handleAdd(s, d, n){//增加节点
+		//增加节点
+		handleAdd(s, d, n){
 			this.title = '添加子节点'
 			this.button = '立即创建'
 			this.currentNode = {
 				Menu_PID: this.currentNode.Menu_ID,
-				Target: '',
-				Name: '',
-				SortNumber: '',
-				Href: '',
-				Icon: '',
-				IsShow: '',
-				sys_roles: []
+				Target: '', Name: '', SortNumber: '', Href: '', Icon: '', IsShow: '', sys_roles: []
 			}
 			this.iconTxt='添加图标'
 		},
-		handleDelete(s, d, n){//删除节点
+		//删除节点
+		handleDelete(s, d, n){
 			this.$confirm('此操作将永久删除该节点, 是否继续?', '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -167,112 +141,70 @@ export default {
 				this.$store.dispatch('deleteMenu', d)
 				this.$store.dispatch('getMenu')
 				this.addRoot()
-				this.$message({
-					type: 'success',
-					message: '删除成功!'
-				})
+				Message.success('删除成功!')
 			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消删除'
-				})         
+				Message.success('已取消删除!')         
 			})
+		},
+		handleSelectIcon(data) {
+			data && (this.iconTxt = this.currentNode.Icon = data)
+			this.selectIcondialog = false
 		},
 		submitForm(type) {
 			if (!this.currentNode.Name) {
-				this.$message.error('标题不能为空！')
+				Message.error('标题不能为空！')
 				return
 			}
 			if (!this.currentNode.Target) {
-				this.$message.error('名字不能为空！')
+				Message.error('名字不能为空！')
 				return
 			}
 			if (!this.currentNode.Href) {
-				this.$message.error('路径不能为空！')
+				Message.error('路径不能为空！')
 				return
+			}
+			const params = {
+				Href: this.currentNode.Href,
+				Target: this.currentNode.Target,
+				Name: this.currentNode.Name,
+				SortNumber: this.currentNode.SortNumber,
+				Icon: this.currentNode.Icon,
+				Menu_PID: this.currentNode.Menu_PID,
+				IsShow: this.isShow ? 'Y' : 'N',
+				sys_roles: this.selectedRoles
 			}
 			// 创建
 			if (type == '立即创建') {
-				let params = {
-					Href: this.currentNode.Href,
-					Target: this.currentNode.Target,
-					Name: this.currentNode.Name,
-					SortNumber: this.currentNode.SortNumber,
-					Icon: this.currentNode.Icon,
-					Menu_PID: this.currentNode.Menu_PID,
-					IsShow: this.isShow ? 'Y' : 'N',
-					sys_roles: this.selectedRoles
-				}
 				this.$store.dispatch('addMenu', params)
 				this.$store.dispatch('getMenu')
 				this.addRoot()
-				this.$message.success('创建成功！')
+				Message.success('创建成功！')
 			// 编辑
 			} else {
-				let params = {
-					Menu_ID: this.currentNode.Menu_ID,
-					Href: this.currentNode.Href,
-					Target: this.currentNode.Target,
-					Name: this.currentNode.Name,
-					SortNumber: this.currentNode.SortNumber,
-					Icon: this.currentNode.Icon,
-					Menu_PID: this.currentNode.Menu_PID,
-					IsShow: this.isShow ? 'Y' : 'N',
-					sys_roles: this.selectedRoles
-				}
+				params['Menu_ID'] = this.currentNode.Menu_ID
 				this.$store.dispatch('editMenu', params)
 				this.$store.dispatch('getMenu')
 				this.addRoot()
-				this.$message.success('编辑成功！')
+				Message.success('编辑成功！')
 			}
-		},
-		selectIcon(icon) {
-			this.selectedIcon= icon
-		},
-		submitSelect() {
-			this.iconTxt = this.currentNode.Icon = this.selectedIcon
-			this.selectIcondialog = false
 		},
 		// 获取菜单详情
 		getMenu(Menu_ID) {
-			let params = {
-				Menu_ID
-			}
-			requestNode({
-				url: '/sys_menu/info',
-				method: 'get',
-				params
-			}).then(res => {
-				if (res.data.code == 0) {
-					this.currentNode = res.data.data
-					this.isShow = res.data.data.IsShow == 'Y' ? true : false
-					this.selectedRoles = res.data.data.sys_roles.map(item => item.Role_ID)
-				} else {
-					Message.error(res.data.msg)
-				}
+			Menu.findById({ Menu_ID }).then(res => {
+				this.currentNode = res
+				this.isShow = res.IsShow == 'Y' ? true : false
+				this.selectedRoles = res.sys_roles.map(item => item.Role_ID)
 			})
 		},
-		// 获取角色
+		// 获取所有角色
 		getRoles() {
-			let params = {
-				pageSize: 100
-			}
-			requestNode({
-				url: '/sys_role/list',
-				method: 'get',
-				params
-			}).then(res => {
-				if (res.data.code == 0) {
-					let Oroles = res.data.data.rows
-					this.roles = Oroles.map(item => {
-						return {
-							Role_ID: item.Role_ID,
-							RoleName: item.RoleName
-						}
-					})
-				} else {
-					Message.error(res.data.msg)
-				}
+			SysRole.find({ pageSize: 1000 }).then(res => {
+				this.roles = res.rows.map(item => {
+					return {
+						Role_ID: item.Role_ID,
+						RoleName: item.RoleName
+					}
+				})
 			})
 		}
 	}
@@ -295,22 +227,6 @@ export default {
 				font-size 14px
 	.svg-icon
 		vertical-align top
-	.iconList
-		padding 0
-		&:after
-			clearfix
-		li
-			list-style-type none
-			float left
-			font-size 18px
-			width 44px
-			height 44px
-			padding 10px
-			text-align center
-			cursor pointer
-			&:hover
-			&.selected
-				color #409EFF
 	.el-checkbox
 		margin 0 30px 0 0	
 </style>

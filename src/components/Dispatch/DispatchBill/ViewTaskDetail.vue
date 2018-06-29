@@ -10,7 +10,7 @@
 					</div>
 					<div class="con">
 						<div class="from">
-							<img src="../../assets/imgs/avatar.gif" class="headPic"/>
+							<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
 							<p class="companyName">{{carrier.shipperCompanyName}}</p>
 							<p>{{carrier.shipperName}}{{carrier.shipperPhone?('/'+carrier.shipperPhone):''}}</p>
 							<p class="area">{{carrier.shipperArea}}</p>
@@ -21,7 +21,7 @@
 							<p>{{taskDetail.plateNo}}{{taskDetail.trailerPlateNo?('/'+taskDetail.trailerPlateNo):''}}</p>
 							</div>
 						<div class="to">
-							<img src="../../assets/imgs/avatar.gif" class="headPic"/>
+							<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
 							<p class="companyName">{{carrier.consigneeCompanyName}}</p>
 							<p>{{carrier.consigneeName}}{{carrier.consigneePhone?('/'+carrier.consigneePhone):''}}</p>
 							<p class="area">{{carrier.consigneeArea}}</p>
@@ -34,17 +34,17 @@
 					<div class="tit">人员信息</div>
 					<div class="con">
 						<div class="driver">
-							<img :src="taskDetail.driverHeadPic ? resizeImg(taskDetail.driverHeadPic, '_80x80.') : require('../../assets/imgs/avatar.gif')" class="headPic"/>
+							<img :src="taskDetail.driverHeadPic ? resizeImg(taskDetail.driverHeadPic, '_80x80.') : require('../../../assets/imgs/avatar.gif')" class="headPic"/>
 							<p class="name">{{taskDetail.driverName}}<span class="tag">司机</span></p>
 							<p>{{taskDetail.driverPhone}}</p>
 						</div>
 						<div class="escort">
-							<img :src="taskDetail.superCargoHeadPic ? resizeImg(taskDetail.superCargoHeadPic, '_80x80.') : require('../../assets/imgs/avatar.gif')" class="headPic"/>
+							<img :src="taskDetail.superCargoHeadPic ? resizeImg(taskDetail.superCargoHeadPic, '_80x80.') : require('../../../assets/imgs/avatar.gif')" class="headPic"/>
 							<p class="name">{{taskDetail.superCargoName}}<span class="tag">押运</span></p>
 							<p>{{taskDetail.superCargoPhone}}</p>
 						</div>
 						<div class="dispatcher">
-							<img :src="taskDetail.dispatcherLogoUrl ? resizeImg(taskDetail.dispatcherLogoUrl, '_80x80.') : require('../../assets/imgs/avatar.gif')" class="headPic"/>
+							<img :src="taskDetail.dispatcherLogoUrl ? resizeImg(taskDetail.dispatcherLogoUrl, '_80x80.') : require('../../../assets/imgs/avatar.gif')" class="headPic"/>
 							<p class="name">{{taskDetail.dispatcherName}}<span class="tag">调度</span></p>
 							<p>{{taskDetail.dispatcherMobile}}</p>
 						</div>
@@ -135,11 +135,11 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Task from '../../api/Task'
-import TaskPic from '../../api/TaskPic'
-import ImageUpload from '../CommonComponents/ImageUpload2'
-import UploadPhoto from './Common/UploadPhoto'
-import { resizeImg } from '../../common/utils'
+import Task from '../../../api/Task'
+import TaskPic from '../../../api/TaskPic'
+import ImageUpload from '../../CommonComponents/ImageUpload2'
+import { resizeImg } from '../../../common/utils'
+import UploadPhoto from './components/UploadPhoto'
 export default {
 	data() {
 		return {
@@ -432,5 +432,5 @@ export default {
 					padding-bottom 5px
 					transform translateY(-50%)
 					font-size 18px
-					background url('../../assets/imgs/arrowBig2.png') no-repeat left bottom
+					background url('../../../assets/imgs/arrowBig2.png') no-repeat left bottom
 </style>

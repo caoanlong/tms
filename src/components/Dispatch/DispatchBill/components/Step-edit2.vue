@@ -79,7 +79,7 @@
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
-import Dispatchbill from '../../../api/Dispatchbill'
+import Dispatchbill from '../../../../api/Dispatchbill'
 export default {
 	data() {
 		return {

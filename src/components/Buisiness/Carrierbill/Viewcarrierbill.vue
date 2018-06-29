@@ -234,9 +234,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { closeConfirm, deleteConfirm } from '../../common/utils'
-import Carrierbill from '../../api/Carrierbill'
-import UploadPhoto from '../DispatchBill/Common/UploadPhoto'
+import { closeConfirm, deleteConfirm } from '../../../common/utils'
+import Carrierbill from '../../../api/Carrierbill'
+import UploadPhoto from '../../Dispatch/DispatchBill/components/UploadPhoto'
 import ViewCargos from './ViewCargos'
 export default {
 	data() {

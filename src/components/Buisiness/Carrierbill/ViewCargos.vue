@@ -20,7 +20,7 @@
     </el-dialog>
 </template>
 <script>
-import ImageUpload from '../CommonComponents/ImageUpload'
+import ImageUpload from '../../CommonComponents/ImageUpload'
 export default {
     props: {
         visible: {

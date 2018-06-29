@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card hasTit">
-			<el-steps :active="stepActive" finish-status="success" simple style="margin-bottom:20px;" class="stepBar">
+			<el-steps :active="stepActive" finish-status="success" process-status="finish" simple style="margin-bottom:20px;" class="stepBar">
 				<el-step title="选择承运单"></el-step>
 				<el-step title="货物配载"></el-step>
 				<el-step title="车辆&amp;人员调度"></el-step>
@@ -14,10 +14,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Step1 from './Common/Step-edit1'
-import Step2 from './Common/Step-edit2'
-import Step3 from './Common/Step-edit3'
-import Step4 from './Common/Step-edit4'
+import Step1 from './components/Step1'
+import Step2 from './components/Step2'
+import Step3 from './components/Step3'
+import Step4 from './components/Step4'
 export default {
 	data() {
 		return {

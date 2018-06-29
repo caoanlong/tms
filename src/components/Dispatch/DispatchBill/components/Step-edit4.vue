@@ -4,12 +4,12 @@
 			<div class="tit">人员信息</div>
 			<div class="con">
 				<div class="driver">
-					<img :src="selectedDriver.driverHeadPic ? resizeImg(selectedDriver.driverHeadPic, '_80x80.') : require('../../../assets/imgs/avatar.gif')" class="headPic"/>
+					<img :src="selectedDriver.driverHeadPic ? resizeImg(selectedDriver.driverHeadPic, '_80x80.') : require('../../../../assets/imgs/avatar.gif')" class="headPic"/>
 					<p class="name">{{selectedDriver.driverName}}<span class="tag">司机</span></p>
 					<p>{{selectedDriver.driverPhone}}</p>
 				</div>
 				<div class="escort">
-					<img :src="selectedStaff.staffHeadPic ? resizeImg(selectedStaff.staffHeadPic, '_80x80.') : require('../../../assets/imgs/avatar.gif')" class="headPic"/>
+					<img :src="selectedStaff.staffHeadPic ? resizeImg(selectedStaff.staffHeadPic, '_80x80.') : require('../../../../assets/imgs/avatar.gif')" class="headPic"/>
 					<p class="name">{{selectedStaff.staffName}}<span class="tag">押运</span></p>
 					<p>{{selectedStaff.staffPhone}}</p>
 				</div>
@@ -25,7 +25,7 @@
 				</div>
 				<div class="con">
 					<div class="from">
-						<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
+						<img src="../../../../assets/imgs/avatar.gif" class="headPic"/>
 						<p class="companyName">{{task.shipperCompanyName}}</p>
 						<p>{{task.shipperName}}{{task.shipperPhone?('/'+task.shipperPhone):''}}</p>
 						<p class="area">{{task.shipperArea}}</p>
@@ -39,7 +39,7 @@
 						</span>
 					</div>
 					<div class="to">
-						<img src="../../../assets/imgs/avatar.gif" class="headPic"/>
+						<img src="../../../../assets/imgs/avatar.gif" class="headPic"/>
 						<p class="companyName">{{task.consigneeCompanyName}}</p>
 						<p>{{task.consigneeName}}{{task.consigneePhone?('/'+task.consigneePhone):''}}</p>
 						<p class="area">{{task.consigneeArea}}</p>
@@ -141,8 +141,8 @@
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
-import Dispatchbill from '../../../api/Dispatchbill'
-import { resizeImg } from '../../../common/utils'
+import Dispatchbill from '../../../../api/Dispatchbill'
+import { resizeImg } from '../../../../common/utils'
 export default {
 	data() {
 		return {

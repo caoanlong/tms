@@ -30,45 +30,35 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import requestNode from '../../../common/requestNode'
-	import { Message } from 'element-ui'
-	export default {
-		data() {
-			return {
-				role: {
-					RoleName: '',
-					RoleEnName: '',
-					RoleCode: '',
-					RoleType: '',
-					Remark: ''
-				}
-			}
-		},
-		created() {
-			this.getRole()
-		},
-		methods: {
-			getRole() {
-				let params = {
-					Role_ID: this.$route.query.Role_ID
-				}
-				requestNode({
-					url: '/sys_role/info',
-					method: 'get',
-					params
-				}).then(res => {
-					if (res.data.code == 0) {
-						this.role = res.data.data
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			back() {
-				this.$router.go(-1)
+import { Message } from 'element-ui'
+import SysRole from '../../../api/SysRole'
+export default {
+	data() {
+		return {
+			role: {
+				RoleName: '',
+				RoleEnName: '',
+				RoleCode: '',
+				RoleType: '',
+				Remark: ''
 			}
 		}
+	},
+	created() {
+		this.getInfo()
+	},
+	methods: {
+		getInfo() {
+			const Role_ID = this.$route.query.Role_ID
+			SysRole.findById({ Role_ID }).then(res => {
+				this.role = res
+			})
+		},
+		back() {
+			this.$router.go(-1)
+		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .el-form-item__content

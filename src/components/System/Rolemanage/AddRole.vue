@@ -25,7 +25,7 @@
 							<el-input type="textarea" resize="none" v-model="role.Remark"></el-input>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click.native="addRole">立即创建</el-button>
+							<el-button type="primary" @click.native="add">立即创建</el-button>
 							<el-button @click.native="back">取消</el-button>
 						</el-form-item>
 					</el-form>
@@ -35,54 +35,39 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import requestNode from '../../../common/requestNode'
-	import { Message } from 'element-ui'
-	export default {
-		data() {
-			return {
-				role: {
-					RoleName: '',
-					RoleEnName: '',
-					RoleCode: '',
-					RoleType: '',
-					Remark: ''
-				},
-				organizations: [],
-				sysDataScopes: []
-			}
-		},
-		created() {
-		},
-		methods: {
-			addRole() {
-				let data = {
-					RoleName: this.role.RoleName,
-					RoleEnName: this.role.RoleEnName,
-					RoleCode: this.role.RoleCode,
-					RoleType: this.role.RoleType,
-					Remark: this.role.Remark
-				}
-				console.log(JSON.stringify(data))
-				requestNode({
-					url: '/sys_role/add',
-					method: 'post',
-					data
-				}).then(res => {
-					if (res.data.code == 0) {
-						console.log(res.data)
-						Message.success(res.data.msg)
-						this.$router.push({name: 'rolemanage'})
-					} else {
-						Message.error(res.data.msg)
-					}
-				})
-			},
-			
-			back() {
-				this.$router.go(-1)
+import { Message } from 'element-ui'
+import SysRole from '../../../api/SysRole'
+export default {
+	data() {
+		return {
+			role: {
+				RoleName: '',
+				RoleEnName: '',
+				RoleCode: '',
+				RoleType: '',
+				Remark: ''
 			}
 		}
+	},
+	methods: {
+		add() {
+			SysRole.add({
+				RoleName: this.role.RoleName,
+				RoleEnName: this.role.RoleEnName,
+				RoleCode: this.role.RoleCode,
+				RoleType: this.role.RoleType,
+				Remark: this.role.Remark
+			}).then(res => {
+				Message.success(res.data.msg)
+				this.$router.push({name: 'rolemanage'})
+			})
+		},
+		
+		back() {
+			this.$router.go(-1)
+		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 	
