@@ -1,9 +1,7 @@
 <template>
 	<div class="main-content">
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-				<span>无车承运人运单列表</span>
-			</div>
+		<div class="wf-card">
+			<div class="header clearfix">无车承运人运单列表</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="托运单号：">
@@ -61,7 +59,7 @@
 				</el-table>
 				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
-		</el-card>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
