@@ -48,6 +48,7 @@
 					</div>
 
 				</div>
+				<DriverItem></DriverItem>
 				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
@@ -61,6 +62,7 @@ import { deleteConfirm } from '../../common/utils'
 import Truck from '../../api/Truck'
 import Page from '../CommonComponents/Page'
 import { limitLength20, checkInt2 } from '../../common/validators'
+import DriverItem from './Common/DriverItem'
 export default {
 	data() {
 		return {
@@ -104,7 +106,8 @@ export default {
 		])
 	},
 	components: {
-		Page
+		Page,
+		DriverItem
 	},
 	created() {
 		this.getList()
@@ -220,7 +223,6 @@ export default {
 		color #fff
 		height 36px
 		line-height 36px
-		display flex
 		text-align center
 		position relative
 		padding-right 520px
@@ -232,6 +234,7 @@ export default {
 		.handle
 			border-left 1px solid #fff
 			position absolute
+			top 0
 	.truckInfo
 		width 100%
 	.handle
