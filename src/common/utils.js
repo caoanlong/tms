@@ -100,11 +100,34 @@ export function deleteConfirm (id, callback, idList) {
 	}).then(() => {
 		callback && callback(ids)
 	}).catch((err) => {
-		console.log(err)
-		Message({
-			type: 'info',
-			message: '已取消删除'
-		})
+		Message.info('已取消删除')
+	})
+}
+
+/**
+ * 删除确认(json数组传参数)
+ * @param {单个id} id 
+ * @param {多个id} idList 
+ */
+export function deleteConfirmArr (id, callback, idList) {
+	let ids = []
+	if (id && (typeof id == 'string' || typeof id == 'number')) {
+		ids = [id]
+	} else {
+		ids = idList
+	}
+	if(ids.length == 0) {
+		Message({ type: 'warning', message: '请选择' })
+		return
+	}
+	vueInstance.$confirm('此操作将永久删除, 是否继续?', '提示', {
+		confirmButtonText: '确定',
+		cancelButtonText: '取消',
+		type: 'warning'
+	}).then(() => {
+		callback && callback(ids)
+	}).catch((err) => {
+		Message.info('已取消删除')
 	})
 }
 

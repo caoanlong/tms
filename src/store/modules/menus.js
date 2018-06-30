@@ -7,32 +7,23 @@ const menu = {
 	mutations: {
 		GET_MENU: (state) => {
 			Menu.find().then(res => {
-				state.menus = res
-				sessionStorage.setItem('menus', JSON.stringify(res))
+				state.menus = res.menus
+				sessionStorage.setItem('menus', JSON.stringify(res.menus))
 			})
 		},
 		ADD_MENU: (state, menu, callback) => {
 			Menu.add(menu).then(() => {
-				Menu.find().then(res => {
-					state.menus = res
-					sessionStorage.setItem('menus', JSON.stringify(res))
-				})
+				this.a.mutations.GET_MENU()
 			})
 		},
 		EDIT_MENU: (state, menu, callback) => {
 			Menu.update(menu).then(() => {
-				Menu.find().then(res => {
-					state.menus = res
-					sessionStorage.setItem('menus', JSON.stringify(res))
-				})
+				this.a.mutations.GET_MENU()
 			})
 		},
 		DELETE_MENU: (state, menu, callback) => {
 			Menu.del({Menu_ID: menu.Menu_ID}).then(() => {
-				Menu.find().then(res => {
-					state.menus = res
-					sessionStorage.setItem('menus', JSON.stringify(res))
-				})
+				this.a.mutations.GET_MENU()
 			})
 		}
 	},
