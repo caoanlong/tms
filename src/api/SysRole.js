@@ -1,5 +1,6 @@
 import Base from './Base'
 import request from '../common/requestNode'
+import { resolve } from 'url';
 /**
  * this._find = "/list"
  * this._findById = "/detail"
@@ -14,16 +15,20 @@ class SysRole extends Base {
             update: '/update',
         })
     }
-    findByDriverSuggest(params) {
-		return new Promise((resolve, reject) => {
-			this.request({
-				url: this.baseUrl + '/driver/suggest',
-				params
-			}).then(res => {
-				resolve(res.data.data)
-			})
-		})
-	}
+    updateMenu(data) {
+        return this.request({
+            url: this.baseUrl + '/update/menu',
+            method: 'post',
+            data
+        })
+    }
+    updateUser(data) {
+        return this.request({
+            url: this.baseUrl + '/update/user',
+            method: 'post',
+            data
+        })
+    }
 }
 
 export default new SysRole('/sys_role', request)
