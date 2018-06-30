@@ -1,6 +1,6 @@
 {
-	"name": "ah-admin",
-	"version": "1.0.0",
+	"name": "tms",
+	"version": "2.1.0",
 	"description": "A Vue.js project",
 	"author": "Caoanlong <caoanlong@gmail.com>",
 	"private": true,
