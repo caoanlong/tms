@@ -32,25 +32,29 @@
 				</el-upload>
 				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
+			<div class="listTable">
 			<div class="driverList">
 				<div class="tableTit">
 					<div class="truck fl">
 						车辆
 					</div>
-					<div class="driver fl">
-						驾驶员
+					<div class="otherInfo fr">
+						<div class="driver fl">
+							驾驶员
+						</div>
+						<div class="mobile fl">
+							电话
+						</div>
+						<div class="handle fl">
+							操作
+						</div>
 					</div>
-					<div class="mobile fl">
-						电话
-					</div>
-					<div class="handle fl">
-						操作
-					</div>
-
 				</div>
-				<DriverItem></DriverItem>
-				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<DriverItem v-for="i in 4" :key="i"></DriverItem>
+				
 			</div>
+			</div>
+			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</div>
 	</div>
 </template>
@@ -217,7 +221,10 @@ export default {
 .upload-File
 	display inline-block
 	margin 0 10px
+.listTable
+	overflow-x auto
 .driverList
+	min-width 900px
 	.tableTit
 		background #409EFF
 		color #fff
@@ -228,6 +235,7 @@ export default {
 		border-radius 3px
 		font-size 14px
 		font-weight bold
+		margin-bottom 10px
 		.driver
 		.mobile
 		.handle
