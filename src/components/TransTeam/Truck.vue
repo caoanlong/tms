@@ -34,16 +34,16 @@
 			</div>
 			<div class="driverList">
 				<div class="tableTit">
-					<div class="truckInfo">
+					<div class="truck fl">
 						车辆
 					</div>
-					<div class="driver">
+					<div class="driver fl">
 						驾驶员
 					</div>
-					<div class="mobile">
+					<div class="mobile fl">
 						电话
 					</div>
-					<div class="handle">
+					<div class="handle fl">
 						操作
 					</div>
 
@@ -225,7 +225,6 @@ export default {
 		line-height 36px
 		text-align center
 		position relative
-		padding-right 520px
 		border-radius 3px
 		font-size 14px
 		font-weight bold
@@ -233,17 +232,12 @@ export default {
 		.mobile
 		.handle
 			border-left 1px solid #fff
-			position absolute
-			top 0
-	.truckInfo
-		width 100%
+	.truck
+		min-width 380px
 	.handle
 		width 180px
-		right 0
 	.driver
 		width 200px
-		right 320px
 	.mobile
 		width 140px
-		right 180px
 </style>

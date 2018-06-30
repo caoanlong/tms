@@ -1,7 +1,30 @@
 <template>
 	<div class="driverItem">
-		<div class="truckInfo">
-			车辆
+		<div class="truck">
+			<div class="truckPic fl">
+				<img :src="defaultImg" />
+			</div>
+			<div class="truckInfo fl">
+				<p><span class="plateNo">粤B-66688 </span>
+					<el-tag size="mini">作业</el-tag>
+					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
+					<el-tag size="mini" type="info">挂车</el-tag>
+					<el-tooltip placement="right" effect="light">
+						<div slot="content">
+							<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
+							<el-tag size="mini" type="danger">身份证到期</el-tag> 
+							<el-tag size="mini" type="danger">从业资格证到期</el-tag>
+						</div>
+						<el-tag size="mini" type="danger">到期</el-tag>
+					</el-tooltip>
+				</p>
+				<p>9.6米/高栏/22吨/3.5方</p>
+			</div>
+			<div class="truckHandle fl">
+				<span>查看档案</span>
+				<span>编辑档案</span>
+				<span>删除车辆</span>
+			</div>
 		</div>
 		<div class="driver">
 			<div class="driverInfo"><span class="driverName">罗凯 </span>
@@ -51,12 +74,16 @@
 
 <script>
 import { Message } from 'element-ui'
+import { defaultImg } from '../../../assets/icons/icons'
 export default {
 	data() {
 		return {
 		   
 		}
 	},
+	computed: {
+		defaultImg: () => defaultImg
+	}
 }
 </script>
 
@@ -67,7 +94,7 @@ export default {
 	border 1px solid  #f0f0f0
 	margin-top 5px
 	font-size 12px
-	height 82px
+	height 92px
 	.driver
 	.mobile
 	.handle
@@ -76,8 +103,27 @@ export default {
 		top 0
 		background #fff
 		height 80px
-	.truckInfo
+	.truck
 		width 100%
+		padding 10px
+		height 90px
+		min-width 380px
+		position relative
+		.truckPic
+			img
+				width 50px
+				height 50px
+				vertical-align top
+		.truckInfo
+			p
+				margin 0
+				.plateNo
+					font-weight bold
+					font-size 16px
+		.truckHandle
+			height 30px
+			width 100%
+			line-height 30px
 	.handle
 		width 179px
 		right 0
