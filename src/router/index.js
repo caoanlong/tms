@@ -454,6 +454,14 @@ let routerMap = [
 						component: () => import ('../components/TransTeam/ViewDriver'),
 					},
 					{
+						path: '/refdriverapp',
+						name: 'refdriverapp',
+						meta: {
+							title: '关联司机APP'
+						},
+						component: () => import ('../components/TransTeam/RefDriverApp'),
+					},
+					{
 						path: '/transinfo',
 						name: 'transinfo',
 						meta: {
@@ -484,6 +492,14 @@ let routerMap = [
 							title: '查看运输档案'
 						},
 						component: () => import ('../components/TransTeam/ViewTransInfo'),
+					},
+					{
+						path: '/expirewarn',
+						name: 'expirewarn',
+						meta: {
+							title: '到期预警'
+						},
+						component: () => import ('../components/TransTeam/ExpireWarn'),
 					},
 				]
 			},
@@ -559,6 +575,22 @@ let routerMap = [
 							title: '收发货单位详情'
 						},
 						component: () => import ('../components/Basedata/ViewRecDeliveryComp'),
+					},
+					{
+						path: '/cargounit',
+						name: 'cargounit',
+						meta: {
+							title: '货物单位'
+						},
+						component: () => import ('../components/Basedata/CargoUnit'),
+					},
+					{
+						path: '/cargo',
+						name: 'cargo',
+						meta: {
+							title: '常用货物'
+						},
+						component: () => import ('../components/Basedata/Cargo'),
 					}
 				]
 			},

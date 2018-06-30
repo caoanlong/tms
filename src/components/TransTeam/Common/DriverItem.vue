@@ -92,7 +92,7 @@ export default {
 	position relative
 	padding-right 520px
 	border 1px solid  #f0f0f0
-	margin-top 5px
+	margin-bottom 10px
 	font-size 12px
 	height 92px
 	.driver
@@ -102,7 +102,7 @@ export default {
 		position absolute
 		top 0
 		background #fff
-		height 80px
+		height 90px
 	.truck
 		width 100%
 		padding 10px
@@ -110,13 +110,19 @@ export default {
 		min-width 380px
 		position relative
 		.truckPic
+			margin-right 10px
 			img
 				width 50px
 				height 50px
 				vertical-align top
+				border-radius 3px
 		.truckInfo
 			p
 				margin 0
+				line-height 20px
+				color #666
+				&:first-child
+					line-height 30px
 				.plateNo
 					font-weight bold
 					font-size 16px
@@ -124,6 +130,10 @@ export default {
 			height 30px
 			width 100%
 			line-height 30px
+			span
+				color #409eff
+				cursor pointer
+				margin-right 20px
 	.handle
 		width 179px
 		right 0
@@ -142,8 +152,8 @@ export default {
 	.mobileItem
 	.driverInfo
 	.handleItem
-		height 40px
-		line-height 40px
+		height 45px
+		line-height 45px
 		&:first-child
 			border-bottom 1px solid #f0f0f0
 	.driverInfo
