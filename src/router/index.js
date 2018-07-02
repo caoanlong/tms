@@ -591,6 +591,22 @@ let routerMap = [
 							title: '常用货物'
 						},
 						component: () => import ('../components/Basedata/Cargo'),
+					},
+					{
+						path: '/addcargo',
+						name: 'addcargo',
+						meta: {
+							title: '常用货物'
+						},
+						component: () => import ('../components/Basedata/AddCargo'),
+					},
+					{
+						path: '/editcargo',
+						name: 'editcargo',
+						meta: {
+							title: '编辑常用货物'
+						},
+						component: () => import ('../components/Basedata/EditCargo'),
 					}
 				]
 			},
@@ -612,6 +628,14 @@ let routerMap = [
 						component: () => import('../components/User/UserProfile')
 					}
 				]
+			},
+			{
+				path: '/companyInfo',
+				name: 'companyInfo',
+				meta: {
+					title: '修改企业资料'
+				},
+				component: () => import('../components/CompanyInfo'),
 			},
 			{
 				path: '/system',

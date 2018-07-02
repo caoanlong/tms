@@ -45,7 +45,7 @@
 					<el-table-column label="包装单位" prop="companyName" align="center"></el-table-column>
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini">编辑</el-button>
+							<el-button type="primary" size="mini" @click="edit">编辑</el-button>
 							<el-button type="danger" size="mini">删除</el-button>
 						</template>
 					</el-table-column>
@@ -53,17 +53,6 @@
 				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
-		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
-			<el-form>
-				<el-form-item label="单位名称" label-width="80px">
-					<el-input placeholder="请输入货物单位" auto-complete="off"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-			</div>
-		</el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
@@ -75,7 +64,6 @@ import { deleteConfirm } from '../../common/utils'
 export default {
 	data() {
 		return {
-			dialogFormVisible:false,
 			findcompanyName: '',
 			findcompanyArea: '',
 			findcontactName: '',
@@ -169,7 +157,10 @@ export default {
 			})
 		},
 		add() { 
-			this.dialogFormVisible = true
+			this.$router.push({ name: 'addcargo' })
+		},
+		edit(){
+			this.$router.push({ name: 'editcargo' })
 		},
 		handleCommand(e) {
 			if(e.type=='view'){
