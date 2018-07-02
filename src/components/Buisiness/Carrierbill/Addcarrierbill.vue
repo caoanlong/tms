@@ -1,5 +1,5 @@
 <template>
-	<div class="main-content">
+	<div class="main-content" style="min-width: 1300px">
 		<!-- <div id="cb"></div> -->
 		<div class="wf-card hasTit">
 			<!-- <div class="header clearfix">添加承运单</div> -->
@@ -67,29 +67,101 @@
 							<el-row class="block-content">
 								<el-col :span="12">
 									<el-form-item label="发货地" prop="shipperAreaID">
-										<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea"/>
+										<el-cascader style="width:100%" :options="dist" change-on-select v-model="selectedArea" @change="handleSelectedArea"></el-cascader>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
-									<el-form-item label="详细地址" prop="shipperDetailAddress">
-										<el-input placeholder="发货详细地址" v-model="carrierbillInfo.shipperDetailAddress"></el-input>
+									<el-form-item label="发货时间" prop="shipperDate">
+										<el-date-picker 
+											type="date" 
+											style="width:100%" 
+											placeholder="选择发货时间" 
+											v-model="carrierbillInfo.shipperDate" 
+											value-format="timestamp">
+										</el-date-picker>
 									</el-form-item>
 								</el-col>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="定位地址" prop="shipperLocationAddress">
+									<el-autocomplete  style="width:100%"
+										value-key="name" 
+										prefix-icon="el-icon-location"
+										v-model="carrierbillInfo.shipperLocationAddress"
+										:fetch-suggestions="getShipperLocation"
+										placeholder="请输入..."
+										@select="handSelectShipperLocation">
+									</el-autocomplete>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="详细地址" prop="shipperDetailAddress">
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperDetailAddress"></el-input>
+								</el-form-item>
 							</el-row>
 						</div>
 					</el-col>
 					<el-col :span="12">
 						<div class="section-block">
 							<span class="block-title">到货信息</span>
-							<el-form-item class="block-content" label="收货单位" prop="consigneeCompanyName">
-								<el-autocomplete  style="width:100%"
-									value-key="companyName" 
-									v-model="carrierbillInfo.consigneeCompanyName"
-									:fetch-suggestions="getRecdeliverycomp"
-									placeholder="请输入内容"
-									@select="handSelectConsignee">
-								</el-autocomplete>
-							</el-form-item>
+							<el-row class="block-content">
+								<el-form-item label="收货单位" prop="consigneeCompanyName">
+									<el-autocomplete  style="width:100%"
+										value-key="companyName" 
+										v-model="carrierbillInfo.consigneeCompanyName"
+										:fetch-suggestions="getRecdeliverycomp"
+										placeholder="请输入内容"
+										@select="handSelectConsignee">
+									</el-autocomplete>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-col :span="12">
+									<el-form-item label="收货人" prop="consigneeName">
+										<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneeName"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="12">
+									<el-form-item label="联系方式" prop="consigneePhone">
+										<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneePhone"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+							<el-row class="block-content">
+								<el-col :span="12">
+									<el-form-item label="收货地" prop="consigneeAreaID">
+										<el-cascader style="width:100%" :options="dist" change-on-select v-model="selectedArea1" @change="handleSelectedArea1"></el-cascader>
+									</el-form-item>
+								</el-col>
+								<el-col :span="12">
+									<el-form-item label="到货时间" prop="consigneeDate">
+										<el-date-picker 
+											type="date" 
+											style="width:100%" 
+											placeholder="选择到货时间" 
+											v-model="carrierbillInfo.consigneeDate" 
+											value-format="timestamp">
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="定位地址" prop="consigneeLocationAddress">
+									<el-autocomplete  style="width:100%"
+										value-key="name" 
+										prefix-icon="el-icon-location" 
+										v-model="carrierbillInfo.consigneeLocationAddress"
+										:fetch-suggestions="getConsigneeLocation"
+										placeholder="请输入..."
+										@select="handSelectConsigneeLocation">
+									</el-autocomplete>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="详细地址" prop="consigneeDetailAddress">
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneeDetailAddress"></el-input>
+								</el-form-item>
+							</el-row>
 						</div>
 					</el-col>
 				</el-row>
@@ -405,6 +477,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
+import dist from '../../../assets/data/dist.json'
 import DistPicker from '../../CommonComponents/DistPicker'
 import request from '../../../common/request'
 import Carrierbill from '../../../api/Carrierbill'
@@ -556,7 +629,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['companyName'])
+		...mapGetters(['companyName']),
+		dist: () => dist
 	},
 	created() {
 		this.carrierbillInfo.carrierrName = this.companyName
@@ -641,12 +715,12 @@ export default {
 			this.selectedArea1 = areaIdToArrayId(String(data.companyAreaID))
 		},
 		handleSelectedArea(data) {
-			this.carrierbillInfo.shipperAreaID = data
-			this.carrierbillInfo.shipperArea = searchAreaByKey(data)
+			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
+			this.carrierbillInfo.shipperArea = searchAreaByKey(data[data.length - 1])
 		},
 		handleSelectedArea1(data) {
-			this.carrierbillInfo.consigneeAreaID = data
-			this.carrierbillInfo.consigneeArea = searchAreaByKey(data)
+			this.carrierbillInfo.consigneeAreaID = data[data.length - 1]
+			this.carrierbillInfo.consigneeArea = searchAreaByKey(data[data.length - 1])
 		},
 		handSelectReceiptMethod(data) {
 			if (data == 'TKM') {
