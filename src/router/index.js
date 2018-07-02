@@ -630,6 +630,14 @@ let routerMap = [
 				]
 			},
 			{
+				path: '/companyInfo',
+				name: 'companyInfo',
+				meta: {
+					title: '修改企业资料'
+				},
+				component: () => import('../components/CompanyInfo'),
+			},
+			{
 				path: '/system',
 				name: '/system',
 				meta: {
