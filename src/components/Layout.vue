@@ -31,7 +31,7 @@
 		</div>
 		<div class="dialogFooter">
 			<span class="sysV">危化标准版</span>
-			<span class="editCompanyInfo"><svg-icon icon-class="edit"></svg-icon> 修改企业资料</span>
+			<span class="editCompanyInfo" @click="editCompanyInfo"><svg-icon icon-class="edit"></svg-icon> 修改企业资料</span>
 		</div>
 		<div class="personInfoDialog" v-if="showPersonInfo">
 			个人信息
@@ -83,6 +83,11 @@ export default {
 				this.showPensonInfo= data1
 				this.showMask = data1
 			}
+		},
+		editCompanyInfo(){
+			this.showMask=false
+			this.showCompanyInfo=false
+			this.$router.push({ name: 'companyInfo' })
 		},
 		closeDialog(type){
 			if(type='companyInfo'){
