@@ -5,7 +5,7 @@
  * @authors coolia (coolia@qq.com)
  * @date    2018-03-20 09:59:18
  * @Last Modified by:   coolia
- * @Last Modified time: 2018-06-29 18:46:18
+ * @Last Modified time: 2018-07-02 12:04:10
  */
 #app{height:100%}
 .top-bar .el-menu--horizontal{border:none}
@@ -75,3 +75,5 @@
 .agreementDialog .el-message-box__btns button{margin:0;}
 .agreementDialog .el-message-box__content{height: 600px;overflow-y: auto;color:#666;padding-bottom: 20px;
 		line-height:24px;}
+.customerCheckbox .el-checkbox{margin:0 30px 0 0;}
+.customerCheckbox .el-checkbox:last-child{margin-right: 0}
