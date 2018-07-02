@@ -41,11 +41,55 @@
 					<el-col :span="12">
 						<div class="section-block">
 							<span class="block-title">发货信息</span>
+							<el-row class="block-content">
+								<el-form-item label="发货单位" prop="shipperCompanyName">
+									<el-autocomplete  style="width:100%"
+										value-key="companyName" 
+										v-model="carrierbillInfo.shipperCompanyName"
+										:fetch-suggestions="getRecdeliverycomp"
+										placeholder="请输入..."
+										@select="handSelectShipper">
+									</el-autocomplete>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-col :span="12">
+									<el-form-item label="发货人" prop="shipperName">
+										<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperName"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="12">
+									<el-form-item label="联系方式" prop="shipperPhone">
+										<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperPhone"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
+							<el-row class="block-content">
+								<el-col :span="12">
+									<el-form-item label="发货地" prop="shipperAreaID">
+										<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea"/>
+									</el-form-item>
+								</el-col>
+								<el-col :span="12">
+									<el-form-item label="详细地址" prop="shipperDetailAddress">
+										<el-input placeholder="发货详细地址" v-model="carrierbillInfo.shipperDetailAddress"></el-input>
+									</el-form-item>
+								</el-col>
+							</el-row>
 						</div>
 					</el-col>
 					<el-col :span="12">
 						<div class="section-block">
 							<span class="block-title">到货信息</span>
+							<el-form-item class="block-content" label="收货单位" prop="consigneeCompanyName">
+								<el-autocomplete  style="width:100%"
+									value-key="companyName" 
+									v-model="carrierbillInfo.consigneeCompanyName"
+									:fetch-suggestions="getRecdeliverycomp"
+									placeholder="请输入内容"
+									@select="handSelectConsignee">
+								</el-autocomplete>
+							</el-form-item>
 						</div>
 					</el-col>
 				</el-row>
