@@ -110,6 +110,7 @@ import { Message } from 'element-ui'
 import { deleteConfirm, closeConfirm } from '../../../common/utils'
 import Carrierbill from '../../../api/Carrierbill'
 import Page from '../../CommonComponents/Page'
+import dist from '../../../assets/data/distpicker.data.js'
 export default {
 	data() {
 		return {
@@ -128,7 +129,22 @@ export default {
 		Page
 	},
 	created() {
-		this.getList()
+		// this.getList()
+		const one = dist[100000]
+		const list = []
+		function revet(node) {
+			Object.keys(node).forEach(key => {
+				list.push({ [key]: node[key] })
+				list.forEach(item => {
+					console.log(item)
+				})
+			})
+		}
+		revet(one)
+		console.log(list)
+		// for (let i = 0; i < one.length; i++) {
+		// 	one[i]
+		// }
 	},
 	methods: {
 		reset() {
