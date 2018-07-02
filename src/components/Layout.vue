@@ -42,56 +42,56 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import Sidebar from './CommonComponents/SideBar'
-	import Navbar from './CommonComponents/NavBar'
-	import AppMain from './CommonComponents/AppMain'
-	import TagsView from './CommonComponents/TagsView'
-	import Breadcrumb from './CommonComponents/Breadcrumb'
-	import { mapGetters } from 'vuex'
-	export default {
-		data(){
-			return{
-				showCompanyInfo:false,
-				showMask:false,
-				showPersonInfo:false
+import Sidebar from './CommonComponents/SideBar'
+import Navbar from './CommonComponents/NavBar'
+import AppMain from './CommonComponents/AppMain'
+import TagsView from './CommonComponents/TagsView'
+import Breadcrumb from './CommonComponents/Breadcrumb'
+import { mapGetters } from 'vuex'
+export default {
+	data(){
+		return{
+			showCompanyInfo:false,
+			showMask:false,
+			showPersonInfo:false
+		}
+	},
+	name: 'layout',
+	computed: {
+		sidebar() {
+			return this.$store.state.app.sidebar
+		},
+		...mapGetters([
+			'userInfo',
+		])
+	},
+	components: {
+		Navbar,
+		Sidebar,
+		AppMain,
+		TagsView,
+		Breadcrumb
+	},
+	methods:{
+		showDialog:function(data,data1){
+			console.log(data)
+			if(data=='companyInfo'){
+				this.showCompanyInfo= data1
+				this.showMask = data1
+
+			}else{
+				this.showPensonInfo= data1
+				this.showMask = data1
 			}
 		},
-		name: 'layout',
-		computed: {
-			sidebar() {
-				return this.$store.state.app.sidebar
-			},
-			...mapGetters([
-				'userInfo',
-			])
-		},
-		components: {
-			Navbar,
-			Sidebar,
-			AppMain,
-			TagsView,
-			Breadcrumb
-		},
-		methods:{
-			showDialog:function(data,data1){
-				console.log(data)
-				if(data=='companyInfo'){
-					this.showCompanyInfo= data1
-					this.showMask = data1
-
-				}else{
-					this.showPensonInfo= data1
-					this.showMask = data1
-				}
-			},
-			closeDialog(type){
-				if(type='companyInfo'){
-					this.showMask=false
-					this.showCompanyInfo=false
-				}
+		closeDialog(type){
+			if(type='companyInfo'){
+				this.showMask=false
+				this.showCompanyInfo=false
 			}
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .app-wrapper

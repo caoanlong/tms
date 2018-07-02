@@ -1,0 +1,329 @@
+$color-1 = #eef1f6
+$color-2 = #337ab7
+$color-3 = #20a0ff
+$color-4 = rgba(66,185,131,0.1)
+$color-5 = #42b983
+$color-6 = #20b6f9
+$color-7 = #2178f1
+$color-8 = #fff
+$color-9 = #d0d0d0
+$color-10 = #333
+$color-11 = #ddd
+$color-12 = #666
+$color-13 = #bfcbd9
+$color-14 = #f5f7fa
+$color-15 = #999
+$color-16 = #c0c4cc
+$color-17 = #3582d0
+
+@charset "UTF-8"
+
+body
+    height 100%
+    position absolute
+    top 0
+    left 0
+    right 0
+    bottom 0
+    osx-font-smoothing grayscale
+    font-smoothing antialiased
+    text-rendering optimizeLegibility
+    font-family Microsoft YaHei,Arial,sans-serif, Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB
+    overflow hidden
+    overflow-y scroll
+
+.fixHead
+    .logo
+        user-select none
+
+label
+    font-weight 700
+
+html
+    height 100%
+    box-sizing border-box
+
+*
+*:before
+*:after
+    box-sizing inherit
+
+.no-padding
+    padding 0px!important
+
+.padding-content
+    padding 4px 0
+
+a:focus
+a:active
+    outline none
+
+a
+a:focus
+a:hover
+    cursor pointer
+    color inherit
+    text-decoration none
+
+div
+    &:focus
+        outline none
+
+.fr
+    float right
+
+.fl
+    float left
+
+.pr-5
+    padding-right 5px
+
+.pl-5
+    padding-left 5px
+
+.block
+    display block
+
+.pointer
+    cursor pointer
+
+.inlineBlock
+    display inline-block
+
+.clearfix
+    &:after
+        visibility hidden
+        display block
+        font-size 0
+        content " "
+        clear both
+        height 0
+
+code
+    background $color-1
+    padding 15px 16px
+    margin-bottom 20px
+    display block
+    line-height 36px
+    font-size 15px
+    font-family "Source Sans Pro","Helvetica Neue",Arial,sans-serif
+
+    a
+        color $color-2
+        cursor pointer
+
+        &:hover
+            color $color-3
+
+.warn-content
+    background $color-4
+    border-radius 2px
+    padding 16px
+    padding 1rem
+    line-height 1.6rem
+    word-spacing .05rem
+
+    a
+        color $color-5
+        font-weight 600
+
+.app-container
+    padding 20px
+
+.components-container
+    margin 30px 50px
+    position relative
+
+.pagination-container
+    margin-top 30px
+
+.text-center
+    text-align center!important
+
+.sub-navbar
+    height 50px
+    line-height 50px
+    position relative
+    width 100%
+    text-align right
+    padding-right 20px
+    transition 600ms ease position
+    background linear-gradient(90deg,$color-6 0%,$color-6 0%,$color-7 100%,$color-7 100%)
+
+    .subtitle
+        font-size 20px
+        color $color-8
+
+    &.draft
+        background $color-9
+
+    &.deleted
+        background $color-9
+
+.link-type
+.link-type:focus
+    color $color-2
+    cursor pointer
+
+.link-type:hover
+.link-type:focus:hover
+    color $color-3
+
+.filter-container
+    padding-bottom 10px
+
+    .filter-item
+        display inline-block
+        vertical-align middle
+        margin-bottom 10px
+
+.multiselect
+    line-height 16px
+
+.multiselect--active
+    z-index 1000!important
+
+.main-content
+    padding 0 20px 20px
+
+    .tableControl
+        margin-bottom 10px
+
+    .pagination
+        margin-top 10px
+        text-align center
+
+.table
+    .el-button--mini
+        padding 5px 7px
+
+    .el-table
+        .cell
+            white-space nowrap
+
+.text-input
+.text-input .el-input__inner
+.customerSelect .el-input__inner
+    vertical-align top
+
+.customerEditor
+    line-height 1.15
+
+.img-preview
+    width 30%
+
+.common-table
+    width 760px
+    font-size 14px
+    margin 0 auto
+    line-height 1.5
+    color $color-10
+    border-collapse separate
+    background $color-11
+    border-spacing 1px
+    color $color-12
+
+    td
+        background $color-8
+        padding 10px
+        vertical-align middle
+        text-align center
+
+        .tit
+            font-weight bold
+
+            +.tit
+                margin-left 10px
+
+        p
+            margin 0 auto
+
+.common-table-footer
+    width 800px
+    margin 20px auto 0
+    text-align center
+
+.split-item
+    padding 5px 0 20px 10px
+    color $color-13
+
+    .num
+        display inline-block
+        width 20px
+        height 20px
+        color $color-8
+        background-color $color-13
+        text-align center
+        line-height 20px
+
+    .tit
+        padding-left 5px
+
+.msg-info
+    width 500px
+    height 300px
+
+.box-card
+    &.hasTit
+        .el-card__header
+            position relative
+
+.carrierbillInfo
+    th
+        background $color-14
+
+.stepBar
+    .el-step
+        &.is-simple
+            .el-step__title
+                font-size 12px
+
+    &.el-steps--simple
+        padding 13px 5%
+
+.control-info
+    .el-form-item
+        margin-bottom 10px
+
+.step .el-form-item__label
+.controlDetail .el-form-item__label
+    font-size 14px
+    color $color-15
+
+.el-popover
+    p
+        font-size 12px
+        color $color-12
+
+.wf-card
+    .el-badge
+        vertical-align top
+        padding-right 15px
+
+        .el-badge__content
+            &.is-fixed
+                top 15px
+
+input::-webkit-input-placeholder
+    color $color-16
+
+input::-moz-placeholder
+    color $color-16
+
+input
+    &:-moz-placeholder
+        color $color-16
+
+    &:-ms-input-placeholder
+        color $color-16
+
+    &:-webkit-autofill
+        animation autofill-fix 1s infinite
+
+.el-input-group__append
+.el-input-group__prepend
+    padding 0 10px
+
+.link
+    cursor pointer
+    color $color-17

@@ -1,0 +1,48 @@
+$color-1 = #4f4f4f
+$color-2 = #444
+$color-3 = #333
+$color-4 = #fff
+$color-5 = #409eff
+
+#app
+    .main-container
+        min-height 100%
+
+    .sidebar-container
+        width 180px!important
+        height 100%
+        position fixed
+        top 50px
+        bottom 0
+        left 0
+        z-index 1001
+        background $color-1
+
+        a
+            display inline-block
+            width 100%
+
+        .svg-icon
+            margin-right 5px
+
+        .el-menu
+            border none
+            width 100%
+            background $color-1
+
+            .el-menu
+                .el-menu-item
+                    background $color-2!important
+
+#app .el-menu--collapse .el-menu .el-submenu
+.el-submenu .el-menu-item
+    min-width 180px!important
+
+#app .sidebar-container .el-menu .el-menu .el-menu-item:hover
+#app .sidebar-container .el-menu .el-menu .el-menu-item:focus
+    background $color-3!important
+
+.el-menu-item.is-active
+#app .sidebar-container .el-menu .el-menu .el-menu-item.is-active
+    color $color-4
+    background $color-5!important

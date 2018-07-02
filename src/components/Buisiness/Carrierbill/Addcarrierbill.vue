@@ -1,15 +1,62 @@
 <template>
 	<div class="main-content">
-		<div id="cb"></div>
+		<!-- <div id="cb"></div> -->
 		<div class="wf-card hasTit">
-			<div class="header clearfix">添加承运单</div>
-			<el-row>
-				<div class="split-item">
-					<span class="num">1</span>
-					<span class="tit">基本信息</span>
-				</div>
-			</el-row>
+			<!-- <div class="header clearfix">添加承运单</div> -->
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="发货单号">
+							<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperNo"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="运输方式" prop="transportType">
+							<el-select v-model="carrierbillInfo.transportType" placeholder="请选择" style="width:100%">
+								<el-option label="海上运输" value="海上运输"></el-option>
+								<el-option label="铁路运输" value="铁路运输"></el-option>
+								<el-option label="公路运输" value="公路运输"></el-option>
+								<el-option label="航空运输" value="航空运输"></el-option>
+								<el-option label="邮件运输" value="邮件运输"></el-option>
+								<el-option label="多式联运" value="多式联运"></el-option>
+								<el-option label="固定设施运输" value="固定设施运输"></el-option>
+								<el-option label="内河运输" value="内河运输"></el-option>
+								<el-option label="其他" value="其他"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="委托时间">
+							<el-date-picker 
+								style="width:100%" 
+								type="date" 
+								placeholder="请选择" 
+								value-format="timestamp" 
+								v-model="carrierbillInfo.commissionDate">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="12">
+						<div class="section-block">
+							<span class="block-title">发货信息</span>
+						</div>
+					</el-col>
+					<el-col :span="12">
+						<div class="section-block">
+							<span class="block-title">到货信息</span>
+						</div>
+					</el-col>
+				</el-row>
+			</el-form>
+			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
+				<el-row>
+					<div class="split-item">
+						<span class="num">1</span>
+						<span class="tit">基本信息</span>
+					</div>
+				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="托运人" prop="consignorName">
@@ -797,33 +844,33 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-	.el-card__header
-		span
-			margin-right 40px
-			font-size 14px
-			color #909399
-			&.CarrierNum
-				font-weight bold
-				margin-left 20px
-			&.status
-				position absolute
-				margin-right 0
-				right 20px
-				top 15px
-				height 24px
-				line-height 24px
-				color #fff
-				padding 0 15px
-				font-size 12px
-				border-radius 4px
-				&.status1
-					background #F56C6C
-				&.status2
-					background #409EFF
-				&.status3
-					background #909399
-	.tips
+.el-card__header
+	span
+		margin-right 40px
+		font-size 14px
 		color #909399
+		&.CarrierNum
+			font-weight bold
+			margin-left 20px
+		&.status
+			position absolute
+			margin-right 0
+			right 20px
+			top 15px
+			height 24px
+			line-height 24px
+			color #fff
+			padding 0 15px
+			font-size 12px
+			border-radius 4px
+			&.status1
+				background #F56C6C
+			&.status2
+				background #409EFF
+			&.status3
+				background #909399
+.tips
+	color #909399
 .wf-checkbox
 	margin-right 30px
 	cursor pointer
@@ -837,6 +884,4 @@ export default {
 		color #409EFF
 		.svg-icon
 			color #409EFF
-
-
 </style>
