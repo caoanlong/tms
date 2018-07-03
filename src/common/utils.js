@@ -1,4 +1,5 @@
 import ChineseDistricts from '../assets/data/distpicker.data'
+import cities from '../assets/data/cities.json'
 import { Message } from 'element-ui'
 import { vueInstance } from '../main'
 
@@ -175,4 +176,8 @@ export function transNum (number, count=2) {
 	} else if (number >= 100) {
 		return ss(count-2) + number
 	}
+}
+
+export function searchLocationByCity(city) {
+	return cities[city]
 }
