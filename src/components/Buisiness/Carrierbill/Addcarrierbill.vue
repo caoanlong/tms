@@ -1,12 +1,10 @@
 <template>
 	<div class="main-content" style="min-width: 1300px">
-		<!-- <div id="cb"></div> -->
 		<div class="wf-card hasTit">
-			<!-- <div class="header clearfix">添加承运单</div> -->
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="发货单号">
+						<el-form-item label="发货单号" prop="shipperNo">
 							<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperNo"></el-input>
 						</el-form-item>
 					</el-col>
@@ -26,7 +24,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="委托时间">
+						<el-form-item label="委托时间" prop="commissionDate">
 							<el-date-picker 
 								style="width:100%" 
 								type="date" 
@@ -67,7 +65,13 @@
 							<el-row class="block-content">
 								<el-col :span="12">
 									<el-form-item label="发货地" prop="shipperAreaID">
-										<el-cascader style="width:100%" :options="dist" change-on-select v-model="selectedArea" @change="handleSelectedArea"></el-cascader>
+										<el-cascader 
+											style="width:100%" 
+											:options="dist" 
+											change-on-select 
+											v-model="selectedShipperArea" 
+											@change="handleSelectedShipperArea">
+										</el-cascader>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
@@ -130,7 +134,13 @@
 							<el-row class="block-content">
 								<el-col :span="12">
 									<el-form-item label="收货地" prop="consigneeAreaID">
-										<el-cascader style="width:100%" :options="dist" change-on-select v-model="selectedArea1" @change="handleSelectedArea1"></el-cascader>
+										<el-cascader 
+											style="width:100%" 
+											:options="dist" 
+											change-on-select 
+											v-model="selectedConsigneeArea" 
+											@change="handleSelectedConsigneeArea">
+										</el-cascader>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
@@ -165,333 +175,138 @@
 						</div>
 					</el-col>
 				</el-row>
-			</el-form>
-			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
-					<div class="split-item">
-						<span class="num">1</span>
-						<span class="tit">基本信息</span>
+					<div class="section-block">
+						<span class="block-title">货物信息</span>
+						<el-form class="block-content" :inline="true" size="mini" :rules="cargoRules" ref="cargoRuleForm">
+							<el-row>
+								<el-form-item><div class="text-center cargo-title">客户单号</div></el-form-item>
+								<el-form-item><div class="text-center cargo-title"><span>*</span>货名</div></el-form-item>
+								<el-form-item><div class="text-center cargo-title"><span>*</span>数量</div></el-form-item>
+								<el-form-item><div class="text-center cargo-title"><span>*</span>单位</div></el-form-item>
+								<el-form-item><div class="text-center cargo-title">重量</div></el-form-item>
+								<el-form-item><div class="text-center cargo-title">体积</div></el-form-item>
+								<el-form-item><div class="text-center cargo-title">操作</div></el-form-item>
+							</el-row>
+							<el-row  v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
+								<el-form-item>
+									<el-input placeholder="请输入..." style="width:150px" v-model="item.orderNo"></el-input>
+								</el-form-item>
+								<el-form-item prop="cargoName">
+									<el-input placeholder="请输入..." style="width:150px" v-model="item.cargoName"></el-input>
+								</el-form-item>
+								<el-form-item prop="cargoNum">
+									<el-input-number style="width:150px" v-model="item.cargoNum" :min="1"></el-input-number>
+								</el-form-item>
+								<el-form-item>
+									<el-select style="width:150px" v-model="item.unit" placeholder="请选择">
+										<el-option label="件" value="shanghai"></el-option>
+										<el-option label="箱" value="beijing"></el-option>
+									</el-select>
+								</el-form-item>
+								<el-form-item prop="cargoWeight">
+									<el-input placeholder="货物重量" style="width:150px" v-model="item.cargoWeight">
+										<template slot="append">吨</template>
+									</el-input>
+								</el-form-item>
+								<el-form-item prop="cargoVolume">
+									<el-input placeholder="货物体积" style="width:150px" v-model="item.cargoVolume">
+										<template slot="append">方</template>
+									</el-input>
+								</el-form-item>
+								<el-form-item>
+									<el-button 
+										type="text" 
+										icon="el-icon-delete" 
+										style="color:#F56C6C;position:relative;left:64px" 
+										@click="removeItem(index)" 
+										v-show="carrierbillInfo.carrierCargo.length > 1">
+										删除
+									</el-button>
+								</el-form-item>
+							</el-row>
+							<el-button type="text" icon="el-icon-plus" class="add-cargo-btn" @click="addItem">添加</el-button>
+						</el-form>
 					</div>
 				</el-row>
 				<el-row>
-					<el-col :span="8">
-						<el-form-item label="托运人" prop="consignorName">
-							<el-autocomplete style="width:100%"
-								value-key="companyName" 
-								v-model="carrierbillInfo.consignorName"
-								:fetch-suggestions="getConsignors"
-								placeholder="请输入内容"
-								@select="handSelectConsignor">
-							</el-autocomplete>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="承运人" prop="carrierrName">
-							<el-input placeholder="请输入承运人" v-model="carrierbillInfo.carrierrName"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="准运证号">
-							<el-input placeholder="请输入..." v-model="carrierbillInfo.navicertNo"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="电子运单">
-							<el-input placeholder="请输入..." v-model="carrierbillInfo.electronicWaybill"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<div class="split-item">
-						<span class="num">2</span>
-						<span class="tit">收发货信息</span>
-					</div>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="发货单位" prop="shipperCompanyName">
-							<el-autocomplete  style="width:100%"
-								value-key="companyName" 
-								v-model="carrierbillInfo.shipperCompanyName"
-								:fetch-suggestions="getRecdeliverycomp"
-								placeholder="请输入内容"
-								@select="handSelectShipper">
-							</el-autocomplete>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="发货单号">
-							<el-input placeholder="发货单号" v-model="carrierbillInfo.shipperNo"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="发货人" prop="shipperName">
-							<el-input placeholder="发货人" v-model="carrierbillInfo.shipperName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="发货人电话" prop="shipperPhone">
-							<el-input placeholder="发货人电话" v-model="carrierbillInfo.shipperPhone"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="发货时间" prop="shipperDate">
-							<el-date-picker 
-								type="date" 
-								style="width:100%" 
-								placeholder="选择发货时间" 
-								v-model="carrierbillInfo.shipperDate" 
-								value-format="timestamp">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="12">
-						<el-form-item label="发货地" prop="shipperAreaID">
-							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea"/>
-						</el-form-item>
+						<div class="section-block">
+							<span class="block-title">运输费用</span>
+							<el-row class="block-content">
+								<el-form-item label="运费金额" prop="transPrice">
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.transPrice"></el-input>
+								</el-form-item>
+							</el-row>
+						</div>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="详细地址" prop="shipperDetailAddress">
-							<el-input placeholder="发货详细地址" v-model="carrierbillInfo.shipperDetailAddress"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="12">
-						<el-form-item label="发货位置" prop="shipperLocationAddress">
-							<el-autocomplete  style="width:100%"
-								value-key="name" 
-								v-model="carrierbillInfo.shipperLocationAddress"
-								:fetch-suggestions="getShipperLocation"
-								placeholder="请输入内容"
-								@select="handSelectShipperLocation">
-							</el-autocomplete>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row style="margin-top:20px">
-					<el-col :span="8">
-						<el-form-item label="收货单位" prop="consigneeCompanyName">
-							<el-autocomplete  style="width:100%"
-								value-key="companyName" 
-								v-model="carrierbillInfo.consigneeCompanyName"
-								:fetch-suggestions="getRecdeliverycomp"
-								placeholder="请输入内容"
-								@select="handSelectConsignee">
-							</el-autocomplete>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="收货人" prop="consigneeName">
-							<el-input placeholder="收货人" v-model="carrierbillInfo.consigneeName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="收货人电话" prop="consigneePhone">
-							<el-input placeholder="收货人电话" v-model="carrierbillInfo.consigneePhone"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="到货时间" prop="consigneeDate">
-							<el-date-picker 
-								type="date" 
-								style="width:100%" 
-								placeholder="选择到货时间" 
-								v-model="carrierbillInfo.consigneeDate" 
-								value-format="timestamp">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="12">
-						<el-form-item label="卸货地" prop="consigneeAreaID">
-							<DistPicker @selectChange="handleSelectedArea1" :selected="selectedArea1"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item label="详细地址" prop="consigneeDetailAddress">
-							<el-input placeholder="卸货详细地址" v-model="carrierbillInfo.consigneeDetailAddress"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="12">
-						<el-form-item label="卸货位置" prop="consigneeLocationAddress">
-							<el-autocomplete  style="width:100%"
-								value-key="name" 
-								v-model="carrierbillInfo.consigneeLocationAddress"
-								:fetch-suggestions="getConsigneeLocation"
-								placeholder="请输入内容"
-								@select="handSelectConsigneeLocation">
-							</el-autocomplete>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row style="margin-top:20px">
-					<el-col :span="8">
-						<el-form-item label="运输方式" prop="transportType">
-							<el-select v-model="carrierbillInfo.transportType" placeholder="请选择" style="width:100%">
-								<el-option label="海上运输" value="海上运输"></el-option>
-								<el-option label="铁路运输" value="铁路运输"></el-option>
-								<el-option label="公路运输" value="公路运输"></el-option>
-								<el-option label="航空运输" value="航空运输"></el-option>
-								<el-option label="邮件运输" value="邮件运输"></el-option>
-								<el-option label="多式联运" value="多式联运"></el-option>
-								<el-option label="固定设施运输" value="固定设施运输"></el-option>
-								<el-option label="内河运输" value="内河运输"></el-option>
-								<el-option label="其他" value="其他"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="委托时间">
-							<el-date-picker 
-								style="width:100%" 
-								type="date" 
-								placeholder="请选择" 
-								value-format="timestamp" 
-								v-model="carrierbillInfo.commissionDate">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<div class="split-item">
-						<span class="num">3</span>
-						<span class="tit">货物信息</span>
-						<el-button type="text" icon="el-icon-plus" class="fr" @click="addItem">添加</el-button>
-					</div>
-				</el-row>
-				<div class="cargoItem" v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
-					<el-form :inline="true" size="mini" :model="item" :rules="cargoRules" ref="cargoRuleForm">
-						<el-row>
-							<el-form-item :label="'货物' + (index + 1)" prop="weightType">
-								<el-select v-model="item.weightType" placeholder="请选择" style="width: 100px">
-									<el-option label="重货" value="Heavy"></el-option>
-									<el-option label="轻货" value="Light"></el-option>
-								</el-select>
-							</el-form-item>
-							<el-form-item prop="cargoName">
-								<el-input placeholder="货物名称" style="width: 130px" v-model="item.cargoName"></el-input>
-							</el-form-item>
-							<el-form-item prop="cargoType">
-								<el-input placeholder="货物规格" style="width: 130px" v-model="item.cargoType"></el-input>
-							</el-form-item>
-							<el-form-item prop="cargoWeight">
-								<el-input placeholder="货物重量" style="width: 130px" v-model="item.cargoWeight">
-									<span slot="suffix">kg</span>
-								</el-input>
-							</el-form-item>
-							<el-form-item prop="cargoVolume">
-								<el-input placeholder="货物体积" style="width: 130px" v-model="item.cargoVolume">
-									<span slot="suffix">m³</span>
-								</el-input>
-							</el-form-item>
-							<el-form-item prop="cargoNum">
-								<el-input placeholder="货物数量" style="width: 130px" v-model="item.cargoNum">
-									<span slot="suffix">件</span>
-								</el-input>
-							</el-form-item>
-							<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-show="carrierbillInfo.carrierCargo.length>1">删除</el-button>
-						</el-row>
-					</el-form>
-				</div>
-				<el-row>
-					<div class="split-item">
-						<span class="num">4</span>
-						<span class="tit">收付款金额</span>
-					</div>
-				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item label="承运单应收款">
-							<el-radio-group v-model="carrierbillInfo.receiptMethod" @change="handSelectReceiptMethod">
-								<el-radio label="TKM">按吨公里自动生成</el-radio>
-								<el-radio label="Manual">手动输入</el-radio>
-							</el-radio-group>
-							<div v-show="carrierbillInfo.receiptMethod=='TKM'" class="tips">从“这个单的发货地”到卸货地对外运距为“{{exmile}}公里”总价为{{totalPrice}}？</div>
-							<div class="form-input">
-								<el-form-item label="现付" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="现付" v-model="carrierbillInfo.cashAmount"></el-input>
+						<div class="section-block">
+							<span class="block-title">回单要求</span>
+							<el-row class="block-content">
+								<el-form-item label="单据">
+									<el-checkbox-group v-model="carrierbillInfo.porRequire">
+										<el-checkbox label="ConsigneePor" name="porRequire">货物托运单</el-checkbox>
+										<el-checkbox label="ShipperPor" name="porRequire">货物发货单</el-checkbox>
+									</el-checkbox-group>
 								</el-form-item>
-								<el-form-item label="到付" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="到付" v-model="carrierbillInfo.codAmount"></el-input>
-								</el-form-item>
-								<el-form-item label="回单结" label-width="60px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="回单结" v-model="carrierbillInfo.porAmount"></el-input>
-								</el-form-item>
-								<el-form-item label="月结" label-width="40px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="月结" v-model="carrierbillInfo.monthlyAmount"></el-input>
-								</el-form-item>
-								<el-form-item label="收货方付" label-width="70px" style="width:180px;display:inline-block;margin:10px 10px 0 0">
-									<el-input placeholder="收货方付" v-model="carrierbillInfo.consigneeAmount"></el-input>
-								</el-form-item>
-								<el-form-item style="width:180px;display:inline-block;margin:10px 10px 0 0" v-if="carrierbillInfo.receiptMethod=='TKM'">
-									<el-button type="primary" @click="getTransportPrice">重新生成</el-button>
-								</el-form-item>
-							</div>
-						</el-form-item>
-						<el-form-item label="付款费用">
-							<el-radio-group v-model="carrierbillInfo.paymentMethod" @change="handSelectPaymentMethod">
-								<el-radio label="TKM">按吨公里自动生成</el-radio>
-								<el-radio label="Manual">手动输入</el-radio>
-							</el-radio-group>
-							<div v-show="carrierbillInfo.paymentMethod=='TKM'" class="tips">从“这单的发货地”到卸货地对内运距为“{{innermile}}公里”?</div>
-						</el-form-item>
-						<el-form-item label="发票">
-							<el-radio-group v-model="carrierbillInfo.invoice">
-								<el-radio label="Y" value="Y">开发票</el-radio>
-								<el-radio label="N" value="N">不开发票</el-radio>
-							</el-radio-group>
-						</el-form-item>
-						<el-form-item label="回单要求" class="receipt">
-							<span class="wf-checkbox" @click="selectReceipt('ConsigneePor')" :class="{'select': carrierbillInfo.porRequire.includes('ConsigneePor')}"><svg-icon :icon-class="carrierbillInfo.porRequire.includes('ConsigneePor') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>货物托运单</span>
-							<span class="wf-checkbox" @click="selectReceipt('ShipperPor')" :class="{'select': carrierbillInfo.porRequire.includes('ShipperPor')}"><svg-icon :icon-class="carrierbillInfo.porRequire.includes('ShipperPor') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>发货单文件</span>
-							<span class="wf-checkbox" @click="selectReceipt('NotRequired')" :class="{'select': carrierbillInfo.porRequire.includes('NotRequired')}"><svg-icon :icon-class="carrierbillInfo.porRequire.includes('NotRequired') ? 'ic_checkbox_true' : 'ic_checkbox_false'"></svg-icon>不需要回单</span>
-						</el-form-item>
+							</el-row>
+						</div>
 					</el-col>
 				</el-row>
-			
-			<el-row>
-				<el-col :span="24">
+				<el-row>
 					<el-form-item align="center" label-width="0">
 						<el-button type="primary" @click="save">保存</el-button>
 						<el-button @click="back">返回</el-button>
 					</el-form-item>
-				</el-col>
-			</el-row>
+				</el-row>
 			</el-form>
 		</div>
 	</div>
 </template>
-
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
 import dist from '../../../assets/data/dist.json'
-import DistPicker from '../../CommonComponents/DistPicker'
-import request from '../../../common/request'
 import Carrierbill from '../../../api/Carrierbill'
 import SettleConfig from '../../../api/SettleConfig'
 import Customer from '../../../api/Customer'
 import BaiduMap from '../../../api/BaiduMap'
-import { searchAreaByKey, areaIdToArrayId } from '../../../common/utils'
+import GeoLocation from '../../../api/GeoLocation'
+import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../../common/utils'
 import { checkFloat2, checkTel } from '../../../common/validators'
-
+import distData from '../../../assets/data/distpicker.data'
+import Geohash from '../../../common/Geohash'
 export default {
+	/*
+	carrierbillInfo: {
+		shipperNo: ''                 // 发货单号
+		transportType: '',            // 运输方式
+		commissionDate: '',           // 委托时间
+		shipperCompanyName: '',       // 发货单位
+		shipperName: '',              // 发货人
+		shipperPhone: '',             // 发货人联系方式
+		shipperAreaID: '',            // 发货地
+		shipperDate: '',              // 发货时间
+		shipperLocationAddress: '',   // 发货定位地址
+		shipperDetailAddress: '',     // 发货详细地址
+		consigneeCompanyName: '',     // 收货单位
+		consigneeName: '',            // 收货人
+		consigneePhone: '',           // 收货人联系方式
+		consigneeAreaID: '',          // 收货地
+		consigneeDate: '',            // 收货时间
+		consigneeLocationAddress: '', // 收货定位地址
+		consigneeDetailAddress: '',   // 收货详细地址
+		transPrice: '',               // 运费金额
+		porRequire: []                // 回单要求
+	}
+	*/
 	data() {
 		return {
-			selectedArea: [],
-			selectedArea1: [],
+			selectedShipperArea: [],
+			selectedConsigneeArea: [],
+			searchShipperAreaHash: '',
+			searchConsigneeAreaHash: '',
 			consignor: {},
 			loading: false,
 			carrierbillInfo: {
@@ -507,8 +322,8 @@ export default {
 				],
 				carrierOrderNo:'',
 				carrierrName: '',
-				navicertNo: '',   // 新增
-				electronicWaybill: '',   // 新增
+				navicertNo: '',
+				electronicWaybill: '',
 				cashAmount:'',
 				chargeMode:'',
 				codAmount:'',
@@ -516,9 +331,9 @@ export default {
 				consigneeAmount:'',
 				consigneeArea:'',
 				consigneeAreaID:'',
-				consigneeLocationAddress:'',  // 新增定位
-				consigneeLocationLng:'',  // 新增定位
-				consigneeLocationLat:'',  // 新增定位
+				consigneeLocationAddress:'',
+				consigneeLocationLng:'',
+				consigneeLocationLat:'',
 				consigneeCompanyName:'',
 				consigneeDate:'',
 				consigneeDetailAddress:'',
@@ -533,9 +348,9 @@ export default {
 				shipperAddressID:'',
 				shipperArea:'',
 				shipperAreaID: '',
-				shipperLocationAddress: '',  // 新增定位
-				shipperLocationLng: '',  // 新增定位
-				shipperLocationLat: '',  // 新增定位
+				shipperLocationAddress: '',
+				shipperLocationLng: '',
+				shipperLocationLat: '',
 				shipperCompanyName:'',
 				shipperDate:'',
 				shipperDetailAddress:'',
@@ -552,6 +367,12 @@ export default {
 			exmile: 0,
 			innermile: 0,
 			rules: {
+				shipperNo: [
+					{required: true, message: '请输入发货单号'}
+				],
+				commissionDate: [
+					{required: true, message: '请选择委托时间'}
+				],
 				consignorName: [
 					{required: true, message: '请输入托运人'}
 				],
@@ -573,10 +394,9 @@ export default {
 				shipperAreaID: [
 					{required: true, message: '请选择发货地'}
 				],
-				// 新增定位
-				// shipperLocationAddress: [
-				// 	{required: true, message: '请选择定位地址'}
-				// ],
+				shipperLocationAddress: [
+					{required: true, message: '请选择定位地址'}
+				],
 				shipperDetailAddress: [
 					{ required: true, message: '请输入发货详细地址'}
 				],
@@ -595,45 +415,41 @@ export default {
 				consigneeAreaID: [
 					{required: true, message: '请选择收货地'}
 				],
-				// 新增定位
-				// consigneeLocationAddress: [
-				// 	{required: true, message: '请选择定位地址'}
-				// ],
+				consigneeLocationAddress: [
+					{required: true, message: '请选择定位地址'}
+				],
 				consigneeDetailAddress: [
 					{required: true, message: '请输入收货详细地址'}
 				],
 				transportType: [
 					{required: true, message: '请选择运输方式'}
+				],
+				transPrice: [
+					{required: true, message: '请输入运费金额'}
 				]
 			},
 			cargoRules: {
-				weightType: [
-					{required: true, message: '请选择货物类型', trigger: 'change'}
-				],
 				cargoName: [
-					{required: true, message: '请输入货物名称', trigger: 'blur'}
+					{required: true, message: '请输入货名'}
 				],
+				// cargoNum: [
+				// 	{required: true, message: '请输入货物数量'},
+				// 	{validator: checkFloat2}
+				// ],
 				cargoType: [
-					{required: true, message: '请输入货物规格', trigger: 'blur'}
+					{required: true, message: '请输入货物规格'}
 				],
 				cargoWeight: [
-					{validator: checkFloat2, trigger: 'blur'}
+					{validator: checkFloat2}
 				],
 				cargoVolume: [
-					{validator: checkFloat2, trigger: 'blur'}
-				],
-				cargoNum: [
-					{validator: checkFloat2, trigger: 'blur'}
+					{validator: checkFloat2}
 				]
 			}
 		}
 	},
 	computed: {
-		...mapGetters(['companyName']),
 		dist: () => dist
-	},
-	created() {
-		this.carrierbillInfo.carrierrName = this.companyName
 	},
 	methods: {
 		getConsignors(queryString, cb) {
@@ -653,15 +469,18 @@ export default {
 			})
 		},
 		getShipperLocation(queryString, cb) {
+			if (!this.searchShipperAreaHash) {
+				Message.error('请选择城市！')
+				return
+			}
+			console.log(this.searchShipperAreaHash)
+			// GeoLocation
 			BaiduMap.getLocation({
 				region: this.carrierbillInfo.shipperArea,
 				queryString
 			}).then(res => {
 				let names = res.name.map((item, i) => { 
-					return { 
-						name: item,
-						location: res.location[i]
-					} 
+					return { name: item, location: res.location[i] } 
 				})
 				cb(names)
 			}).catch(err => {
@@ -669,15 +488,16 @@ export default {
 			})
 		},
 		getConsigneeLocation(queryString, cb) {
+			if (!this.searchConsigneeAreaHash) {
+				Message.error('请选择城市！')
+				return
+			}
 			BaiduMap.getLocation({
 				region: this.carrierbillInfo.consigneeArea,
 				queryString
 			}).then(res => {
 				let names = res.name.map((item, i) => { 
-					return { 
-						name: item,
-						location: res.location[i]
-					} 
+					return { name: item, location: res.location[i] } 
 				})
 				cb(names)
 			}).catch(err => {
@@ -699,7 +519,7 @@ export default {
 			this.carrierbillInfo.shipperID = data.customerID
 			this.carrierbillInfo.shipperPhone = data.contactPhone
 			this.carrierbillInfo.shipperAreaID = data.companyAreaID
-			this.selectedArea = areaIdToArrayId(String(data.companyAreaID))
+			this.selectedShipperArea = areaIdToArrayId(String(data.companyAreaID))
 		},
 		handSelectConsignee(data){
 			this.carrierbillInfo.consigneeCompanyName = data.companyName
@@ -712,76 +532,22 @@ export default {
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.carrierbillInfo.consigneePhone = data.contactPhone
 			this.carrierbillInfo.consigneeAreaID = data.companyAreaID
-			this.selectedArea1 = areaIdToArrayId(String(data.companyAreaID))
+			this.selectedConsigneeArea = areaIdToArrayId(String(data.companyAreaID))
 		},
-		handleSelectedArea(data) {
+		handleSelectedShipperArea(data) {
 			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
 			this.carrierbillInfo.shipperArea = searchAreaByKey(data[data.length - 1])
-		},
-		handleSelectedArea1(data) {
-			this.carrierbillInfo.consigneeAreaID = data[data.length - 1]
-			this.carrierbillInfo.consigneeArea = searchAreaByKey(data[data.length - 1])
-		},
-		handSelectReceiptMethod(data) {
-			if (data == 'TKM') {
-				if (!this.carrierbillInfo.consigneeArea) {
-					Message.error('收货地区未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				if (!this.carrierbillInfo.consigneeDetailAddress) {
-					Message.error('收货详细地址未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				if (!this.carrierbillInfo.shipperArea) {
-					Message.error('发货地区未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				if (!this.carrierbillInfo.shipperDetailAddress) {
-					Message.error('发货详细地址未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
-				if (heavyCargos.length == 0) {
-					Message.error('货物不能全是轻货！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				this.getTransportPrice(true)
+			if (data[1]) {
+				const location = searchLocationByCity(distData[data[0]][data[1]])
+				this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
 			}
 		},
-		handSelectPaymentMethod(data) {
-			if (data == 'TKM') {
-				if (!this.carrierbillInfo.consigneeArea) {
-					Message.error('收货地区未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				if (!this.carrierbillInfo.consigneeDetailAddress) {
-					Message.error('收货详细地址未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				if (!this.carrierbillInfo.shipperArea) {
-					Message.error('发货地区未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				if (!this.carrierbillInfo.shipperDetailAddress) {
-					Message.error('发货详细地址未填写！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
-				if (heavyCargos.length == 0) {
-					Message.error('货物不能全是轻货！')
-					this.carrierbillInfo.receiptMethod = 'Manual'
-					return
-				}
-				this.getTransportPrice(false)
+		handleSelectedConsigneeArea(data) {
+			this.carrierbillInfo.consigneeAreaID = data[data.length - 1]
+			this.carrierbillInfo.consigneeArea = searchAreaByKey(data[data.length - 1])
+			if (data[1]) {
+				const location = searchLocationByCity(distData[data[0]][data[1]])
+				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
 			}
 		},
 		handSelectShipperLocation(data) {
@@ -898,65 +664,9 @@ export default {
 		removeItem(index) {
 			this.carrierbillInfo.carrierCargo.splice(index, 1)
 		},
-		selectReceipt(e){
-			if (this.carrierbillInfo.porRequire.includes(e)) {
-				this.carrierbillInfo.porRequire.splice(this.carrierbillInfo.porRequire.indexOf(e), 1)
-			} else {
-				this.carrierbillInfo.porRequire.push(e)
-			}
-			if(e == 'NotRequired'){
-				this.carrierbillInfo.porRequire = ['NotRequired']
-			} else {
-				this.carrierbillInfo.porRequire.includes('NotRequired') 
-				&& this.carrierbillInfo.porRequire.splice(this.carrierbillInfo.porRequire.indexOf('NotRequired'), 1)
-			}
-		},
-		getTransportPrice(type) {
-			SettleConfig.findOneByAddress({
-				consigneeAreaID: this.carrierbillInfo.consigneeAreaID, //	收货地区ID
-				consigneeArea: this.carrierbillInfo.consigneeArea, //	收货地区
-				consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress, //	收货详细地址	
-				shipperAreaID: this.carrierbillInfo.shipperAreaID, //	发货地区ID
-				shipperArea: this.carrierbillInfo.shipperArea, //	发货地区	
-				shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress // 发货详细地址
-			}).then(res => {
-				if (res.data.code == 2001) {
-					this.$msgbox({
-						message: '请先配置运费模板！',
-						title: '未配置运费模板',
-						confirmButtonText: '去配置',
-						showCancelButton: true,
-						callback: (action) => {
-							if (action == 'confirm') {
-								this.$router.push({name: 'addsettleconfig'})
-							}
-						}
-					})
-				} else {
-					let result = res.data.data
-					let heavyCargos = this.carrierbillInfo.carrierCargo.filter(item => item.weightType == 'Heavy')
-					let cargoWeights = heavyCargos.map(item => Number(item.cargoWeight))
-					let totalCargoWeight = cargoWeights.reduce((prev, next) => (prev + next), 0)
-					let temp = Number(result.externalUnitPrice) * Number(result.externalMileage) * totalCargoWeight
-					if (type) {
-						this.carrierbillInfo.cashAmount = temp * result.externalCashRate
-						this.carrierbillInfo.codAmount = temp * result.externalCodRate
-						this.carrierbillInfo.porAmount = temp * result.externalPorRate
-						this.carrierbillInfo.monthlyAmount = temp * result.externalAbschlussRate
-						this.carrierbillInfo.consigneeAmount = temp * result.externalConsigneeCodRate
-					}
-					this.exmile = result.externalMileage
-					this.innermile = result.mileage
-					this.totalPrice = temp
-				}
-			}).catch(err => {})
-		},
 		back() {
 			this.$router.go(-1)
 		}
-	},
-	components: {
-		DistPicker
 	}
 }
 
@@ -1002,4 +712,14 @@ export default {
 		color #409EFF
 		.svg-icon
 			color #409EFF
+.add-cargo-btn
+	position absolute
+	right 20px
+	top -9px
+	background-color #fff
+.cargo-title
+	width 150px
+	margin-right 2px
+	span
+		color red
 </style>
