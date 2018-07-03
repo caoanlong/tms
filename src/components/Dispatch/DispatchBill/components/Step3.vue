@@ -1,10 +1,5 @@
 <template>
-	<div class="step step2">
-		<el-row>
-			<div class="split-item">
-				<span class="tit">选择司机及车辆</span>
-			</div>
-		</el-row>
+	<div class="step step3">
 		<div class="search">
 			<el-form :inline="true" class="demo-form-inline" size="small">
 				<el-form-item label="关键字">
@@ -20,7 +15,7 @@
 						placeholder="选择日期">
 					</el-date-picker>
 				</el-form-item>
-				<el-form-item label="空闲状态">
+				<el-form-item label="车辆状态">
 					<el-select placeholder="全部" v-model="truck.workStatus">
 						<el-option label="全部" value=""></el-option>
 						<el-option label="空闲" value="Free"></el-option>
@@ -33,61 +28,16 @@
 				</el-form-item>
 			</el-form>
 		</div>
-		<div class="list">
-			<DriverItem 
-				:isSelected="truck.selected.truckID == item.truckID" 
-				:index="index" 
-				v-for="(item, index) in truck.list" 
-				:key="index" 
-				:truck="item" 
-				@click.native.stop="selectDriverItem(item)">
-			</DriverItem>
+		<div class="tableList">
+			<div class="tit">
+				<div class="selectColumn">选择</div>
+				<div class="truckColumn">车辆<span>*</span></div>
+				<div class="driverColumn">驾驶员<span>*</span></div>
+				<div class="escortColumn">随行人员</div>
+			</div>
+			<TruckItem></TruckItem>
 		</div>
 		<!-- <Page :total="truck.count" :pageSize="truck.pageSize" @pageChange="truckPageChange" @pageSizeChange="truckPageSizeChange"/> -->
-		<el-row>
-			<div class="split-item">
-				<span class="tit">随车人员</span>
-			</div>
-		</el-row>
-		<div class="search">
-			<el-form :inline="true" class="demo-form-inline" size="small">
-				<el-form-item label="关键字">
-					<el-input placeholder="姓名/角色" v-model="person.keywords"></el-input>
-				</el-form-item>
-				<el-form-item label="装车日期">
-					<el-date-picker 
-						:editable="false"
-						style="width: 100%" 
-						v-model="person.shipperDate"
-						type="date"
-						value-format="timestamp"
-						placeholder="选择日期">
-					</el-date-picker>
-				</el-form-item>
-				<el-form-item label="人员状态">
-					<el-select placeholder="全部" v-model="person.workStatus">
-						<el-option label="全部" value=""></el-option>
-						<el-option label="空闲" value="Free"></el-option>
-						<el-option label="工作中" value="Working"></el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="getPersonList">搜索</el-button>
-					<el-button type="default" @click="resetPerson">重置</el-button>
-				</el-form-item>
-			</el-form>
-		</div>
-		<div class="list">
-			<EscortItem 
-				:isSelected="person.selected.staffID == item.staffID" 
-				:index="index" 
-				v-for="(item,index) in person.list" 
-				:key="index" 
-				:person="item"
-				@click.native.stop="selectEscortItem(item)">
-			</EscortItem>
-		</div>
-		<!-- <Page :total="person.count" :pageSize="person.pageSize" @pageChange="personPageChange" @pageSizeChange="personPageSizeChange"/> -->
 		<div class="step-footer">
 			<el-button @click="prevStep">上一步</el-button>
 			<el-button type="primary" @click="nextStep">下一步</el-button>
@@ -101,8 +51,7 @@ import { Message } from 'element-ui'
 import TransportRecord from '../../../../api/TransportRecord'
 import Dispatchbill from '../../../../api/Dispatchbill'
 import Staff from '../../../../api/Staff'
-import DriverItem from './DriverItem'
-import EscortItem from './EscortItem'
+import TruckItem from './TruckItem'
 import Page from '../../../CommonComponents/Page'
 export default {
 	data() {
@@ -260,8 +209,7 @@ export default {
 		}
 	},
 	components: {
-		DriverItem,
-		EscortItem,
+		TruckItem,
 		Page
 	}
 }
@@ -270,11 +218,24 @@ export default {
 	.step-footer
 		margin-top 20px
 		text-align center
-	.step
-		.split-item
-			padding 10px 0
-			margin-bottom 20px
-			border-bottom 1px solid #ebeef5
-			.tit
-				padding-left 0
+	.tableList
+		.tit
+			display flex
+			background #f0f0f0
+			border 1px solid #f0f0f0
+			div
+				flex 1
+				text-align center
+				font-size 14px
+				color #999
+				height 40px
+				line-height 20px
+				padding 10px
+				&.selectColumn
+					flex 0 0 70px
+					padding 0
+					line-height 40px
+				span
+					color #f00
+			
 </style>
