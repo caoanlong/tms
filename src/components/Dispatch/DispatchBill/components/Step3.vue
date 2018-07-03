@@ -219,11 +219,18 @@ export default {
 		margin-top 20px
 		text-align center
 	.tableList
+		width 100%
+		padding-bottom 10px
+		overflow hidden
+		overflow-x auto
 		.tit
+			min-width 1210px
 			display flex
 			background #f0f0f0
 			border 1px solid #f0f0f0
-			div
+			.truckColumn
+			.driverColumn
+			.escortColumn
 				flex 1
 				text-align center
 				font-size 14px
@@ -231,11 +238,16 @@ export default {
 				height 40px
 				line-height 20px
 				padding 10px
-				&.selectColumn
-					flex 0 0 70px
-					padding 0
-					line-height 40px
-				span
-					color #f00
+				min-width 380px
+			.selectColumn
+				flex 0 0 70px
+				text-align center
+				font-size 14px
+				color #999
+				padding 0
+				line-height 40px
+				width 70px
+			span
+				color #f00
 			
 </style>
