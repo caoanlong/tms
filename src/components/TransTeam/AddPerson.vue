@@ -1,492 +1,560 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">添加人员</div>
-			<el-form label-width="155px" size="mini" :model="person" :rules="rules" ref="ruleForm">
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="创建人" prop="createName">
-							<el-input v-model="person.createName"></el-input>
-						</el-form-item>
+		<el-form label-width="110px" size="mini" :model="truck" :rules="rules" ref="ruleForm" >
+			<el-card class="box-card">
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">基本信息</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="姓名">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="性别">
+									<el-select placeholder="请选择" style="width:100%" >
+										<el-option label="男" value="1"></el-option>
+										<el-option label="女" value="2"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="联系方式">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="合作关系">
+									<el-select placeholder="请选择" style="width:100%" >
+										<el-option label="自有" value="1"></el-option>
+										<el-option label="挂靠" value="2"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="住址">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="合同有效期">
+									<el-date-picker
+									type="date"
+									placeholder="选择日期" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="职称/技术等级">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="备注">
+									<el-input type="textarea" :rows="3" resize="none"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="个人照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<p>正面</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">身份证</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="身份证号">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="身份证有效期">
+									<el-date-picker
+									type="daterange"
+									range-separator="至"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="身份证照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<p>正面</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<p>背面</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block">
+					<span class="block-title">卫生员合格证</span>
+					<div class="block-content">
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="卫生合格证照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<p>正面</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<p>背面</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+			</el-card>
+			<el-card class="box-card">
+				<span>从事运输岗位</span>
+				<el-checkbox-group v-model="Position" @change="positionChange">
+					<el-checkbox label="驾驶员"></el-checkbox>
+					<el-checkbox label="押运员"></el-checkbox>
+				</el-checkbox-group>
+			</el-card>
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>驾驶员</span>
+				</div>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">驾驶证</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="驾驶证号">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="档案编号">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="准驾车型">
+									<el-select placeholder="请选择" style="width:100%" >
+										<option value="请选择">请选择</option>
+										<option label="A1" value="A1"></option>
+										<option label="A2" value="A2"></option>
+										<option label="A3" value="A3"></option>
+										<option label="B1" value="B1"></option>
+										<option label="B2" value="B2"></option>
+										<option label="C1" value="C1"></option>
+										<option label="C2" value="C2"></option>
+										<option label="C3" value="C3"></option>
+										<option label="C4" value="C4"></option>
+										<option label="C5" value="C5"></option>
+										<option label="D" value="D"></option>
+										<option label="E" value="E"></option>
+										<option label="F" value="F"></option>
+										<option label="M" value="M"></option>
+										<option label="N" value="N"></option>
+										<option label="P" value="P"></option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="初次领证日期">
+									<el-date-picker
+									type="date"
+									placeholder="选择日期" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="驾驶证有效期">
+									<el-date-picker
+									type="daterange"
+									range-separator="至"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="驾驶证照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<p>正本</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<p>副本</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">危货从业资格证</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="证号">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="编号">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="准驾车型">
+									<el-select placeholder="请选择" style="width:100%" >
+										<option value="请选择">请选择</option>
+										<option label="A1" value="A1"></option>
+										<option label="A2" value="A2"></option>
+										<option label="A3" value="A3"></option>
+										<option label="B1" value="B1"></option>
+										<option label="B2" value="B2"></option>
+										<option label="C1" value="C1"></option>
+										<option label="C2" value="C2"></option>
+										<option label="C3" value="C3"></option>
+										<option label="C4" value="C4"></option>
+										<option label="C5" value="C5"></option>
+										<option label="D" value="D"></option>
+										<option label="E" value="E"></option>
+										<option label="F" value="F"></option>
+										<option label="M" value="M"></option>
+										<option label="N" value="N"></option>
+										<option label="P" value="P"></option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="是否新证">
+									<el-switch></el-switch>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="初次领证日期">
+									<el-date-picker
+									type="date"
+									placeholder="选择日期" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="驾驶证有效期">
+									<el-date-picker
+									type="daterange"
+									range-separator="至"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="从业资格类别">
+									<el-select placeholder="请选择" style="width:100%" >
+										<el-option label="类别1" value="1"></el-option>
+										<el-option label="类别2" value="2"></el-option>
+										<el-option label="类别3" value="3"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="5"/>
+										<p>照片1</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row :gutter="20" style="margin-bottom:20px">
+					<el-col :span="12">
+						<div class="section-block">
+							<span class="block-title">驾驶员继续再教育合格证</span>
+							<div class="block-content">
+								<el-row >
+									<el-col :span="24">
+										<el-form-item label="继续教育时间">
+											<el-date-picker
+											type="year"
+											placeholder="选择日期" style="width:100%">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row >
+									<el-col :span="24">
+										<el-form-item label="照片">
+											<div class="uploadTruckPicItem">
+												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<p>照片1</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
 					</el-col>
-					<el-col :span="8">
-						<el-form-item label="状态" prop="status">
-							<el-select style="width: 100%" v-model="person.status" placeholder="请选择">
-								<el-option label="通过" value="Passed"></el-option>
-								<el-option label="未通过" value="NotPassed"></el-option>
-								<el-option label="其他" value="Other"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="审核人" prop="auditName">
-							<el-input v-model="person.auditName"></el-input>
-						</el-form-item>
+					<el-col :span="12">
+						<div class="section-block">
+							<span class="block-title">诚信考核记录</span>
+							<div class="block-content">
+								<el-row >
+									<el-col :span="24">
+										<el-form-item label="诚信等级">
+											<el-select placeholder="请选择" style="width:100%" >
+												<el-option label="1" value="1"></el-option>
+												<el-option label="2" value="2"></el-option>
+												<el-option label="3" value="3"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-col :span="24">
+									<el-form-item label="合格至">
+										<el-date-picker
+										type="date"
+										placeholder="选择日期" style="width:100%">
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-row >
+									<el-col :span="24">
+										<el-form-item label="照片">
+											<div class="uploadTruckPicItem">
+												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<p>照片1</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row :gutter="20">
 					<el-col :span="8">
-						<el-form-item label="审核日期" prop="auditTime">
-							<el-date-picker 
-								:picker-options="{disabledDate}" 
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.auditTime"
-								type="date"
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
+						<div class="section-block">
+							<span class="block-title">违章和记分记录</span>
+							<div class="block-content">
+								<el-row >
+									<el-col :span="24">
+										<el-form-item label="照片" label-width="40px">
+											<div class="uploadTruckPicItem">
+												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<p>照片1</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="姓名" prop="realName">
-							<el-input v-model="person.realName"></el-input>
-						</el-form-item>
+						<div class="section-block">
+							<span class="block-title">三年无重大交通事故证明</span>
+							<div class="block-content">
+								<el-row >
+									<el-col :span="24">
+										<el-form-item label="照片" label-width="40px">
+											<div class="uploadTruckPicItem">
+												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<p>照片1</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="家庭地址" prop="homeAddress">
-							<el-input v-model="person.homeAddress"></el-input>
-						</el-form-item>
+						<div class="section-block">
+							<span class="block-title">驾驶员身体条件证明</span>
+							<div class="block-content">
+								<el-row >
+									<el-col :span="24">
+										<el-form-item label="照片" label-width="40px">
+											<div class="uploadTruckPicItem">
+												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<p>照片1</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
 					</el-col>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="联系电话" prop="mobile">
-							<el-input v-model="person.mobile"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="性别" prop="sex">
-							<el-select style="width: 100%" v-model="person.sex" placeholder="请选择">
-								<el-option label="男" value="M"></el-option>
-								<el-option label="女" value="F"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="驾驶证初次领证日期">
-							<el-date-picker 
-								:picker-options="{disabledDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.driverLicenseFirstTime"
-								type="date"
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
+			</el-card>
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>押运员信息</span>
+				</div>
+				<el-row class="section-block">
+					<span class="block-title">押运员从业资格证</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="证号">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="编号">
+									<el-input></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="从业资格类别">
+									<el-select placeholder="请选择" style="width:100%" >
+										<el-option label="类别1" value="1"></el-option>
+										<el-option label="类别2" value="2"></el-option>
+										<el-option label="类别3" value="3"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="准驾车型">
+									<el-select placeholder="请选择" style="width:100%" >
+										<option value="请选择">请选择</option>
+										<option label="A1" value="A1"></option>
+										<option label="A2" value="A2"></option>
+										<option label="A3" value="A3"></option>
+										<option label="B1" value="B1"></option>
+										<option label="B2" value="B2"></option>
+										<option label="C1" value="C1"></option>
+										<option label="C2" value="C2"></option>
+										<option label="C3" value="C3"></option>
+										<option label="C4" value="C4"></option>
+										<option label="C5" value="C5"></option>
+										<option label="D" value="D"></option>
+										<option label="E" value="E"></option>
+										<option label="F" value="F"></option>
+										<option label="M" value="M"></option>
+										<option label="N" value="N"></option>
+										<option label="P" value="P"></option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="初次领证日期">
+									<el-date-picker
+									type="date"
+									placeholder="选择日期" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="24">
+								<el-form-item label="驾驶证有效期">
+									<el-date-picker
+									type="daterange"
+									range-separator="至"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="5"/>
+										<p>正本</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="5"/>
+										<p>副本</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="诚信考核等级">
-							<el-select style="width: 100%" v-model="person.integrityExamineGrade" placeholder="请选择">
-								<el-option label="无" value=""></el-option>
-								<el-option label="A" value="A"></el-option>
-								<el-option label="AA" value="AA"></el-option>
-								<el-option label="AAA" value="AAA"></el-option>
-								<el-option label="AAAA" value="AAAA"></el-option>
-								<el-option label="AAAAA" value="AAAAA"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="聘用岗位" prop="position">
-							<el-select style="width: 100%" multiple v-model="position" placeholder="请选择" @change="changePost">
-								<el-option label="操作员" value="Operator"></el-option>
-								<el-option label="押运员" value="Supercargo"></el-option>
-								<el-option label="专职安全员" value="SafetyOfficer"></el-option>
-								<el-option label="装卸管理人员" value="Stevedore"></el-option>
-								<el-option label="其他人员" value="Other"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="诚信考核有效期至">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.integrityExamineEndTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
+			</el-card>
+			<el-card class="box-card">
+				<el-row class="section-block">
+					<span class="block-title">其他</span>
+					<div class="block-content">
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="照片" label-width="40px">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="60" :height="60" :limitNum="6"/>
+										<p>照片1</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="身份证号" prop="idCardNum">
-							<el-input v-model="person.idCardNum"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="准驾车型">
-							<el-select style="width: 100%" v-model="person.quasiDrivingType" placeholder="请选择">
-								<el-option label="A1" value="A1"></el-option>
-								<el-option label="A2" value="A2"></el-option>
-								<el-option label="A3" value="A3"></el-option>
-								<el-option label="B1" value="B1"></el-option>
-								<el-option label="B2" value="B2"></el-option>
-								<el-option label="C1" value="C1"></el-option>
-								<el-option label="C2" value="C2"></el-option>
-								<el-option label="C3" value="C3"></el-option>
-								<el-option label="C4" value="C4"></el-option>
-								<el-option label="C5" value="C5"></el-option>
-								<el-option label="D" value="D"></el-option>
-								<el-option label="E" value="E"></el-option>
-								<el-option label="F" value="F"></el-option>
-								<el-option label="M" value="M"></el-option>
-								<el-option label="N" value="N"></el-option>
-								<el-option label="P" value="P"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="合同有效期起">
-							<el-date-picker 
-								:picker-options="{disabledDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.laborContractBeginTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="合同有效期至">
-							<el-date-picker 
-								:picker-options="{
-									disabledDate: curDate => {
-										if (person.laborContractBeginTime) {
-											return person.laborContractBeginTime > curDate
-										} else {
-											return new Date() > curDate
-										}
-									}
-								}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.laborContractEndTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="驾驶证审验有效期起">
-							<el-date-picker 
-								:picker-options="{disabledDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.driverLicExamineBeginTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="驾驶证审验有效期至">
-							<el-date-picker 
-								:picker-options="{
-									disabledDate: curDate => {
-										if (person.driverLicExamineBeginTime) {
-											return person.driverLicExamineBeginTime > curDate
-										} else {
-											return new Date() > curDate
-										}
-									}
-								}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.driverLicExamineEndTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="驾驶证档案编号">
-							<el-input v-model="person.driverLicenseCode"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="职称或技术等级">
-							<el-input v-model="person.titleLever"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="从业资格证件号">
-							<el-input v-model="person.qualificationCode"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="从业资格类别">
-							<el-input v-model="person.qualificationType"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="从业资格证有效期至">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="person.qualificationExpirationTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item label="备注说明">
-							<el-input type="textarea" v-model="person.remark"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
-						<el-form-item label="头像">
-							<ImageUpload :files="[person.headPic]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleAvatarSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="身份证正面">
-							<ImageUpload :files="[person.idCardFrontUrl]" @imgUrlBack="handleCardFrontSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="身份证反面">
-							<ImageUpload :files="[person.idCardBackUrl]" @imgUrlBack="handleCardBackSuccess"/>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
-						<el-form-item label="驾驶证正面">
-							<ImageUpload :files="[person.driverLicFrontUrl]" @imgUrlBack="handleDriverFrontSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="驾驶证反面">
-							<ImageUpload :files="[person.driverLicBackUrl]" @imgUrlBack="handleDriverBackSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="从业资格证正">
-							<ImageUpload :files="[person.qualificationFirstPage]" @imgUrlBack="handleQualifCerFrontSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="从业资格证副">
-							<ImageUpload :files="[person.qualificationSecondPage]" @imgUrlBack="handleQualifCerBackSuccess"/>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item label="其他照片">
-							<ImageUpload :files="otherImgs" :limitNum="5" @imgUrlBack="imgUrlBack"/>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item>
-							<el-button type="primary" @click="createItem">立即保存</el-button>
-							<el-button @click="back">取消</el-button>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
-		</div>
+			</el-card>
+			<div class="formHandle text-center">
+				<el-button @click="back">取消</el-button>
+				<el-button type="primary">保存</el-button>	
+			</div>
+		</el-form>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { mapGetters } from 'vuex'
-import Staff from '../../api/Staff'
 import ImageUpload from '../CommonComponents/ImageUpload'
-import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
+
 export default {
 	data() {
 		return {
-			person: {
-				createName: '',
-				status: '',
-				auditName: '',
-				auditTime: '',
-				realName: '',
-				homeAddress: '',
-				mobile: '',
-				sex: '',
-				driverLicenseFirstTime: '',
-				integrityExamineGrade: '',
-				position: '',
-				integrityExamineEndTime: '',
-				idCardNum: '',
-				quasiDrivingType: '',
-				laborContractBeginTime: '',
-				laborContractEndTime: '',
-				driverLicExamineBeginTime: '',
-				driverLicExamineEndTime: '',
-				driverLicenseCode: '',
-				titleLever: '',
-				qualificationCode: '',
-				qualificationType: '',
-				qualificationExpirationTime: '',
-				remark: '',
-				headPic: '',
-				idCardFrontUrl: '',
-				idCardBackUrl: '',
-				driverLicFrontUrl: '',
-				driverLicBackUrl: '',
-				qualificationFirstPage: '',
-				qualificationSecondPage: '',
-				otherStaffPic1: '',
-				otherStaffPic2: '',
-				otherStaffPic3: '',
-				otherStaffPic4: '',
-				otherStaffPic5: ''
-			},
-			quasiDrivingType: [],
-			position: [],
-			otherImgs: [],
-			rules: {
-				createName: [
-					{required: true, message: '请输入创建人', trigger: 'blur'},
-					{validator: limitLength50, trigger: 'blur'},
-				],
-				status: [
-					{ required: true, message: '请选择状态', trigger: 'change' }
-				],
-				auditName: [
-					{required: true, message: '请输入审核人', trigger: 'blur'},
-					{validator: limitLength50, trigger: 'blur'},
-				],
-				auditTime: [
-					{required: true, message: '请输入审核时间', trigger: 'blur'}
-				],
-				realName: [
-					{ required: true, message: '请选择姓名', trigger: 'blur' },
-					{validator: limitLength50, trigger: 'blur'},
-				],
-				homeAddress: [
-					{required: true, message: '请输入家庭地址', trigger: 'blur'},
-					{validator: limitLength100, trigger: 'blur'}
-				],
-				mobile: [
-					{required: true, validator: checkMobile, trigger: 'blur'},
-				],
-				sex: [
-					{ required: true, message: '请选择性别', trigger: 'change' }
-				],
-				position: [
-					{required: true, message: '请选择岗位', trigger: 'change'}
-				],
-				idCardNum: [
-					{required: true, validator: checkIDCard, trigger: 'blur'}
-				]
-			}
-		}
-	},
-	computed: {
-		...mapGetters(['name', 'mobile'])
-	},
-	watch: {
-		position: {
-			handler(newVal) {
-				if (newVal.includes('Operator')) {
-					this.person.auditName = this.name
-					this.person.mobile = this.mobile
-				}
-			},
-			deep: true
+			Position:[]
 		}
 	},
 	methods: {
-		disabledDate(curDate) {
-			return new Date() < curDate
-		},
-		handleAvatarSuccess(res) {
-			this.person.headPic = res[0]
-		},
-		handleCardFrontSuccess(res) {
-			this.person.idCardFrontUrl = res[0]
-		},
-		handleCardBackSuccess(res) {
-			this.person.idCardBackUrl = res[0]
-		},
-		handleDriverFrontSuccess(res) {
-			this.person.driverLicFrontUrl = res[0]
-		},
-		handleDriverBackSuccess(res) {
-			this.person.driverLicBackUrl = res[0]
-		},
-		handleQualifCerFrontSuccess(res) {
-			this.person.qualificationFirstPage = res[0]
-		},
-		handleQualifCerBackSuccess(res) {
-			this.person.qualificationSecondPage = res[0]
-		},
-		imgUrlBack(files) {
-			this.otherImgs = files
-			for (let i = 0; i < files.length; i++) {
-				this.person['otherStaffPic' + (i + 1)] = files[i]
-			}
-		},
-		changePost(e) {
-			this.person.position = e.join(',')
-		},
-		createItem() {
-			let data = this.person
-			if(!data.integrityExamineEndTime) {
-				data.integrityExamineEndTime = ''
-			}
-			if(!data.driverLicenseFirstTime) {
-				data.driverLicenseFirstTime = ''
-			}
-			if(!data.laborContractBeginTime) {
-				data.laborContractBeginTime = ''
-			}
-			if(!data.laborContractEndTime) {
-				data.laborContractEndTime = ''
-			}
-			if(!data.laborContractBeginTime) {
-				data.laborContractBeginTime = ''
-			}
-			if(!data.laborContractEndTime) {
-				data.laborContractEndTime = ''
-			}
-			if(!data.driverLicExamineBeginTime) {
-				data.driverLicExamineBeginTime = ''
-			}
-			if(!data.driverLicExamineEndTime) {
-				data.driverLicExamineEndTime = ''
-			}
-			if(!data.qualificationExpirationTime) {
-				data.qualificationExpirationTime = ''
-			}
-			this.$refs['ruleForm'].validate(valid => {
-				if (valid) {
-					Staff.add(data).then(res => {
-						Message.success(res.data.msg)
-						this.$router.push({name: 'person'})
-					})
-				}
-			})
+		positionChange(){
+
 		},
 		back() {
 			this.$router.go(-1)
@@ -499,25 +567,19 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-.avatar-uploader
-	line-height 1
-	width 100px
-	height 100px
-	overflow hidden
-	border 1px dashed #d9d9d9
-	border-radius 6px
-	&:hover 
-		border-color #409eff
-	.avatar-uploader-icon
-		font-size 28px
-		color #8c939d
-		width 98px
-		height 98px
-		line-height 98px
+.section-block
+	margin 10px 0 0
+.uploadTruckPicItem
+	display inline-block
+	margin-right 10px
+	p
+		margin 0
 		text-align center
-	.avatar
-		width 98px
-		height 98px
-		display block
-		vertical-align top
+		font-size 12px
+		color #999
+.box-card
+	margin-bottom 10px
+.el-checkbox-group
+	display inline-block
+	margin-left 40px
 </style>
