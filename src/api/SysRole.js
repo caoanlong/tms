@@ -1,6 +1,5 @@
 import Base from './Base'
-import request from '../common/requestNode'
-import { resolve } from 'url';
+import request from '../common/request'
 /**
  * this._find = "/list"
  * this._findById = "/detail"
@@ -11,24 +10,25 @@ import { resolve } from 'url';
 class SysRole extends Base {
     constructor(url, req) {
         super(url, req).initURI({
-            findById: '/info',
-            update: '/update',
+            find: '/findList',
+            findById: '/findById',
+            update: '/update'
         })
     }
-    updateMenu(data) {
-        return this.request({
-            url: this.baseUrl + '/update/menu',
-            method: 'post',
-            data
-        })
-    }
-    updateUser(data) {
-        return this.request({
-            url: this.baseUrl + '/update/user',
-            method: 'post',
-            data
-        })
-    }
+    // updateMenu(data) {
+    //     return this.request({
+    //         url: this.baseUrl + '/update/menu',
+    //         method: 'post',
+    //         data
+    //     })
+    // }
+    // updateUser(data) {
+    //     return this.request({
+    //         url: this.baseUrl + '/update/user',
+    //         method: 'post',
+    //         data
+    //     })
+    // }
 }
 
-export default new SysRole('/sys_role', request)
+export default new SysRole('/sys/role', request)

@@ -38,70 +38,46 @@
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 			</div>
 			<div class="table">
-				<table class="wfTable">
-					<tr>
-						<th>货物</th>
-						<th>货量</th>
-						<th>件数</th>
-						<th>发货公司</th>
-						<th>发货人</th>
-						<th>发货地</th>
-						<th width="140">发货时间</th>
-						<th>到货公司</th>
-						<th>到货人</th>
-						<th>到货地</th>
-						<th width="140">到货时间</th>
-					</tr>
-					<template v-for="(item, index) in tableData">
-						<tr class="tit" :key="index">
-							<td colspan="11">
-								<span class="infoItem ViewDispatchBill" @click="view(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
-								<span class="infoItem">
-									<el-tag size="mini" type="warning" v-if="item.status=='Committed'">未执行</el-tag>
-									<el-tag size="mini" v-else-if="item.status=='Running'">执行中</el-tag>
-									<el-tag size="mini" type="success" v-else-if="item.status=='Signed'">已完成</el-tag>
-									<el-tag size="mini" type="info" v-else-if="item.status=='Closed'">已关闭</el-tag>
-									<el-tag size="mini" type="info" v-else-if="item.status=='Canceled'">作废</el-tag>
-								</span>
-								<span class="fr">
-									<el-button type="text" size="mini" 
-										:disabled="item.status != 'Committed'" 
-										@click="edit(item.carrierOrderID)">
-										编辑
-									</el-button>
-									<el-button type="text" size="mini" 
-										:disabled="item.status != 'Running' && item.status != 'Signed'"
-										@click="close(item.carrierOrderID)">
-										关闭
-									</el-button>
-									<el-button type="text" size="mini"
-										:disabled="item.status == 'Running' || item.status == 'Signed' || item.status == 'Closed'" 
-										@click="del(item.carrierOrderID)">
-										删除
-									</el-button>
-								</span>
-							</td>
-						</tr>
-						<tr class="list" :key="index+100" v-if="item.carrierCargo">
-							<td>{{item.cargoName}}</td>
-							<td width="80">
-								{{item.cargoWeightSum + 'kg'}}
-								{{(item.cargoVolumeSum ? ('/' + item.cargoVolumeSum) : 0) + 'm³'}}
-							</td>
-							<td width="80">{{item.cargoNumSum}}</td>
-							<td>{{item.shipperCompanyName}}</td>
-							<td>{{item.shipperName}}({{item.shipperPhone}})</td>
-							<td>{{item.shipperArea}}</td>
-							<td width="140">{{item.shipperDate | getdatefromtimestamp(true)}}</td>
-							<td>{{item.consigneeCompanyName}}</td>
-							<td>{{item.consigneeName}}({{item.consigneePhone}})</td>
-							<td>{{item.consigneeArea}}</td>
-							<td width="140">{{item.consigneeDate | getdatefromtimestamp(true)}}</td>
-						</tr>
-					</template>
-				</table>	
+				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
+					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
+					<el-table-column label="单号" prop="carrierOrderNo">
+						<template slot-scope="scope">
+							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="状态" prop="status"></el-table-column>
+					<el-table-column label="货物" prop="cargoName"></el-table-column>
+					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
+					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
+					<el-table-column label="发货时间" prop="shipperDate">
+						<template slot-scope="scope">
+							<span v-if="scope.row.shipperDate">{{ new Date(scope.row.shipperDate).getTime() | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
+					<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
+					<el-table-column label="数量(余)" prop="cargoNumSum"></el-table-column>
+					<el-table-column label="货量(余)" prop="PositionType">
+						<template slot-scope="scope">
+							<span>{{scope.row.cargoWeightSum + '吨'}}/{{scope.row.cargoVolumeSum + '方'}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column width="80" align="center" fixed="right">
+						<template slot-scope="scope">
+							<el-dropdown  @command="handleCommand"  trigger="click">
+								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}" >删除</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						</template>
+					</el-table-column>
+				</el-table>
+				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
-			<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</div>
 	</div>
 </template>
@@ -122,7 +98,8 @@ export default {
 			findRangeDate: [],
 			findshipperBeginDate: '',
 			findshipperEndDate: '',
-			findStatus: ''
+			findStatus: '',
+			selectedList: []
 		}
 	},
 	components: {
@@ -132,6 +109,9 @@ export default {
 		this.getList()
 	},
 	methods: {
+		selectionChange(data) {
+			this.selectedList = data.map(item => item.carrierOrderID)
+		},
 		reset() {
 			this.findsearchInfo = ''
 			this.findshipperBeginDate = ''
@@ -144,17 +124,6 @@ export default {
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
-		},
-		SumDispatchCargoQuantity(data) {
-			let sumWeight = 0
-			let sumVolume = 0
-			let sumNum = 0
-			data.map(item => {
-				sumWeight += (item.cargoWeight ?item.cargoWeight : 0)
-				sumVolume += (item.cargoVolume ? item.cargoVolume : 0)
-				sumNum += (item.cargoNum ? item.cargoNum : 0)
-			})
-			return (sumWeight + '吨/' + sumVolume + '方/' + sumNum + '件')
 		},
 		pageChange(index) {
 			this.pageIndex = index
@@ -177,14 +146,22 @@ export default {
 				this.total= res.total
 			})
 		},
-		view(carrierOrderID) {
-			this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
-		},
-		edit(carrierOrderID) {
-			this.$router.push({name: 'editcarrierbill', query: {carrierOrderID}})
+		handleCommand(e) {
+			if(e.type == 'view') {
+				this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID: e.id}})
+			} else if (e.type == 'edit') {
+				this.$router.push({name: 'editcarrierbill', query: {carrierOrderID: e.id}})
+			} else if (e.type == 'close') {
+				this.close(e.id)
+			} else if (e.type == 'delete') {
+				this.del(e.id)
+			}
 		},
 		add() {
 			this.$router.push({ name: 'addcarrierbill' })
+		},
+		view() {
+			this.$router.push({ name: 'viewcarrierbill' })
 		},
 		close(carrierOrderID) {
 			closeConfirm(carrierOrderID, carrierOrderIDs => {
