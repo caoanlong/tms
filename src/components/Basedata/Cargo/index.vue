@@ -72,11 +72,11 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request, { baseURL } from '../../common/request'
-import Customer from '../../api/Customer'
-import CargoGeneralName from '../../api/CargoGeneralName'
-import Page from '../CommonComponents/Page'
-import { deleteConfirm } from '../../common/utils'
+import { baseURL } from '../../../common/request'
+import Customer from '../../../api/Customer'
+import CargoGeneralName from '../../../api/CargoGeneralName'
+import Page from '../../CommonComponents/Page'
+import { deleteConfirm } from '../../../common/utils'
 export default {
 	data() {
 		return {

@@ -41,11 +41,7 @@ const user = {
 			return new Promise((resolve, reject) => {
 				commit('SET_USERINFO', '')
 				commit('SET_TOKEN', '')
-				localStorage.removeItem('userInfo')
-				localStorage.removeItem('name')
-				localStorage.removeItem('mobile')
-				localStorage.removeItem('companyName')
-				localStorage.removeItem('token')
+				localStorage.clear()
 				sessionStorage.clear()
 				resolve()
 			})

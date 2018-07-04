@@ -1,13 +1,231 @@
 <template>
-	<div>
-		<router-view></router-view>
+	<div class="main-content">
+		<div class="wf-card box-card">
+			<div class="header clearfix">承运单列表</div>
+			<div class="search">
+				<el-form :inline="true" class="demo-form-inline" size="small">
+					<el-form-item label="关键字" >
+						<el-input placeholder="请输入关键字" style="width:150px" v-model="findsearchInfo"></el-input>
+					</el-form-item>
+					<el-form-item label="发货时间">
+						<el-date-picker
+							v-model="findRangeDate"
+							type="daterange"
+							range-separator="至"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							value-format="timestamp"
+							:clearable="false"
+							@change="selectDateRange">
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item label="运单状态" class="customerSelect">
+						<el-select v-model="findStatus" placeholder="运单状态" style="width:140px">
+							<el-option value="" label="全部订单">全部订单</el-option>
+							<el-option value="Committed" label="未执行">未执行</el-option>
+							<el-option value="Running" label="执行中">执行中</el-option>
+							<el-option value="Signed" label="已完成">已完成</el-option>
+							<el-option value="Closed" label="已关闭">已关闭</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="getList">搜索</el-button>
+						<el-button type="default" @click="reset">重置</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+			<div class="tableControl">
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
+			</div>
+			<div class="table">
+				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
+					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
+					<el-table-column label="单号" prop="carrierOrderNo">
+						<template slot-scope="scope">
+							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="状态" prop="status"></el-table-column>
+					<el-table-column label="货物" prop="cargoName"></el-table-column>
+					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
+					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
+					<el-table-column label="发货时间" prop="shipperDate">
+						<template slot-scope="scope">
+							<span v-if="scope.row.shipperDate">{{ new Date(scope.row.shipperDate).getTime() | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
+					<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
+					<el-table-column label="数量(余)" prop="cargoNumSum"></el-table-column>
+					<el-table-column label="货量(余)" prop="PositionType">
+						<template slot-scope="scope">
+							<span>{{scope.row.cargoWeightSum + '吨'}}/{{scope.row.cargoVolumeSum + '方'}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column width="80" align="center" fixed="right">
+						<template slot-scope="scope">
+							<el-dropdown  @command="handleCommand"  trigger="click">
+								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}" >删除</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						</template>
+					</el-table-column>
+				</el-table>
+				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+			</div>
+		</div>
 	</div>
 </template>
 <script type="text/javascript">
-	export default {
-		
+import { Message } from 'element-ui'
+import dist from '../../../assets/data/distpicker.data.js'
+import { deleteConfirm, closeConfirm } from '../../../common/utils'
+import Carrierbill from '../../../api/Carrierbill'
+import Page from '../../CommonComponents/Page'
+export default {
+	data() {
+		return {
+			pageIndex: 1,
+			pageSize: 10,
+			total: 0,
+			tableData: [],
+			findsearchInfo:'',
+			findRangeDate: [],
+			findshipperBeginDate: '',
+			findshipperEndDate: '',
+			findStatus: '',
+			selectedList: []
+		}
+	},
+	components: {
+		Page
+	},
+	created() {
+		this.getList()
+	},
+	methods: {
+		selectionChange(data) {
+			this.selectedList = data.map(item => item.carrierOrderID)
+		},
+		reset() {
+			this.findsearchInfo = ''
+			this.findshipperBeginDate = ''
+			this.findshipperEndDate = ''
+			this.findRangeDate = []
+			this.findStatus = ''
+			this.pageIndex = 1
+			this.getList()
+		},
+		selectDateRange(date) {
+			this.findshipperBeginDate = date[0]
+			this.findshipperEndDate = date[1]
+		},
+		pageChange(index) {
+			this.pageIndex = index
+			this.getList() 
+		},
+		pageSizeChange(size) {
+			this.pageSize = size
+			this.getList() 
+		},
+		getList() {
+			Carrierbill.find({
+				current: this.pageIndex,
+				size: this.pageSize,
+				shipperBeginDate: this.findshipperBeginDate,
+				shipperEndDate: this.findshipperEndDate,
+				searchInfo: this.findsearchInfo,
+				status: this.findStatus
+			}).then(res => {
+				this.tableData = res.records
+				this.total= res.total
+			})
+		},
+		handleCommand(e) {
+			if(e.type == 'view') {
+				this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID: e.id}})
+			} else if (e.type == 'edit') {
+				this.$router.push({name: 'editcarrierbill', query: {carrierOrderID: e.id}})
+			} else if (e.type == 'close') {
+				this.close(e.id)
+			} else if (e.type == 'delete') {
+				this.del(e.id)
+			}
+		},
+		add() {
+			this.$router.push({ name: 'addcarrierbill' })
+		},
+		view() {
+			this.$router.push({ name: 'viewcarrierbill' })
+		},
+		close(carrierOrderID) {
+			closeConfirm(carrierOrderID, carrierOrderIDs => {
+				Carrierbill.close({ carrierOrderIDs }).then(res => {
+					Message({ type: 'success', message: '关闭成功!' })
+					this.getList()
+				})
+			})
+		},
+		del(carrierOrderID) {
+			deleteConfirm(carrierOrderID, carrierOrderIDs => {
+				Carrierbill.del({ carrierOrderIDs }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.getList()
+				})
+			})
+		}
 	}
+}
+
 </script>
 <style lang="stylus" scoped>
-	
+.table
+	overflow hidden
+	overflow-x auto
+.wfTable
+	width 100%
+	background #e2ecf6
+	border-spacing 1px
+	font-size 14px
+	margin-bottom 10px
+	th
+	td
+		white-space  nowrap 
+	td
+		background #fff
+		padding 6px 10px
+		height 36px
+		line-height 24px
+		color #666
+		position relative
+	.tit
+		td
+			border-top 10px solid #fff
+			background #f8f8f8
+			color #3582d0
+			.infoItem
+				margin-right 40px
+				height 24px
+				line-height 24px
+				display inline-block
+				&.ViewDispatchBill
+					cursor pointer
+	th
+		padding 6px 10px
+		height 36px
+		line-height 24px
+		background #f0f0f0
+		color #666
+		width 100px
+	.list
+		td
+			font-size 12px
+			.ViewTaskDetail
+				cursor pointer
+				display block
 </style>

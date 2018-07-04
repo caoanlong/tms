@@ -49,9 +49,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import CargoUnit from '../../api/CargoUnit'
-import Page from '../CommonComponents/Page'
-import { deleteConfirm } from '../../common/utils'
+import CargoUnit from '../../../api/CargoUnit'
+import Page from '../../CommonComponents/Page'
+import { deleteConfirm } from '../../../common/utils'
 export default {
 	data() {
 		return {

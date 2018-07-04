@@ -44,11 +44,11 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import dist from '../../assets/data/dist.json'
-import Customer from '../../api/Customer'
-import ImageUpload from '../CommonComponents/ImageUpload'
-import { areaIdToArrayId } from '../../common/utils'
-import { checkMobile } from '../../common/validator'
+import dist from '../../../assets/data/dist.json'
+import Customer from '../../../api/Customer'
+import ImageUpload from '../../CommonComponents/ImageUpload'
+import { areaIdToArrayId } from '../../../common/utils'
+import { checkMobile } from '../../../common/validator'
 export default {
 	data() {
 		return {

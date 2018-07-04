@@ -90,11 +90,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Customer from '../../api/Customer'
-import CargoUnit from '../../api/CargoUnit'
-import CargoGeneralName from '../../api/CargoGeneralName'
-import DistPicker from '../CommonComponents/DistPicker'
-import { checkTel } from '../../common/validator'
+import Customer from '../../../api/Customer'
+import CargoUnit from '../../../api/CargoUnit'
+import CargoGeneralName from '../../../api/CargoGeneralName'
+import { checkTel } from '../../../common/validator'
 export default {
 	data() {
 		return {
@@ -233,9 +232,6 @@ export default {
 		back() {
 			this.$router.go(-1)
 		}
-	},
-	components: {
-		DistPicker
 	}
 }
 </script>

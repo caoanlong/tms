@@ -74,10 +74,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { baseURL } from '../../common/request'
-import Customer from '../../api/Customer'
-import Page from '../CommonComponents/Page'
-import { deleteConfirm } from '../../common/utils'
+import { baseURL } from '../../../common/request'
+import Customer from '../../../api/Customer'
+import Page from '../../CommonComponents/Page'
+import { deleteConfirm } from '../../../common/utils'
 export default {
 	data() {
 		return {

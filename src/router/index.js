@@ -36,42 +36,25 @@ let routerMap = [
 						name: 'carrierbill',
 						meta: { title: '承运单' },
 						component: () => import ('../components/Buisiness/Carrierbill'),
-						redirect: '/carrierbills',
-						children: [
-							{
-								path: '/carrierbills',
-								name: 'carrierbills',
-								meta: {
-									title: '承运单列表'
-								},
-								component: () => import ('../components/Buisiness/Carrierbill/Carrierbills'),
-							},
-							{
-								path: '/addcarrierbill',
-								name: 'addcarrierbill',
-								meta: {
-									title: '添加承运单'
-								},
-								component: () => import ('../components/Buisiness/Carrierbill/Addcarrierbill'),
-							},
-							{
-								path: '/viewcarrierbill',
-								name: 'viewcarrierbill',
-								meta: {
-									title: '承运单详情'
-								},
-								component: () => import ('../components/Buisiness/Carrierbill/Viewcarrierbill')
-							},
-							{
-								path: '/editcarrierbill',
-								name: 'editcarrierbill',
-								meta: {
-									title: '编辑承运单'
-								},
-								component: () => import ('../components/Buisiness/Carrierbill/Editcarrierbill')
-							}
-						]
 					},
+					{
+						path: '/addcarrierbill',
+						name: 'addcarrierbill',
+						meta: { title: '添加承运单' },
+						component: () => import ('../components/Buisiness/Carrierbill/Add'),
+					},
+					{
+						path: '/viewcarrierbill',
+						name: 'viewcarrierbill',
+						meta: { title: '承运单详情' },
+						component: () => import ('../components/Buisiness/Carrierbill/View')
+					},
+					{
+						path: '/editcarrierbill',
+						name: 'editcarrierbill',
+						meta: { title: '编辑承运单' },
+						component: () => import ('../components/Buisiness/Carrierbill/Edit')
+					}
 				]
 			},
 			{
@@ -506,107 +489,81 @@ let routerMap = [
 			{
 				path: '/basedata',
 				name: 'basedata',
-				meta: {
-					title: '基础资料'
-				},
+				meta: { title: '基础资料' },
 				component: () => import ('../components/Basedata'),
-				redirect: '/shipper',
+				redirect: '/recdeliverycomp',
 				children: [
-					{
-						path: '/shipper',
-						name: 'shipper',
-						meta: {
-							title: '托运人'
-						},
-						component: () => import ('../components/Basedata/Shipper'),
-					},
-					{
-						path: '/addshipper',
-						name: 'addshipper',
-						meta: {
-							title: '添加托运人'
-						},
-						component: () => import ('../components/Basedata/AddShipper'),
-					},
-					{
-						path: '/editshipper',
-						name: 'editshipper',
-						meta: {
-							title: '编辑托运人'
-						},
-						component: () => import ('../components/Basedata/EditShipper'),
-					},
-					{
-						path: '/viewshipper',
-						name: 'viewshipper',
-						meta: {
-							title: '托运人详情'
-						},
-						component: () => import ('../components/Basedata/ViewShipper'),
-					},
 					{
 						path: '/recdeliverycomp',
 						name: 'recdeliverycomp',
-						meta: {
-							title: '收发货单位'
-						},
-						component: () => import ('../components/Basedata/RecDeliveryComp'),
+						meta: { title: '收发货单位' },
+						component: () => import ('../components/Basedata/Customer'),
 					},
 					{
 						path: '/addrecdeliverycomp',
 						name: 'addrecdeliverycomp',
-						meta: {
-							title: '添加收发货单位'
-						},
-						component: () => import ('../components/Basedata/AddRecDeliveryComp'),
+						meta: { title: '添加收发货单位' },
+						component: () => import ('../components/Basedata/Customer/Add'),
 					},
 					{
 						path: '/editrecdeliverycomp',
 						name: 'editrecdeliverycomp',
-						meta: {
-							title: '编辑收发货单位'
-						},
-						component: () => import ('../components/Basedata/EditRecDeliveryComp'),
+						meta: { title: '编辑收发货单位' },
+						component: () => import ('../components/Basedata/Customer/Edit'),
 					},
 					{
 						path: '/viewrecdeliverycomp',
 						name: 'viewrecdeliverycomp',
-						meta: {
-							title: '收发货单位详情'
-						},
-						component: () => import ('../components/Basedata/ViewRecDeliveryComp'),
+						meta: { title: '收发货单位详情' },
+						component: () => import ('../components/Basedata/Customer/View'),
+					},
+					{
+						path: '/companyaddress',
+						name: 'companyaddress',
+						meta: { title: '企业地址' },
+						component: () => import ('../components/Basedata/CompanyAddress'),
+					},
+					{
+						path: '/addcompanyaddress',
+						name: 'addcompanyaddress',
+						meta: { title: '添加企业地址' },
+						component: () => import ('../components/Basedata/CompanyAddress/Add'),
+					},
+					{
+						path: '/editcompanyaddress',
+						name: 'editcompanyaddress',
+						meta: { title: '编辑企业地址' },
+						component: () => import ('../components/Basedata/CompanyAddress/Edit'),
+					},
+					{
+						path: '/viewcompanyaddress',
+						name: 'viewcompanyaddress',
+						meta: { title: '查看企业地址' },
+						component: () => import ('../components/Basedata/CompanyAddress/View'),
 					},
 					{
 						path: '/cargounit',
 						name: 'cargounit',
-						meta: {
-							title: '货物单位'
-						},
-						component: () => import ('../components/Basedata/CargoUnit'),
+						meta: { title: '货物单位' },
+						component: () => import ('../components/Basedata/CargoUnit/index'),
 					},
 					{
 						path: '/cargo',
 						name: 'cargo',
-						meta: {
-							title: '常用货物'
-						},
-						component: () => import ('../components/Basedata/Cargo'),
+						meta: { title: '常用货物' },
+						component: () => import ('../components/Basedata/Cargo/index'),
 					},
 					{
 						path: '/addcargo',
 						name: 'addcargo',
-						meta: {
-							title: '常用货物'
-						},
-						component: () => import ('../components/Basedata/AddCargo'),
+						meta: { title: '添加常用货物' },
+						component: () => import ('../components/Basedata/Cargo/Add'),
 					},
 					{
 						path: '/editcargo',
 						name: 'editcargo',
-						meta: {
-							title: '编辑常用货物'
-						},
-						component: () => import ('../components/Basedata/EditCargo'),
+						meta: { title: '编辑常用货物' },
+						component: () => import ('../components/Basedata/Cargo/Edit'),
 					}
 				]
 			},

@@ -96,7 +96,7 @@
 					<div class="other">
 						<el-checkbox v-model="checked">同意</el-checkbox><span @click="agreement" class="agreement">《微服TMS用户协议》</span>
 					</div>
-					<el-button class="login-btn" type="primary" @click="handRegister">注册</el-button>
+					<el-button class="login-btn" type="primary" :disabled="!checked" @click="handRegister">注册</el-button>
 				</form>
 				<!-- 忘记密码 -->
 				<form class="findpassword" v-show="loginOrRegister == 'findpassword'">
@@ -143,12 +143,12 @@ import Common from '../api/Common'
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
 import { isPoneAvailable, isVerCodeAvailable } from '../common/validators'
+import { setCooikie, getCooikie } from '../common/utils'
 export default {
 	name: 'App',
 	data() {
 		return {
-			//是否自动登录
-			checked:true,
+			checked: false,
 			//TMS用户协议
 			ShowAgreement:false,
 			// 登录提交的参数
@@ -193,7 +193,7 @@ export default {
 		})
 	},
 	mounted() {
-		this.login.username = localStorage.getItem('loginUserName')
+		this.login.username = getCooikie('loginUserName')
 	},
 	methods: {
 		/**
@@ -283,7 +283,7 @@ export default {
 					password: this.login.password
 				}).then(res => {
 					Message.success('成功！')
-					localStorage.setItem('loginUserName', this.login.username)
+					setCooikie('loginUserName', this.login.username)
 					new Promise((resolve, reject) => {
 						this.$store.dispatch('login', res.headers['authorization'])
 						resolve()
@@ -332,6 +332,7 @@ export default {
 					address: this.register.address
 				}).then(res => {
 					Message.success('成功！')
+					setCooikie('loginUserName', this.login.username)
 					new Promise((resolve, reject) => {
 						this.$store.dispatch('register', res.headers['authorization'])
 						resolve()

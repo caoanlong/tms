@@ -34,9 +34,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import dist from '../../assets/data/dist.json'
-import Customer from '../../api/Customer'
-import ImageUpload from '../CommonComponents/ImageUpload'
+import dist from '../../../assets/data/dist.json'
+import Customer from '../../../api/Customer'
+import ImageUpload from '../../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {

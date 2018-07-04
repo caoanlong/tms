@@ -237,7 +237,7 @@ import { Message } from 'element-ui'
 import { closeConfirm, deleteConfirm } from '../../../common/utils'
 import Carrierbill from '../../../api/Carrierbill'
 import UploadPhoto from '../../Dispatch/DispatchBill/components/UploadPhoto'
-import ViewCargos from './ViewCargos'
+import ViewCargos from './components/ViewCargos'
 export default {
 	data() {
 		return {
