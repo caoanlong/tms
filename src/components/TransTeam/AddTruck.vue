@@ -230,7 +230,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block">
 					<span class="block-title">GPS</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -924,6 +924,7 @@ import { Message } from 'element-ui'
 import request from '../../common/request'
 import Truck from '../../api/Truck'
 import ImageUpload from '../CommonComponents/ImageUpload'
+import DistPicker from '../CommonComponents/DistPicker'
 export default {
 	data() {
 		return {}
