@@ -4,28 +4,14 @@
 			<div  class="header clearfix">收发货单位</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="公司名称">
-						<el-input placeholder="请输入..." v-model="findcompanyName"></el-input>
+					<el-form-item label="企业">
+						<el-input placeholder="名称/手机号" v-model="find.keyword"></el-input>
 					</el-form-item>
-					<el-form-item label="地区">
-						<el-input placeholder="请输入..." v-model="findcompanyArea"></el-input>
-					</el-form-item>
-					<el-form-item label="联系人">
-						<el-input placeholder="请输入..." v-model="findcontactName"></el-input>
-					</el-form-item>
-					<el-form-item label="联系方式">
-						<el-input placeholder="请输入..." v-model="findcontactPhone"></el-input>
-					</el-form-item>
-					<el-form-item label="录入时间">
-						<el-date-picker
-							v-model="findRangeDate"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							value-format="timestamp"
-							@change="selectDateRange">
-						</el-date-picker>
+					<el-form-item label="类型" class="customerSelect">
+						<el-select v-model="find.customerType" placeholder="请选择">
+							<el-option value="Shipper" label="发货单位">发货单位</el-option>
+							<el-option value="Consignee" label="收货单位">收货单位</el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList()">查询</el-button>
@@ -57,16 +43,17 @@
 					:data="tableData" @selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="公司名称" prop="companyName"></el-table-column>
+					<el-table-column label="企业名称" prop="companyName"></el-table-column>
 					<el-table-column label="地区" prop="companyArea"></el-table-column>
-					<el-table-column label="详细地址" prop="detailAddress"></el-table-column>
-					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>
-					<el-table-column label="联系方式" prop="contactPhone" width="140"></el-table-column>
-					<el-table-column label="录入时间" prop="createTime" width="140">
+					<el-table-column label="类型" prop="customerType" width="120">
 						<template slot-scope="scope">
-							<span>{{scope.row.createTime | getdatefromtimestamp() }}</span>
+							<span v-if="scope.row.customerType == 'Shipper'">发货单位</span>
+							<span v-else-if="scope.row.customerType == 'Consignee'">收货单位</span>
 						</template>
 					</el-table-column>
+					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>
+					<el-table-column label="手机" prop="contactPhone" width="140"></el-table-column>
+					<el-table-column label="TA的地址" prop="customerAddressNum" width="140"></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
@@ -94,13 +81,10 @@ import { deleteConfirm } from '../../common/utils'
 export default {
 	data() {
 		return {
-			findcompanyName: '',
-			findcompanyArea: '',
-			findcontactName: '',
-			findcontactPhone: '',
-			findRangeDate: [],
-			findcreateTimeBegin: '',
-			findcreateTimeEnd: '',
+			find: {
+				keyword: '',
+				customerType: ''
+			},
 			pageIndex: 1,
 			pageSize: 10,
 			total:0,
@@ -120,14 +104,10 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.findcompanyArea='',
-			this.findcompanyName='',
-			this.findcontactName='',
-			this.findcontactPhone='',
-			this.findcreateTimeBegin='',
-			this.findcreateTimeEnd='',
-			this.findRangeDate = [],
-			this.pageIndex=1,
+			this.find.keyword = ''
+			this.find.customerType = ''
+			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
 		},
 		pageChange(index) {
@@ -137,10 +117,6 @@ export default {
 		pageSizeChange(size) {
 			this.pageSize = size
 			this.getList() 
-		},
-		selectDateRange(date) {
-			this.findcreateTimeBegin = date[0]
-			this.findcreateTimeEnd = date[1]
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.customerID)
@@ -175,13 +151,8 @@ export default {
 			Customer.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				companyArea: this.findcompanyArea,
-				companyName: this.findcompanyName,
-				contactName: this.findcontactName,
-				contactPhone: this.findcontactPhone,
-				createTimeBegin: this.findcreateTimeBegin,
-				createTimeEnd: this.findcreateTimeEnd,
-				type: 'ShipperConsignee',
+				customerType: this.find.customerType,
+				keyword: this.find.keyword
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total
@@ -191,18 +162,18 @@ export default {
 			this.$router.push({name: 'addrecdeliverycomp'})
 		},
 		handleCommand(e) {
-			if(e.type=='view'){
-				this.$router.push({name: 'viewrecdeliverycomp', query: { customerID:e.id }})
-			}else if(e.type=='edit'){
-				this.$router.push({ name: 'editrecdeliverycomp' , query: {  customerID:e.id } })
-			}else if(e.type=='delete'){
+			if (e.type == 'view') {
+				this.$router.push({name: 'viewrecdeliverycomp', query: { customerID: e.id }})
+			} else if (e.type == 'edit') {
+				this.$router.push({ name: 'editrecdeliverycomp' , query: {  customerID: e.id } })
+			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}
 		},
 		del(customerID) {
 			deleteConfirm(customerID, customerIDs => {
 				Customer.del({ customerIDs }).then(res => {
-					Message({ type: 'success', message: '删除成功!' })
+					Message.success('删除成功!')
 					this.getList()
 				})
 			}, this.selectedList)

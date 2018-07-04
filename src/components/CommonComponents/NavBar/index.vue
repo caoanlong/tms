@@ -3,7 +3,7 @@
 		<div class="logo" @click="sendToParent('companyInfo')">
 			<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
 			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180">
-			<span class="companyName">{{userInfo.companyName}}</span>
+			<span class="companyName">{{companyName}}</span>
 		</div>
 		<el-menu class="navbar" mode="horizontal">
 			<div class="right-menu">
@@ -17,10 +17,7 @@
 					<el-dropdown-menu slot="dropdown">
 						<!-- <router-link :to="{name: 'userprofile'}">
 							<el-dropdown-item>个人资料</el-dropdown-item>
-						</router-link>
-						<el-dropdown-item divided>
-							<span @click="logout" style="display:block;">退出</span>
-						</el-dropdown-item> -->
+						</router-link> -->
 						<el-dropdown-item>
 							<span style="display:block;">账号设置</span>
 						</el-dropdown-item>
@@ -42,6 +39,7 @@ export default {
 	computed: {
 		...mapGetters([
 			'name',
+			'companyName',
 			'userInfo',
 		])
 	},

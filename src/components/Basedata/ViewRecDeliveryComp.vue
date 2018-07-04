@@ -1,27 +1,26 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card box-card">
-			<div  class="header clearfix">收发货单位详情</div>
+			<div  class="header clearfix">查看企业</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px">
-						<el-form-item label="公司名称">
+					<el-form label-width="120px" size="mini">
+						<el-form-item label="企业LOGO">
+							<ImageUpload :files="[recdeliverycomp.logoUrl]" :isPreview="true"/>
+						</el-form-item>
+						<el-form-item label="企业名称" prop="companyName">
 							<p>{{recdeliverycomp.companyName}}</p>
 						</el-form-item>
-						<el-form-item label="地址">
-							<p v-if="recdeliverycomp.companyArea">{{recdeliverycomp.companyArea}}</p>
-							<p v-else-if="recdeliverycomp.companyAreaID">{{recdeliverycomp.companyAreaID | searchAreaByKey}}</p>
+						<el-form-item label="收发类型" prop="customerType">
+							<p>{{recdeliverycomp.customerType == 'Shipper' ? '发货单位' : '收货单位'}}</p>
 						</el-form-item>
-						<el-form-item label="详细地址">
-							<p>{{recdeliverycomp.detailAddress}}</p>
-						</el-form-item>
-						<el-form-item label="位置">
-							<p>{{recdeliverycomp.locationAddress}}</p>
+						<el-form-item label="所在区域" prop="companyAreaID">
+							<p>{{recdeliverycomp.companyArea}}</p>
 						</el-form-item>
 						<el-form-item label="联系人">
 							<p>{{recdeliverycomp.contactName}}</p>
 						</el-form-item>
-						<el-form-item label="联系方式">
+						<el-form-item label="手机号" prop="contactPhone">
 							<p>{{recdeliverycomp.contactPhone}}</p>
 						</el-form-item>
 						<el-form-item>
@@ -35,19 +34,32 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import dist from '../../assets/data/dist.json'
 import Customer from '../../api/Customer'
+import ImageUpload from '../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {
-			recdeliverycomp: {}
+			selectedArea: [],
+			recdeliverycomp: {
+				logoUrl: '',
+				companyAreaID: '',
+				companyName: '',
+				contactName: '',
+				contactPhone: '',
+				customerType: ''
+			}
 		}
 	},
+	computed: {
+		dist: () => dist
+	},
 	created() {
-		this.getDetail()
+		this.getInfo()
 	},
 	methods: {
-		getDetail() {
-			let customerID = this.$route.query.customerID
+		getInfo() {
+			const customerID = this.$route.query.customerID
 			Customer.findById({ customerID }).then(res => {
 				this.recdeliverycomp = res
 			})
@@ -55,6 +67,9 @@ export default {
 		back() {
 			this.$router.go(-1)
 		}
+	},
+	components: {
+		ImageUpload
 	}
 }
 </script>
@@ -65,7 +80,7 @@ export default {
 		border 1px solid #fff
 		border-bottom-color #dcdfe6
 		padding 0 15px
-		height 40px
+		min-height 40px
 		font-family 'sans-serif'
 		line-height 40px
 		color #999
