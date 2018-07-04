@@ -696,30 +696,6 @@ let routerMap = [
 						component: () => import('../components/System/Rolemanage')
 					},
 					{
-						path: '/addrole',
-						name: 'addrole',
-						meta: {
-							title: '添加角色'
-						},
-						component: () => import('../components/System/Rolemanage/AddRole')
-					},
-					{
-						path: '/editrole',
-						name: 'editrole',
-						meta: {
-							title: '编辑角色'
-						},
-						component: () => import('../components/System/Rolemanage/EditRole')
-					},
-					{
-						path: '/viewrole',
-						name: 'viewrole',
-						meta: {
-							title: '查看角色'
-						},
-						component: () => import('../components/System/Rolemanage/ViewRole')
-					},
-					{
 						path: '/orgmange',
 						name: 'orgmange',
 						meta: {
