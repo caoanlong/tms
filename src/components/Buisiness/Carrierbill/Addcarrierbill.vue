@@ -272,7 +272,7 @@ import Carrierbill from '../../../api/Carrierbill'
 import SettleConfig from '../../../api/SettleConfig'
 import Customer from '../../../api/Customer'
 import BaiduMap from '../../../api/BaiduMap'
-import GeoLocation from '../../../api/GeoLocation'
+import CrossProxy from '../../../api/CrossProxy'
 import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../../common/utils'
 import { checkFloat2, checkTel } from '../../../common/validators'
 import distData from '../../../assets/data/distpicker.data'
@@ -473,36 +473,20 @@ export default {
 				Message.error('请选择城市！')
 				return
 			}
-			console.log(this.searchShipperAreaHash)
-			// GeoLocation
-			BaiduMap.getLocation({
-				region: this.carrierbillInfo.shipperArea,
-				queryString
-			}).then(res => {
-				let names = res.name.map((item, i) => { 
-					return { name: item, location: res.location[i] } 
-				})
-				cb(names)
-			}).catch(err => {
-				cb(err)
-			})
+			CrossProxy.getEleLocation({
+				geohash: this.searchShipperAreaHash,
+				keyword: queryString
+			}).then(res => { cb(res) })
 		},
 		getConsigneeLocation(queryString, cb) {
 			if (!this.searchConsigneeAreaHash) {
 				Message.error('请选择城市！')
 				return
 			}
-			BaiduMap.getLocation({
-				region: this.carrierbillInfo.consigneeArea,
-				queryString
-			}).then(res => {
-				let names = res.name.map((item, i) => { 
-					return { name: item, location: res.location[i] } 
-				})
-				cb(names)
-			}).catch(err => {
-				cb(err)
-			})
+			CrossProxy.getEleLocation({
+				geohash: this.searchShipperAreaHash,
+				keyword: queryString
+			}).then(res => { cb(res) })
 		},
 		handSelectConsignor(data) {
 			this.carrierbillInfo.consignorID = data.customerID
@@ -551,12 +535,12 @@ export default {
 			}
 		},
 		handSelectShipperLocation(data) {
-			this.carrierbillInfo.shipperLocationLng = data.location.lng
-			this.carrierbillInfo.shipperLocationLat = data.location.lat
+			this.carrierbillInfo.shipperLocationLng = data.longitude
+			this.carrierbillInfo.shipperLocationLat = data.latitude
 		},
 		handSelectConsigneeLocation(data) {
-			this.carrierbillInfo.consigneeLocationLng = data.location.lng
-			this.carrierbillInfo.consigneeLocationLat = data.location.lat
+			this.carrierbillInfo.consigneeLocationLng = data.longitude
+			this.carrierbillInfo.consigneeLocationLat = data.latitude
 		},
 		save() {
 			new Promise((resolve, reject) => {
