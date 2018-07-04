@@ -1,32 +1,35 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card box-card">
-			<div  class="header clearfix">添加收发货单位</div>
+			<div  class="header clearfix">添加企业</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="mini">
-						<el-form-item label="公司名称" prop="companyName">
+						<el-form-item label="企业LOGO">
+							<ImageUpload :files="[recdeliverycomp.logoUrl]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleLogoSuccess"/>
+						</el-form-item>
+						<el-form-item label="企业名称" prop="companyName">
 							<el-input v-model="recdeliverycomp.companyName" :maxlength="100"></el-input>
 						</el-form-item>
-						<el-form-item label="地区" prop="companyAreaID">
-							<DistPicker @selectChange="handleSelectedArea"/>
+						<el-form-item label="收发类型" prop="customerType">
+							<el-select v-model="recdeliverycomp.customerType" placeholder="请选择" style="width:100%">
+								<el-option value="Shipper" label="发货单位">发货单位</el-option>
+								<el-option value="Consignee" label="收货单位">收货单位</el-option>
+							</el-select>
 						</el-form-item>
-						<el-form-item label="详细地址" prop="detailAddress" :maxlength="100">
-							<el-input v-model="recdeliverycomp.detailAddress"></el-input>
-						</el-form-item>
-						<el-form-item label="位置" prop="locationAddress">
-							<el-autocomplete  style="width:100%"
-								value-key="name" 
-								v-model="recdeliverycomp.locationAddress"
-								:fetch-suggestions="getLocation"
-								placeholder="请输入内容"
-								@select="handSelectLocation">
-							</el-autocomplete>
+						<el-form-item label="所在区域" prop="companyAreaID">
+							<el-cascader 
+								style="width:100%" 
+								:options="dist" 
+								change-on-select 
+								v-model="selectedArea" 
+								@change="handleSelectedArea">
+							</el-cascader>
 						</el-form-item>
 						<el-form-item label="联系人">
 							<el-input v-model="recdeliverycomp.contactName"></el-input>
 						</el-form-item>
-						<el-form-item label="联系方式">
+						<el-form-item label="手机号" prop="contactPhone">
 							<el-input v-model="recdeliverycomp.contactPhone"></el-input>
 						</el-form-item>
 						<el-form-item>
@@ -41,24 +44,22 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import dist from '../../assets/data/dist.json'
 import Customer from '../../api/Customer'
-import BaiduMap from '../../api/BaiduMap'
-import { searchAreaByKey } from '../../common/utils'
-import DistPicker from '../CommonComponents/DistPicker'
+import ImageUpload from '../CommonComponents/ImageUpload'
+import { checkMobile } from '../../common/validator'
 export default {
 	data() {
 		return {
+			selectedArea: [],
 			recdeliverycomp: {
+				logoUrl: '',
 				companyAreaID: '',
 				companyName: '',
 				contactName: '',
 				contactPhone: '',
-				detailAddress: '',
-				locationAddress: '',
-				locationLng: '',
-				locationLat: '',
+				customerType: ''
 			},
-			selectedArea: [],
 			rules: {
 				companyName: [
 					{required: true, message: '请输入名称', trigger: 'blur'}
@@ -66,60 +67,32 @@ export default {
 				companyAreaID: [
 					{ required: true, message: '请选择区域', trigger: 'change' }
 				],
-				detailAddress: [
-					{required: true, message: '请输入详细地址', trigger: 'blur'}
+				customerType: [
+					{ required: true, message: '请选择类型', trigger: 'change' }
 				],
-				// locationAddress: [
-				// 	{required: true, message: '请输入位置', trigger: 'blur'}
-				// ]
+				contactPhone: [
+					{ validator: checkMobile}
+				]
 			}
 		}
 	},
+	computed: {
+		dist: () => dist
+	},
 	methods: {
+		handleLogoSuccess(res) {
+			this.recdeliverycomp.logoUrl = res[0]
+		},
 		handleSelectedArea(data) {
-			this.recdeliverycomp.companyAreaID = data
-			this.recdeliverycomp.companyArea = searchAreaByKey(data)
-		},
-		handSelectLocation(data) {
-			this.recdeliverycomp.locationLng = data.location.lng
-			this.recdeliverycomp.locationLat = data.location.lat
-		},
-		getLocation(queryString, cb) {
-			BaiduMap.getLocation({
-				region: this.recdeliverycomp.companyArea,
-				queryString
-			}).then(res => {
-				let names = res.name.map((item, i) => { 
-					return { 
-						name: item,
-						location: res.location[i]
-					} 
-				})
-				cb(names)
-			}).catch(err => {
-				cb(err)
-			})
+			this.recdeliverycomp.companyAreaID = data[data.length - 1]
 		},
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
-				if (valid) {
-					Customer.add({
-						companyAreaID: this.recdeliverycomp.companyAreaID,
-						companyName: this.recdeliverycomp.companyName,
-						contactName: this.recdeliverycomp.contactName,
-						contactPhone: this.recdeliverycomp.contactPhone,
-						detailAddress: this.recdeliverycomp.detailAddress,
-						locationAddress: this.recdeliverycomp.locationAddress || '云南昆明',
-						locationLng: this.recdeliverycomp.locationLng || 25.05,
-						locationLat: this.recdeliverycomp.locationLat || 102.72,
-						type: 'ShipperConsignee'
-					}).then(res => {
-						Message.success('保存成功！')
-						this.$router.push({name: 'recdeliverycomp'})
-					})
-				} else {
-					return
-				}
+				if (!valid) return
+				Customer.add(this.recdeliverycomp).then(res => {
+					Message.success('保存成功！')
+					this.$router.push({name: 'recdeliverycomp'})
+				})
 			})
 		},
 		back() {
@@ -127,7 +100,7 @@ export default {
 		}
 	},
 	components: {
-		DistPicker
+		ImageUpload
 	}
 }
 </script>

@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="企业名称">
-						<el-input placeholder="请输入企业名称" v-model="findcompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="find.shipperCompanyName"></el-input>
 					</el-form-item>
 					<el-form-item label="货物名称">
-						<el-input placeholder="请输入货物名称" v-model="findcompanyName"></el-input>
+						<el-input placeholder="请输入..." v-model="find.cargoName"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList()">查询</el-button>
@@ -31,6 +31,7 @@
 					:show-file-list="false">
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入货物</el-button>
 				</el-upload>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table 
@@ -38,15 +39,29 @@
 					:data="tableData"
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
-					<el-table-column label="企业名称" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="货物名称" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="品名表名称" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="货物类型" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="包装单位" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="操作" align="center">
+					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
+					<el-table-column label="企业名称" prop="shipperCompanyName" align="center"></el-table-column>
+					<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
+					<el-table-column label="品名表名称" prop="productName" align="center"></el-table-column>
+					<el-table-column label="货物类型" prop="cargoType" align="center">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini" @click="edit">编辑</el-button>
-							<el-button type="danger" size="mini">删除</el-button>
+							<span v-if="scope.row.cargoType == 'FMCG'">快消品</span>
+							<span v-else-if="scope.row.cargoType == 'Cement'">水泥</span>
+							<span v-else-if="scope.row.cargoType == 'Beer'">啤酒</span>
+							<span v-else-if="scope.row.cargoType == 'DangerousCargo'">危险品</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="包装单位" prop="cargoUnit" align="center" width="70"></el-table-column>
+					<el-table-column label="操作" align="center" width="100">
+						<template slot-scope="scope">
+							<el-dropdown  @command="handleCommand"  trigger="click">
+								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item :command="{type: 'view', id: scope.row.cargoNameID}">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.cargoNameID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.cargoNameID}" >删除</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -59,18 +74,16 @@
 import { Message } from 'element-ui'
 import request, { baseURL } from '../../common/request'
 import Customer from '../../api/Customer'
+import CargoGeneralName from '../../api/CargoGeneralName'
 import Page from '../CommonComponents/Page'
 import { deleteConfirm } from '../../common/utils'
 export default {
 	data() {
 		return {
-			findcompanyName: '',
-			findcompanyArea: '',
-			findcontactName: '',
-			findcontactPhone: '',
-			findRangeDate: [],
-			findcreateTimeBegin: '',
-			findcreateTimeEnd: '',
+			find: {
+				shipperCompanyName: '',
+				cargoName: ''
+			},
 			pageIndex: 1,
 			pageSize: 10,
 			total:0,
@@ -90,13 +103,8 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.findcompanyArea = ''
-			this.findcompanyName = ''
-			this.findcontactName = ''
-			this.findcontactPhone = ''
-			this.findcreateTimeBegin = ''
-			this.findcreateTimeEnd = ''
-			this.findRangeDate = []
+			this.find.shipperCompanyName = ''
+			this.find.cargoName = ''
 			this.pageIndex = 1
 			this.getList()
 		},
@@ -107,10 +115,6 @@ export default {
 		pageSizeChange(size) {
 			this.pageSize = size
 			this.getList() 
-		},
-		selectDateRange(date) {
-			this.findcreateTimeBegin = date[0]
-			this.findcreateTimeEnd = date[1]
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.customerID)
@@ -141,16 +145,11 @@ export default {
 			return extension || extension2 && isLt2M
 		},
 		getList() {
-			Customer.find({
+			CargoGeneralName.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				companyArea:this.findcompanyArea,
-				companyName:this.findcompanyName,
-				contactName:this.findcontactName,
-				contactPhone:this.findcontactPhone,
-				createTimeBegin:this.findcreateTimeBegin,
-				createTimeEnd:this.findcreateTimeEnd,
-				type: 'Consignor'
+				shipperCompanyName: this.find.shipperCompanyName,
+				cargoName: this.find.cargoName
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total
@@ -159,22 +158,19 @@ export default {
 		add() { 
 			this.$router.push({ name: 'addcargo' })
 		},
-		edit(){
-			this.$router.push({ name: 'editcargo' })
-		},
 		handleCommand(e) {
-			if(e.type=='view'){
-				this.$router.push({name: 'viewshipper', query: { customerID:e.id }})
-			}else if(e.type=='edit'){
-				this.$router.push({ name: 'editshipper' , query: {  customerID:e.id } })
-			}else if(e.type=='delete'){
+			if (e.type == 'view') {
+				this.$router.push({name: 'viewcargo', query: { cargoNameID: e.id }})
+			} else if (e.type == 'edit') {
+				this.$router.push({ name: 'editcargo' , query: {  cargoNameID: e.id } })
+			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}
 		},
-		del(customerID) {
-			deleteConfirm(customerID, customerIDs => {
-				Customer.del({ customerIDs }).then(res => {
-					Message({ type: 'success', message: '删除成功!' })
+		del(cargoNameID) {
+			deleteConfirm(cargoNameID, cargoNameIDs => {
+				CargoGeneralName.del({ cargoNameIDs }).then(res => {
+					Message.success('删除成功!')
 					this.getList()
 				})
 			}, this.selectedList)

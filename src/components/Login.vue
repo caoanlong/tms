@@ -18,7 +18,7 @@
 					<div v-show="loginOrRegister == 'findpassword'" class="tab-item findpwd active">找回密码</div>
 				</div>
 				<!-- 登录 -->
-				<form class="login" v-show="loginOrRegister == 'login'" autocomplete="off">
+				<form class="login" v-show="loginOrRegister == 'login'">
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="customer"></svg-icon>
 						<input autocomplete="off" type="text" name="username" placeholder="请输入用户名" v-model="login.username">
@@ -32,8 +32,8 @@
 						</span>
 					</div>
 					<div class="other">
-						<el-checkbox v-model="checked">下次自动登录</el-checkbox>
-						<span  @click="handleTabClick('findpassword')"  class="forget">忘记密码?</span>
+						<!-- <el-checkbox v-model="checked">下次自动登录</el-checkbox> -->
+						<span @click="handleTabClick('findpassword')"  class="forget">忘记密码?</span>
 					</div>
 					<el-button class="login-btn" type="primary" @click="handLogin">登录</el-button>
 				</form>
@@ -138,6 +138,8 @@
 <script>
 import Footer from './CommonComponents/Footer'
 import request, { baseURL } from "../common/request"
+import Member from '../api/Member'
+import Common from '../api/Common'
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
 import { isPoneAvailable, isVerCodeAvailable } from '../common/validators'
@@ -153,7 +155,6 @@ export default {
 			login: {
 				username: '',
 				password: '',
-				
 			},
 			// 注册提交的参数
 			register: {
@@ -190,6 +191,9 @@ export default {
 				value: item.value
 			}
 		})
+	},
+	mounted() {
+		this.login.username = localStorage.getItem('loginUserName')
 	},
 	methods: {
 		/**
@@ -234,9 +238,7 @@ export default {
 		 */
 		getVCode() {
 			if (this.isGetVCode) return
-
 			let params = {}
-
 			if (this.loginOrRegister == 'register') {
 				if (this.register.mobile == '') {
 					Message.error('手机号不能为空！')
@@ -246,9 +248,7 @@ export default {
 					Message.error('请输入正确的手机号！')
 					return
 				}
-				params = {
-					mobile: this.register.mobile
-				}
+				params = { mobile: this.register.mobile }
 			} else if (this.loginOrRegister == 'findpassword') {
 				if (this.findPassword.mobile == '') {
 					Message.error('手机号不能为空！')
@@ -263,56 +263,27 @@ export default {
 					type: 'forget'
 				}
 			}
-
 			this.timeGo()
-			request({
-				url: '/common/vcode',
-				params
-			}).then(res => {
+			Common.getVCode(params).then(res => {
 				console.log(res.data)
-
-				if (baseURL.includes('develop')) {
-					Message({
-						type: 'info',
-						message: res.data.data,
-						duration: 3 * 1000
-					})
-				}
+				if (baseURL.includes('develop')) Message.info(res.data.data)
 			})
 		},
 		/**
 		 * 	登录
 		 */
 		handLogin() {
-			if (!this.login.username.trim()) {
-				Message.error('用户名不能为空！')
-				return
-			}
-
-			if (this.login.username.trim().length > 50) {
-				Message.error('用户名过长！')
-				return
-			}
-			if (!this.login.password.trim()) {
-				Message.error('密码不能为空！')
-				return
-			}
-
-			if (this.login.password.trim().length > 32 || this.login.password.trim().length <8) {
-				Message.error('密码必须是8-16位字母、下划线、数字')
-				return
-			}
-			let data = {
-				username: this.login.username,
-				password: this.login.password
-			}
-			request({
-				url: '/mem/login',
-				method: 'POST',
-				data
-			}).then(res => {
-				if (res.data.code == 200) {
+			try {
+				if (!this.login.username.trim()) throw ('用户名不能为空！')
+				if (this.login.username.trim().length > 50) throw ('用户名过长！')
+				if (!this.login.password.trim()) throw ('密码不能为空！')
+				if (this.login.password.trim().length > 32 || this.login.password.trim().length <8) throw ('密码必须是8-16位字母、下划线、数字')
+				Member.login({
+					username: this.login.username,
+					password: this.login.password
+				}).then(res => {
 					Message.success('成功！')
+					localStorage.setItem('loginUserName', this.login.username)
 					new Promise((resolve, reject) => {
 						this.$store.dispatch('login', res.headers['authorization'])
 						resolve()
@@ -321,8 +292,10 @@ export default {
 						this.$store.dispatch('getUserInfo')
 						this.$store.dispatch('getMenu')
 					})
-				}
-			})
+				})
+			} catch (err) {
+				Message.error(err.toString())
+			}
 		},
 		/**
 		 * 	注册
@@ -332,73 +305,32 @@ export default {
 				dangerouslyUseHTMLString: true,
 				customClass:'agreementDialog',
 				showClose:false
-			});
+			})
 		},
 		handRegister() {
-			if (!this.register.mobile.trim()) {
-				Message.error('手机号不能为空！')
-				return
-			}
-			if (!isPoneAvailable(this.register.mobile)) {
-				Message.error('请输入正确的手机号！')
-				return
-			}
-			if (!this.register.vcode.trim()) {
-				Message.error('验证码不能为空！')
-				return
-			}
-			if (this.register.vcode.trim().length != 6) {
-				Message.error('请输入正确长度的验证码！')
-				return
-			}
-			if (!this.register.password.trim()) {
-				Message.error('密码不能为空！')
-				return
-			}
-			if (this.register.password.trim().length > 32 || this.register.password.trim().length <8) {
-				Message.error('密码必须是8-16位字母、下划线、数字')
-				return
-			}
-			if (!this.register.contact.trim()) {
-				Message.error('联系人不能为空！')
-				return
-			}
-			if (!this.register.company.trim()) {
-				Message.error('公司不能为空！')
-				return
-			}
-			if (this.register.company.trim().length > 100) {
-				Message.error('公司名过长！')
-				return
-			}
-			if (!this.register.province.trim() || !this.register.city.trim()) {
-				Message.error('省份和城市必选！')
-				return
-			}
-			if (!this.register.address.trim()) {
-				Message.error('详细地址不能为空！')
-				return
-			}
-			if (this.register.address.trim().length > 100) {
-				Message.error('地址过长！')
-				return
-			}
-			let data = {
-				mobile: this.register.mobile,
-				vcode: this.register.vcode,
-				password: this.register.password,
-				contact: this.register.contact,
-				company: this.register.company,
-				province: this.register.province,
-				city: this.register.city,
-				address: this.register.address
-			}
-			request({
-				url: '/mem/register',
-				method: 'POST',
-				data
-			}).then(res => {
-				if (res.data.code == 200) {
+			try {
+				if (!this.register.mobile.trim()) throw ('手机号不能为空！')
+				if (!isPoneAvailable(this.register.mobile)) throw ('请输入正确的手机号！')
+				if (!this.register.vcode.trim()) throw ('验证码不能为空！')
+				if (this.register.vcode.trim().length != 6) throw ('请输入正确长度的验证码！')
+				if (!this.register.password.trim()) throw ('密码不能为空！')
+				if (this.register.password.trim().length > 32 || this.register.password.trim().length <8) throw ('密码必须是8-16位字母、下划线、数字')
+				if (!this.register.contact.trim()) throw ('联系人不能为空！')
+				if (!this.register.company.trim()) throw ('公司不能为空！')
+				if (this.register.company.trim().length > 100) throw ('公司名过长！')
+				if (!this.register.province.trim() || !this.register.city.trim()) throw ('省份和城市必选！')
+				if (!this.register.address.trim()) throw ('详细地址不能为空！')
+				if (this.register.address.trim().length > 100) throw ('地址过长！')
+				Member.register({
+					mobile: this.register.mobile,
+					vcode: this.register.vcode,
+					password: this.register.password,
+					contact: this.register.contact,
+					company: this.register.company,
+					province: this.register.province,
+					city: this.register.city,
+					address: this.register.address
+				}).then(res => {
 					Message.success('成功！')
 					new Promise((resolve, reject) => {
 						this.$store.dispatch('register', res.headers['authorization'])
@@ -408,62 +340,36 @@ export default {
 						this.$store.dispatch('getUserInfo')
 						this.$store.dispatch('getMenu')
 					})
-				}
-			})
+				})
+			} catch (err) {
+				Message.error(err.toString())
+			}
 		},
 		/**
 		 * 	找回密码
 		 */
 		handFindPassword() {
-			if (!this.findPassword.mobile.trim()) {
-				Message.error('手机号不能为空！')
-				return
-			}
-			if (!isPoneAvailable(this.findPassword.mobile)) {
-				Message.error('请输入正确的手机号！')
-				return
-			}
-			if (!this.findPassword.vcode.trim()) {
-				Message.error('验证码不能为空！')
-				return
-			}
-			if (this.findPassword.vcode.length != 6) {
-				Message.error('请输入正确长度的验证码！')
-				return
-			}
-			if (!this.findPassword.password.trim()) {
-				Message.error('密码不能为空！')
-				return
-			}
-			if (this.findPassword.password.length > 32 || this.findPassword.password.length <8 ) {
-				Message.error('8-16位字母、下划线、数字')
-				return
-			}
-			if (this.findPassword.password != this.findPassword.confirmPassword) {
-				Message.error('重复输入密码不一致！')
-				return
-			}
-			let data = {
-				mobile: this.findPassword.mobile,
-				vcode: this.findPassword.vcode,
-				password: this.findPassword.password,
-				confirmPassword: this.findPassword.confirmPassword
-			}
-			request({
-				url: '/mem/passwor/forget',
-				method: 'POST',
-				data
-			}).then(res => {
-				console.log(res.data)
-				if (res.data.code == 200) {
+			try {
+				if (!this.findPassword.mobile.trim()) throw ('手机号不能为空！')
+				if (!isPoneAvailable(this.findPassword.mobile)) throw ('请输入正确的手机号！')
+				if (!this.findPassword.vcode.trim()) throw ('验证码不能为空！')
+				if (this.findPassword.vcode.length != 6) throw ('请输入正确长度的验证码！')
+				if (!this.findPassword.password.trim()) throw ('密码不能为空！')
+				if (this.findPassword.password.length > 32 || this.findPassword.password.length < 8) throw ('8-16位字母、下划线、数字')
+				if (this.findPassword.password != this.findPassword.confirmPassword) throw ('重复输入密码不一致！')
+				Member.pwdForget({
+					mobile: this.findPassword.mobile,
+					vcode: this.findPassword.vcode,
+					password: this.findPassword.password,
+					confirmPassword: this.findPassword.confirmPassword
+				}).then(res => {
 					Message.success('成功！')
 					this.loginOrRegister = 'login'
-					this.login = {
-						username: '',
-						password: ''
-					}
-				}
-			})
+					this.login = { username: '', password: '' }
+				})
+			} catch (err) {
+				Message.error(err.toString())
+			}
 		},
 		/**
 		 * 	倒计时
@@ -476,11 +382,9 @@ export default {
 				return
 			} else {
 				this.isGetVCode = true
-				this.getVcodeText = this.wait+'s'
+				this.getVcodeText = this.wait + 's'
 				this.wait--
-				setTimeout(() => {
-					this.timeGo()
-				}, 1000)
+				setTimeout(() => { this.timeGo() }, 1000)
 			}
 		}
 	},
@@ -563,6 +467,7 @@ export default {
 						position absolute
 						left 0
 						top 12px
+						z-index 10
 						width 30px
 						color #ccc
 					.show-pwd
