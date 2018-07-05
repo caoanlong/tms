@@ -59,7 +59,8 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id:scope.row.customerID}" icon="el-icon-view">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'address', data: scope.row}">地址</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id:scope.row.customerID}">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerID}">编辑</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
@@ -166,6 +167,8 @@ export default {
 				this.$router.push({name: 'viewrecdeliverycomp', query: { customerID: e.id }})
 			} else if (e.type == 'edit') {
 				this.$router.push({ name: 'editrecdeliverycomp' , query: {  customerID: e.id } })
+			} else if (e.type == 'address') {
+				this.$router.push({ name: 'companyaddress' , query: {  customerID: e.data.customerID, companyName: e.data.companyName } })
 			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}

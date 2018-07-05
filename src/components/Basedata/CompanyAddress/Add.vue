@@ -20,7 +20,7 @@
                         <el-form-item label="电话" prop="contactPhone">
 							<el-input v-model="companyAddress.contactPhone" placeholder="请输入..."></el-input>
 						</el-form-item>
-						<el-form-item label="所在区域" prop="companyAreaID">
+						<el-form-item label="所在区域" prop="areaID">
                             <el-cascader 
                                 style="width:100%" 
                                 :options="dist" 
@@ -40,7 +40,7 @@
                             </el-autocomplete>
                         </el-form-item>
 						<el-form-item label="门牌信息">
-							<el-input v-model="companyAddress.info" placeholder="如：十字路口左边22栋301室"></el-input>
+							<el-input v-model="companyAddress.detailAddress" placeholder="如：十字路口左边22栋301室"></el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="add">立即保存</el-button>
@@ -55,9 +55,10 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
+import CustomerAddress from '../../../api/CustomerAddress'
 import dist from '../../../assets/data/dist.json'
 import distData from '../../../assets/data/distpicker.data'
-import { searchAreaByKey, searchLocationByCity } from '../../../common/utils'
+import { searchLocationByCity } from '../../../common/utils'
 import Geohash from '../../../common/Geohash'
 import CrossProxy from '../../../api/CrossProxy'
 import { checkTel } from '../../../common/validator'
@@ -67,30 +68,33 @@ export default {
             selectedArea: [],
             searchAreaHash: '',
 			companyAddress: {
-				companyName: '',
+				customerID: '',
+				areaID: '',
                 contactName: '',
-                contactPhone: '',
-				companyAreaID: '',
-                locationAddress: '',
-                info: ''
+				contactPhone: '',
+				detailAddress: '',
+				companyName: '',
+				locationLng: '',
+				locationLat: '',
+                locationAddress: ''
 			},
 			rules: {
 				customerID: [
-					{required: true, message: '请输入所属企业', trigger: 'blur'}
+					{required: true, message: '请输入所属企业'}
                 ],
 				contactName: [
-					{required: true, message: '请输入联系人', trigger: 'blur'}
+					{required: true, message: '请输入联系人'}
                 ],
                 contactPhone: [
-                    {required: true, message: '请输入电话', trigger: 'blur'},
+                    {required: true, message: '请输入电话'},
                     {validator: checkTel}
                 ],
-				companyAreaID: [
+				areaID: [
 					{ required: true, message: '请选择区域', trigger: 'change' }
 				],
 				locationAddress: [
-					{required: true, message: '请输入定位地址', trigger: 'blur'}
-				],
+					{required: true, message: '请输入定位地址'}
+				]
 			}
 		}
     },
@@ -111,8 +115,7 @@ export default {
 			this.companyAddress.companyName = data.companyName
 		},
 		handleSelectedArea(data) {
-            this.companyAddress.companyAreaID = data[data.length - 1]
-            this.companyAddress.shipperArea = searchAreaByKey(data[data.length - 1])
+            this.companyAddress.areaID = data[data.length - 1]
             if (data[1]) {
 				const location = searchLocationByCity(distData[data[0]][data[1]])
 				this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
@@ -134,21 +137,11 @@ export default {
 		},
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
-				if (valid) {
-					Customer.add({
-						companyAreaID: this.shipper.companyAreaID,
-						companyName: this.shipper.companyName,
-						contactName: this.shipper.contactName,
-						contactPhone: this.shipper.contactPhone,
-						detailAddress: this.shipper.detailAddress,
-						type: 'Consignor'
-					}).then(res => {
-						Message.success('保存成功！')
-						this.$router.push({name: 'shipper'})
-					})
-				} else {
-					return
-				}
+				if (!valid) return
+				CustomerAddress.add(this.companyAddress).then(res => {
+					Message.success('保存成功！')
+					this.$router.push({name: 'companyaddress'})
+				})
 			})
 		},
 		back() {

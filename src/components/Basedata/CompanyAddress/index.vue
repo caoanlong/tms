@@ -4,8 +4,11 @@
 			<div  class="header clearfix">企业地址</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="关键字">
-						<el-input placeholder="姓名/手机号/地址" v-model="find.keyword"></el-input>
+					<el-form-item label="联系人">
+						<el-input placeholder="姓名/手机号" v-model="find.keyword"></el-input>
+					</el-form-item>
+					<el-form-item label="地址">
+						<el-input placeholder="关键字" v-model="find.address"></el-input>
 					</el-form-item>
                     <el-form-item label="所属企业">
                         <el-autocomplete  style="width:100%"
@@ -33,19 +36,19 @@
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="所属企业" prop="unit" align="center"></el-table-column>
-					<el-table-column label="联系人" prop="unit" align="center"></el-table-column>
-					<el-table-column label="电话" prop="unit" align="center"></el-table-column>
-					<el-table-column label="区域" prop="unit" align="center"></el-table-column>
-					<el-table-column label="地址" prop="unit" align="center"></el-table-column>
+					<el-table-column label="所属企业" prop="companyName" align="center"></el-table-column>
+					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
+					<el-table-column label="电话" prop="contactPhone" align="center"></el-table-column>
+					<el-table-column label="区域" prop="contactArea" align="center"></el-table-column>
+					<el-table-column label="地址" prop="detailAddress" align="center"></el-table-column>
 					<el-table-column label="操作" align="center" width="100">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id:scope.row.Staff_ID}">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.Staff_ID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.Staff_ID}" >删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id:scope.row.customerAddressID}">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerAddressID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerAddressID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -71,13 +74,14 @@
 import { Message } from 'element-ui'
 import CargoUnit from '../../../api/CargoUnit'
 import Customer from '../../../api/Customer'
+import CustomerAddress from '../../../api/CustomerAddress'
 import Page from '../../CommonComponents/Page'
 import { deleteConfirm } from '../../../common/utils'
 export default {
 	data() {
 		return {
 			dialogFormVisible: false,
-			find: { keyword: '', customerID: '', companyName: '' },
+			find: { keyword: '', address: '', customerID: '', companyName: '' },
 			unit: '',
 			pageIndex: 1,
 			pageSize: 10,
@@ -90,6 +94,10 @@ export default {
 		Page
 	},
 	created() {
+		const customerID = this.$route.query.customerID
+		const companyName = this.$route.query.companyName
+		if (customerID) this.find.customerID = customerID
+		if (companyName) this.find.companyName = companyName
 		this.getList()
 	},
 	methods: {
@@ -106,7 +114,10 @@ export default {
 			this.find.companyName = data.companyName
 		},
 		reset() {
-			this.find.unit = ''
+			this.find.keyword = ''
+			this.find.address = ''
+			this.find.customerID = ''
+			this.find.companyName = ''
 			this.pageIndex = 1
 			this.getList()
 		},
@@ -123,10 +134,12 @@ export default {
 			console.log(this.selectedList)
 		},
 		getList() {
-			CargoUnit.find({
+			CustomerAddress.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				unit:this.find.unit,
+				contactName: this.find.keyword,
+				detailAddress: this.find.address,
+				customerID: this.find.customerID
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total
@@ -134,9 +147,9 @@ export default {
         },
         handleCommand(e) {
 			if(e.type == 'view'){
-				this.$router.push({name: 'viewcompanyaddress', query: { Staff_ID: e.id }})
+				this.$router.push({name: 'viewcompanyaddress', query: { customerAddressID: e.id }})
 			}else if(e.type == 'edit'){
-				this.$router.push({ name: 'editcompanyaddress' , query: {  Staff_ID: e.id } })
+				this.$router.push({ name: 'editcompanyaddress' , query: { customerAddressID: e.id } })
 			}else if(e.type == 'delete'){
 				this.del(e.id)
 			}
@@ -144,9 +157,9 @@ export default {
 		add() { 
 			this.$router.push({ name: 'addcompanyaddress' })
 		},
-		del(cargoUnitID) {
-			deleteConfirm(cargoUnitID, cargoUnitIDs => {
-				CargoUnit.del({ cargoUnitIDs }).then(res => {
+		del(customerAddressID) {
+			deleteConfirm(customerAddressID, customerAddressIDs => {
+				CustomerAddress.del({ customerAddressIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

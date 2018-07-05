@@ -1979,14 +1979,15 @@ element-china-area-data@^4.0.0:
     china-area-data "^4.0.0"
     uglify-js "^3.1.4"
 
-element-ui@^2.0.11:
-  version "2.2.1"
-  resolved "http://registry.npm.taobao.org/element-ui/download/element-ui-2.2.1.tgz#9efb17a37d161b5cbca9998f3f217ccb4fa7da55"
+element-ui@^2.4.1:
+  version "2.4.3"
+  resolved "http://registry.npm.taobao.org/element-ui/download/element-ui-2.4.3.tgz#17a09ba6332b17a90002d86070697dcdb88fe0a5"
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"
     deepmerge "^1.2.0"
     normalize-wheel "^1.0.1"
+    resize-observer-polyfill "^1.5.0"
     throttle-debounce "^1.0.1"
 
 elliptic@^6.0.0:
@@ -4930,6 +4931,10 @@ require-main-filename@^1.0.1:
 requires-port@1.0.x, requires-port@1.x.x, requires-port@~1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/requires-port/download/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
+
+resize-observer-polyfill@^1.5.0:
+  version "1.5.0"
+  resolved "http://registry.npm.taobao.org/resize-observer-polyfill/download/resize-observer-polyfill-1.5.0.tgz#660ff1d9712a2382baa2cad450a4716209f9ca69"
 
 resolve-cwd@^2.0.0:
   version "2.0.0"

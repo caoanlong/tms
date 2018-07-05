@@ -39,7 +39,7 @@
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.roleID}" >删除</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'setAuth', id: scope.row.roleID}" >权限设置</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'setStaff', id: scope.row.roleID}" >分配用户</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'setMember', id: scope.row.roleID}" >分配用户</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -49,7 +49,7 @@
 			</div>
 		</div>
 		<auth-config :showSetAuth="showSetAuth" :setRoleID="setRoleID" @selected-auth="handleSelectedAuth"></auth-config>
-		<staff-config :showSetStaff="showSetStaff" :setRoleID="setRoleID" @selected-staff="handleSelectedStaff"></staff-config>
+		<member-config :showSetMember="showSetMember" :setRoleID="setRoleID" @selected-mem="handleSelectedMember"></member-config>
 		<el-dialog title="添加角色" :visible.sync="dialogFormVisible">
 			<el-form>
 				<el-form-item label="名称" label-width="80px">
@@ -71,7 +71,7 @@ import Menu from '../../../api/Menu'
 import { deleteConfirm } from '../../../common/utils'
 import Page from '../../CommonComponents/Page'
 import AuthConfig from './components/AuthConfig'
-import StaffConfig from './components/StaffConfig'
+import MemberConfig from './components/MemberConfig'
 export default {
 	data() {
 		return {
@@ -85,10 +85,10 @@ export default {
 			selectedList: [],
 			setRoleID: '',
 			showSetAuth: false,
-			showSetStaff:false
+			showSetMember:false
 		}
 	},
-	components: { Page, AuthConfig, StaffConfig },
+	components: { Page, AuthConfig, MemberConfig },
 	created() {
 		this.getList()
 	},
@@ -105,8 +105,8 @@ export default {
 				case 'setAuth':
 					this.setAuth(e.id)
 					break
-				case 'setStaff':
-					this.setStaff(e.id)
+				case 'setMember':
+					this.setMember(e.id)
 					break
 				case 'delete':
 					this.del(e.id)
@@ -153,16 +153,16 @@ export default {
 				this.$store.dispatch('getMenu')
 			}
 		},
-		handleSelectedStaff(bool) {
-			this.showSetStaff = false
+		handleSelectedMember(bool) {
+			this.showSetMember = false
 			if (bool) this.getList()
 		},
 		setAuth(roleID) {
 			this.showSetAuth = true
 			this.setRoleID = roleID
 		},
-		setStaff(roleID) {
-			this.showSetStaff = true
+		setMember(roleID) {
+			this.showSetMember = true
 			this.setRoleID = roleID
 		}
 	}
