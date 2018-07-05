@@ -32,7 +32,7 @@
 				</el-form-item>
 			</el-form>
 		</div>
-		<div class="table">
+		<!-- <div class="table">
 			<table class="wfTable">
 				<tr>
 					<th><el-checkbox class="fl"
@@ -89,7 +89,35 @@
 				</template>
 			</table>
 		</div>
-		<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+		<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/> -->
+		<div class="table">
+				<el-table :data="carrierList" @selection-change="selectionChange" border style="width: 100%" size="mini">
+					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
+					<el-table-column label="单号" prop="carrierOrderNo">
+						<template slot-scope="scope">
+							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="状态" prop="status"></el-table-column>
+					<el-table-column label="货物" prop="cargoName"></el-table-column>
+					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
+					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
+					<el-table-column label="发货时间" prop="shipperDate">
+						<template slot-scope="scope">
+							<span v-if="scope.row.shipperDate">{{ new Date(scope.row.shipperDate).getTime() | getdatefromtimestamp(true)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
+					<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
+					<el-table-column label="数量(余)" prop="cargoNumSum"></el-table-column>
+					<el-table-column label="货量(余)" prop="PositionType">
+						<template slot-scope="scope">
+							<span>{{scope.row.cargoWeightSum + '吨'}}/{{scope.row.cargoVolumeSum + '方'}}</span>
+						</template>
+					</el-table-column>
+				</el-table>
+				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+			</div>
 		<div class="step-footer text-center">
 			<el-button type="primary" @click="nextStep">下一步</el-button>
 			<el-button @click="back">返回</el-button>
