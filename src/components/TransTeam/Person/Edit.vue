@@ -299,9 +299,9 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
-import Staff from '../../api/Staff'
-import ImageUpload from '../CommonComponents/ImageUpload'
-import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../common/validators'
+import Staff from '../../../api/Staff'
+import ImageUpload from '../../CommonComponents/ImageUpload'
+import { checkMobile, checkIDCard, limitLength50, limitLength100 } from '../../../common/validators'
 export default {
 	data() {
 		return {

@@ -378,7 +378,7 @@ let routerMap = [
 						meta: {
 							title: '人员'
 						},
-						component: () => import ('../components/TransTeam/Person'),
+						component: () => import ('../components/TransTeam/Person/index'),
 					},
 					{
 						path: '/addperson',
@@ -386,7 +386,7 @@ let routerMap = [
 						meta: {
 							title: '添加人员'
 						},
-						component: () => import ('../components/TransTeam/AddPerson'),
+						component: () => import ('../components/TransTeam/Person/Add'),
 					},
 					{
 						path: '/editperson',
@@ -394,7 +394,7 @@ let routerMap = [
 						meta: {
 							title: '编辑人员'
 						},
-						component: () => import ('../components/TransTeam/EditPerson'),
+						component: () => import ('../components/TransTeam/Person/Edit'),
 					},
 					{
 						path: '/viewperson',
@@ -402,7 +402,7 @@ let routerMap = [
 						meta: {
 							title: '查看人员'
 						},
-						component: () => import ('../components/TransTeam/ViewPerson'),
+						component: () => import ('../components/TransTeam/Person/View'),
 					},
 					{
 						path: '/driver',

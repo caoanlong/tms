@@ -163,10 +163,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { deleteConfirm } from '../../common/utils'
-import { baseURL } from '../../common/request'
-import Staff from '../../api/Staff'
-import Page from '../CommonComponents/Page'
+import { deleteConfirm } from '../../../common/utils'
+import { baseURL } from '../../../common/request'
+import SuperCargo from '../../../api/SuperCargo'
+import Page from '../../CommonComponents/Page'
 export default {
 	data() {
 		return {
@@ -255,7 +255,7 @@ export default {
 			return extension || extension2 && isLt2M
 		},
 		getList() {
-			Staff.find({
+			SuperCargo.find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				mobile: this.findMobile,
@@ -283,7 +283,7 @@ export default {
 		},
 		del(staffID) {
 			deleteConfirm(staffID, staffIDs => {
-				Staff.del({ staffIDs }).then(res => {
+				SuperCargo.del({ staffIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})

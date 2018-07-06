@@ -215,8 +215,8 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
-import Staff from '../../api/Staff'
-import ImageUpload from '../CommonComponents/ImageUpload'
+import Staff from '../../../api/Staff'
+import ImageUpload from '../../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {

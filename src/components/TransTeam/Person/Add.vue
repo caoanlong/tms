@@ -544,7 +544,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import ImageUpload from '../CommonComponents/ImageUpload'
+import ImageUpload from '../../CommonComponents/ImageUpload'
 
 export default {
 	data() {

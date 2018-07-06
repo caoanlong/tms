@@ -1,5 +1,5 @@
 <template>
-	<div class="main-content" style="min-width: 1300px">
+	<div class="main-content" style="min-width: 1150px">
 		<div class="wf-card hasTit">
 			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
