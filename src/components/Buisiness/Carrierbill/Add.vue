@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content" style="min-width: 1150px">
 		<div class="wf-card hasTit">
-			<el-form label-width="100px" size="mini" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
+			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="发货单号" prop="shipperNo">

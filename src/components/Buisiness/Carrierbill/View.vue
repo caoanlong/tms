@@ -1,12 +1,12 @@
 <template>
 	<div class="main-content" >
-		<div class="wf-card">
-			<div class="header clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}
-				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="warning" v-if="carrierOrder.status=='Committed'">未执行</el-tag>
-				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" v-else-if="carrierOrder.status=='Running'">执行中</el-tag>
-				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="success" v-else-if="carrierOrder.status=='Signed'">已完成</el-tag>
-				<el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="info" v-else-if="carrierOrder.status=='Closed'">已关闭</el-tag>
-				<!-- <el-tag size="mini" style="position:absolute;right:15px;top:50%;transform:translateY(-50%)" type="info" v-else-if="carrierOrder.status=='Canceled'">作废</el-tag> -->
+		<el-card class="box-card">
+			<div slot="header" class="posr clearfix">承运单编号：{{carrierOrder.carrierOrderNo}}
+				<el-tag size="mini" class="statusTag" type="warning" v-if="carrierOrder.status=='Committed'">未执行</el-tag>
+				<el-tag size="mini" class="statusTag" v-else-if="carrierOrder.status=='Running'">执行中</el-tag>
+				<el-tag size="mini" class="statusTag" type="success" v-else-if="carrierOrder.status=='Signed'">已完成</el-tag>
+				<el-tag size="mini" class="statusTag" type="info" v-else-if="carrierOrder.status=='Closed'">已关闭</el-tag>
+				<!-- <el-tag size="mini" class="statusTag" type="info" v-else-if="carrierOrder.status=='Canceled'">作废</el-tag> -->
 			</div>
 			<div class="datetime">
 				<span class="label">发货单号：</span><span>{{carrierOrder.shipperNo}}</span>
@@ -217,7 +217,7 @@
 			<div class="wf-footer clearfix text-center">
 				<el-button @click="back">返回</el-button>
 			</div>
-		</div>
+		</el-card>
 		<UploadPhoto 
 			:isPreview="true" 
 			:isVisible="isPhotoVisible" 
@@ -316,37 +316,19 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.main-content
-	background #ebebeb
-	padding-top 20px
-	.wf-card
-		.header
-			margin-bottom 0
-			position relative
-		.datetime
-			font-size 12px
-			padding 10px 15px 
-			margin-bottom 10px
-			border 1px solid #e2ecf6
-			color #3582d0
-			.label~.label
-				margin-left 40px
-		.wf-table
-			.justify
-				width 80px
-				height 24px
-				display inline-block
-				vertical-align top
-				padding-right 20px
-				color #3582d0
-				text-align justify
-				&:after
-					content '：'
-					position relative
-					top -24px
-					padding-left 100%
-					display inline-block
-					
+	.statusTag
+		position absolute
+		right 10px
+		top 50%
+		transform translateY(-50%)
+	.datetime
+		font-size 12px
+		padding 10px 15px 
+		margin-bottom 10px
+		border-bottom 1px solid #e2ecf6
+		color #3582d0
+		.label~.label
+			margin-left 40px				
 .porRequire
 	span
 		margin-right 20px				
