@@ -362,36 +362,36 @@ let routerMap = [
 						component: () => import ('../components/TransTeam/Truck/View'),
 					},
 					{
-						path: '/person',
-						name: 'person',
+						path: '/supercargo',
+						name: 'supercargo',
 						meta: {
-							title: '人员'
+							title: '运输人员'
 						},
-						component: () => import ('../components/TransTeam/Person/index'),
+						component: () => import ('../components/TransTeam/SuperCargo/index'),
 					},
 					{
-						path: '/addperson',
-						name: 'addperson',
+						path: '/addsupercargo',
+						name: 'addsupercargo',
 						meta: {
-							title: '添加人员'
+							title: '添加运输人员'
 						},
-						component: () => import ('../components/TransTeam/Person/Add'),
+						component: () => import ('../components/TransTeam/SuperCargo/Add'),
 					},
 					{
-						path: '/editperson',
-						name: 'editperson',
+						path: '/editsupercargo',
+						name: 'editsupercargo',
 						meta: {
-							title: '编辑人员'
+							title: '编辑运输人员'
 						},
-						component: () => import ('../components/TransTeam/Person/Edit'),
+						component: () => import ('../components/TransTeam/SuperCargo/Edit'),
 					},
 					{
-						path: '/viewperson',
-						name: 'viewperson',
+						path: '/viewsupercargo',
+						name: 'viewsupercargo',
 						meta: {
-							title: '查看人员'
+							title: '查看运输人员'
 						},
-						component: () => import ('../components/TransTeam/Person/View'),
+						component: () => import ('../components/TransTeam/SuperCargo/View'),
 					},
 					{
 						path: '/driver',

@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">查看人员</div>
+			<div class="header clearfix">查看运输人员</div>
 			<el-form label-width="155px">
 				<el-row>
 					<el-col :span="8">

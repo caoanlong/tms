@@ -132,6 +132,14 @@ export const checkIDCard = (rule, value, callback) => {
 		callback()
 	}
 }
+
+export const checkArrayNull = (rule, value, callback) => {
+	if (value.length == 0) {
+		callback(new Error('请选择'))
+	} else {
+		callback()
+	}
+}
 // 限制长度50
 export const limitLength50 = (rule, value, callback) => {
 	if (value.length > 50) {
