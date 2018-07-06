@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card box-card">
-			<div class="header clearfix">添加员工</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">添加员工</div>
 			<el-form label-width="120px" :model="user" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
@@ -76,7 +76,7 @@
 					<el-button @click="back">取消</el-button>
 				</el-form-item>
 			</el-form>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">

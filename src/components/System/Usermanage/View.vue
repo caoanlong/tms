@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card box-card">
-			<div class="header clearfix">查看员工</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">查看员工</div>
 			<el-form label-width="120px">
 			<el-row>
 				<el-col :span="8">
@@ -77,7 +77,7 @@
 				</el-col>
 			</el-row>
 		</el-form>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">

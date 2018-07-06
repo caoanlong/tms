@@ -1,15 +1,18 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card hasTit">
-			<div class="header clearfix">承运单编号：{{carrierbillInfo.carrierOrderNo}}
-				<span>发货单号：{{carrierbillInfo.shipperNo}}</span>
-				<span>创建时间：{{carrierbillInfo.createTime | getdatefromtimestamp()}}</span>
-				<span>委托时间：<span v-if="carrierbillInfo.commissionDate">{{carrierbillInfo.commissionDate | getdatefromtimestamp(true)}}</span></span>
-				<span class="status status1" v-if="carrierbillInfo.status=='Commited'">未执行</span>
-				<span class="status status2" v-else-if="carrierbillInfo.status=='Running'">执行中</span>
-				<span class="status status3" v-else-if="carrierbillInfo.status=='Signed'">已完成</span>
-				<span class="status status1" v-else-if="carrierbillInfo.status=='Closed'">已关闭</span>
-				<!-- <span class="status status1" v-else-if="carrierbillInfo.status=='Canceled'">作废</span> -->
+		<el-card class="box-card">
+			<div slot="header" class="posr clearfix">
+				<div class="carrierbill">
+					<span>承运单编号：{{carrierbillInfo.carrierOrderNo}}</span>
+					<span v-if="carrierbillInfo.shipperNo">发货单号：{{carrierbillInfo.shipperNo}}</span>
+					<span>创建时间：{{carrierbillInfo.createTime | getdatefromtimestamp()}}</span>
+					<span v-if="carrierbillInfo.commissionDate">委托时间：{{carrierbillInfo.commissionDate | getdatefromtimestamp(true)}}</span>
+				</div>
+				<el-tag size="mini" class="statusTag" type="info" v-if="carrierbillInfo.status=='Commited'">未执行</el-tag>
+				<el-tag size="mini" class="statusTag"  v-else-if="carrierbillInfo.status=='Running'">执行中</el-tag>
+				<el-tag size="mini" class="statusTag"  type="success" v-else-if="carrierbillInfo.status=='Signed'">已完成</el-tag>
+				<el-tag size="mini" class="statusTag"  type="info" v-else-if="carrierbillInfo.status=='Closed'">已关闭</el-tag>
+				<!-- <el-tag size="mini" class="statusTag"  type="danger" v-else-if="carrierbillInfo.status=='Canceled'">作废</el-tag> -->
 			</div>
 			<el-row>
 				<div class="split-item">
@@ -314,7 +317,7 @@
 				</el-col>
 			</el-row>
 			</el-form>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
@@ -809,33 +812,19 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-	.el-card__header
-		span
-			margin-right 40px
-			font-size 14px
-			color #909399
-			&.CarrierNum
-				font-weight bold
-				margin-left 20px
-			&.status
-				position absolute
-				margin-right 0
-				right 20px
-				top 15px
-				height 24px
-				line-height 24px
-				color #fff
-				padding 0 15px
-				font-size 12px
-				border-radius 4px
-				&.status1
-					background #F56C6C
-				&.status2
-					background #409EFF
-				&.status3
-					background #909399
-	.tips
-		color #909399
+.statusTag
+	position absolute
+	right 10px
+	top 50%
+	transform translateY(-50%)
+.carrierbill
+	span 
+		margin-right 10px
+		~span
+			font-size 12px
+			color #999
+.tips
+	color #909399
 // .cargoItem
 // 	padding-top 10px
 // 	border-top 1px solid #ebeef5

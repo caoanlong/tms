@@ -1,6 +1,6 @@
 <template>
 	<div class="main-content" style="min-width: 1150px">
-		<div class="wf-card hasTit">
+		<el-card class="box-card hasTit">
 			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
@@ -261,7 +261,7 @@
 					</el-form-item>
 				</el-row>
 			</el-form>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">

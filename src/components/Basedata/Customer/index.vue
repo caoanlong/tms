@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card box-card">
-			<div  class="header clearfix">收发货单位</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">收发货单位</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="企业">
@@ -70,7 +70,7 @@
 				</el-table>
 				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">

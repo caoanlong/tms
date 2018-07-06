@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card box-card">
-			<div  class="header clearfix">货物单位</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">货物单位</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="货物单位名称">
@@ -33,7 +33,7 @@
 				</el-table>
 				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
-		</div>
+		</el-card>
 		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
 			<el-form>
 				<el-form-item label="单位名称" label-width="80px">

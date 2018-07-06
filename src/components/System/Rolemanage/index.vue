@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">角色列表</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">角色列表</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="名称">
@@ -47,7 +47,7 @@
 				</el-table>
 				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
-		</div>
+		</el-card>
 		<auth-config :showSetAuth="showSetAuth" :setRoleID="setRoleID" @selected-auth="handleSelectedAuth"></auth-config>
 		<member-config :showSetMember="showSetMember" :setRoleID="setRoleID" @selected-mem="handleSelectedMember"></member-config>
 		<el-dialog title="添加角色" :visible.sync="dialogFormVisible">
