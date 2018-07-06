@@ -68,7 +68,7 @@
 							<el-col :span="24">
 								<el-form-item label="个人照片">
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<ImageUpload :width="80" :height="80" :limitNum="1"/>
 										<p>正面</p>
 									</div>
 								</el-form-item>
@@ -102,11 +102,11 @@
 							<el-col :span="24">
 								<el-form-item label="身份证照片">
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<ImageUpload :width="80" :height="80" :limitNum="1"/>
 										<p>正面</p>
 									</div>
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<ImageUpload :width="80" :height="80" :limitNum="1"/>
 										<p>背面</p>
 									</div>
 								</el-form-item>
@@ -121,11 +121,11 @@
 							<el-col :span="24">
 								<el-form-item label="卫生合格证照片">
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<ImageUpload :width="80" :height="80" :limitNum="1"/>
 										<p>正面</p>
 									</div>
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<ImageUpload :width="80" :height="80" :limitNum="1"/>
 										<p>背面</p>
 									</div>
 								</el-form-item>
@@ -209,11 +209,11 @@
 							<el-col :span="24">
 								<el-form-item label="驾驶证照片">
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<ImageUpload :width="80" :height="80" :limitNum="1"/>
 										<p>正本</p>
 									</div>
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="1"/>
+										<ImageUpload :width="80" :height="80" :limitNum="1"/>
 										<p>副本</p>
 									</div>
 								</el-form-item>
@@ -301,7 +301,7 @@
 							<el-col :span="24">
 								<el-form-item label="照片">
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="5"/>
+										<ImageUpload :width="80" :height="80" :limitNum="5"/>
 										<p>照片1</p>
 									</div>
 								</el-form-item>
@@ -328,7 +328,7 @@
 									<el-col :span="24">
 										<el-form-item label="照片">
 											<div class="uploadTruckPicItem">
-												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<ImageUpload :width="80" :height="80" :limitNum="2"/>
 												<p>照片1</p>
 											</div>
 										</el-form-item>
@@ -364,7 +364,7 @@
 									<el-col :span="24">
 										<el-form-item label="照片">
 											<div class="uploadTruckPicItem">
-												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<ImageUpload :width="80" :height="80" :limitNum="2"/>
 												<p>照片1</p>
 											</div>
 										</el-form-item>
@@ -383,7 +383,7 @@
 									<el-col :span="24">
 										<el-form-item label="照片" label-width="40px">
 											<div class="uploadTruckPicItem">
-												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<ImageUpload :width="80" :height="80" :limitNum="2"/>
 												<p>照片1</p>
 											</div>
 										</el-form-item>
@@ -400,7 +400,7 @@
 									<el-col :span="24">
 										<el-form-item label="照片" label-width="40px">
 											<div class="uploadTruckPicItem">
-												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<ImageUpload :width="80" :height="80" :limitNum="2"/>
 												<p>照片1</p>
 											</div>
 										</el-form-item>
@@ -417,7 +417,7 @@
 									<el-col :span="24">
 										<el-form-item label="照片" label-width="40px">
 											<div class="uploadTruckPicItem">
-												<ImageUpload :width="60" :height="60" :limitNum="2"/>
+												<ImageUpload :width="80" :height="80" :limitNum="2"/>
 												<p>照片1</p>
 											</div>
 										</el-form-item>
@@ -505,11 +505,11 @@
 							<el-col :span="24">
 								<el-form-item label="照片">
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="5"/>
+										<ImageUpload :width="80" :height="80" :limitNum="5"/>
 										<p>正本</p>
 									</div>
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="5"/>
+										<ImageUpload :width="80" :height="80" :limitNum="5"/>
 										<p>副本</p>
 									</div>
 								</el-form-item>
@@ -526,7 +526,7 @@
 							<el-col :span="24">
 								<el-form-item label="照片" label-width="40px">
 									<div class="uploadTruckPicItem">
-										<ImageUpload :width="60" :height="60" :limitNum="6"/>
+										<ImageUpload :width="80" :height="80" :limitNum="6"/>
 										<p>照片1</p>
 									</div>
 								</el-form-item>
