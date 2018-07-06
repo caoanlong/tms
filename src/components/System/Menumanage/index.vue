@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card menu-list">
-			<div class="header clearfix">菜单列表</div>
+		<el-card class="box-card menu-list">
+			<div slot="header" class="posr clearfix">菜单列表</div>
 			<div class="tableControl">
 				<el-button type="success" plain size="mini" icon="el-icon-plus" @click="addRoot">添加顶级节点</el-button>
 			</div>
@@ -15,9 +15,9 @@
 				:render-content="renderContent"
 				@node-click="handleNodeClick">
 			</el-tree>
-		</div>
-		<div class="wf-card menu-info">
-			<div class="header clearfix">菜单详情</div>
+		</el-card>
+		<el-card class="box-card menu-info">
+			<div slot="header" class="posr clearfix">菜单详情</div>
 			<el-form ref="form" :model="currentNode" label-width="80px">
 				<el-form-item label="标题">
 					<el-input v-model="currentNode.Name"></el-input>
@@ -50,7 +50,7 @@
 					<el-button>取消</el-button>
 				</el-form-item>
 			</el-form>
-		</div>
+		</el-card>
 		<select-icon :selectIcondialog="selectIcondialog" @select-icon="handleSelectIcon"></select-icon>
 	</div>
 </template>
@@ -213,17 +213,16 @@ export default {
 <style lang="stylus" scoped>
 	.main-content
 		display flex
-		.wf-card
-			&.menu-list
-				flex 0 0 360px
-				margin-right 20px
-				.expand-tree
-					height 600px
-					overflow-y auto
-			&.menu-info
-				flex 1
+		.menu-list
+			flex 0 0 360px
+			margin-right 20px
 			.expand-tree
-				font-size 14px
+				height 600px
+				overflow-y auto
+		.menu-info
+			flex 1
+		.expand-tree
+			font-size 14px
 	.svg-icon
 		vertical-align top
 	.el-checkbox

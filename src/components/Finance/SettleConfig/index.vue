@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">运费模板</div>
+		<el-card class="box-card">
+			<div slot="header" class="posr clearfix">运费模板</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="发货单位">
@@ -124,7 +124,7 @@
 				</el-table>
 				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">

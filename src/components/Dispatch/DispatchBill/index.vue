@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">调度列表</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">调度列表</div>
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="关键字">
@@ -150,7 +150,7 @@
 				</table>
 			</div>
 			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
-		</div>
+		</el-card>
 		<UploadPhoto 
 			:isVisible="isPhotoVisible" 
 			@control="handUploadPhoto" 

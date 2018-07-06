@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card box-card">
-			<div  class="header clearfix">编辑常用货物</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">编辑常用货物</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="cargo" :rules="rules" ref="ruleForm" size="small">
@@ -74,7 +74,7 @@
 					</el-form>
 				</el-col>
 			</el-row>
-		</div>
+		</el-card>
 		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
 			<el-form>
 				<el-form-item label="单位名称" label-width="80px">
