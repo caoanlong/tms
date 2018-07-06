@@ -45,7 +45,11 @@
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="姓名" prop="realName"></el-table-column>
+					<el-table-column label="姓名" prop="realName">
+						<template slot-scope="scope">
+							<span class="link" @click="view(scope.row.comSupercargoID)">{{scope.row.realName}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="手机" prop="mobile"></el-table-column>
 					<el-table-column label="驾驶员" prop="homeAddress">
 						<template slot-scope="scope">
@@ -174,6 +178,9 @@ export default {
 			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}
+		},
+		view(comSupercargoID) {
+			this.$router.push({name: 'viewsupercargo', query: { comSupercargoID }})
 		},
 		add() {
 			this.$router.push({name: 'addsupercargo'})

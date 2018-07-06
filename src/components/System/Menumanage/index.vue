@@ -42,8 +42,7 @@
 				</el-form-item>
 				<el-form-item label="角色权限">
 					<el-select style="width: 100%" v-model="selectedRoles" multiple placeholder="请选择">
-						<el-option v-for="role in roles" :key="role.Role_ID" :label="role.RoleName" :value="role.Role_ID">
-						</el-option>
+						<el-option v-for="role in roles" :key="role.Role_ID" :label="role.RoleName" :value="role.Role_ID"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item>
@@ -199,10 +198,10 @@ export default {
 		// 获取所有角色
 		getRoles() {
 			SysRole.find({ pageSize: 1000 }).then(res => {
-				this.roles = res.rows.map(item => {
+				this.roles = res.records.map(item => {
 					return {
-						Role_ID: item.Role_ID,
-						RoleName: item.RoleName
+						Role_ID: item.roleID,
+						RoleName: item.roleName
 					}
 				})
 			})
