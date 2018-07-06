@@ -183,11 +183,11 @@ export default {
 			})
 		},
 		getShipperCompanys(queryString, cb) {
-			Customer.find({
-				type: 'ShipperConsignee',
+			Customer.suggest({
+				customerType: 'Shipper',
 				companyName: queryString
 			}).then(res => {
-				cb(res.records)
+				cb(res)
 			})
 		},
 		handSelectShipper(data){

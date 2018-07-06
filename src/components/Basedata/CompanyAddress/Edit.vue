@@ -106,11 +106,10 @@ export default {
 	},
 	methods: {
 		getCompanys(queryString, cb) {
-			Customer.find({
-				type: 'ShipperConsignee',
+			Customer.suggest({
 				companyName: queryString
 			}).then(res => {
-				cb(res.records)
+				cb(res)
 			})
         },
         handSelect(data){
