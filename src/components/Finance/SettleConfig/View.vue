@@ -165,8 +165,8 @@
 </template>
 
 <script type="text/javascript">
-import request from '../../common/request'
-import SettleConfig from '../../api/SettleConfig'
+import request from '../../../common/request'
+import SettleConfig from '../../../api/SettleConfig'
 export default {
 	data() {
 		return {

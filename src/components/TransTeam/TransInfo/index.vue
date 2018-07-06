@@ -116,9 +116,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { baseURL } from '../../common/request'
-import { deleteConfirm } from '../../common/utils'
-import TransportRecord from '../../api/TransportRecord'
+import { baseURL } from '../../../common/request'
+import { deleteConfirm } from '../../../common/utils'
+import TransportRecord from '../../../api/TransportRecord'
 export default {
 	data() {
 		return {

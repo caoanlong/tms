@@ -61,12 +61,12 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
-import { baseURL } from '../../common/request'
-import { deleteConfirm } from '../../common/utils'
-import Truck from '../../api/Truck'
-import Page from '../CommonComponents/Page'
-import { limitLength20, checkInt2 } from '../../common/validators'
-import DriverItem from './Common/DriverItem'
+import { baseURL } from '../../../common/request'
+import { deleteConfirm } from '../../../common/utils'
+import Truck from '../../../api/Truck'
+import Page from '../../CommonComponents/Page'
+import { limitLength20, checkInt2 } from '../../../common/validators'
+import DriverItem from '../components/DriverItem'
 export default {
 	data() {
 		return {

@@ -10,7 +10,7 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="姓名" prop="realName">
-							<el-input v-model="driver.realName"></el-input>
+							<el-input v-model="driver.realName" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -53,7 +53,7 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="身份证号" prop="idCardNum">
-							<el-input v-model="driver.idCardNum"></el-input>
+							<el-input v-model="driver.idCardNum" disabled></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="16">
@@ -222,7 +222,7 @@
 				<el-row>
 					<el-col :span="24">
 						<el-form-item>
-							<el-button type="primary" @click="createItem">立即保存</el-button>
+							<el-button type="primary" @click="updateItem">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-col>
@@ -233,12 +233,14 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Driver from '../../api/Driver'
-import ImageUpload from '../CommonComponents/ImageUpload'
-import { checkMobile, checkIDCard } from '../../common/validators'
+import Driver from '../../../api/Driver'
+import ImageUpload from '../../CommonComponents/ImageUpload'
+import { checkMobile, checkIDCard } from '../../../common/validators'
 export default {
 	data() {
 		return {
+			originMobile: '',
+			originIdCardNum: '',
 			driver: {
 				realName: '',
 				sex: '',
@@ -273,10 +275,10 @@ export default {
 			driverLicenseDate: [],
 			qualificationDate: [],
 			rules: {
-				realName: [
-					{required: true, message: '请输入姓名'},
-					{min: 2, max: 10, message: '长度在 2 到 10 个字符'}
-				],
+				// realName: [
+				// 	{required: true, message: '请输入姓名'},
+				// 	{min: 2, max: 10, message: '长度在 2 到 10 个字符'}
+				// ],
 				sex: [
 					{ required: true, message: '请选择性别'}
 				],
@@ -288,15 +290,15 @@ export default {
 					{required: true, message: '请选择合作关系'}
 				],
 				laborContractBeginTime: [
-					{required: true, message: '请选择合同有效期'}
+					{ required: true, message: '请选择合同有效期' },
 				],
 				laborContractDate: [
 					{ required: true, message: '请选择合同有效期' },
 				],
-				idCardNum: [
-					{required: true, message: '请输入身份证号'},
-					{validator: checkIDCard}
-				],
+				// idCardNum: [
+				// 	{required: true, message: '请输入身份证号'},
+				// 	{validator: checkIDCard}
+				// ],
 				homeAddress: [
 					{required: true, message: '请输入住址'},
 				],
@@ -305,6 +307,9 @@ export default {
 				]
 			}
 		}
+	},
+	created() {
+		this.getInfo()
 	},
 	methods: {
 		handSelectLaborContractDate(date) {
@@ -347,7 +352,19 @@ export default {
 		handleQualifCerBackSuccess(res) {
 			this.driver.qualificationSecondPage = res[0]
 		},
-		createItem() {
+		getInfo() {
+			let comDriverID = this.$route.query.comDriverID
+			Driver.findById({ comDriverID }).then(res => {
+				this.driver = res
+				this.laborContractDate = [res.laborContractBeginTime, res.laborContractEndTime]
+				this.idCardDate = [res.idCardBeginTime, res.idCardExpirationTime]
+				this.driverLicenseDate = [res.driverLicenseBeginTime, res.driverLicenseEndTime]
+				this.qualificationDate = [res.qualificationBeginTime, res.qualificationExpirationTime]
+				this.originMobile = res.mobile
+				this.originIdCardNum = res.idCardNum
+			})
+		},
+		updateItem() {
 			let data = this.driver
 			!data.laborContractBeginTime && (data.laborContractBeginTime = '')
 			!data.laborContractEndTime && (data.laborContractEndTime = '')
@@ -366,7 +383,11 @@ export default {
 			!data.qualificationSecondPage && (data.qualificationSecondPage = '')
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					Driver.add(data).then(res => {
+					delete data.realName
+					delete data.idCardNum
+					if (data.mobile == this.originMobile) delete data.mobile
+					if (data.idCardNum == this.originIdCardNum) delete data.idCardNum
+					Driver.update(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'driver'})
 					})

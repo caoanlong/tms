@@ -176,8 +176,8 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Driver from '../../api/Driver'
-import ImageUpload from '../CommonComponents/ImageUpload'
+import Driver from '../../../api/Driver'
+import ImageUpload from '../../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {

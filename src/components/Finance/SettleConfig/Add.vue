@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<div class="wf-card">
-			<div class="header clearfix">编辑运费模板</div>
+			<div class="header clearfix">添加运费模板</div>
 			<el-row>
 				<div class="split-item">
 					<span class="num">1</span>
@@ -44,12 +44,12 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<el-form-item label="发货地">
+						<el-form-item label="发货地" prop="shipperAreaID">
 							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
-						<el-form-item label="详细地址">
+						<el-form-item label="详细地址" prop="shipperDetailAddress">
 							<el-input placeholder="详细地址" v-model="templateFreight.shipperDetailAddress"></el-input>
 						</el-form-item>
 					</el-col>
@@ -95,12 +95,14 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="对内运距" prop="mileage">
-							<el-input placeholder="请输入..." v-model="templateFreight.mileage"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.mileage" @change="calcInternalAmount">
+								<span slot="append">公里</span>
+							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="对内TKM" prop="internalUnitPrice">
-							<el-input placeholder="请输入..." v-model="templateFreight.internalUnitPrice"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.internalUnitPrice" @change="calcInternalAmount"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -118,12 +120,14 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="对外运距" prop="externalMileage">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalMileage"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.externalMileage" @change="calcExternalAmount">
+								<span slot="append">公里</span>
+							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="对外TKM" prop="externalUnitPrice">
-							<el-input placeholder="请输入..." v-model="templateFreight.externalUnitPrice"></el-input>
+							<el-input placeholder="请输入..." v-model="templateFreight.externalUnitPrice" @change="calcExternalAmount"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -202,7 +206,7 @@
 					</el-col>
 				</el-row>
 				<div class="handle">
-					<el-button type="primary" @click="update">立即保存</el-button>
+					<el-button type="primary" @click="add">立即保存</el-button>
 					<el-button @click="back">取消</el-button>
 				</div>
 			</el-form>
@@ -212,17 +216,15 @@
 
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import DistPicker from '../CommonComponents/DistPicker'
-import request from '../../common/request'
-import SettleConfig from '../../api/SettleConfig'
-import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
-import { checkFloat } from '../../common/validators'
+import DistPicker from '../../CommonComponents/DistPicker'
+import request from '../../../common/request'
+import SettleConfig from '../../../api/SettleConfig'
+import { searchAreaByKey } from '../../../common/utils'
+import { checkFloat } from '../../../common/validators'
 export default {
 	data() {
 		return {
 			loading: false,
-			ConsignorList:[],
-			Recdeliverycomp:[],
 			selectedArea:[],
 			selectedArea1:[],
 			templateFreight: {
@@ -289,9 +291,6 @@ export default {
 			}
 		}
 	},
-	created() {
-		this.getInfo()
-	},
 	methods: {
 		getConsignors(queryString, cb) {
 			let params = {
@@ -344,25 +343,13 @@ export default {
 		handleSelectedArea1(data) {
 			this.templateFreight.consigneeAreaID = data
 		},
-		getInfo() {
-			let transporPriceID = this.$route.query.transporPriceID
-			SettleConfig.findById({ transporPriceID }).then(res => {
-				this.templateFreight = res
-				this.selectedArea = areaIdToArrayId(res.shipperAreaID)
-				this.selectedArea1 = areaIdToArrayId(res.consigneeAreaID)
-				this.templateFreight.internalCashRate = res.internalCashRate *100
-				this.templateFreight.internalCodRate = res.internalCodRate *100
-				this.templateFreight.internalPorRate = res.internalPorRate *100
-				this.templateFreight.internalAbschlussRate = res.internalAbschlussRate *100
-				this.templateFreight.internalConsigneeCodRate = res.internalConsigneeCodRate *100
-				this.templateFreight.externalCashRate = res.externalCashRate *100
-				this.templateFreight.externalCodRate = res.externalCodRate *100
-				this.templateFreight.externalPorRate = res.externalPorRate *100
-				this.templateFreight.externalAbschlussRate = res.externalAbschlussRate *100
-				this.templateFreight.externalConsigneeCodRate = res.externalConsigneeCodRate *100
-			})
+		calcInternalAmount(data) {
+			this.templateFreight.internalPrice = ((this.templateFreight.mileage || 0) * (this.templateFreight.internalUnitPrice || 0)).toFixed(2)
 		},
-		update() {
+		calcExternalAmount(data) {
+			this.templateFreight.externalPrice = ((this.templateFreight.externalMileage || 0) * (this.templateFreight.externalUnitPrice || 0)).toFixed(2)
+		},
+		add() {
 			let data = this.templateFreight
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
@@ -403,7 +390,7 @@ export default {
 				params.externalPorRate = externalPorRate / 100
 				params.externalAbschlussRate = externalAbschlussRate / 100
 				params.externalConsigneeCodRate = externalConsigneeCodRate / 100
-				SettleConfig.update(params).then(res => {
+				SettleConfig.add(params).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'settleconfig'})
 				})

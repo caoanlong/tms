@@ -109,10 +109,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { baseURL } from '../../common/request'
-import Driver from '../../api/Driver'
-import { resizeImg } from '../../common/utils'
-import Page from '../CommonComponents/Page'
+import { baseURL } from '../../../common/request'
+import Driver from '../../../api/Driver'
+import { resizeImg } from '../../../common/utils'
+import Page from '../../CommonComponents/Page'
 export default {
 	data() {
 		return {

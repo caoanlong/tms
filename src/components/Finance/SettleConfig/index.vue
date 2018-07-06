@@ -129,11 +129,11 @@
 </template>
 <script type="text/javascript">
 	import { Message } from 'element-ui'
-	import request, { baseURL } from '../../common/request'
-	import SettleConfig from '../../api/SettleConfig'
-	import { deleteConfirm } from '../../common/utils'
-	import FileUpload from '../CommonComponents/FileUpload'
-	import Page from '../CommonComponents/Page'
+	import request, { baseURL } from '../../../common/request'
+	import SettleConfig from '../../../api/SettleConfig'
+	import { deleteConfirm } from '../../../common/utils'
+	import FileUpload from '../../CommonComponents/FileUpload'
+	import Page from '../../CommonComponents/Page'
 	export default {
 		data() {
 			return {

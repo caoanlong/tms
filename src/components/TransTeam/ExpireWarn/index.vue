@@ -65,10 +65,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request, { baseURL } from '../../common/request'
-import Driver from '../../api/Driver'
-import Page from '../CommonComponents/Page'
-import { deleteConfirm } from '../../common/utils'
+import request, { baseURL } from '../../../common/request'
+import Driver from '../../../api/Driver'
+import Page from '../../CommonComponents/Page'
+import { deleteConfirm } from '../../../common/utils'
 export default {
 	data() {
 		return {

@@ -65,56 +65,45 @@ let routerMap = [
 				redirect: '/dispatchbill',
 				children: [
 					{
-						path: '/dispatchbill',
-						name: 'dispatchbill',
+						path: '/dispatchbills',
+						name: 'dispatchbills',
 						meta: {
 							title: '调度单'
 						},
-						component: () => import ('../components/Dispatch/DispatchBill'),
-						redirect: '/dispatchbills',
-						children: [
-							{
-								path: '/dispatchbills',
-								name: 'dispatchbills',
-								meta: {
-									title: '调度单列表'
-								},
-								component: () => import ('../components/Dispatch/DispatchBill/DispatchBills'),
-							},
-							{
-								path: '/adddispatchbill',
-								name: 'adddispatchbill',
-								meta: {
-									title: '添加调度单'
-								},
-								component: () => import ('../components/Dispatch/DispatchBill/AddDispatchBill'),
-							},
-							{
-								path: '/editdispatchbill',
-								name: 'editdispatchbill',
-								meta: {
-									title: '编辑调度单'
-								},
-								component: () => import ('../components/Dispatch/DispatchBill/EditDispatchBill'),
-							},
-							{
-								path: '/viewdispatchbill',
-								name: 'viewdispatchbill',
-								meta: {
-									title: '调度单详情'
-								},
-								component: () => import ('../components/Dispatch/DispatchBill/ViewDispatchBill')
-							},
-							{
-								path: '/viewtaskdetail',
-								name: 'viewtaskdetail',
-								meta: {
-									title: '任务单详情'
-								},
-								component: () => import ('../components/Dispatch/DispatchBill/ViewTaskDetail')
-							}
-						]
+						component: () => import ('../components/Dispatch/DispatchBill/index'),
 					},
+					{
+						path: '/adddispatchbill',
+						name: 'adddispatchbill',
+						meta: {
+							title: '添加调度单'
+						},
+						component: () => import ('../components/Dispatch/DispatchBill/Add'),
+					},
+					{
+						path: '/editdispatchbill',
+						name: 'editdispatchbill',
+						meta: {
+							title: '编辑调度单'
+						},
+						component: () => import ('../components/Dispatch/DispatchBill/Edit'),
+					},
+					{
+						path: '/viewdispatchbill',
+						name: 'viewdispatchbill',
+						meta: {
+							title: '调度单详情'
+						},
+						component: () => import ('../components/Dispatch/DispatchBill/View')
+					},
+					{
+						path: '/viewtaskdetail',
+						name: 'viewtaskdetail',
+						meta: {
+							title: '任务单详情'
+						},
+						component: () => import ('../components/Dispatch/DispatchBill/ViewTask')
+					}
 				]
 			},
 			{
@@ -263,47 +252,15 @@ let routerMap = [
 					title: '财务'
 				},
 				component: () => import ('../components/Finance'),
-				redirect: '/receivablesum',
+				redirect: '/settleconfig',
 				children: [
-					{
-						path: '/receivablesum',
-						name: 'receivablesum',
-						meta: {
-							title: '应收汇总'
-						},
-						component: () => import ('../components/Finance/Receivablesum'),
-					},
-					{
-						path: '/receivableinfo',
-						name: 'receivableinfo',
-						meta: {
-							title: '应收明细'
-						},
-						component: () => import ('../components/Finance/Receivableinfo'),
-					},
-					{
-						path: '/payablesum',
-						name: 'payablesum',
-						meta: {
-							title: '应付汇总'
-						},
-						component: () => import ('../components/Finance/Payablesum'),
-					},
-					{
-						path: '/payableinfo',
-						name: 'payableinfo',
-						meta: {
-							title: '应付明细'
-						},
-						component: () => import ('../components/Finance/Payableinfo'),
-					},
 					{
 						path: '/settleconfig',
 						name: 'settleconfig',
 						meta: {
 							title: '结算设置'
 						},
-						component: () => import ('../components/Finance/SettleConfig'),
+						component: () => import ('../components/Finance/SettleConfig/index'),
 					},
 					{
 						path: '/addsettleconfig',
@@ -311,7 +268,7 @@ let routerMap = [
 						meta: {
 							title: '添加运费模板'
 						},
-						component: () => import ('../components/Finance/AddSettleConfig'),
+						component: () => import ('../components/Finance/SettleConfig/Add'),
 					},
 					{
 						path: '/editsettleconfig',
@@ -319,7 +276,7 @@ let routerMap = [
 						meta: {
 							title: '编辑运费模板'
 						},
-						component: () => import ('../components/Finance/EditSettleConfig'),
+						component: () => import ('../components/Finance/SettleConfig/Edit'),
 					},
 					{
 						path: '/viewsettleconfig',
@@ -327,8 +284,40 @@ let routerMap = [
 						meta: {
 							title: '查看运费模板'
 						},
-						component: () => import ('../components/Finance/ViewSettleConfig'),
+						component: () => import ('../components/Finance/SettleConfig/View'),
 					},
+					{
+						path: '/receivablesum',
+						name: 'receivablesum',
+						meta: {
+							title: '应收汇总'
+						},
+						component: () => import ('../components/Finance/Receivablesum/index'),
+					},
+					{
+						path: '/receivableinfo',
+						name: 'receivableinfo',
+						meta: {
+							title: '应收明细'
+						},
+						component: () => import ('../components/Finance/Receivableinfo/index'),
+					},
+					{
+						path: '/payablesum',
+						name: 'payablesum',
+						meta: {
+							title: '应付汇总'
+						},
+						component: () => import ('../components/Finance/Payablesum/index'),
+					},
+					{
+						path: '/payableinfo',
+						name: 'payableinfo',
+						meta: {
+							title: '应付明细'
+						},
+						component: () => import ('../components/Finance/Payableinfo/index'),
+					}
 				]
 			},
 			{
@@ -346,7 +335,7 @@ let routerMap = [
 						meta: {
 							title: '车辆'
 						},
-						component: () => import ('../components/TransTeam/Truck'),
+						component: () => import ('../components/TransTeam/Truck/index'),
 					},
 					{
 						path: '/addtruck',
@@ -354,7 +343,7 @@ let routerMap = [
 						meta: {
 							title: '添加车辆'
 						},
-						component: () => import ('../components/TransTeam/AddTruck'),
+						component: () => import ('../components/TransTeam/Truck/Add'),
 					},
 					{
 						path: '/edittruck',
@@ -362,7 +351,7 @@ let routerMap = [
 						meta: {
 							title: '编辑车辆'
 						},
-						component: () => import ('../components/TransTeam/EditTruck'),
+						component: () => import ('../components/TransTeam/Truck/Edit'),
 					},
 					{
 						path: '/viewtruck',
@@ -370,7 +359,7 @@ let routerMap = [
 						meta: {
 							title: '查看车辆'
 						},
-						component: () => import ('../components/TransTeam/ViewTruck'),
+						component: () => import ('../components/TransTeam/Truck/View'),
 					},
 					{
 						path: '/person',
@@ -410,7 +399,7 @@ let routerMap = [
 						meta: {
 							title: '司机'
 						},
-						component: () => import ('../components/TransTeam/Driver'),
+						component: () => import ('../components/TransTeam/Driver/index'),
 					},
 					{
 						path: '/adddriver',
@@ -418,7 +407,7 @@ let routerMap = [
 						meta: {
 							title: '添加司机'
 						},
-						component: () => import ('../components/TransTeam/AddDriver'),
+						component: () => import ('../components/TransTeam/Driver/Add'),
 					},
 					{
 						path: '/editdriver',
@@ -426,7 +415,7 @@ let routerMap = [
 						meta: {
 							title: '编辑司机'
 						},
-						component: () => import ('../components/TransTeam/EditDriver'),
+						component: () => import ('../components/TransTeam/Driver/Edit'),
 					},
 					{
 						path: '/viewdriver',
@@ -434,7 +423,7 @@ let routerMap = [
 						meta: {
 							title: '查看司机'
 						},
-						component: () => import ('../components/TransTeam/ViewDriver'),
+						component: () => import ('../components/TransTeam/Driver/View'),
 					},
 					{
 						path: '/refdriverapp',
@@ -442,7 +431,7 @@ let routerMap = [
 						meta: {
 							title: '关联司机APP'
 						},
-						component: () => import ('../components/TransTeam/RefDriverApp'),
+						component: () => import ('../components/TransTeam/RefDriverApp/index'),
 					},
 					{
 						path: '/transinfo',
@@ -450,7 +439,7 @@ let routerMap = [
 						meta: {
 							title: '运输档案'
 						},
-						component: () => import ('../components/TransTeam/TransInfo'),
+						component: () => import ('../components/TransTeam/TransInfo/index'),
 					},
 					{
 						path: '/addtransinfo',
@@ -458,7 +447,7 @@ let routerMap = [
 						meta: {
 							title: '添加运输档案'
 						},
-						component: () => import ('../components/TransTeam/AddTransInfo'),
+						component: () => import ('../components/TransTeam/TransInfo/Add'),
 					},
 					{
 						path: '/edittransinfo',
@@ -466,7 +455,7 @@ let routerMap = [
 						meta: {
 							title: '编辑运输档案'
 						},
-						component: () => import ('../components/TransTeam/EditTransInfo'),
+						component: () => import ('../components/TransTeam/TransInfo/Edit'),
 					},
 					{
 						path: '/viewtransinfo',
@@ -474,7 +463,7 @@ let routerMap = [
 						meta: {
 							title: '查看运输档案'
 						},
-						component: () => import ('../components/TransTeam/ViewTransInfo'),
+						component: () => import ('../components/TransTeam/TransInfo/View'),
 					},
 					{
 						path: '/expirewarn',
@@ -482,7 +471,7 @@ let routerMap = [
 						meta: {
 							title: '到期预警'
 						},
-						component: () => import ('../components/TransTeam/ExpireWarn'),
+						component: () => import ('../components/TransTeam/ExpireWarn/index'),
 					},
 				]
 			},
@@ -610,7 +599,7 @@ let routerMap = [
 						meta: {
 							title: '员工管理'
 						},
-						component: () => import('../components/System/Usermanage')
+						component: () => import('../components/System/Usermanage/index')
 					},
 					{
 						path: '/adduser',
@@ -618,7 +607,7 @@ let routerMap = [
 						meta: {
 							title: '添加员工'
 						},
-						component: () => import('../components/System/Usermanage/AddUser')
+						component: () => import('../components/System/Usermanage/Add')
 					},
 					{
 						path: '/edituser',
@@ -626,7 +615,7 @@ let routerMap = [
 						meta: {
 							title: '编辑员工'
 						},
-						component: () => import('../components/System/Usermanage/EditUser')
+						component: () => import('../components/System/Usermanage/Edit')
 					},
 					{
 						path: '/viewuser',
@@ -634,7 +623,7 @@ let routerMap = [
 						meta: {
 							title: '查看员工'
 						},
-						component: () => import('../components/System/Usermanage/ViewUser')
+						component: () => import('../components/System/Usermanage/View')
 					},
 					{
 						path: '/menumanage',

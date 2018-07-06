@@ -136,9 +136,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { baseURL } from '../../common/request'
-import Finance from '../../api/Finance'
-import Page from '../CommonComponents/Page'
+import { baseURL } from '../../../common/request'
+import Finance from '../../../api/Finance'
+import Page from '../../CommonComponents/Page'
 export default {
 	data() {
 		return {

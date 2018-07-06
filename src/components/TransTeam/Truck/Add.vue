@@ -921,10 +921,10 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request from '../../common/request'
-import Truck from '../../api/Truck'
-import ImageUpload from '../CommonComponents/ImageUpload'
-import DistPicker from '../CommonComponents/DistPicker'
+import request from '../../../common/request'
+import Truck from '../../../api/Truck'
+import ImageUpload from '../../CommonComponents/ImageUpload'
+import DistPicker from '../../CommonComponents/DistPicker'
 export default {
 	data() {
 		return {}

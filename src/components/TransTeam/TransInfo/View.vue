@@ -262,10 +262,10 @@
 	</div>
 </template>
 <script type="text/javascript">
-import ImageUpload from '../CommonComponents/ImageUpload'
-import { getdatefromtimestamp,deleteConfirm } from '../../common/utils'
-import TransportRecord from '../../api/TransportRecord'
-import RegisterForm from './Common/RegisterForm'
+import ImageUpload from '../../CommonComponents/ImageUpload'
+import { getdatefromtimestamp,deleteConfirm } from '../../../common/utils'
+import TransportRecord from '../../../api/TransportRecord'
+import RegisterForm from '../components/RegisterForm'
 export default {
 	data() {
 		return {

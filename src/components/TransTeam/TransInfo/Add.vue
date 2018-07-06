@@ -73,9 +73,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Staff from '../../api/Staff'
-import Truck from '../../api/Truck'
-import TransportRecord from '../../api/TransportRecord'
+import Staff from '../../../api/Staff'
+import Truck from '../../../api/Truck'
+import TransportRecord from '../../../api/TransportRecord'
 export default {
 	data() {
 		return {

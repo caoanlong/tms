@@ -567,11 +567,11 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Truck from '../../api/Truck'
-import ImageUpload from '../CommonComponents/ImageUpload'
-import DistPicker from '../CommonComponents/DistPicker'
-import { searchAreaByKey, areaIdToArrayId } from '../../common/utils'
-import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../common/validators'
+import Truck from '../../../api/Truck'
+import ImageUpload from '../../CommonComponents/ImageUpload'
+import DistPicker from '../../CommonComponents/DistPicker'
+import { searchAreaByKey, areaIdToArrayId } from '../../../common/utils'
+import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../../common/validators'
 export default {
 	data() {
 		return {

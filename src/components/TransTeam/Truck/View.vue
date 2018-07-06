@@ -410,8 +410,8 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { regionData } from 'element-china-area-data'
-import ImageUpload from '../CommonComponents/ImageUpload'
-import Truck from '../../api/Truck'
+import ImageUpload from '../../CommonComponents/ImageUpload'
+import Truck from '../../../api/Truck'
 export default {
 	data() {
 		return {
