@@ -56,10 +56,10 @@
 					</el-table-column>
 					<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
 					<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
-					<el-table-column label="数量(余)" prop="cargoNumSum"></el-table-column>
-					<el-table-column label="货量(余)" prop="PositionType">
+					<el-table-column label="数量(余)" prop="remainingCargoNum"></el-table-column>
+					<el-table-column label="货量(余)">
 						<template slot-scope="scope">
-							<span>{{scope.row.cargoWeightSum + '吨'}}/{{scope.row.cargoVolumeSum + '方'}}</span>
+							<span>{{scope.row.remainingCargoWeight + '吨'}}/{{scope.row.remainingCargoVolume + '方'}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">

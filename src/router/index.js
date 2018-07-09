@@ -434,6 +434,14 @@ let routerMap = [
 						component: () => import ('../components/TransTeam/RefDriverApp/index'),
 					},
 					{
+						path: '/adddriverapp',
+						name: 'adddriverapp',
+						meta: {
+							title: '邀请司机'
+						},
+						component: () => import ('../components/TransTeam/RefDriverApp/Add'),
+					},
+					{
 						path: '/transinfo',
 						name: 'transinfo',
 						meta: {
