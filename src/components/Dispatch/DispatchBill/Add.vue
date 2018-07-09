@@ -1,6 +1,6 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card hasTit">
+		<el-card class="box-card">
 			<el-steps :active="stepActive" finish-status="success" process-status="finish" simple style="margin-bottom:20px;" class="stepBar">
 				<el-step title="选择承运单"></el-step>
 				<el-step title="货物配载"></el-step>
@@ -9,7 +9,7 @@
 				<el-step title="完成"></el-step>
 			</el-steps>
 			<component :is="currentStepView" @nextStep="nextStep" @prevStep="prevStep"></component>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">

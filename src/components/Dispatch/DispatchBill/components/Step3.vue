@@ -226,7 +226,7 @@ export default {
 		.tit
 			min-width 1210px
 			display flex
-			background #f0f0f0
+			background #fff
 			border 1px solid #f0f0f0
 			.truckColumn
 			.driverColumn
@@ -239,6 +239,7 @@ export default {
 				line-height 20px
 				padding 10px
 				min-width 380px
+				border-left 1px solid #f0f0f0
 			.selectColumn
 				flex 0 0 70px
 				text-align center

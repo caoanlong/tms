@@ -236,7 +236,6 @@ export default {
 			padding 5px 0
 	.tit
 		td
-			border-top 10px solid #fff
 			background #f8f8f8
 			color #3582d0
 			.infoItem
@@ -259,7 +258,7 @@ export default {
 		padding 6px 10px
 		height 36px
 		line-height 24px
-		background #f0f0f0
+		background #fff
 		color #666
 		white-space nowrap
 	.list
