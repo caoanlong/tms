@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">车辆</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">车辆列表</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small" :model="find" :rules="rules" ref="ruleForm">
 					<el-form-item label="车辆" prop="plateNo">
@@ -55,7 +55,7 @@
 			</div>
 			</div>
 			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
@@ -226,20 +226,18 @@ export default {
 .driverList
 	min-width 900px
 	.tableTit
-		background #409EFF
-		color #fff
-		height 36px
+		height 38px
 		line-height 36px
 		text-align center
 		position relative
-		border-radius 3px
 		font-size 14px
 		font-weight bold
 		margin-bottom 10px
+		border 1px solid #ebeef5
 		.driver
 		.mobile
 		.handle
-			border-left 1px solid #fff
+			border-left 1px solid #ebeef5
 	.truck
 		min-width 380px
 	.handle

@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">添加企业地址</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px" :model="companyAddress" :rules="rules" ref="ruleForm" size="mini">
+					<el-form label-width="120px" :model="companyAddress" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="所属企业" prop="customerID">
 							<el-autocomplete  style="width:100%"
 								value-key="companyName" 

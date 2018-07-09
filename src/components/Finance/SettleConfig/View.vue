@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">查看运费模板</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">查看运费模板</div>	
 			<el-form label-width="100px">
 				<el-row>
 					<div class="split-item">
@@ -160,7 +160,7 @@
 					</el-col>
 				</el-row>
 			</el-form>
-		</div>
+		</el-card>
 	</div>
 </template>
 
