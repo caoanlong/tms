@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">应付汇总</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">应付汇总</div>	
 			<el-tabs v-model="tabSelected" type="card" @tab-click="handleTabSelected">
 				<el-tab-pane label="司机" name="driver"></el-tab-pane>
 				<el-tab-pane label="随车人员" name="follower"></el-tab-pane>
@@ -80,7 +80,7 @@
 				</el-table>
 				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">

@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">编辑运费模板</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">编辑运费模板</div>	
 			<el-row>
 				<div class="split-item">
 					<span class="num">1</span>
@@ -206,7 +206,7 @@
 					<el-button @click="back">取消</el-button>
 				</div>
 			</el-form>
-		</div>
+		</el-card>
 	</div>
 </template>
 
