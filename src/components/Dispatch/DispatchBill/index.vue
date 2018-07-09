@@ -305,7 +305,6 @@ export default {
 		position relative
 	.tit
 		td
-			border-top 10px solid #fff
 			background #f8f8f8
 			.infoItem
 				font-size 12px
@@ -317,7 +316,7 @@ export default {
 		padding 6px 10px
 		height 36px
 		line-height 24px
-		background #f0f0f0
+		background #fff
 		color #666
 		width 100px
 	.list

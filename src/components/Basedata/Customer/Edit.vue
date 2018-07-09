@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">编辑企业</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="mini">
+					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="企业LOGO">
 							<ImageUpload :files="[recdeliverycomp.logoUrl]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleLogoSuccess"/>
 						</el-form-item>

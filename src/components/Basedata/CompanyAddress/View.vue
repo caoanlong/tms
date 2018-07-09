@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">查看企业地址</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px" size="mini">
+					<el-form label-width="120px" size="small">
 						<el-form-item label="所属企业">
                             <p>{{companyAddress.companyName}}</p>
 						</el-form-item>
@@ -76,9 +76,9 @@ export default {
 		border 1px solid #fff
 		border-bottom-color #dcdfe6
 		padding 0 15px
-		min-height 40px
+		min-height 32px
 		font-family 'sans-serif'
-		line-height 40px
+		line-height 32px
 		color #999
 	.el-input__inner
 		vertical-align top
