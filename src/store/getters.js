@@ -10,5 +10,6 @@ const getters = {
 	selectedCargos: state => state.dispatch.selectedCargos,
 	selectedDriver: state => state.dispatch.selectedDriver,
 	selectedStaff: state => state.dispatch.selectedStaff,
+	selectedTruck: state => state.dispatch.selectedTruck,
 }
 export default getters

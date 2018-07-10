@@ -1152,6 +1152,8 @@ export default {
 			gpsValidDate: [],
 			managementAgreementDate: [],
 			truck: {
+				code: '',
+				trailerPlateNo: '',
 				truckCategory: '',  // String	车辆类别 WholeVehicle-整车 Tractor-牵引车 Trailer-挂车
 				plateNoColor: '',  // String	车牌颜色
 				trailerID: '',  // number	挂车ID

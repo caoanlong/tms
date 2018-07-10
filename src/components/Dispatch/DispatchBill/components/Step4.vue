@@ -1,134 +1,130 @@
 <template>
 	<div class="step step4">
-		<div class="personInfo">
-			<div class="tit">人员信息</div>
-			<div class="con">
-				<div class="driver">
-					<img :src="selectedDriver.driverHeadPic ? resizeImg(selectedDriver.driverHeadPic, '_80x80.') : require('../../../../assets/imgs/avatar.gif')" class="headPic"/>
-					<p class="name">{{selectedDriver.driverName}}<span class="tag">司机</span></p>
-					<p>{{selectedDriver.driverPhone}}</p>
-				</div>
-				<div class="escort">
-					<img :src="selectedStaff.staffHeadPic ? resizeImg(selectedStaff.staffHeadPic, '_80x80.') : require('../../../../assets/imgs/avatar.gif')" class="headPic"/>
-					<p class="name">{{selectedStaff.staffName}}<span class="tag">押运</span></p>
-					<p>{{selectedStaff.staffPhone}}</p>
-				</div>
-			</div>
-		</div>
 		<div class="item" v-for="(task, index) in taskList" :key="task.carrierOrderID">
-			<div class="lineInfo">
-				<div class="tit"><span>任务单号：{{index + 1}}</span>
-					<span class="status fr" v-if="task.status='Committed'">待执行</span>
-					<span class="status fr" v-else-if="task.status='Loaded'">已装运</span>
-					<span class="status fr" v-else-if="task.status='Signed'">已签收</span>
-					<span class="status fr" v-else>已作废</span>
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>任务单号：{{index + 1}}</span>
+					<span>{{task.shipperArea}}</span> -> <span>{{task.consigneeArea}}</span>
 				</div>
-				<div class="con">
-					<div class="from">
-						<img src="../../../../assets/imgs/avatar.gif" class="headPic"/>
-						<p class="companyName">{{task.shipperCompanyName}}</p>
-						<p>{{task.shipperName}}{{task.shipperPhone?('/'+task.shipperPhone):''}}</p>
-						<p class="area">{{task.shipperArea}}</p>
-						<p class="datetime">{{task.shipperDate | getdatefromtimestamp(true)}}（预计发货）</p>
-						<p class="datetime c2" v-if="task.shipperActualDate">{{task.shipperActualDate | getdatefromtimestamp(true)}}（实际发货）</p>
+				<el-row class="section-block" style="margin-bottom:30px">
+					<span class="block-title">货物清单</span>
+					<div class="block-content">
+						<table class="cargoList">
+							<tr>
+								<th>承运单</th>
+								<th>货物名称</th>
+								<th>货物重量</th>
+								<th>货物体积</th>
+								<th>货物数量</th>
+							</tr>
+							<tr v-for="cargoItem in task.cargo" :key="cargoItem.carrierCargoID">
+								<td align="center">{{task.carrierOrderNo}}</td>
+								<td align="center">{{cargoItem.cargoName}}</td>
+								<td align="center">{{cargoItem.cargoWeightNew ? cargoItem.cargoWeightNew + '吨' : ''}}</td>
+								<td align="center">{{cargoItem.cargoVolumeNew ? cargoItem.cargoVolumeNew + '方' : ''}}</td>
+								<td align="center">{{cargoItem.cargoNumNew ? cargoItem.cargoNumNew + '件' : ''}}</td>
+							</tr>
+						</table>
 					</div>
-					<div class="platNo">
-						<span>
-							{{selectedDriver.plateNo}}
-							{{selectedDriver.trailerPlateNo ? ('/' + selectedDriver.trailerPlateNo) : ''}}
-						</span>
+				</el-row>
+				<el-row class="section-block" style="margin-bottom:10px">
+					<span class="block-title">运费录入</span>
+					<div class="block-content">
+						<table class="cargoList">
+							<tr>
+								<th style="width:90px">人员</th>
+								<th>现付</th>
+								<th>到付</th>
+								<th>回单付</th>
+								<th>月结</th>
+								<th>收货方付</th>
+								<th style="width:90px">合计</th>
+							</tr>
+							<tr class="text-center">
+								<td>司机</td>
+								<td><el-input size="mini" v-model="task.driverCashAmount"></el-input></td>
+								<td><el-input size="mini" v-model="task.driverCodAmount"></el-input></td>
+								<td><el-input size="mini" v-model="task.driverPorAmount"></el-input></td>
+								<td><el-input size="mini" v-model="task.driverMonthlyAmont"></el-input></td>
+								<td><el-input size="mini" v-model="task.driverCosigneeAmount"></el-input></td>
+								<td>
+									{{
+										Number(task.driverCashAmount ? task.driverCashAmount : 0) 
+										+ Number(task.driverCodAmount ? task.driverCodAmount : 0) 
+										+ Number(task.driverPorAmount ? task.driverPorAmount : 0) 
+										+ Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
+										+ Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0)
+									}}
+								</td>
+							</tr>
+							<tr class="text-center">
+								<td>押运员</td>
+								<td><el-input size="mini" v-model="task.superCargoCashAmount"></el-input></td>
+								<td><el-input size="mini" v-model="task.superCargoCodAmount"></el-input></td>
+								<td><el-input size="mini" v-model="task.superCargoCorAmount"></el-input></td>
+								<td><el-input size="mini" v-model="task.superCargoMonthlyAmount"></el-input></td>
+								<td><el-input size="mini" v-model="task.superCosigneeAmount"></el-input></td>
+								<td>
+									{{
+										Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
+										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
+										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
+										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
+										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)
+									}}
+								</td>
+							</tr>
+							<tr class="text-center">
+								<td>合计</td>
+								<td>
+									{{
+										Number(task.driverCashAmount ? task.driverCashAmount : 0) 
+										+ Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
+									}}
+								</td>
+								<td>
+									{{
+										Number(task.driverCodAmount ? task.driverCodAmount : 0) 
+										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
+									}}
+								</td>
+								<td>
+									{{
+										Number(task.driverPorAmount ? task.driverPorAmount : 0) 
+										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
+									}}
+								</td>
+								<td>
+									{{
+										Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
+										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
+									}}
+								</td>
+								<td>
+									{{
+										Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0) 
+										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0) 
+									}}
+								</td>
+								<td>
+									{{
+										Number(task.driverCashAmount ? task.driverCashAmount : 0) 
+										+ Number(task.driverCodAmount ? task.driverCodAmount : 0) 
+										+ Number(task.driverPorAmount ? task.driverPorAmount : 0) 
+										+ Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
+										+ Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0)
+										+ Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
+										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
+										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
+										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
+										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)
+									}}
+								</td>
+							</tr>
+						</table>
 					</div>
-					<div class="to">
-						<img src="../../../../assets/imgs/avatar.gif" class="headPic"/>
-						<p class="companyName">{{task.consigneeCompanyName}}</p>
-						<p>{{task.consigneeName}}{{task.consigneePhone?('/'+task.consigneePhone):''}}</p>
-						<p class="area">{{task.consigneeArea}}</p>
-						<p class="datetime">{{task.consigneeDate | getdatefromtimestamp(true)}}（预计到货）</p>
-						<p class="datetime c2" v-if="task.consigneeActualDate">{{task.consigneeActualDate | getdatefromtimestamp(true)}}（实际到货）</p>
-					</div>
-				</div>
-			</div>
-			<table class="cargoList">
-				<tr>
-					<td class="tit" colspan="4">货物清单</td>
-				</tr>
-				<tr v-for="cargoItem in task.cargo" :key="cargoItem.carrierCargoID">
-					<td class="text-center" width="100">
-						<span v-if="cargoItem.weightType == 'Heavy'">重货</span>
-						<span v-else>轻货</span>
-					</td>
-					<td>{{cargoItem.cargoType}}</td>
-					<td>{{cargoItem.cargoName}}</td>
-					<td>
-						{{cargoItem.cargoWeightNew?(cargoItem.cargoWeightNew+'kg/'+''):''}}
-						{{cargoItem.cargoVolumeNew?cargoItem.cargoVolumeNew+'m³/':''}}
-						{{cargoItem.cargoNumNew?cargoItem.cargoNumNew+'件':''}}
-					</td>
-				</tr>
-			</table>
-			<table class="fare">
-				<tr>
-					<td class="tit" colspan="7">付款费用</td>
-				</tr>
-				<tr>
-					<th width="100">付给人员</th>
-					<th>现付</th>
-					<th>到付</th>
-					<th>回单结</th>
-					<th>月结</th>
-					<th>收货方付款</th>
-					<th>合计</th>
-				</tr>
-				<tr class="text-center">
-					<td>司机</td>
-					<td><el-input size="mini" v-model="task.driverCashAmount"></el-input></td>
-					<td><el-input size="mini" v-model="task.driverCodAmount"></el-input></td>
-					<td><el-input size="mini" v-model="task.driverPorAmount"></el-input></td>
-					<td><el-input size="mini" v-model="task.driverMonthlyAmont"></el-input></td>
-					<td><el-input size="mini" v-model="task.driverCosigneeAmount"></el-input></td>
-					<td>
-						<el-input size="mini" disabled :value="
-							Number(task.driverCashAmount ? task.driverCashAmount : 0) 
-							+ Number(task.driverCodAmount ? task.driverCodAmount : 0) 
-							+ Number(task.driverPorAmount ? task.driverPorAmount : 0) 
-							+ Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
-							+ Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0)">
-						</el-input>
-					</td>
-				</tr>
-				<tr class="text-center">
-					<td>随行人员</td>
-					<td><el-input size="mini" v-model="task.superCargoCashAmount"></el-input></td>
-					<td><el-input size="mini" v-model="task.superCargoCodAmount"></el-input></td>
-					<td><el-input size="mini" v-model="task.superCargoCorAmount"></el-input></td>
-					<td><el-input size="mini" v-model="task.superCargoMonthlyAmount"></el-input></td>
-					<td><el-input size="mini" v-model="task.superCosigneeAmount"></el-input></td>
-					<td>
-						<el-input size="mini" disabled :value="
-						Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
-						+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
-						+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
-						+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
-						+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)">
-						</el-input>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="6"></td>
-					<td style="font-weight:bold">任务运费：￥{{
-						Number(task.driverCashAmount ? task.driverCashAmount : 0) 
-						+ Number(task.driverCodAmount ? task.driverCodAmount : 0) 
-						+ Number(task.driverPorAmount ? task.driverPorAmount : 0) 
-						+ Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
-						+ Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0)
-						+ Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
-						+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
-						+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
-						+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
-						+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)
-					}}</td>
-				</tr>
-			</table>
+				</el-row>
+			</el-card>
 		</div>
 		<div class="totalAmount">本次调度总运费：￥{{totalAmount}}</div>
 		<div class="text-center">
@@ -150,7 +146,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['selectedCarrierBill', 'selectedDriver', 'selectedStaff', 'selectedCargos']),
+		...mapGetters(['selectedCarrierBill', 'selectedTruck', 'selectedCargos']),
 		totalAmount() {
 			let amount = 0
 			this.taskList.forEach(item => {
@@ -197,7 +193,7 @@ export default {
 					return
 				}
 			}
-			let dispatchTaskCargoInfo = this.selectedCargos.map(item => {
+			const dispatchTaskCargoInfo = this.selectedCargos.map(item => {
 				return {
 					'carrierCargoID': item.carrierCargoID,
 					'carrierOrderID': item.carrierOrderID,
@@ -206,7 +202,7 @@ export default {
 					'cargoNum': item.cargoNumNew
 				}
 			})
-			let dispatchTaskInfo = this.taskList.map(item => {
+			const dispatchTaskInfo = this.taskList.map(item => {
 				return {
 					'carrierOrderID': item.carrierOrderID,
 					'amountSum': Number(item.driverCashAmount ? item.driverCashAmount : 0) 
@@ -235,11 +231,9 @@ export default {
 				'dispatchTaskCargoInfo': JSON.stringify(dispatchTaskCargoInfo),
 				'dispatchTaskInfo': JSON.stringify(dispatchTaskInfo),
 				'sumAmount': this.totalAmount,
-				'transportRecordID': this.selectedDriver.transportRecordID,
-				'truckID': this.selectedDriver.truckID,
-				'trailerID': this.selectedDriver.trailerID,
-				'driverID': this.selectedDriver.driverID,
-				'superCargoID': this.selectedStaff.staffID
+				'truckID': this.selectedTruck.truckID,
+				'driverID': this.selectedTruck.primaryDriver.comSupercargoID,
+				'superCargoID': this.selectedTruck.secondaryDriver.comSupercargoID
 			}).then(res => {
 				Message.success('保存成功！')
 				this.$store.dispatch('clearCargo')
@@ -260,7 +254,9 @@ export default {
 .totalAmount
 	color #ff6900
 	font-weight bold
-	text-align right
+	text-align center
+	height 50px
+	line-height 50px
 .item
 	margin-bottom 10px
 	table

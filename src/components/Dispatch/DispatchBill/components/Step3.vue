@@ -35,7 +35,12 @@
 				<div class="driverColumn">驾驶员<span>*</span></div>
 				<div class="escortColumn">随行人员</div>
 			</div>
-			<TruckItem></TruckItem>
+			<TruckItem 
+				v-for="(item, index) in truck" 
+				:truck="item" :key="index" 
+				:isSelected="selectedTruck && (selectedTruck.truckID == item.truckID)" 
+				@selectTruck="selectTruck">
+			</TruckItem>
 		</div>
 		<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		<div class="step-footer">
@@ -67,7 +72,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['selectedDriver', 'selectedStaff'])
+		...mapGetters(['selectedTruck'])
 	},
 	components: {
 		TruckItem, Page
@@ -80,31 +85,14 @@ export default {
 			this.$emit('prevStep', 2)
 		},
 		nextStep() {
-			if (!this.truck.selected.truckID) {
+			if (!this.selectedTruck) {
 				Message.error('请选择司机车辆！')
-				return
-			}
-			if(!this.person.selected.staffID) {
-				Message.error('请选择随车人员！')
 				return
 			}
 			this.$emit('nextStep', 4)
 		},
-		selectDriverItem(data) {
-			if (this.truck.selected.truckID == data.truckID) {
-				this.truck.selected = {}
-				return
-			}
-			this.truck.selected = data
-			this.$store.dispatch('setDriver', data)
-		},
-		selectEscortItem(data) {
-			if (this.person.selected.staffID == data.staffID) {
-				this.person.selected = {}
-				return
-			}
-			this.person.selected = data
-			this.$store.dispatch('setStaff', data)
+		selectTruck(data) {
+			this.$store.dispatch('setTruck', data)
 		},
 		reset() {
 			this.find.keyword = ''
@@ -134,7 +122,7 @@ export default {
 				workStatus: this.find.workStatus,
 				shipperDate: this.find.shipperDate
 			}).then(res => {
-				this.truck = res
+				this.truck = res.records
 			})
 		},
 		back() {

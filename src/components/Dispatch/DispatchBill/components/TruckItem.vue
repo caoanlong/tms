@@ -1,15 +1,22 @@
 <template>
 	<div class="listItem" >
-		<div class="selectColumn">
-			<span class="selectIcon"><svg-icon :icon-class="isSelected?'ic_checkbox_true':'ic_checkbox_false'" :class="isSelected?'selected':''"></svg-icon></span>
+		<div class="selectColumn" @click="selectTruck">
+			<span class="selectIcon">
+				<svg-icon :icon-class="isSelected ? 'ic_checkbox_true' : 'ic_checkbox_false'" :class="isSelected ? 'selected' : ''"></svg-icon>
+			</span>
 		</div>
 		<div class="truckColumn">
 			<div class="headPic fl">
-				<img :src="defaultImg" />
+				<img :src="truck.truckFrontPic ? resizeImg(truck.truckFrontPic, '_100x100.') : defaultImg" />
 			</div>
 			<div class="truckInfo fl">
-				<p><span class="plateNo">粤B-66688 </span>
-					<el-tag size="mini">作业</el-tag>
+				<p>
+					<span class="plateNo">{{truck.plateNo}}</span>
+					<el-tag size="mini" v-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'Van'">厢式货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</el-tag>
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tag size="mini" type="info">挂车</el-tag>
 					<el-tooltip placement="right" effect="light">
@@ -21,15 +28,15 @@
 						<el-tag size="mini" type="danger">到期</el-tag>
 					</el-tooltip>
 				</p>
-				<p>9.6米/高栏/22吨/3.5方</p>
+				<p>{{Number(truck.length)/1000}}米/高栏/{{truck.loads}}吨/{{truck.loadVolume}}方</p>
 			</div>
 		</div>
-		<div class="driverColumn">
+		<div class="driverColumn" v-if="truck.primaryDriver && truck.primaryDriver.realName">
 			<div class="headPic fl">
-				<img :src="defaultImg" />
+				<img :src="truck.primaryDriver.headPic ? resizeImg(truck.primaryDriver.headPic, '_100x100.') : defaultImg" />
 			</div>
 			<div class="driverInfo fl">
-				<p><span class="driverName">罗凯</span>
+				<p><span class="driverName">{{truck.primaryDriver.realName}}</span>
 					<el-tag size="mini" type="success">主驾</el-tag>
 					<el-tag size="mini">作业</el-tag>
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
@@ -42,16 +49,19 @@
 						<el-tag size="mini" type="danger">到期</el-tag>
 					</el-tooltip>
 				</p>
-				<p>13424299894</p>
+				<p>{{truck.primaryDriver.mobile}}</p>
 			</div>
-			<span class="btn replaceBtn" @click="selectSupercargo('driver')">更换</span>
+			<span class="btn replaceBtn" @click="selectSupercargo('primary')">更换</span>
 		</div>
-		<div class="escortColumn" v-if="1">
+		<div class="escortColumn" v-else>
+			<span class="btn addEscortBtn"  @click="add('primary')"><svg-icon icon-class="add-icon"></svg-icon>添加驾驶员</span>
+		</div>
+		<div class="escortColumn" v-if="truck.secondaryDriver && truck.secondaryDriver.realName">
 			<div class="headPic fl">
-				<img :src="defaultImg" />
+				<img :src="truck.secondaryDriver.headPic ? resizeImg(truck.secondaryDriver.headPic, '_100x100.') : defaultImg" />
 			</div>
 			<div class="escortInfo fl">
-				<p><span class="escortName">吴正平</span>
+				<p><span class="escortName">{{truck.secondaryDriver.realName}}</span>
 					<el-tag size="mini">作业</el-tag>
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tooltip placement="right" effect="light">
@@ -63,29 +73,27 @@
 						<el-tag size="mini" type="danger">到期</el-tag>
 					</el-tooltip>
 				</p>
-				<p>13424299894</p>
+				<p>{{truck.secondaryDriver.mobile}}</p>
 			</div>
-			<span class="btn replaceBtn" @click="selectSupercargo('staff')">更换</span>
+			<span class="btn replaceBtn" @click="selectSupercargo('second')">更换</span>
 			<span class="btn deleteBtn" @click="deleteItem">删除</span>
 		</div>
 		<div class="escortColumn" v-else>
-			<span class="btn addEscortBtn" @click="selectSupercargo"><svg-icon icon-class="add-icon"></svg-icon>添加押车员</span>
+			<span class="btn addEscortBtn"  @click="add('second')"><svg-icon icon-class="add-icon"></svg-icon>添加押车员</span>
 		</div>
 		<SelectSupercargo :type="type" :dialogVisible="selectDialogVisible" @control="handleSelectSupercargo"></SelectSupercargo>
 	</div>
 </template>
 
 <script>
-import {defaultImg} from '../../../../assets/icons/icons'
+import { defaultImg } from '../../../../assets/icons/icons'
+import { resizeImg, deleteConfirm } from '../../../../common/utils'
 import SelectSupercargo from './SelectSupercargo'
 export default {
 	props: {
 		isSelected: {
 			type: Boolean,
 			default: false
-		},
-		index: {
-			type: Number
 		},
 		truck: {
 			type: Object,
@@ -95,14 +103,22 @@ export default {
 	data(){
 		return {
 			selectDialogVisible: false,
-			type: 'driver'
+			type: 'primary'
 		}
 	},
 	computed: {
-		defaultImg: () => defaultImg
+		defaultImg: () => defaultImg,
+		resizeImg: () => resizeImg
 	},
 	components: { SelectSupercargo },
 	methods:{
+		selectTruck() {
+			this.$emit('selectTruck', this.truck)
+		},
+		add(type) {
+			this.type = type
+			this.selectDialogVisible = true
+		},
 		selectSupercargo(type) {
 			this.type = type
 			this.selectDialogVisible = true
@@ -110,7 +126,13 @@ export default {
 		deleteItem() {
 
 		},
-		handleSelectSupercargo() {
+		handleSelectSupercargo(bool, data, type) {
+			console.log(bool, data, type)
+			if (type == 'primary') {
+				this.truck.primaryDriver = data
+			} else {
+				this.truck.secondaryDriver = data
+			}
 			this.selectDialogVisible = false
 		}
 	}

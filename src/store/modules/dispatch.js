@@ -4,6 +4,7 @@ const dispatch = {
 		selectedCargos: [],
 		selectedDriver: null,
 		selectedStaff: null,
+		selectedTruck: null
 	},
 	mutations: {
         ADD_CARRIERBILL: (state, list) => {
@@ -35,6 +36,9 @@ const dispatch = {
 		SET_STAFF: (state, data) => {
 			state.selectedStaff = data
 		},
+		SET_TRUCK: (state, data) => {
+			state.selectedTruck = data
+		},
 	},
 	actions: {
 		addCarrierBill({ commit }, list) {
@@ -58,6 +62,9 @@ const dispatch = {
 		setStaff({ commit }, data) {
 			commit('SET_STAFF', data)
 		},
+		setTruck({ commit }, data) {
+			commit('SET_TRUCK', data)
+		}
 	}
 }
 

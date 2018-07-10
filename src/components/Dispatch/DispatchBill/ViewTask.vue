@@ -261,7 +261,7 @@ export default {
 		resizeImg: () => resizeImg
 	},
 	created() {
-		this.getDetail()
+		this.getInfo()
 		this.getImgs()
 	},
 	methods: {
@@ -271,8 +271,8 @@ export default {
 		saveFare() {
 			this.modifyFreight()
 		},
-		getDetail() {
-			let dispatchTaskID = this.$route.query.dispatchTaskID
+		getInfo() {
+			const dispatchTaskID = this.$route.query.dispatchTaskID
 			Task.findById({ dispatchTaskID }).then(res => {
 				this.taskDetail = res
 				this.task = res.task
@@ -281,7 +281,7 @@ export default {
 			})
 		},
 		getImgs() {
-			let dispatchTaskID = this.$route.query.dispatchTaskID
+			const dispatchTaskID = this.$route.query.dispatchTaskID
             TaskPic.find({ dispatchTaskID }).then(res => {
 				this.loadImgObjs = res.Loaded
                 this.arriveImgObjs = res.Arrived
@@ -310,7 +310,7 @@ export default {
 				Message.error('随车人员付款费用必填一项！')
 				return
 			}
-			let dispatchTaskID = this.$route.query.dispatchTaskID
+			const dispatchTaskID = this.$route.query.dispatchTaskID
 			Task.modifyFreight({
 				'dispatchTaskID': dispatchTaskID,
 				'driverCashAmount': this.task.driverCashAmount,
@@ -326,7 +326,7 @@ export default {
 			}).then(res => {
 				this.isEdit = false
 				Message.success(res.data.msg)
-				this.getDetail()
+				this.getInfo()
 			})
 		},
 		upload() {

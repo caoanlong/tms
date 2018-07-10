@@ -70,12 +70,12 @@
 			<div class="handleItem">
 				<span style="color: #ccc">设为主驾</span>
 				<span @click="add('primary')">人员替换</span>
-				<span @click="delSuperCargo">删除</span>
+				<span @click="delSuperCargo(truck.primaryDriver.comSupercargoID)">删除</span>
 			</div>
 			<div class="handleItem">
 				<span @click="primary">设为主驾</span>
 				<span @click="add('second')">人员替换</span>
-				<span @click="delSuperCargo">删除</span>
+				<span @click="delSuperCargo(truck.secondaryDriver.comSupercargoID)">删除</span>
 			</div>
 		</div>
 		<SelectSuperCargo :dialogVisible="dialogVisible" :type="type" :truckID="truck.truckID" @control="handleSelect"></SelectSuperCargo>
@@ -125,9 +125,9 @@ export default {
 				})
 			})
 		},
-		delSuperCargo() {
+		delSuperCargo(comSupercargoID) {
 			Truck.deleteDriver({
-				comSupercargoID: this.truck.secondaryDriver.comSupercargoID,
+				comSupercargoID,
 				comTruckID: this.truck.truckID
 			}).then(res => {
 				Message.success(res.data.msg)

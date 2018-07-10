@@ -50,23 +50,21 @@
 				<tr>
 					<td>
 						<span class="justify">发货地</span>
-						{{carrierOrder.shipperArea ? carrierOrder.shipperArea : ''}}
-						{{carrierOrder.shipperDetailAddress ? carrierOrder.shipperDetailAddress : ''}}
+						{{carrierOrder.shipperArea}}
 					</td>
 					<td>
 						<span class="justify">收货地</span>
-						{{carrierOrder.consigneeArea ? carrierOrder.consigneeArea : ''}}
-						{{carrierOrder.consigneeDetailAddress ? carrierOrder.consigneeDetailAddress : ''}}
+						{{carrierOrder.consigneeArea}}
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<span class="justify">发货位置</span>
-						{{carrierOrder.shipperLocationAddress}}
+						<span class="justify">详细地址</span>
+						{{carrierOrder.shipperDetailAddress}}
 					</td>
 					<td>
-						<span class="justify">收货位置</span>
-						{{carrierOrder.consigneeLocationAddress}}
+						<span class="justify">详细地址</span>
+						{{carrierOrder.consigneeDetailAddress}}
 					</td>
 				</tr>
 				<tr>
@@ -129,28 +127,22 @@
 			<table class="wf-table">
 				<caption>运输进展</caption>
 				<tr>
-					<th>车牌号/挂车号</th>
-					<th>司机</th>
-					<th>随车人员</th>
 					<th>任务单号</th>
-					<th>任务状态</th>
+					<th>车牌号</th>
+					<th>司机</th>
+					<th>押运员</th>
 					<th>货物名称</th>
 					<th>配载货量</th>
 					<th>运输照片</th>
 				</tr>
 				<tr class="is-center" v-for="(transport, index) in transports" :key="index">
+					<td><span class="link" @click="viewTask(transport.dispatchTaskID)">{{transport.taskNo}}</span></td>
 					<td>
 						{{transport.plateNo}}
 						{{transport.trailerPlateNo ? ('/' + transport.trailerPlateNo) : ''}}
 					</td>
 					<td>{{transport.driverName}}</td>
 					<td>{{transport.superCargoName}}</td>
-					<td><span class="link" @click="viewTask(transport.dispatchTaskID)">{{transport.taskNo}}</span></td>
-					<td>
-						<el-tag size="mini" type="warning" v-if="transport.status == 'Committed'">待装车</el-tag>
-						<el-tag size="mini" v-else-if="transport.status == 'Loaded'">已装车</el-tag>
-						<el-tag size="mini" type="success" v-else-if="transport.status == 'Signed'">已签收</el-tag>
-					</td>
 					<td>{{transport.cargoName}}</td>
 					<td>{{transport.loadWeightSum + 'kg'}}/{{transport.loadVolumeSum + 'm³'}}/{{transport.LoadNumSum + '件'}}</td>
 					<td style="text-align: center">
