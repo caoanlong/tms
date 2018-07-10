@@ -2,11 +2,16 @@
 	<div class="driverItem">
 		<div class="truck">
 			<div class="truckPic fl">
-				<img :src="defaultImg" />
+				<img :src="truck.truckFrontPic ? resizeImg(truck.truckFrontPic, '_100x100.') : defaultImg" />
 			</div>
 			<div class="truckInfo fl">
-				<p><span class="plateNo">粤B-66688 </span>
-					<el-tag size="mini">作业</el-tag>
+				<p>
+					<span class="plateNo">{{truck.plateNo}}</span>
+					<el-tag size="mini" v-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'Van'">厢式货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</el-tag>
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tag size="mini" type="info">挂车</el-tag>
 					<el-tooltip placement="right" effect="light">
@@ -18,16 +23,17 @@
 						<el-tag size="mini" type="danger">到期</el-tag>
 					</el-tooltip>
 				</p>
-				<p>9.6米/高栏/22吨/3.5方</p>
+				<p>{{Number(truck.length)/1000}}米/高栏/{{truck.loads}}吨/{{truck.loadVolume}}方</p>
 			</div>
 			<div class="truckHandle fl">
-				<span>查看档案</span>
-				<span>编辑档案</span>
+				<router-link tag="span" :to="{name: 'viewtruck', query: { truckID: truck.truckID } }">查看档案</router-link>
+				<router-link tag="span" :to="{name: 'edittruck', query: { truckID: truck.truckID } }">编辑档案</router-link>
 				<span>删除车辆</span>
 			</div>
 		</div>
 		<div class="driver">
-			<div class="driverInfo"><span class="driverName">罗凯 </span>
+			<div class="driverInfo" v-if="truck.primaryDriver">
+				<span class="driverName">{{truck.primaryDriver.realName}}</span>
 				<el-tooltip placement="top" >
 					<div slot="content">开通APP接单</div>
 					<el-tag size="mini">APP</el-tag> 
@@ -41,7 +47,8 @@
 					<el-tag size="mini" type="danger">到期</el-tag>
 				</el-tooltip>
 			</div>
-			<div class="driverInfo"><span class="driverName">吴正平 </span>
+			<div class="driverInfo" v-if="truck.secondaryDriver">
+				<span class="driverName">{{truck.secondaryDriver.realName}}</span>
 				<el-tag type="info" size="mini">APP</el-tag> 
 				<el-tooltip placement="right" effect="light">
 					<div slot="content">
@@ -54,8 +61,8 @@
 			</div>
 		</div>
 		<div class="mobile">
-			<div class="mobileItem">13423899694</div>
-			<div class="mobileItem">13723592463</div>
+			<div class="mobileItem" v-if="truck.primaryDriver">{{truck.primaryDriver.mobile}}</div>
+			<div class="mobileItem" v-if="truck.secondaryDriver">{{truck.secondaryDriver.mobile}}</div>
 		</div>
 		<div class="handle">
 			<div class="handleItem">
@@ -75,14 +82,19 @@
 <script>
 import { Message } from 'element-ui'
 import { defaultImg } from '../../../assets/icons/icons'
+import { resizeImg } from '../../../common/utils'
 export default {
+	props: {
+		truck: Object
+	},
 	data() {
 		return {
 		   
 		}
 	},
 	computed: {
-		defaultImg: () => defaultImg
+		defaultImg: () => defaultImg,
+		resizeImg: () => resizeImg
 	}
 }
 </script>

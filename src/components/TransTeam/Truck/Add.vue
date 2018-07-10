@@ -14,9 +14,9 @@
 							<el-col :span="8">
 								<el-form-item label="车辆类别" prop="truckCategory">
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckCategory">
-										<el-option label="整车" value="整车"></el-option>
-										<el-option label="牵引车" value="牵引车"></el-option>
-										<el-option label="挂车" value="挂车"></el-option>
+										<el-option label="整车" value="WholeVehicle"></el-option>
+										<el-option label="牵引车" value="Tractor"></el-option>
+										<el-option label="挂车" value="Trailer"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
@@ -43,11 +43,11 @@
 							<el-col :span="8">
 								<el-form-item label="车辆类型" prop="truckType">
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckType">
-										<el-option label="集装箱挂车" value="集装箱挂车"></el-option>
-										<el-option label="厢式货车" value="厢式货车"></el-option>
-										<el-option label="重型半挂牵引车" value="重型半挂牵引车"></el-option>
-										<el-option label="重型厢式货车" value="重型厢式货车"></el-option>
-										<el-option label="重型集装箱半挂车" value="重型集装箱半挂车"></el-option>
+										<el-option label="集装箱挂车" value="ContainerTrailer"></el-option>
+										<el-option label="厢式货车" value="Van"></el-option>
+										<el-option label="重型半挂牵引车" value="HeavySemitrailerTractor"></el-option>
+										<el-option label="重型厢式货车" value="HeavyVan"></el-option>
+										<el-option label="重型集装箱半挂车" value="HeavyContainerSemitrailer"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
@@ -56,8 +56,8 @@
 							<el-col :span="8">
 								<el-form-item label="车辆归属" prop="cooperateRelation">
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.cooperateRelation">
-										<el-option label="挂靠" value="挂靠"></el-option>
-										<el-option label="自有" value="自有"></el-option>
+										<el-option label="挂靠" value="Self"></el-option>
+										<el-option label="自有" value="Attach"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
@@ -583,19 +583,35 @@
 					<span class="block-title">技术参数</span>
 					<div class="block-content">
 						<el-row :gutter="20">
-							<el-col :span="24">
-								<el-form-item label="车辆长宽高">
-									<el-input placeholder="长度" style="width:32%" v-model="truck.length"><template slot="append">mm</template></el-input>
-									<el-input placeholder="宽度" style="width:32%" v-model="truck.width"><template slot="append">mm</template></el-input>
-									<el-input placeholder="高度" style="width:32%" v-model="truck.high"><template slot="append">mm</template></el-input>
+							<el-col :span="8">
+								<el-form-item label="车辆长度" prop="length">
+									<el-input placeholder="长度" v-model="truck.length"><template slot="append">mm</template></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="24">
-								<el-form-item label="装载量">
-									<el-input placeholder="载重" style="width:32%" v-model="truck.loads"><template slot="append">kg</template></el-input>
-									<el-input placeholder="容积" style="width:32%" v-model="truck.loadVolume"><template slot="append">m³</template></el-input>
+							<el-col :span="8">
+								<el-form-item label="车辆宽度" prop="width">
+									<el-input placeholder="宽度" v-model="truck.width"><template slot="append">mm</template></el-input>
 								</el-form-item>
 							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车辆高度" prop="high">
+									<el-input placeholder="高度" v-model="truck.high"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="装载重量" prop="loads">
+									<el-input placeholder="载重" v-model="truck.loads"><template slot="append">kg</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="装载容积" prop="loadVolume">
+									<el-input placeholder="容积" v-model="truck.loadVolume"><template slot="append">m³</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<!-- <el-row :gutter="20">
 							<el-col :span="8">
 								<el-form-item label="车身颜色">
 									<el-input v-model="truck.carBodyColor"></el-input>
@@ -751,7 +767,7 @@
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
-						</el-row>
+						</el-row> -->
 					</div>
 				</div>
 			</el-card>
@@ -765,7 +781,10 @@
 						<el-row :gutter="20" >
 							<el-col :span="12">
 								<el-form-item label="罐体类型" label-width="140px">
-									<el-input v-model="truck.cannedType"></el-input>
+									<el-select style="width: 100%" v-model="truck.cannedType" placeholder="请选择">
+										<el-option label="常压罐" value="常压罐"></el-option>
+										<el-option label="压力罐" value="压力罐"></el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
@@ -857,7 +876,7 @@
 						<el-row :gutter="20" >
 							<el-col :span="12">
 								<el-form-item label="二次安全保证金" label-width="140px">
-									<el-input v-model="truck.secondSecurityDepositDate"><template slot="append">元</template></el-input>
+									<el-input v-model="truck.secondSecurityDepositAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
@@ -867,7 +886,7 @@
 										placeholder="选择日期" 
 										style="width:100%" 
 										value-format="timestamp"
-										v-model="truck.secondSecurityDepositAmount">
+										v-model="truck.secondSecurityDepositDate">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
@@ -1263,7 +1282,12 @@ export default {
 				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'} ],
 				plateNo: [ { required: true , message: '请输入车牌号码'} ],
 				truckType: [ { required: true , message: '请选择车牌类型'} ],
-				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ]
+				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ],
+				length: [ { required: true , message: '请输入车长'} ],
+				width: [ { required: true , message: '请输入车宽'} ],
+				high: [ { required: true , message: '请输入车高'} ],
+				loads: [ { required: true , message: '请输入车辆装载重量'} ],
+				loadVolume: [ { required: true , message: '请输入车辆装载容积'} ]
 			}
 		}
 	},
@@ -1329,6 +1353,10 @@ export default {
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 			console.log(this.truck)
+			Truck.add(this.truck).then(res => {
+				Message.success(res.data.msg)
+				this.$router.push({name: 'truck'})
+			})
 		},
 		back() {
 			this.$router.go(-1)

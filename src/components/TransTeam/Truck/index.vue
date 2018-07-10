@@ -4,11 +4,11 @@
 			<div slot="header" class="clearfix">车辆列表</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small" :model="find" :rules="rules" ref="ruleForm">
-					<el-form-item label="车辆" prop="plateNo">
+					<el-form-item label="车辆">
 						<el-input placeholder="请输入车牌号" v-model="find.plateNo"></el-input>
 					</el-form-item>
-					<el-form-item label="司机" prop="code">
-						<el-input placeholder="请输入姓名或手机号" v-model="find.code"></el-input>
+					<el-form-item label="司机">
+						<el-input placeholder="请输入姓名或手机号" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -42,7 +42,7 @@
 						<div class="handle fl">操作</div>
 					</div>
 				</div>
-				<DriverItem v-for="i in 4" :key="i"></DriverItem>
+				<DriverItem v-for="(truck, index) in tableData" :key="index" :truck="truck"></DriverItem>
 			</div>
 			</div>
 			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
@@ -62,13 +62,8 @@ export default {
 	data() {
 		return {
 			find: {
-				high: '',
-				length: '',
-				plateNo: '',
-				code: '',
-				width: '',
-				tractiveTonnage: '',
-				date: [],
+				keyword: '',
+				plateNo: ''
 			},
 			startDate: '',
 			endDate: '',
@@ -109,15 +104,8 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.find.high = ''
-			this.find.length = ''
 			this.find.plateNo = ''
-			this.find.code = ''
-			this.find.width = ''
-			this.find.tractiveTonnage = ''
-			this.find.date = []
-			this.startDate = ''
-			this.endDate = ''
+			this.find.keyword = ''
 			this.getList()
 		},
 		pageChange(index) {
@@ -172,14 +160,8 @@ export default {
 			Truck.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				high: this.find.high,
-				length: this.find.length,
-				plateNo: this.find.plateNo,
-				code: this.find.code,
-				width: this.find.width,
-				tractiveTonnage: this.find.tractiveTonnage,
-				createTimeBegin: this.startDate,
-				createTimeEnd: this.endDate
+				keyword: this.find.keyword,
+				plateNo: this.find.plateNo
 			}).then(res => {
 				this.tableData = res.records
 				this.count = res.total

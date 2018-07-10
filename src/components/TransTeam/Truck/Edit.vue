@@ -1,796 +1,1293 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">编辑车辆</div>
-			<el-form label-width="155px" size="mini" :model="truck" :rules="rules" ref="ruleForm">
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="状态" prop="status">
-							<el-select style="width: 100%" v-model="truck.status" placeholder="请选择">
-								<el-option label="通过" value="Passed"></el-option>
-								<el-option label="未通过" value="NotPassed"></el-option>
-								<el-option label="其他" value="Other"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="审核人" prop="auditName">
-							<el-input v-model="truck.auditName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="审核日期" prop="auditTime">
-							<el-date-picker 
-								:picker-options="{disabledDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.auditTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
+		<el-form label-width="100px" size="mini" :model="truck" :rules="rules" ref="ruleForm" >
+			<el-card class="box-card">
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">基本信息</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="车辆编号" prop="code">
+									<el-input v-model="truck.code"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车辆类别" prop="truckCategory">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckCategory">
+										<el-option label="整车" value="WholeVehicle"></el-option>
+										<el-option label="牵引车" value="Tractor"></el-option>
+										<el-option label="挂车" value="Trailer"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车牌颜色" prop="plateNoColor">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.plateNoColor">
+										<el-option label="黄色" value="黄色"></el-option>
+										<el-option label="蓝色" value="蓝色"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="挂车牌号码" prop="trailerPlateNo" v-if="truck.truckCategory == '牵引车'">
+									<el-input v-model="truck.trailerPlateNo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车牌号码" prop="plateNo">
+									<el-input v-model="truck.plateNo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车辆类型" prop="truckType">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckType">
+										<el-option label="集装箱挂车" value="ContainerTrailer"></el-option>
+										<el-option label="厢式货车" value="Van"></el-option>
+										<el-option label="重型半挂牵引车" value="HeavySemitrailerTractor"></el-option>
+										<el-option label="重型厢式货车" value="HeavyVan"></el-option>
+										<el-option label="重型集装箱半挂车" value="HeavyContainerSemitrailer"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="车辆归属" prop="cooperateRelation">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.cooperateRelation">
+										<el-option label="挂靠" value="Self"></el-option>
+										<el-option label="自有" value="Attach"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="主驾司机">
+									<el-autocomplete  style="width:100%"
+										value-key="realName" 
+										v-model="truck.primaryDriverName"
+										:fetch-suggestions="getPrimaryDriver"
+										placeholder="请输入..."
+										@select="handSelectPrimaryDriver">
+									</el-autocomplete>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="副驾司机">
+									<el-autocomplete  style="width:100%"
+										value-key="realName" 
+										v-model="truck.secondaryDriverName"
+										:fetch-suggestions="getSecondaryDriver"
+										placeholder="请输入..."
+										@select="handSelectSecondaryDriver">
+									</el-autocomplete>
+								</el-form-item>
+							</el-col>							
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								<el-form-item label="车辆照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.truckFrontPic]" 
+											@imgUrlBack="handleTruckFrontPic">
+										</ImageUpload>
+										<p>正面</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.truckSidePic1]" 
+											@imgUrlBack="handleTruckSidePic1">
+										</ImageUpload>
+										<p>45°角</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.truckSidePic2]" 
+											@imgUrlBack="handleTruckSidePic2">
+										</ImageUpload>
+										<p>侧面</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="16">
-						<el-form-item label="所属地区" prop="areaID">
-							<DistPicker :selected="selectedArea" @selectChange="handleSelectedArea"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="所属企业" prop="companyName">
-							<el-input v-model="truck.companyName"></el-input>
-						</el-form-item>
-					</el-col>
-					
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">所属单位/车主</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="车主/单位名称" label-width="120px">
+									<el-input v-model="truck.carOwnerName"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="车主/单位电话" label-width="120px">
+									<el-input v-model="truck.carOwnerMobile"></el-input>
+								</el-form-item>
+							</el-col>
+							
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="车主/单位地址" label-width="120px">
+									<el-input v-model="truck.carOwnerAddress"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="所有权类型" label-width="120px">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.propertyType">
+										<el-option label="单位" value="单位"></el-option>
+										<el-option label="挂靠" value="挂靠"></el-option>
+										<el-option label="个人" value="个人"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="车辆类别" prop="truckCategory">
-							<el-select style="width: 100%" v-model="truck.truckCategory" placeholder="请选择">
-								<el-option label="挂车" value="挂车"></el-option>
-								<el-option label="牵引车" value="牵引车"></el-option>
-								<el-option label="整车" value="整车"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="车辆类型" prop="truckType">
-							<el-select style="width: 100%" v-model="truck.truckType" placeholder="请选择" disabled>
-								<!-- <el-option v-for="item in truckTypes" :key="item.constStdID" :label="item.name" :value="item.name"></el-option> -->
-								<el-option label="集装箱挂车" value="集装箱挂车"></el-option>
-								<el-option label="厢式货车" value="厢式货车"></el-option>
-								<el-option label="重型半挂牵引车" value="重型半挂牵引车"></el-option>
-								<el-option label="重型厢式货车" value="重型厢式货车"></el-option>
-								<el-option label="重型集装箱半挂车" value="重型集装箱半挂车"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="车牌颜色" prop="plateNoColor">
-							<el-select style="width: 100%" v-model="truck.plateNoColor" placeholder="请选择">
-								<el-option label="黄" value="黄"></el-option>
-								<el-option label="蓝" value="蓝"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">行驶证</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="注册日期">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.driverLicRegisterTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="发证日期">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.driverLicIssueTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="24">
+								<el-form-item label="行驶证有效期">
+									<el-date-picker
+										type="daterange"
+										range-separator="至"
+										start-placeholder="开始日期"
+										end-placeholder="结束日期" 
+										style="width:100%" 
+										v-model="driverLicTime" 
+										@change="handSelectDriverLicTime">
+										<!-- driverLicBeginTime,driverLicExpiresTime -->
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="24">
+								<el-form-item label="行驶证照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.driverLicPic]" 
+											@imgUrlBack="handleDriverLicPic">
+										</ImageUpload>
+										<p>正本</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.driverLicSidePic]" 
+											@imgUrlBack="handleDriverLicSidePic">
+										</ImageUpload>
+										<p>副本</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="16">
-						<el-form-item>
-							<span style="color: red" slot="label">*</span>
-							<el-select style="width: 120px" v-model="plateNoType" placeholder="请选择" @change="changePlateNoType" disabled>
-								<el-option label="车牌号" value="车牌号" disabled></el-option>
-								<el-option label="挂车车牌" value="挂车车牌" disabled></el-option>
-							</el-select>
-							<div style="display: inline-block">
-								<el-input placeholder="请输入车牌号" v-model="truck.plateNo" v-if="plateNoType == '车牌号'" disabled></el-input>
-								<el-input placeholder="请输入挂车车牌" v-model="truck.trailerPlateNo" v-if="plateNoType == '挂车车牌'" disabled></el-input>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">道路运输许可证</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="许可证号">
+									<el-input v-model="truck.roadTransportNo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="年审日期至">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.roadTransportLicAnnualPeriod">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								<el-form-item label="经营范围">
+									<el-input type="textarea" resize="none" :rows="3" v-model="truck.businessScope"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="许可运输品">
+									<el-input v-model="truck.roadTransportGoods"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="许可运输品是否剧毒" label-width="150px">
+									<el-switch v-model="truck.roadTransportGoodsIsPoisonous"></el-switch>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="24">
+								<el-form-item label="道路运输许可证" label-width="110px">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.roadTransportPic]" 
+											@imgUrlBack="handleRoadTransportPic">
+										</ImageUpload>
+										<p>正本</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.roadTransportSidePic]" 
+											@imgUrlBack="handleRoadTransportSidePic">
+										</ImageUpload>
+										<p>副本</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block">
+					<span class="block-title">GPS</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="入网号">
+									<el-input v-model="truck.gpSNetworkNo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="卡号">
+									<el-input v-model="truck.gpSCardNo"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="序列号">
+									<el-input v-model="truck.gpSSerialNumber"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="安装时间">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.gpSSetupTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="24">
+								<el-form-item label="有效期">
+									<el-date-picker
+										type="daterange"
+										range-separator="至"
+										start-placeholder="开始日期"
+										end-placeholder="结束日期" 
+										style="width:100%" 
+										v-model="gpSValidDate" 
+										@change="handSelectGpSValidDate">
+										<!-- gpSValidBeginDate, gpSValidEndDate -->
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="费用">
+									<el-input v-model="truck.gpSCostAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="类型">
+									<el-input v-model="truck.gpSType"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.gpSEquippedCertifyPic]" 
+											@imgUrlBack="handleGpSEquippedCertifyPic">
+										</ImageUpload>
+										<p>照片1</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.gpSEquippedCertifyPic2]" 
+											@imgUrlBack="handleGpSEquippedCertifyPic2">
+										</ImageUpload>
+										<p>照片2</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+			</el-card>
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>保险信息</span>
+				</div>
+				<el-row class="section-block" style="margin-bottom:10px">
+					<span class="block-title">交强险</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="保险公司">
+									<el-input v-model="truck.saLIInsuranceVendor"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="保险单号">
+									<el-input v-model="truck.saLIInsuranceNo"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="保险到期日">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.saLIInsuranceExpires">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="保险金额">
+									<el-input v-model="truck.saLIInsuranceAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="车船税金额">
+									<el-input v-model="truck.saLIInsuranceTaxAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								<el-form-item label="照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.saLIInsurancePic]" 
+											@imgUrlBack="handleSaLIInsurancePic">
+										</ImageUpload>
+										<p>照片1</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.saLIInsurancePic2]" 
+											@imgUrlBack="handleSaLIInsurancePic2">
+										</ImageUpload>
+										<p>照片2</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row :gutter="20">
+					<el-col :span="12">
+						<div class="section-block">
+							<span class="block-title">商业险</span>
+							<div class="block-content">
+								<el-row>
+									<el-col :span="24">
+										<el-form-item label="保险单号">
+											<el-input v-model="truck.bizInsuranceNo"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="24">
+										<el-form-item label="保险到期日">
+											<el-date-picker
+												type="date"
+												placeholder="选择日期" 
+												style="width:100%" 
+												value-format="timestamp"
+												v-model="truck.bizInsuranceExpires">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="24">
+										<el-form-item label="保险金额">
+											<el-input v-model="truck.bizInsuranceAmount"><template slot="append">元</template></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="24">
+										<el-form-item label="照片">
+											<div class="uploadTruckPicItem">
+												<ImageUpload 
+													:width="80" :height="80" 
+													:files="[truck.bizInsurancePic]" 
+													@imgUrlBack="handleBizInsurancePic">
+												</ImageUpload>
+												<p>照片1</p>
+											</div>
+											<div class="uploadTruckPicItem">
+												<ImageUpload 
+													:width="80" :height="80" 
+													:files="[truck.bizInsurancePic2]" 
+													@imgUrlBack="handleBizInsurancePic2">
+												</ImageUpload>
+												<p>照片2</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
 							</div>
-						</el-form-item>
+						</div>
 					</el-col>
-					<el-col :span="8">
-						<el-form-item label="自编号" prop="code">
-							<el-input v-model="truck.code"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="车长" prop="length">
-							<el-input v-model="truck.length">
-								<template slot="append">毫米</template>
-							</el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="车宽" prop="width">
-							<el-input v-model="truck.width">
-								<template slot="append">毫米</template>
-							</el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="车高" prop="high">
-							<el-input v-model="truck.high">
-								<template slot="append">毫米</template>
-							</el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="载重" prop="loads">
-							<el-input v-model="truck.loads">
-								<template slot="append">千克</template>
-							</el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="装载方数" prop="loadVolume">
-							<el-input v-model="truck.loadVolume">
-								<template slot="append">立方米</template>
-							</el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="牵引质量" prop="tractiveTonnage">
-							<el-input v-model="truck.tractiveTonnage">
-								<template slot="append">千克</template>
-							</el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="总质量" prop="totalWeight">
-							<el-input v-model="truck.totalWeight">
-								<template slot="append">千克</template>
-							</el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="准载类型">
-							<el-input v-model="truck.accurateLoadType"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="罐体类型">
-							<el-select style="width: 100%" v-model="truck.cannedType" placeholder="请选择">
-								<el-option label="椭圆形" value="椭圆形"></el-option>
-								<el-option label="方圆形" value="方圆形"></el-option>
-								<el-option label="圆形" value="圆形"></el-option>
-							</el-select>
-						</el-form-item>
+					<el-col :span="12">
+						<div class="section-block">
+							<span class="block-title">承运险</span>
+							<div class="block-content">
+								<el-row>
+									<el-col :span="24">
+										<el-form-item label="保险单号">
+											<el-input v-model="truck.carrierRiskInsuranceNo"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="24">
+										<el-form-item label="保险到期日">
+											<el-date-picker
+												type="date"
+												placeholder="选择日期" 
+												style="width:100%" 
+												value-format="timestamp"
+												v-model="truck.carrierRiskInsuranceExpires">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="24">
+										<el-form-item label="保险金额">
+											<el-input v-model="truck.carrierRiskInsuranceAmount"><template slot="append">元</template></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="24">
+										<el-form-item label="照片">
+											<div class="uploadTruckPicItem">
+												<ImageUpload 
+													:width="80" :height="80" 
+													:files="[truck.carrierRiskInsurancePic]" 
+													@imgUrlBack="handleCarrierRiskInsurancePic">
+												</ImageUpload>
+												<p>照片1</p>
+											</div>
+											<div class="uploadTruckPicItem">
+												<ImageUpload 
+													:width="80" :height="80" 
+													:files="[truck.carrierRiskInsurancePic2]" 
+													@imgUrlBack="handleCarrierRiskInsurancePic2">
+												</ImageUpload>
+												<p>照片2</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
 					</el-col>
 				</el-row>
-				<el-row>
-					
-					<el-col :span="8">
-						<el-form-item label="罐体容积" prop="tankVolume">
-							<el-input v-model="truck.tankVolume">
-								<template slot="append">立方米</template>
-							</el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="罐体检测有效期至">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.tankQCExpires"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="安全阀检测有效期至">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.safetyValvesQCExpires"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
+				<el-row class="section-block" style="margin-top:20px">
+					<span class="block-title">货运险</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="保险单号">
+									<el-input v-model="truck.cargoInsuranceNo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="保险到期日">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.cargoInsuranceExpireDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="保险金额">
+									<el-input v-model="truck.cargoInsuranceAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="压力表检测有效期至">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.pressureGaugeQCExpires"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
+				<el-row class="section-block" style="margin-top:20px">
+					<span class="block-title">保险备注</span>
+					<div class="block-content">
+						<el-form-item label="保险备注">
+							<el-input type="textarea" :rows="3" resize="none" v-model="truck.insuranceNote"></el-input>
 						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="汽车生产厂家" prop="manufacturer">
-							<el-input v-model="truck.manufacturer"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="品牌型号" prop="carBrandModel">
-							<el-input v-model="truck.carBrandModel"></el-input>
-						</el-form-item>
-					</el-col>
+					</div>
 				</el-row>
-				<el-row>
-					
-					
-					<el-col :span="8">
-						<el-form-item label="发动机号">
-							<el-input v-model="truck.engineNO"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="车架号">
-							<el-input v-model="truck.vehicleFrameNO"></el-input>
-						</el-form-item>
-					</el-col>
+			</el-card>
+			<el-card class="box-card">
+				<div class="section-block">
+					<span class="block-title">技术参数</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="车辆长度" prop="length">
+									<el-input placeholder="长度" v-model="truck.length"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车辆宽度" prop="width">
+									<el-input placeholder="宽度" v-model="truck.width"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车辆高度" prop="high">
+									<el-input placeholder="高度" v-model="truck.high"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="装载重量" prop="loads">
+									<el-input placeholder="载重" v-model="truck.loads"><template slot="append">kg</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="装载容积" prop="loadVolume">
+									<el-input placeholder="容积" v-model="truck.loadVolume"><template slot="append">m³</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<!-- <el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="车身颜色">
+									<el-input v-model="truck.carBodyColor"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="使用性质">
+									<el-input v-model="truck.transportFunction"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="运输类别">
+									<el-input v-model="truck.transportCategory"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="运输介质">
+									<el-input v-model="truck.transportMedium"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="发动机型号">
+									<el-input v-model="truck.engineType"></el-input>
+								</el-form-item>
+							</el-col>
+						
+							<el-col :span="8">
+								<el-form-item label="发动机号">
+									<el-input v-model="truck.engineNO"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="排放标准">
+									<el-input v-model="truck.emissionStandard"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="准载类型">
+									<el-input v-model="truck.accurateLoadType"></el-input>
+								</el-form-item>
+							</el-col>
+						
+							<el-col :span="8">
+								<el-form-item label="核载人数">
+									<el-input v-model="truck.personsCapacity"><template slot="append">人</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="车辆识别号">
+									<el-input placeholder="车辆识别号/车架号" v-model="truck.vehicleFrameNO"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="厂牌型号">
+									<el-input v-model="truck.carBrandModel"></el-input>
+								</el-form-item>
+							</el-col>
+						
+							<el-col :span="8">
+								<el-form-item label="生产厂家">
+									<el-input v-model="truck.manufacturer"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="车辆外廓尺寸">
+									<el-input v-model="truck.truckGabarite"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车辆轮距">
+									<el-input v-model="truck.wheelTrack"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="车辆轴数">
+									<el-input v-model="truck.axesNumber"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="轴距">
+									<el-input v-model="truck.wheelBase"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="总质量">
+									<el-input v-model="truck.totalWeight"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="核定载质量">
+									<el-input v-model="truck.approvedLoadCapacity"><template slot="append">kg</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="整备质量">
+									<el-input v-model="truck.curbWeight"><template slot="append">kg</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="准牵引总质量">
+									<el-input v-model="truck.tractiveTonnage"><template slot="append">kg</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="标志灯牌编号及完好情况" label-width="190px">
+									<el-input v-model="truck.signalLampInfo"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label="出厂日期">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.productionDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="落户日期">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.settleDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="安全卡发放日期" label-width="110px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.securityCardIssueDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row> -->
+					</div>
+				</div>
+			</el-card>
+			<el-card class="box-card" style="margin-bottom:20px">
+				<div slot="header" class="clearfix">
+					<span>其他信息</span>
+				</div>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">罐体</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="罐体类型" label-width="140px">
+									<el-select style="width: 100%" v-model="truck.cannedType" placeholder="请选择">
+										<el-option label="常压罐" value="常压罐"></el-option>
+										<el-option label="压力罐" value="压力罐"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="容积" label-width="140px">
+									<el-input v-model="truck.tankVolume"><template slot="append">m³</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="罐体检测有效期至" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.tankQCExpires">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="安全阀监测有效期至" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.safetyValvesQCExpires">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="压力表监测有效期至" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.pressureGaugeQCExpires">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="照片" label-width="140px">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.cannedMonitorTableCertificatePic1]" 
+											@imgUrlBack="handleCannedMonitorTableCertificatePic1">
+										</ImageUpload>
+										<p>照片1</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.cannedMonitorTableCertificatePic2]" 
+											@imgUrlBack="handleCannedMonitorTableCertificatePic2">
+										</ImageUpload>
+										<p>照片2</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="核载人数" prop="personsCapacity">
-							<el-select style="width: 100%" v-model="truck.personsCapacity" placeholder="请选择">
-								<el-option 
-								v-for="i in 9" :key="i" 
-								:label="i+1" :value="i+1"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="车身颜色" prop="carBodyColor">
-							<el-input v-model="truck.carBodyColor"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="是否喷涂警示标志" prop="hasWarnMark">
-							<el-select style="width: 100%" v-model="truck.hasWarnMark" placeholder="请选择">
-								<el-option label="是" value="是"></el-option>
-								<el-option label="否" value="否"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">保证金</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="金额" label-width="140px">
+									<el-input v-model="truck.securityDepositAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="日期" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.securityDepositDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="二次安全保证金" label-width="140px">
+									<el-input v-model="truck.secondSecurityDepositAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="二次安全保证金日期" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.secondSecurityDepositDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="缴费日期" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.securityDepositPayDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								<el-form-item label="保证金备注"  label-width="140px">
+									<el-input type="textarea" :rows="3" resize="none" v-model="truck.securityDepositNote"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="行驶证注册日期" prop="driverLicRegisterTime">
-							<el-date-picker 
-								:picker-options="{disabledDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.driverLicRegisterTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="行驶证发证日期" prop="driverLicIssueTime">
-							<el-date-picker 
-								:picker-options="{disabledDate: (curDate) => truck.driverLicRegisterTime > curDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.driverLicIssueTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="行驶证审验有效期至" prop="driverLicExamineExpires">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.driverLicExamineExpires"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">技术等级</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="等级评定"  label-width="140px">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.rank">
+										<el-option label="一级" value="1"></el-option>
+										<el-option label="二级" value="2"></el-option>
+										<el-option label="三级" value="3"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="评级日期" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.rankEvaluteTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="下次评级日期" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.nextRankEvaluteTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								<el-form-item label="审验备注" label-width="140px">
+									<el-input type="textarea" :rows="3" resize="none" v-model="truck.rankRemark"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-col :span="24">
+							<el-form-item label="照片" label-width="140px">
+								<div class="uploadTruckPicItem">
+									<ImageUpload 
+										:width="80" :height="80" 
+										:files="[truck.technicalRankPic]" 
+										@imgUrlBack="handleTechnicalRankPic">
+									</ImageUpload>
+									<p>正本</p>
+								</div>
+								<div class="uploadTruckPicItem">
+									<ImageUpload 
+										:width="80" :height="80" 
+										:files="[truck.technicalRankPic2]" 
+										@imgUrlBack="handleTechnicalRankPic2">
+									</ImageUpload>
+									<p>副本</p>
+								</div>
+							</el-form-item>
+						</el-col>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="道路运输证号" prop="roadTransportNo">
-							<el-input v-model="truck.roadTransportNo"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="经营范围" prop="businessScope">
-							<el-input v-model="truck.businessScope"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="道路运输证年审期至" prop="roadTransportLicAnnualPeriod">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.roadTransportLicAnnualPeriod"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">二级维护</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="维护日期" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.secondaMaintainTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="下次维护" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.nextSecondLevel">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="所有人或单位" prop="carOwnerName">
-							<el-input v-model="truck.carOwnerName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="所有人联系电话" prop="carOwnerMobile">
-							<el-input v-model="truck.carOwnerMobile"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="所有人登记地址" prop="carOwnerAddress">
-							<el-input v-model="truck.carOwnerAddress"></el-input>
-						</el-form-item>
-					</el-col>
+				<el-row class="section-block" style="margin-bottom:20px">
+					<span class="block-title">管理协议</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="金额" label-width="140px">
+									<el-input v-model="truck.managementAgreementAmount"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="缴费日期" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.managementAgreementPayDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="有效期" label-width="140px">
+									<el-date-picker
+										type="daterange"
+										range-separator="至"
+										start-placeholder="开始日期"
+										end-placeholder="结束日期" 
+										style="width:100%" 
+										v-model="managementAgreementDate" 
+										@change="handSelectManagementAgreementDate">
+										<!-- managementAgreementBeginDate, managementAgreementExpireDate -->
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="安全责任书到期日" label-width="140px">
+									<el-date-picker
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.safetyLiabilityLetterExpireDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="元/轴/月" label-width="140px">
+									<el-input v-model="truck.managementAgreementMoneyPerMonth"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="24">
+								<el-form-item label="协议备注" label-width="140px">
+									<el-input type="textarea" :rows="3" resize="none" v-model="truck.managementAgreementNote"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="实际车主姓名" prop="curDriverName">
-							<el-input v-model="truck.curDriverName"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="实际车主电话" prop="curDriverMobile">
-							<el-input v-model="truck.curDriverMobile"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="实际车主现住址" prop="curDriverAddress">
-							<el-input v-model="truck.curDriverAddress"></el-input>
-						</el-form-item>
-					</el-col>
+				<el-row class="section-block">
+					<span class="block-title">其他资料</span>
+					<div class="block-content">
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="照片" label-width="50px">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.purchaseInvoicePic]" 
+											@imgUrlBack="handlePurchaseInvoicePic">
+										</ImageUpload>
+										<p>购车发票</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.vehicleCertificatePic]" 
+											@imgUrlBack="handleVehicleCertificatePic">
+										</ImageUpload>
+										<p>整车合格证</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.vehicleRegistrationCertificatePic]" 
+											@imgUrlBack="handleVehicleRegistrationCertificatePic">
+										</ImageUpload>
+										<p>机动车登记证</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.otherTruckPic1]" 
+											@imgUrlBack="handleOtherTruckPic1">
+										</ImageUpload>
+										<p>照片1</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.otherTruckPic2]" 
+											@imgUrlBack="handleOtherTruckPic2">
+										</ImageUpload>
+										<p>照片2</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.otherTruckPic3]" 
+											@imgUrlBack="handleOtherTruckPic3">
+										</ImageUpload>
+										<p>照片3</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
 				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="所有权" prop="propertyType">
-							<el-select style="width: 100%" v-model="truck.propertyType" placeholder="请选择">
-								<el-option label="单位" value="单位"></el-option>
-								<el-option label="个人" value="个人"></el-option>
-								<el-option label="挂靠" value="挂靠"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="经营证号" prop="businessLicenseNo">
-							<el-input v-model="truck.businessLicenseNo"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="经营性质" prop="businessNature">
-							<el-select style="width: 100%" v-model="truck.businessNature" placeholder="请选择">
-								<el-option label="营运" value="营运"></el-option>
-								<el-option label="自用" value="自用"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="等级评定" prop="rank">
-							<el-select style="width: 100%" v-model="truck.rank" placeholder="请选择">
-								<el-option label="一级" value="一级"></el-option>
-								<el-option label="二级" value="二级"></el-option>
-								<el-option label="三级" value="三级"></el-option>
-								<el-option label="未评定" value="未评定"></el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="下次等评日期" prop="nextRankEvaluteTime">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.nextRankEvaluteTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="二级维护日期" prop="secondaMaintainTime">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.secondaMaintainTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="下次二级维护日期" prop="nextSecondLevel">
-							<el-date-picker 
-								:picker-options="{disabledDate: (curDate) => truck.secondaMaintainTime > curDate}"
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.nextSecondLevel"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="承运人责任险有效期" prop="carrierRiskInsuranceExpires">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.carrierRiskInsuranceExpires"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>				
-					<el-col :span="8">
-						<el-form-item label="交强险有效期至" prop="saLIInsuranceExpires">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.saLIInsuranceExpires"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="商业险有效期至" prop="bizInsuranceExpires">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.bizInsuranceExpires"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="GPS类型">
-							<el-input v-model="truck.gpSType"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="GPS入网号">
-							<el-input v-model="truck.gpSNetworkNo"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="GPS卡号">
-							<el-input v-model="truck.gpSCardNo"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="GPS序列号">
-							<el-input v-model="truck.gpSSerialNumber"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="GPS安装时间">
-							<el-date-picker 
-								:editable="false"
-								style="width: 100%" 
-								v-model="truck.gpSSetupTime"
-								type="date" 
-								value-format="timestamp"
-								placeholder="选择日期">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
-						<el-form-item label="车辆照片(正面)">
-							<ImageUpload :files="[truck.truckFrontPic]" @imgUrlBack="handleTruckFrontPicSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="车辆照片(侧面1)">
-							<ImageUpload :files="[truck.truckSidePic1]" @imgUrlBack="handleTruckSidePic1Success"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="车辆照片(侧面2)">
-							<ImageUpload :files="[truck.truckSidePic2]" @imgUrlBack="handleTruckSidePic2Success"/>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="6">
-						<el-form-item label="机动车行驶证(正)">
-							<ImageUpload :files="[truck.driverLicPic]" @imgUrlBack="handleDriverLicPicSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="机动车行驶证(副)">
-							<ImageUpload :files="[truck.driverLicSidePic]" @imgUrlBack="handleDriverLicSidePicSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="道路运输许可证(正)">
-							<ImageUpload :files="[truck.roadTransportPic]" @imgUrlBack="handleRoadTransportPicSuccess"/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="6">
-						<el-form-item label="道路运输许可证(副)">
-							<ImageUpload :files="[truck.roadTransportSidePic]" @imgUrlBack="handleRoadTransportSidePicSuccess"/>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item label="其他照片">
-							<ImageUpload :files="otherImgs" :limitNum="5" @imgUrlBack="imgUrlBack"/>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="24">
-						<el-form-item>
-							<el-button type="primary" @click="updateItem">立即保存</el-button>
-							<el-button @click="back">取消</el-button>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
-		</div>
+			</el-card>
+			<div class="formHandle text-center">
+				<el-button @click="back">取消</el-button>
+				<el-button type="primary" @click="save">保存</el-button>	
+			</div>
+		</el-form>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import request from '../../../common/request'
 import Truck from '../../../api/Truck'
+import SuperCargo from '../../../api/SuperCargo'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import DistPicker from '../../CommonComponents/DistPicker'
-import { searchAreaByKey, areaIdToArrayId } from '../../../common/utils'
-import { checkTel, checkInt, checkFloat, checkFloat2 } from '../../../common/validators'
 export default {
 	data() {
 		return {
-			loading: true,
-			plateNoType: '车牌号',
-			truckTypes: [],
+			driverLicTime: [],
+			gpSValidDate: [],
+			managementAgreementDate: [],
 			truck: {
-				auditBy: '',
-				auditTime: '',
-				accurateLoadType: '',		// string 准载类型
-				area: '',		// string 地区
-				areaID: '',		// string 地区ID
-				bizInsuranceExpires: '',		// string	@mock=1522813658
-				businessLicenseNo: '',		// string 经营证号
-				businessNature: '',		// string 经营性质
-				businessScope: '',		// string 经营范围
-				cannedType: '',		// string 罐装类型
-				carBodyColor: '',		// string 车身颜色
-				carBrandModel: '',		// string 车品牌型号
-				carOwnerAddress: '',		// string 所有人登记地址
-				carOwnerMobile: '',		// string 所有人电话
-				carOwnerName: '',		// string 所有人姓名或单位名称
-				carrierRiskInsuranceExpires: '',		// string	@mock=1522813658
-				code: '',		// string 编码
-				companyID: '',		// string	@mock=978991129738719234
-				companyName: '',		// string 所属企业名称
-				curDriverAddress: '',		// string 实际车主现住址
-				curDriverMobile: '',		// string 当前车主联系方式
-				curDriverName: '',		// string 当前车主姓名
-				driverLicExamineExpires: '',		// string	@mock=1522813658
-				driverLicIssueTime: '',		// string	@mock=1522813658
-				driverLicPic: '',		// string 机动车行驶证正本
-				driverLicRegisterTime: '',		// string	@mock=1522813658
-				driverLicSidePic: '',		// string 机动车行驶证副本
-				engineNO: '',		// string 发动机号
-				gpSCardNo: '',		// string GPS卡号
-				gpSNetworkNo: '',		// string GPS入网号
-				gpSSerialNumber: '',		// string GPS序列号
-				gpSSetupTime: '',		// string	@mock=1522813658
-				gpSType: '',		// string GPS类型
-				hasWarnMark: '',		// string	@mock=N
-				high: '',		// string	@mock=20
-				length: '',		// string	@mock=12
-				loadStatus: '',		// string 装载状态
-				loadVolume: '',		// string	@mock=11
-				loads: '',		// string	@mock=20
-				manufacturer: '',		// string 汽车生产厂家
-				nextRankEvaluteTime: '',		// string	@mock=1522813658
-				nextSecondLevel: '',		// string	@mock=1522813658
-				otherTruckPic1: '',		// string 车辆其他图片1
-				otherTruckPic2: '',		// string 车辆其他图片2
-				otherTruckPic3: '',		// string 车辆其他图片3
-				otherTruckPic4: '',		// string 车辆其他图片4
-				otherTruckPic5: '',		// string 车辆其他图片5
-				personsCapacity: '',		// string	@mock=20
-				plateNo: '',		// string 车牌号
-				plateNoColor: '',		// string 车牌颜色
-				plateNoType: '',		// string 车牌类型
-				pressureGaugeQCExpires: '',		// string	@mock=1522813658
-				propertyType: '',		// string 所有权类型
-				rank: '',		// string 等级评定
-				roadTransportLicAnnualPeriod: '',		// string	@mock=1522813658
-				roadTransportNo: '',		// string 道路运输证号
-				roadTransportPic: '',		// string 道路运输许可证
-				roadTransportSidePic: '',		// string 道路运输许可证副本
-				saLIInsuranceExpires: '',		// string	@mock=1522813658
-				safetyValvesQCExpires: '',		// string	@mock=1522813658
-				secondaMaintainTime: '',		// string	@mock=1522813658
-				status: '',		// string 资料状态
-				tankQCExpires: '',		// string	@mock=1522813658
-				tankVolume: '',		// string	@mock=123
-				totalWeight: '',		// string	@mock=4
-				tractiveTonnage: '',		// string	@mock=12
-				trailerPlateNo: '',		// string 挂车牌号
-				truckBrand: '',		// string	@mock=1
-				truckCategory: '',		// string 车辆类别
-				truckFrontPic: '',		// string 车辆正面照
-				truckSidePic1: '',		// string 车辆侧面照1
-				truckSidePic2: '',		// string 车辆侧面照2
-				truckType: '',		// string 车辆类型
-				vehicleFrameNO: '',		// string 车架号
-				width: '',		// string	@mock=50
-				workStatus: ''		// string 运输状态
+				truckCategory: '',  // String	车辆类别 WholeVehicle-整车 Tractor-牵引车 Trailer-挂车
+				plateNoColor: '',  // String	车牌颜色
+				trailerID: '',  // number	挂车ID
+				plateNo: '',  // String	车牌号码
+				truckType: '',  // String	车辆类型 ContainerTrailer-集装箱挂车 Van-厢式货车 HeavySemitrailerTractor-重型半挂牵引车 HeavyVan-重型厢式货车 HeavyContainerSemitrailer-重型集装箱半挂车
+				cooperateRelation: '',  // String	车辆归属 Self 自有 Attach 挂靠
+				primaryDriver: '',  // number	主驾司机ID
+				secondaryDriver: '',  // number	副驾司机ID
+				truckFrontPic: '',  // String	车辆照片正面
+				truckSidePic1: '',  // String	车辆照片45°角
+				truckSidePic2: '',  // String	车辆照片侧面
+				carOwnerName: '',  // String	所属单位/车主名称
+				carOwnerMobile: '',  // String	所属单位/车主电话
+				carOwnerAddress: '',  // String	所属单位/车主地址
+				propertyType: '',  // String	所属单位/车主所有权类型
+				driverLicRegisterTime: '',  // number	行驶证注册日期
+				driverLicIssueTime: '',  // number	行驶证发证日期
+				driverLicBeginTime: '',  // number	行驶证有效期起始日期
+				driverLicExpiresTime: '',  // number	行驶证有效期截止日期
+				driverLicPic: '',  // String	行驶证照片正本
+				driverLicSidePic: '',  // String	行驶证照片副本
+				roadTransportNo: '',  // String	道路运输许可证号
+				roadTransportLicAnnualPeriod: '',  // number	道路运输许可证年审日期到
+				businessScope: '',  // String	道路运输许可证经营范围
+				roadTransportGoods: '',  // String	道路运输许可证许可运输品
+				roadTransportGoodsIsPoisonous: false,  // String	道路运输许可证许可运输品是否剧毒
+				roadTransportPic: '',  // String	道路运输许可证照片正本
+				roadTransportSidePic: '',  // String	道路运输许可证照片副本
+				gpsNetworkNo: '',  // String	GPS入网号
+				gpsCardNo: '',  // String	GPS卡号
+				gpsSerialNumber: '',  // String	GPS序列号
+				gpsSetupTime: '',  // number	GPS安装时间
+				gpsValidBeginDate: '',  // number	GPS有效期起始日期
+				gpsValidEndDate: '',  // number	GPS有效期截止日期
+				gpsCostAmount: '',  // String	GPS费用
+				gpsType: '',  // String	GPS类型
+				gpsEquippedCertifyPic: '',  // String	GPS照片1
+				gpsEquippedCertifyPic2: '',  // String	GPS照片2
+				saliInsuranceVendor: '',  // String	交强险保险公司
+				saliInsuranceNo: '',  // String	交强险保险单号
+				saliInsuranceExpires: '',  // number	交强险保险到期日
+				saliInsuranceAmount: '',  // number	交强险保险金额
+				saliInsuranceTaxAmount: '',  // number	交强险车船税金额
+				saliInsurancePic: '',  // String	交强险照片1
+				saliInsurancePic2: '',  // String	交强险照片2
+				bizInsuranceNo: '',  // String	商业险保险单号
+				bizInsuranceExpires: '',  // number	商业险保险到期日
+				bizInsuranceAmount: '',  // number	商业险保险金额
+				bizInsurancePic: '',  // String	商业险照片1
+				bizInsurancePic2: '',  // String	商业险照片2
+				carrierRiskInsuranceNo: '',  // String	承运险保险单号
+				carrierRiskInsuranceExpires: '',  // number	承运险保险到期日
+				carrierRiskInsuranceAmount: '',  // number	承运险保险金额
+				carrierRiskInsurancePic: '',  // String	承运险照片1
+				carrierRiskInsurancePic2: '',  // String	承运险照片2
+				cargoInsuranceNo: '',  // String	货运险保险单号
+				cargoInsuranceExpireDate: '',  // number	货运险保险到期日
+				cargoInsuranceAmount: '',  // number	货运险保险金额
+				insuranceNote: '',  // String	保险备注
+				length: '',  // number	技术参数车厢长
+				width: '',  // number	技术参数车厢宽
+				high: '',  // number	技术参数车厢高
+				loads: '',  // number	技术参数装载量载重
+				loadVolume: '',  // number	技术参数装载量容积
+				carBodyColor: '',  // String	技术参数车身颜色
+				transportFunction: '',  // String	技术参数使用性质
+				transportCategory: '',  // String	技术参数运输类别
+				transportMedium: '',  // String	技术参数运输介质
+				engineType: '',  // String	技术参数发动机型号
+				engineNO: '',  // String	技术参数发动机号
+				emissionStandard: '',  // String	技术参数排放标准
+				accurateLoadType: '',  // String	技术参数准载类型
+				personsCapacity: '',  // String	技术参数核载人数
+				vehicleFrameNO: '',  // String	技术参数车辆识别代号/车架号
+				carBrandModel: '',  // String	技术参数厂牌型号
+				manufacturer: '',  // String	技术参数生产厂家
+				truckGabarite: '',  // number	技术参数车牌外廓尺寸
+				wheelTrack: '',  // number	技术参数车辆轮距
+				axesNumber: '',  // number	技术参数车辆轴数
+				wheelBase: '',  // number	技术参数轴距
+				totalWeight: '',  // number	技术参数总质量
+				approvedLoadCapacity: '',  // number	技术参数核定载质量
+				curbWeight: '',  // number	技术参数整备质量
+				tractiveTonnage: '',  // number	技术参数准牵引总质量
+				signalLampInfo: '',  // String	技术参数标志灯牌编号及完好情况
+				securityCardIssueDate: '',  // number	技术参数安全卡发放日期
+				productionDate: '',  // number	技术参数出厂日期
+				settleDate: '',  // number	技术参数落户日期
+				cannedType: '',  // String	罐体类型
+				tankVolume: '',  // number	罐体容积
+				tankQCExpires: '',  // number	罐体检测有效期至
+				safetyValvesQCExpires: '',  // number	罐体安全阀监测有效期至
+				pressureGaugeQCExpires: '',  // number	罐体压力表监测有效期至
+				cannedMonitorTableCertificatePic1: '',  // String	罐体照片1
+				cannedMonitorTableCertificatePic2: '',  // String	罐体照片2
+				securityDepositAmount: '',  // number	保证金金额
+				securityDepositDate: '',  // number	保证金日期
+				secondSecurityDepositAmount: '',  // number	保证金二次安全保证金金额
+				secondSecurityDepositDate: '',  // number	保证金二次安全保证金日期
+				securityDepositPayDate: '',  // number	保证金缴费日期
+				securityDepositNote: '',  // String	保证金备注
+				rank: '',  // String	技术等级等级评定
+				rankEvaluteTime: '',  // 	技术等级评级日期
+				nextRankEvaluteTime: '',  // 	技术等级下次评级日期
+				rankRemark: '',  // String	技术等级审验备注
+				technicalRankPic: '',  // String	技术等级照片正本
+				technicalRankPic2: '',  // String	技术等级照片副本
+				secondaMaintainTime: '',  // 	二级维护维护日期
+				nextSecondLevel: '',  // String	二级维护下次维护
+				managementAgreementAmount: '',  // number	管理协议金额
+				managementAgreementPayDate: '',  // number	管理协议缴费日期
+				managementAgreementBeginDate: '',  // number	管理协议有效期起始日期
+				managementAgreementExpireDate: '',  // number	管理协议有效期截止日期
+				safetyLiabilityLetterExpireDate: '',  // number	管理协议安全责任书到期日
+				managementAgreementMoneyPerMonth: '',  // number	管理协议元/轴/月
+				managementAgreementNote: '',  // String	管理协议协议备注
+				purchaseInvoicePic: '',  // String	其他资料购车发票照片
+				vehicleCertificatePic: '',  // String	其他资料整车合格证照片
+				vehicleRegistrationCertificatePic: '',  // String	其他资料机动车登记证
+				otherTruckPic1: '',  // String	其他资料照片1
+				otherTruckPic2: '',  // String	其他资料照片2
+				otherTruckPic3: ''  // String	其他资料照片3
 			},
-			otherImgs: [],
-			selectedArea: [],
 			rules: {
-				status: [
-					{ required: true, message: '请选择状态', trigger: 'change' }
-				],
-				auditName: [
-					{required: true, message: '请输入审核人', trigger: 'blur'}
-				],
-				auditTime: [
-					{required: true, message: '请选择审核日期', trigger: 'change'}
-				],
-				areaID: [
-					{ required: true, message: '请选择地区', trigger: 'change' }
-				],
-				companyName: [
-					{required: true, message: '请输入企业', trigger: 'blur'}
-				],
-				code: [
-					{min: 1, max: 20, message: '长度在 1 到 20 个字符'}
-				],
-				// truckCategory: [
-				// 	{required: true, message: '请选择车辆类别', trigger: 'change'},
-				// ],
-				// truckType: [
-				// 	{ required: true, message: '请选择车辆类型', trigger: 'change' }
-				// ],
-				// plateNoColor: [
-				// 	{required: true, message: '请选择车牌颜色', trigger: 'change'}
-				// ],
-				length: [
-					{required: true, validator: checkInt, trigger: 'blur'}
-				],
-				width: [
-					{ required: true, validator: checkInt,trigger: 'blur' }
-				],
-				high: [
-					{required: true, validator: checkInt, trigger: 'blur'}
-				],
-				loads: [
-					{required: true, validator: checkFloat, trigger: 'blur'}
-				],
-				loadVolume: [
-					{ required: true, validator: checkFloat, trigger: 'blur' }
-				],
-				tractiveTonnage: [
-					{ validator: checkFloat2, trigger: 'blur' }
-				],
-				totalWeight: [
-					{ required: true, validator: checkFloat, trigger: 'blur' }
-				],
-				tankVolume: [
-					{ validator: checkFloat2, trigger: 'blur' }
-				],
-				manufacturer: [
-					{required: true, message: '请输入生产厂家', trigger: 'blur'}
-				],
-				carBrandModel: [
-					{required: true, message: '请输入品牌型号', trigger: 'blur'},
-				],
-				personsCapacity: [
-					{ required: true, message: '请选择核载人数', trigger: 'change' }
-				],
-				carBodyColor: [
-					{required: true, message: '请输入车身颜色', trigger: 'blur'}
-				],
-				hasWarnMark: [
-					{required: true, message: '请选择是否喷涂警示', trigger: 'change'}
-				],
-				driverLicRegisterTime: [
-					{required: true, message: '请选择行驶证注册日期', trigger: 'change'}
-				],
-				driverLicIssueTime: [
-					{ required: true, message: '请选择行驶证发证日期', trigger: 'change' }
-				],
-				driverLicExamineExpires: [
-					{required: true, message: '请选择行驶证审验日', trigger: 'change'}
-				],
-				roadTransportNo: [
-					{required: true, message: '请输入道路运输号', trigger: 'blur'},
-				],
-				businessScope: [
-					{ required: true, message: '请输入经营范围', trigger: 'blur' }
-				],
-				roadTransportLicAnnualPeriod: [
-					{required: true, message: '请输入道路运输年审日', trigger: 'change'}
-				],
-				carOwnerName: [
-					{required: true, message: '请输入所有人/单位', trigger: 'blur'}
-				],
-				carOwnerMobile: [
-					{required: true, validator: checkTel, trigger: 'blur'}
-				],
-				carOwnerAddress: [
-					{required: true, message: '请输入所有人地址', trigger: 'blur'}
-				],
-				curDriverName: [
-					{required: true, message: '请输入车主姓名', trigger: 'blur'}
-				],
-				curDriverMobile: [
-					{required: true, validator: checkTel, trigger: 'blur'}
-				],
-				curDriverAddress: [
-					{required: true, message: '请输入车主住址', trigger: 'blur'}
-				],
-				propertyType: [
-					{required: true, message: '请选择所有权', trigger: 'change'}
-				],
-				businessNature: [
-					{required: true, message: '请选择经营性质', trigger: 'change'}
-				],
-				businessLicenseNo: [
-					{required: true, message: '请输入经营证号', trigger: 'blur'}
-				],
-				rank: [
-					{required: true, message: '请选择等级评定', trigger: 'blur'}
-				],
-				nextRankEvaluteTime: [
-					{required: true, message: '请选择下次等评日期', trigger: 'blur'}
-				],
-				secondaMaintainTime: [
-					{required: true, message: '请选择二次维护日期', trigger: 'blur'}
-				],
-				nextSecondLevel: [
-					{required: true, message: '请选择下次二次维护日期', trigger: 'blur'}
-				],
-				carrierRiskInsuranceExpires: [
-					{required: true, message: '请选择承运人责任险有效期', trigger: 'blur'}
-				],
-				saLIInsuranceExpires: [
-					{required: true, message: '请选择交强险有效期', trigger: 'blur'}
-				],
-				bizInsuranceExpires: [
-					{required: true, message: '请选择商业险有效期', trigger: 'blur'}
-				]
+				code: [ { required: true , message: '请输入车辆编号'} ],
+				truckCategory: [ { required: true , message: '请选择车辆类别'} ],
+				plateNoColor: [ { required: true , message: '请选择车牌颜色'} ],
+				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'} ],
+				plateNo: [ { required: true , message: '请输入车牌号码'} ],
+				truckType: [ { required: true , message: '请选择车牌类型'} ],
+				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ],
+				length: [ { required: true , message: '请输入车长'} ],
+				width: [ { required: true , message: '请输入车宽'} ],
+				high: [ { required: true , message: '请输入车高'} ],
+				loads: [ { required: true , message: '请输入车辆装载重量'} ],
+				loadVolume: [ { required: true , message: '请输入车辆装载容积'} ]
 			}
 		}
 	},
@@ -798,104 +1295,73 @@ export default {
 		this.getInfo()
 	},
 	methods: {
-		getInfo() {
-			let truckID = this.$route.query.truckID
-			Truck.findById({ truckID }).then(res => {
-				this.truck = res
-				if (this.truck.plateNo) {
-					this.plateNoType = '车牌号'
-				} else {
-					this.plateNoType = '挂车车牌'
-				}
-				this.selectedArea = areaIdToArrayId(res.areaID)
-				let resDataComStaffPic = res
-				let i = 1
-				while (i < 6) {
-					this.otherImgs.push(resDataComStaffPic['otherTruckPic' + i])
-					i++
-				}
+		getPrimaryDriver(queryString, cb) {
+			SuperCargo.find({
+				current: 1,
+				size: 1000,
+				supercargoType: 'Driver',
+				keyword: queryString
+			}).then(res => { cb(res.records) })
+		},
+		getSecondaryDriver(queryString, cb) {
+			SuperCargo.find({
+				current: 1,
+				size: 1000,
+				// supercargoType: 'Supercargo',
+				supercargoType: 'Driver',
+				keyword: queryString
+			}).then(res => { cb(res.records) })
+		},
+		handSelectPrimaryDriver(data) { this.truck.primaryDriver = data.comSupercargoID },
+		handSelectSecondaryDriver(data) { this.truck.secondaryDriver = data.comSupercargoID },
+		handleTruckFrontPic(res) { this.truck.truckFrontPic = res[0] },
+		handleTruckSidePic1(res) { this.truck.truckSidePic1 = res[0] },
+		handleTruckSidePic2(res) { this.truck.truckSidePic2 = res[0] },
+		handleDriverLicPic(res) { this.truck.driverLicPic = res[0] },
+		handleDriverLicSidePic(res) { this.truck.driverLicSidePic = res[0] },
+		handleRoadTransportPic(res) { this.truck.roadTransportPic = res[0] },
+		handleRoadTransportSidePic(res) { this.truck.roadTransportSidePic = res[0] },
+		handleGpSEquippedCertifyPic(res) { this.truck.gpSEquippedCertifyPic = res[0] },
+		handleGpSEquippedCertifyPic2(res) { this.truck.gpSEquippedCertifyPic2 = res[0] },
+		handleSaLIInsurancePic(res) { this.truck.saLIInsurancePic = res[0] },
+		handleSaLIInsurancePic2(res) { this.truck.saLIInsurancePic2 = res[0] },
+		handleBizInsurancePic(res) { this.truck.bizInsurancePic = res[0] },
+		handleBizInsurancePic2(res) { this.truck.bizInsurancePic2 = res[0] },
+		handleCarrierRiskInsurancePic(res) { this.truck.carrierRiskInsurancePic = res[0] },
+		handleCarrierRiskInsurancePic2(res) { this.truck.carrierRiskInsurancePic2 = res[0] },
+		handleCannedMonitorTableCertificatePic1(res) { this.truck.cannedMonitorTableCertificatePic1 = res[0] },
+		handleCannedMonitorTableCertificatePic2(res) { this.truck.cannedMonitorTableCertificatePic2 = res[0] },
+		handleTechnicalRankPic(res) { this.truck.technicalRankPic = res[0] },
+		handleTechnicalRankPic2(res) { this.truck.technicalRankPic2 = res[0] },
+		handlePurchaseInvoicePic(res) { this.truck.purchaseInvoicePic = res[0] },
+		handleVehicleCertificatePic(res) { this.truck.vehicleCertificatePic = res[0] },
+		handleVehicleRegistrationCertificatePic(res) { this.truck.vehicleRegistrationCertificatePic = res[0] },
+		handleOtherTruckPic1(res) { this.truck.otherTruckPic1 = res[0] },
+		handleOtherTruckPic2(res) { this.truck.otherTruckPic2 = res[0] },
+		handleOtherTruckPic3(res) { this.truck.otherTruckPic3 = res[0] },
+		handSelectDriverLicTime(date) { 
+			this.truck.driverLicBeginTime = date[0].getTime()
+			this.truck.driverLicExpiresTime = date[1].getTime()
+		},
+		handSelectGpSValidDate(date) { 
+			this.truck.gpSValidBeginDate = date[0].getTime()
+			this.truck.gpSValidEndDate = date[1].getTime()
+		},
+		handSelectManagementAgreementDate(date) { 
+			this.truck.managementAgreementBeginDate = date[0].getTime()
+			this.truck.managementAgreementExpireDate = date[1].getTime()
+		},
+		save() {
+			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
+			Truck.update(this.truck).then(res => {
+				Message.success(res.data.msg)
+				this.$router.push({name: 'truck'})
 			})
 		},
-		disabledDate(curDate) {
-			return new Date() < curDate
-		},
-		// 车辆照片(正)
-		handleTruckFrontPicSuccess(res) {
-			this.truck.truckFrontPic = res[0]
-		},
-		// 车辆照片(侧1)
-		handleTruckSidePic1Success(res) {
-			this.truck.truckSidePic1 = res[0]
-		},
-		// 车辆照片(侧2)
-		handleTruckSidePic2Success(res) {
-			this.truck.truckSidePic2 = res[0]
-		},
-		// 机动车行驶证照片(正)
-		handleDriverLicPicSuccess(res) {
-			this.truck.driverLicPic = res[0]
-		},
-		// 机动车行驶证照片(副)
-		handleDriverLicSidePicSuccess(res) {
-			this.truck.driverLicSidePic = res[0]
-		},
-		// 道路运输许可证照片(正)
-		handleRoadTransportPicSuccess(res) {
-			this.truck.roadTransportPic = res[0]
-		},
-		// 道路运输许可证照片(副)
-		handleRoadTransportSidePicSuccess(res) {
-			this.truck.roadTransportSidePic = res[0]
-		},
-		imgUrlBack(files) {
-			this.otherImgs = files
-			for (let i = 0; i < files.length; i++) {
-				this.truck['otherTruckPic' + (i + 1)] = files[i]
-			}
-		},
-		handleSelectedArea(data) {
-			this.truck.areaID = data
-			this.truck.area = data ? searchAreaByKey(data) : ''
-		},
-		changePlateNoType(e) {
-			if (e == '车牌号') {
-				this.truck.trailerPlateNo = ''
-			} else {
-				this.truck.plateNo = ''
-			}
-		},
-		updateItem() {
-			let data = this.truck
-			if (!data.tankQCExpires) data.tankQCExpires = ''
-			if (!data.safetyValvesQCExpires) data.safetyValvesQCExpires = ''
-			if (!data.pressureGaugeQCExpires) data.pressureGaugeQCExpires = ''
-			if (!data.gpSSetupTime) data.gpSSetupTime = ''
-			if(!data.truckFrontPic) data.truckFrontPic = ''
-			if(!data.truckSidePic1) data.truckSidePic1 = ''
-			if(!data.truckSidePic2) data.truckSidePic2 = ''
-			if(!data.driverLicPic) data.driverLicPic = ''
-			if(!data.driverLicSidePic) data.driverLicSidePic = ''
-			if(!data.roadTransportPic) data.roadTransportPic = ''
-			if(!data.roadTransportSidePic) data.roadTransportSidePic = ''
-			if (data.driverLicRegisterTime > data.driverLicIssueTime) {
-				Message.error('行驶证注册日期不能早于行驶证发证日期！')
-				return
-			}
-			if (data.secondaMaintainTime > data.nextSecondLevel) {
-				Message.error('二级维护日期不能早于下次二级维护日期！')
-				return
-			}
-			this.$refs['ruleForm'].validate(valid => {
-				if (valid) {
-					delete data.plateNo
-					delete data.trailerPlateNo
-					delete data.truckType
-					delete data.plateNoType
-					Truck.update(data).then(res => {
-						Message.success(res.data.msg)
-						this.$router.push({name: 'truck'})
-					})
-				}
+		getInfo() {
+			const truckID = this.$route.query.truckID
+			Truck.findById({ truckID }).then(res => {
+				this.truck = res
 			})
 		},
 		back() {
@@ -910,25 +1376,16 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-.avatar-uploader
-	line-height 1
-	width 100px
-	height 100px
-	overflow hidden
-	border 1px dashed #d9d9d9
-	border-radius 6px
-	&:hover 
-		border-color #409eff
-	.avatar-uploader-icon
-		font-size 28px
-		color #8c939d
-		width 98px
-		height 98px
-		line-height 98px
+.section-block
+	margin 10px 0 0
+.uploadTruckPicItem
+	display inline-block
+	margin-right 10px
+	p
+		margin 0
 		text-align center
-	.avatar
-		width 98px
-		height 98px
-		display block
-		vertical-align top
+		font-size 12px
+		color #999
+.box-card
+	margin-bottom 10px
 </style>

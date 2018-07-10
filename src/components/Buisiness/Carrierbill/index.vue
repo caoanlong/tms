@@ -5,10 +5,7 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="调度单号/货物名称" style="width:150px" v-model="find.keyword1"></el-input>
-					</el-form-item>
-					<el-form-item label="司机">
-						<el-input placeholder="姓名/手机号" style="width:150px" v-model="find.keyword2"></el-input>
+						<el-input placeholder="承运单号/货物名称" style="width:150px" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item label="状态" class="customerSelect">
 						<el-select placeholder="请选择" v-model="find.status">
@@ -92,8 +89,7 @@ export default {
 			total: 0,
 			tableData: [],
 			find: {
-				keyword1: '',
-				keyword2: '',
+				keyword: '',
 				status: ''
 			},
 			selectedList: []
@@ -108,8 +104,7 @@ export default {
 			this.selectedList = data.map(item => item.carrierOrderID)
 		},
 		reset() {
-			this.find.keyword1 = ''
-			this.find.keyword2 = ''
+			this.find.keyword = ''
 			this.find.status = ''
 			this.pageIndex = 1
 			this.pageSize = 10
@@ -127,8 +122,7 @@ export default {
 			Carrierbill.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword1: this.find.keyword1,
-				keyword2: this.find.keyword2,
+				keyword: this.find.keyword,
 				status: this.find.status
 			}).then(res => {
 				this.tableData = res.records
