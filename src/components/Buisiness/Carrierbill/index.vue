@@ -143,8 +143,8 @@ export default {
 		add() {
 			this.$router.push({ name: 'addcarrierbill' })
 		},
-		view() {
-			this.$router.push({ name: 'viewcarrierbill' })
+		view(carrierOrderID) {
+			this.$router.push({ name: 'viewcarrierbill', query: { carrierOrderID }})
 		},
 		close(carrierOrderID) {
 			closeConfirm(carrierOrderID, carrierOrderIDs => {

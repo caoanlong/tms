@@ -287,19 +287,19 @@
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="入网号">
-									<el-input v-model="truck.gpSNetworkNo"></el-input>
+									<el-input v-model="truck.gpsNetworkNo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="卡号">
-									<el-input v-model="truck.gpSCardNo"></el-input>
+									<el-input v-model="truck.gpsCardNo"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="序列号">
-									<el-input v-model="truck.gpSSerialNumber"></el-input>
+									<el-input v-model="truck.gpsSerialNumber"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
@@ -309,7 +309,7 @@
 										placeholder="选择日期" 
 										style="width:100%" 
 										value-format="timestamp"
-										v-model="truck.gpSSetupTime">
+										v-model="truck.gpsSetupTime">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
@@ -323,8 +323,8 @@
 										start-placeholder="开始日期"
 										end-placeholder="结束日期" 
 										style="width:100%" 
-										v-model="gpSValidDate" 
-										@change="handSelectGpSValidDate">
+										v-model="gpsValidDate" 
+										@change="handSelectGpsValidDate">
 										<!-- gpSValidBeginDate, gpSValidEndDate -->
 									</el-date-picker>
 								</el-form-item>
@@ -333,12 +333,12 @@
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="费用">
-									<el-input v-model="truck.gpSCostAmount"><template slot="append">元</template></el-input>
+									<el-input v-model="truck.gpsCostAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="类型">
-									<el-input v-model="truck.gpSType"></el-input>
+									<el-input v-model="truck.gpsType"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -348,16 +348,16 @@
 									<div class="uploadTruckPicItem">
 										<ImageUpload 
 											:width="80" :height="80" 
-											:files="[truck.gpSEquippedCertifyPic]" 
-											@imgUrlBack="handleGpSEquippedCertifyPic">
+											:files="[truck.gpsEquippedCertifyPic]" 
+											@imgUrlBack="handleGpsEquippedCertifyPic">
 										</ImageUpload>
 										<p>照片1</p>
 									</div>
 									<div class="uploadTruckPicItem">
 										<ImageUpload 
 											:width="80" :height="80" 
-											:files="[truck.gpSEquippedCertifyPic2]" 
-											@imgUrlBack="handleGpSEquippedCertifyPic2">
+											:files="[truck.gpsEquippedCertifyPic2]" 
+											@imgUrlBack="handleGpsEquippedCertifyPic2">
 										</ImageUpload>
 										<p>照片2</p>
 									</div>
@@ -377,12 +377,12 @@
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="保险公司">
-									<el-input v-model="truck.saLIInsuranceVendor"></el-input>
+									<el-input v-model="truck.saliInsuranceVendor"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="保险单号">
-									<el-input v-model="truck.saLIInsuranceNo"></el-input>
+									<el-input v-model="truck.saliInsuranceNo"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -394,20 +394,20 @@
 										placeholder="选择日期" 
 										style="width:100%" 
 										value-format="timestamp"
-										v-model="truck.saLIInsuranceExpires">
+										v-model="truck.saliInsuranceExpires">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="保险金额">
-									<el-input v-model="truck.saLIInsuranceAmount"><template slot="append">元</template></el-input>
+									<el-input v-model="truck.saliInsuranceAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="车船税金额">
-									<el-input v-model="truck.saLIInsuranceTaxAmount"><template slot="append">元</template></el-input>
+									<el-input v-model="truck.saliInsuranceTaxAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -417,16 +417,16 @@
 									<div class="uploadTruckPicItem">
 										<ImageUpload 
 											:width="80" :height="80" 
-											:files="[truck.saLIInsurancePic]" 
-											@imgUrlBack="handleSaLIInsurancePic">
+											:files="[truck.saliInsurancePic]" 
+											@imgUrlBack="handleSaliInsurancePic">
 										</ImageUpload>
 										<p>照片1</p>
 									</div>
 									<div class="uploadTruckPicItem">
 										<ImageUpload 
 											:width="80" :height="80" 
-											:files="[truck.saLIInsurancePic2]" 
-											@imgUrlBack="handleSaLIInsurancePic2">
+											:files="[truck.saliInsurancePic2]" 
+											@imgUrlBack="handleSaliInsurancePic2">
 										</ImageUpload>
 										<p>照片2</p>
 									</div>
@@ -1149,7 +1149,7 @@ export default {
 	data() {
 		return {
 			driverLicTime: [],
-			gpSValidDate: [],
+			gpsValidDate: [],
 			managementAgreementDate: [],
 			truck: {
 				truckCategory: '',  // String	车辆类别 WholeVehicle-整车 Tractor-牵引车 Trailer-挂车
@@ -1320,10 +1320,10 @@ export default {
 		handleDriverLicSidePic(res) { this.truck.driverLicSidePic = res[0] },
 		handleRoadTransportPic(res) { this.truck.roadTransportPic = res[0] },
 		handleRoadTransportSidePic(res) { this.truck.roadTransportSidePic = res[0] },
-		handleGpSEquippedCertifyPic(res) { this.truck.gpSEquippedCertifyPic = res[0] },
-		handleGpSEquippedCertifyPic2(res) { this.truck.gpSEquippedCertifyPic2 = res[0] },
-		handleSaLIInsurancePic(res) { this.truck.saLIInsurancePic = res[0] },
-		handleSaLIInsurancePic2(res) { this.truck.saLIInsurancePic2 = res[0] },
+		handleGpsEquippedCertifyPic(res) { this.truck.gpsEquippedCertifyPic = res[0] },
+		handleGpsEquippedCertifyPic2(res) { this.truck.gpsEquippedCertifyPic2 = res[0] },
+		handleSalIInsurancePic(res) { this.truck.salIInsurancePic = res[0] },
+		handleSalIInsurancePic2(res) { this.truck.salIInsurancePic2 = res[0] },
 		handleBizInsurancePic(res) { this.truck.bizInsurancePic = res[0] },
 		handleBizInsurancePic2(res) { this.truck.bizInsurancePic2 = res[0] },
 		handleCarrierRiskInsurancePic(res) { this.truck.carrierRiskInsurancePic = res[0] },
@@ -1342,9 +1342,9 @@ export default {
 			this.truck.driverLicBeginTime = date[0].getTime()
 			this.truck.driverLicExpiresTime = date[1].getTime()
 		},
-		handSelectGpSValidDate(date) { 
-			this.truck.gpSValidBeginDate = date[0].getTime()
-			this.truck.gpSValidEndDate = date[1].getTime()
+		handSelectGpsValidDate(date) { 
+			this.truck.gpsValidBeginDate = date[0].getTime()
+			this.truck.gpsValidEndDate = date[1].getTime()
 		},
 		handSelectManagementAgreementDate(date) { 
 			this.truck.managementAgreementBeginDate = date[0].getTime()
