@@ -516,7 +516,7 @@ export default {
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
-					Carrierbill.add(carrierbill).then(res => {
+					Carrierbill.update(carrierbill).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'carrierbill'})
 					})
@@ -545,8 +545,9 @@ export default {
 					this.carrierbillInfo.porRequire = res.porRequire.split(',')
 				} else {
 					this.carrierbillInfo.porRequire = [res.porRequire]
-					console.log(this.carrierbillInfo.porRequire)
 				}
+				this.selectedShipperArea = areaIdToArrayId(res.shipperAreaID)
+				this.selectedConsigneeArea = areaIdToArrayId(res.consigneeAreaID)
 			})
 		},
 		back() {

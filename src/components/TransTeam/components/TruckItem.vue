@@ -28,11 +28,11 @@
 			<div class="truckHandle fl">
 				<router-link tag="span" :to="{name: 'viewtruck', query: { truckID: truck.truckID } }">查看档案</router-link>
 				<router-link tag="span" :to="{name: 'edittruck', query: { truckID: truck.truckID } }">编辑档案</router-link>
-				<span>删除车辆</span>
+				<span @click="delTruck(truck.truckID)">删除车辆</span>
 			</div>
 		</div>
 		<div class="driver">
-			<div class="driverInfo" v-if="truck.primaryDriver">
+			<div class="driverInfo" v-if="truck.primaryDriver && truck.primaryDriver.realName">
 				<span class="driverName">{{truck.primaryDriver.realName}}</span>
 				<el-tooltip placement="top" >
 					<div slot="content">开通APP接单</div>
@@ -47,7 +47,8 @@
 					<el-tag size="mini" type="danger">到期</el-tag>
 				</el-tooltip>
 			</div>
-			<div class="driverInfo" v-if="truck.secondaryDriver">
+			<div class="driverInfo link text-center" v-else @click="add('primary')">+添加主驾</div>
+			<div class="driverInfo" v-if="truck.secondaryDriver && truck.secondaryDriver.realName">
 				<span class="driverName">{{truck.secondaryDriver.realName}}</span>
 				<el-tag type="info" size="mini">APP</el-tag> 
 				<el-tooltip placement="right" effect="light">
@@ -59,6 +60,7 @@
 					<el-tag size="mini" type="danger">到期</el-tag>
 				</el-tooltip>
 			</div>
+			<div class="driverInfo link text-center" v-else @click="add('second')">+添加副驾</div>
 		</div>
 		<div class="mobile">
 			<div class="mobileItem" v-if="truck.primaryDriver">{{truck.primaryDriver.mobile}}</div>
@@ -66,35 +68,76 @@
 		</div>
 		<div class="handle">
 			<div class="handleItem">
-				<span>设为主驾</span>
-				<span>人员替换</span>
-				<span>删除</span>
+				<span style="color: #ccc">设为主驾</span>
+				<span @click="add('primary')">人员替换</span>
+				<span @click="delSuperCargo">删除</span>
 			</div>
 			<div class="handleItem">
-				<span>设为主驾</span>
-				<span>人员替换</span>
-				<span>删除</span>
+				<span @click="primary">设为主驾</span>
+				<span @click="add('second')">人员替换</span>
+				<span @click="delSuperCargo">删除</span>
 			</div>
 		</div>
+		<SelectSuperCargo :dialogVisible="dialogVisible" :type="type" :truckID="truck.truckID" @control="handleSelect"></SelectSuperCargo>
 	</div>
 </template>
 
 <script>
 import { Message } from 'element-ui'
 import { defaultImg } from '../../../assets/icons/icons'
-import { resizeImg } from '../../../common/utils'
+import { resizeImg, deleteConfirm } from '../../../common/utils'
+import SelectSuperCargo from './SelectSuperCargo'
+import Truck from '../../../api/Truck'
 export default {
 	props: {
 		truck: Object
 	},
 	data() {
 		return {
-		   
+		   type: 'primary',
+		   dialogVisible: false
 		}
 	},
 	computed: {
 		defaultImg: () => defaultImg,
 		resizeImg: () => resizeImg
+	},
+	components: { SelectSuperCargo },
+	methods: {
+		add(type) {
+			this.type = type
+			this.dialogVisible = true
+		},
+		primary() {
+			Truck.primary({
+				comSupercargoID: this.truck.secondaryDriver.comSupercargoID,
+				comTruckID: this.truck.truckID
+			}).then(res => {
+				Message.success(res.data.msg)
+				this.$emit('refresh')
+			})
+		},
+		delTruck(truckID) {
+			deleteConfirm(truckID, truckIDs => {
+				Truck.del({ truckIDs }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.$emit('refresh')
+				})
+			})
+		},
+		delSuperCargo() {
+			Truck.deleteDriver({
+				comSupercargoID: this.truck.secondaryDriver.comSupercargoID,
+				comTruckID: this.truck.truckID
+			}).then(res => {
+				Message.success(res.data.msg)
+				this.$emit('refresh')
+			})
+		},
+		handleSelect(bool) {
+			this.dialogVisible = false
+			bool && this.$emit('refresh')
+		}
 	}
 }
 </script>

@@ -42,7 +42,7 @@
 						<div class="handle fl">操作</div>
 					</div>
 				</div>
-				<DriverItem v-for="(truck, index) in tableData" :key="index" :truck="truck"></DriverItem>
+				<TruckItem v-for="(truck, index) in tableData" :key="index" :truck="truck" @refresh="refresh"></TruckItem>
 			</div>
 			</div>
 			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
@@ -57,7 +57,7 @@ import { deleteConfirm } from '../../../common/utils'
 import Truck from '../../../api/Truck'
 import Page from '../../CommonComponents/Page'
 import { limitLength20, checkInt2 } from '../../../common/validators'
-import DriverItem from '../components/DriverItem'
+import TruckItem from '../components/TruckItem'
 export default {
 	data() {
 		return {
@@ -97,7 +97,7 @@ export default {
 	},
 	components: {
 		Page,
-		DriverItem
+		TruckItem
 	},
 	created() {
 		this.getList()
@@ -186,6 +186,9 @@ export default {
 					this.getList()
 				})
 			}, this.selectedList)
+		},
+		refresh() {
+			this.getList()
 		}
 	}
 }

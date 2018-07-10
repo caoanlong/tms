@@ -76,6 +76,37 @@ class Truck extends Base {
             data
         })
     }
+    findDriverList(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/findDriverList',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
+    changeDriver(data) {
+        return this.request({
+            url: this.baseUrl + '/changeDriver',
+            method: 'post',
+            data
+        })
+    }
+    primary(data) {
+        return this.request({
+            url: this.baseUrl + '/primary',
+            method: 'post',
+            data
+        })
+    }
+    deleteDriver(data) {
+        return this.request({
+            url: this.baseUrl + '/deleteDriver',
+            method: 'post',
+            data
+        })
+    }
 }
 
 export default new Truck('/truck', request)
