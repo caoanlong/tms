@@ -1,5 +1,5 @@
 <template>
-	<div class="main-content" style="min-width: 1150px">
+	<div class="main-content" style="min-width: 1050px">
 		<el-card class="box-card hasTit">
 			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
@@ -46,14 +46,20 @@
 										v-model="carrierbillInfo.shipperCompanyName"
 										:fetch-suggestions="getRecdeliverycomp"
 										placeholder="请输入..."
-										@select="handSelectShipper">
+										@select="handSelectShipperCompany">
 									</el-autocomplete>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
 								<el-col :span="12">
 									<el-form-item label="发货人" prop="shipperName">
-										<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperName"></el-input>
+										<el-autocomplete  style="width:100%"
+											value-key="contactName" 
+											v-model="carrierbillInfo.shipperName"
+											:fetch-suggestions="getShipper"
+											placeholder="请输入..."
+											@select="handSelectShipper">
+										</el-autocomplete>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
@@ -115,14 +121,20 @@
 										v-model="carrierbillInfo.consigneeCompanyName"
 										:fetch-suggestions="getRecdeliverycomp"
 										placeholder="请输入内容"
-										@select="handSelectConsignee">
+										@select="handSelectConsigneeCompany">
 									</el-autocomplete>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
 								<el-col :span="12">
 									<el-form-item label="收货人" prop="consigneeName">
-										<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneeName"></el-input>
+										<el-autocomplete  style="width:100%"
+											value-key="contactName" 
+											v-model="carrierbillInfo.consigneeName"
+											:fetch-suggestions="getConsignee"
+											placeholder="请输入..."
+											@select="handSelectConsignee">
+										</el-autocomplete>
 									</el-form-item>
 								</el-col>
 								<el-col :span="12">
@@ -178,39 +190,45 @@
 				<el-row>
 					<div class="section-block">
 						<span class="block-title">货物信息</span>
-						<el-form class="block-content" :inline="true" size="mini" :rules="cargoRules" ref="cargoRuleForm">
-							<el-row>
-								<el-form-item><div class="text-center cargo-title">客户单号</div></el-form-item>
-								<el-form-item><div class="text-center cargo-title"><span>*</span>货名</div></el-form-item>
-								<el-form-item><div class="text-center cargo-title"><span>*</span>数量</div></el-form-item>
-								<el-form-item><div class="text-center cargo-title"><span>*</span>单位</div></el-form-item>
-								<el-form-item><div class="text-center cargo-title">重量</div></el-form-item>
-								<el-form-item><div class="text-center cargo-title">体积</div></el-form-item>
-								<el-form-item><div class="text-center cargo-title">操作</div></el-form-item>
-							</el-row>
+						<el-row style="margin: 0 20px">
+							<div class="text-center cargo-title">客户单号</div>
+							<div class="text-center cargo-title"><span>*</span>货名</div>
+							<div class="text-center cargo-title"><span>*</span>数量</div>
+							<div class="text-center cargo-title"><span>*</span>单位</div>
+							<div class="text-center cargo-title">重量</div>
+							<div class="text-center cargo-title">体积</div>
+							<div class="text-center cargo-title">操作</div>
+						</el-row>
+						<el-form class="block-content" :model="carrierbillInfo" :inline="true" size="mini" ref="cargoRuleForm">
 							<el-row  v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
 								<el-form-item>
-									<el-input placeholder="请输入..." style="width:150px" v-model="item.orderNo"></el-input>
+									<el-input placeholder="请输入..." style="width:130px" v-model="item.customizedNo"></el-input>
 								</el-form-item>
-								<el-form-item prop="cargoName">
-									<el-input placeholder="请输入..." style="width:150px" v-model="item.cargoName"></el-input>
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
+									<el-autocomplete 
+										style="width:130px" 
+										value-key="cargoName" 
+										v-model="item.cargoName"
+										:fetch-suggestions="getCargos"
+										placeholder="请输入..."
+										@select="handSelectCargo">
+									</el-autocomplete>
 								</el-form-item>
-								<el-form-item prop="cargoNum">
-									<el-input-number style="width:150px" v-model="item.cargoNum" :min="1"></el-input-number>
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{ required: true, message: '请输入数量'}]">
+									<el-input-number style="width:130px" v-model="item.cargoNum" :min="1"></el-input-number>
 								</el-form-item>
-								<el-form-item>
-									<el-select style="width:150px" v-model="item.unit" placeholder="请选择">
-										<el-option label="件" value="shanghai"></el-option>
-										<el-option label="箱" value="beijing"></el-option>
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" :rules="[{ required: true, message: '请选择单位'}]">
+									<el-select style="width:130px" v-model="item.cargoUnitName" placeholder="请选择">
+										<el-option v-for="unit in units" :key="unit.unit" :label="unit.unit" :value="unit.unit"></el-option>
 									</el-select>
 								</el-form-item>
 								<el-form-item prop="cargoWeight">
-									<el-input placeholder="货物重量" style="width:150px" v-model="item.cargoWeight">
+									<el-input placeholder="货物重量" style="width:130px" v-model="item.cargoWeight">
 										<template slot="append">吨</template>
 									</el-input>
 								</el-form-item>
 								<el-form-item prop="cargoVolume">
-									<el-input placeholder="货物体积" style="width:150px" v-model="item.cargoVolume">
+									<el-input placeholder="货物体积" style="width:130px" v-model="item.cargoVolume">
 										<template slot="append">方</template>
 									</el-input>
 								</el-form-item>
@@ -218,7 +236,7 @@
 									<el-button 
 										type="text" 
 										icon="el-icon-delete" 
-										style="color:#F56C6C;position:relative;left:64px" 
+										style="color:#F56C6C;position:relative;left:40px" 
 										@click="removeItem(index)" 
 										v-show="carrierbillInfo.carrierCargo.length > 1">
 										删除
@@ -234,8 +252,8 @@
 						<div class="section-block">
 							<span class="block-title">运输费用</span>
 							<el-row class="block-content">
-								<el-form-item label="运费金额" prop="transPrice">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.transPrice"></el-input>
+								<el-form-item label="运费金额" prop="freight">
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight"></el-input>
 								</el-form-item>
 							</el-row>
 						</div>
@@ -269,204 +287,117 @@ import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
 import dist from '../../../assets/data/dist.json'
 import Carrierbill from '../../../api/Carrierbill'
-import SettleConfig from '../../../api/SettleConfig'
 import Customer from '../../../api/Customer'
-import BaiduMap from '../../../api/BaiduMap'
 import CrossProxy from '../../../api/CrossProxy'
+import CustomerAddress from '../../../api/CustomerAddress'
+import CargoUnit from '../../../api/CargoUnit'
+import CargoGeneralName from '../../../api/CargoGeneralName'
 import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../../common/utils'
-import { checkFloat2, checkTel } from '../../../common/validators'
+import { checkTel } from '../../../common/validators'
 import distData from '../../../assets/data/distpicker.data'
 import Geohash from '../../../common/Geohash'
 export default {
-	/*
-	carrierbillInfo: {
-		shipperNo: ''                 // 发货单号
-		transportType: '',            // 运输方式
-		commissionDate: '',           // 委托时间
-		shipperCompanyName: '',       // 发货单位
-		shipperName: '',              // 发货人
-		shipperPhone: '',             // 发货人联系方式
-		shipperAreaID: '',            // 发货地
-		shipperDate: '',              // 发货时间
-		shipperLocationAddress: '',   // 发货定位地址
-		shipperDetailAddress: '',     // 发货详细地址
-		consigneeCompanyName: '',     // 收货单位
-		consigneeName: '',            // 收货人
-		consigneePhone: '',           // 收货人联系方式
-		consigneeAreaID: '',          // 收货地
-		consigneeDate: '',            // 收货时间
-		consigneeLocationAddress: '', // 收货定位地址
-		consigneeDetailAddress: '',   // 收货详细地址
-		transPrice: '',               // 运费金额
-		porRequire: []                // 回单要求
-	}
-	*/
 	data() {
 		return {
+			units: [],
+			carrierbillInfo: {
+				shipperNo: '',                  /** String 发货单号*/
+				transportType: '',              /** String 运输方式*/
+				commissionDate: '',             /** Date 委托时间*/
+				shipperID: '',                  /** Long 发货单位ID*/
+				shipperCompanyName: '',         /** String 发货单位名称*/
+				shipperAddressID: '',           /** Long 发货人地址ID*/
+				shipperPhone: '',               /** String 发货人电话*/
+				shipperAreaID: '',              /** Long 发货人区域ID*/
+				shipperLocationLng: '',         /** BigDecimal 发货人地址经度*/
+				shipperLocationLat: '',         /** BigDecimal 发货人地址纬度*/
+				shipperLocationAddress: '',     /** String 发货人定位地址*/
+				shipperName: '',                /** String 发货人名字*/
+				shipperDetailAddress: '',       /** String 发货人详细地址*/
+				shipperDate: '',                /** Date 发货人时间*/
+				consigneeID: '',                /** Long 收货单位ID*/
+				consigneeCompanyName: '',       /** String 收货单位名称*/
+				consigneeAddressID: '',         /** Long 收货人地址ID*/
+				consigneeName: '',              /** String 收货人名字*/
+				consigneePhone: '',             /** String 收货人电话*/
+				consigneeAreaID: '',            /** Long 收货人区域ID*/
+				consigneeLocationLng: '',       /** BigDecimal 收货人地址经度*/
+				consigneeLocationLat: '',       /** BigDecimal 收货人地址纬度*/
+				consigneeLocationAddress: '',   /** String 收货人定位地址*/
+				consigneeDetailAddress: '',     /** String 收货人详细地址*/
+				consigneeDate: '',              /** Date 收货时间*/
+				carrierCargo: [{
+					customizedNo: '',
+					cargoNameID: '',
+					cargoName: '',
+					cargoNum: '',
+					cargoUnitName: '',
+					cargoWeight: '',
+					cargoVolume: ''
+				}],                     /** String货物清单（JSON串）*/
+				freight: '',                    /** BigDecimal运费*/
+				porRequire: []                  /** String 回单要求*/
+			},
 			selectedShipperArea: [],
 			selectedConsigneeArea: [],
 			searchShipperAreaHash: '',
 			searchConsigneeAreaHash: '',
-			consignor: {},
-			loading: false,
-			carrierbillInfo: {
-				carrierCargo:[
-					{
-						'weightType': 'Heavy',
-						'cargoName': '',
-						'cargoType': '',
-						'cargoWeight': 0,
-						'cargoVolume': 0,
-						'cargoNum': 0
-					}
-				],
-				carrierOrderNo:'',
-				carrierrName: '',
-				navicertNo: '',
-				electronicWaybill: '',
-				cashAmount:'',
-				chargeMode:'',
-				codAmount:'',
-				consigneeAddressID:'',
-				consigneeAmount:'',
-				consigneeArea:'',
-				consigneeAreaID:'',
-				consigneeLocationAddress:'',
-				consigneeLocationLng:'',
-				consigneeLocationLat:'',
-				consigneeCompanyName:'',
-				consigneeDate:'',
-				consigneeDetailAddress:'',
-				consigneeID:'',
-				consigneeName:'',
-				consigneePhone:'',
-				consignorID:'',
-				monthlyAmount:'',
-				paymentMethod:'Manual',
-				porAmount:'',
-				receiptMethod:'Manual',
-				shipperAddressID:'',
-				shipperArea:'',
-				shipperAreaID: '',
-				shipperLocationAddress: '',
-				shipperLocationLng: '',
-				shipperLocationLat: '',
-				shipperCompanyName:'',
-				shipperDate:'',
-				shipperDetailAddress:'',
-				shipperID:'',
-				shipperName:'',
-				shipperNo:'',
-				shipperPhone:'',
-				invoice:'N',
-				porRequire: ['NotRequired'],
-				transportType: '公路运输',
-				commissionDate: ''
-			},
-			totalPrice: 0,
-			exmile: 0,
-			innermile: 0,
 			rules: {
-				shipperNo: [
-					{required: true, message: '请输入发货单号'}
-				],
-				commissionDate: [
-					{required: true, message: '请选择委托时间'}
-				],
-				consignorName: [
-					{required: true, message: '请输入托运人'}
-				],
-				carrierrName: [
-					{required: true, message: '请输入承运人'}
-				],
-				shipperCompanyName: [
-					{required: true, message: '请输入发货单位'}
-				],
-				shipperName: [
-					{ required: true, message: '请输入发货人'}
-				],
-				shipperPhone: [
-					{ required: true, validator: checkTel}
-				],
-				shipperDate: [
-					{required: true, message: '请选择发货时间', trigger: 'change'}
-				],
-				shipperAreaID: [
-					{required: true, message: '请选择发货地'}
-				],
-				shipperLocationAddress: [
-					{required: true, message: '请选择定位地址'}
-				],
-				shipperDetailAddress: [
-					{ required: true, message: '请输入发货详细地址'}
-				],
-				consigneeCompanyName: [
-					{required: true, message: '请输入收货单位'}
-				],
-				consigneeName: [
-					{ required: true, message: '请输入收货人'}
-				],
-				consigneePhone: [
-					{ required: true, validator: checkTel}
-				],
-				consigneeDate: [
-					{required: true, message: '请选择收货时间', trigger: 'change'}
-				],
-				consigneeAreaID: [
-					{required: true, message: '请选择收货地'}
-				],
-				consigneeLocationAddress: [
-					{required: true, message: '请选择定位地址'}
-				],
-				consigneeDetailAddress: [
-					{required: true, message: '请输入收货详细地址'}
-				],
-				transportType: [
-					{required: true, message: '请选择运输方式'}
-				],
-				transPrice: [
-					{required: true, message: '请输入运费金额'}
-				]
-			},
-			cargoRules: {
-				cargoName: [
-					{required: true, message: '请输入货名'}
-				],
-				// cargoNum: [
-				// 	{required: true, message: '请输入货物数量'},
-				// 	{validator: checkFloat2}
-				// ],
-				cargoType: [
-					{required: true, message: '请输入货物规格'}
-				],
-				cargoWeight: [
-					{validator: checkFloat2}
-				],
-				cargoVolume: [
-					{validator: checkFloat2}
-				]
+				shipperNo: [ {required: true, message: '请输入发货单号'} ],
+				commissionDate: [ {required: true, message: '请选择委托时间'} ],
+				consignorName: [ {required: true, message: '请输入托运人'} ],
+				carrierrName: [ {required: true, message: '请输入承运人'} ],
+				shipperCompanyName: [ {required: true, message: '请输入发货单位'} ],
+				shipperName: [ { required: true, message: '请输入发货人'} ],
+				shipperPhone: [ { required: true, validator: checkTel} ],
+				shipperDate: [ {required: true, message: '请选择发货时间', trigger: 'change'} ],
+				shipperAreaID: [ {required: true, message: '请选择发货地'} ],
+				shipperLocationAddress: [ {required: true, message: '请选择定位地址'} ],
+				shipperDetailAddress: [ { required: true, message: '请输入发货详细地址'} ],
+				consigneeCompanyName: [ {required: true, message: '请输入收货单位'} ],
+				consigneeName: [ { required: true, message: '请输入收货人'} ],
+				consigneePhone: [ { required: true, validator: checkTel} ],
+				consigneeDate: [ {required: true, message: '请选择收货时间', trigger: 'change'} ],
+				consigneeAreaID: [ {required: true, message: '请选择收货地'} ],
+				consigneeLocationAddress: [ {required: true, message: '请选择定位地址'} ],
+				consigneeDetailAddress: [ {required: true, message: '请输入收货详细地址'} ],
+				transportType: [ {required: true, message: '请选择运输方式'} ],
+				freight: [ {required: true, message: '请输入运费金额'} ]
 			}
 		}
 	},
 	computed: {
 		dist: () => dist
 	},
+	created() {
+		this.getUnits()
+	},
 	methods: {
+		getUnits() {
+			CargoUnit.find({
+				current: 1,
+				size: 1000
+			}).then(res => {
+				this.units = res.records
+			})
+		},
+		getCargos(queryString, cb) {
+			CargoGeneralName.find({
+				current: 1,
+				size: 1000
+			}).then(res => { cb(res.records) })
+		},
 		getConsignors(queryString, cb) {
 			Customer.find({
 				type: 'Consignor',
 				companyName: queryString
-			}).then(res => {
-				cb(res.records)
-			})
+			}).then(res => { cb(res.records) })
 		},
 		getRecdeliverycomp(queryString, cb) {
 			Customer.find({
 				type: 'ShipperConsignee',
 				companyName: queryString
-			}).then(res => {
-				cb(res.records)
-			})
+			}).then(res => { cb(res.records) })
 		},
 		getShipperLocation(queryString, cb) {
 			if (!this.searchShipperAreaHash) {
@@ -484,39 +415,65 @@ export default {
 				return
 			}
 			CrossProxy.getEleLocation({
-				geohash: this.searchShipperAreaHash,
+				geohash: this.searchConsigneeAreaHash,
 				keyword: queryString
 			}).then(res => { cb(res) })
 		},
-		handSelectConsignor(data) {
-			this.carrierbillInfo.consignorID = data.customerID
-			this.carrierbillInfo.consignorName = data.companyName
+		getShipper(queryString, cb) {
+			CustomerAddress.find({
+				current: 1,
+				size: 10,
+				contactName: queryString,
+				customerID: this.carrierbillInfo.shipperID
+			}).then(res => { cb(res.records) })
 		},
-		handSelectShipper(data){
+		getConsignee(queryString, cb) {
+			CustomerAddress.find({
+				current: 1,
+				size: 10,
+				contactName: queryString,
+				customerID: this.carrierbillInfo.consigneeID
+			}).then(res => { cb(res.records) })
+		},
+		handSelectCargo(data) {
+			this.carrierbillInfo.carrierCargo.forEach(item => {
+				if (item.cargoName == data.cargoName) {
+					item.cargoNameID = data.cargoNameID
+					item.cargoUnitName = data.cargoUnit
+				}
+			})
+		},
+		handSelectShipperCompany(data) {
 			this.carrierbillInfo.shipperCompanyName = data.companyName
+			this.carrierbillInfo.shipperID = data.customerID
+		},
+		handSelectConsigneeCompany(data) {
+			this.carrierbillInfo.consigneeCompanyName = data.companyName
+			this.carrierbillInfo.consigneeID = data.customerID
+		},
+		handSelectShipper(data) {
 			this.carrierbillInfo.shipperName = data.contactName
 			this.carrierbillInfo.shipperArea = data.companyArea
 			this.carrierbillInfo.shipperDetailAddress = data.detailAddress
 			this.carrierbillInfo.shipperLocationAddress = data.locationAddress
 			this.carrierbillInfo.shipperLocationLng = data.locationLng
 			this.carrierbillInfo.shipperLocationLat = data.locationLat
-			this.carrierbillInfo.shipperID = data.customerID
 			this.carrierbillInfo.shipperPhone = data.contactPhone
-			this.carrierbillInfo.shipperAreaID = data.companyAreaID
-			this.selectedShipperArea = areaIdToArrayId(String(data.companyAreaID))
+			this.carrierbillInfo.shipperAreaID = data.areaID
+			this.carrierbillInfo.shipperAddressID = data.customerAddressID
+			this.selectedShipperArea = areaIdToArrayId(data.areaID)
 		},
-		handSelectConsignee(data){
-			this.carrierbillInfo.consigneeCompanyName = data.companyName
+		handSelectConsignee(data) {
 			this.carrierbillInfo.consigneeName = data.contactName
 			this.carrierbillInfo.consigneeArea = data.companyArea
 			this.carrierbillInfo.consigneeDetailAddress = data.detailAddress
 			this.carrierbillInfo.consigneeLocationAddress = data.locationAddress
 			this.carrierbillInfo.consigneeLocationLng = data.locationLng
 			this.carrierbillInfo.consigneeLocationLat = data.locationLat
-			this.carrierbillInfo.consigneeID = data.customerID
 			this.carrierbillInfo.consigneePhone = data.contactPhone
-			this.carrierbillInfo.consigneeAreaID = data.companyAreaID
-			this.selectedConsigneeArea = areaIdToArrayId(String(data.companyAreaID))
+			this.carrierbillInfo.consigneeAreaID = data.areaID
+			this.carrierbillInfo.consigneeAddressID = data.customerAddressID
+			this.selectedConsigneeArea = areaIdToArrayId(data.areaID)
 		},
 		handleSelectedShipperArea(data) {
 			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
@@ -545,104 +502,35 @@ export default {
 		save() {
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
-					if (valid) {
-						resolve()
-					} else {
-						reject()
-					}
+					if (!valid) return
+					resolve()
 				})
 			}).then(() => {
 				new Promise((resolve, reject) => {
-					this.$refs['cargoRuleForm'].forEach(item => {
-						item.validate(valid => {
-							if (valid) {
-								let cargoInfo = this.carrierbillInfo.carrierCargo
-								for (let i = 0; i < cargoInfo.length; i++) {
-									if (cargoInfo[i].weightType == 'Heavy' && (cargoInfo[i].cargoWeight == '' || cargoInfo[i].cargoWeight == 0)) {
-										Message.error('重货必须填写货物重量！')
-										return reject()
-									}
-									if (cargoInfo[i].weightType == 'Light' && (cargoInfo[i].cargoVolume == '' || cargoInfo[i].cargoVolume == 0)) {
-										Message.error('轻货必须填写货物体积！')
-										return reject()
-									}
-								}
-								resolve()
-							} else {
-								reject()
-							}
-						})
+					this.$refs['cargoRuleForm'].validate(valid => {
+						if (!valid) return 
+						resolve()
 					})
 				}).then(() => {
-					let cargos = this.carrierbillInfo.carrierCargo.map(item => {
-						return {
-							'weightType': item.weightType,
-							'cargoName': item.cargoName,
-							'cargoType': item.cargoType,
-							'cargoWeight': item.cargoWeight ? item.cargoWeight : 0,
-							'cargoVolume': item.cargoVolume ? item.cargoVolume : 0,
-							'cargoNum': item.cargoNum ? item.cargoNum : 0
-						}
-					})
-					Carrierbill.add({
-						carrierCargoInfo: JSON.stringify(cargos),
-						carrierOrderNo: this.carrierbillInfo.carrierOrderNo,
-						carrierrName: this.carrierbillInfo.carrierrName,
-						navicertNo: this.carrierbillInfo.navicertNo,
-						electronicWaybill: this.carrierbillInfo.electronicWaybill,
-						cashAmount: this.carrierbillInfo.cashAmount,
-						codAmount: this.carrierbillInfo.codAmount,
-						consigneeAddressID: '',
-						consigneeAmount: this.carrierbillInfo.consigneeAmount,
-						consigneeArea: this.carrierbillInfo.consigneeArea ,
-						consigneeAreaID: this.carrierbillInfo.consigneeAreaID,
-						consigneeLocationAddress: this.carrierbillInfo.consigneeLocationAddress || '云南昆明',  // 新增定位
-						consigneeLocationLng: this.carrierbillInfo.consigneeLocationLng || 25.05,  // 新增定位
-						consigneeLocationLat: this.carrierbillInfo.consigneeLocationLat || 102.72,  // 新增定位
-						consigneeCompanyName: this.carrierbillInfo.consigneeCompanyName,
-						consigneeDate: this.carrierbillInfo.consigneeDate,
-						consigneeDetailAddress: this.carrierbillInfo.consigneeDetailAddress,
-						consigneeID: this.carrierbillInfo.consigneeID,
-						consigneeName: this.carrierbillInfo.consigneeName,
-						consigneePhone: this.carrierbillInfo.consigneePhone,
-						consignorID: this.carrierbillInfo.consignorID || '', // 托运人ID
-						consignorName: this.carrierbillInfo.consignorName || '', // 托运人名称
-						monthlyAmount: this.carrierbillInfo.monthlyAmount,
-						paymentMethod: this.carrierbillInfo.paymentMethod,
-						porAmount: this.carrierbillInfo.porAmount,
-						receiptMethod: this.carrierbillInfo.receiptMethod,	
-						shipperAddressID: '',
-						shipperArea: this.carrierbillInfo.shipperArea,
-						shipperAreaID: this.carrierbillInfo.shipperAreaID,
-						shipperLocationAddress: this.carrierbillInfo.shipperLocationAddress || '云南昆明',  // 新增定位
-						shipperLocationLng: this.carrierbillInfo.shipperLocationLng || 25.05,  // 新增定位
-						shipperLocationLat: this.carrierbillInfo.shipperLocationLat || 102.72,  // 新增定位
-						shipperCompanyName: this.carrierbillInfo.shipperCompanyName,
-						shipperDate: this.carrierbillInfo.shipperDate,
-						shipperDetailAddress: this.carrierbillInfo.shipperDetailAddress,
-						shipperID: this.carrierbillInfo.shipperID,
-						shipperName: this.carrierbillInfo.shipperName,
-						shipperNo: this.carrierbillInfo.shipperNo,
-						shipperPhone: this.carrierbillInfo.shipperPhone,
-						porRequire: this.carrierbillInfo.porRequire.join(','),
-						invoice: this.carrierbillInfo.invoice,
-						transportType: this.carrierbillInfo.transportType,
-						commissionDate: this.carrierbillInfo.commissionDate
-					}).then(res => {
+					const carrierbill = Object.assign({}, this.carrierbillInfo)
+					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
+					carrierbill.porRequire = carrierbill.porRequire.join(',')
+					Carrierbill.add(carrierbill).then(res => {
 						Message.success(res.data.msg)
-						this.$router.push({name: 'carrierbills'})
+						this.$router.push({name: 'carrierbill'})
 					})
 				})
 			})
 		},
 		addItem() {
 			this.carrierbillInfo.carrierCargo.push({
-				'cargoType': '',
-				'cargoName': '',
-				'weightType': 'Heavy',
-				'cargoWeight': 0,
-				'cargoVolume': 0,
-				'cargoNum': 0
+				customizedNo: '',
+				cargoNameID: '',
+				cargoName: '',
+				cargoNum: '',
+				cargoUnitName: '',
+				cargoWeight: '',
+				cargoVolume: ''
 			})
 		},
 		removeItem(index) {
@@ -702,8 +590,10 @@ export default {
 	top -9px
 	background-color #fff
 .cargo-title
-	width 150px
-	margin-right 2px
+	display inline-block
+	width 130px
+	line-height 2
+	margin-right 10px
 	span
 		color red
 </style>

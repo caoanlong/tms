@@ -10,24 +10,11 @@
 			</div>
 			<div class="datetime">
 				<span class="label">发货单号：</span><span>{{carrierOrder.shipperNo}}</span>
-				<span class="label">创建时间：</span>
-				<span v-if="carrierOrder.createTime">{{carrierOrder.createTime | getdatefromtimestamp()}}</span>
-				<span v-else></span>
+				<span class="label">运输方式：</span><span>{{carrierOrder.transportType}}</span>
 				<span class="label">委托时间：</span>
 				<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
 				<span v-else></span>
 			</div>
-			<table class="wf-table">
-				<caption>承运信息</caption>
-				<tr>
-					<td width="50%"><span class="justify">托运人</span>{{carrierOrder.consignorName}}</td>
-					<td width="50%"><span class="justify">承运人</span>{{carrierOrder.carrierrName}}</td>
-				</tr>
-				<tr>
-					<td width="50%"><span class="justify">准运证号</span>{{carrierOrder.navicertNo}}</td>
-					<td width="50%"><span class="justify">电子运单</span>{{carrierOrder.electronicWaybill}}</td>
-				</tr>
-			</table>
 			<table class="wf-table">
 				<caption>收发货信息</caption>
 				<tr>
@@ -140,43 +127,6 @@
 				</tr>
 			</table>
 			<table class="wf-table">
-				<caption>应收款&nbsp;&nbsp;
-					<svg-icon icon-class="eye" @click.native="isShow = true" v-if="!isShow"/>
-					<i class="el-icon-view" @click="isShow = false" v-if="isShow"></i></caption>
-				<tr>
-					<th width="12.5%">现付</th>
-					<th width="12.5%">到付</th>
-					<th width="12.5%">回单付</th>
-					<th width="12.5%">月结</th>
-					<th width="12.5%">收方到货付</th>
-					<th width="12.5%">合计</th>
-					<th width="12.5%">其他</th>
-					<th width="12.5%">备注</th>
-				</tr>
-				<tr class="is-center">
-					<td>{{isShow ? carrierOrder.cashAmount : '**'}}元</td>
-					<td>{{isShow ? carrierOrder.codAmount : '**'}}元</td>
-					<td>{{isShow ? carrierOrder.porAmount : '**'}}元</td>
-					<td>{{isShow ? carrierOrder.monthlyAmount : '**'}}元</td>
-					<td>{{isShow ? carrierOrder.consigneeAmount : '**'}}元</td>
-					<td>{{isShow ? carrierOrderTotal : '**'}}元</td>
-					<td>{{isShow ? carrierOrder.otherAmount : '**'}}</td>
-					<td>{{isShow ? carrierOrder.remark : '**'}}</td>
-				</tr>
-				<tr>
-					<td colspan="8">
-						<span class="labels">发票：</span>{{carrierOrder.invoice == 'Y' ? '开发票' : '不开发票'}}
-						<span class="labels" style="margin-left:40px">回单要求：</span>
-						<span v-for="item in porRequire" class="porRequire" :key="item">
-							<span v-if="item == 'ConsigneePor'">货物托运单</span>
-							<span v-else-if="item == 'ShipperPor'">发货单文件</span>
-							<span v-else>不需要回单</span>
-						</span>
-						<span class="labels fr">承运单应收总价：{{isShow ? carrierOrderTotal + parseInt(carrierOrder.otherAmount) : '**'}}元</span>
-					</td>
-				</tr>
-			</table>
-			<table class="wf-table">
 				<caption>运输进展</caption>
 				<tr>
 					<th>车牌号/挂车号</th>
@@ -241,7 +191,6 @@ import ViewCargos from './components/ViewCargos'
 export default {
 	data() {
 		return {
-			isShow: false,
 			carrierOrder: {},
 			isPhotoVisible: false,
 			currentDispatchTaskID: '',
@@ -251,15 +200,6 @@ export default {
 			carrierCargo: [],
 			porRequire: [],
 			transports: []
-		}
-	},
-	computed:{
-		carrierOrderTotal() {
-			return parseInt(this.carrierOrder.cashAmount) 
-				+ parseInt(this.carrierOrder.codAmount) 
-				+ parseInt(this.carrierOrder.porAmount) 
-				+ parseInt(this.carrierOrder.monthlyAmount) 
-				+ parseInt(this.carrierOrder.consigneeAmount)
 		}
 	},
 	components: {

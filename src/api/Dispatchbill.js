@@ -29,7 +29,7 @@ class Dispatchbill extends Base {
     }
     /**
      * 取消调度单
-     * @param {dispatchOrderID} params 调度单ID
+     * @param {String} dispatchOrderID 调度单ID
      */
     cancel(data) {
         return this.request({
@@ -40,7 +40,7 @@ class Dispatchbill extends Base {
     }
     /**
      * 关闭调度单
-     * @param {dispatchOrderID} params 调度单ID
+     * @param {String} dispatchOrderID 调度单ID
      */
     close(data) {
         return this.request({
@@ -51,7 +51,7 @@ class Dispatchbill extends Base {
     }
     /**
      * 根据承运单获取待配载列表
-     * @param {carrierOrderIDs} params 承运单ID（多个承运单ID）
+     * @param {String} carrierOrderIDs 承运单ID（多个承运单ID）
      */
     findPreLoad(params) {
         return new Promise((resolve, reject) => {
@@ -65,9 +65,9 @@ class Dispatchbill extends Base {
     }
     /**
      * 可调度司机列表
-     * @param {keyword} params 关键字（档案编号、司机姓名、车牌号、车长、车型）
-     * @param {shipperDate} params 装车日期
-     * @param {workStatus} params 车辆行驶状态 Working/运输中 Empty/空车
+     * @param {String} keyword 关键字（档案编号、司机姓名、车牌号、车长、车型）
+     * @param {Number} shipperDate 装车日期
+     * @param {String} workStatus 车辆行驶状态 Working/运输中 Empty/空车
      */
     findTrucksAndDrivers(params) {
         return new Promise((resolve, reject) => {
@@ -80,12 +80,26 @@ class Dispatchbill extends Base {
         })
     }
     /**
-     * 可调度押运员列表
-     * @param {keyword} params 关键字（押运员姓名、角色）
-     * @param {shipperDate} params 装车日期
-     * @param {workStatus} params 车辆行驶状态 Working/已有任务 Free/空闲
+     * 调度-车辆-列表
+     * @param {Object} params 
      */
-    findTruckstaffs(params) {
+    findTrucks(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/trucks',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
+    /**
+     * 可调度押运员列表
+     * @param {String} keyword 关键字（押运员姓名、角色）
+     * @param {Number} shipperDate 装车日期
+     * @param {String} workStatus 车辆行驶状态 Working/已有任务 Free/空闲
+     */
+    findStaffs(params) {
         return new Promise((resolve, reject) => {
             this.request({
                 url: this.baseUrl + '/staffs',
@@ -95,7 +109,6 @@ class Dispatchbill extends Base {
             })
         })
     }
-
 }
 
 export default new Dispatchbill('/biz/dispatchOrder', request)

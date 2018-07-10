@@ -4,24 +4,14 @@
 			<div slot="header" class="clearfix">承运单列表</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
-					<el-form-item label="关键字" >
-						<el-input placeholder="请输入关键字" style="width:150px" v-model="findsearchInfo"></el-input>
+					<el-form-item label="关键字">
+						<el-input placeholder="调度单号/货物名称" style="width:150px" v-model="find.keyword1"></el-input>
 					</el-form-item>
-					<el-form-item label="发货时间">
-						<el-date-picker
-							v-model="findRangeDate"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							value-format="timestamp"
-							:clearable="false"
-							@change="selectDateRange">
-						</el-date-picker>
+					<el-form-item label="司机">
+						<el-input placeholder="姓名/手机号" style="width:150px" v-model="find.keyword2"></el-input>
 					</el-form-item>
-					<el-form-item label="运单状态" class="customerSelect">
-						<el-select v-model="findStatus" placeholder="运单状态" style="width:140px">
-							<el-option value="" label="全部订单">全部订单</el-option>
+					<el-form-item label="状态" class="customerSelect">
+						<el-select placeholder="请选择" v-model="find.status">
 							<el-option value="Committed" label="未执行">未执行</el-option>
 							<el-option value="Running" label="执行中">执行中</el-option>
 							<el-option value="Signed" label="已完成">已完成</el-option>
@@ -40,12 +30,19 @@
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="单号" prop="carrierOrderNo">
+					<el-table-column label="单号" prop="carrierOrderNo" width="170">
 						<template slot-scope="scope">
 							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="状态" prop="status"></el-table-column>
+					<el-table-column label="状态" prop="status">
+						<template slot-scope="scope">
+							<el-tag size="mini" class="statusTag" type="warning" v-if="scope.row.status == 'Committed'">未执行</el-tag>
+							<el-tag size="mini" class="statusTag" type="primary" v-else-if="scope.row.status == 'Running'">执行中</el-tag>
+							<el-tag size="mini" class="statusTag" type="success" v-else-if="scope.row.status == 'Signed'">已完成</el-tag>
+							<el-tag size="mini" class="statusTag" type="info" v-else-if="scope.row.status == 'Closed'">已关闭</el-tag>
+						</template>
+					</el-table-column>
 					<el-table-column label="货物" prop="cargoName"></el-table-column>
 					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
@@ -69,7 +66,7 @@
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}">关闭</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
@@ -94,17 +91,15 @@ export default {
 			pageSize: 10,
 			total: 0,
 			tableData: [],
-			findsearchInfo:'',
-			findRangeDate: [],
-			findshipperBeginDate: '',
-			findshipperEndDate: '',
-			findStatus: '',
+			find: {
+				keyword1: '',
+				keyword2: '',
+				status: ''
+			},
 			selectedList: []
 		}
 	},
-	components: {
-		Page
-	},
+	components: { Page },
 	created() {
 		this.getList()
 	},
@@ -113,17 +108,12 @@ export default {
 			this.selectedList = data.map(item => item.carrierOrderID)
 		},
 		reset() {
-			this.findsearchInfo = ''
-			this.findshipperBeginDate = ''
-			this.findshipperEndDate = ''
-			this.findRangeDate = []
-			this.findStatus = ''
+			this.find.keyword1 = ''
+			this.find.keyword2 = ''
+			this.find.status = ''
 			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
-		},
-		selectDateRange(date) {
-			this.findshipperBeginDate = date[0]
-			this.findshipperEndDate = date[1]
 		},
 		pageChange(index) {
 			this.pageIndex = index
@@ -137,10 +127,9 @@ export default {
 			Carrierbill.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				shipperBeginDate: this.findshipperBeginDate,
-				shipperEndDate: this.findshipperEndDate,
-				searchInfo: this.findsearchInfo,
-				status: this.findStatus
+				keyword1: this.find.keyword1,
+				keyword2: this.find.keyword2,
+				status: this.find.status
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total

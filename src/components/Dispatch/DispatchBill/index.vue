@@ -5,19 +5,19 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="findkeyword"></el-input>
+						<el-input style="width:250px" placeholder="调度单号/货物名称/司机/车牌号" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item label="收发货单位">
 						<el-autocomplete
 							value-key="companyName" 
-							v-model="recdeliverycomp.companyName"
-							:fetch-suggestions="getRecdeliverycomp"
+							v-model="find.companyName"
+							:fetch-suggestions="getCustomers"
 							placeholder="请输入收发货单位"
-							@select="handSelectShipper">
+							@select="handSelectCustomer">
 						</el-autocomplete>
 					</el-form-item>
 					<el-form-item label="调度状态">
-						<el-select v-model="findstatus" placeholder="请选择">
+						<el-select v-model="find.status" placeholder="请选择">
 							<el-option label="全部" value=""></el-option>
 							<el-option label="未接单" value="Committed"></el-option>
 							<el-option label="已接单" value="Ordered"></el-option>
@@ -26,6 +26,18 @@
 							<el-option label="已拒绝" value="Rejected"></el-option>
 							<el-option label="已完成" value="Finished"></el-option>
 						</el-select>
+					</el-form-item>
+					<el-form-item label="调度时间">
+						<el-date-picker
+							v-model="rangeDate"
+							type="daterange"
+							range-separator="至"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							value-format="timestamp"
+							:clearable="false"
+							@change="selectDateRange">
+						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="getList">搜索</el-button>
@@ -43,6 +55,7 @@
 						<th width="80">状态</th>
 						<th width="80">货物</th>
 						<th>货量</th>
+						<th>件数</th>
 						<th>装车地</th>
 						<th width="140">装车时间</th>
 						<th>送货地</th>
@@ -51,7 +64,7 @@
 					</tr>
 					<template v-for="item in dispatchBillList">
 						<tr class="tit" :key="item.dispatchOrderID">
-							<td colspan="9">
+							<td colspan="10">
 								<span class="infoItem ViewDispatchBill" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
 								<span class="infoItem">车牌号：{{item.plateNo}}</span>
 								<span class="infoItem" v-if="item.trailerPlateNo">挂车：{{item.trailerPlateNo}}</span>
@@ -124,12 +137,12 @@
 								<span v-else-if="taskItem.status == 'Signed'">已签收</span>
 								<span v-else>已作废</span>
 							</td>
-							<td>{{taskItem.cargoName}}</td>
+							<td class="text-center">{{taskItem.cargoName}}</td>
 							<td class="text-center">
-								{{taskItem.loadWeightSum?taskItem.loadWeightSum+'kg/':''}}
-								{{taskItem.loadVolumeSum?taskItem.loadVolumeSum+'m³/':''}}
-								{{taskItem.loadNumSum?taskItem.loadNumSum+'件':''}}
+								{{taskItem.loadWeightSum ? taskItem.loadWeightSum + 'kg/' : ''}}
+								{{taskItem.loadVolumeSum ? taskItem.loadVolumeSum + 'm³' : ''}}
 							</td>
+							<td>{{taskItem.loadNumSum}}</td>
 							<td>{{taskItem.shipperArea}}</td>
 							<td class="text-center" width="120">{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
 							<td>{{taskItem.consigneeArea}}</td>
@@ -171,9 +184,15 @@ import DispatchBillItem from './components/DispatchBillItem'
 export default {
 	data() {
 		return {
-			findkeyword: '',
-			findcustomerID: '',
-			findstatus: '',
+			rangeDate: [],
+			find: {
+				keyword: '',
+				customerID: '',
+				companyName: '',
+				status: '',
+				beginDispatchDate: '',
+				endDispatchDate: ''
+			},
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
@@ -189,12 +208,17 @@ export default {
 		this.getList()
 	},
 	methods: {
+		selectDateRange(date) {
+			this.find.beginDispatchDate = date[0]
+			this.find.endDispatchDate = date[1]
+		},
 		reset() {
-			this.findkeyword=''
-			this.findcustomerID=''
-			this.findstatus=''
-			this.recdeliverycomp.companyName = ''
-			this.recdeliverycomp.customerID = ''
+			this.find.keyword = ''
+			this.find.customerID = ''
+			this.find.companyName = ''
+			this.find.status = ''
+			this.find.beginDispatchDate = ''
+			this.find.endDispatchDate = ''
 			this.getList()
 		},
 		pageChange(index) {
@@ -207,17 +231,19 @@ export default {
 		},
 		getList () {
 			Dispatchbill.find({
-				keyword: this.findkeyword,
-				consigneeAndShipper: this.recdeliverycomp.companyName,
-				status: this.findstatus,
 				current: this.pageIndex,
-				size: this.pageSize
+				size: this.pageSize,
+				keyword: this.find.keyword,
+				customerID: this.find.customerID,
+				status: this.find.status,
+				beginDispatchDate: this.find.beginDispatchDate,
+				endDispatchDate: this.find.endDispatchDate
 			}).then(res => {
 				this.dispatchBillList = res.records
 				this.count = res.total
 			})
 		},
-		getRecdeliverycomp(queryString, cb) {
+		getCustomers(queryString, cb) {
 			Customer.find({
 				type: 'ShipperConsignee',
 				companyName: queryString
@@ -225,9 +251,9 @@ export default {
 				cb(res.records)
 			})
 		},
-		handSelectShipper(data){
-			this.recdeliverycomp.companyName = data.companyName
-			this.recdeliverycomp.customerID = data.customerID
+		handSelectCustomer(data){
+			this.find.companyName = data.companyName
+			this.find.customerID = data.customerID
 		},
 		add() {
 			this.$router.push({ name: 'adddispatchbill' })
@@ -239,7 +265,7 @@ export default {
 			this.$router.push({ name: 'editdispatchbill' , query: { dispatchOrderID } })
 		},
 		viewTask(dispatchTaskID,type) {
-			this.$router.push({ name: 'viewtaskdetail' , query: {dispatchTaskID,type}})
+			this.$router.push({ name: 'viewtaskdetail' , query: {dispatchTaskID, type}})
 		},
 		upload(task) {
 			this.currentDispatchTaskID = task.dispatchTaskID
@@ -317,7 +343,7 @@ export default {
 		height 36px
 		line-height 24px
 		background #fff
-		color #666
+		color #909399
 		width 100px
 	.list
 		td

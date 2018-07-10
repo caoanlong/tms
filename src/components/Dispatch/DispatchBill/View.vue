@@ -64,7 +64,7 @@ import TaskListItem from './components/TaskListItem'
 export default {
 	data() {
 		return {
-			dispatchOrder:{}
+			dispatchOrder: {}
 		}
 	},
 	created() {
@@ -72,13 +72,13 @@ export default {
 	},
 	methods: {
 		getDetail() {
-			let dispatchOrderID = this.$route.query.dispatchOrderID
+			const dispatchOrderID = this.$route.query.dispatchOrderID
 			Dispatchbill.findById({ dispatchOrderID }).then(res => {
 				this.dispatchOrder = res
 			})
 		},
 		cancelDispatchOrder() {
-			let id = this.$route.query.dispatchOrderID
+			const id = this.$route.query.dispatchOrderID
 			cancelConfirm(id, dispatchOrderID => {
 				Dispatchbill.cancel({ dispatchOrderID }).then(res =>{
 					Message.success('已成功取消调度单!')
@@ -87,7 +87,7 @@ export default {
 			})
 		},
 		closeDispatchOrder() {
-			let id = this.$route.query.dispatchOrderID
+			const id = this.$route.query.dispatchOrderID
 			closeConfirm(id, dispatchOrderID => {
 				Dispatchbill.close({ dispatchOrderID }).then(res => {
 					Message.success('关闭调度成功!')

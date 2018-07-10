@@ -35,23 +35,14 @@
 			<div class="listTable">
 			<div class="driverList">
 				<div class="tableTit">
-					<div class="truck fl">
-						车辆
-					</div>
+					<div class="truck fl">车辆</div>
 					<div class="otherInfo fr">
-						<div class="driver fl">
-							驾驶员
-						</div>
-						<div class="mobile fl">
-							电话
-						</div>
-						<div class="handle fl">
-							操作
-						</div>
+						<div class="driver fl">驾驶员</div>
+						<div class="mobile fl">电话</div>
+						<div class="handle fl">操作</div>
 					</div>
 				</div>
 				<DriverItem v-for="i in 4" :key="i"></DriverItem>
-				
 			</div>
 			</div>
 			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
@@ -226,6 +217,7 @@ export default {
 .driverList
 	min-width 900px
 	.tableTit
+		color #909399
 		height 38px
 		line-height 36px
 		text-align center
