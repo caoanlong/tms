@@ -18,133 +18,157 @@
 					<div v-show="loginOrRegister == 'findpassword'" class="tab-item findpwd active">找回密码</div>
 				</div>
 				<!-- 登录 -->
-				<form class="login" v-if="loginOrRegister == 'login'">
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="customer"></svg-icon>
-						<input autocomplete="off" type="text" name="username" placeholder="请输入用户名" v-model="login.username">
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="password"></svg-icon>
-						<input autocomplete="off" :type="passwordType" name="password" placeholder="请输入密码" v-model="login.password">
-						<span class="show-pwd" @click="showPwd">
-							<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
-							<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
-						</span>
-					</div>
+				<el-form :model="login" :rules="loginRules" ref="loginForm" style="margin-top:20px" v-if="loginOrRegister == 'login'">
+					<el-form-item prop="username">
+						<el-input v-model="login.username" placeholder="请输入用户名">
+							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
+						</el-input>
+					</el-form-item>
+					<el-form-item prop="password">
+						<el-input :type="passwordType" v-model="login.password" placeholder="请输入密码">
+							<template slot="prefix">
+								<svg-icon class="ico" icon-class="password"></svg-icon>
+							</template>
+							<template slot="suffix">
+								<span class="show-pwd" @click="showPwd">
+									<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
+									<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
+								</span>
+							</template>
+						</el-input>
+					</el-form-item>
 					<div class="other">
 						<!-- <el-checkbox v-model="checked">下次自动登录</el-checkbox> -->
 						<span @click="handleTabClick('findpassword')"  class="forget">忘记密码?</span>
 					</div>
 					<el-button class="login-btn" type="primary" @click="handLogin">登录</el-button>
-				</form>
+				</el-form>
 				<!-- 注册 -->
-				<form class="register" v-if="loginOrRegister == 'register'" autocomplete="off">
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="customer"></svg-icon>
-						<input type="text" name="username" placeholder="请输入手机号" v-model="register.mobile">
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="email"></svg-icon>
-						<input type="text" name="vcode" placeholder="请输入验证码" v-model="register.vcode">
-						<el-button class="vercode-btn" type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="password"></svg-icon>
-						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="register.password">
-						<span class="show-pwd" @click="showPwd">
-							<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
-							<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
-						</span>
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="peoples"></svg-icon>
-						<input type="text" name="contact" placeholder="请输入联系人" v-model="register.contact">
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="excel"></svg-icon>
-						<input type="text" name="company" placeholder="请输入公司名称" v-model="register.company">
-					</div>
-					<div class="ipt" style="background: none;border: none;padding:0">
-						<el-select 
-							class="sel fl" 
-							placeholder="请选择公司所在省份" 
-							v-model="register.province" 
-							@change="handProvince">
-							<el-option 
-								v-for="province in provinces" 
-								:key="province.value" 
-								:label="province.label" 
-								:value="province.value"></el-option>
-						</el-select>
-						<div style="flex: 0 0 10px"></div>
-						<el-select 
-							class="sel fr" 
-							placeholder="请输入公司所在城市" 
-							v-model="register.city" 
-							@change="handCity">
-							<el-option 
-								v-for="city in citys" 
-								:key="city.value" 
-								:label="city.label" 
-								:value="city.value"></el-option>
-						</el-select>
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="home-icon"></svg-icon>
-						<input type="text" name="address" placeholder="请输入公司所在地址" v-model="register.address">
-					</div>
+				<el-form :model="register" :rules="registerRules" ref="registerForm" style="margin-top:20px" v-if="loginOrRegister == 'register'">
+					<el-form-item prop="mobile">
+						<el-input v-model="register.mobile" placeholder="请输入手机号">
+							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
+						</el-input>
+					</el-form-item>
+					<el-form-item prop="vcode">
+						<el-input v-model="register.vcode" placeholder="请输入验证码">
+							<template slot="prefix"><svg-icon class="ico" icon-class="email"></svg-icon></template>
+							<template slot="suffix">
+								<el-button type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
+							</template>
+						</el-input>
+					</el-form-item>
+					<el-form-item prop="password">
+						<el-input :type="passwordType" v-model="register.password" placeholder="请输入密码">
+							<template slot="prefix">
+								<svg-icon class="ico" icon-class="password"></svg-icon>
+							</template>
+							<template slot="suffix">
+								<span class="show-pwd" @click="showPwd">
+									<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
+									<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
+								</span>
+							</template>
+						</el-input>
+					</el-form-item>
+					<el-form-item prop="contact">
+						<el-input v-model="register.contact" placeholder="请输入联系人">
+							<template slot="prefix"><svg-icon class="ico" icon-class="peoples"></svg-icon></template>
+						</el-input>
+					</el-form-item>
+					<el-form-item prop="company">
+						<el-input v-model="register.company" placeholder="请输入公司名称">
+							<template slot="prefix"><svg-icon class="ico" icon-class="excel"></svg-icon></template>
+						</el-input>
+					</el-form-item>
+					<el-row>
+						<el-col :span="11">
+							<el-form-item prop="province">
+								<el-select style="width:100%" placeholder="请选择公司所在省份" v-model="register.province" @change="handProvince">
+									<el-option v-for="province in provinces" :key="province.value" :label="province.label" :value="province.value"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col class="line" :span="2"> &nbsp; </el-col>
+						<el-col :span="11">
+							<el-form-item prop="city">
+								<el-select style="width:100%" placeholder="请选择公司所在城市" v-model="register.city" @change="handCity">
+									<el-option v-for="city in citys" :key="city.value" :label="city.label" :value="city.value"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-form-item prop="address">
+						<el-input v-model="register.address" placeholder="请输入公司所在地址">
+							<template slot="prefix"><svg-icon class="ico" icon-class="home-icon"></svg-icon></template>
+						</el-input>
+					</el-form-item>
 					<div class="other">
 						<el-checkbox v-model="checked">同意</el-checkbox><span @click="agreement" class="agreement">《微服TMS用户协议》</span>
 					</div>
 					<el-button class="login-btn" type="primary" :disabled="!checked" @click="handRegister">注册</el-button>
-				</form>
+				</el-form>
 				<!-- 忘记密码 -->
-				<form class="findpassword" v-if="loginOrRegister == 'findpassword'">
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="customer"></svg-icon>
-						<input type="text" name="mobile" placeholder="请输入手机号" v-model="findPassword.mobile">
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="email"></svg-icon>
-						<input type="text" name="vcode" placeholder="请输入验证码" v-model="findPassword.vcode">
-						<el-button class="vercode-btn" type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="password"></svg-icon>
-						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="findPassword.password">
-						<span class="show-pwd" @click="showPwd">
-							<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
-							<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
-						</span>
-					</div>
-					<div class="ipt">
-						<svg-icon class="ico" icon-class="password"></svg-icon>
-						<input :type="passwordType" name="confirmPassword" placeholder="请重复输入密码" v-model="findPassword.confirmPassword">
-						<span class="show-pwd" @click="showPwd">
-							<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
-							<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
-						</span>
-					</div>
-					<div class="txt-btn">
-						<div class="lg-btn" @click="handleTabClick('login')">登录</div>
-						<div class="rg-btn" @click="handleTabClick('register')">注册</div>
-					</div>
+				<el-form :model="findPassword" :rules="findPasswordRules" ref="findPasswordForm" style="margin-top:20px" v-if="loginOrRegister == 'findpassword'">
+					<el-form-item prop="mobile">
+						<el-input v-model="findPassword.mobile" placeholder="请输入手机号">
+							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
+						</el-input>
+					</el-form-item>
+					<el-form-item prop="vcode">
+						<el-input v-model="findPassword.vcode" placeholder="请输入验证码">
+							<template slot="prefix"><svg-icon class="ico" icon-class="email"></svg-icon></template>
+							<template slot="suffix">
+								<el-button type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
+							</template>
+						</el-input>
+					</el-form-item>
+					<el-form-item prop="password">
+						<el-input :type="passwordType" v-model="findPassword.password" placeholder="请输入密码">
+							<template slot="prefix">
+								<svg-icon class="ico" icon-class="password"></svg-icon>
+							</template>
+							<template slot="suffix">
+								<span class="show-pwd" @click="showPwd">
+									<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
+									<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
+								</span>
+							</template>
+						</el-input>
+					</el-form-item>
+					<el-form-item prop="confirmPassword">
+						<el-input :type="passwordType" v-model="findPassword.confirmPassword" placeholder="请重复输入密码">
+							<template slot="prefix">
+								<svg-icon class="ico" icon-class="password"></svg-icon>
+							</template>
+							<template slot="suffix">
+								<span class="show-pwd" @click="showPwd">
+									<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
+									<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
+								</span>
+							</template>
+						</el-input>
+					</el-form-item>
+					<el-row class="other">
+						<el-col :span="12" @click.native="handleTabClick('login')" class="agreement">登录</el-col>
+						<el-col :span="12" @click.native="handleTabClick('register')" class="agreement" style="text-align:right">注册</el-col>
+					</el-row>
 					<el-button class="login-btn" type="primary" @click="handFindPassword">提交</el-button>
-				</form>
+				</el-form>
 			</div>
 		</div>
 		<Footer/>
 	</div>
 </template>
 <script>
+import { Message } from 'element-ui'
 import Footer from './CommonComponents/Footer'
-import request, { baseURL } from "../common/request"
+import { baseURL } from "../common/request"
 import Member from '../api/Member'
 import Common from '../api/Common'
-import { Message } from 'element-ui'
-import { regionData } from 'element-china-area-data'
-import { isPoneAvailable, isVerCodeAvailable } from '../common/validators'
+import dist from '../assets/data/dist.json'
 import { setCooikie, getCooikie } from '../common/utils'
+import { checkMobile } from '../common/validator'
 export default {
 	name: 'App',
 	data() {
@@ -182,44 +206,68 @@ export default {
 			wait: 60,
 			isGetVCode: false,
 			getVcodeText: '获取验证码',
-			citys: []
+			citys: [],
+			loginRules: {
+				username: [{required: true, message: '请输入用户名', trigger: 'blur'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
+				password: [{required: true, message: '请输入密码', trigger: 'blur'}, {min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}]
+			},
+			registerRules: {
+				mobile: [{required: true, message: '请输入手机号'}, {validator: checkMobile}],
+				vcode: [{required: true, message: '请输入验证码'}, {min: 6, max: 6, message: '请输入正确长度的验证码！'}],
+				password: [{required: true, message: '请输入密码'}, {min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}],
+				contact: [{required: true, message: '请输入联系人'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
+				company: [{required: true, message: '请输入公司名称'}, {min: 1, max: 100, message: '长度在 1 到 100 个字符'}],
+				province: [{required: true, message: '请选择公司所在省份'}],
+				city: [{required: true, message: '请选择公司所在城市'}],
+				address: [{required: true, message: '请输入公司所在地址'}, {min: 1, max: 100, message: '长度在 1 到 100 个字符'}]
+			},
+			findPasswordRules: {
+				mobile: [{required: true, message: '请输入手机号'}, {validator: checkMobile}],
+				vcode: [{required: true, message: '请输入验证码'}, {min: 6, max: 6, message: '请输入正确长度的验证码！'}],
+				password: [{required: true, message: '请输入密码'}, {min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}],
+				confirmPassword: [
+					{required: true, message: '请重复输入密码'}, 
+					{min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'},
+					{validator: (rule, value, callback) => {
+						value == this.findPassword.password ? callback() : callback(new Error('两次输入密码不一致!'))
+					}}
+				],
+			}
 		}
 	},
 	computed: {
-		provinces: () => regionData.map(item => {
+		provinces: () => dist.map(item => {
 			return {
 				label: item.label,
 				value: item.value
 			}
 		})
 	},
+	components: { Footer },
 	mounted() {
 		this.login.username = getCooikie('loginUserName')
 	},
 	methods: {
 		/**
 		 * 	tab标签切换
-		 * 	@param tab 当前选择
 		 */
 		handleTabClick(tab) {
 			this.loginOrRegister = tab
 		},
 		/**
 		 * 	省份选择
-		 * 	@param data 当前选择的省份
 		 */
 		handProvince(data) {
 			this.register.province = data
 			this.register.city = ''
-			for (let i = 0; i < regionData.length; i++) {
-				if (data === regionData[i].value) {
-					this.citys = regionData[i].children
+			for (let i = 0; i < dist.length; i++) {
+				if (data === dist[i].value) {
+					this.citys = dist[i].children
 				}
 			}
 		},
 		/**
 		 * 	城市选择
-		 * 	@param data 当前选择的城市
 		 */
 		handCity(data) {
 			this.register.city = data
@@ -239,46 +287,40 @@ export default {
 		 */
 		getVCode() {
 			if (this.isGetVCode) return
-			let params = {}
 			if (this.loginOrRegister == 'register') {
-				if (this.register.mobile == '') {
-					Message.error('手机号不能为空！')
-					return
-				}
-				if (!isPoneAvailable(this.register.mobile)) {
-					Message.error('请输入正确的手机号！')
-					return
-				}
-				params = { mobile: this.register.mobile }
+				this.$refs['registerForm'].validateField('mobile', errMsg => {
+					if (errMsg) {
+						Message.error(errMsg)
+						return
+					}
+					const params = { mobile: this.register.mobile }
+					this.timeGo()
+					Common.getVCode(params).then(res => {
+						console.log(res.data)
+						if (baseURL.includes('develop')) Message.info(res.data.data)
+					})
+				})
 			} else if (this.loginOrRegister == 'findpassword') {
-				if (this.findPassword.mobile == '') {
-					Message.error('手机号不能为空！')
-					return
-				}
-				if (!isPoneAvailable(this.findPassword.mobile)) {
-					Message.error('请输入正确的手机号！')
-					return
-				}
-				params = {
-					mobile: this.findPassword.mobile,
-					type: 'forget'
-				}
+				this.$refs['findPasswordForm'].validateField('mobile', errMsg => {
+					if (errMsg) {
+						Message.error(errMsg)
+						return
+					}
+					const params = { mobile: this.findPassword.mobile, type: 'forget' }
+					this.timeGo()
+					Common.getVCode(params).then(res => {
+						console.log(res.data)
+						if (baseURL.includes('develop')) Message.info(res.data.data)
+					})
+				})
 			}
-			this.timeGo()
-			Common.getVCode(params).then(res => {
-				console.log(res.data)
-				if (baseURL.includes('develop')) Message.info(res.data.data)
-			})
 		},
 		/**
 		 * 	登录
 		 */
 		handLogin() {
-			try {
-				if (!this.login.username.trim()) throw ('用户名不能为空！')
-				if (this.login.username.trim().length > 50) throw ('用户名过长！')
-				if (!this.login.password.trim()) throw ('密码不能为空！')
-				if (this.login.password.trim().length > 32 || this.login.password.trim().length <8) throw ('密码必须是8-16位字母、下划线、数字')
+			this.$refs['loginForm'].validate(valid => {
+				if (!valid) return
 				Member.login({
 					username: this.login.username.trim(),
 					password: this.login.password.trim()
@@ -294,9 +336,7 @@ export default {
 						this.$store.dispatch('getMenu')
 					})
 				})
-			} catch (err) {
-				Message.error(err.toString())
-			}
+			})
 		},
 		/**
 		 * 	注册
@@ -309,19 +349,8 @@ export default {
 			})
 		},
 		handRegister() {
-			try {
-				if (!this.register.mobile.trim()) throw ('手机号不能为空！')
-				if (!isPoneAvailable(this.register.mobile)) throw ('请输入正确的手机号！')
-				if (!this.register.vcode.trim()) throw ('验证码不能为空！')
-				if (this.register.vcode.trim().length != 6) throw ('请输入正确长度的验证码！')
-				if (!this.register.password.trim()) throw ('密码不能为空！')
-				if (this.register.password.trim().length > 32 || this.register.password.trim().length <8) throw ('密码必须是8-16位字母、下划线、数字')
-				if (!this.register.contact.trim()) throw ('联系人不能为空！')
-				if (!this.register.company.trim()) throw ('公司不能为空！')
-				if (this.register.company.trim().length > 100) throw ('公司名过长！')
-				if (!this.register.province.trim() || !this.register.city.trim()) throw ('省份和城市必选！')
-				if (!this.register.address.trim()) throw ('详细地址不能为空！')
-				if (this.register.address.trim().length > 100) throw ('地址过长！')
+			this.$refs['registerForm'].validate(valid => {
+				if (!valid) return
 				Member.register({
 					mobile: this.register.mobile.trim(),
 					vcode: this.register.vcode.trim(),
@@ -343,22 +372,14 @@ export default {
 						this.$store.dispatch('getMenu')
 					})
 				})
-			} catch (err) {
-				Message.error(err.toString())
-			}
+			})
 		},
 		/**
 		 * 	找回密码
 		 */
 		handFindPassword() {
-			try {
-				if (!this.findPassword.mobile.trim()) throw ('手机号不能为空！')
-				if (!isPoneAvailable(this.findPassword.mobile)) throw ('请输入正确的手机号！')
-				if (!this.findPassword.vcode.trim()) throw ('验证码不能为空！')
-				if (this.findPassword.vcode.length != 6) throw ('请输入正确长度的验证码！')
-				if (!this.findPassword.password.trim()) throw ('密码不能为空！')
-				if (this.findPassword.password.length > 32 || this.findPassword.password.length < 8) throw ('8-16位字母、下划线、数字')
-				if (this.findPassword.password != this.findPassword.confirmPassword) throw ('重复输入密码不一致！')
+			this.$refs['findPasswordForm'].validate(valid => {
+				if (!valid) return
 				Member.pwdForget({
 					mobile: this.findPassword.mobile.trim(),
 					vcode: this.findPassword.vcode.trim(),
@@ -369,9 +390,7 @@ export default {
 					this.loginOrRegister = 'login'
 					this.login = { username: '', password: '' }
 				})
-			} catch (err) {
-				Message.error(err.toString())
-			}
+			})
 		},
 		/**
 		 * 	倒计时
@@ -389,9 +408,6 @@ export default {
 				setTimeout(() => { this.timeGo() }, 1000)
 			}
 		}
-	},
-	components: {
-		Footer
 	}
 }
 </script>
@@ -449,14 +465,6 @@ export default {
 						line-height 30px
 						margin-top 10px
 						cursor pointer
-						.lg-btn
-							float left
-							width 50%
-							text-align left
-						.rg-btn
-							float left
-							width 50%
-							text-align right
 				.ipt
 					position relative
 					width 100%
@@ -507,9 +515,7 @@ export default {
 					width 100%
 					margin-top 10px
 			.other
-				height 30px
-				line-height 30px
-				margin-top 10px
+				line-height 1.5
 				.forget
 					float right
 					color #409EFF
