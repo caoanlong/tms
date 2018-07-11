@@ -94,7 +94,7 @@ export default {
 		...mapGetters(['selectedCarrierBill', 'selectedCargos'])
 	},
 	created() {
-		let carrierOrderIDs = this.selectedCarrierBill.map(item => item.carrierOrderID).join(',')
+		const carrierOrderIDs = this.selectedCarrierBill.map(item => item.carrierOrderID).join(',')
 		this.getList(carrierOrderIDs)
 	},
 	methods: {
@@ -123,9 +123,9 @@ export default {
 			bool && this.autoSetInput()
 		},
 		autoSetInput() {
-			let cargoList = []
+			const cargoList = []
 			this.carrierBills.forEach((carrierBill, index) => {
-				let selectCargoIDs = this.selectedCargos.map(item => item.carrierCargoID)
+				const selectCargoIDs = this.selectedCargos.map(item => item.carrierCargoID)
 				carrierBill.cargo.forEach(cargo => {
 					if (selectCargoIDs.includes(cargo.carrierCargoID)) {
 						cargoList.push(cargo)
@@ -154,7 +154,7 @@ export default {
 			})
 		},
 		selectionAll(data, carrierBill) {
-			let list = this.selectedCargoList.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
+			const list = this.selectedCargos.filter(item => item.carrierOrderID != carrierBill.carrierOrderID)
 			if (data.length > 0) {
 				for (let i = 0; i < data.length; i++) {
 					if (!data[i].cargoWeightNew) data[i].cargoWeightNew = data[i].remainingCargoWeight
@@ -163,28 +163,23 @@ export default {
 				}
 				list.push(...data)
 			}
-			this.selectedCargoList = list
-			this.$store.dispatch('setCargo', this.selectedCargoList)
+			this.$store.dispatch('setCargo', list)
 			this.handInputChange()
 		},
 		selectionSimple(data, row) {
-			if (this.selectedCargos.length > 0) {
-				this.selectedCargoList = this.selectedCargos
-			}
+			const list = this.selectedCargos
 			let flag = true
-			for (let i = 0; i < this.selectedCargoList.length; i++) {
-				if (this.selectedCargoList[i].carrierCargoID == row.carrierCargoID) {
-					this.selectedCargoList.splice(i, 1)
+			for (let i = 0; i < list.length; i++) {
+				if (list[i].carrierCargoID == row.carrierCargoID) {
+					list.splice(i, 1)
 					flag = false
 				}
 			}
 			if (!row.cargoWeightNew) row.cargoWeightNew = row.remainingCargoWeight
 			if (!row.cargoVolumeNew) row.cargoVolumeNew = row.remainingCargoVolume
 			if (!row.cargoNumNew) row.cargoNumNew = row.remainingCargoNum
-			if (flag) {
-				this.selectedCargoList.push(row)
-			}
-			this.$store.dispatch('setCargo', this.selectedCargoList)
+			if (flag) list.push(row)
+			this.$store.dispatch('setCargo', list)
 			this.handInputChange()
 		},
 		nextStep(){

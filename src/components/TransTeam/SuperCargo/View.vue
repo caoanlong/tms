@@ -40,7 +40,7 @@
 							</div>
 							<div>
 								<span class="tit">合同有效期</span>
-								<span class="ctt">{{superCargo.laborContractEndTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.laborContractEndTime">{{superCargo.laborContractEndTime | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">职称/技术等级</span>
@@ -66,7 +66,7 @@
 						<el-col :span="9">
 							<div>
 								<span class="tit">有效期</span>
-								<span class="ctt">{{superCargo.idCardBeginTime | getdatefromtimestamp(true)}}至{{superCargo.idCardExpirationTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.idCardBeginTime">{{superCargo.idCardBeginTime | getdatefromtimestamp(true)}}至{{superCargo.idCardExpirationTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -111,7 +111,7 @@
 							</div>
 							<div>
 								<span class="tit">有效期</span>
-								<span class="ctt">{{superCargo.driverLicenseBeginTime | getdatefromtimestamp(true)}}至{{superCargo.driverLicenseEndTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.driverLicenseBeginTime">{{superCargo.driverLicenseBeginTime | getdatefromtimestamp(true)}}至{{superCargo.driverLicenseEndTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 						<el-col :span="12">
@@ -121,7 +121,7 @@
 							</div>
 							<div>
 								<span class="tit">初次领证日期</span>
-								<span class="ctt">{{superCargo.driverLicenseFirstTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.driverLicenseFirstTime">{{superCargo.driverLicenseFirstTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -150,7 +150,7 @@
 							</div>
 							<div>
 								<span class="tit">初次领证日期</span>
-								<span class="ctt">{{superCargo.qualificationIssueDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.qualificationIssueDate">{{superCargo.qualificationIssueDate | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">从业资格类别</span>
@@ -168,7 +168,7 @@
 							</div>
 							<div>
 								<span class="tit">有效期</span>
-								<span class="ctt">{{superCargo.qualificationBeginDate | getdatefromtimestamp(true)}}至{{superCargo.qualificationExpirationDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.qualificationBeginDate">{{superCargo.qualificationBeginDate | getdatefromtimestamp(true)}}至{{superCargo.qualificationExpirationDate | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -191,7 +191,7 @@
 					<el-row style="margin-bottom: 10px">
 						<div>
 							<span class="tit">继续教育时间</span>
-							<span class="ctt">{{superCargo.continueEducationCertificationEndDate | getdatefromtimestamp(true)}}</span>
+							<span class="ctt" v-if="superCargo.continueEducationCertificationEndDate">{{superCargo.continueEducationCertificationEndDate | getdatefromtimestamp(true)}}</span>
 						</div>
 					</el-row>
 					<el-row style="margin-bottom: 10px">
@@ -217,7 +217,7 @@
 						<el-col :span="9">
 							<div>
 								<span class="tit">合格至</span>
-								<span class="ctt">{{superCargo.integrityExamineEndTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.integrityExamineEndTime">{{superCargo.integrityExamineEndTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -294,7 +294,7 @@
 							</div>
 							<div>
 								<span class="tit">初次领证日期</span>
-								<span class="ctt">{{superCargo.escortLicenseFirstTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.escortLicenseFirstTime">{{superCargo.escortLicenseFirstTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 						<el-col :span="12">
@@ -308,7 +308,7 @@
 							</div>
 							<div>
 								<span class="tit">有效期</span>
-								<span class="ctt">{{superCargo.escortLicenseBeginDate | getdatefromtimestamp(true)}}至{{superCargo.escortLicenseExpireDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="superCargo.escortLicenseBeginDate">{{superCargo.escortLicenseBeginDate | getdatefromtimestamp(true)}}至{{superCargo.escortLicenseExpireDate | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>

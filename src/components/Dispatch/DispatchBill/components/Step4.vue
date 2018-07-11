@@ -167,10 +167,8 @@ export default {
 		resizeImg: () => resizeImg
 	},
 	created() {
-		this.selectedCarrierBill.forEach(item => {
-			item.cargo = []
-		})
-		this.taskList = this.selectedCarrierBill
+		this.selectedCarrierBill.forEach(item => { item.cargo = [] })
+		this.taskList = this.selectedCarrierBill.filter(item => this.selectedCargos.map(i => i.carrierOrderID).includes(item.carrierOrderID))
 		this.taskList.forEach(carrierBill => {
 			!carrierBill.cargo && (carrierBill.cargo = [])
 			this.selectedCargos.forEach(cargo => {
@@ -184,11 +182,19 @@ export default {
 		add() {
 			for (let i = 0; i < this.taskList.length; i++) {
 				const item = this.taskList[i]
-				if (!item.driverCashAmount && !item.driverCodAmount && !item.driverPorAmount && !item.driverMonthlyAmont && !item.driverCosigneeAmount ) {
+				if (!item.driverCashAmount 
+					&& !item.driverCodAmount 
+					&& !item.driverPorAmount 
+					&& !item.driverMonthlyAmont 
+					&& !item.driverCosigneeAmount ) {
 					Message.error(`任务单号：${i+1} 司机费用必填一项！`)
 					return
 				}
-				if (!item.superCargoCashAmount && !item.superCargoCodAmount && !item.superCargoCorAmount && !item.superCargoMonthlyAmount && !item.superCosigneeAmount ) {
+				if (!item.superCargoCashAmount 
+					&& !item.superCargoCodAmount 
+					&& !item.superCargoCorAmount 
+					&& !item.superCargoMonthlyAmount 
+					&& !item.superCosigneeAmount ) {
 					Message.error(`任务单号：${i+1} 随车人员费用必填一项！`)
 					return
 				}

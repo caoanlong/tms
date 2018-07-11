@@ -96,17 +96,17 @@
 						<el-col :span="12">
 							<div>
 								<span class="tit">注册日期</span>
-								<span class="ctt">{{truck.driverLicRegisterTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.driverLicRegisterTime">{{truck.driverLicRegisterTime | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">有效期从</span>
-								<span class="ctt">{{truck.driverLicBeginTime | getdatefromtimestamp(true)}}至{{truck.driverLicExpiresTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.driverLicBeginTime">{{truck.driverLicBeginTime | getdatefromtimestamp(true)}}至{{truck.driverLicExpiresTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 						<el-col :span="12">
 							<div>
 								<span class="tit">发证日期</span>
-								<span class="ctt">{{truck.driverLicIssueTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.driverLicIssueTime">{{truck.driverLicIssueTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -141,7 +141,7 @@
 						<el-col :span="12">
 							<div>
 								<span class="tit">年审日期到</span>
-								<span class="ctt">{{truck.roadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.roadTransportLicAnnualPeriod">{{truck.roadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">许可运输品是否剧毒</span>
@@ -174,7 +174,7 @@
 							</div>
 							<div>
 								<span class="tit">有效期从</span>
-								<span class="ctt">{{truck.gpsValidBeginDate | getdatefromtimestamp(true)}}至{{truck.gpsValidEndDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.gpsValidBeginDate">{{truck.gpsValidBeginDate | getdatefromtimestamp(true)}}至{{truck.gpsValidEndDate | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">费用</span>
@@ -188,7 +188,7 @@
 							</div>
 							<div>
 								<span class="tit">安装时间</span>
-								<span class="ctt">{{truck.gpsSetupTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.gpsSetupTime">{{truck.gpsSetupTime | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">类型</span>
@@ -220,7 +220,7 @@
 							</div>
 							<div>
 								<span class="tit">保险到期日</span>
-								<span class="ctt">{{truck.saliInsuranceExpires | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.saliInsuranceExpires">{{truck.saliInsuranceExpires | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">车船税金额</span>
@@ -265,7 +265,7 @@
 						<el-col :span="12">
 							<div>
 								<span class="tit">保险到期日</span>
-								<span class="ctt">{{truck.bizInsuranceExpires | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.bizInsuranceExpires">{{truck.bizInsuranceExpires | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -296,7 +296,7 @@
 						<el-col :span="12">
 							<div>
 								<span class="tit">保险到期日</span>
-								<span class="ctt">{{truck.carrierRiskInsuranceExpires | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.carrierRiskInsuranceExpires">{{truck.carrierRiskInsuranceExpires | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -327,7 +327,7 @@
 						<el-col :span="12">
 							<div>
 								<span class="tit">保险到期日</span>
-								<span class="ctt">{{truck.cargoInsuranceExpireDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.cargoInsuranceExpireDate">{{truck.cargoInsuranceExpireDate | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -394,11 +394,11 @@
 							</div>
 							<div>
 								<span class="tit">罐体检测有效期至</span>
-								<span class="ctt">{{truck.tankQCExpires | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.tankQCExpires">{{truck.tankQCExpires | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">压力表监测有效期至</span>
-								<span class="ctt">{{truck.pressureGaugeQCExpires | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.pressureGaugeQCExpires">{{truck.pressureGaugeQCExpires | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 						<el-col :span="12">
@@ -408,7 +408,7 @@
 							</div>
 							<div>
 								<span class="tit">安全阀监测有效期至</span>
-								<span class="ctt">{{truck.safetyValvesQCExpires | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.safetyValvesQCExpires">{{truck.safetyValvesQCExpires | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -437,7 +437,7 @@
 							</div>
 							<div>
 								<span class="tit">缴费日期</span>
-								<span class="ctt">{{truck.securityDepositPayDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.securityDepositPayDate">{{truck.securityDepositPayDate | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">保证金备注</span>
@@ -447,11 +447,11 @@
 						<el-col :span="12">
 							<div>
 								<span class="tit">日期</span>
-								<span class="ctt">{{truck.securityDepositDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.securityDepositDate">{{truck.securityDepositDate | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">二次安全保证金日期</span>
-								<span class="ctt">{{truck.secondSecurityDepositDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.secondSecurityDepositDate">{{truck.secondSecurityDepositDate | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -468,13 +468,13 @@
 							</div>
 							<div>
 								<span class="tit">下次评级日期</span>
-								<span class="ctt">{{truck.nextRankEvaluteTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.nextRankEvaluteTime">{{truck.nextRankEvaluteTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 						<el-col :span="12">
 							<div>
 								<span class="tit">评级日期</span>
-								<span class="ctt">{{truck.rankEvaluteTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.rankEvaluteTime">{{truck.rankEvaluteTime | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">审验备注</span>
@@ -499,13 +499,13 @@
 						<el-col :span="12">
 							<div>
 								<span class="tit">维护日期</span>
-								<span class="ctt">{{truck.secondaMaintainTime | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.secondaMaintainTime">{{truck.secondaMaintainTime | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 						<el-col :span="12">
 							<div>
 								<span class="tit">下次维护</span>
-								<span class="ctt">{{truck.nextSecondLevel | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.nextSecondLevel">{{truck.nextSecondLevel | getdatefromtimestamp(true)}}</span>
 							</div>
 						</el-col>
 					</el-row>
@@ -522,7 +522,7 @@
 							</div>
 							<div>
 								<span class="tit">安全责任书到期日</span>
-								<span class="ctt">{{truck.safetyLiabilityLetterExpireDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.safetyLiabilityLetterExpireDate">{{truck.safetyLiabilityLetterExpireDate | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">协议备注</span>
@@ -532,7 +532,7 @@
 						<el-col :span="12">
 							<div>
 								<span class="tit">缴费日期</span>
-								<span class="ctt">{{truck.managementAgreementPayDate | getdatefromtimestamp(true)}}</span>
+								<span class="ctt" v-if="truck.managementAgreementPayDate">{{truck.managementAgreementPayDate | getdatefromtimestamp(true)}}</span>
 							</div>
 							<div>
 								<span class="tit">元/轴/月</span>
@@ -541,7 +541,7 @@
 						</el-col>
 						<div>
 							<span class="tit">有效期</span>
-							<span class="ctt">{{truck.managementAgreementBeginDate | getdatefromtimestamp(true)}}至{{truck.managementAgreementExpireDate | getdatefromtimestamp(true)}}</span>
+							<span class="ctt" v-if="truck.managementAgreementBeginDate">{{truck.managementAgreementBeginDate | getdatefromtimestamp(true)}}至{{truck.managementAgreementExpireDate | getdatefromtimestamp(true)}}</span>
 						</div>
 					</el-row>
 				</div>

@@ -1,69 +1,40 @@
 <template>
 	<div class="step step1">
 		<div class="table">
-			<table class="wfTable">
-				<tr>
-					<th width="40">
-						<el-checkbox 
-							:disabled="true" 
-							:checked="true" 
-							:indeterminate="(selectedCarrierBill.length > 0) && (selectedCarrierBill.length < carrierList.length)" 
-							v-model="checked">
-						</el-checkbox>
-					</th>
-					<th>货物</th>
-					<th>货量</th>
-					<th>件数</th>
-					<th>发货公司</th>
-					<th width="160">发货人</th>
-					<th>发货地</th>
-					<th width="160">发货时间</th>
-					<th>收货公司</th>
-					<th width="160">收货人</th>
-					<th>收货地</th>
-					<th width="160">收货时间</th>
-				</tr>
-				<template v-for="item in carrierList">
-					<tr class="tit" :key="item.carrierOrderID">
-						<td>
-							<div class="wfCheck">
-								<span>
-									<input 
-										:disabled="true" 
-										type="checkbox" 
-										class="checkbox" 
-										ref="checkCarrier" 
-										:checked="true"
-									/>
-									<label></label>
-								</span>
-							</div>
-						</td>
-						<td colspan="11">
-							<span class="infoItem ViewDispatchBill" @click="ViewCarrierbills(item.carrierOrderID)">承运单号：{{item.carrierOrderNo}}</span>
-							<span class="infoItem">
-								<el-tag size="mini" type="warning" v-if="item.status=='Committed'">待执行</el-tag>
-								<el-tag size="mini" v-else-if="item.status=='Running'">执行中</el-tag>
-							</span>
-						</td>
-					</tr>
-					<tr class="list" :key="item.carrierOrderID + 1">
-						<td colspan="2">{{item.cargoName}}</td>
-						<td class="text-center">{{item.cargoWeightSum}}kg{{item.cargoWeightSum&&item.cargoVolumeSum?'/':''}}{{item.cargoVolumeSum?item.cargoVolumeSum+'m³':''}}</td>
-						<td class="text-center">{{item.cargoNumSum?item.cargoNumSum:''}}</td>
-						<td>{{item.shipperCompanyName}}</td>
-						<td class="text-center" width="160">{{item.shipperName}}<span class="phone">{{item.shipperPhone}}</span></td>
-						<td class="text-center">{{item.shipperArea}}</td>
-						<td class="text-center" width="140">{{item.shipperDate | getdatefromtimestamp(true)}}</td>
-						<td>{{item.consigneeCompanyName}}</td>
-						<td class="text-center" width="160">{{item.consigneeName}}<span class="phone">{{item.consigneePhone}}</span></td>
-						<td class="text-center">{{item.consigneeArea}}</td>
-						<td class="text-center" width="140">{{item.consigneeDate | getdatefromtimestamp(true)}}</td>
-					</tr>
-				</template>
-			</table>
+			<el-table 
+				ref="carrierOrderTable"
+				:data="carrierList" 
+				border style="width: 100%" size="mini">
+				<el-table-column label="Id" type="selection" align="center" width="40" :selectable="() => false"></el-table-column>
+				<el-table-column label="单号" prop="carrierOrderNo" width="170">
+					<template slot-scope="scope">
+						<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="状态" prop="status">
+					<template slot-scope="scope">
+						<el-tag size="mini" class="statusTag" type="warning" v-if="scope.row.status == 'Committed'">未执行</el-tag>
+						<el-tag size="mini" class="statusTag" type="primary" v-else-if="scope.row.status == 'Running'">执行中</el-tag>
+						<el-tag size="mini" class="statusTag" type="success" v-else-if="scope.row.status == 'Signed'">已完成</el-tag>
+						<el-tag size="mini" class="statusTag" type="info" v-else-if="scope.row.status == 'Closed'">已关闭</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column label="货物" prop="cargoName"></el-table-column>
+				<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
+				<el-table-column label="发货地" prop="shipperArea"></el-table-column>
+				<el-table-column label="发货时间" prop="shipperDate">
+					<template slot-scope="scope">
+						<span v-if="scope.row.shipperDate">{{ new Date(scope.row.shipperDate).getTime() | getdatefromtimestamp(true)}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
+				<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
+				<el-table-column label="数量(余)" prop="remainingCargoNum"></el-table-column>
+				<el-table-column label="重量(余)" prop="remainingCargoWeight"></el-table-column>
+				<el-table-column label="体积(余)" prop="remainingCargoVolume"></el-table-column>
+			</el-table>
+			<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</div>
-		<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		<div class="step-footer text-center">
 			<el-button type="primary" @click="nextStep">下一步</el-button>
 			<el-button @click="back">返回</el-button>
@@ -74,6 +45,7 @@
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import Carrierbill from '../../../../api/Carrierbill'
+import Customer from '../../../../api/Customer'
 import Page from '../../../CommonComponents/Page'
 export default {
 	data() {
@@ -81,17 +53,13 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
-			carrierList:[],
-			checkedList: [],
-			checked: false,
-			isIndeterminate: false,
-			recdeliverycomp: {},
-			dispatchOrderID: this.$route.query.dispatchOrderID
+			carrierList: []
 		}
 	},
 	computed: {
 		...mapGetters(['selectedCarrierBill'])
 	},
+	components: { Page },
 	created() {
 		this.getList()
 	},
@@ -112,29 +80,27 @@ export default {
 			this.getList() 
 		},
 		getList() {
-			let params = {
-				current: this.pageIndex,
-				size: this.pageSize
-			}
-			this.dispatchOrderID && (params['dispatchOrderID'] = this.dispatchOrderID)
+			const dispatchOrderID = this.$route.query.dispatchOrderID
+			const params = { current: this.pageIndex, size: this.pageSize }
+			dispatchOrderID && (params['dispatchOrderID'] = dispatchOrderID)
 			Carrierbill.findPreDispatch(params).then(res => {
 				this.carrierList = res.records
 				this.total = res.total
-				if (this.dispatchOrderID) {
-					this.$store.dispatch('addCarrierBill', this.carrierList)
-				}
+				if (dispatchOrderID) this.$store.dispatch('setCarrierBill', this.carrierList)
+				this.$nextTick(() => {
+                    this.carrierList.forEach(row => {
+                        this.$refs.carrierOrderTable.toggleRowSelection(row)
+                    })
+                })
 			})
 		},
-		ViewCarrierbills(carrierOrderID) {
-			this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID}})
+		viewCarrierbills(carrierOrderID) {
+			this.$router.push({name: 'viewcarrierbill', query: { carrierOrderID } })
 		},
 		back() {
 			this.$router.go(-1)
 		}
-	},
-	components: {
-		Page
-	},
+	}
 }
 </script>
 <style lang="stylus" scoped>
@@ -158,9 +124,10 @@ export default {
 		max-width 180px
 		overflow hidden
 		text-overflow ellipsis
+		.wfCheck
+			padding 5px 0
 	.tit
 		td
-			border-top 1px solid #bbb
 			background #f8f8f8
 			color #3582d0
 			.infoItem
@@ -183,7 +150,7 @@ export default {
 		padding 6px 10px
 		height 36px
 		line-height 24px
-		background #f0f0f0
+		background #fff
 		color #666
 		white-space nowrap
 	.list

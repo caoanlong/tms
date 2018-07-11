@@ -180,7 +180,6 @@ import { deleteConfirm, closeConfirm, cancelConfirm } from '../../../common/util
 import Page from '../../CommonComponents/Page'
 import Customer from '../../../api/Customer'
 import UploadPhoto from './components/UploadPhoto'
-import DispatchBillItem from './components/DispatchBillItem'
 export default {
 	data() {
 		return {
@@ -204,6 +203,7 @@ export default {
 			recdeliverycomp:{}
 		}
 	},
+	components:{ Page, UploadPhoto },
 	created() {
 		this.getList()
 	},
@@ -300,11 +300,6 @@ export default {
 				})
 			})
 		}
-	},
-	components:{
-		DispatchBillItem,
-		Page,
-		UploadPhoto
 	}
 }
 

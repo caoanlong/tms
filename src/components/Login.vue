@@ -18,7 +18,7 @@
 					<div v-show="loginOrRegister == 'findpassword'" class="tab-item findpwd active">找回密码</div>
 				</div>
 				<!-- 登录 -->
-				<form class="login" v-show="loginOrRegister == 'login'">
+				<form class="login" v-if="loginOrRegister == 'login'">
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="customer"></svg-icon>
 						<input autocomplete="off" type="text" name="username" placeholder="请输入用户名" v-model="login.username">
@@ -38,7 +38,7 @@
 					<el-button class="login-btn" type="primary" @click="handLogin">登录</el-button>
 				</form>
 				<!-- 注册 -->
-				<form class="register" v-show="loginOrRegister == 'register'" autocomplete="off">
+				<form class="register" v-if="loginOrRegister == 'register'" autocomplete="off">
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="customer"></svg-icon>
 						<input type="text" name="username" placeholder="请输入手机号" v-model="register.mobile">
@@ -99,7 +99,7 @@
 					<el-button class="login-btn" type="primary" :disabled="!checked" @click="handRegister">注册</el-button>
 				</form>
 				<!-- 忘记密码 -->
-				<form class="findpassword" v-show="loginOrRegister == 'findpassword'">
+				<form class="findpassword" v-if="loginOrRegister == 'findpassword'">
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="customer"></svg-icon>
 						<input type="text" name="mobile" placeholder="请输入手机号" v-model="findPassword.mobile">
@@ -112,8 +112,9 @@
 					<div class="ipt">
 						<svg-icon class="ico" icon-class="password"></svg-icon>
 						<input :type="passwordType" name="password" placeholder="请输入密码" v-model="findPassword.password">
-						<span class="ico show-pwd" @click="showPwd">
-							<svg-icon icon-class="eye"/>
+						<span class="show-pwd" @click="showPwd">
+							<svg-icon icon-class="eye-open" v-show="passwordType == 'text'"/>
+							<svg-icon icon-class="eye" v-show="passwordType == 'password'"/>
 						</span>
 					</div>
 					<div class="ipt">
@@ -279,8 +280,8 @@ export default {
 				if (!this.login.password.trim()) throw ('密码不能为空！')
 				if (this.login.password.trim().length > 32 || this.login.password.trim().length <8) throw ('密码必须是8-16位字母、下划线、数字')
 				Member.login({
-					username: this.login.username,
-					password: this.login.password
+					username: this.login.username.trim(),
+					password: this.login.password.trim()
 				}).then(res => {
 					Message.success('成功！')
 					setCooikie('loginUserName', this.login.username)
@@ -322,14 +323,14 @@ export default {
 				if (!this.register.address.trim()) throw ('详细地址不能为空！')
 				if (this.register.address.trim().length > 100) throw ('地址过长！')
 				Member.register({
-					mobile: this.register.mobile,
-					vcode: this.register.vcode,
-					password: this.register.password,
-					contact: this.register.contact,
-					company: this.register.company,
+					mobile: this.register.mobile.trim(),
+					vcode: this.register.vcode.trim(),
+					password: this.register.password.trim(),
+					contact: this.register.contact.trim(),
+					company: this.register.company.trim(),
 					province: this.register.province,
 					city: this.register.city,
-					address: this.register.address
+					address: this.register.address.trim()
 				}).then(res => {
 					Message.success('成功！')
 					setCooikie('loginUserName', this.login.username)
@@ -359,10 +360,10 @@ export default {
 				if (this.findPassword.password.length > 32 || this.findPassword.password.length < 8) throw ('8-16位字母、下划线、数字')
 				if (this.findPassword.password != this.findPassword.confirmPassword) throw ('重复输入密码不一致！')
 				Member.pwdForget({
-					mobile: this.findPassword.mobile,
-					vcode: this.findPassword.vcode,
-					password: this.findPassword.password,
-					confirmPassword: this.findPassword.confirmPassword
+					mobile: this.findPassword.mobile.trim(),
+					vcode: this.findPassword.vcode.trim(),
+					password: this.findPassword.password.trim(),
+					confirmPassword: this.findPassword.confirmPassword.trim()
 				}).then(res => {
 					Message.success('成功！')
 					this.loginOrRegister = 'login'

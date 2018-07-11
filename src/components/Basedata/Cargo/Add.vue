@@ -58,13 +58,13 @@
 						<el-form-item>
 							<span @click="fold" class="foldIcon" >其他项 <svg-icon icon-class="arrow-down" class="icon" :class="{fold: isFold}"></svg-icon></span>
 						</el-form-item>
-						<el-form-item label="品名表名称" v-if="isFold">
+						<el-form-item label="品名表名称" v-if="isFold" prop="productName">
 							<el-input v-model="cargo.productName"></el-input>
 						</el-form-item>
-						<el-form-item label="CN编码" v-if="isFold">
+						<el-form-item label="CN编码" v-if="isFold" prop="cnCode">
 							<el-input v-model="cargo.cnCode"></el-input>
 						</el-form-item>
-						<el-form-item label="UN编码" prop="contactPhone" v-if="isFold">
+						<el-form-item label="UN编码" v-if="isFold" prop="unCode">
 							<el-input v-model="cargo.unCode"></el-input>
 						</el-form-item>
 						<el-form-item>
@@ -123,24 +123,15 @@ export default {
 			},
 			isFold:false,
 			rules: {
-				customerID: [
-					{required: true, message: '请选择发货单位'}
-				],
-				cargoName: [
-					{required: true, message: '请输入货物名称'}
-				],
-				cargoType: [
-					{required: true, message: '请选择货物类型'}
-				],
-				dangerousCoodsCategory: [
-					{required: true, message: '请输入危险品类别'}
-				],
-				cargoUnit: [
-					{required: true, message: '请选择货物单位'}
-				],
-				packageType: [
-					{required: true, message: '请选择包装类型'}
-				]
+				customerID: [{required: true, message: '请选择发货单位'}],
+				cargoName: [{required: true, message: '请输入货物名称'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
+				cargoType: [{required: true, message: '请选择货物类型'}],
+				dangerousCoodsCategory: [{required: true, message: '请输入危险品类别'}],
+				cargoUnit: [{required: true, message: '请选择货物单位'}],
+				packageType: [{required: true, message: '请选择包装类型'}],
+				productName: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
+				cnCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
+				unCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
 			}
 		}
 	},

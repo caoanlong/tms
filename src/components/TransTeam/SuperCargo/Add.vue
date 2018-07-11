@@ -37,13 +37,14 @@
 						</el-row>
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="住址">
+								<el-form-item label="住址" prop="homeAddress">
 									<el-input v-model="superCargo.homeAddress"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="合同有效期">
 									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date" 
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -55,14 +56,14 @@
 						</el-row>
 						<el-row >
 							<el-col :span="24">
-								<el-form-item label="职称/技术等级">
+								<el-form-item label="职称/技术等级" prop="titleLever">
 									<el-input v-model="superCargo.titleLever"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row >
 							<el-col :span="24">
-								<el-form-item label="备注">
+								<el-form-item label="备注" prop="remark">
 									<el-input type="textarea" :rows="3" resize="none" v-model="superCargo.remark"></el-input>
 								</el-form-item>
 							</el-col>
@@ -211,7 +212,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="初次领证日期" prop="driverLicenseFirstTime">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -265,12 +267,12 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="证号">
+								<el-form-item label="证号" prop="qualificationNum">
 									<el-input v-model="superCargo.qualificationNum"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="编号">
+								<el-form-item label="编号" prop="qualificationCode">
 									<el-input v-model="superCargo.qualificationCode"></el-input>
 								</el-form-item>
 							</el-col>
@@ -307,7 +309,8 @@
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="初次领证日期">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -422,7 +425,8 @@
 									</el-select>
 								</el-form-item>
 								<el-form-item label="合格至">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -545,12 +549,12 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="证号">
+								<el-form-item label="证号" prop="escortLicenseNum">
 									<el-input v-model="superCargo.escortLicenseNum"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="编号">
+								<el-form-item label="编号" prop="escortLicenseCode">
 									<el-input v-model="superCargo.escortLicenseCode"></el-input>
 								</el-form-item>
 							</el-col>
@@ -591,7 +595,8 @@
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="初次领证日期">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -739,15 +744,22 @@ export default {
 				sex: [ { required: true , message: '请选择性别'} ],
 				mobile: [ { required: true , message: '请输入联系方式'}, { validator: checkTel } ],
 				cooperateRelation: [ { required: true , message: '请选择合作方式'} ],
+				homeAddress: [ {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
+				titleLever: [ {min: 1, max: 20, message: '长度在 1 到 20 个字符'} ],
+				remark: [ {min: 1, max: 100, message: '长度在 1 到 100 个字符'} ],
 				idCardNum: [ { required: true , message: '请输入身份证号'}, { validator: checkIDCard } ],
 				idCardExpirationTime: [ { required: true , message: '请选择身份证有效期'} ],
 				idCardFrontUrl: [ { required: true , message: '请上传身份证照片'} ],
-				driverLicenseNum: [ { required: true , message: '请输入驾驶证号'} ],
-				driverLicenseCode: [ { required: true , message: '请输入档案编号'} ],
+				driverLicenseNum: [ { required: true , message: '请输入驾驶证号'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
+				driverLicenseCode: [ { required: true , message: '请输入档案编号'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
 				quasiDrivingType: [ { required: true , message: '请选择准驾车型'} ],
 				driverLicenseFirstTime: [ { required: true , message: '请选择初次领证日期'} ],
 				driverLicenseBeginTime: [ { required: true , message: '请选择有效期'} ],
-				driverLicFrontUrl: [ { required: true , message: '请上传驾驶证照片'} ]
+				driverLicFrontUrl: [ { required: true , message: '请上传驾驶证照片'} ],
+				qualificationNum: [ {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
+				qualificationCode: [ {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
+				escortLicenseNum: [ {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
+				escortLicenseCode: [ {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ]
 			}
 		}
 	},

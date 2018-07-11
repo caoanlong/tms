@@ -18,9 +18,9 @@
 						<!-- <router-link :to="{name: 'userprofile'}">
 							<el-dropdown-item>个人资料</el-dropdown-item>
 						</router-link> -->
-						<el-dropdown-item>
+						<!-- <el-dropdown-item>
 							<span style="display:block;">账号设置</span>
-						</el-dropdown-item>
+						</el-dropdown-item> -->
 						<el-dropdown-item>
 							<span @click="logout" style="display:block;">退出</span>
 						</el-dropdown-item>

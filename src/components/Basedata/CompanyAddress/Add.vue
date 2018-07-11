@@ -39,7 +39,7 @@
                                 @select="handSelectLocation">
                             </el-autocomplete>
                         </el-form-item>
-						<el-form-item label="门牌信息">
+						<el-form-item label="门牌信息" prop="detailAddress">
 							<el-input v-model="companyAddress.detailAddress" placeholder="如：十字路口左边22栋301室"></el-input>
 						</el-form-item>
 						<el-form-item>
@@ -79,22 +79,12 @@ export default {
                 locationAddress: ''
 			},
 			rules: {
-				customerID: [
-					{required: true, message: '请输入所属企业'}
-                ],
-				contactName: [
-					{required: true, message: '请输入联系人'}
-                ],
-                contactPhone: [
-                    {required: true, message: '请输入电话'},
-                    {validator: checkTel}
-                ],
-				areaID: [
-					{ required: true, message: '请选择区域', trigger: 'change' }
-				],
-				locationAddress: [
-					{required: true, message: '请输入定位地址'}
-				]
+				customerID: [{required: true, message: '请输入所属企业'}],
+				contactName: [{required: true, message: '请输入联系人'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
+                contactPhone: [{required: true, message: '请输入电话'}, {validator: checkTel}],
+				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
+				locationAddress: [{required: true, message: '请输入定位地址'}],
+				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}]
 			}
 		}
     },

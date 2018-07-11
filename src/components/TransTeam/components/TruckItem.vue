@@ -13,14 +13,14 @@
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</el-tag>
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</el-tag>
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
-					<el-tag size="mini" type="info">挂车</el-tag>
+					<!-- <el-tag size="mini" type="info">挂车</el-tag> -->
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
 							<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
 							<el-tag size="mini" type="danger">身份证到期</el-tag> 
 							<el-tag size="mini" type="danger">从业资格证到期</el-tag>
 						</div>
-						<el-tag size="mini" type="danger">到期</el-tag>
+						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
 				<p>{{Number(truck.length)/1000}}米/高栏/{{truck.loads}}吨/{{truck.loadVolume}}方</p>
@@ -44,7 +44,7 @@
 						<el-tag size="mini" type="danger">身份证到期</el-tag> 
 						<el-tag size="mini" type="danger">从业资格证到期</el-tag>
 					</div>
-					<el-tag size="mini" type="danger">到期</el-tag>
+					<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 				</el-tooltip>
 			</div>
 			<div class="driverInfo link text-center" v-else @click="add('primary')">+添加主驾</div>
@@ -57,7 +57,7 @@
 						<el-tag size="mini" type="danger">身份证到期</el-tag> 
 						<el-tag size="mini" type="danger">商业险到期</el-tag>
 					</div>
-					<el-tag size="mini" type="danger">到期</el-tag>
+					<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 				</el-tooltip>
 			</div>
 			<div class="driverInfo link text-center" v-else @click="add('second')">+添加副驾</div>

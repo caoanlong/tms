@@ -1,16 +1,16 @@
 import Base from './Base'
 import request from '../common/request'
 
-class Member extends Base {
+class Common extends Base {
     constructor(url, req) {
         super(url, req)
     }
-    getVCode(data) {
+    getVCode(params) {
         return this.request({
             url: this.baseUrl + '/vcode',
-            data
+            params
         })
     }
 }
 
-export default new Member('/common', request)
+export default new Common('/common', request)

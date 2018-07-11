@@ -35,9 +35,9 @@
 			</div>
 		</el-card>
 		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
-			<el-form>
-				<el-form-item label="单位名称" label-width="80px">
-					<el-input placeholder="请输入货物单位" auto-complete="off" v-model="unit"></el-input>
+			<el-form :model="unit" :rules="rules" ref="ruleForm">
+				<el-form-item label="单位名称" label-width="80px" prop="unit">
+					<el-input placeholder="请输入货物单位" v-model="unit.unit"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -57,12 +57,15 @@ export default {
 		return {
 			dialogFormVisible: false,
 			find: { unit: '' },
-			unit: '',
+			unit: { unit: ''},
 			pageIndex: 1,
 			pageSize: 10,
 			total:0,
 			tableData: [],
-			selectedList: []
+			selectedList: [],
+			rules: {
+				unit: [{required: true, message: '请输入货物单位'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
+			}
 		}
 	},
 	components: {
@@ -99,14 +102,17 @@ export default {
 				this.total= res.total
 			})
 		},
-		add() { 
-			CargoUnit.add({
-				unit: this.unit
-			}).then(res => {
-				this.dialogFormVisible = false
-				this.unit = ''
-				this.getList()
-				Message.success('保存成功！')
+		add() {
+			this.$refs['ruleForm'].validate(valid => {
+				if (!valid) return
+				CargoUnit.add({
+					unit: this.unit.unit
+				}).then(res => {
+					this.dialogFormVisible = false
+					this.unit.unit = ''
+					this.getList()
+					Message.success('保存成功！')
+				})
 			})
 		},
 		del(cargoUnitID) {

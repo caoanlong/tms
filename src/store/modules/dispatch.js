@@ -8,17 +8,20 @@ const dispatch = {
 	},
 	mutations: {
         ADD_CARRIERBILL: (state, list) => {
-			let selectedCarrierBill = state.selectedCarrierBill
+			const selectedCarrierBill = state.selectedCarrierBill
 			list.forEach(item => {
-				if (selectedCarrierBill.indexOf(item) == -1) {
+				if (selectedCarrierBill.map(i => i.carrierOrderID).indexOf(item.carrierOrderID) == -1) {
 					selectedCarrierBill.push(item)
 				}
 			})
 		},
+		SET_CARRIERBILL: (state, list) => {
+			state.selectedCarrierBill = list
+		},
 		DEL_CARRIERBILL: (state, list) => {
-			let selectedCarrierBill = state.selectedCarrierBill
+			const selectedCarrierBill = state.selectedCarrierBill
 			list.forEach(item => {
-				selectedCarrierBill.splice(selectedCarrierBill.indexOf(item), 1)
+				selectedCarrierBill.splice(selectedCarrierBill.map(i => i.carrierOrderID).indexOf(item.carrierOrderID), 1)
 			})
 		},
 		CLEAR_CARRIERBILL: (state) => {
@@ -43,6 +46,9 @@ const dispatch = {
 	actions: {
 		addCarrierBill({ commit }, list) {
 			commit('ADD_CARRIERBILL', list)
+		},
+		setCarrierBill({ commit }, list) {
+			commit('SET_CARRIERBILL', list)
 		},
 		delCarrierBill({ commit }, list) {
 			commit('DEL_CARRIERBILL', list)

@@ -26,7 +26,7 @@
 								@change="handleSelectedArea">
 							</el-cascader>
 						</el-form-item>
-						<el-form-item label="联系人">
+						<el-form-item label="联系人" prop="contactName">
 							<el-input v-model="recdeliverycomp.contactName"></el-input>
 						</el-form-item>
 						<el-form-item label="手机号" prop="contactPhone">
@@ -47,7 +47,7 @@ import { Message } from 'element-ui'
 import dist from '../../../assets/data/dist.json'
 import Customer from '../../../api/Customer'
 import ImageUpload from '../../CommonComponents/ImageUpload'
-import { checkMobile } from '../../../common/validator'
+import { checkTel } from '../../../common/validator'
 export default {
 	data() {
 		return {
@@ -61,18 +61,11 @@ export default {
 				customerType: ''
 			},
 			rules: {
-				companyName: [
-					{required: true, message: '请输入名称', trigger: 'blur'}
-				],
-				companyAreaID: [
-					{ required: true, message: '请选择区域', trigger: 'change' }
-				],
-				customerType: [
-					{ required: true, message: '请选择类型', trigger: 'change' }
-				],
-				contactPhone: [
-					{ validator: checkMobile}
-				]
+				companyName: [ {required: true, message: '请输入名称', trigger: 'blur'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
+				companyAreaID: [ { required: true, message: '请选择区域', trigger: 'change' } ],
+				customerType: [ { required: true, message: '请选择类型', trigger: 'change' } ],
+				contactName: [ {min: 1, max: 20, message: '长度在 1 到 20 个字符'} ],
+				contactPhone: [ { validator: checkTel } ]
 			}
 		}
 	},

@@ -73,13 +73,14 @@ export default {
 		Breadcrumb
 	},
 	methods:{
-		showDialog:function(data,data1){
+		showDialog(data, data1) {
+			return
 			console.log(data)
-			if(data=='companyInfo'){
+			if(data == 'companyInfo'){
 				this.showCompanyInfo= data1
 				this.showMask = data1
 
-			}else{
+			}else {
 				this.showPensonInfo= data1
 				this.showMask = data1
 			}

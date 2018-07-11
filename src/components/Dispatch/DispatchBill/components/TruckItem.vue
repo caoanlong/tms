@@ -25,10 +25,10 @@
 							<el-tag size="mini" type="danger">身份证到期</el-tag> 
 							<el-tag size="mini" type="danger">从业资格证到期</el-tag>
 						</div>
-						<el-tag size="mini" type="danger">到期</el-tag>
+						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
-				<p>{{Number(truck.length)/1000}}米/高栏/{{truck.loads}}吨/{{truck.loadVolume}}方</p>
+				<p>{{Number(truck.length)/1000}}米/{{truck.loads}}吨/{{truck.loadVolume}}方</p>
 			</div>
 		</div>
 		<div class="driverColumn" v-if="truck.primaryDriver && truck.primaryDriver.realName">
@@ -38,7 +38,7 @@
 			<div class="driverInfo fl">
 				<p><span class="driverName">{{truck.primaryDriver.realName}}</span>
 					<el-tag size="mini" type="success">主驾</el-tag>
-					<el-tag size="mini">作业</el-tag>
+					<!-- <el-tag size="mini">作业</el-tag> -->
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
@@ -46,7 +46,7 @@
 							<el-tag size="mini" type="danger">身份证到期</el-tag> 
 							<el-tag size="mini" type="danger">从业资格证到期</el-tag>
 						</div>
-						<el-tag size="mini" type="danger">到期</el-tag>
+						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
 				<p>{{truck.primaryDriver.mobile}}</p>
@@ -62,7 +62,7 @@
 			</div>
 			<div class="escortInfo fl">
 				<p><span class="escortName">{{truck.secondaryDriver.realName}}</span>
-					<el-tag size="mini">作业</el-tag>
+					<!-- <el-tag size="mini">作业</el-tag> -->
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
@@ -70,7 +70,7 @@
 							<el-tag size="mini" type="danger">身份证到期</el-tag> 
 							<el-tag size="mini" type="danger">从业资格证到期</el-tag>
 						</div>
-						<el-tag size="mini" type="danger">到期</el-tag>
+						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
 				<p>{{truck.secondaryDriver.mobile}}</p>
