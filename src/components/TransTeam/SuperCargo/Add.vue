@@ -30,7 +30,7 @@
 								<el-form-item label="合作关系" prop="cooperateRelation">
 									<el-select placeholder="请选择" style="width:100%" v-model="superCargo.cooperateRelation">
 										<el-option label="挂靠" value="Attach"></el-option>
-										<el-option label="自有车辆" value="Self"></el-option>
+										<el-option label="自有" value="Self"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
@@ -320,7 +320,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="驾驶证有效期">
+								<el-form-item label="从业资格证有效期">
 									<el-date-picker
 										type="daterange"
 										range-separator="至"
@@ -337,9 +337,9 @@
 							<el-col :span="12">
 								<el-form-item label="从业资格类别">
 									<el-select placeholder="请选择" style="width:100%" v-model="superCargo.qualificationType">
-										<el-option label="类别1" value="1"></el-option>
-										<el-option label="类别2" value="2"></el-option>
-										<el-option label="类别3" value="3"></el-option>
+										<el-option label="类型1" value="类型1"></el-option>
+										<el-option label="类型2" value="类型2"></el-option>
+										<el-option label="类型3" value="类型3"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
@@ -419,9 +419,12 @@
 							<div class="block-content">
 								<el-form-item label="诚信等级">
 									<el-select placeholder="请选择" style="width:100%" v-model="superCargo.integrityExamineGrade">
-										<el-option label="等级1" value="1"></el-option>
-										<el-option label="等级2" value="2"></el-option>
-										<el-option label="等级3" value="3"></el-option>
+										<el-option label="无" value="无"></el-option>
+										<el-option label="A" value="A"></el-option>
+										<el-option label="AA" value="AA"></el-option>
+										<el-option label="AAA" value="AAA"></el-option>
+										<el-option label="AAAA" value="AAAA"></el-option>
+										<el-option label="AAAAA" value="AAAAA"></el-option>
 									</el-select>
 								</el-form-item>
 								<el-form-item label="合格至">
@@ -563,9 +566,9 @@
 							<el-col :span="12">
 								<el-form-item label="从业资格类别">
 									<el-select placeholder="请选择" style="width:100%" v-model="superCargo.escortLicenseType">
-										<el-option label="类别1" value="1"></el-option>
-										<el-option label="类别2" value="2"></el-option>
-										<el-option label="类别3" value="3"></el-option>
+										<el-option label="类型1" value="类型1"></el-option>
+										<el-option label="类型2" value="类型2"></el-option>
+										<el-option label="类型3" value="类型3"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>

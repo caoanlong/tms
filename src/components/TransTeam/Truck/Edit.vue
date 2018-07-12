@@ -31,7 +31,7 @@
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="8">
-								<el-form-item label="挂车牌号码" prop="trailerPlateNo" v-if="truck.truckCategory == '牵引车'">
+								<el-form-item label="挂车牌号码" prop="trailerPlateNo" v-if="truck.truckCategory == 'Tractor'">
 									<el-input v-model="truck.trailerPlateNo" disabled></el-input>
 								</el-form-item>
 							</el-col>
@@ -1004,6 +1004,7 @@ import Truck from '../../../api/Truck'
 import SuperCargo from '../../../api/SuperCargo'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import DistPicker from '../../CommonComponents/DistPicker'
+import { checkPlateNo } from '../../../common/validator'
 export default {
 	data() {
 		return {
@@ -1140,8 +1141,8 @@ export default {
 				code: [ { required: true , message: '请输入车辆编号'} ],
 				truckCategory: [ { required: true , message: '请选择车辆类别'} ],
 				plateNoColor: [ { required: true , message: '请选择车牌颜色'} ],
-				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'} ],
-				plateNo: [ { required: true , message: '请输入车牌号码'} ],
+				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'}],
+				plateNo: [ { required: true , message: '请输入车牌号码'}, { validator: checkPlateNo } ],
 				truckType: [ { required: true , message: '请选择车牌类型'} ],
 				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ],
 				length: [ { required: true , message: '请输入车长'} ],

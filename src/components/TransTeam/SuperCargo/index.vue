@@ -7,7 +7,7 @@
 					<el-form-item label="人员">
 						<el-input placeholder="姓名/手机号" v-model="find.keyword"></el-input>
 					</el-form-item>
-					<el-form-item label="联系电话">
+					<el-form-item label="运输岗位">
 						<el-form-item>
 							<el-checkbox-group v-model="supercargoType" @change="supercargoTypeChange">
 								<el-checkbox label="Driver">驾驶员</el-checkbox>
@@ -98,6 +98,7 @@ export default {
 		reset() {
 			this.find.keyword = ''
 			this.find.supercargoType = ''
+			this.supercargoType = []
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()

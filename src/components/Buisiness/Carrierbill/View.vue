@@ -42,25 +42,17 @@
 				<div class="block-content">
 					<table class="wf-table">
 						<tr>
-							<th>货物类型</th>
-							<th>货物规格</th>
 							<th>货物名称</th>
-							<th>数量(件)</th>
-							<th>体积(m³)</th>
-							<th>重量(kg)</th>
+							<th>数量</th>
+							<th>体积</th>
+							<th>重量</th>
 							<th>剩余货量</th>
 						</tr>
 						<tr class="is-center" v-for="item in carrierCargo" :key="item.carrierCargoID">
-							<td>
-								<span v-if="item.weightType=='Heavy'">重货</span>
-								<span v-else-if="item.weightType=='Light'">轻货</span>
-								<span v-else-if="item.weightType=='HeavyAndLight'">重轻货</span>
-							</td>
-							<td>{{item.cargoType}}</td>
 							<td>{{item.cargoName}}</td>
-							<td>{{item.cargoNum}}</td>
-							<td>{{item.cargoVolume}}</td>
-							<td>{{item.cargoWeight}}</td>
+							<td>{{item.cargoNum}}{{item.cargoUnitName}}</td>
+							<td>{{item.cargoVolume + 'm³'}}</td>
+							<td>{{item.cargoWeight + 'kg'}}</td>
 							<td>
 								{{item.remainingCargoNum ? item.remainingCargoNum + '件' : ''}}
 								{{item.remainingCargoVolume ? ('/' + item.remainingCargoVolume + 'm³') : ''}}
@@ -69,12 +61,11 @@
 						</tr>
 						<tr class="total is-center">
 							<td>合计</td>
-							<td colspan="2"></td>
 							<td>{{sum('cargoNum')}}</td>
-							<td>{{sum('cargoVolume')}}</td>
-							<td>{{sum('cargoWeight')}}</td>
+							<td>{{sum('cargoVolume') + 'm³'}}</td>
+							<td>{{sum('cargoWeight') + 'kg'}}</td>
 							<td>
-								<span v-if="sum('remainingCargoNum')>0">{{sum('remainingCargoNum')}}件/</span>
+								<span v-if="sum('remainingCargoNum')>0">{{sum('remainingCargoNum')}}/</span>
 								<span v-if="sum('remainingCargoVolume')>0">{{sum('remainingCargoVolume')}}m³/</span>
 								<span v-if="sum('remainingCargoWeight')>0">{{sum('remainingCargoWeight')}}kg</span>	
 							</td>

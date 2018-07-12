@@ -245,6 +245,14 @@
 							</el-row>
 							<el-button type="text" icon="el-icon-plus" class="add-cargo-btn" @click="addItem">添加</el-button>
 						</el-form>
+						<el-row>
+							<el-col :span="12" :offset="12" style="height:50px;line-height:50px;text-align:right;padding-right:20px">
+								<span>合计：</span>
+								<span style="display:inline-block;width:80px">{{sum('cargoNum')}}</span>
+								<span style="display:inline-block;width:80px">{{sum('cargoWeight')}}吨</span>
+								<span style="display:inline-block;width:80px">{{sum('cargoVolume')}}方</span>
+							</el-col>
+						</el-row>
 					</div>
 				</el-row>
 				<el-row>
@@ -353,14 +361,14 @@ export default {
 				shipperDate: [ {required: true, message: '请选择发货时间', trigger: 'change'} ],
 				shipperAreaID: [ {required: true, message: '请选择发货地'} ],
 				shipperLocationAddress: [ {required: true, message: '请选择定位地址'} ],
-				shipperDetailAddress: [ { required: true, message: '请输入发货详细地址'} ],
+				// shipperDetailAddress: [ { required: true, message: '请输入发货详细地址'} ],
 				consigneeCompanyName: [ {required: true, message: '请输入收货单位'} ],
 				consigneeName: [ { required: true, message: '请输入收货人'} ],
 				consigneePhone: [ { required: true, validator: checkTel} ],
 				consigneeDate: [ {required: true, message: '请选择收货时间', trigger: 'change'} ],
 				consigneeAreaID: [ {required: true, message: '请选择收货地'} ],
 				consigneeLocationAddress: [ {required: true, message: '请选择定位地址'} ],
-				consigneeDetailAddress: [ {required: true, message: '请输入收货详细地址'} ],
+				// consigneeDetailAddress: [ {required: true, message: '请输入收货详细地址'} ],
 				transportType: [ {required: true, message: '请选择运输方式'} ],
 				freight: [ {required: true, message: '请输入运费金额'} ]
 			}
@@ -373,6 +381,13 @@ export default {
 		this.getUnits()
 	},
 	methods: {
+		sum(o) {
+			let sum = 0
+			for (let i = this.carrierbillInfo.carrierCargo.length - 1; i >= 0; i--) {
+				sum += Number(this.carrierbillInfo.carrierCargo[i][o])
+			}
+			return sum
+		},
 		getUnits() {
 			CargoUnit.find({
 				current: 1,

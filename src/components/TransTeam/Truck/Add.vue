@@ -32,7 +32,9 @@
 						<el-row :gutter="20">
 							<el-col :span="8">
 								<el-form-item label="挂车牌号码" prop="trailerPlateNo" v-if="truck.truckCategory == 'Tractor'">
-									<el-input v-model="truck.trailerPlateNo"></el-input>
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.trailerPlateNo" @change="handSelectTrailer">
+										<el-option v-for="item in trailers" :label="item.plateNo" :value="item" :key="item.truckID"></el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
@@ -1161,12 +1163,14 @@ import Truck from '../../../api/Truck'
 import SuperCargo from '../../../api/SuperCargo'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import DistPicker from '../../CommonComponents/DistPicker'
+import { checkPlateNo } from '../../../common/validator'
 export default {
 	data() {
 		return {
 			driverLicTime: [],
 			gpsValidDate: [],
 			managementAgreementDate: [],
+			trailers: [],
 			truck: {
 				code: '',
 				trailerPlateNo: '',
@@ -1297,8 +1301,8 @@ export default {
 				code: [ { required: true , message: '请输入车辆编号'} ],
 				truckCategory: [ { required: true , message: '请选择车辆类别'} ],
 				plateNoColor: [ { required: true , message: '请选择车牌颜色'} ],
-				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'} ],
-				plateNo: [ { required: true , message: '请输入车牌号码'} ],
+				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'}],
+				plateNo: [ { required: true , message: '请输入车牌号码'}, { validator: checkPlateNo } ],
 				truckType: [ { required: true , message: '请选择车牌类型'} ],
 				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ],
 				length: [ { required: true , message: '请输入车长'} ],
@@ -1310,6 +1314,7 @@ export default {
 		}
 	},
 	created() {
+		this.getTrailers()
 	},
 	methods: {
 		getPrimaryDriver(queryString, cb) {
@@ -1368,12 +1373,24 @@ export default {
 			this.truck.managementAgreementBeginDate = date[0].getTime()
 			this.truck.managementAgreementExpireDate = date[1].getTime()
 		},
+		handSelectTrailer(data) {
+			this.truck.trailerPlateNo = data.plateNo
+			this.truck.trailerID = data.truckID
+		},
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
-			console.log(this.truck)
 			Truck.add(this.truck).then(res => {
 				Message.success(res.data.msg)
 				this.$router.push({name: 'truck'})
+			})
+		},
+		getTrailers() {
+			Truck.find({
+				current: 1,
+				size: 1000,
+				truckCategory: 'Trailer'
+			}).then(res => {
+				this.trailers = res.records
 			})
 		},
 		back() {

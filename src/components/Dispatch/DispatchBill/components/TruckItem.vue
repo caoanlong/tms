@@ -17,7 +17,8 @@
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</el-tag>
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</el-tag>
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</el-tag>
-					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
+					<el-tag size="mini" type="warning" v-if="truck.workStatus == 'Free'">空闲</el-tag>
+					<el-tag size="mini" type="warning" v-else>作业</el-tag>
 					<el-tag size="mini" type="info">挂车</el-tag>
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
@@ -38,6 +39,11 @@
 			<div class="driverInfo fl">
 				<p><span class="driverName">{{truck.primaryDriver.realName}}</span>
 					<el-tag size="mini" type="success">主驾</el-tag>
+					<el-tooltip placement="top" v-if="truck.primaryDriver.appStatus == 'Y'">
+						<div slot="content">开通APP接单</div>
+						<el-tag size="mini">APP</el-tag> 
+					</el-tooltip>
+					<el-tag type="info" size="mini" v-else>APP</el-tag>
 					<!-- <el-tag size="mini">作业</el-tag> -->
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tooltip placement="right" effect="light">
@@ -61,7 +67,13 @@
 				<img :src="truck.secondaryDriver.headPic ? resizeImg(truck.secondaryDriver.headPic, '_100x100.') : defaultImg" />
 			</div>
 			<div class="escortInfo fl">
-				<p><span class="escortName">{{truck.secondaryDriver.realName}}</span>
+				<p>
+					<span class="escortName">{{truck.secondaryDriver.realName}}</span>
+					<el-tooltip placement="top" v-if="truck.secondaryDriver.appStatus == 'Y'">
+						<div slot="content">开通APP接单</div>
+						<el-tag size="mini">APP</el-tag> 
+					</el-tooltip>
+					<el-tag type="info" size="mini" v-else>APP</el-tag> 
 					<!-- <el-tag size="mini">作业</el-tag> -->
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tooltip placement="right" effect="light">

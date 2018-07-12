@@ -16,16 +16,7 @@
 				@select="selectionSimple" 
 				@select-all="selectionAll($event, item)">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
-				<el-table-column label="货物类型" align="center">
-					<template slot-scope="scope">
-						<span v-if="scope.row.weightType=='Heavy'">重货</span>
-						<span v-else-if="scope.row.weightType=='Light'">轻货</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="货物名称" align="center" prop="cargoName">	
-				</el-table-column>
-				<el-table-column label="货物规格" align="center" prop="cargoType">
-				</el-table-column>
+				<el-table-column label="货物名称" align="center" prop="cargoName">	</el-table-column>
 				<el-table-column label="待配货量" align="center" >
 					<template slot-scope="scope">
 						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + 'kg') : ''}} 
