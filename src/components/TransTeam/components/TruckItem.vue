@@ -34,10 +34,11 @@
 		<div class="driver">
 			<div class="driverInfo" v-if="truck.primaryDriver && truck.primaryDriver.realName">
 				<span class="driverName">{{truck.primaryDriver.realName}}</span>
-				<el-tooltip placement="top" >
+				<el-tooltip placement="top" v-if="truck.primaryDriver.appStatus == 'Y'">
 					<div slot="content">开通APP接单</div>
 					<el-tag size="mini">APP</el-tag> 
 				</el-tooltip>
+				<el-tag type="info" size="mini" v-else>APP</el-tag>
 				<el-tooltip placement="right" effect="light">
 					<div slot="content">
 						<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
@@ -50,7 +51,11 @@
 			<div class="driverInfo link text-center" v-else @click="add('primary')">+添加主驾</div>
 			<div class="driverInfo" v-if="truck.secondaryDriver && truck.secondaryDriver.realName">
 				<span class="driverName">{{truck.secondaryDriver.realName}}</span>
-				<el-tag type="info" size="mini">APP</el-tag> 
+				<el-tooltip placement="top" v-if="truck.secondaryDriver.appStatus == 'Y'">
+					<div slot="content">开通APP接单</div>
+					<el-tag size="mini">APP</el-tag> 
+				</el-tooltip>
+				<el-tag type="info" size="mini" v-else>APP</el-tag> 
 				<el-tooltip placement="right" effect="light">
 					<div slot="content">
 						<el-tag size="mini" type="danger">驾驶证到期</el-tag> 

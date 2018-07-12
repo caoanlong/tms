@@ -44,7 +44,7 @@
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
 										v-model="carrierbillInfo.shipperCompanyName"
-										:fetch-suggestions="getRecdeliverycomp"
+										:fetch-suggestions="getShipperCompany"
 										placeholder="请输入..."
 										@select="handSelectShipperCompany">
 									</el-autocomplete>
@@ -119,7 +119,7 @@
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
 										v-model="carrierbillInfo.consigneeCompanyName"
-										:fetch-suggestions="getRecdeliverycomp"
+										:fetch-suggestions="getConsigneeCompany"
 										placeholder="请输入内容"
 										@select="handSelectConsigneeCompany">
 									</el-autocomplete>
@@ -302,7 +302,7 @@ export default {
 			units: [],
 			carrierbillInfo: {
 				shipperNo: '',                  /** String 发货单号*/
-				transportType: '',              /** String 运输方式*/
+				transportType: '公路运输',              /** String 运输方式*/
 				commissionDate: '',             /** Date 委托时间*/
 				shipperID: '',                  /** Long 发货单位ID*/
 				shipperCompanyName: '',         /** String 发货单位名称*/
@@ -387,15 +387,15 @@ export default {
 				size: 1000
 			}).then(res => { cb(res.records) })
 		},
-		getConsignors(queryString, cb) {
+		getShipperCompany(queryString, cb) {
 			Customer.find({
-				type: 'Consignor',
+				customerType: 'Shipper',
 				companyName: queryString
 			}).then(res => { cb(res.records) })
 		},
-		getRecdeliverycomp(queryString, cb) {
+		getConsigneeCompany(queryString, cb) {
 			Customer.find({
-				type: 'ShipperConsignee',
+				customerType: 'Consignee',
 				companyName: queryString
 			}).then(res => { cb(res.records) })
 		},

@@ -39,7 +39,7 @@
 					<el-table-column label="合作备注" prop="remark" align="center"></el-table-column>
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" @click="relieve(scope.row.driverInvitationID)">解除</el-button>
+							<el-button type="default" size="mini" :disabled="scope.row.status == 'Invited'" @click="relieve(scope.row.driverInvitationID)">解除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>

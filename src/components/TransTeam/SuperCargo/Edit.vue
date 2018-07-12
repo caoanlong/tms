@@ -1,6 +1,6 @@
 <template>
 	<div class="main-content">
-		<el-form label-width="110px" size="mini" :model="superCargo" :rules="rules" ref="ruleForm" >
+		<el-form label-width="126px" size="mini" :model="superCargo" :rules="rules" ref="ruleForm" >
 			<el-card class="box-card">
 				<el-row class="section-block" style="margin-bottom:20px">
 					<span class="block-title">基本信息</span>
@@ -606,7 +606,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="24">
-								<el-form-item label="驾驶证有效期">
+								<el-form-item label="从业资格证有效期">
 									<el-date-picker
 										type="daterange"
 										range-separator="至"

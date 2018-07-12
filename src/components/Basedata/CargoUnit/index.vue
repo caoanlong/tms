@@ -27,7 +27,7 @@
 					<el-table-column label="单位" prop="unit" align="center"></el-table-column>
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
-							<el-button type="danger" size="mini" @click="del(scope.row.cargoUnitID)">删除</el-button>
+							<el-button type="danger" size="mini" :disabled="scope.row.blDefault == 'Y'" @click="del(scope.row.cargoUnitID)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
