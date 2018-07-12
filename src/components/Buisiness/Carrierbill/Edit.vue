@@ -385,7 +385,8 @@ export default {
 		getCargos(queryString, cb) {
 			CargoGeneralName.find({
 				current: 1,
-				size: 1000
+				size: 1000,
+				shipperCompanyName: this.carrierbillInfo.shipperCompanyName
 			}).then(res => { cb(res.records) })
 		},
 		getShipperCompany(queryString, cb) {

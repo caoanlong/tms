@@ -8,7 +8,7 @@
 						<el-input placeholder="报文参考号" v-model="findMessageReferenceNumber"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary"  @click.native="getList()">查询</el-button>
+						<el-button type="primary"  @click.native="search">查询</el-button>
 						<el-button type="default" @click.native="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -63,7 +63,7 @@
 					</el-table-column>
 				</el-table>
 				<!--endprint-->
-				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
 	</div>
@@ -94,8 +94,16 @@ export default {
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.findMessageReferenceNumber = ''
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
 		},
 		pageChange() {
 			this.pageIndex = index

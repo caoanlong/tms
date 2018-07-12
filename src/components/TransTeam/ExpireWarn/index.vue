@@ -24,7 +24,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList()">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -47,7 +47,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
@@ -98,6 +98,11 @@ export default {
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.findcompanyArea = ''
 			this.findcompanyName = ''
@@ -107,6 +112,7 @@ export default {
 			this.findcreateTimeEnd = ''
 			this.findRangeDate = []
 			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
 		},
 		pageChange(index) {

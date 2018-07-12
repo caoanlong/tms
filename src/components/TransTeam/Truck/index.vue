@@ -32,7 +32,7 @@
 				<TruckItem v-for="(truck, index) in tableData" :key="index" :truck="truck" @refresh="refresh"></TruckItem>
 			</div>
 			</div>
-			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+			<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
 	</div>
 </template>
@@ -66,9 +66,16 @@ export default {
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.find.plateNo = ''
 			this.find.keyword = ''
+			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
 		},
 		pageChange(index) {

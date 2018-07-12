@@ -40,7 +40,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList">搜索</el-button>
+						<el-button type="primary" @click="search">搜索</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -162,7 +162,7 @@
 					</template>
 				</table>
 			</div>
-			<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+			<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
 		<UploadPhoto 
 			:isVisible="isPhotoVisible" 
@@ -212,6 +212,11 @@ export default {
 			this.find.beginDispatchDate = date[0]
 			this.find.endDispatchDate = date[1]
 		},
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.find.keyword = ''
 			this.find.customerID = ''
@@ -219,6 +224,8 @@ export default {
 			this.find.status = ''
 			this.find.beginDispatchDate = ''
 			this.find.endDispatchDate = ''
+			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
 		},
 		pageChange(index) {

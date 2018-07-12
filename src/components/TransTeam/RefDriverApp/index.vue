@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card box-card">
-			<div  class="header clearfix">关联司机APP</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">关联司机APP</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="司机">
@@ -9,12 +9,12 @@
 					</el-form-item>
 					<el-form-item label="关联状态">
 						<el-select placeholder="全部" v-model="find.status">
-							<el-option label="已关联" value="Agreed"></el-option>
+							<el-option label="已同意" value="Agreed"></el-option>
 							<el-option label="已邀请" value="Invited"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList()">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -43,9 +43,10 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
-		</div>
+		</el-card>
+		<InviteDriver :isVisible="isInviteVisible" @callback="handleInviteDriver"></InviteDriver>
 	</div>
 </template>
 <script type="text/javascript">
@@ -53,6 +54,7 @@ import { Message } from 'element-ui'
 import DriverInvitation from '../../../api/DriverInvitation'
 import Page from '../../CommonComponents/Page'
 import { deleteConfirm } from '../../../common/utils'
+import InviteDriver from '../components/InviteDriver'
 export default {
 	data() {
 		return {
@@ -65,13 +67,19 @@ export default {
 			total: 0,
 			tableData: [],
 			selectedList: [],
+			isInviteVisible: false
 		}
 	},
-	components: { Page },
+	components: { Page, InviteDriver },
 	created() {
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.find.keyword = ''
 			this.find.status = ''
@@ -102,7 +110,7 @@ export default {
 			})
 		},
 		add() { 
-			this.$router.push({name: 'adddriverapp'})
+			this.isInviteVisible = true
 		},
 		del(customerID) {
 			deleteConfirm(customerID, customerIDs => {
@@ -125,6 +133,10 @@ export default {
             }).catch((err) => {
                 Message.info('已取消')
             })
+		},
+		handleInviteDriver(bool) {
+			this.isInviteVisible = false
+			bool && this.getList()
 		}
 	}
 }

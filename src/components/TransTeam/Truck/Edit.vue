@@ -56,13 +56,13 @@
 							<el-col :span="8">
 								<el-form-item label="车辆归属" prop="cooperateRelation">
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.cooperateRelation">
-										<el-option label="挂靠" value="Self"></el-option>
-										<el-option label="自有" value="Attach"></el-option>
+										<el-option label="挂靠" value="Attach"></el-option>
+										<el-option label="自有" value="Self"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
-								<el-form-item label="主驾司机">
+								<el-form-item label="主驾司机" v-if="truck.truckCategory != 'Trailer'">
 									<el-autocomplete  style="width:100%"
 										value-key="realName" 
 										v-model="truck.primaryDriverName"
@@ -73,7 +73,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
-								<el-form-item label="副驾司机">
+								<el-form-item label="副驾司机" v-if="truck.truckCategory != 'Trailer'">
 									<el-autocomplete  style="width:100%"
 										value-key="realName" 
 										v-model="truck.secondaryDriverName"
@@ -156,7 +156,8 @@
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="注册日期">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -167,7 +168,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="发证日期">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -228,7 +230,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="年审日期至">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -304,7 +307,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="安装时间">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -389,7 +393,8 @@
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="保险到期日">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -448,7 +453,8 @@
 									</el-col>
 									<el-col :span="24">
 										<el-form-item label="保险到期日">
-											<el-date-picker
+											<el-date-picker 
+												:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 												type="date"
 												placeholder="选择日期" 
 												style="width:100%" 
@@ -500,7 +506,8 @@
 									</el-col>
 									<el-col :span="24">
 										<el-form-item label="保险到期日">
-											<el-date-picker
+											<el-date-picker 
+												:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 												type="date"
 												placeholder="选择日期" 
 												style="width:100%" 
@@ -552,7 +559,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="保险到期日">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -639,7 +647,8 @@
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="罐体检测有效期至" label-width="140px">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -650,7 +659,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="安全阀监测有效期至" label-width="140px">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -661,7 +671,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="压力表监测有效期至" label-width="140px">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -771,7 +782,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="评级日期" label-width="140px">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -784,7 +796,8 @@
 						<el-row :gutter="20" >
 							<el-col :span="12">
 								<el-form-item label="下次评级日期" label-width="140px">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -829,7 +842,8 @@
 						<el-row :gutter="20" >
 							<el-col :span="12">
 								<el-form-item label="维护日期" label-width="140px">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -840,7 +854,8 @@
 							</el-col>
 							<el-col :span="12">
 								<el-form-item label="下次维护" label-width="140px">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 
@@ -892,7 +907,8 @@
 						<el-row :gutter="20" >
 							<el-col :span="12">
 								<el-form-item label="安全责任书到期日" label-width="140px">
-									<el-date-picker
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
 										placeholder="选择日期" 
 										style="width:100%" 

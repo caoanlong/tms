@@ -14,7 +14,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList()">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -39,7 +39,11 @@
 					</el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100"></el-table-column>
 					<el-table-column label="手机" prop="contactPhone" width="140"></el-table-column>
-					<el-table-column label="TA的地址" prop="customerAddressNum" width="140"></el-table-column>
+					<el-table-column label="TA的地址" prop="customerAddressNum" width="140">
+						<template slot-scope="scope">
+							<span :class="{'link': Number(scope.row.customerAddressNum) > 0}" @click="viewAddress(scope.row)">{{scope.row.customerAddressNum + '个地址'}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
@@ -54,7 +58,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
@@ -83,6 +87,11 @@ export default {
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.find.keyword = ''
 			this.find.customerType = ''
@@ -125,6 +134,9 @@ export default {
 			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}
+		},
+		viewAddress(data) {
+			this.$router.push({ name: 'companyaddress' , query: {  customerID: data.customerID, companyName: data.companyName } })
 		},
 		del(customerID) {
 			deleteConfirm(customerID, customerIDs => {

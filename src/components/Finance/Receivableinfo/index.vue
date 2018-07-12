@@ -15,7 +15,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getDetail">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -73,7 +73,7 @@
 					<el-table-column label="备注" prop="remark"></el-table-column>
 					<el-table-column label="总计" prop="allmoney"></el-table-column>
 				</el-table>
-				<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
@@ -120,7 +120,7 @@ export default {
 		this.shipperAreaID = shipperAreaID || ''
 		this.consigneeAreaID = consigneeAreaID || ''
 		this.resetExportExcelUrl()
-		this.getDetail()
+		this.getList()
 	},
 	methods: {
 		resetExportExcelUrl() {
@@ -134,6 +134,11 @@ export default {
 				+ '&shipperCompanyName=' + this.findshipperCompanyName 
 				+ '&consigneeCompanyName=' + this.findconsigneeCompanyName
 		},
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.findshipperCompanyName = '',
 			this.findconsigneeCompanyName = '',
@@ -144,18 +149,20 @@ export default {
 			this.consigneeAreaID = ''
 			this.shipperDetailAddress = ''
 			this.consigneeDetailAddress = ''
+			this.pageIndex = 1
+			this.pageSize = 10
 			this.resetExportExcelUrl()
-			this.getDetail()
+			this.getList()
 		},
 		pageChange(index) {
 			this.pageIndex = index
-			this.getDetail()
+			this.getList()
 		},
 		pageSizeChange(size) {
 			this.pageSize = size
-			this.getDetail() 
+			this.getList() 
 		},
-		getDetail() {
+		getList() {
 			Finance.findReceivableinfo({
 				current: this.pageIndex,
 				size: this.pageSize,

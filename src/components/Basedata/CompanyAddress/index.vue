@@ -20,7 +20,7 @@
                         </el-autocomplete>
                     </el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList()">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -58,7 +58,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
@@ -91,31 +91,33 @@ export default {
 			pageSize: 10,
 			total:0,
 			tableData: [],
-			selectedList: []
+			selectedList: [],
+			customerID: this.$route.query.customerID,
+			companyName: this.$route.query.companyName
 		}
 	},
-	components: {
-		Page
-	},
+	components: { Page },
 	created() {
-		const customerID = this.$route.query.customerID
-		const companyName = this.$route.query.companyName
-		if (customerID) this.find.customerID = customerID
-		if (companyName) this.find.companyName = companyName
+		if (this.customerID) this.find.customerID = this.customerID
+		if (this.companyName) this.find.companyName = this.companyName
 		this.getList()
 	},
 	methods: {
         getCompanys(queryString, cb) {
-			Customer.find({
-				type: 'ShipperConsignee',
+			Customer.suggest({
 				companyName: queryString
 			}).then(res => {
-				cb(res.records)
+				cb(res)
 			})
         },
         handSelect(data){
 			this.find.customerID = data.customerID
 			this.find.companyName = data.companyName
+		},
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
 		},
 		reset() {
 			this.find.keyword = ''
@@ -134,7 +136,7 @@ export default {
 			this.getList() 
 		},
 		selectionChange(data) {
-			this.selectedList = data.map(item => item.cargoUnitID)
+			this.selectedList = data.map(item => item.customerAddressID)
 			console.log(this.selectedList)
 		},
 		getList() {
@@ -158,8 +160,12 @@ export default {
 				this.del(e.id)
 			}
 		},
-		add() { 
-			this.$router.push({ name: 'addcompanyaddress' })
+		add() {
+			if (this.customerID && this.companyName) {
+				this.$router.push({ name: 'addcompanyaddress', query: { customerID: this.customerID, companyName: this.companyName } })
+			} else {
+				this.$router.push({ name: 'addcompanyaddress' })
+			}
 		},
 		del(customerAddressID) {
 			deleteConfirm(customerAddressID, customerAddressIDs => {

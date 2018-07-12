@@ -78,6 +78,8 @@ export default {
 				locationLat: '',
                 locationAddress: ''
 			},
+			customerID: this.$route.query.customerID,
+			companyName: this.$route.query.companyName,
 			rules: {
 				customerID: [{required: true, message: '请输入所属企业'}],
 				contactName: [{required: true, message: '请输入联系人'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
@@ -90,6 +92,10 @@ export default {
     },
     computed: {
 		dist: () => dist
+	},
+	created() {
+		if (this.customerID) this.companyAddress.customerID = this.customerID
+		if (this.companyName) this.companyAddress.companyName = this.companyName
 	},
 	methods: {
 		getCompanys(queryString, cb) {

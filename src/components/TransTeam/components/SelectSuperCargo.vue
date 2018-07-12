@@ -5,7 +5,7 @@
                 <el-input placeholder="姓名/手机号" v-model="find.keyword"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">搜索</el-button>
+                <el-button type="primary" @click="search">搜索</el-button>
                 <el-button>重置</el-button>
             </el-form-item>
         </el-form>
@@ -18,7 +18,7 @@
             <el-table-column label="姓名" prop="realName" align="center"></el-table-column>
             <el-table-column label="手机号" prop="mobile" align="center"></el-table-column>
         </el-table>
-        <Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+        <Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
         <div slot="footer" class="dialog-footer">
             <el-button @click="control(false)">取 消</el-button>
             <!-- <el-button type="primary" @click="control(true)">确 定</el-button> -->
@@ -67,6 +67,11 @@ export default {
                 Message.success(res.data.msg)
                 this.control(true, data)
             })
+        },
+        search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
 		},
         reset() {
             this.find.keyword = ''

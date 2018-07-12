@@ -8,7 +8,7 @@
 						<el-input placeholder="请输入..." v-model="find.roleName"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -45,7 +45,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 		<auth-config :showSetAuth="showSetAuth" :setRoleID="setRoleID" @selected-auth="handleSelectedAuth"></auth-config>
@@ -124,8 +124,15 @@ export default {
 		selectChange(data) {
 			this.selectedList = data.map(item => item.roleID)
 		},
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.find.roleName = ''
+			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
 		},
 		getList() {

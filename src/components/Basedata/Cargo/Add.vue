@@ -41,6 +41,7 @@
 								<el-option label="铁质" value="铁质"></el-option>
 								<el-option label="塑料" value="塑料"></el-option>
 								<el-option label="玻璃" value="玻璃"></el-option>
+								<el-option label="其他材料" value="其他材料"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="防护要求" style="margin-bottom:0">

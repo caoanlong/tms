@@ -25,7 +25,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -91,25 +91,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<el-row type="flex">
-					<el-col :span="12" style="padding-top: 15px; font-size: 12px; color: #909399">
-						<span>总共 {{count}} 条记录每页显示</span>
-						<el-select size="mini" style="width: 90px; padding: 0 5px" v-model="pageSize" @change="getList">
-							<el-option label="10" :value="10"></el-option>
-							<el-option label="20" :value="20"></el-option>
-							<el-option label="30" :value="30"></el-option>
-							<el-option label="40" :value="40"></el-option>
-							<el-option label="50" :value="50"></el-option>
-							<el-option label="100" :value="100"></el-option>
-						</el-select>
-						<span>条记录</span>
-					</el-col>
-					<el-col :span="12">
-						<div class="pagination">
-							<el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="count" @current-change="pageChange"></el-pagination>
-						</div>
-					</el-col>
-				</el-row>
+				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
 	</div>
@@ -118,6 +100,7 @@
 import { Message } from 'element-ui'
 import { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
+import Page from '../../CommonComponents/Page'
 import TransportRecord from '../../../api/TransportRecord'
 export default {
 	data() {
@@ -139,10 +122,16 @@ export default {
 			templateTit: 'transport.xlsx',
 		}
 	},
+	components: { Page },
 	created() {
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.findName = ''
 			this.findPlateNum = ''
@@ -150,6 +139,9 @@ export default {
 			this.findDate = []
 			this.startDate = ''
 			this.endDate = ''
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
 		},
 		pageChange(index) {
 			this.pageIndex = index

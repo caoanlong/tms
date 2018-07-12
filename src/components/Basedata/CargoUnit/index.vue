@@ -8,7 +8,7 @@
 						<el-input placeholder="请输入货物单位" v-model="find.unit"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList()">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -23,7 +23,7 @@
 					:data="tableData"
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
-					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
+					<el-table-column label="id" type="selection" align="center" width="40" :selectable="(row, index) => row.blDefault == 'N'"></el-table-column>
 					<el-table-column label="单位" prop="unit" align="center"></el-table-column>
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
@@ -31,7 +31,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
@@ -75,9 +75,15 @@ export default {
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.find.unit = ''
 			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
 		},
 		pageChange(index) {

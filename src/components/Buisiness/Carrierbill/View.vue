@@ -14,7 +14,7 @@
 				<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
 				<span v-else></span>
 			</div>
-			<el-row class="section-block" style="margin-bottom:20px;margin-top:20px;min-width: 1100px">
+			<el-row class="section-block" style="margin-bottom:20px;margin-top:20px;min-width: 1050px">
 				<span class="block-title">收发货信息</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px;">

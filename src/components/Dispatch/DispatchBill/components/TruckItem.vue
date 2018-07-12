@@ -28,7 +28,7 @@
 						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
-				<p>{{Number(truck.length)/1000}}米/{{truck.loads}}吨/{{truck.loadVolume}}方</p>
+				<p>{{Number(truck.length)/1000}}米/{{Number(truck.loads)/1000}}吨/{{truck.loadVolume}}方</p>
 			</div>
 		</div>
 		<div class="driverColumn" v-if="truck.primaryDriver && truck.primaryDriver.realName">

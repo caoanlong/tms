@@ -1,7 +1,6 @@
 <template>
-    <div class="main-content">
-		<div class="wf-card box-card">
-			<div  class="header clearfix">邀请司机</div>
+    <el-dialog title="邀请司机" width="50%" :visible.sync="isVisible" :show-close="false" custom-class="table" :close-on-click-modal="false">
+        <div class="box-card">
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="司机">
@@ -15,7 +14,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList()">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -45,17 +44,25 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</div>
-	</div>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="cancel()">取 消</el-button>
+        </div>
+    </el-dialog>
 </template>
 <script>
 import { Message } from 'element-ui'
 import DriverInvitation from '../../../api/DriverInvitation'
 import Page from '../../CommonComponents/Page'
-import { deleteConfirm } from '../../../common/utils'
 export default {
+    props: {
+        isVisible: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             find: {
@@ -69,11 +76,18 @@ export default {
             selectedList: []
         }
     },
-    components: { Page },
-    created() {
-        this.getList()
+    watch: {
+        isVisible(newVal) {
+            newVal && this.getList()
+        }
     },
+    components: { Page },
     methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
         reset() {
 			this.find.keyword = ''
 			this.find.status = ''
@@ -121,15 +135,19 @@ export default {
             }).then(() => {
                 DriverInvitation.add({ comSupercargoIDs }).then(res => {
                     Message.success(res.data.msg)
-                    this.$router.push({name: 'refdriverapp'})
+                    this.$emit('callback', true)
                 })
             }).catch((err) => {
                 Message.info('已取消')
             })
+        },
+        cancel() {
+            this.$emit('callback', false)
         }
     }
 }
 </script>
+
 <style lang="stylus" scoped>
 
 </style>

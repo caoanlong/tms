@@ -11,7 +11,7 @@
 						<el-input placeholder="请输入..." v-model="find.cargoName"></el-input>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getList()">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -44,7 +44,6 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id: scope.row.cargoNameID}">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.cargoNameID}">编辑</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.cargoNameID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
@@ -52,7 +51,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
@@ -84,10 +83,16 @@ export default {
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
 		reset() {
 			this.find.shipperCompanyName = ''
 			this.find.cargoName = ''
 			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
 		},
 		pageChange(index) {
@@ -99,7 +104,8 @@ export default {
 			this.getList() 
 		},
 		selectionChange(data) {
-			this.selectedList = data.map(item => item.customerID)
+			this.selectedList = data.map(item => item.cargoNameID)
+			console.log(this.selectedList)
 		},
 		getList() {
 			CargoGeneralName.find({
@@ -116,9 +122,7 @@ export default {
 			this.$router.push({ name: 'addcargo' })
 		},
 		handleCommand(e) {
-			if (e.type == 'view') {
-				this.$router.push({name: 'viewcargo', query: { cargoNameID: e.id }})
-			} else if (e.type == 'edit') {
+			if (e.type == 'edit') {
 				this.$router.push({ name: 'editcargo' , query: {  cargoNameID: e.id } })
 			} else if (e.type == 'delete') {
 				this.del(e.id)

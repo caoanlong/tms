@@ -13,7 +13,9 @@
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</el-tag>
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</el-tag>
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
-					<!-- <el-tag size="mini" type="info">挂车</el-tag> -->
+					<el-tag size="mini" type="success" v-if="truck.truckCategory == 'Trailer'">挂车</el-tag>
+					<el-tag size="mini" type="success" v-else-if="truck.truckCategory == 'Tractor'">牵引车</el-tag>
+					<el-tag size="mini" type="success" v-else-if="truck.truckCategory == 'WholeVehicle'">整车</el-tag>
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
 							<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
@@ -23,7 +25,7 @@
 						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
-				<p>{{Number(truck.length)/1000}}米/高栏/{{truck.loads}}吨/{{truck.loadVolume}}方</p>
+				<p>{{Number(truck.length)/1000}}米/{{Number(truck.loads)/1000}}吨/{{truck.loadVolume}}方</p>
 			</div>
 			<div class="truckHandle fl">
 				<router-link tag="span" :to="{name: 'viewtruck', query: { truckID: truck.truckID } }">查看档案</router-link>
@@ -48,7 +50,7 @@
 					<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 				</el-tooltip>
 			</div>
-			<div class="driverInfo link text-center" v-else @click="add('primary')">+添加主驾</div>
+			<div class="driverInfo link text-center" v-else @click="add('primary')" v-show="truck.truckCategory != 'Trailer'">+添加主驾</div>
 			<div class="driverInfo" v-if="truck.secondaryDriver && truck.secondaryDriver.realName">
 				<span class="driverName">{{truck.secondaryDriver.realName}}</span>
 				<el-tooltip placement="top" v-if="truck.secondaryDriver.appStatus == 'Y'">
@@ -65,13 +67,13 @@
 					<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 				</el-tooltip>
 			</div>
-			<div class="driverInfo link text-center" v-else @click="add('second')">+添加副驾</div>
+			<div class="driverInfo link text-center" v-else @click="add('second')" v-show="truck.truckCategory != 'Trailer'">+添加副驾</div>
 		</div>
 		<div class="mobile">
 			<div class="mobileItem" v-if="truck.primaryDriver">{{truck.primaryDriver.mobile}}</div>
 			<div class="mobileItem" v-if="truck.secondaryDriver">{{truck.secondaryDriver.mobile}}</div>
 		</div>
-		<div class="handle">
+		<div class="handle" v-show="truck.truckCategory != 'Trailer'">
 			<div class="handleItem">
 				<span style="color: #ccc">设为主驾</span>
 				<span @click="add('primary')">人员替换</span>

@@ -14,7 +14,14 @@
         </el-col>
         <el-col :span="12">
             <div class="pagination">
-                <el-pagination :page-size="pageSize" align="right" background layout="prev, pager, next" :total="total" @current-change="pageChange"></el-pagination>
+                <el-pagination 
+                    :page-size="pageSize" 
+                    align="right" 
+                    background layout="prev, pager, next" 
+                    :total="total" 
+                    :current-page.sync="pageIndex" 
+                    @current-change="pageChange">
+                </el-pagination>
             </div>
         </el-col>
     </el-row>
@@ -24,15 +31,18 @@
 export default {
     props: {
         total: Number,
-        pageSize: Number
+        pageSize: Number,
+        pageIndex: Number
     },
     data() {
         return {
             pageSizeX: 10
         }
     },
-    created() {
-        this.pageSizeX = this.pageSize
+    watch: {
+        pageSize(newVal) {
+            this.pageSizeX = newVal
+        }
     },
     methods: {
         pageChange(index) {

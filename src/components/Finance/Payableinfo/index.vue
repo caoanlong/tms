@@ -36,7 +36,7 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="getDetail">查询</el-button>
+						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
 				</el-form>
@@ -129,7 +129,7 @@
 					<el-table-column label="备注"></el-table-column>
 					<el-table-column label="总计" prop="allMoney" align="center" width="120"></el-table-column>
 				</el-table>
-				<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
@@ -173,21 +173,26 @@ export default {
 		this.findshipperEndDate = shipperEndDate
 		this.transportRecordID = transportRecordID
 		this.resetExportExcelUrl()
-		this.getDetail()
+		this.getList()
 	},
 	methods: {
 		pageChange(index) {
 			this.pageIndex = index
-			this.getDetail()
+			this.getList()
 		},
 		pageSizeChange(size) {
 			this.pageSize = size
-			this.getDetail() 
+			this.getList() 
 		},
 		selectDateRange(date) {
 			this.findshipperBeginDate = date[0]
 			this.findshipperEndDate = date[1]
 			this.resetExportExcelUrl()
+		},
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
 		},
 		reset() {
 			this.findRangeDate = [],
@@ -199,8 +204,10 @@ export default {
 			this.findconsigneeCompanyName = '',
 			this.findcode = ''
 			this.transportRecordID = ''
+			this.pageIndex = 1
+			this.pageSize = 10
 			this.resetExportExcelUrl()
-			this.getDetail()
+			this.getList()
 		},
 		resetExportExcelUrl() {
 			this.exportExcelUrl = baseURL + '/export/finance/payableDetail?Authorization=' + localStorage.getItem("token") 
@@ -214,7 +221,7 @@ export default {
 				+ '&code=' + this.findcode 
 				+ '&transportRecordID=' + this.transportRecordID
 		},
-		getDetail() {
+		getList() {
 			Finance.findPayableinfo({
 				current: this.pageIndex,
 				size: this.pageSize,
