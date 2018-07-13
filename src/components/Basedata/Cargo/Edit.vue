@@ -28,7 +28,7 @@
 						<el-form-item label="危险品类别" v-if="cargo.cargoType == 'DangerousCargo'" prop="dangerousCoodsCategory">
 							<el-input v-model="cargo.dangerousCoodsCategory" :maxlength="100"></el-input>
 						</el-form-item>
-						<el-form-item label="发货包装单位" prop="cargoUnit">
+						<el-form-item label="包装单位" prop="cargoUnit">
 							<el-select style="width:70%" placeholder="请选择" v-model="cargo.cargoUnit">
 								<el-option v-for="item in units" :label="item.unit" :value="item.unit" :key="item.cargoUnitID"></el-option>
 							</el-select>

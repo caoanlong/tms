@@ -73,7 +73,7 @@
 						<div class="block-content" style="padding:10px 0 20px">
 							<el-table :data="cargoList" border style="width: 100%" size="mini" stripe>
 								<el-table-column label="承运单号" prop="carrierOrderID" align="center"></el-table-column>
-								<el-table-column label="货物名称" prop="cargoName"></el-table-column>
+								<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
 								<el-table-column label="货物重量" align="center">
 									<template slot-scope="scope">
 										<span >{{scope.row.cargoWeight? scope.row.cargoWeight+'吨':''}}</span>
@@ -86,7 +86,7 @@
 								</el-table-column>
 								<el-table-column label="货物数量" align="center">
 									<template slot-scope="scope">
-										<span >{{scope.row.cargoNum? scope.row.cargoNum+'件':''}}</span>
+										<span >{{scope.row.cargoNum? scope.row.cargoNum+scope.row.cargoUnitName:''}}</span>
 									</template>
 								</el-table-column>
 							</el-table>

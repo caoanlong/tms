@@ -33,7 +33,7 @@
 				<el-table-column label="重量(余)" prop="remainingCargoWeight"></el-table-column>
 				<el-table-column label="体积(余)" prop="remainingCargoVolume"></el-table-column>
 			</el-table>
-			<Page :total="total" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</div>
 		<div class="step-footer text-center">
 			<el-button type="primary" @click="nextStep">下一步</el-button>

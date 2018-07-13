@@ -13,8 +13,9 @@
 						</el-form-item>
 						<el-form-item label="收发类型" prop="customerType">
 							<el-select v-model="recdeliverycomp.customerType" placeholder="请选择" style="width:100%">
-								<el-option value="Shipper" label="发货单位">发货单位</el-option>
-								<el-option value="Consignee" label="收货单位">收货单位</el-option>
+								<el-option value="Shipper" label="发货单位"></el-option>
+								<el-option value="Consignee" label="收货单位"></el-option>
+								<el-option value="ShipperConsignee" label="收发货单位"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">

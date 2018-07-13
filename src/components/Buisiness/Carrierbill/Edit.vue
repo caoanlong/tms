@@ -51,46 +51,42 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-col :span="12">
-									<el-form-item label="发货人" prop="shipperName">
-										<el-autocomplete  style="width:100%"
-											value-key="contactName" 
-											v-model="carrierbillInfo.shipperName"
-											:fetch-suggestions="getShipper"
-											placeholder="请输入..."
-											@select="handSelectShipper">
-										</el-autocomplete>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="联系方式" prop="shipperPhone">
-										<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperPhone"></el-input>
-									</el-form-item>
-								</el-col>
+								<el-form-item label="发货人" prop="shipperName">
+									<el-autocomplete  style="width:100%"
+										value-key="contactName" 
+										v-model="carrierbillInfo.shipperName"
+										:fetch-suggestions="getShipper"
+										placeholder="请输入..."
+										@select="handSelectShipper">
+									</el-autocomplete>
+								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-col :span="12">
-									<el-form-item label="发货地" prop="shipperAreaID">
-										<el-cascader 
-											style="width:100%" 
-											:options="dist" 
-											change-on-select 
-											v-model="selectedShipperArea" 
-											@change="handleSelectedShipperArea">
-										</el-cascader>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="发货时间" prop="shipperDate">
-										<el-date-picker 
-											type="date" 
-											style="width:100%" 
-											placeholder="选择发货时间" 
-											v-model="carrierbillInfo.shipperDate" 
-											value-format="timestamp">
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
+								<el-form-item label="联系方式" prop="shipperPhone">
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperPhone"></el-input>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="发货地" prop="shipperAreaID">
+									<el-cascader 
+										style="width:100%" 
+										:options="dist" 
+										change-on-select 
+										v-model="selectedShipperArea" 
+										@change="handleSelectedShipperArea">
+									</el-cascader>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="发货时间" prop="shipperDate">
+									<el-date-picker 
+										type="date" 
+										style="width:100%" 
+										placeholder="选择发货时间" 
+										v-model="carrierbillInfo.shipperDate" 
+										value-format="timestamp">
+									</el-date-picker>
+								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="定位地址" prop="shipperLocationAddress">
@@ -126,46 +122,42 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-col :span="12">
-									<el-form-item label="收货人" prop="consigneeName">
-										<el-autocomplete  style="width:100%"
-											value-key="contactName" 
-											v-model="carrierbillInfo.consigneeName"
-											:fetch-suggestions="getConsignee"
-											placeholder="请输入..."
-											@select="handSelectConsignee">
-										</el-autocomplete>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="联系方式" prop="consigneePhone">
-										<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneePhone"></el-input>
-									</el-form-item>
-								</el-col>
+								<el-form-item label="收货人" prop="consigneeName">
+									<el-autocomplete  style="width:100%"
+										value-key="contactName" 
+										v-model="carrierbillInfo.consigneeName"
+										:fetch-suggestions="getConsignee"
+										placeholder="请输入..."
+										@select="handSelectConsignee">
+									</el-autocomplete>
+								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-col :span="12">
-									<el-form-item label="收货地" prop="consigneeAreaID">
-										<el-cascader 
-											style="width:100%" 
-											:options="dist" 
-											change-on-select 
-											v-model="selectedConsigneeArea" 
-											@change="handleSelectedConsigneeArea">
-										</el-cascader>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="到货时间" prop="consigneeDate">
-										<el-date-picker 
-											type="date" 
-											style="width:100%" 
-											placeholder="选择到货时间" 
-											v-model="carrierbillInfo.consigneeDate" 
-											value-format="timestamp">
-										</el-date-picker>
-									</el-form-item>
-								</el-col>
+								<el-form-item label="联系方式" prop="consigneePhone">
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneePhone"></el-input>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="收货地" prop="consigneeAreaID">
+									<el-cascader 
+										style="width:100%" 
+										:options="dist" 
+										change-on-select 
+										v-model="selectedConsigneeArea" 
+										@change="handleSelectedConsigneeArea">
+									</el-cascader>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="到货时间" prop="consigneeDate">
+									<el-date-picker 
+										type="date" 
+										style="width:100%" 
+										placeholder="选择到货时间" 
+										v-model="carrierbillInfo.consigneeDate" 
+										value-format="timestamp">
+									</el-date-picker>
+								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="定位地址" prop="consigneeLocationAddress">
@@ -418,7 +410,7 @@ export default {
 		},
 		getShipperLocation(queryString, cb) {
 			if (!this.searchShipperAreaHash) {
-				Message.error('请选择城市！')
+				Message.error('请选择发货地！')
 				return
 			}
 			CrossProxy.getEleLocation({
@@ -428,7 +420,7 @@ export default {
 		},
 		getConsigneeLocation(queryString, cb) {
 			if (!this.searchConsigneeAreaHash) {
-				Message.error('请选择城市！')
+				Message.error('请选择收货地！')
 				return
 			}
 			CrossProxy.getEleLocation({
@@ -479,6 +471,10 @@ export default {
 			this.carrierbillInfo.shipperAreaID = data.areaID
 			this.carrierbillInfo.shipperAddressID = data.customerAddressID
 			this.selectedShipperArea = areaIdToArrayId(data.areaID)
+			if (this.selectedShipperArea[1]) {
+				const location = searchLocationByCity(distData[this.selectedShipperArea[0]][this.selectedShipperArea[1]])
+				this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
+			}
 		},
 		handSelectConsignee(data) {
 			this.carrierbillInfo.consigneeName = data.contactName
@@ -491,6 +487,10 @@ export default {
 			this.carrierbillInfo.consigneeAreaID = data.areaID
 			this.carrierbillInfo.consigneeAddressID = data.customerAddressID
 			this.selectedConsigneeArea = areaIdToArrayId(data.areaID)
+			if (this.selectedConsigneeArea[1]) {
+				const location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
+				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
+			}
 		},
 		handleSelectedShipperArea(data) {
 			this.carrierbillInfo.shipperAreaID = data[data.length - 1]

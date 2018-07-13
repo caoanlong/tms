@@ -42,7 +42,7 @@
 				@selectTruck="selectTruck">
 			</TruckItem>
 		</div>
-		<Page :total="count" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+		<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		<div class="step-footer">
 			<el-button @click="prevStep">上一步</el-button>
 			<el-button type="primary" @click="nextStep">下一步</el-button>

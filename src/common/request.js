@@ -4,6 +4,7 @@ import { Message, MessageBox } from 'element-ui'
 
 export const baseURL = process.env.BASE_API
 
+const msg = null
 
 export const href = () => {
 	if (process.env.ENV_CONFIG == 'test') {
@@ -14,25 +15,31 @@ export const href = () => {
 		return '/#/login'  // 生产
 	}
 }
-export const msgBox = {
-	title: '温馨提示！',
-	customClass: 'msg-info',
-	message: `
-	<div style="text-align: center;">
-		<p style="margin-top: 40px">
-			您已提交申请，请等待审核！
-		</p>
-		<p style="margin-top: 40px;color: #aaa">
-			一般客户处理时间为24小时内；客服电话：0871 - 67366889
-		</p>
-		<button style="margin-top: 20px" onclick="localStorage.clear();location.href='${href()}'">退出当前账户</button>
+
+export const msgBox = () => {
+	const msgEl = document.createElement('div')
+	msgEl.id = 'msgEl'
+	msgEl.style.width = '100%'
+	msgEl.style.height = '100%'
+	msgEl.style.position = 'fixed'
+	msgEl.style.left = '0px'
+	msgEl.style.top = '0px'
+	msgEl.style.zIndex = '2000'
+	msgEl.innerHTML = `
+	<div style="position:absolute;z-index:2;width:50%;left:50%;top:50%;padding:20px;transform: translate(-50%,-50%);background-color:#fff;box-shadow:0 5px 5px rgba(0,0,0,.2)">
+		<div>温馨提示！</div>
+		<div style="text-align: center;">
+			<p style="margin-top: 40px">
+				您已提交申请，请等待审核！
+			</p>
+			<p style="margin-top: 40px;color: #aaa">
+				一般客户处理时间为24小时内；客服电话：0871 - 67366889
+			</p>
+			<button style="margin-top: 20px" onclick="document.body.removeChild(document.getElementById('msgEl'));localStorage.clear();location.href='${href()}';">退出当前账户</button>
+		</div>
 	</div>
-	`,
-	dangerouslyUseHTMLString: true,
-	closeOnPressEscape: false,
-	showClose: false,
-	closeOnClickModal: false,
-	showConfirmButton: false
+	<div style="width:100%;height:100%;position:absolute;left:0;top:0;background-color:rgba(0,0,0,.3)"></div>`
+	return msgEl
 }
 
 // create an axios instance
@@ -71,7 +78,9 @@ response => {
 			return Promise.reject('error')
 		}
 		if (response.data.code == 104) {
-			MessageBox(msgBox)
+			if (!document.getElementById('msgEl')) {
+				document.body.appendChild(msgBox())
+			}
 			return
 		}
 		if (response.data.code == 2001) {

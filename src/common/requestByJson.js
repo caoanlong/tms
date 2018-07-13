@@ -38,7 +38,9 @@ response => {
 			return Promise.reject('error')
 		}
 		if (response.data.code == 104) {
-			MessageBox(msgBox)
+			if (!document.getElementById('msgEl')) {
+				document.body.appendChild(msgBox())
+			}
 			return
 		}
 		if (response.data.code == 2001) {

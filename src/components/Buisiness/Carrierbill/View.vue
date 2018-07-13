@@ -14,28 +14,29 @@
 				<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
 				<span v-else></span>
 			</div>
-			<el-row class="section-block" style="margin-bottom:20px;margin-top:20px;min-width: 1050px">
-				<span class="block-title">收发货信息</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px;">
-						<el-col :span="12">
-							<div><span class="tit">发货单位</span><span class="ctt">{{carrierOrder.shipperCompanyName}}</span></div>
-							<div><span class="tit">发货人</span><span class="ctt">{{carrierOrder.shipperName}}</span></div>
-							<div><span class="tit">联系方式</span><span class="ctt">{{carrierOrder.shipperPhone}}</span></div>
-							<div><span class="tit">发货地</span><span class="ctt">{{carrierOrder.shipperArea}}</span></div>
-							<div><span class="tit">详细地址</span><span class="ctt">{{carrierOrder.shipperDetailAddress}}</span></div>
-							<div><span class="tit">发货时间</span><span class="ctt"><span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp(true)}}</span></span></div>
-						</el-col>
-						<el-col :span="12">
-							<div><span class="tit">收货单位</span><span class="ctt">{{carrierOrder.consigneeCompanyName}}</span></div>
-							<div><span class="tit">收货人</span><span class="ctt">{{carrierOrder.consigneeName}}</span></div>
-							<div><span class="tit">联系方式</span><span class="ctt">{{carrierOrder.consigneePhone}}</span></div>
-							<div><span class="tit">收货地</span><span class="ctt">{{carrierOrder.consigneeArea}}</span></div>
-							<div><span class="tit">详细地址</span><span class="ctt">{{carrierOrder.consigneeDetailAddress}}</span></div>
-							<div><span class="tit">到货时间</span><span class="ctt"><span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | getdatefromtimestamp(true)}}</span></span></div>
-						</el-col>
-					</el-row>
-				</div>
+			<el-row style="margin-bottom:20px;margin-top:20px;min-width: 1050px">
+				<el-col :span="12">
+					<div  class="section-block">
+						<span class="block-title">发货</span>
+						<div class="block-content" style="margin-bottom: 10px;">
+							<div><span class="ctt">{{carrierOrder.shipperCompanyName}}</span></div>
+							<div><span class="ctt">{{carrierOrder.shipperName}}/{{carrierOrder.shipperPhone}}</span></div>
+							<div><span class="ctt">{{carrierOrder.shipperArea}} {{carrierOrder.shipperDetailAddress}} {{carrierOrder.shipperLocationAddress}}</span></div>
+							<div><span class="ctt"><span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp()}}</span></span></div>
+						</div>
+					</div>
+				</el-col>
+				<el-col :span="12">
+					<div  class="section-block">
+						<span class="block-title">收货</span>
+						<div class="block-content" style="margin-bottom: 10px;">
+							<div><span class="ctt">{{carrierOrder.consigneeCompanyName}}</span></div>
+							<div><span class="ctt">{{carrierOrder.consigneeName}}/{{carrierOrder.consigneePhone}}</span></div>
+							<div><span class="ctt">{{carrierOrder.consigneeArea}} {{carrierOrder.consigneeDetailAddress}} {{carrierOrder.consigneeLocationAddress}}</span></div>
+							<div><span class="ctt"><span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | getdatefromtimestamp()}}</span></span></div>
+						</div>
+					</div>
+				</el-col>
 			</el-row>
 			<el-row class="section-block" style="margin-bottom:20px;">
 				<span class="block-title">货物信息</span>
@@ -51,23 +52,23 @@
 						<tr class="is-center" v-for="item in carrierCargo" :key="item.carrierCargoID">
 							<td>{{item.cargoName}}</td>
 							<td>{{item.cargoNum}}{{item.cargoUnitName}}</td>
-							<td>{{item.cargoVolume + 'm³'}}</td>
-							<td>{{item.cargoWeight + 'kg'}}</td>
+							<td>{{item.cargoVolume + '方'}}</td>
+							<td>{{item.cargoWeight + '吨'}}</td>
 							<td>
-								{{item.remainingCargoNum ? item.remainingCargoNum + '件' : ''}}
-								{{item.remainingCargoVolume ? ('/' + item.remainingCargoVolume + 'm³') : ''}}
-								{{item.remainingCargoWeight ? ('/' + item.remainingCargoWeight + 'kg') : ''}}
+								{{item.remainingCargoNum ? item.remainingCargoNum + item.cargoUnitName : ''}}
+								{{item.remainingCargoVolume ? ('/' + item.remainingCargoVolume + '方') : ''}}
+								{{item.remainingCargoWeight ? ('/' + item.remainingCargoWeight + '吨') : ''}}
 							</td>
 						</tr>
 						<tr class="total is-center">
 							<td>合计</td>
 							<td>{{sum('cargoNum')}}</td>
-							<td>{{sum('cargoVolume') + 'm³'}}</td>
-							<td>{{sum('cargoWeight') + 'kg'}}</td>
+							<td>{{sum('cargoVolume') + '方'}}</td>
+							<td>{{sum('cargoWeight') + '吨'}}</td>
 							<td>
 								<span v-if="sum('remainingCargoNum')>0">{{sum('remainingCargoNum')}}/</span>
-								<span v-if="sum('remainingCargoVolume')>0">{{sum('remainingCargoVolume')}}m³/</span>
-								<span v-if="sum('remainingCargoWeight')>0">{{sum('remainingCargoWeight')}}kg</span>	
+								<span v-if="sum('remainingCargoVolume')>0">{{sum('remainingCargoVolume')}}方/</span>
+								<span v-if="sum('remainingCargoWeight')>0">{{sum('remainingCargoWeight')}}吨</span>	
 							</td>
 						</tr>
 					</table>
@@ -95,7 +96,7 @@
 							<td>{{transport.driverName}}</td>
 							<td>{{transport.superCargoName}}</td>
 							<td>{{transport.cargoName}}</td>
-							<td>{{transport.loadWeightSum + 'kg'}}/{{transport.loadVolumeSum + 'm³'}}/{{transport.LoadNumSum + '件'}}</td>
+							<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.LoadNumSum + '件'}}</td>
 							<td style="text-align: center">
 								<el-button 
 									:disabled="transport.taskPicNum == 0"

@@ -19,33 +19,33 @@
 				<el-table-column label="货物名称" align="center" prop="cargoName">	</el-table-column>
 				<el-table-column label="待配货量" align="center" >
 					<template slot-scope="scope">
-						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + 'kg') : ''}} 
-						{{scope.row.remainingCargoVolume ? ('/' + scope.row.remainingCargoVolume + 'm³') : ''}} 
+						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}} 
+						{{scope.row.remainingCargoVolume ? ('/' + scope.row.remainingCargoVolume + '方') : ''}} 
 					</template> 
 				</el-table-column>
 				<el-table-column label="待配件数" align="center" prop="remainingCargoNum">
 					<template slot-scope="scope">
-						{{scope.row.remainingCargoNum ? (scope.row.remainingCargoNum + '件') : ''}}
+						{{scope.row.remainingCargoNum ? (scope.row.remainingCargoNum + scope.row.cargoUnitName) : ''}}
 					</template>
 				</el-table-column>
 				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
 						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange(true)">
-							<span slot="append">kg</span>
+							<span slot="append">吨</span>
 						</el-input>
 					</template>	
 				</el-table-column>
 				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
 						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange(true)">
-							<span slot="append">m³</span>
+							<span slot="append">方</span>
 						</el-input>
 					</template>					
 				</el-table-column>
 				<el-table-column label="配载数量" align="center">
 					<template slot-scope="scope">
 						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange(true)">
-							<span slot="append">件</span>
+							<span slot="append">{{scope.row.cargoUnitName}}</span>
 						</el-input>
 					</template>
 				</el-table-column>

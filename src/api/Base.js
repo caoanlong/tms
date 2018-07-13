@@ -21,7 +21,7 @@ class Base {
                 url: this.baseUrl + this._find,
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -31,7 +31,7 @@ class Base {
                 url: this.baseUrl + this._findById,
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }

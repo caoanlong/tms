@@ -45,11 +45,17 @@
 							<el-col :span="8">
 								<el-form-item label="车辆类型" prop="truckType">
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckType">
-										<el-option label="集装箱挂车" value="ContainerTrailer"></el-option>
-										<el-option label="厢式货车" value="Van"></el-option>
-										<el-option label="重型半挂牵引车" value="HeavySemitrailerTractor"></el-option>
-										<el-option label="重型厢式货车" value="HeavyVan"></el-option>
-										<el-option label="重型集装箱半挂车" value="HeavyContainerSemitrailer"></el-option>
+										<el-option label="罐式货车" value="TankTruck" v-if="truck.truckCategory == 'WholeVehicle'"></el-option>
+										<el-option label="厢式货车" value="VanTruck" v-if="truck.truckCategory == 'WholeVehicle'"></el-option>
+										<el-option label="仓栅货车" value="BarrackTruck" v-if="truck.truckCategory == 'WholeVehicle'"></el-option>
+										<el-option label="栏板货车" value="TailgateTruck" v-if="truck.truckCategory == 'WholeVehicle'"></el-option>
+										<el-option label="自卸货车" value="DumpTruck" v-if="truck.truckCategory == 'WholeVehicle'"></el-option>
+										<el-option label="重型半挂牵引车" value="HeavySemitrailerTractor" v-if="truck.truckCategory == 'Tractor'"></el-option>
+										<el-option label="罐式挂车" value="TankTrailer" v-if="truck.truckCategory == 'Trailer'"></el-option>
+										<el-option label="厢式挂车" value="VanTrailer" v-if="truck.truckCategory == 'Trailer'"></el-option>
+										<el-option label="仓栅挂车" value="BarrackTrailer" v-if="truck.truckCategory == 'Trailer'"></el-option>
+										<el-option label="栏板挂车" value="TailgateTrailer" v-if="truck.truckCategory == 'Trailer'"></el-option>
+										<el-option label="集装箱挂车" value="ContainerTrailer" v-if="truck.truckCategory == 'Trailer'"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>

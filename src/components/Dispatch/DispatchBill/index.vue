@@ -142,10 +142,10 @@
 								{{taskItem.loadWeightSum ? taskItem.loadWeightSum + 'kg/' : ''}}
 								{{taskItem.loadVolumeSum ? taskItem.loadVolumeSum + 'm³' : ''}}
 							</td>
-							<td>{{taskItem.loadNumSum}}</td>
-							<td>{{taskItem.shipperArea}}</td>
+							<td class="text-center">{{taskItem.loadNumSum}}</td>
+							<td class="text-center">{{taskItem.shipperArea}}</td>
 							<td class="text-center" width="120">{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
-							<td>{{taskItem.consigneeArea}}</td>
+							<td class="text-center">{{taskItem.consigneeArea}}</td>
 							<td class="text-center" width="120">{{taskItem.consigneeDate | getdatefromtimestamp(true)}}</td>
 							<td class="text-center">
 								<el-button type="text" size="mini" @click="upload(taskItem)" :disabled="
