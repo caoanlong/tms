@@ -36,7 +36,7 @@
 		</el-card>
 		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
 			<el-form :model="unit" :rules="rules" ref="ruleForm">
-				<el-form-item label="单位名称" label-width="80px" prop="unit">
+				<el-form-item label="名称" label-width="80px" prop="unit">
 					<el-input placeholder="请输入货物单位" v-model="unit.unit"></el-input>
 				</el-form-item>
 			</el-form>

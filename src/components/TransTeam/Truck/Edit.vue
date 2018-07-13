@@ -1203,31 +1203,31 @@ export default {
 		},
 		handSelectPrimaryDriver(data) { this.truck.primaryDriver = data.comSupercargoID },
 		handSelectSecondaryDriver(data) { this.truck.secondaryDriver = data.comSupercargoID },
-		handleTruckFrontPic(res) { this.truck.truckFrontPic = res[0] },
-		handleTruckSidePic1(res) { this.truck.truckSidePic1 = res[0] },
-		handleTruckSidePic2(res) { this.truck.truckSidePic2 = res[0] },
-		handleDriverLicPic(res) { this.truck.driverLicPic = res[0] },
-		handleDriverLicSidePic(res) { this.truck.driverLicSidePic = res[0] },
-		handleRoadTransportPic(res) { this.truck.roadTransportPic = res[0] },
-		handleRoadTransportSidePic(res) { this.truck.roadTransportSidePic = res[0] },
-		handleGpsEquippedCertifyPic(res) { this.truck.gpsEquippedCertifyPic = res[0] },
-		handleGpsEquippedCertifyPic2(res) { this.truck.gpsEquippedCertifyPic2 = res[0] },
-		handleSaliInsurancePic(res) { this.truck.saliInsurancePic = res[0] },
-		handleSaliInsurancePic2(res) { this.truck.saliInsurancePic2 = res[0] },
-		handleBizInsurancePic(res) { this.truck.bizInsurancePic = res[0] },
-		handleBizInsurancePic2(res) { this.truck.bizInsurancePic2 = res[0] },
-		handleCarrierRiskInsurancePic(res) { this.truck.carrierRiskInsurancePic = res[0] },
-		handleCarrierRiskInsurancePic2(res) { this.truck.carrierRiskInsurancePic2 = res[0] },
-		handleCannedMonitorTableCertificatePic1(res) { this.truck.cannedMonitorTableCertificatePic1 = res[0] },
-		handleCannedMonitorTableCertificatePic2(res) { this.truck.cannedMonitorTableCertificatePic2 = res[0] },
-		handleTechnicalRankPic(res) { this.truck.technicalRankPic = res[0] },
-		handleTechnicalRankPic2(res) { this.truck.technicalRankPic2 = res[0] },
-		handlePurchaseInvoicePic(res) { this.truck.purchaseInvoicePic = res[0] },
-		handleVehicleCertificatePic(res) { this.truck.vehicleCertificatePic = res[0] },
-		handleVehicleRegistrationCertificatePic(res) { this.truck.vehicleRegistrationCertificatePic = res[0] },
-		handleOtherTruckPic1(res) { this.truck.otherTruckPic1 = res[0] },
-		handleOtherTruckPic2(res) { this.truck.otherTruckPic2 = res[0] },
-		handleOtherTruckPic3(res) { this.truck.otherTruckPic3 = res[0] },
+		handleTruckFrontPic(res) { this.truck.truckFrontPic = res.length == 0 ? '' : res[0] },
+		handleTruckSidePic1(res) { this.truck.truckSidePic1 = res.length == 0 ? '' : res[0] },
+		handleTruckSidePic2(res) { this.truck.truckSidePic2 = res.length == 0 ? '' : res[0] },
+		handleDriverLicPic(res) { this.truck.driverLicPic = res.length == 0 ? '' : res[0] },
+		handleDriverLicSidePic(res) { this.truck.driverLicSidePic = res.length == 0 ? '' : res[0] },
+		handleRoadTransportPic(res) { this.truck.roadTransportPic = res.length == 0 ? '' : res[0] },
+		handleRoadTransportSidePic(res) { this.truck.roadTransportSidePic = res.length == 0 ? '' : res[0] },
+		handleGpsEquippedCertifyPic(res) { this.truck.gpsEquippedCertifyPic = res.length == 0 ? '' : res[0] },
+		handleGpsEquippedCertifyPic2(res) { this.truck.gpsEquippedCertifyPic2 = res.length == 0 ? '' : res[0] },
+		handleSaliInsurancePic(res) { this.truck.saliInsurancePic = res.length == 0 ? '' : res[0] },
+		handleSaliInsurancePic2(res) { this.truck.saliInsurancePic2 = res.length == 0 ? '' : res[0] },
+		handleBizInsurancePic(res) { this.truck.bizInsurancePic = res.length == 0 ? '' : res[0] },
+		handleBizInsurancePic2(res) { this.truck.bizInsurancePic2 = res.length == 0 ? '' : res[0] },
+		handleCarrierRiskInsurancePic(res) { this.truck.carrierRiskInsurancePic = res.length == 0 ? '' : res[0] },
+		handleCarrierRiskInsurancePic2(res) { this.truck.carrierRiskInsurancePic2 = res.length == 0 ? '' : res[0] },
+		handleCannedMonitorTableCertificatePic1(res) { this.truck.cannedMonitorTableCertificatePic1 = res.length == 0 ? '' : res[0] },
+		handleCannedMonitorTableCertificatePic2(res) { this.truck.cannedMonitorTableCertificatePic2 = res.length == 0 ? '' : res[0] },
+		handleTechnicalRankPic(res) { this.truck.technicalRankPic = res.length == 0 ? '' : res[0] },
+		handleTechnicalRankPic2(res) { this.truck.technicalRankPic2 = res.length == 0 ? '' : res[0] },
+		handlePurchaseInvoicePic(res) { this.truck.purchaseInvoicePic = res.length == 0 ? '' : res[0] },
+		handleVehicleCertificatePic(res) { this.truck.vehicleCertificatePic = res.length == 0 ? '' : res[0] },
+		handleVehicleRegistrationCertificatePic(res) { this.truck.vehicleRegistrationCertificatePic = res.length == 0 ? '' : res[0] },
+		handleOtherTruckPic1(res) { this.truck.otherTruckPic1 = res.length == 0 ? '' : res[0] },
+		handleOtherTruckPic2(res) { this.truck.otherTruckPic2 = res.length == 0 ? '' : res[0] },
+		handleOtherTruckPic3(res) { this.truck.otherTruckPic3 = res.length == 0 ? '' : res[0] },
 		handSelectDriverLicTime(date) { 
 			this.truck.driverLicBeginTime = date[0].getTime()
 			this.truck.driverLicExpiresTime = date[1].getTime()
@@ -1242,10 +1242,10 @@ export default {
 		},
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
-			// let truck = Object.assign({}, this.truck)
 			delete this.truck.plateNo
 			delete this.truck.trailerPlateNo
 			delete this.truck.truckCategory
+			console.log(this.truck.truckFrontPic)
 			Truck.update(this.truck).then(res => {
 				Message.success(res.data.msg)
 				this.$router.push({name: 'truck'})

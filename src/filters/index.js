@@ -9,7 +9,11 @@ export const getdatefromtimestamp = function (input, bool) {
 	let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
 	let second = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds()
 	if (bool) {
-		return year + "-" + month + "-" + date
+		if (bool == 'min') {
+			return year + "-" + month + "-" + date + " " + hour + ":" + minute
+		} else {
+			return year + "-" + month + "-" + date
+		}
 	}else {
 		return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
 	}

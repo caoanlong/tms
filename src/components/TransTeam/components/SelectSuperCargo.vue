@@ -93,7 +93,8 @@ export default {
 				size: this.pageSize,
 				keyword: this.find.keyword
 			}).then(res => {
-				this.superCargos = res.records
+                this.superCargos = res.records
+                this.total = res.total
 			})
 		},
         control(bool) {

@@ -354,27 +354,27 @@
 						<el-col :span="8">
 							<div>
 								<span class="tit">车长</span>
-								<span class="ctt">{{truck.length}}</span>
+								<span class="ctt">{{truck.length}}mm</span>
 							</div>
 							<div>
 								<span class="tit">装载重量</span>
-								<span class="ctt">{{truck.loads}}</span>
+								<span class="ctt">{{truck.loads}}kg</span>
 							</div>
 						</el-col>
 						<el-col :span="8">
 							<div>
 								<span class="tit">车宽</span>
-								<span class="ctt">{{truck.width}}</span>
+								<span class="ctt">{{truck.width}}mm</span>
 							</div>
 							<div>
 								<span class="tit">装载体积</span>
-								<span class="ctt">{{truck.loadVolume}}</span>
+								<span class="ctt">{{truck.loadVolume}}m³</span>
 							</div>
 						</el-col>
 						<el-col :span="8">
 							<div>
 								<span class="tit">车高</span>
-								<span class="ctt">{{truck.high}}</span>
+								<span class="ctt">{{truck.high}}mm</span>
 							</div>
 						</el-col>
 					</el-row>

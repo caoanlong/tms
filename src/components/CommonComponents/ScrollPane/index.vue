@@ -23,17 +23,17 @@ export default {
 		clearPos() {
 			this.left = 0
 		},
-		scroll(o){
-			let wrapper = document.getElementById('scroll-wrapper').offsetWidth
-			let box = document.getElementById('scroll-box').offsetWidth
+		scroll(bool){
+			let boxWidth = document.getElementById('scroll-box').offsetWidth
+			let wrapperWidth = document.getElementById('scroll-wrapper').offsetWidth
 			let offsetL = document.getElementById('scroll-wrapper').offsetLeft
-			if(o){
-				if(wrapper>box&&offsetL<0){
-					this.left += 100
+			if(bool){
+				if(wrapperWidth > boxWidth && offsetL < 20){
+					this.left += 40
 				}
 			}else{
-				if(wrapper>box&& box-wrapper<offsetL){
-					this.left -= 100
+				if(wrapperWidth > boxWidth && boxWidth - wrapperWidth < offsetL){
+					this.left -= 40
 				}
 			}
 		},

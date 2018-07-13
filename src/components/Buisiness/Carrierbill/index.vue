@@ -62,9 +62,9 @@
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Committed'">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}" v-if="scope.row.status != 'Committed'">关闭</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}" >删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Committed' && scope.row.status != 'Closed'">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}" v-if="scope.row.status != 'Committed' && scope.row.status != 'Closed'">关闭</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}" v-if="scope.row.status != 'Closed'">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>

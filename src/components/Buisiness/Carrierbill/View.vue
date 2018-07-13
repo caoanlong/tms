@@ -21,8 +21,8 @@
 						<div class="block-content" style="margin-bottom: 10px;">
 							<div><span class="ctt">{{carrierOrder.shipperCompanyName}}</span></div>
 							<div><span class="ctt">{{carrierOrder.shipperName}}/{{carrierOrder.shipperPhone}}</span></div>
-							<div><span class="ctt">{{carrierOrder.shipperArea}} {{carrierOrder.shipperDetailAddress}} {{carrierOrder.shipperLocationAddress}}</span></div>
-							<div><span class="ctt"><span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp()}}</span></span></div>
+							<div><span class="ctt">{{carrierOrder.shipperArea}} {{carrierOrder.shipperLocationAddress}} {{carrierOrder.shipperDetailAddress}}</span></div>
+							<div><span class="ctt"><span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp('min')}}</span></span></div>
 						</div>
 					</div>
 				</el-col>
@@ -32,8 +32,8 @@
 						<div class="block-content" style="margin-bottom: 10px;">
 							<div><span class="ctt">{{carrierOrder.consigneeCompanyName}}</span></div>
 							<div><span class="ctt">{{carrierOrder.consigneeName}}/{{carrierOrder.consigneePhone}}</span></div>
-							<div><span class="ctt">{{carrierOrder.consigneeArea}} {{carrierOrder.consigneeDetailAddress}} {{carrierOrder.consigneeLocationAddress}}</span></div>
-							<div><span class="ctt"><span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | getdatefromtimestamp()}}</span></span></div>
+							<div><span class="ctt">{{carrierOrder.consigneeArea}} {{carrierOrder.consigneeLocationAddress}} {{carrierOrder.consigneeDetailAddress}}</span></div>
+							<div><span class="ctt"><span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | getdatefromtimestamp('min')}}</span></span></div>
 						</div>
 					</div>
 				</el-col>

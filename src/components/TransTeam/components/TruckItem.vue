@@ -44,9 +44,10 @@
 				<span class="driverName">{{truck.primaryDriver.realName}}</span>
 				<el-tooltip placement="top" v-if="truck.primaryDriver.appStatus == 'Y'">
 					<div slot="content">开通APP接单</div>
-					<el-tag size="mini">APP</el-tag> 
+					<el-tag size="mini">APP</el-tag>
 				</el-tooltip>
 				<el-tag type="info" size="mini" v-else>APP</el-tag>
+				<el-tag type="info" size="mini">主驾</el-tag>
 				<el-tooltip placement="right" effect="light">
 					<div slot="content">
 						<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
@@ -64,6 +65,7 @@
 					<el-tag size="mini">APP</el-tag> 
 				</el-tooltip>
 				<el-tag type="info" size="mini" v-else>APP</el-tag> 
+				<el-tag type="info" size="mini">副驾</el-tag>
 				<el-tooltip placement="right" effect="light">
 					<div slot="content">
 						<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
@@ -76,8 +78,8 @@
 			<div class="driverInfo link text-center" v-else @click="add('second')" v-show="truck.truckCategory != 'Trailer'">+添加副驾</div>
 		</div>
 		<div class="mobile">
-			<div class="mobileItem" v-if="truck.primaryDriver">{{truck.primaryDriver.mobile}}</div>
-			<div class="mobileItem" v-if="truck.secondaryDriver">{{truck.secondaryDriver.mobile}}</div>
+			<div class="mobileItem" v-if="truck.primaryDriver && truck.primaryDriver.mobile">{{truck.primaryDriver.mobile}}</div>
+			<div class="mobileItem" v-if="truck.secondaryDriver && truck.secondaryDriver.mobile">{{truck.secondaryDriver.mobile}}</div>
 		</div>
 		<div class="handle" v-show="truck.truckCategory != 'Trailer'">
 			<div class="handleItem" v-if="truck.primaryDriver">

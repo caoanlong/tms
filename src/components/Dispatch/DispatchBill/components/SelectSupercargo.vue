@@ -39,7 +39,6 @@
     </el-dialog>
 </template>
 <script>
-import Truck from '../../../../api/Truck'
 import Dispatchbill from '../../../../api/Dispatchbill'
 import Page from '../../../CommonComponents/Page'
 import { Message } from 'element-ui'
@@ -67,7 +66,7 @@ export default {
     },
     watch: {
         dialogVisible(newVal) {
-            newVal && (this.type == '' ? this.getDriverList() : this.getSuperCagoList())
+            newVal && (this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList())
         }
     },
     components: { Page },
@@ -92,11 +91,12 @@ export default {
 			this.getList() 
         },
         getDriverList() {
-			Truck.findDriverList({
+			Dispatchbill.findDrivers({
 				current: this.pageIndex,
 				size: this.pageSize,
                 keyword: this.find.keyword,
-                // type: this.type == 'primary' ? 'driver' : 'superCargo'
+                shipperDate: this.find.shipperDate,
+                workStatus: this.find.workStatus
 			}).then(res => {
                 this.superCargos = res.records
                 this.total = res.total

@@ -93,9 +93,7 @@
 									<el-input v-model="superCargo.idCardNum"></el-input>
 								</el-form-item>
 							</el-col>
-						</el-row>
-						<el-row >
-							<el-col :span="24">
+							<el-col :span="12">
 								<el-form-item label="身份证有效期" prop="idCardExpirationTime">
 									<el-date-picker
 										type="daterange"
@@ -771,28 +769,28 @@ export default {
 		this.getInfo()
 	},
 	methods: {
-		handleHeadPic(res) { this.superCargo.headPic = res[0] },
-		handleIdCardFrontUrl(res) { this.superCargo.idCardFrontUrl = res[0] },
-		handleIdCardBackUrl(res) { this.superCargo.idCardBackUrl = res[0] },
-		handleHygienistsCertificateOfApprovalPic1(res) { this.superCargo.hygienistsCertificateOfApprovalPic1 = res[0] },
-		handleHygienistsCertificateOfApprovalPic2(res) { this.superCargo.hygienistsCertificateOfApprovalPic2 = res[0] },
-		handleDriverLicFrontUrl(res) { this.superCargo.driverLicFrontUrl = res[0] },
-		handleDriverLicCopyFrontUrl(res) { this.superCargo.driverLicCopyFrontUrl = res[0] },
-		handleQualificationFirstPage(res) { this.superCargo.qualificationFirstPage = res[0] },
-		handleQualificationSecondPage(res) { this.superCargo.qualificationSecondPage = res[0] },
-		handleQualificationThirdPage(res) { this.superCargo.qualificationThirdPage = res[0] },
-		handleContinueEducationCertificationPic1(res) { this.superCargo.continueEducationCertificationPic1 = res[0] },
-		handleContinueEducationCertificationPic2(res) { this.superCargo.continueEducationCertificationPic2 = res[0] },
-		handleIntegrityExaminePic1(res) { this.superCargo.integrityExaminePic1 = res[0] },
-		handleIntegrityExaminePic2(res) { this.superCargo.integrityExaminePic2 = res[0] },
-		handleEndorsementPic1(res) { this.superCargo.endorsementPic1 = res[0] },
-		handleEndorsementPic2(res) { this.superCargo.endorsementPic2 = res[0] },
-		handleNoMajorAccidentsIn3YearsPic1(res) { this.superCargo.noMajorAccidentsIn3YearsPic1 = res[0] },
-		handleNoMajorAccidentsIn3YearsPic2(res) { this.superCargo.noMajorAccidentsIn3YearsPic2 = res[0] },
-		handleDriverHealthCertificatePic1(res) { this.superCargo.driverHealthCertificatePic1 = res[0] },
-		handleDriverHealthCertificatePic2(res) { this.superCargo.driverHealthCertificatePic2 = res[0] },
-		handleEscortLicensePic1(res) { this.superCargo.escortLicensePic1 = res[0] },
-		handleEscortLicensePic2(res) { this.superCargo.escortLicensePic2 = res[0] },
+		handleHeadPic(res) { this.superCargo.headPic = res.length == 0 ? '' : res[0] },
+		handleIdCardFrontUrl(res) { this.superCargo.idCardFrontUrl = res.length == 0 ? '' : res[0] },
+		handleIdCardBackUrl(res) { this.superCargo.idCardBackUrl = res.length == 0 ? '' : res[0] },
+		handleHygienistsCertificateOfApprovalPic1(res) { this.superCargo.hygienistsCertificateOfApprovalPic1 = res.length == 0 ? '' : res[0] },
+		handleHygienistsCertificateOfApprovalPic2(res) { this.superCargo.hygienistsCertificateOfApprovalPic2 = res.length == 0 ? '' : res[0] },
+		handleDriverLicFrontUrl(res) { this.superCargo.driverLicFrontUrl = res.length == 0 ? '' : res[0] },
+		handleDriverLicCopyFrontUrl(res) { this.superCargo.driverLicCopyFrontUrl = res.length == 0 ? '' : res[0] },
+		handleQualificationFirstPage(res) { this.superCargo.qualificationFirstPage = res.length == 0 ? '' : res[0] },
+		handleQualificationSecondPage(res) { this.superCargo.qualificationSecondPage = res.length == 0 ? '' : res[0] },
+		handleQualificationThirdPage(res) { this.superCargo.qualificationThirdPage = res.length == 0 ? '' : res[0] },
+		handleContinueEducationCertificationPic1(res) { this.superCargo.continueEducationCertificationPic1 = res.length == 0 ? '' : res[0] },
+		handleContinueEducationCertificationPic2(res) { this.superCargo.continueEducationCertificationPic2 = res.length == 0 ? '' : res[0] },
+		handleIntegrityExaminePic1(res) { this.superCargo.integrityExaminePic1 = res.length == 0 ? '' : res[0] },
+		handleIntegrityExaminePic2(res) { this.superCargo.integrityExaminePic2 = res.length == 0 ? '' : res[0] },
+		handleEndorsementPic1(res) { this.superCargo.endorsementPic1 = res.length == 0 ? '' : res[0] },
+		handleEndorsementPic2(res) { this.superCargo.endorsementPic2 = res.length == 0 ? '' : res[0] },
+		handleNoMajorAccidentsIn3YearsPic1(res) { this.superCargo.noMajorAccidentsIn3YearsPic1 = res.length == 0 ? '' : res[0] },
+		handleNoMajorAccidentsIn3YearsPic2(res) { this.superCargo.noMajorAccidentsIn3YearsPic2 = res.length == 0 ? '' : res[0] },
+		handleDriverHealthCertificatePic1(res) { this.superCargo.driverHealthCertificatePic1 = res.length == 0 ? '' : res[0] },
+		handleDriverHealthCertificatePic2(res) { this.superCargo.driverHealthCertificatePic2 = res.length == 0 ? '' : res[0] },
+		handleEscortLicensePic1(res) { this.superCargo.escortLicensePic1 = res.length == 0 ? '' : res[0] },
+		handleEscortLicensePic2(res) { this.superCargo.escortLicensePic2 = res.length == 0 ? '' : res[0] },
 		handleOtherPic(res) { 
 			this.otherPic = res
 			this.superCargo.otherPic1 = res.join(',')

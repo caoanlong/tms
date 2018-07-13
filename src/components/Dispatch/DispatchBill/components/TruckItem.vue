@@ -26,7 +26,9 @@
 
 					<el-tag size="mini" type="warning" v-if="truck.workStatus == 'Free'">空闲</el-tag>
 					<el-tag size="mini" type="warning" v-else>作业</el-tag>
-					<el-tag size="mini" type="info">挂车</el-tag>
+					<el-tag size="mini" type="success" v-if="truck.truckCategory == 'Trailer'">挂车</el-tag>
+					<el-tag size="mini" type="success" v-else-if="truck.truckCategory == 'Tractor'">牵引车</el-tag>
+					<el-tag size="mini" type="success" v-else-if="truck.truckCategory == 'WholeVehicle'">整车</el-tag>
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
 							<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
@@ -143,10 +145,9 @@ export default {
 			this.selectDialogVisible = true
 		},
 		deleteItem() {
-
+			this.truck.superCargo = ''
 		},
 		handleSelectSupercargo(bool, data, type) {
-			console.log(bool, data, type)
 			if (type == 'primary') {
 				this.truck.primaryDriver = data
 			} else {

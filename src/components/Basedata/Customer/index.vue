@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">收发货单位</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="企业">
+					<el-form-item label="收发货单位">
 						<el-input placeholder="名称/手机号" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item label="类型" class="customerSelect">
@@ -30,7 +30,7 @@
 					:data="tableData" @selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="企业名称" prop="companyName"></el-table-column>
+					<el-table-column label="收发货单位名称" prop="companyName"></el-table-column>
 					<el-table-column label="地区" prop="companyArea"></el-table-column>
 					<el-table-column label="类型" prop="customerType" width="120">
 						<template slot-scope="scope">

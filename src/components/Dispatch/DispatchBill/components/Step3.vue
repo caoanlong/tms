@@ -63,7 +63,7 @@ export default {
 			find: {
 				keyword: '',
 				shipperDate: new Date().getTime(),
-				workStatus: ''
+				workStatus: 'Free'
 			},
 			pageIndex: 1,
 			pageSize: 10,
@@ -87,6 +87,10 @@ export default {
 		nextStep() {
 			if (!this.selectedTruck) {
 				Message.error('请选择司机车辆！')
+				return
+			}
+			if (this.selectedTruck.primaryDriver.appStatus == 'N') {
+				Message.error('该驾驶员未通过企业邀请！')
 				return
 			}
 			this.$emit('nextStep', 4)

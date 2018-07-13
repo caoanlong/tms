@@ -79,7 +79,7 @@ export default {
 	},
 	methods: {
 		handleLogoSuccess(res) {
-			this.recdeliverycomp.logoUrl = res[0]
+			this.recdeliverycomp.logoUrl = res.length == 0 ? '' : res[0]
 		},
 		handleSelectedArea(data) {
 			this.recdeliverycomp.companyAreaID = data[data.length - 1]
