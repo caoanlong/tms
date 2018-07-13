@@ -42,7 +42,7 @@
 				@selectTruck="selectTruck">
 			</TruckItem>
 		</div>
-		<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+		<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		<div class="step-footer">
 			<el-button @click="prevStep">上一步</el-button>
 			<el-button type="primary" @click="nextStep">下一步</el-button>
@@ -67,7 +67,7 @@ export default {
 			},
 			pageIndex: 1,
 			pageSize: 10,
-			count: 0,
+			total: 0,
 			truck: []
 		}
 	},
@@ -123,6 +123,7 @@ export default {
 				shipperDate: this.find.shipperDate
 			}).then(res => {
 				this.truck = res.records
+				this.total = res.total
 			})
 		},
 		back() {

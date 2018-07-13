@@ -1,5 +1,5 @@
 <template>
-	<div class="main-content" ref="superCargo">
+	<div class="main-content" ref="superCargo" style="padding-left:180px">
 		<el-card class="box-card">
 			<el-row class="section-block" style="margin-bottom:20px">
 				<span class="block-title">基本信息</span>
@@ -164,7 +164,7 @@
 							</div>
 							<div>
 								<span class="tit">是否新证</span>
-								<span class="ctt">{{superCargo.qualificationIsNewest ? '是' : '否'}}</span>
+								<span class="ctt">{{superCargo.qualificationIsNewest == 'Y' ? '是' : '否'}}</span>
 							</div>
 							<div>
 								<span class="tit">有效期</span>

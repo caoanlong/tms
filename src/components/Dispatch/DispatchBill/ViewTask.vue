@@ -50,7 +50,7 @@
 									</div>
 								</el-col>
 								<el-col :span="6">
-									<div class="escort">
+									<div class="escort" v-if="taskDetail.superCargoName">
 										<p class="name">{{taskDetail.superCargoName}}<span class="tag">押运</span></p>
 										<p class="phone">{{taskDetail.superCargoPhone}}</p>
 									</div>

@@ -7,11 +7,17 @@
 			<div class="truckInfo fl">
 				<p>
 					<span class="plateNo">{{truck.plateNo}}</span>
-					<el-tag size="mini" v-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</el-tag>
-					<el-tag size="mini" v-else-if="truck.truckType == 'Van'">厢式货车</el-tag>
+					<el-tag size="mini" v-if="truck.truckType == 'TankTruck'">罐式货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'VanTruck'">厢式货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'BarrackTruck'">仓栅货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'TailgateTruck'">栏板货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'DumpTruck'">自卸货车</el-tag>
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</el-tag>
-					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</el-tag>
-					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'TankTrailer'">罐式挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'VanTrailer'">厢式挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'BarrackTrailer'">仓栅挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'TailgateTrailer'">栏板挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</el-tag>
 					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tag size="mini" type="success" v-if="truck.truckCategory == 'Trailer'">挂车</el-tag>
 					<el-tag size="mini" type="success" v-else-if="truck.truckCategory == 'Tractor'">牵引车</el-tag>
@@ -74,12 +80,12 @@
 			<div class="mobileItem" v-if="truck.secondaryDriver">{{truck.secondaryDriver.mobile}}</div>
 		</div>
 		<div class="handle" v-show="truck.truckCategory != 'Trailer'">
-			<div class="handleItem">
+			<div class="handleItem" v-if="truck.primaryDriver">
 				<span style="color: #ccc">设为主驾</span>
 				<span @click="add('primary')">人员替换</span>
 				<span @click="delSuperCargo(truck.primaryDriver.comSupercargoID)">删除</span>
 			</div>
-			<div class="handleItem">
+			<div class="handleItem" v-if="truck.secondaryDriver">
 				<span @click="primary">设为主驾</span>
 				<span @click="add('second')">人员替换</span>
 				<span @click="delSuperCargo(truck.secondaryDriver.comSupercargoID)">删除</span>
@@ -133,12 +139,14 @@ export default {
 			})
 		},
 		delSuperCargo(comSupercargoID) {
-			Truck.deleteDriver({
-				comSupercargoID,
-				comTruckID: this.truck.truckID
-			}).then(res => {
-				Message.success(res.data.msg)
-				this.$emit('refresh')
+			deleteConfirm(comSupercargoID, comSupercargoIDs => {
+				Truck.deleteDriver({
+					comSupercargoID,
+					comTruckID: this.truck.truckID
+				}).then(res => {
+					Message.success(res.data.msg)
+					this.$emit('refresh')
+				})
 			})
 		},
 		handleSelect(bool) {

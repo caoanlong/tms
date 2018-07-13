@@ -13,7 +13,7 @@
 							</el-col>
 							<el-col :span="8">
 								<el-form-item label="车辆类别" prop="truckCategory">
-									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckCategory">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckCategory" @change="truck.truckType = ''">
 										<el-option label="整车" value="WholeVehicle"></el-option>
 										<el-option label="牵引车" value="Tractor"></el-option>
 										<el-option label="挂车" value="Trailer"></el-option>
@@ -344,7 +344,7 @@
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="12">
-								<el-form-item label="费用">
+								<el-form-item label="费用" prop="gpsCostAmount">
 									<el-input v-model="truck.gpsCostAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
@@ -412,14 +412,14 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="保险金额">
+								<el-form-item label="保险金额" prop="saliInsuranceAmount">
 									<el-input v-model="truck.saliInsuranceAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="12">
-								<el-form-item label="车船税金额">
+								<el-form-item label="车船税金额" prop="saliInsuranceTaxAmount">
 									<el-input v-model="truck.saliInsuranceTaxAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
@@ -472,7 +472,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="24">
-										<el-form-item label="保险金额">
+										<el-form-item label="保险金额" prop="bizInsuranceAmount">
 											<el-input v-model="truck.bizInsuranceAmount"><template slot="append">元</template></el-input>
 										</el-form-item>
 									</el-col>
@@ -525,7 +525,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="24">
-										<el-form-item label="保险金额">
+										<el-form-item label="保险金额" prop="carrierRiskInsuranceAmount">
 											<el-input v-model="truck.carrierRiskInsuranceAmount"><template slot="append">元</template></el-input>
 										</el-form-item>
 									</el-col>
@@ -578,7 +578,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="保险金额">
+								<el-form-item label="保险金额" prop="cargoInsuranceAmount">
 									<el-input v-model="truck.cargoInsuranceAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
@@ -804,7 +804,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="容积" label-width="140px">
+								<el-form-item label="容积" label-width="140px" prop="tankVolume">
 									<el-input v-model="truck.tankVolume"><template slot="append">m³</template></el-input>
 								</el-form-item>
 							</el-col>
@@ -876,7 +876,7 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="金额" label-width="140px">
+								<el-form-item label="金额" label-width="140px" prop="securityDepositAmount">
 									<el-input v-model="truck.securityDepositAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
@@ -894,7 +894,7 @@
 						</el-row>
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="二次安全保证金" label-width="140px">
+								<el-form-item label="二次安全保证金" label-width="140px" prop="secondSecurityDepositAmount">
 									<el-input v-model="truck.secondSecurityDepositAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
@@ -1037,7 +1037,7 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="金额" label-width="140px">
+								<el-form-item label="金额" label-width="140px" prop="managementAgreementAmount">
 									<el-input v-model="truck.managementAgreementAmount"></el-input>
 								</el-form-item>
 							</el-col>
@@ -1083,7 +1083,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="元/轴/月" label-width="140px">
+								<el-form-item label="元/轴/月" label-width="140px" prop="managementAgreementMoneyPerMonth">
 									<el-input v-model="truck.managementAgreementMoneyPerMonth"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
@@ -1166,10 +1166,9 @@
 import { Message } from 'element-ui'
 import request from '../../../common/request'
 import Truck from '../../../api/Truck'
-import SuperCargo from '../../../api/SuperCargo'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import DistPicker from '../../CommonComponents/DistPicker'
-import { checkPlateNo } from '../../../common/validator'
+import { checkPlateNo, checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		return {
@@ -1311,11 +1310,22 @@ export default {
 				plateNo: [ { required: true , message: '请输入车牌号码'}, { validator: checkPlateNo } ],
 				truckType: [ { required: true , message: '请选择车牌类型'} ],
 				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ],
-				length: [ { required: true , message: '请输入车长'} ],
-				width: [ { required: true , message: '请输入车宽'} ],
-				high: [ { required: true , message: '请输入车高'} ],
-				loads: [ { required: true , message: '请输入车辆装载重量'} ],
-				loadVolume: [ { required: true , message: '请输入车辆装载容积'} ]
+				length: [ { required: true , message: '请输入车长'}, { validator: checkInt } ],
+				width: [ { required: true , message: '请输入车宽'}, { validator: checkInt } ],
+				high: [ { required: true , message: '请输入车高'}, { validator: checkInt } ],
+				loads: [ { required: true , message: '请输入车辆装载重量'}, { validator: checkInt } ],
+				loadVolume: [ { required: true , message: '请输入车辆装载容积'}, { validator: checkInt } ],
+				gpsCostAmount: [ { validator: checkFloat2 } ],
+				saliInsuranceAmount: [ { validator: checkFloat2 } ],
+				saliInsuranceTaxAmount: [ { validator: checkFloat2 } ],
+				bizInsuranceAmount: [ { validator: checkFloat2 } ],
+				carrierRiskInsuranceAmount: [ { validator: checkFloat2 } ],
+				cargoInsuranceAmount: [ { validator: checkFloat2 } ],
+				tankVolume: [ { validator: checkFloat2 } ],
+				securityDepositAmount: [ { validator: checkFloat2 } ],
+				secondSecurityDepositAmount: [ { validator: checkFloat2 } ],
+				managementAgreementAmount: [ { validator: checkFloat2 } ],
+				managementAgreementMoneyPerMonth: [ { validator: checkFloat2 } ]
 			}
 		}
 	},
@@ -1324,21 +1334,32 @@ export default {
 	},
 	methods: {
 		getPrimaryDriver(queryString, cb) {
-			SuperCargo.find({
+			Truck.findDriverList({
 				current: 1,
 				size: 1000,
-				supercargoType: 'Driver',
+				type: 'driver',
 				keyword: queryString
-			}).then(res => { cb(res.records) })
+			}).then(res => {
+				const list = res.records
+				const idList = list.map(item => item.comSupercargoID)
+				const index = idList.indexOf(this.truck.secondaryDriver)
+				if ( index > -1) list.splice(index, 1)
+				cb(list)
+			})
 		},
 		getSecondaryDriver(queryString, cb) {
-			SuperCargo.find({
+			Truck.findDriverList({
 				current: 1,
 				size: 1000,
-				// supercargoType: 'Supercargo',
-				supercargoType: 'Driver',
+				type: 'superCargo',
 				keyword: queryString
-			}).then(res => { cb(res.records) })
+			}).then(res => {
+				const list = res.records
+				const idList = list.map(item => item.comSupercargoID)
+				const index = idList.indexOf(this.truck.primaryDriver)
+				if ( index > -1) list.splice(index, 1)
+				cb(list)
+			})
 		},
 		handSelectPrimaryDriver(data) { this.truck.primaryDriver = data.comSupercargoID },
 		handSelectSecondaryDriver(data) { this.truck.secondaryDriver = data.comSupercargoID },

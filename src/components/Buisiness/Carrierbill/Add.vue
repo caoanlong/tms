@@ -78,17 +78,6 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货时间" prop="shipperDate">
-									<el-date-picker 
-										type="date" 
-										style="width:100%" 
-										placeholder="选择发货时间" 
-										v-model="carrierbillInfo.shipperDate" 
-										value-format="timestamp">
-									</el-date-picker>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
 								<el-form-item label="定位地址" prop="shipperLocationAddress">
 									<el-autocomplete  style="width:100%"
 										value-key="name" 
@@ -103,6 +92,17 @@
 							<el-row class="block-content">
 								<el-form-item label="详细地址" prop="shipperDetailAddress">
 									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperDetailAddress"></el-input>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="发货时间" prop="shipperDate">
+									<el-date-picker 
+										type="date" 
+										style="width:100%" 
+										placeholder="选择发货时间" 
+										v-model="carrierbillInfo.shipperDate" 
+										value-format="timestamp">
+									</el-date-picker>
 								</el-form-item>
 							</el-row>
 						</div>
@@ -149,17 +149,6 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="到货时间" prop="consigneeDate">
-									<el-date-picker 
-										type="date" 
-										style="width:100%" 
-										placeholder="选择到货时间" 
-										v-model="carrierbillInfo.consigneeDate" 
-										value-format="timestamp">
-									</el-date-picker>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
 								<el-form-item label="定位地址" prop="consigneeLocationAddress">
 									<el-autocomplete  style="width:100%"
 										value-key="name" 
@@ -174,6 +163,17 @@
 							<el-row class="block-content">
 								<el-form-item label="详细地址" prop="consigneeDetailAddress">
 									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneeDetailAddress"></el-input>
+								</el-form-item>
+							</el-row>
+							<el-row class="block-content">
+								<el-form-item label="到货时间" prop="consigneeDate">
+									<el-date-picker 
+										type="date" 
+										style="width:100%" 
+										placeholder="选择到货时间" 
+										v-model="carrierbillInfo.consigneeDate" 
+										value-format="timestamp">
+									</el-date-picker>
 								</el-form-item>
 							</el-row>
 						</div>

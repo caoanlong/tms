@@ -190,13 +190,15 @@ export default {
 					Message.error(`任务单号：${i+1} 司机费用必填一项！`)
 					return
 				}
-				if (!item.superCargoCashAmount 
-					&& !item.superCargoCodAmount 
-					&& !item.superCargoCorAmount 
-					&& !item.superCargoMonthlyAmount 
-					&& !item.superCosigneeAmount ) {
-					Message.error(`任务单号：${i+1} 随车人员费用必填一项！`)
-					return
+				if (this.selectedTruck.superCargo) {
+					if (!item.superCargoCashAmount 
+						&& !item.superCargoCodAmount 
+						&& !item.superCargoCorAmount 
+						&& !item.superCargoMonthlyAmount 
+						&& !item.superCosigneeAmount ) {
+						Message.error(`任务单号：${i+1} 随车人员费用必填一项！`)
+						return
+					}
 				}
 			}
 			const dispatchTaskCargoInfo = this.selectedCargos.map(item => {
@@ -239,7 +241,7 @@ export default {
 				'sumAmount': this.totalAmount,
 				'truckID': this.selectedTruck.truckID,
 				'driverID': this.selectedTruck.primaryDriver.comSupercargoID,
-				'superCargoID': this.selectedTruck.secondaryDriver.comSupercargoID
+				'superCargoID': this.selectedTruck.superCargo && this.selectedTruck.superCargo.comSupercargoID
 			}).then(res => {
 				Message.success('保存成功！')
 				this.$store.dispatch('clearCargo')

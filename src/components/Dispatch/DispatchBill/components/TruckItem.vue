@@ -12,11 +12,18 @@
 			<div class="truckInfo fl">
 				<p>
 					<span class="plateNo">{{truck.plateNo}}</span>
-					<el-tag size="mini" v-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</el-tag>
-					<el-tag size="mini" v-else-if="truck.truckType == 'Van'">厢式货车</el-tag>
+					<el-tag size="mini" v-if="truck.truckType == 'TankTruck'">罐式货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'VanTruck'">厢式货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'BarrackTruck'">仓栅货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'TailgateTruck'">栏板货车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'DumpTruck'">自卸货车</el-tag>
 					<el-tag size="mini" v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</el-tag>
-					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</el-tag>
-					<el-tag size="mini" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'TankTrailer'">罐式挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'VanTrailer'">厢式挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'BarrackTrailer'">仓栅挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'TailgateTrailer'">栏板挂车</el-tag>
+					<el-tag size="mini" v-else-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</el-tag>
+
 					<el-tag size="mini" type="warning" v-if="truck.workStatus == 'Free'">空闲</el-tag>
 					<el-tag size="mini" type="warning" v-else>作业</el-tag>
 					<el-tag size="mini" type="info">挂车</el-tag>
@@ -62,14 +69,14 @@
 		<div class="escortColumn" v-else>
 			<span class="btn addEscortBtn"  @click="add('primary')"><svg-icon icon-class="add-icon"></svg-icon>添加驾驶员</span>
 		</div>
-		<div class="escortColumn" v-if="truck.secondaryDriver && truck.secondaryDriver.realName">
+		<div class="escortColumn" v-if="truck.superCargo && truck.superCargo.realName">
 			<div class="headPic fl">
-				<img :src="truck.secondaryDriver.headPic ? resizeImg(truck.secondaryDriver.headPic, '_100x100.') : defaultImg" />
+				<img :src="truck.superCargo.headPic ? resizeImg(truck.superCargo.headPic, '_100x100.') : defaultImg" />
 			</div>
 			<div class="escortInfo fl">
 				<p>
-					<span class="escortName">{{truck.secondaryDriver.realName}}</span>
-					<el-tooltip placement="top" v-if="truck.secondaryDriver.appStatus == 'Y'">
+					<span class="escortName">{{truck.superCargo.realName}}</span>
+					<el-tooltip placement="top" v-if="truck.superCargo.appStatus == 'Y'">
 						<div slot="content">开通APP接单</div>
 						<el-tag size="mini">APP</el-tag> 
 					</el-tooltip>
@@ -85,7 +92,7 @@
 						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
-				<p>{{truck.secondaryDriver.mobile}}</p>
+				<p>{{truck.superCargo.mobile}}</p>
 			</div>
 			<span class="btn replaceBtn" @click="selectSupercargo('second')">更换</span>
 			<span class="btn deleteBtn" @click="deleteItem">删除</span>
@@ -143,7 +150,7 @@ export default {
 			if (type == 'primary') {
 				this.truck.primaryDriver = data
 			} else {
-				this.truck.secondaryDriver = data
+				this.truck.superCargo = data
 			}
 			this.selectDialogVisible = false
 		}

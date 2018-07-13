@@ -120,7 +120,16 @@ export const checkFloat6 = (rule, value, callback) => {
 		callback(new Error('请输入正确的数字'))
 	}
 }
-
+// 验证整数
+export const checkInt = (rule, value, callback) => {
+	let r = /^\+?[1-9][0-9]*$/
+	if (r.test(value)) {
+		callback()
+	} else {
+		callback(new Error('请输入正确的整数'))
+	}
+}
+// 验证身份证
 export const checkIDCard = (rule, value, callback) => {
 	if (!value) {
 		callback(new Error('身份证号不能为空'))
