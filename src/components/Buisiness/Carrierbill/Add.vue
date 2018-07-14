@@ -400,7 +400,7 @@ export default {
 			CargoGeneralName.find({
 				current: 1,
 				size: 1000,
-				shipperCompanyName: this.carrierbillInfo.shipperCompanyName
+				cargoName: queryString
 			}).then(res => { cb(res.records) })
 		},
 		getShipperCompany(queryString, cb) {
@@ -524,6 +524,74 @@ export default {
 			this.carrierbillInfo.consigneeLocationLat = data.latitude
 		},
 		save() {
+			// if (this.carrierbillInfo.shipperNo) {
+			// 	Message.error('请输入发货单号')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.commissionDate) {
+			// 	Message.error('请选择委托时间')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consignorName) {
+			// 	Message.error('请输入托运人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.carrierrName) {
+			// 	Message.error('请输入承运人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperCompanyName) {
+			// 	Message.error('请输入发货单位')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperName) {
+			// 	Message.error('请输入发货人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperName) {
+			// 	Message.error('请输入发货人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperPhone) {
+			// 	Message.error('请输入发货人联系方式')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperDate) {
+			// 	Message.error('请选择发货时间')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperAreaID) {
+			// 	Message.error('请选择发货地')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperLocationAddress) {
+			// 	Message.error('请选择发货定位地址')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneeCompanyName) {
+			// 	Message.error('请输入收货单位')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneeName) {
+			// 	Message.error('请输入收货人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneePhone) {
+			// 	Message.error('请输入收货联系方式')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneeAreaID) {
+			// 	Message.error('请选择收货地')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneeLocationAddress) {
+			// 	Message.error('请选择定位地址')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.transportType) {
+			// 	Message.error('请选择运输方式')
+			// 	return
+			// }
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					if (!valid) return

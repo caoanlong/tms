@@ -68,7 +68,8 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
-			truck: []
+			truck: [],
+			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
 	},
 	computed: {
@@ -89,7 +90,19 @@ export default {
 				Message.error('请选择司机车辆！')
 				return
 			}
-			this.$emit('nextStep', 4)
+			if (this.selectedTruck.primaryDriver.appStatus == 'N') {
+				this.$confirm('该司机未激活APP, 是否继续调度?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$emit('nextStep', 4)
+				}).catch((err) => {
+					Message.info('已取消删除')
+				})
+			} else {
+				this.$emit('nextStep', 4)
+			}
 		},
 		selectTruck(data) {
 			this.$store.dispatch('setTruck', data)
@@ -120,7 +133,8 @@ export default {
 				size: this.pageSize,
 				keyword: this.find.keyword,
 				workStatus: this.find.workStatus,
-				shipperDate: this.find.shipperDate
+				shipperDate: this.find.shipperDate,
+				dispatchOrderID: this.dispatchOrderID
 			}).then(res => {
 				this.truck = res.records
 			})

@@ -114,6 +114,15 @@ export default {
 	z-index 1001
 	padding-left 180px
 	background #424242
+.right-container
+	padding-top 40px
+	.breadcrumb-container
+		position fixed
+		top 84px
+		z-index 100
+		width 100%
+		background-color #ffffff
+		border-bottom 1px solid #dddddd
 .fullBg
 	position fixed
 	top 0

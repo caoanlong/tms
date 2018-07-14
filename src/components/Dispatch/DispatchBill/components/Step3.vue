@@ -90,10 +90,18 @@ export default {
 				return
 			}
 			if (this.selectedTruck.primaryDriver.appStatus == 'N') {
-				Message.error('该驾驶员未通过企业邀请！')
-				return
+				this.$confirm('该司机未激活APP, 是否继续调度?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$emit('nextStep', 4)
+				}).catch((err) => {
+					Message.info('已取消删除')
+				})
+			} else {
+				this.$emit('nextStep', 4)
 			}
-			this.$emit('nextStep', 4)
 		},
 		selectTruck(data) {
 			this.$store.dispatch('setTruck', data)

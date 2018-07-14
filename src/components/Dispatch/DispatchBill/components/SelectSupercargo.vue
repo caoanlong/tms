@@ -20,7 +20,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">搜索</el-button>
+                <el-button type="primary" @click="search">搜索</el-button>
                 <el-button>重置</el-button>
             </el-form-item>
         </el-form>
@@ -73,7 +73,10 @@ export default {
     methods: {
         handleCurrentChange(data) {
             data && this.$emit('control', true, data, this.type)
-		},
+        },
+        search() {
+            this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
+        },
         reset() {
             this.find.keyword = ''
             this.find.shipperDate = ''

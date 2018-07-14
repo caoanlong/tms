@@ -1,8 +1,8 @@
 <template>
-	<div class="main-content">
+	<div class="main-content" style="padding-left:200px">
 		<div ref="superCargo" id="superCargo">
 			<el-card class="box-card">
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target1" style="margin-bottom:20px">
 					<span class="block-title">基本信息</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -54,7 +54,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target2" style="margin-bottom:20px">
 					<span class="block-title">身份证</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -81,7 +81,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block">
+				<el-row class="section-block target3">
 					<span class="block-title">卫生员合格证</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -97,7 +97,7 @@
 			</el-card>
 			<el-card class="box-card">
 				<div slot="header" class="clearfix"><span>驾驶员信息</span></div>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target4" style="margin-bottom:20px">
 					<span class="block-title">驾驶证</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -136,7 +136,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target5" style="margin-bottom:20px">
 					<span class="block-title">危货从业资格证</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -186,7 +186,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target6" style="margin-bottom:20px">
 					<span class="block-title">驾驶员继续再教育合格证</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -205,7 +205,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target7" style="margin-bottom:20px">
 					<span class="block-title">诚信考核记录</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -232,7 +232,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row :gutter="20" style="margin-bottom:20px">
+				<el-row :gutter="20" class="target8" style="margin-bottom:20px">
 					<el-col :span="12">
 						<div class="section-block">
 							<span class="block-title">违章和记分记录</span>
@@ -264,7 +264,7 @@
 						</div>
 					</el-col>
 				</el-row>
-				<el-row class="section-block">
+				<el-row class="section-block target9">
 					<span class="block-title">驾驶员身体条件证明</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -278,9 +278,9 @@
 					</div>
 				</el-row>
 			</el-card>
-			<el-card class="box-card" v-if="superCargo.supercargoType == 'Supercargo' || superCargo.supercargoType == 'SupercargoDriver'">
+			<el-card class="box-card">
 				<div slot="header" class="clearfix"><span>押运员信息</span></div>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target10" style="margin-bottom:20px">
 					<span class="block-title">押运员从业资格证</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -325,7 +325,7 @@
 				</el-row>
 			</el-card>
 			<el-card class="box-card">
-				<el-row class="section-block">
+				<el-row class="section-block target11">
 					<span class="block-title">其他</span>
 					<div class="block-content">
 						<el-row style="margin-bottom: 10px">
@@ -341,11 +341,12 @@
 			<el-button @click="back">返回</el-button>
 			<el-button type="primary" @click="print">预览打印</el-button>	
 		</div>
-		<!-- <SelectPosition :titleList="titleList" :selected="selectedTitle" @select="selectTitle"></SelectPosition> -->
+		<SelectPosition class="lift-nav" :titleList="titleList"></SelectPosition>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import SelectPosition from '../components/SelectPosition'
 import SuperCargo from '../../../api/SuperCargo'
@@ -353,18 +354,17 @@ export default {
 	data() {
 		return {
 			titleList: [
-				{key: 0, value: '基本信息'},
-				{key: 250, value: '身份证'},
-				{key: 470, value: '卫生合格证'},
-				{key: 580, value: '驾驶证'},
-				{key: 910, value: '危货从业资格证'},
-				{key: 1000, value: '驾驶员继续再教育合格证'},
-				{key: 1200, value: '诚信考核记录'},
-				{key: 1400, value: '违章和记分记录'},
-				{key: 1500, value: '驾驶员身体条件证明'},
-				{key: 1800, value: '其他'}
+				'基本信息',
+				'身份证',
+				'卫生合格证',
+				'驾驶证',
+				'危货从业资格证',
+				'驾驶员继续再教育合格证',
+				'诚信考核记录',
+				'违章和记分记录',
+				'驾驶员身体条件证明',
+				'其他'
 			],
-			selectedTitle: {key: 0, value: '基本信息'},
 			otherPic: [],
 			superCargo: {}
 		}
@@ -372,6 +372,26 @@ export default {
 	components: { ImageUpload, SelectPosition },
 	created() {
 		this.getInfo()
+	},
+	mounted() {
+		LiftEffect({
+			"control1": ".lift-nav", 	//侧栏电梯的容器
+			"control2": ".lift",        //需要遍历的电梯的父元素
+			"target": [
+				".target1",
+				".target2",
+				".target3",
+				".target4",
+				".target5",
+				".target6",
+				".target7",
+				".target8",
+				".target9",
+				".target10",
+				".target11"
+			], 							//监听的内容，注意一定要从小到大输入
+			"current": "active" 		//选中的样式
+		})
 	},
 	methods: {
 		print() {
@@ -382,10 +402,6 @@ export default {
 			window.print()
 			window.document.body.innerHTML = winElem
 			window.location.reload()
-		},
-		selectTitle(item) {
-			this.selectedTitle = item
-			document.documentElement.scrollTop = document.body.scrollTop = item.key
 		},
 		getInfo() {
 			const comSupercargoID = this.$route.query.comSupercargoID

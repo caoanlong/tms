@@ -213,7 +213,7 @@ export default {
 			},
 			registerRules: {
 				mobile: [{required: true, message: '请输入手机号'}, {validator: checkMobile}],
-				vcode: [{required: true, message: '请输入验证码'}, {min: 6, max: 6, message: '请输入正确长度的验证码！'}],
+				vcode: [{required: true, message: '请输入验证码'}],
 				password: [{required: true, message: '请输入密码'}, {min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}],
 				contact: [{required: true, message: '请输入联系人'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
 				company: [{required: true, message: '请输入公司名称'}, {min: 1, max: 100, message: '长度在 1 到 100 个字符'}],
@@ -223,7 +223,7 @@ export default {
 			},
 			findPasswordRules: {
 				mobile: [{required: true, message: '请输入手机号'}, {validator: checkMobile}],
-				vcode: [{required: true, message: '请输入验证码'}, {min: 6, max: 6, message: '请输入正确长度的验证码！'}],
+				vcode: [{required: true, message: '请输入验证码'}],
 				password: [{required: true, message: '请输入密码'}, {min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}],
 				confirmPassword: [
 					{required: true, message: '请重复输入密码'}, 
@@ -333,7 +333,7 @@ export default {
 					}).then(() => {
 						this.$router.push({name: 'home'})
 						this.$store.dispatch('getUserInfo')
-						this.$store.dispatch('getMenu')
+						// this.$store.dispatch('getMenu')
 					})
 				})
 			})
@@ -369,7 +369,7 @@ export default {
 					}).then(() => {
 						this.$router.push({name: 'home'})
 						this.$store.dispatch('getUserInfo')
-						this.$store.dispatch('getMenu')
+						// this.$store.dispatch('getMenu')
 					})
 				})
 			})

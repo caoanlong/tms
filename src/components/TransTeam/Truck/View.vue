@@ -1,7 +1,8 @@
 <template>
-	<div class="main-content" ref="truck">
+	<div class="main-content" style="padding-left:200px">
+		<div ref="truck">
 		<el-card class="box-card">
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target1" style="margin-bottom:20px">
 				<span class="block-title">基本信息</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -62,7 +63,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target2" style="margin-bottom:20px">
 				<span class="block-title">所属单位/车主</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -89,7 +90,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target3" style="margin-bottom:20px">
 				<span class="block-title">行驶证</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -120,7 +121,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target4" style="margin-bottom:20px">
 				<span class="block-title">道路运输许可证</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -159,7 +160,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target5" style="margin-bottom:20px">
 				<span class="block-title">GPS</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -209,7 +210,7 @@
 		</el-card>
 		<el-card class="box-card">
 			<div slot="header" class="clearfix"><span>保险信息</span></div>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target6" style="margin-bottom:20px">
 				<span class="block-title">交强险</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -248,7 +249,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target7" style="margin-bottom:20px">
 				<span class="block-title">商业险</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -279,7 +280,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target8" style="margin-bottom:20px">
 				<span class="block-title">承运险</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -310,7 +311,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target9" style="margin-bottom:20px">
 				<span class="block-title">货运险</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -333,7 +334,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target10" style="margin-bottom:20px">
 				<span class="block-title">保险备注</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -347,7 +348,7 @@
 		</el-card>
 		<el-card class="box-card">
 			<div slot="header" class="clearfix"><span>技术参数</span></div>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target11" style="margin-bottom:20px">
 				<span class="block-title">技术参数</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -383,7 +384,7 @@
 		</el-card>
 		<el-card class="box-card">
 			<div slot="header" class="clearfix"><span>其他信息</span></div>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target12" style="margin-bottom:20px">
 				<span class="block-title">罐体</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -422,7 +423,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target13" style="margin-bottom:20px">
 				<span class="block-title">保证金</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -457,7 +458,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target14" style="margin-bottom:20px">
 				<span class="block-title">技术等级</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -492,7 +493,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target15" style="margin-bottom:20px">
 				<span class="block-title">二级维护</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -511,7 +512,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target16" style="margin-bottom:20px">
 				<span class="block-title">管理协议</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -546,7 +547,7 @@
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px">
+			<el-row class="section-block target17" style="margin-bottom:20px">
 				<span class="block-title">其他</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
@@ -572,32 +573,79 @@
 				</div>
 			</el-row>
 		</el-card>
+		</div>
 		<div class="formHandle text-center" ref="btns">
 			<el-button @click="back">返回</el-button>
 			<el-button type="primary" @click="print">预览打印</el-button>	
 		</div>
+		<SelectPosition class="lift-nav" :titleList="titleList"></SelectPosition>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
+import SelectPosition from '../components/SelectPosition'
 import Truck from '../../../api/Truck'
 export default {
 	data() {
 		return {
+			titleList: [
+				'基本信息',
+				'所属单位/车主',
+				'行驶证',
+				'道路运输许可证',
+				'GPS',
+				'交强险',
+				'商业险',
+				'承运险',
+				'货运险',
+				'保险备注',
+				'技术参数',
+				'罐体',
+				'保证金',
+				'技术等级',
+				'二级维护',
+				'管理协议',
+				'其他'
+			],
 			truck: {}
 		}
 	},
-	components: { ImageUpload },
+	components: { ImageUpload, SelectPosition },
 	created() {
 		this.getInfo()
+	},
+	mounted() {
+		LiftEffect({
+			"control1": ".lift-nav", 	//侧栏电梯的容器
+			"control2": ".lift",        //需要遍历的电梯的父元素
+			"target": [
+				".target1",
+				".target2",
+				".target3",
+				".target4",
+				".target5",
+				".target6",
+				".target7",
+				".target8",
+				".target9",
+				".target10",
+				".target11",
+				".target12",
+				".target13",
+				".target14",
+				".target15",
+				".target16",
+				".target17"
+			], 							//监听的内容，注意一定要从小到大输入
+			"current": "active" 		//选中的样式
+		})
 	},
 	methods: {
 		print() {
 			let truckElem = this.$refs.truck
-			const btnsElem = this.$refs.btns
 			const winElem = window.document.body.innerHTML
-			truckElem.removeChild(btnsElem)
 			window.document.body.innerHTML = truckElem.innerHTML
 			// document.execCommand('print')
 			window.print()

@@ -1,19 +1,13 @@
 <template>
-    <div class="main">
-        <div class="item" :class="{'active': selected.key == item.key}" v-for="(item,index) in titleList" :key="index" @click="select(item)">{{item.value}}</div>
+    <div class="main lift">
+        <div class="item" v-for="item in titleList" :key="item">{{item}}</div>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        titleList: Array,
-        selected: Object
-    },
-    methods: {
-        select(item) {
-            this.$emit('select', item)
-        }
+        titleList: Array
     }
 }
 </script>
@@ -28,8 +22,8 @@ export default {
     background-color #fff
     .item
         width 100%
-        height 50px
-        line-height 50px
+        height 30px
+        line-height 30px
         font-size 14px
         color #409eff
         text-align center

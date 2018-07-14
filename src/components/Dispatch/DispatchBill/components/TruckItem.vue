@@ -71,7 +71,7 @@
 		<div class="escortColumn" v-else>
 			<span class="btn addEscortBtn"  @click="add('primary')"><svg-icon icon-class="add-icon"></svg-icon>添加驾驶员</span>
 		</div>
-		<div class="escortColumn" v-if="truck.superCargo && truck.superCargo.realName">
+		<div class="escortColumn" v-if="flag && truck.superCargo && truck.superCargo.realName">
 			<div class="headPic fl">
 				<img :src="truck.superCargo.headPic ? resizeImg(truck.superCargo.headPic, '_100x100.') : defaultImg" />
 			</div>
@@ -124,7 +124,8 @@ export default {
 	data(){
 		return {
 			selectDialogVisible: false,
-			type: 'primary'
+			type: 'primary',
+			flag: false
 		}
 	},
 	computed: {
@@ -146,6 +147,7 @@ export default {
 		},
 		deleteItem() {
 			this.truck.superCargo = ''
+			this.flag = false
 		},
 		handleSelectSupercargo(bool, data, type) {
 			if (type == 'primary') {
@@ -153,6 +155,7 @@ export default {
 			} else {
 				this.truck.superCargo = data
 			}
+			this.flag = true
 			this.selectDialogVisible = false
 		}
 	}

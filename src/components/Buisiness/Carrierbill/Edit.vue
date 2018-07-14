@@ -237,13 +237,13 @@
 							</el-row>
 							<el-button type="text" icon="el-icon-plus" class="add-cargo-btn" @click="addItem">添加</el-button>
 						</el-form>
-						<el-row>
-							<el-col :span="12" :offset="12" style="height:50px;line-height:50px;text-align:right;padding-right:20px">
-								<span>合计：</span>
-								<span style="display:inline-block;width:80px">{{sum('cargoNum')}}</span>
-								<span style="display:inline-block;width:80px">{{sum('cargoWeight')}}吨</span>
-								<span style="display:inline-block;width:80px">{{sum('cargoVolume')}}方</span>
-							</el-col>
+						<el-row style="margin: 0 20px 10px 20px">
+							<div class="text-center cargo-title"></div>
+							<div class="text-center cargo-title">合计：</div>
+							<div class="text-center cargo-title">{{sum('cargoNum')}}</div>
+							<div class="text-center cargo-title"></div>
+							<div class="text-center cargo-title">{{sum('cargoWeight')}}吨</div>
+							<div class="text-center cargo-title">{{sum('cargoVolume')}}方</div>
 						</el-row>
 					</div>
 				</el-row>
@@ -393,7 +393,7 @@ export default {
 			CargoGeneralName.find({
 				current: 1,
 				size: 1000,
-				shipperCompanyName: this.carrierbillInfo.shipperCompanyName
+				cargoName: queryString
 			}).then(res => { cb(res.records) })
 		},
 		getShipperCompany(queryString, cb) {
@@ -517,6 +517,74 @@ export default {
 			this.carrierbillInfo.consigneeLocationLat = data.latitude
 		},
 		save() {
+			// if (this.carrierbillInfo.shipperNo) {
+			// 	Message.error('请输入发货单号')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.commissionDate) {
+			// 	Message.error('请选择委托时间')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consignorName) {
+			// 	Message.error('请输入托运人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.carrierrName) {
+			// 	Message.error('请输入承运人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperCompanyName) {
+			// 	Message.error('请输入发货单位')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperName) {
+			// 	Message.error('请输入发货人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperName) {
+			// 	Message.error('请输入发货人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperPhone) {
+			// 	Message.error('请输入发货人联系方式')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperDate) {
+			// 	Message.error('请选择发货时间')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperAreaID) {
+			// 	Message.error('请选择发货地')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.shipperLocationAddress) {
+			// 	Message.error('请选择发货定位地址')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneeCompanyName) {
+			// 	Message.error('请输入收货单位')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneeName) {
+			// 	Message.error('请输入收货人')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneePhone) {
+			// 	Message.error('请输入收货联系方式')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneeAreaID) {
+			// 	Message.error('请选择收货地')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.consigneeLocationAddress) {
+			// 	Message.error('请选择定位地址')
+			// 	return
+			// }
+			// if (this.carrierbillInfo.transportType) {
+			// 	Message.error('请选择运输方式')
+			// 	return
+			// }
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					if (!valid) return
