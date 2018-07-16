@@ -20,11 +20,12 @@ export default {
     width 180px
     height 100%
     background-color #fff
+    overflow auto
     .item
         width 100%
-        height 30px
-        line-height 30px
-        font-size 14px
+        height 24px
+        line-height 24px
+        font-size 13px
         color #409eff
         text-align center
         cursor pointer

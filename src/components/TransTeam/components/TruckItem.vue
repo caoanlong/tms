@@ -85,12 +85,12 @@
 			<div class="handleItem" v-if="truck.primaryDriver">
 				<span style="color: #ccc">设为主驾</span>
 				<span @click="add('primary')">人员替换</span>
-				<span @click="delSuperCargo(truck.primaryDriver.comSupercargoID)">删除</span>
+				<span @click="delSuperCargo(truck.primaryDriver.comSupercargoID, '主驾')">删除</span>
 			</div>
 			<div class="handleItem" v-if="truck.secondaryDriver">
 				<span @click="primary">设为主驾</span>
 				<span @click="add('second')">人员替换</span>
-				<span @click="delSuperCargo(truck.secondaryDriver.comSupercargoID)">删除</span>
+				<span @click="delSuperCargo(truck.secondaryDriver.comSupercargoID, '副驾')">删除</span>
 			</div>
 		</div>
 		<SelectSuperCargo :dialogVisible="dialogVisible" :type="type" :truckID="truck.truckID" @control="handleSelect"></SelectSuperCargo>
@@ -140,8 +140,12 @@ export default {
 				})
 			})
 		},
-		delSuperCargo(comSupercargoID) {
-			deleteConfirm(comSupercargoID, comSupercargoIDs => {
+		delSuperCargo(comSupercargoID, type) {
+			this.$confirm(`此操作将清空该车辆${type}, 是否继续?`, '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
 				Truck.deleteDriver({
 					comSupercargoID,
 					comTruckID: this.truck.truckID
@@ -149,7 +153,7 @@ export default {
 					Message.success(res.data.msg)
 					this.$emit('refresh')
 				})
-			})
+			}).catch(err => { Message.info('已取消') })
 		},
 		handleSelect(bool) {
 			this.dialogVisible = false

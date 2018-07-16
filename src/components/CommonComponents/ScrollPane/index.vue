@@ -1,12 +1,12 @@
 <template>
 	<div class="scroll-container" ref="scrollContainer" @wheel.prevent="handleScroll">
-		<i class="el-icon-arrow-left scrollBtn scrollLeft" @click="scroll(true)"></i>
+		<i class="el-icon-arrow-left scrollBtn scrollLeft" @click="scroll('L')"></i>
 		<div class="scroll-box" id="scroll-box">
 			<div class="scroll-wrapper" id="scroll-wrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
 				<slot></slot>
 			</div>
 		</div>
-		<i class="el-icon-arrow-right scrollBtn scrollRight" @click="scroll(false)"></i>
+		<i class="el-icon-arrow-right scrollBtn scrollRight" @click="scroll('R')"></i>
 	</div>
 </template>
 
@@ -23,17 +23,24 @@ export default {
 		clearPos() {
 			this.left = 0
 		},
-		scroll(bool){
-			let boxWidth = document.getElementById('scroll-box').offsetWidth
-			let wrapperWidth = document.getElementById('scroll-wrapper').offsetWidth
-			let offsetL = document.getElementById('scroll-wrapper').offsetLeft
-			if(bool){
-				if(wrapperWidth > boxWidth && offsetL < 20){
-					this.left += 40
-				}
-			}else{
-				if(wrapperWidth > boxWidth && boxWidth - wrapperWidth < offsetL){
-					this.left -= 40
+		scroll(type) {
+			const $container = this.$refs.scrollContainer
+			const $containerWidth = $container.offsetWidth
+			const $wrapper = this.$refs.scrollWrapper
+			const $wrapperWidth = $wrapper.offsetWidth
+
+			let eventDelta = type == 'L' ? 30 : -30
+			if (eventDelta > 0) {
+				this.left = Math.min(0, this.left + eventDelta)
+			} else {
+				if ($containerWidth - padding < $wrapperWidth) {
+					if (this.left < -($wrapperWidth - $containerWidth + padding)) {
+						this.left = this.left
+					} else {
+						this.left = Math.max(this.left + eventDelta, $containerWidth - $wrapperWidth - padding)
+					}
+				} else {
+					this.left =0
 				}
 			}
 		},

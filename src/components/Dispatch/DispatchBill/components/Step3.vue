@@ -89,19 +89,15 @@ export default {
 				Message.error('请选择司机车辆！')
 				return
 			}
-			if (this.selectedTruck.primaryDriver.appStatus == 'N') {
-				this.$confirm('该司机未激活APP, 是否继续调度?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.$emit('nextStep', 4)
-				}).catch((err) => {
-					Message.info('已取消删除')
-				})
-			} else {
-				this.$emit('nextStep', 4)
+			if (!this.selectedTruck.primaryDriver) {
+				Message.error('当前选择的车辆没有司机！')
+				return
 			}
+			if (this.selectedTruck.primaryDriver.appStatus == 'N') {
+				Message.error('该司机未激活APP!')
+				return
+			}
+			this.$emit('nextStep', 4)
 		},
 		selectTruck(data) {
 			this.$store.dispatch('setTruck', data)

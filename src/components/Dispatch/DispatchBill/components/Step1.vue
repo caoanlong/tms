@@ -55,16 +55,23 @@
 				<el-table-column label="货物" prop="cargoName"></el-table-column>
 				<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
 				<el-table-column label="发货地" prop="shipperArea"></el-table-column>
-				<el-table-column label="发货时间" prop="shipperDate">
+				<el-table-column label="委托时间" prop="commissionDate">
 					<template slot-scope="scope">
-						<span v-if="scope.row.shipperDate">{{ new Date(scope.row.shipperDate).getTime() | getdatefromtimestamp(true)}}</span>
+						<span v-if="scope.row.commissionDate">{{ new Date(scope.row.commissionDate).getTime() | getdatefromtimestamp(true)}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
 				<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
-				<el-table-column label="数量(余)" prop="remainingCargoNum"></el-table-column>
+				<el-table-column label="货量(余)" prop="remainingCargoNum">
+					<template slot-scope="scope">
+						<span>{{scope.row.remainingCargoWeight + '吨/'}}</span>
+						<span>{{scope.row.remainingCargoVolume + '方/'}}</span>
+						<span>{{scope.row.remainingCargoNum}}</span>
+					</template>
+				</el-table-column>
+				<!-- <el-table-column label="数量(余)" prop="remainingCargoNum"></el-table-column>
 				<el-table-column label="重量(余)" prop="remainingCargoWeight"></el-table-column>
-				<el-table-column label="体积(余)" prop="remainingCargoVolume"></el-table-column>
+				<el-table-column label="体积(余)" prop="remainingCargoVolume"></el-table-column> -->
 			</el-table>
 			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</div>

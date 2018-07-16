@@ -139,8 +139,8 @@
 							</td>
 							<td class="text-center">{{taskItem.cargoName}}</td>
 							<td class="text-center">
-								{{taskItem.loadWeightSum ? taskItem.loadWeightSum + 'kg/' : ''}}
-								{{taskItem.loadVolumeSum ? taskItem.loadVolumeSum + 'm³' : ''}}
+								{{taskItem.loadWeightSum ? taskItem.loadWeightSum + '吨' : ''}}
+								{{taskItem.loadVolumeSum ? (taskItem.loadWeightSum ? '/' : '') + taskItem.loadVolumeSum + '方' : ''}}
 							</td>
 							<td class="text-center">{{taskItem.loadNumSum}}</td>
 							<td class="text-center">{{taskItem.shipperArea}}</td>
@@ -253,7 +253,7 @@ export default {
 		getCustomers(queryString, cb) {
 			Customer.find({
 				type: 'ShipperConsignee',
-				companyName: queryString
+				keyword: queryString
 			}).then(res => {
 				cb(res.records)
 			})

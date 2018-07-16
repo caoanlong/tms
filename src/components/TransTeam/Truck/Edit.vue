@@ -1,8 +1,8 @@
 <template>
-	<div class="main-content">
+	<div class="main-content" style="padding-left:200px">
 		<el-form label-width="100px" size="mini" :model="truck" :rules="rules" ref="ruleForm" >
 			<el-card class="box-card">
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target1" style="margin-bottom:20px">
 					<span class="block-title">基本信息</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -122,7 +122,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target2" style="margin-bottom:20px">
 					<span class="block-title">所属单位/车主</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -156,7 +156,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target3" style="margin-bottom:20px">
 					<span class="block-title">行驶证</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -225,7 +225,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target4" style="margin-bottom:20px">
 					<span class="block-title">道路运输许可证</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -290,7 +290,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block">
+				<el-row class="section-block target5">
 					<span class="block-title">GPS</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -381,7 +381,7 @@
 				<div slot="header" class="clearfix">
 					<span>保险信息</span>
 				</div>
-				<el-row class="section-block" style="margin-bottom:10px">
+				<el-row class="section-block target6" style="margin-bottom:10px">
 					<span class="block-title">交强险</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -448,7 +448,7 @@
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="12">
-						<div class="section-block">
+						<div class="section-block target7">
 							<span class="block-title">商业险</span>
 							<div class="block-content">
 								<el-row>
@@ -501,7 +501,7 @@
 						</div>
 					</el-col>
 					<el-col :span="12">
-						<div class="section-block">
+						<div class="section-block target8">
 							<span class="block-title">承运险</span>
 							<div class="block-content">
 								<el-row>
@@ -554,7 +554,7 @@
 						</div>
 					</el-col>
 				</el-row>
-				<el-row class="section-block" style="margin-top:20px">
+				<el-row class="section-block target9" style="margin-top:20px">
 					<span class="block-title">货运险</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -583,7 +583,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-top:20px">
+				<el-row class="section-block target10" style="margin-top:20px">
 					<span class="block-title">保险备注</span>
 					<div class="block-content">
 						<el-form-item label="保险备注">
@@ -593,7 +593,7 @@
 				</el-row>
 			</el-card>
 			<el-card class="box-card">
-				<div class="section-block">
+				<div class="section-block target11">
 					<span class="block-title">技术参数</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -632,7 +632,7 @@
 				<div slot="header" class="clearfix">
 					<span>其他信息</span>
 				</div>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target12" style="margin-bottom:20px">
 					<span class="block-title">罐体</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -712,7 +712,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target13" style="margin-bottom:20px">
 					<span class="block-title">保证金</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -773,7 +773,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target14" style="margin-bottom:20px">
 					<span class="block-title">技术等级</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -842,7 +842,7 @@
 						</el-col>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target15" style="margin-bottom:20px">
 					<span class="block-title">二级维护</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -873,7 +873,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target16" style="margin-bottom:20px">
 					<span class="block-title">管理协议</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -936,7 +936,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block">
+				<el-row class="section-block target17">
 					<span class="block-title">其他资料</span>
 					<div class="block-content">
 						<el-row >
@@ -1001,18 +1001,40 @@
 				<el-button type="primary" @click="save">保存</el-button>	
 			</div>
 		</el-form>
+		<SelectPosition class="lift-nav" :titleList="titleList"></SelectPosition>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
 import Truck from '../../../api/Truck'
+import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
+import SelectPosition from '../components/SelectPosition'
 import DistPicker from '../../CommonComponents/DistPicker'
 import { checkPlateNo, checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		return {
+			titleList: [
+				'基本信息',
+				'所属单位/车主',
+				'行驶证',
+				'道路运输许可证',
+				'GPS',
+				'交强险',
+				'商业险',
+				'承运险',
+				'货运险',
+				'保险备注',
+				'技术参数',
+				'罐体',
+				'保证金',
+				'技术等级',
+				'二级维护',
+				'管理协议',
+				'其他'
+			],
 			driverLicTime: [],
 			gpsValidDate: [],
 			managementAgreementDate: [],
@@ -1169,8 +1191,35 @@ export default {
 			}
 		}
 	},
+	components: { ImageUpload, DistPicker, SelectPosition },
 	created() {
 		this.getInfo()
+	},
+	mounted() {
+		LiftEffect({
+			"control1": ".lift-nav", 	//侧栏电梯的容器
+			"control2": ".lift",        //需要遍历的电梯的父元素
+			"target": [
+				".target1",
+				".target2",
+				".target3",
+				".target4",
+				".target5",
+				".target6",
+				".target7",
+				".target8",
+				".target9",
+				".target10",
+				".target11",
+				".target12",
+				".target13",
+				".target14",
+				".target15",
+				".target16",
+				".target17"
+			], 							//监听的内容，注意一定要从小到大输入
+			"current": "active" 		//选中的样式
+		})
 	},
 	methods: {
 		getPrimaryDriver(queryString, cb) {
@@ -1242,13 +1291,21 @@ export default {
 		},
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
-			delete this.truck.plateNo
-			delete this.truck.trailerPlateNo
-			delete this.truck.truckCategory
-			console.log(this.truck.truckFrontPic)
-			Truck.update(this.truck).then(res => {
-				Message.success(res.data.msg)
-				this.$router.push({name: 'truck'})
+			this.$refs['ruleForm'].validate(valid => {
+				if (!valid) {
+					this.$nextTick(() => {
+						Message.error($('.el-form-item__error:first').text())
+						return
+					})
+				} else {
+					delete this.truck.plateNo
+					delete this.truck.trailerPlateNo
+					delete this.truck.truckCategory
+					Truck.update(this.truck).then(res => {
+						Message.success(res.data.msg)
+						this.$router.push({name: 'truck'})
+					})
+				}
 			})
 		},
 		getInfo() {
@@ -1264,10 +1321,6 @@ export default {
 		back() {
 			this.$router.go(-1)
 		}
-	},
-	components: {
-		ImageUpload,
-		DistPicker
 	}
 }
 

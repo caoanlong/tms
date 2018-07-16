@@ -42,7 +42,7 @@
 				@selectTruck="selectTruck">
 			</TruckItem>
 		</div>
-		<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+		<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		<div class="step-footer">
 			<el-button @click="prevStep">上一步</el-button>
 			<el-button type="primary" @click="nextStep">下一步</el-button>
@@ -67,7 +67,7 @@ export default {
 			},
 			pageIndex: 1,
 			pageSize: 10,
-			count: 0,
+			total: 0,
 			truck: [],
 			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
@@ -90,19 +90,15 @@ export default {
 				Message.error('请选择司机车辆！')
 				return
 			}
-			if (this.selectedTruck.primaryDriver.appStatus == 'N') {
-				this.$confirm('该司机未激活APP, 是否继续调度?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					this.$emit('nextStep', 4)
-				}).catch((err) => {
-					Message.info('已取消删除')
-				})
-			} else {
-				this.$emit('nextStep', 4)
+			if (!this.selectedTruck.primaryDriver) {
+				Message.error('当前选择的车辆没有司机！')
+				return
 			}
+			if (this.selectedTruck.primaryDriver.appStatus == 'N') {
+				Message.error('该司机未激活APP!')
+				return
+			}
+			this.$emit('nextStep', 4)
 		},
 		selectTruck(data) {
 			this.$store.dispatch('setTruck', data)
@@ -137,6 +133,14 @@ export default {
 				dispatchOrderID: this.dispatchOrderID
 			}).then(res => {
 				this.truck = res.records
+				this.total = res.total
+				let currentTruck = {}
+				this.truck.forEach(item => {
+					if (item.dispatchOrderID) {
+						currentTruck = item
+					}
+				})
+				this.$store.dispatch('setTruck', currentTruck)
 			})
 		},
 		back() {

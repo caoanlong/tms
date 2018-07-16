@@ -57,7 +57,7 @@
 									}}
 								</td>
 							</tr>
-							<tr class="text-center">
+							<tr class="text-center" v-if="selectedTruck.superCargo">
 								<td>押运员</td>
 								<td><el-input size="mini" v-model="task.superCargoCashAmount"></el-input></td>
 								<td><el-input size="mini" v-model="task.superCargoCodAmount"></el-input></td>

@@ -142,6 +142,16 @@ export const checkIDCard = (rule, value, callback) => {
 	}
 }
 
+// 验证驾驶证
+export const checkDriverLicenseNum = (rule, value, callback) => {
+	let regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+	if(!regIdNo.test(value)){  
+		callback(new Error('请输入正确的驾驶证号'))
+	} else {
+		callback()
+	}
+}
+
 export const checkArrayNull = (rule, value, callback) => {
 	if (value.length == 0) {
 		callback(new Error('请选择'))

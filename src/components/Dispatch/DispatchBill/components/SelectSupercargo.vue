@@ -1,7 +1,7 @@
 <template>
     <el-dialog :title="type == 'primary' ? '驾驶员列表' : '押运员列表'" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false">
         <el-form :inline="true" size="mini">
-            <el-form-item label="驾驶员">
+            <el-form-item :label="type == 'primary' ? '驾驶员' : '押运员'">
                 <el-input placeholder="姓名/手机号" v-model="find.keyword"></el-input>
             </el-form-item>
             <el-form-item label="装车日期">
@@ -21,7 +21,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="search">搜索</el-button>
-                <el-button>重置</el-button>
+                <el-button @click="reset">重置</el-button>
             </el-form-item>
         </el-form>
         <el-table 
@@ -31,6 +31,12 @@
             border style="width: 100%" size="mini" stripe>
             <el-table-column label="姓名" prop="realName" align="center"></el-table-column>
             <el-table-column label="手机号" prop="mobile" align="center"></el-table-column>
+            <el-table-column label="状态" prop="workStatus" align="center">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.workStatus == 'Free'">空闲</span>
+                    <span v-else-if="scope.row.workStatus == 'Working'">业务中</span>
+                </template>
+            </el-table-column>
         </el-table>
         <Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
         <div slot="footer" class="dialog-footer">
@@ -55,7 +61,7 @@ export default {
         return {
             find: {
                 keyword: '',
-                shipperDate: '',
+                shipperDate: new Date().getTime(),
                 workStatus: ''
 			},
             pageIndex: 1,
@@ -83,15 +89,15 @@ export default {
             this.find.workStatus = ''
 			this.pageIndex = 1
 			this.pageSize = 10
-			this.getList()
+			this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
 		},
 		pageChange(index) {
 			this.pageIndex = index
-			this.getList()
+			this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
 		},
 		pageSizeChange(size) {
 			this.pageSize = size
-			this.getList() 
+			this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList() 
         },
         getDriverList() {
 			Dispatchbill.findDrivers({

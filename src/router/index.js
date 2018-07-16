@@ -509,25 +509,25 @@ let routerMap = [
 					{
 						path: '/companyaddress',
 						name: 'companyaddress',
-						meta: { title: '企业地址' },
+						meta: { title: '收发货单位地址' },
 						component: () => import ('../components/Basedata/CompanyAddress'),
 					},
 					{
 						path: '/addcompanyaddress',
 						name: 'addcompanyaddress',
-						meta: { title: '添加企业地址' },
+						meta: { title: '添加收发货单位地址' },
 						component: () => import ('../components/Basedata/CompanyAddress/Add'),
 					},
 					{
 						path: '/editcompanyaddress',
 						name: 'editcompanyaddress',
-						meta: { title: '编辑企业地址' },
+						meta: { title: '编辑收发货单位地址' },
 						component: () => import ('../components/Basedata/CompanyAddress/Edit'),
 					},
 					{
 						path: '/viewcompanyaddress',
 						name: 'viewcompanyaddress',
-						meta: { title: '查看企业地址' },
+						meta: { title: '查看收发货单位地址' },
 						component: () => import ('../components/Basedata/CompanyAddress/View'),
 					},
 					{

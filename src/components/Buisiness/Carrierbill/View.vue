@@ -43,6 +43,7 @@
 				<div class="block-content">
 					<table class="wf-table">
 						<tr>
+							<th>客户单号</th>
 							<th>货物名称</th>
 							<th>数量</th>
 							<th>体积</th>
@@ -50,6 +51,7 @@
 							<th>剩余货量</th>
 						</tr>
 						<tr class="is-center" v-for="item in carrierCargo" :key="item.carrierCargoID">
+							<td>{{item.customizedNo}}</td>
 							<td>{{item.cargoName}}</td>
 							<td>{{item.cargoNum}}{{item.cargoUnitName}}</td>
 							<td>{{item.cargoVolume + '方'}}</td>
@@ -62,6 +64,7 @@
 						</tr>
 						<tr class="total is-center">
 							<td>合计</td>
+							<td></td>
 							<td>{{sum('cargoNum')}}</td>
 							<td>{{sum('cargoVolume') + '方'}}</td>
 							<td>{{sum('cargoWeight') + '吨'}}</td>
@@ -110,6 +113,38 @@
 					</table>
 				</div>
 			</el-row>
+			<el-row>
+				<el-col :span="12">
+					<div class="section-block">
+						<span class="block-title">运输费用</span>
+						<el-row class="block-content" style="padding-bottom:20px">
+							<div>
+								<span class="tit">运费金额</span>
+								<span class="ctt">{{carrierOrder.freight}}</span>
+							</div>
+						</el-row>
+					</div>
+				</el-col>
+				<el-col :span="12">
+					<div class="section-block">
+						<span class="block-title">回单要求</span>
+						<el-row class="block-content" style="padding-bottom:20px">
+							<div>
+								<span class="tit">单据</span>
+								<span class="ctt">
+									<span v-for="(item,index) in carrierOrder.porRequire" :key="index"> {{index != 0 ? ',' : ''}}{{mapType[item]}}</span>
+								</span>
+							</div>
+							<!-- <el-form-item label="单据">
+								<el-checkbox-group v-model="carrierCargo.porRequire" disabled>
+									<el-checkbox label="ConsigneePor" name="porRequire">货物托运单</el-checkbox>
+									<el-checkbox label="ShipperPor" name="porRequire">货物发货单</el-checkbox>
+								</el-checkbox-group>
+							</el-form-item> -->
+						</el-row>
+					</div>
+				</el-col>
+			</el-row>
 			<div class="wf-footer clearfix text-center">
 				<el-button @click="back">返回</el-button>
 			</div>
@@ -131,6 +166,10 @@ import UploadPhoto from '../../Dispatch/DispatchBill/components/UploadPhoto'
 export default {
 	data() {
 		return {
+			mapType: {
+				'ConsigneePor': '货物托运单',
+				'ShipperPor': '货物发货单'
+			},
 			carrierOrder: {},
 			isPhotoVisible: false,
 			currentDispatchTaskID: '',
@@ -157,8 +196,8 @@ export default {
 			const carrierOrderID = this.$route.query.carrierOrderID
 			Carrierbill.findById({ carrierOrderID }).then(res => {
 				this.carrierOrder = res
+				this.carrierOrder.porRequire = res.porRequire.split(',')
 				this.carrierCargo = res.carrierCargo
-				this.porRequire = res.porRequire.split(',')
 				this.getTransports(carrierOrderID)
 			})
 		},

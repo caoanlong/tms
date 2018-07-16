@@ -15,6 +15,18 @@
 							<el-option value="Closed" label="已关闭">已关闭</el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="委托时间">
+						<el-date-picker
+							v-model="rangeDate"
+							type="daterange"
+							range-separator="至"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							value-format="timestamp"
+							:clearable="false"
+							@change="selectDateRange">
+						</el-date-picker>
+					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">搜索</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
@@ -43,13 +55,19 @@
 					<el-table-column label="货物" prop="cargoName"></el-table-column>
 					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
-					<el-table-column label="发货时间" prop="shipperDate">
+					<el-table-column label="委托时间" prop="commissionDate" width="100">
 						<template slot-scope="scope">
-							<span v-if="scope.row.shipperDate">{{ new Date(scope.row.shipperDate).getTime() | getdatefromtimestamp(true)}}</span>
+							<span v-if="scope.row.commissionDate">{{ new Date(scope.row.commissionDate).getTime() | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
 					<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
+					<el-table-column label="原数量" prop="cargoNumSum"></el-table-column>
+					<el-table-column label="原货量">
+						<template slot-scope="scope">
+							<span>{{scope.row.cargoWeightSum + '吨'}}/{{scope.row.cargoVolumeSum + '方'}}</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="数量(余)" prop="remainingCargoNum"></el-table-column>
 					<el-table-column label="货量(余)">
 						<template slot-scope="scope">
@@ -88,9 +106,12 @@ export default {
 			pageSize: 10,
 			total: 0,
 			tableData: [],
+			rangeDate: [],
 			find: {
 				keyword: '',
-				status: ''
+				status: '',
+				begin: '',
+				end: ''
 			},
 			selectedList: []
 		}
@@ -100,6 +121,10 @@ export default {
 		this.getList()
 	},
 	methods: {
+		selectDateRange(date) {
+			this.find.begin = date[0]
+			this.find.end = date[1]
+		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.carrierOrderID)
 		},
@@ -111,6 +136,9 @@ export default {
 		reset() {
 			this.find.keyword = ''
 			this.find.status = ''
+			this.find.begin = ''
+			this.find.end = ''
+			this.rangeDate = []
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
@@ -128,7 +156,9 @@ export default {
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
-				status: this.find.status
+				status: this.find.status,
+				begin: this.find.begin,
+				end: this.find.end
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total

@@ -16,7 +16,7 @@
 				</el-col>
 				<el-col :span="8">
 					<p>货物信息：</p><p>{{taskItem.cargoName}}</p>
-					<p>{{taskItem.loadWeightSum?(taskItem.loadWeightSum+'kg/'):''}}{{taskItem.loadVolumeSum?(taskItem.loadVolumeSum+'m³/'):''}}{{taskItem.loadNumSum?(taskItem.loadNumSum+'件'):''}}</p>
+					<p>{{taskItem.loadWeightSum?(taskItem.loadWeightSum+'吨/'):''}}{{taskItem.loadVolumeSum?(taskItem.loadVolumeSum+'方/'):''}}{{taskItem.loadNumSum?(taskItem.loadNumSum+'件'):''}}</p>
 				</el-col>
 				<el-col :span="8">
 					<p>收货单位：{{taskItem.consigneeCompanyName}}</p>

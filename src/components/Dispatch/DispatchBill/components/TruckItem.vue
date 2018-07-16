@@ -155,6 +155,7 @@ export default {
 			} else {
 				this.truck.superCargo = data
 			}
+			this.$emit('selectTruck', this.truck)
 			this.flag = true
 			this.selectDialogVisible = false
 		}

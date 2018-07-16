@@ -80,7 +80,8 @@
 							<el-row class="block-content">
 								<el-form-item label="发货时间" prop="shipperDate">
 									<el-date-picker 
-										type="date" 
+										format="yyyy-MM-dd HH:mm"
+										type="datetime" 
 										style="width:100%" 
 										placeholder="选择发货时间" 
 										v-model="carrierbillInfo.shipperDate" 
@@ -151,7 +152,9 @@
 							<el-row class="block-content">
 								<el-form-item label="到货时间" prop="consigneeDate">
 									<el-date-picker 
-										type="date" 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
+										format="yyyy-MM-dd HH:mm"
+										type="datetime" 
 										style="width:100%" 
 										placeholder="选择到货时间" 
 										v-model="carrierbillInfo.consigneeDate" 
@@ -206,7 +209,7 @@
 										@select="handSelectCargo">
 									</el-autocomplete>
 								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{ required: true, message: '请输入数量'}]">
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{ required: true, message: '请输入数量'}, { validator: checkInt }]">
 									<el-input-number style="width:130px" v-model="item.cargoNum" :min="1"></el-input-number>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" :rules="[{ required: true, message: '请选择单位'}]">
@@ -296,6 +299,7 @@ import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../..
 import { checkTel } from '../../../common/validators'
 import distData from '../../../assets/data/distpicker.data'
 import Geohash from '../../../common/Geohash'
+import { checkInt } from '../../../common/validator'
 export default {
 	data() {
 		return {
@@ -367,7 +371,8 @@ export default {
 		}
 	},
 	computed: {
-		dist: () => dist
+		dist: () => dist,
+		checkInt: () => checkInt
 	},
 	created() {
 		this.getUnits()
@@ -399,13 +404,13 @@ export default {
 		getShipperCompany(queryString, cb) {
 			Customer.find({
 				customerType: 'Shipper',
-				companyName: queryString
+				keyword: queryString
 			}).then(res => { cb(res.records) })
 		},
 		getConsigneeCompany(queryString, cb) {
 			Customer.find({
 				customerType: 'Consignee',
-				companyName: queryString
+				keyword: queryString
 			}).then(res => { cb(res.records) })
 		},
 		getShipperLocation(queryString, cb) {
@@ -517,77 +522,14 @@ export default {
 			this.carrierbillInfo.consigneeLocationLat = data.latitude
 		},
 		save() {
-			// if (this.carrierbillInfo.shipperNo) {
-			// 	Message.error('请输入发货单号')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.commissionDate) {
-			// 	Message.error('请选择委托时间')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.consignorName) {
-			// 	Message.error('请输入托运人')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.carrierrName) {
-			// 	Message.error('请输入承运人')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.shipperCompanyName) {
-			// 	Message.error('请输入发货单位')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.shipperName) {
-			// 	Message.error('请输入发货人')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.shipperName) {
-			// 	Message.error('请输入发货人')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.shipperPhone) {
-			// 	Message.error('请输入发货人联系方式')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.shipperDate) {
-			// 	Message.error('请选择发货时间')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.shipperAreaID) {
-			// 	Message.error('请选择发货地')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.shipperLocationAddress) {
-			// 	Message.error('请选择发货定位地址')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.consigneeCompanyName) {
-			// 	Message.error('请输入收货单位')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.consigneeName) {
-			// 	Message.error('请输入收货人')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.consigneePhone) {
-			// 	Message.error('请输入收货联系方式')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.consigneeAreaID) {
-			// 	Message.error('请选择收货地')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.consigneeLocationAddress) {
-			// 	Message.error('请选择定位地址')
-			// 	return
-			// }
-			// if (this.carrierbillInfo.transportType) {
-			// 	Message.error('请选择运输方式')
-			// 	return
-			// }
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
-					if (!valid) return
+					if (!valid) {
+						this.$nextTick(() => {
+							Message.error($('.el-form-item__error:first').text())
+							return
+						})
+					}
 					resolve()
 				})
 			}).then(() => {

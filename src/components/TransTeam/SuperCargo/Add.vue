@@ -1,8 +1,8 @@
 <template>
-	<div class="main-content">
+	<div class="main-content" style="padding-left:200px">
 		<el-form label-width="126px" size="mini" :model="superCargo" :rules="rules" ref="ruleForm" >
 			<el-card class="box-card">
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target1" style="margin-bottom:20px">
 					<span class="block-title">基本信息</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -84,7 +84,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target2" style="margin-bottom:20px">
 					<span class="block-title">身份证</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -131,7 +131,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block">
+				<el-row class="section-block target3">
 					<span class="block-title">卫生员合格证</span>
 					<div class="block-content">
 						<el-row >
@@ -168,11 +168,11 @@
 					</el-checkbox-group>
 				</el-form-item>
 			</el-card>
-			<el-card class="box-card" v-if="supercargoType.includes('Driver')">
+			<el-card class="box-card" v-show="supercargoType.includes('Driver')">
 				<div slot="header" class="clearfix"><span>驾驶员</span></div>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target4" style="margin-bottom:20px;min-height:280px">
 					<span class="block-title">驾驶证</span>
-					<div class="block-content">
+					<div class="block-content" v-if="supercargoType.includes('Driver')">
 						<el-row :gutter="20" >
 							<el-col :span="12">
 								<el-form-item label="驾驶证号" prop="driverLicenseNum">
@@ -260,7 +260,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
+				<el-row class="section-block target5" style="margin-bottom:20px">
 					<span class="block-title">危货从业资格证</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -374,7 +374,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row :gutter="20" style="margin-bottom:20px">
+				<el-row :gutter="20" class="target6" style="margin-bottom:20px">
 					<el-col :span="12">
 						<div class="section-block">
 							<span class="block-title">驾驶员继续再教育合格证</span>
@@ -459,7 +459,7 @@
 						</div>
 					</el-col>
 				</el-row>
-				<el-row :gutter="20">
+				<el-row :gutter="20" class="target7">
 					<el-col :span="8">
 						<div class="section-block">
 							<span class="block-title">违章和记分记录</span>
@@ -543,9 +543,9 @@
 					</el-col>
 				</el-row>
 			</el-card>
-			<el-card class="box-card" v-if="supercargoType.includes('Supercargo')">
+			<el-card class="box-card" v-show="supercargoType.includes('Supercargo')">
 				<div slot="header" class="clearfix"><span>押运员信息</span></div>
-				<el-row class="section-block">
+				<el-row class="section-block target8">
 					<span class="block-title">押运员从业资格证</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -606,7 +606,7 @@
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
-							<el-col :span="24">
+							<el-col :span="12">
 								<el-form-item label="从业资格证有效期">
 									<el-date-picker
 										type="daterange"
@@ -646,7 +646,7 @@
 				</el-row>
 			</el-card>
 			<el-card class="box-card">
-				<el-row class="section-block">
+				<el-row class="section-block target9">
 					<span class="block-title">其他</span>
 					<div class="block-content">
 						<el-form-item label="照片" label-width="40px" prop="otherPic1">
@@ -665,16 +665,30 @@
 				<el-button type="primary" @click="save">保存</el-button>	
 			</div>
 		</el-form>
+		<SelectPosition class="lift-nav" :titleList="titleList"></SelectPosition>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
+import SelectPosition from '../components/SelectPosition'
 import SuperCargo from '../../../api/SuperCargo'
-import { checkTel, checkIDCard } from '../../../common/validator'
+import { checkTel, checkIDCard, checkDriverLicenseNum } from '../../../common/validator'
 export default {
 	data() {
 		return {
+			titleList: [
+				'基本信息',
+				'身份证',
+				'卫生合格证',
+				'驾驶证',
+				'危货从业资格证',
+				'驾驶员继续再教育合格证',
+				'违章和记分记录',
+				'押运员从业资格证',
+				'其他'
+			],
 			supercargoType: [],
 			idCardTime: [],
 			driverLicenseTime: [],
@@ -751,7 +765,7 @@ export default {
 				idCardNum: [ { required: true , message: '请输入身份证号'}, { validator: checkIDCard } ],
 				idCardExpirationTime: [ { required: true , message: '请选择身份证有效期'} ],
 				idCardFrontUrl: [ { required: true , message: '请上传身份证照片'} ],
-				driverLicenseNum: [ { required: true , message: '请输入驾驶证号'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
+				driverLicenseNum: [ { required: true , message: '请输入驾驶证号'}, { validator: checkDriverLicenseNum } ],
 				driverLicenseCode: [ { required: true , message: '请输入档案编号'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
 				quasiDrivingType: [ { required: true , message: '请选择准驾车型'} ],
 				driverLicenseFirstTime: [ { required: true , message: '请选择初次领证日期'} ],
@@ -764,7 +778,25 @@ export default {
 			}
 		}
 	},
-	components: { ImageUpload },
+	components: { ImageUpload, SelectPosition },
+	mounted() {
+		LiftEffect({
+			"control1": ".lift-nav", 	//侧栏电梯的容器
+			"control2": ".lift",        //需要遍历的电梯的父元素
+			"target": [
+				".target1",
+				".target2",
+				".target3",
+				".target4",
+				".target5",
+				".target6",
+				".target7",
+				".target8",
+				".target9"
+			], 							//监听的内容，注意一定要从小到大输入
+			"current": "active" 		//选中的样式
+		})
+	},
 	methods: {
 		handleHeadPic(res) { this.superCargo.headPic = res.length == 0 ? '' : res[0] },
 		handleIdCardFrontUrl(res) { this.superCargo.idCardFrontUrl = res.length == 0 ? '' : res[0] },
@@ -810,19 +842,41 @@ export default {
 		},
 		supercargoTypeChange(data) {
 			this.superCargo.supercargoType = data.length == 2 ? 'SupercargoDriver' : data.join('')
+			LiftEffect({
+				"control1": ".lift-nav", 	//侧栏电梯的容器
+				"control2": ".lift",        //需要遍历的电梯的父元素
+				"target": [
+					".target1",
+					".target2",
+					".target3",
+					".target4",
+					".target5",
+					".target6",
+					".target7",
+					".target8",
+					".target9"
+				], 							//监听的内容，注意一定要从小到大输入
+				"current": "active" 		//选中的样式
+			})
 		},
 		save() {
 			this.superCargo.qualificationIsNewest = this.superCargo.qualificationIsNewest ? 'Y' : 'N'
 			this.$refs['ruleForm'].validate(valid => {
-				if (!valid) return
-				if (!this.superCargo.supercargoType) {
-					Message.error('必须选择从事运输岗位！')
-					return
+				if (!valid) {
+					this.$nextTick(() => {
+						Message.error($('.el-form-item__error:first').text())
+						return
+					})
+				} else {
+					if (!this.superCargo.supercargoType) {
+						Message.error('必须选择从事运输岗位！')
+						return
+					}
+					SuperCargo.add(this.superCargo).then(res => {
+						Message.success(res.data.msg)
+						this.$router.push({name: 'supercargo'})
+					})
 				}
-				SuperCargo.add(this.superCargo).then(res => {
-					Message.success(res.data.msg)
-					this.$router.push({name: 'supercargo'})
-				})
 			})
 		},
 		back() {

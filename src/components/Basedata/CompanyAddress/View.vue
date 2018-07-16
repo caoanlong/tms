@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">查看企业地址</div>
+			<div slot="header" class="clearfix">查看收发货单位地址</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" size="small">

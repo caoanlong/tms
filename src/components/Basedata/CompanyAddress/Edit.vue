@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">编辑企业地址</div>
+			<div slot="header" class="clearfix">编辑收发货单位地址</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="companyAddress" :rules="rules" ref="ruleForm" size="small">
