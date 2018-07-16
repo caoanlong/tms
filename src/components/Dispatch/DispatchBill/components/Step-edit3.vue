@@ -132,8 +132,15 @@ export default {
 				shipperDate: this.find.shipperDate,
 				dispatchOrderID: this.dispatchOrderID
 			}).then(res => {
-				this.truck = res.records
+				const list = res.records
 				this.total = res.total
+				list.forEach(item => {
+					if (this.selectedTruck && (item.truckID == this.selectedTruck.truckID)) {
+						item.primaryDriver = this.selectedTruck.primaryDriver
+						item.superCargo = this.selectedTruck.superCargo
+					}
+				})
+				this.truck = list
 				let currentTruck = {}
 				this.truck.forEach(item => {
 					if (item.dispatchOrderID) {

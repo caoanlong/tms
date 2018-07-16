@@ -20,8 +20,8 @@
 							<tr v-for="cargoItem in task.cargo" :key="cargoItem.carrierCargoID">
 								<td align="center">{{task.carrierOrderNo}}</td>
 								<td align="center">{{cargoItem.cargoName}}</td>
-								<td align="center">{{cargoItem.cargoWeightNew ? cargoItem.cargoWeightNew + '吨' : ''}}</td>
-								<td align="center">{{cargoItem.cargoVolumeNew ? cargoItem.cargoVolumeNew + '方' : ''}}</td>
+								<td align="center">{{cargoItem.cargoWeightNew ? cargoItem.cargoWeightNew + '吨' : '0吨'}}</td>
+								<td align="center">{{cargoItem.cargoVolumeNew ? cargoItem.cargoVolumeNew + '方' : '0方'}}</td>
 								<td align="center">{{cargoItem.cargoNumNew ? cargoItem.cargoNumNew + cargoItem.cargoUnitName : ''}}</td>
 							</tr>
 						</table>
@@ -244,6 +244,7 @@ export default {
 				'superCargoID': this.selectedTruck.superCargo && this.selectedTruck.superCargo.comSupercargoID
 			}).then(res => {
 				Message.success('保存成功！')
+				this.$store.dispatch('setTruck', null)
 				this.$store.dispatch('clearCargo')
 				this.$store.dispatch('clearCarrierBill')
 				this.$router.push({name: 'dispatchbills'})

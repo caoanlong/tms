@@ -55,7 +55,7 @@
 						<th width="80">状态</th>
 						<th width="80">货物</th>
 						<th>货量</th>
-						<th>件数</th>
+						<th>数量</th>
 						<th>装车地</th>
 						<th width="140">装车时间</th>
 						<th>送货地</th>
@@ -213,6 +213,11 @@ export default {
 			this.find.endDispatchDate = date[1]
 		},
 		search() {
+			if (this.find.companyName && !this.find.customerID) {
+				this.dispatchBillList = []
+				this.count = 0
+				return
+			}
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()

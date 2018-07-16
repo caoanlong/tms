@@ -15,8 +15,16 @@
             </el-form-item>
             <el-form-item label="状态">
                 <el-select placeholder="请选择" v-model="find.workStatus">
+                    <el-option label="全部" value=""></el-option>
                     <el-option label="空闲" value="Free"></el-option>
                     <el-option label="业务中" value="Working"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="APP激活状态" v-if="type == 'primary'">
+                <el-select placeholder="请选择" v-model="find.appStatus">
+                    <el-option label="全部" value=""></el-option>
+                    <el-option label="已激活" value="Y"></el-option>
+                    <el-option label="未激活" value="N"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -29,7 +37,20 @@
             highlight-current-row
             @current-change="handleCurrentChange"
             border style="width: 100%" size="mini" stripe>
-            <el-table-column label="姓名" prop="realName" align="center"></el-table-column>
+            <el-table-column label="姓名" align="center">
+                <template slot-scope="scope">
+                    <span>{{scope.row.realName}}</span>
+                    <span v-if="type == 'primary'">
+                        <el-tooltip placement="top" v-if="scope.row.appStatus == 'Y'">
+                            <div slot="content">开通APP接单</div>
+                            <el-tag size="mini">APP</el-tag> 
+                        </el-tooltip>
+                        <el-tag type="info" size="mini" v-else>APP</el-tag> 
+                    </span>
+                    <el-tag type="success" size="mini" v-if="scope.row.isPrimary == 'Y'">主驾</el-tag>
+                    <el-tag type="success" size="mini" v-else-if="scope.row.isSecondary == 'Y'">副驾</el-tag>
+                </template>
+            </el-table-column>
             <el-table-column label="手机号" prop="mobile" align="center"></el-table-column>
             <el-table-column label="状态" prop="workStatus" align="center">
                 <template slot-scope="scope">
@@ -55,14 +76,16 @@ export default {
             default: false
         },
         type: String,
-        truckID: String
+        truckID: String,
+        exclude: String
     },
     data() {
         return {
             find: {
                 keyword: '',
                 shipperDate: new Date().getTime(),
-                workStatus: ''
+                workStatus: 'Free',
+                appStatus: ''
 			},
             pageIndex: 1,
 			pageSize: 10,
@@ -72,21 +95,31 @@ export default {
     },
     watch: {
         dialogVisible(newVal) {
+            this.reset()
             newVal && (this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList())
         }
     },
     components: { Page },
     methods: {
         handleCurrentChange(data) {
+            if (this.type == 'primary' && data.appStatus == 'N') {
+                Message.error('该司机未在APP激活！')
+                return
+            }
             data && this.$emit('control', true, data, this.type)
         },
         search() {
+            if (!this.find.shipperDate) {
+                Message.error('装车日期必填！')
+                return
+            }
             this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
         },
         reset() {
             this.find.keyword = ''
-            this.find.shipperDate = ''
-            this.find.workStatus = ''
+            this.find.shipperDate = new Date().getTime()
+            this.find.workStatus = 'Free'
+            this.find.appStatus = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
@@ -105,10 +138,17 @@ export default {
 				size: this.pageSize,
                 keyword: this.find.keyword,
                 shipperDate: this.find.shipperDate,
-                workStatus: this.find.workStatus
+                workStatus: this.find.workStatus,
+                appStatus: this.find.appStatus,
+                truckID: this.truckID
 			}).then(res => {
-                this.superCargos = res.records
                 this.total = res.total
+                const list = res.records
+                if (this.exclude) {
+                    const index = list.map(item => item.comSupercargoID).indexOf(this.exclude)
+                    list.splice(index, 1)
+                }
+                this.superCargos = list
 			})
         },
         getSuperCagoList() {
@@ -119,8 +159,13 @@ export default {
                 shipperDate: this.find.shipperDate,
                 workStatus: this.find.workStatus
 			}).then(res => {
-                this.superCargos = res.records
                 this.total = res.total
+                const list = res.records
+                if (this.exclude) {
+                    const index = list.map(item => item.comSupercargoID).indexOf(this.exclude)
+                    list.splice(index, 1)
+                }
+                this.superCargos = list
 			})
 		},
         control(bool) {

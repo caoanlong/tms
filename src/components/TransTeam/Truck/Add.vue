@@ -1400,7 +1400,7 @@ export default {
 			Truck.findDriverList({
 				current: 1,
 				size: 1000,
-				type: 'superCargo',
+				type: 'driver',
 				keyword: queryString
 			}).then(res => {
 				const list = res.records

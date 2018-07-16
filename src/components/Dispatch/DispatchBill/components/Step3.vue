@@ -130,8 +130,15 @@ export default {
 				workStatus: this.find.workStatus,
 				shipperDate: this.find.shipperDate
 			}).then(res => {
-				this.truck = res.records
+				const list = res.records
 				this.total = res.total
+				list.forEach(item => {
+					if (this.selectedTruck && (item.truckID == this.selectedTruck.truckID)) {
+						item.primaryDriver = this.selectedTruck.primaryDriver
+						item.superCargo = this.selectedTruck.superCargo
+					}
+				})
+				this.truck = list
 			})
 		},
 		back() {

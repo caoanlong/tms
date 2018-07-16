@@ -76,17 +76,17 @@
 								<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
 								<el-table-column label="货物重量" align="center">
 									<template slot-scope="scope">
-										<span >{{scope.row.cargoWeight? scope.row.cargoWeight+'吨':''}}</span>
+										<span >{{scope.row.cargoWeight? scope.row.cargoWeight+'吨':'0吨'}}</span>
 									</template>
 								</el-table-column>
 								<el-table-column label="货物体积" align="center">
 									<template slot-scope="scope">
-										<span >{{scope.row.cargoVolume? scope.row.cargoVolume+'方':''}}</span>
+										<span >{{scope.row.cargoVolume? scope.row.cargoVolume+'方':'0方'}}</span>
 									</template>
 								</el-table-column>
 								<el-table-column label="货物数量" align="center">
 									<template slot-scope="scope">
-										<span >{{scope.row.cargoNum? scope.row.cargoNum+scope.row.cargoUnitName:''}}</span>
+										<span >{{scope.row.cargoNum? scope.row.cargoNum+scope.row.cargoUnitName:'0'}}</span>
 									</template>
 								</el-table-column>
 							</el-table>

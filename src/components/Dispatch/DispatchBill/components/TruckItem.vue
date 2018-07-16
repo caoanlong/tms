@@ -53,15 +53,14 @@
 						<el-tag size="mini">APP</el-tag> 
 					</el-tooltip>
 					<el-tag type="info" size="mini" v-else>APP</el-tag>
-					<!-- <el-tag size="mini">作业</el-tag> -->
-					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
+					<el-tag type="warning" size="mini" v-if="truck.primaryDriver.workStatus == 'Free'">空闲</el-tag>
+					<el-tag type="warning" size="mini" v-else-if="truck.primaryDriver.workStatus == 'Working'">工作中</el-tag>
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
 							<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
 							<el-tag size="mini" type="danger">身份证到期</el-tag> 
 							<el-tag size="mini" type="danger">从业资格证到期</el-tag>
 						</div>
-						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
 				<p>{{truck.primaryDriver.mobile}}</p>
@@ -78,20 +77,12 @@
 			<div class="escortInfo fl">
 				<p>
 					<span class="escortName">{{truck.superCargo.realName}}</span>
-					<el-tooltip placement="top" v-if="truck.superCargo.appStatus == 'Y'">
-						<div slot="content">开通APP接单</div>
-						<el-tag size="mini">APP</el-tag> 
-					</el-tooltip>
-					<el-tag type="info" size="mini" v-else>APP</el-tag> 
-					<!-- <el-tag size="mini">作业</el-tag> -->
-					<!-- <el-tag size="mini" type="warning">空闲</el-tag> -->
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
 							<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
 							<el-tag size="mini" type="danger">身份证到期</el-tag> 
 							<el-tag size="mini" type="danger">从业资格证到期</el-tag>
 						</div>
-						<!-- <el-tag size="mini" type="danger">到期</el-tag> -->
 					</el-tooltip>
 				</p>
 				<p>{{truck.superCargo.mobile}}</p>
@@ -102,7 +93,7 @@
 		<div class="escortColumn" v-else>
 			<span class="btn addEscortBtn"  @click="add('second')"><svg-icon icon-class="add-icon"></svg-icon>添加押车员</span>
 		</div>
-		<SelectSupercargo :type="type" :dialogVisible="selectDialogVisible" @control="handleSelectSupercargo"></SelectSupercargo>
+		<SelectSupercargo :type="type" :truckID="truck.truckID" :exclude="exclude" :dialogVisible="selectDialogVisible" @control="handleSelectSupercargo"></SelectSupercargo>
 	</div>
 </template>
 
@@ -123,9 +114,10 @@ export default {
 	},
 	data(){
 		return {
+			exclude: '',
 			selectDialogVisible: false,
 			type: 'primary',
-			flag: false
+			flag: true
 		}
 	},
 	computed: {
@@ -138,10 +130,20 @@ export default {
 			this.$emit('selectTruck', this.truck)
 		},
 		add(type) {
+			if (type == 'primary' && this.truck.superCargo) {
+				this.exclude = this.truck.superCargo.comSupercargoID
+			} else if (type == 'second' && this.truck.primaryDriver) {
+				this.exclude = this.truck.primaryDriver.comSupercargoID
+			}
 			this.type = type
 			this.selectDialogVisible = true
 		},
 		selectSupercargo(type) {
+			if (type == 'primary' && this.truck.superCargo) {
+				this.exclude = this.truck.superCargo.comSupercargoID
+			} else if (type == 'second' && this.truck.primaryDriver) {
+				this.exclude = this.truck.primaryDriver.comSupercargoID
+			}
 			this.type = type
 			this.selectDialogVisible = true
 		},
@@ -150,10 +152,12 @@ export default {
 			this.flag = false
 		},
 		handleSelectSupercargo(bool, data, type) {
-			if (type == 'primary') {
-				this.truck.primaryDriver = data
-			} else {
-				this.truck.superCargo = data
+			if (bool) {
+				if (type == 'primary') {
+					this.truck.primaryDriver = data
+				} else {
+					this.truck.superCargo = data
+				}
 			}
 			this.$emit('selectTruck', this.truck)
 			this.flag = true

@@ -57,9 +57,9 @@
 							<td>{{item.cargoVolume + '方'}}</td>
 							<td>{{item.cargoWeight + '吨'}}</td>
 							<td>
-								{{item.remainingCargoNum ? item.remainingCargoNum + item.cargoUnitName : ''}}
-								{{item.remainingCargoVolume ? ('/' + item.remainingCargoVolume + '方') : ''}}
-								{{item.remainingCargoWeight ? ('/' + item.remainingCargoWeight + '吨') : ''}}
+								{{item.remainingCargoNum + item.cargoUnitName}}
+								{{'/' + item.remainingCargoVolume + '方'}}
+								{{'/' + item.remainingCargoWeight + '吨'}}
 							</td>
 						</tr>
 						<tr class="total is-center">
@@ -69,9 +69,9 @@
 							<td>{{sum('cargoVolume') + '方'}}</td>
 							<td>{{sum('cargoWeight') + '吨'}}</td>
 							<td>
-								<span v-if="sum('remainingCargoNum')>0">{{sum('remainingCargoNum')}}/</span>
-								<span v-if="sum('remainingCargoVolume')>0">{{sum('remainingCargoVolume')}}方/</span>
-								<span v-if="sum('remainingCargoWeight')>0">{{sum('remainingCargoWeight')}}吨</span>	
+								<span>{{sum('remainingCargoNum')}}</span>
+								<span>/{{sum('remainingCargoVolume')}}方</span>
+								<span>/{{sum('remainingCargoWeight')}}吨</span>	
 							</td>
 						</tr>
 					</table>
@@ -99,7 +99,7 @@
 							<td>{{transport.driverName}}</td>
 							<td>{{transport.superCargoName}}</td>
 							<td>{{transport.cargoName}}</td>
-							<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.LoadNumSum + '件'}}</td>
+							<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.LoadNumSum}}</td>
 							<td style="text-align: center">
 								<el-button 
 									:disabled="transport.taskPicNum == 0"
@@ -135,12 +135,6 @@
 									<span v-for="(item,index) in carrierOrder.porRequire" :key="index"> {{index != 0 ? ',' : ''}}{{mapType[item]}}</span>
 								</span>
 							</div>
-							<!-- <el-form-item label="单据">
-								<el-checkbox-group v-model="carrierCargo.porRequire" disabled>
-									<el-checkbox label="ConsigneePor" name="porRequire">货物托运单</el-checkbox>
-									<el-checkbox label="ShipperPor" name="porRequire">货物发货单</el-checkbox>
-								</el-checkbox-group>
-							</el-form-item> -->
 						</el-row>
 					</div>
 				</el-col>

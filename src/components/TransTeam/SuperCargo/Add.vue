@@ -90,19 +90,30 @@
 						<el-row :gutter="20" >
 							<el-col :span="12">
 								<el-form-item label="身份证号" prop="idCardNum">
-									<el-input v-model="superCargo.idCardNum"></el-input>
+									<el-input v-model="superCargo.idCardNum" @blur="setIDCard"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								<el-form-item label="有效期开始" prop="idCardBeginTime">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate}"
+										type="date"
+										style="width:100%" 
+										value-format="timestamp" 
+										v-model="superCargo.idCardBeginTime">
+									</el-date-picker>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="身份证有效期" prop="idCardExpirationTime">
-									<el-date-picker
-										type="daterange"
-										range-separator="至"
-										start-placeholder="开始日期"
-										end-placeholder="结束日期" 
+								<el-form-item label="有效期结束" prop="idCardExpirationTime">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate}"
+										type="date"
 										style="width:100%" 
-										v-model="idCardTime" 
-										@change="handSelectIdCardTime">
+										value-format="timestamp" 
+										v-model="superCargo.idCardExpirationTime">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
@@ -222,16 +233,25 @@
 							</el-col>
 						</el-row>
 						<el-row >
-							<el-col :span="24">
-								<el-form-item label="驾驶证有效期" prop="driverLicenseBeginTime">
-									<el-date-picker
-										type="daterange"
-										range-separator="至"
-										start-placeholder="开始日期"
-										end-placeholder="结束日期" 
+							<el-col :span="12">
+								<el-form-item label="有效期开始" prop="driverLicenseBeginTime">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate}"
+										type="date"
 										style="width:100%" 
-										v-model="driverLicenseTime" 
-										@change="handDriverLicenseTime">
+										value-format="timestamp"
+										v-model="superCargo.driverLicenseBeginTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="有效期结束" prop="driverLicenseEndTime">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate}"
+										type="date"
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="superCargo.driverLicenseEndTime">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
@@ -318,27 +338,36 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="从业资格证有效期">
-									<el-date-picker
-										type="daterange"
-										range-separator="至"
-										start-placeholder="开始日期"
-										end-placeholder="结束日期" 
-										style="width:100%" 
-										v-model="qualificationDate" 
-										@change="handQualificationDate">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="12">
 								<el-form-item label="从业资格类别">
 									<el-select placeholder="请选择" style="width:100%" v-model="superCargo.qualificationType">
 										<el-option label="类型1" value="类型1"></el-option>
 										<el-option label="类型2" value="类型2"></el-option>
 										<el-option label="类型3" value="类型3"></el-option>
 									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="12">
+								<el-form-item label="有效期开始">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate}"
+										type="date"
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="superCargo.qualificationBeginDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="有效期结束">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate}"
+										type="date"
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="superCargo.qualificationExpirationDate">
+									</el-date-picker>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -606,16 +635,27 @@
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
+						</el-row>
+						<el-row>
 							<el-col :span="12">
-								<el-form-item label="从业资格证有效期">
-									<el-date-picker
-										type="daterange"
-										range-separator="至"
-										start-placeholder="开始日期"
-										end-placeholder="结束日期" 
+								<el-form-item label="有效期开始">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate}"
+										type="date"
 										style="width:100%" 
-										v-model="escortLicenseDate" 
-										@change="handSelectEscortLicenseDate">
+										value-format="timestamp"
+										v-model="superCargo.escortLicenseBeginDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="有效期结束">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate}"
+										type="date"
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="superCargo.escortLicenseExpireDate">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
@@ -763,13 +803,15 @@ export default {
 				titleLever: [ {min: 1, max: 20, message: '长度在 1 到 20 个字符'} ],
 				remark: [ {min: 1, max: 100, message: '长度在 1 到 100 个字符'} ],
 				idCardNum: [ { required: true , message: '请输入身份证号'}, { validator: checkIDCard } ],
-				idCardExpirationTime: [ { required: true , message: '请选择身份证有效期'} ],
+				idCardBeginTime: [ { required: true , message: '请选择身份证开始有效期'} ],
+				idCardExpirationTime: [ { required: true , message: '请选择身份证结束有效期'} ],
 				idCardFrontUrl: [ { required: true , message: '请上传身份证照片'} ],
 				driverLicenseNum: [ { required: true , message: '请输入驾驶证号'}, { validator: checkDriverLicenseNum } ],
 				driverLicenseCode: [ { required: true , message: '请输入档案编号'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
 				quasiDrivingType: [ { required: true , message: '请选择准驾车型'} ],
 				driverLicenseFirstTime: [ { required: true , message: '请选择初次领证日期'} ],
-				driverLicenseBeginTime: [ { required: true , message: '请选择有效期'} ],
+				driverLicenseBeginTime: [ { required: true , message: '请选择开始有效期'} ],
+				driverLicenseEndTime: [ { required: true , message: '请选择结束有效期'} ],
 				driverLicFrontUrl: [ { required: true , message: '请上传驾驶证照片'} ],
 				qualificationNum: [ {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
 				qualificationCode: [ {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
@@ -798,6 +840,9 @@ export default {
 		})
 	},
 	methods: {
+		setIDCard() {
+			this.superCargo.driverLicenseNum = this.superCargo.idCardNum
+		},
 		handleHeadPic(res) { this.superCargo.headPic = res.length == 0 ? '' : res[0] },
 		handleIdCardFrontUrl(res) { this.superCargo.idCardFrontUrl = res.length == 0 ? '' : res[0] },
 		handleIdCardBackUrl(res) { this.superCargo.idCardBackUrl = res.length == 0 ? '' : res[0] },

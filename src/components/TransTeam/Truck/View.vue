@@ -38,15 +38,26 @@
 							</div>
 							<div>
 								<span class="tit">车辆类型</span>
-								<span class="ctt" v-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</span>
+								<!-- <span class="ctt" v-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</span>
 								<span class="ctt" v-else-if="truck.truckType == 'Van'">厢式货车</span>
 								<span class="ctt" v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
 								<span class="ctt" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</span>
-								<span class="ctt" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</span>
+								<span class="ctt" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</span> -->
+								<span v-if="truck.truckType == 'TankTruck'">罐式货车</span>
+								<span v-else-if="truck.truckType == 'VanTruck'">厢式货车</span>
+								<span v-else-if="truck.truckType == 'BarrackTruck'">仓栅货车</span>
+								<span v-else-if="truck.truckType == 'TailgateTruck'">栏板货车</span>
+								<span v-else-if="truck.truckType == 'DumpTruck'">自卸货车</span>
+								<span v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
+								<span v-else-if="truck.truckType == 'TankTrailer'">罐式挂车</span>
+								<span v-else-if="truck.truckType == 'VanTrailer'">厢式挂车</span>
+								<span v-else-if="truck.truckType == 'BarrackTrailer'">仓栅挂车</span>
+								<span v-else-if="truck.truckType == 'TailgateTrailer'">栏板挂车</span>
+								<span v-else-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</span>
 							</div>
 							<div>
 								<span class="tit">司机</span>
-								<span class="ctt">{{truck.primaryDriverName}}</span>
+								<span class="ctt">{{truck.primaryDriverName}}&nbsp;{{truck.secondaryDriverName}}</span>
 							</div>
 						</el-col>
 					</el-row>

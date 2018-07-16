@@ -17,21 +17,6 @@
 				@select-all="selectionAll($event, item)">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
 				<el-table-column label="货物名称" align="center" prop="cargoName">	</el-table-column>
-				<!-- <el-table-column label="待配货量" align="center" >
-					<template slot-scope="scope">
-						{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}} 
-					</template> 
-				</el-table-column>
-				<el-table-column label="待配体积" align="center" >
-					<template slot-scope="scope">
-						{{scope.row.remainingCargoVolume ? (scope.row.remainingCargoVolume + '方') : ''}} 
-					</template> 
-				</el-table-column>
-				<el-table-column label="待配件数" align="center" prop="remainingCargoNum">
-					<template slot-scope="scope">
-						{{scope.row.remainingCargoNum ? (scope.row.remainingCargoNum + scope.row.cargoUnitName) : ''}}
-					</template>
-				</el-table-column> -->
 				<el-table-column label="待配货量" align="center">
 					<template slot-scope="scope">
 						<span>{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}}</span>
@@ -41,23 +26,35 @@
 				</el-table-column>
 				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange(true)">
-							<span slot="append">吨</span>
-						</el-input>
+						<el-form :model="scope.row" ref="ruleForm">
+							<el-form-item prop="cargoWeightNew">
+								<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange(true)">
+									<span slot="append">吨</span>
+								</el-input>
+							</el-form-item>
+						</el-form>
 					</template>	
 				</el-table-column>
 				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange(true)">
-							<span slot="append">方</span>
-						</el-input>
+						<el-form :model="scope.row" ref="ruleForm">
+							<el-form-item prop="cargoVolumeNew">
+								<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange(true)">
+									<span slot="append">方</span>
+								</el-input>
+							</el-form-item>
+						</el-form>
 					</template>					
 				</el-table-column>
 				<el-table-column label="配载数量" align="center">
 					<template slot-scope="scope">
-						<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange(true)">
-							<span slot="append">{{scope.row.cargoUnitName}}</span>
-						</el-input>
+						<el-form :model="scope.row" ref="ruleForm">
+							<el-form-item prop="cargoNumNew" :rules="[{ required: true, message: '请输入配载件数'}]">
+								<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange(true)">
+									<span slot="append">{{scope.row.cargoUnitName}}</span>
+								</el-input>
+							</el-form-item>
+						</el-form>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -240,6 +237,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.el-form-item
+	margin-bottom 17px
 .stowageItem
 	margin-bottom 10px
 	.tit

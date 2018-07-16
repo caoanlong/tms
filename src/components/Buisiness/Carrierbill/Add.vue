@@ -405,6 +405,7 @@ export default {
 			CargoGeneralName.find({
 				current: 1,
 				size: 1000,
+				customerID: this.carrierbillInfo.shipperID,
 				cargoName: queryString
 			}).then(res => { cb(res.records) })
 		},
