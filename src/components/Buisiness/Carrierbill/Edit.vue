@@ -209,20 +209,45 @@
 										@select="handSelectCargo">
 									</el-autocomplete>
 								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{ required: true, message: '请输入数量'}, { validator: checkInt }]">
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" 
+									:rules="[{ required: true, message: '请输入数量'}, { validator: (rule, value, callback) => {
+										const r = /^\+?[1-9][0-9]*$/
+										if (r.test(value) || value == 0) {
+											callback()
+										} else {
+											callback('请输入正确的正整数')
+										}
+									} }]">
 									<el-input-number style="width:130px" v-model="item.cargoNum" :min="1"></el-input-number>
 								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" :rules="[{ required: true, message: '请选择单位'}]">
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" 
+									:rules="[{ required: true, message: '请选择单位'}]">
 									<el-select style="width:130px" v-model="item.cargoUnitName" placeholder="请选择">
 										<el-option v-for="unit in units" :key="unit.unit" :label="unit.unit" :value="unit.unit"></el-option>
 									</el-select>
 								</el-form-item>
-								<el-form-item prop="cargoWeight">
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoWeight'" 
+									:rules="[{ validator: (rule, value, callback) => {
+										const r = /^[0-9]+(.[0-9]{1,2})?$/
+										if (r.test(value) || value == 0) {
+											callback()
+										} else {
+											callback('请输入正确的数字')
+										}
+									} }]">
 									<el-input placeholder="货物重量" style="width:130px" v-model="item.cargoWeight">
 										<template slot="append">吨</template>
 									</el-input>
 								</el-form-item>
-								<el-form-item prop="cargoVolume">
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoVolume'" 
+									:rules="[{ validator: (rule, value, callback) => {
+										const r = /^[0-9]+(.[0-9]{1,2})?$/
+										if (r.test(value) || value == 0) {
+											callback()
+										} else {
+											callback('请输入正确的数字')
+										}
+									} }]">
 									<el-input placeholder="货物体积" style="width:130px" v-model="item.cargoVolume">
 										<template slot="append">方</template>
 									</el-input>
@@ -299,7 +324,6 @@ import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../..
 import { checkTel } from '../../../common/validators'
 import distData from '../../../assets/data/distpicker.data'
 import Geohash from '../../../common/Geohash'
-import { checkInt } from '../../../common/validator'
 export default {
 	data() {
 		return {
@@ -371,8 +395,7 @@ export default {
 		}
 	},
 	computed: {
-		dist: () => dist,
-		checkInt: () => checkInt
+		dist: () => dist
 	},
 	created() {
 		this.getUnits()
@@ -540,6 +563,13 @@ export default {
 						resolve()
 					})
 				}).then(() => {
+					const cargos = this.carrierbillInfo.carrierCargo
+					for (let i = 0; i < cargos.length; i++) {
+						if (!cargos[i].cargoWeight && !cargos[i].cargoVolume) {
+							Message.error(`货物“${cargos[i].cargoName}”的重量和体积必填一项！`)
+							return
+						}
+					}
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')

@@ -19,7 +19,7 @@
                     align="right" 
                     background layout="prev, pager, next" 
                     :total="total" 
-                    :current-page.sync="pageIndex" 
+                    :current-page.sync="pageIndexX" 
                     @current-change="pageChange">
                 </el-pagination>
             </div>
@@ -36,10 +36,14 @@ export default {
     },
     data() {
         return {
+            pageIndexX: 1,
             pageSizeX: 10
         }
     },
     watch: {
+        pageIndex(newVal) {
+            this.pageIndexX = newVal
+        },
         pageSize(newVal) {
             this.pageSizeX = newVal
         }

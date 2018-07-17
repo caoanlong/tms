@@ -226,12 +226,28 @@
 										<el-option v-for="unit in units" :key="unit.unit" :label="unit.unit" :value="unit.unit"></el-option>
 									</el-select>
 								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + 'cargoWeight'">
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoWeight'" 
+									:rules="[{ validator: (rule, value, callback) => {
+										const r = /^[0-9]+(.[0-9]{1,2})?$/
+										if (r.test(value) || value == 0) {
+											callback()
+										} else {
+											callback('请输入正确的数字')
+										}
+									} }]">
 									<el-input placeholder="货物重量" style="width:130px" v-model="item.cargoWeight">
 										<template slot="append">吨</template>
 									</el-input>
 								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + 'cargoVolume'">
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoVolume'" 
+									:rules="[{ validator: (rule, value, callback) => {
+										const r = /^[0-9]+(.[0-9]{1,2})?$/
+										if (r.test(value) || value == 0) {
+											callback()
+										} else {
+											callback('请输入正确的数字')
+										}
+									} }]">
 									<el-input placeholder="货物体积" style="width:130px" v-model="item.cargoVolume">
 										<template slot="append">方</template>
 									</el-input>
@@ -553,6 +569,13 @@ export default {
 						resolve()
 					})
 				}).then(() => {
+					const cargos = this.carrierbillInfo.carrierCargo
+					for (let i = 0; i < cargos.length; i++) {
+						if (!cargos[i].cargoWeight && !cargos[i].cargoVolume) {
+							Message.error(`货物“${cargos[i].cargoName}”的重量和体积必填一项！`)
+							return
+						}
+					}
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')

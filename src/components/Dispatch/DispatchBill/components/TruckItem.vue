@@ -53,8 +53,8 @@
 						<el-tag size="mini">APP</el-tag> 
 					</el-tooltip>
 					<el-tag type="info" size="mini" v-else>APP</el-tag>
-					<el-tag type="warning" size="mini" v-if="truck.primaryDriver.workStatus == 'Free'">空闲</el-tag>
-					<el-tag type="warning" size="mini" v-else-if="truck.primaryDriver.workStatus == 'Working'">工作中</el-tag>
+					<el-tag type="warning" size="mini" v-if="truck.driverWorkStatus == 'Free'">空闲</el-tag>
+					<el-tag type="warning" size="mini" v-else-if="truck.driverWorkStatus == 'Working'">工作中</el-tag>
 					<el-tooltip placement="right" effect="light">
 						<div slot="content">
 							<el-tag size="mini" type="danger">驾驶证到期</el-tag> 
@@ -137,7 +137,8 @@ export default {
 			this.selectDialogVisible = true
 		},
 		deleteItem() {
-			this.truck.superCargo = ''
+			this.truck.superCargo = null
+			this.$emit('selectTruck', this.truck)
 			this.flag = false
 		},
 		handleSelectSupercargo(bool, data, type) {

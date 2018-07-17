@@ -72,7 +72,7 @@
 						<span class="block-title">货物清单</span>
 						<div class="block-content" style="padding:10px 0 20px">
 							<el-table :data="cargoList" border style="width: 100%" size="mini" stripe>
-								<el-table-column label="承运单号" prop="carrierOrderID" align="center"></el-table-column>
+								<el-table-column label="承运单号" prop="carrierOrderNo" align="center"></el-table-column>
 								<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
 								<el-table-column label="货物重量" align="center">
 									<template slot-scope="scope">
