@@ -203,10 +203,11 @@
 									<el-autocomplete 
 										style="width:130px" 
 										value-key="cargoName" 
-										v-model="item.cargoName"
+										v-model="item.cargoName" 
 										:fetch-suggestions="getCargos"
 										placeholder="请输入..."
-										@select="handSelectCargo">
+										@select="handSelectCargo" 
+										@blur="blurSelectCargo(index)">
 									</el-autocomplete>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" 
@@ -486,6 +487,9 @@ export default {
 					item.cargoUnitName = data.cargoUnit
 				}
 			})
+		},
+		blurSelectCargo(i) {
+			console.log(this.carrierbillInfo.carrierCargo[i].cargoName)
 		},
 		handSelectShipperCompany(data) {
 			this.carrierbillInfo.shipperCompanyName = data.companyName

@@ -83,6 +83,7 @@
 					<table class="wf-table">
 						<tr>
 							<th>任务单号</th>
+							<th>状态</th>
 							<th>车牌号</th>
 							<th>司机</th>
 							<th>押运员</th>
@@ -92,6 +93,11 @@
 						</tr>
 						<tr class="is-center" v-for="(transport, index) in transports" :key="index">
 							<td><span class="link" @click="viewTask(transport.dispatchTaskID)">{{transport.taskNo}}</span></td>
+							<td>
+								<span v-if="transport.status == 'Committed'">待装车</span>
+								<span v-else-if="transport.status == 'Loaded'">已装运</span>
+								<span v-else-if="transport.status == 'Signed'">已签收</span>
+							</td>
 							<td>
 								{{transport.plateNo}}
 								{{transport.trailerPlateNo ? ('/' + transport.trailerPlateNo) : ''}}
