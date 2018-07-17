@@ -63,7 +63,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="联系方式" prop="shipperPhone">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperPhone"></el-input>
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperPhone" @input="inputShipperPhone"></el-input>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -135,7 +135,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="联系方式" prop="consigneePhone">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneePhone"></el-input>
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneePhone" @input="inputConsigneePhone"></el-input>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -207,7 +207,7 @@
 										:fetch-suggestions="getCargos"
 										placeholder="请输入..."
 										@select="handSelectCargo" 
-										@blur="blurSelectCargo(index)">
+										@input="inputSelectCargo(index)">
 									</el-autocomplete>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" 
@@ -224,7 +224,7 @@
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" 
 									:rules="[{ required: true, message: '请选择单位'}]">
 									<el-select style="width:130px" v-model="item.cargoUnitName" placeholder="请选择">
-										<el-option v-for="unit in units" :key="unit.unit" :label="unit.unit" :value="unit.unit"></el-option>
+										<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
 									</el-select>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoWeight'" 
@@ -488,8 +488,8 @@ export default {
 				}
 			})
 		},
-		blurSelectCargo(i) {
-			console.log(this.carrierbillInfo.carrierCargo[i].cargoName)
+		inputSelectCargo(i) {
+			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
 		},
 		handSelectShipperCompany(data) {
 			this.carrierbillInfo.shipperCompanyName = data.companyName
@@ -515,6 +515,9 @@ export default {
 				this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
 			}
 		},
+		inputShipperPhone() {
+			this.carrierbillInfo.shipperAddressID = ''
+		},
 		handSelectConsignee(data) {
 			this.carrierbillInfo.consigneeName = data.contactName
 			this.carrierbillInfo.consigneeArea = data.companyArea
@@ -530,6 +533,9 @@ export default {
 				const location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
 				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
 			}
+		},
+		inputConsigneePhone() {
+			this.carrierbillInfo.consigneeAddressID = ''
 		},
 		handleSelectedShipperArea(data) {
 			this.carrierbillInfo.shipperAreaID = data[data.length - 1]

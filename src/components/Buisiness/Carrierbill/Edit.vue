@@ -206,7 +206,8 @@
 										v-model="item.cargoName"
 										:fetch-suggestions="getCargos"
 										placeholder="请输入..."
-										@select="handSelectCargo">
+										@select="handSelectCargo" 
+										@input="inputSelectCargo(index)">
 									</el-autocomplete>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" 
@@ -223,7 +224,7 @@
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" 
 									:rules="[{ required: true, message: '请选择单位'}]">
 									<el-select style="width:130px" v-model="item.cargoUnitName" placeholder="请选择">
-										<el-option v-for="unit in units" :key="unit.unit" :label="unit.unit" :value="unit.unit"></el-option>
+										<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
 									</el-select>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoWeight'" 
@@ -481,6 +482,9 @@ export default {
 				}
 			})
 		},
+		inputSelectCargo(i) {
+			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
+		},
 		handSelectShipperCompany(data) {
 			this.carrierbillInfo.shipperCompanyName = data.companyName
 			this.carrierbillInfo.shipperID = data.customerID
@@ -505,6 +509,9 @@ export default {
 				this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
 			}
 		},
+		inputShipperPhone() {
+			this.carrierbillInfo.shipperAddressID = ''
+		},
 		handSelectConsignee(data) {
 			this.carrierbillInfo.consigneeName = data.contactName
 			this.carrierbillInfo.consigneeArea = data.companyArea
@@ -520,6 +527,9 @@ export default {
 				const location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
 				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
 			}
+		},
+		inputConsigneePhone() {
+			this.carrierbillInfo.consigneeAddressID = ''
 		},
 		handleSelectedShipperArea(data) {
 			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
