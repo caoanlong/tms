@@ -94,7 +94,7 @@ export default {
 				Message.error('当前选择的车辆没有司机！')
 				return
 			}
-			if (this.selectedTruck.primaryDriver.appStatus == 'N') {
+			if (this.selectedTruck.primaryDriver.appStatus != 'Y') {
 				Message.error('该司机未激活APP!')
 				return
 			}

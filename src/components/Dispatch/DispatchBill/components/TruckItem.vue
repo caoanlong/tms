@@ -93,7 +93,7 @@
 		<div class="escortColumn" v-else>
 			<span class="btn addEscortBtn"  @click="add('second')"><svg-icon icon-class="add-icon"></svg-icon>添加押车员</span>
 		</div>
-		<SelectSupercargo :type="type" :truckID="truck.truckID" :exclude="exclude" :dialogVisible="selectDialogVisible" @control="handleSelectSupercargo"></SelectSupercargo>
+		<SelectSupercargo :type="type" :truck="truck" :dialogVisible="selectDialogVisible" @control="handleSelectSupercargo"></SelectSupercargo>
 	</div>
 </template>
 
@@ -114,7 +114,6 @@ export default {
 	},
 	data(){
 		return {
-			exclude: '',
 			selectDialogVisible: false,
 			type: 'primary',
 			flag: true
@@ -130,20 +129,10 @@ export default {
 			this.$emit('selectTruck', this.truck)
 		},
 		add(type) {
-			if (type == 'primary' && this.truck.superCargo) {
-				this.exclude = this.truck.superCargo.comSupercargoID
-			} else if (type == 'second' && this.truck.primaryDriver) {
-				this.exclude = this.truck.primaryDriver.comSupercargoID
-			}
 			this.type = type
 			this.selectDialogVisible = true
 		},
 		selectSupercargo(type) {
-			if (type == 'primary' && this.truck.superCargo) {
-				this.exclude = this.truck.superCargo.comSupercargoID
-			} else if (type == 'second' && this.truck.primaryDriver) {
-				this.exclude = this.truck.primaryDriver.comSupercargoID
-			}
 			this.type = type
 			this.selectDialogVisible = true
 		},

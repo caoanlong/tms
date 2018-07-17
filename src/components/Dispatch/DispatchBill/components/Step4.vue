@@ -228,11 +228,11 @@ export default {
 					'driverPorAmount': item.driverPorAmount,
 					'driverMonthlyAmont': item.driverMonthlyAmont,
 					'driverCosigneeAmount': item.driverCosigneeAmount,
-					'superCargoCashAmount': item.superCargoCashAmount,
-					'superCargoCodAmount': item.superCargoCodAmount,
-					'superCargoCorAmount': item.superCargoCorAmount,
-					'superCargoMonthlyAmount': item.superCargoMonthlyAmount,
-					'superCosigneeAmount': item.superCosigneeAmount
+					'superCargoCashAmount': this.selectedTruck.superCargo ? item.superCargoCashAmount : 0,
+					'superCargoCodAmount': this.selectedTruck.superCargo ? item.superCargoCodAmount : 0,
+					'superCargoCorAmount': this.selectedTruck.superCargo ? item.superCargoCorAmount : 0,
+					'superCargoMonthlyAmount': this.selectedTruck.superCargo ? item.superCargoMonthlyAmount : 0,
+					'superCosigneeAmount': this.selectedTruck.superCargo ? item.superCosigneeAmount : 0
 				}
 			})
 			Dispatchbill.add({

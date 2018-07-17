@@ -76,8 +76,7 @@ export default {
             default: false
         },
         type: String,
-        truckID: String,
-        exclude: String
+        truck: Object
     },
     data() {
         return {
@@ -102,9 +101,22 @@ export default {
     components: { Page },
     methods: {
         handleCurrentChange(data) {
-            if (this.type == 'primary' && data.appStatus == 'N') {
-                Message.error('该司机未在APP激活！')
-                return
+            if (this.type == 'primary') {
+                if (data.appStatus != 'Y') {
+                    Message.error('该司机未在APP激活！')
+                    return
+                }
+                if (this.truck.superCargo && this.truck.superCargo.supercargoType == 'SupercargoDriver' 
+                    && data.comSupercargoID == this.truck.superCargo.comSupercargoID) {
+                    Message.error('该司机已经是押运员了！')
+                    return
+                }
+            } else {
+                if (this.truck.primaryDriver && this.truck.primaryDriver.supercargoType == 'SupercargoDriver' 
+                    && data.comSupercargoID == this.truck.primaryDriver.comSupercargoID) {
+                    Message.error('该押运员已经是司机了！')
+                    return
+                }
             }
             data && this.$emit('control', true, data, this.type)
         },
@@ -140,15 +152,10 @@ export default {
                 shipperDate: this.find.shipperDate,
                 workStatus: this.find.workStatus,
                 appStatus: this.find.appStatus,
-                truckID: this.truckID
+                truckID: this.truck.truckID
 			}).then(res => {
                 this.total = res.total
-                const list = res.records
-                if (this.exclude) {
-                    const index = list.map(item => item.comSupercargoID).indexOf(this.exclude)
-                    list.splice(index, 1)
-                }
-                this.superCargos = list
+                this.superCargos = res.records
 			})
         },
         getSuperCagoList() {
@@ -160,12 +167,7 @@ export default {
                 workStatus: this.find.workStatus
 			}).then(res => {
                 this.total = res.total
-                const list = res.records
-                if (this.exclude) {
-                    const index = list.map(item => item.comSupercargoID).indexOf(this.exclude)
-                    list.splice(index, 1)
-                }
-                this.superCargos = list
+                this.superCargos = res.records
 			})
 		},
         control(bool) {
