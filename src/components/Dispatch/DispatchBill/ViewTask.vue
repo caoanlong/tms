@@ -120,7 +120,7 @@
 									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCosigneeAmount"></el-input></td>
 									<td class="totalNum">{{totalDriver}}</td>
 								</tr>
-								<tr class="text-center">
+								<tr class="text-center" v-if="taskDetail.superCargoName">
 									<td>随行人员</td>
 									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCashAmount"></el-input></td>
 									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCodAmount"></el-input></td>
@@ -302,7 +302,8 @@ export default {
 				Message.error('司机付款费用必填一项！')
 				return
 			}
-			if (!Number(this.task.superCargoCashAmount) 
+			if (this.taskDetail.superCargoName 
+				&& !Number(this.task.superCargoCashAmount) 
 				&& !Number(this.task.superCargoCodAmount) 
 				&& !Number(this.task.superCargoCorAmount) 
 				&& !Number(this.task.superCargoMonthlyAmount) 

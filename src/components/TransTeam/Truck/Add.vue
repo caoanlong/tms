@@ -1392,7 +1392,7 @@ export default {
 				const list = res.records
 				const idList = list.map(item => item.comSupercargoID)
 				const index = idList.indexOf(this.truck.secondaryDriver)
-				if ( index > -1) list.splice(index, 1)
+				if ( index > -1 && this.truck.secondaryDriverName) list.splice(index, 1)
 				cb(list)
 			})
 		},
@@ -1406,12 +1406,18 @@ export default {
 				const list = res.records
 				const idList = list.map(item => item.comSupercargoID)
 				const index = idList.indexOf(this.truck.primaryDriver)
-				if ( index > -1) list.splice(index, 1)
+				if ( index > -1 && this.truck.primaryDriverName) list.splice(index, 1)
 				cb(list)
 			})
 		},
-		handSelectPrimaryDriver(data) { this.truck.primaryDriver = data.comSupercargoID },
-		handSelectSecondaryDriver(data) { this.truck.secondaryDriver = data.comSupercargoID },
+		handSelectPrimaryDriver(data) { 
+			this.truck.primaryDriver = data.comSupercargoID
+			this.truck.primaryDriverName = data.realName
+		},
+		handSelectSecondaryDriver(data) { 
+			this.truck.secondaryDriver = data.comSupercargoID
+			this.truck.secondaryDriverName = data.realName
+		},
 		handleTruckFrontPic(res) { this.truck.truckFrontPic = res.length == 0 ? '' : res[0] },
 		handleTruckSidePic1(res) { this.truck.truckSidePic1 = res.length == 0 ? '' : res[0] },
 		handleTruckSidePic2(res) { this.truck.truckSidePic2 = res.length == 0 ? '' : res[0] },
@@ -1455,6 +1461,8 @@ export default {
 		},
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
+			if (!this.truck.primaryDriverName) this.truck.primaryDriver = ''
+			if (!this.truck.secondaryDriverName) this.truck.secondaryDriver = ''
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) {
 					this.$nextTick(() => {

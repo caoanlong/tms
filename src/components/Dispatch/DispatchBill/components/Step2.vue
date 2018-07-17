@@ -27,7 +27,15 @@
 				<el-table-column label="配载重量" align="center">
 					<template slot-scope="scope">
 						<el-form :model="scope.row" ref="ruleForm">
-							<el-form-item prop="cargoWeightNew">
+							<el-form-item prop="cargoWeightNew" :rules="[{ validator: checkFloat2 }, {
+								validator: (rule, value, callback) => {
+									if (value > scope.row.remainingCargoWeight) {
+										callback('配载重量不能大于待配重量！')
+									} else {
+										callback()
+									}
+								}
+							}]">
 								<el-input placeholder="配载重量" size="mini" v-model="scope.row.cargoWeightNew" @change="handInputChange(true)">
 									<span slot="append">吨</span>
 								</el-input>
@@ -38,7 +46,15 @@
 				<el-table-column label="配载体积" align="center">
 					<template slot-scope="scope">
 						<el-form :model="scope.row" ref="ruleForm">
-							<el-form-item prop="cargoVolumeNew">
+							<el-form-item prop="cargoVolumeNew" :rules="[{ validator: checkFloat2 }, {
+								validator: (rule, value, callback) => {
+									if (value > scope.row.remainingCargoVolume) {
+										callback('配载体积不能大于待配体积！')
+									} else {
+										callback()
+									}
+								}
+							}]">
 								<el-input placeholder="配载体积" size="mini" v-model="scope.row.cargoVolumeNew" @change="handInputChange(true)">
 									<span slot="append">方</span>
 								</el-input>
@@ -49,7 +65,15 @@
 				<el-table-column label="配载数量" align="center">
 					<template slot-scope="scope">
 						<el-form :model="scope.row" ref="ruleForm">
-							<el-form-item prop="cargoNumNew" :rules="[{ required: true, message: '请输入配载件数'}]">
+							<el-form-item prop="cargoNumNew" :rules="[{ required: true, message: '请输入配载数量'}, { validator: checkInt }, {
+								validator: (rule, value, callback) => {
+									if (value > scope.row.remainingCargoNum) {
+										callback('配载数量不能大于待配数量！')
+									} else {
+										callback()
+									}
+								}
+							}]">
 								<el-input placeholder="配载件数" size="mini" v-model="scope.row.cargoNumNew" @change="handInputChange(true)">
 									<span slot="append">{{scope.row.cargoUnitName}}</span>
 								</el-input>
@@ -79,6 +103,7 @@
 import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import Dispatchbill from '../../../../api/Dispatchbill'
+import { checkInt, checkFloat2 } from '../../../../common/validator'
 export default {
 	data() {
 		return {
@@ -90,7 +115,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['selectedCarrierBill', 'selectedCargos'])
+		...mapGetters(['selectedCarrierBill', 'selectedCargos']),
+		checkInt: () => checkInt,
+		checkFloat2: () => checkFloat2
 	},
 	created() {
 		const carrierOrderIDs = this.selectedCarrierBill.map(item => item.carrierOrderID).join(',')
@@ -186,46 +213,32 @@ export default {
 				Message.error(`请选择货物！`)
 				return
 			}
-			for (let i = 0; i < this.selectedCargos.length; i++) {
-				const cargo = this.selectedCargos[i]
-				if (cargo.weightType == 'Heavy') {
-					if (!cargo.cargoWeightNew || Number(cargo.cargoWeightNew) <= 0) {
-						Message.error(`货物“${cargo.cargoName}”的配载重量必填！`)
-						return
-					}
-					if (Number(cargo.cargoVolumeNew) < 0) {
-						Message.error(`货物“${cargo.cargoName}”的配载体积不能小于0！`)
-						return
-					}
-				} else if (cargo.weightType == 'Light') {
-					if (Number(cargo.cargoWeightNew) < 0) {
-						Message.error(`货物“${cargo.cargoName}”的配载重量不能小于0！`)
-						return
-					}
-					if (!cargo.cargoVolumeNew || Number(cargo.cargoVolumeNew) <= 0) {
-						Message.error(`货物“${cargo.cargoName}”的配载体积必填！`)
-						return
+			new Promise((resolve, reject) => {
+				let flag = true
+				for (let i = 0; i < this.$refs['ruleForm'].length; i++) {
+					const item = this.$refs['ruleForm'][i]
+					if (this.selectedCargos.map(cargo => cargo.carrierCargoID).includes(item.model.carrierCargoID)) {
+						item.validate(valid => {
+							if (!valid) {
+								flag = false
+							}
+						})
 					}
 				}
-				if (Number(cargo.cargoWeightNew) > Number(cargo.remainingCargoWeight)) {
-					Message.error(`货物“${cargo.cargoName}”的配载重量不能大于待配载重量！`)
-					return
+				flag ? resolve() : reject()
+			}).then(() => {
+				for (let i = 0; i < this.selectedCargos.length; i++) {
+					const cargo = this.selectedCargos[i]
+					if (cargo.remainingCargoWeight || cargo.remainingCargoVolume) {
+						if ((!cargo.cargoWeightNew || Number(cargo.cargoWeightNew) <= 0) 
+							&& (!cargo.cargoVolumeNew || Number(cargo.cargoVolumeNew) <= 0)) {
+							Message.error(`货物“${cargo.cargoName}”的配载重量和体积必填一项！`)
+							return
+						}
+					}
 				}
-				
-				if (Number(cargo.cargoVolumeNew) > Number(cargo.remainingCargoVolume)) {
-					Message.error(`货物“${cargo.cargoName}”的配载体积不能大于待配载体积！`)
-					return
-				}
-				if (Number(cargo.cargoNumNew) < 0) {
-					Message.error(`货物“${cargo.cargoName}”的配载数量不能小于0！`)
-					return
-				}
-				if (Number(cargo.cargoNumNew) > Number(cargo.remainingCargoNum)) {
-					Message.error(`货物“${cargo.cargoName}”的配载数量不能大于待配载数量！`)
-					return
-				}
-			}
-			this.$emit('nextStep', 3)
+				this.$emit('nextStep', 3)
+			}).catch(err => { })
 		},
 		prevStep(){
 			this.$emit('prevStep', 1)

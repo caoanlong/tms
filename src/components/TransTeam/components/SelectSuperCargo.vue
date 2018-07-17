@@ -6,7 +6,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="search">搜索</el-button>
-                <el-button>重置</el-button>
+                <el-button @click="reset">重置</el-button>
             </el-form-item>
         </el-form>
         <el-table 

@@ -1232,7 +1232,7 @@ export default {
 				const list = res.records
 				const idList = list.map(item => item.comSupercargoID)
 				const index = idList.indexOf(this.truck.secondaryDriver)
-				if ( index > -1) list.splice(index, 1)
+				if ( index > -1 && this.truck.secondaryDriverName) list.splice(index, 1)
 				cb(list)
 			})
 		},
@@ -1246,7 +1246,7 @@ export default {
 				const list = res.records
 				const idList = list.map(item => item.comSupercargoID)
 				const index = idList.indexOf(this.truck.primaryDriver)
-				if ( index > -1) list.splice(index, 1)
+				if ( index > -1 && this.truck.primaryDriverName) list.splice(index, 1)
 				cb(list)
 			})
 		},
@@ -1291,6 +1291,8 @@ export default {
 		},
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
+			if (!this.truck.primaryDriverName) this.truck.primaryDriver = ''
+			if (!this.truck.secondaryDriverName) this.truck.secondaryDriver = ''
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) {
 					this.$nextTick(() => {

@@ -530,7 +530,6 @@ export default {
 			this.carrierbillInfo.consigneeLocationLat = data.latitude
 		},
 		save() {
-			console.log(this.carrierbillInfo)
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					if (!valid) {

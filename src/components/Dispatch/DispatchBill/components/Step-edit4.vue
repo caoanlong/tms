@@ -79,31 +79,31 @@
 								<td>
 									{{
 										Number(task.driverCashAmount ? task.driverCashAmount : 0) 
-										+ Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
+										+ Number(selectedTruck.superCargo && task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
 									}}
 								</td>
 								<td>
 									{{
 										Number(task.driverCodAmount ? task.driverCodAmount : 0) 
-										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
+										+ Number(selectedTruck.superCargo && task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
 									}}
 								</td>
 								<td>
 									{{
 										Number(task.driverPorAmount ? task.driverPorAmount : 0) 
-										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
+										+ Number(selectedTruck.superCargo && task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
 									}}
 								</td>
 								<td>
 									{{
 										Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
-										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
+										+ Number(selectedTruck.superCargo && task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
 									}}
 								</td>
 								<td>
 									{{
 										Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0) 
-										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0) 
+										+ Number( selectedTruck.superCargo && task.superCosigneeAmount ? task.superCosigneeAmount : 0) 
 									}}
 								</td>
 								<td>
@@ -113,11 +113,11 @@
 										+ Number(task.driverPorAmount ? task.driverPorAmount : 0) 
 										+ Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
 										+ Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0)
-										+ Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
-										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
-										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
-										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
-										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)
+										+ Number(selectedTruck.superCargo && task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
+										+ Number(selectedTruck.superCargo && task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
+										+ Number(selectedTruck.superCargo && task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
+										+ Number(selectedTruck.superCargo && task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
+										+ Number(selectedTruck.superCargo && task.superCosigneeAmount ? task.superCosigneeAmount : 0)
 									}}
 								</td>
 							</tr>
@@ -156,11 +156,11 @@ export default {
 					+ Number(item.driverPorAmount ? item.driverPorAmount : 0) 
 					+ Number(item.driverMonthlyAmont ? item.driverMonthlyAmont : 0) 
 					+ Number(item.driverCosigneeAmount ? item.driverCosigneeAmount : 0)
-					+ Number(item.superCargoCashAmount ? item.superCargoCashAmount : 0) 
-					+ Number(item.superCargoCodAmount ? item.superCargoCodAmount : 0) 
-					+ Number(item.superCargoCorAmount ? item.superCargoCorAmount : 0) 
-					+ Number(item.superCargoMonthlyAmount ? item.superCargoMonthlyAmount : 0) 
-					+ Number(item.superCosigneeAmount ? item.superCosigneeAmount : 0)
+					+ Number(this.selectedTruck.superCargo && item.superCargoCashAmount ? item.superCargoCashAmount : 0) 
+					+ Number(this.selectedTruck.superCargo && item.superCargoCodAmount ? item.superCargoCodAmount : 0) 
+					+ Number(this.selectedTruck.superCargo && item.superCargoCorAmount ? item.superCargoCorAmount : 0) 
+					+ Number(this.selectedTruck.superCargo && item.superCargoMonthlyAmount ? item.superCargoMonthlyAmount : 0) 
+					+ Number(this.selectedTruck.superCargo && item.superCosigneeAmount ? item.superCosigneeAmount : 0)
 				amount += itemAmount
 			})
 			return amount

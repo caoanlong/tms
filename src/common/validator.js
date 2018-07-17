@@ -123,10 +123,10 @@ export const checkFloat6 = (rule, value, callback) => {
 // 验证整数
 export const checkInt = (rule, value, callback) => {
 	let r = /^\+?[1-9][0-9]*$/
-	if (r.test(value)) {
+	if (r.test(value) || value == 0) {
 		callback()
 	} else {
-		callback(new Error('请输入正确的整数'))
+		callback(new Error('请输入正确的正整数'))
 	}
 }
 // 验证身份证

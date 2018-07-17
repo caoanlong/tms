@@ -13,7 +13,6 @@ export default function LiftEffect(json) {
 	for (var i = 0; i < json.target.length; i++) {
 		var t = $(json.target[i]).offset().top;
 		array.push(t);
-
 	}
 	function Selected(index) {
 		$(json.control2).children().eq(index).addClass(json.current).siblings().removeClass(json.current);
@@ -52,7 +51,7 @@ export default function LiftEffect(json) {
 			if (flag) {
 				if (index == i) {
 					$("html,body").stop().animate({
-						"scrollTop": array[i] - 50
+						"scrollTop": array[i] - 175
 					}, 500, function () {
 						$(window).on("scroll", Check);
 					});

@@ -34,7 +34,7 @@
 							</el-select>
 							<el-button style="position:relative;left:10px" type="text" @click="dialogFormVisible = true">添加单位</el-button>
 						</el-form-item>
-						<el-form-item label="包装类型" prop="packageType">
+						<el-form-item label="包装材质" prop="packageType">
 							<el-select style="width: 100%" placeholder="请选择" v-model="cargo.packageType">
 								<el-option label="纸质" value="纸质"></el-option>
 								<el-option label="木质" value="木质"></el-option>
