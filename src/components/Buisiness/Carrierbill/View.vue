@@ -171,7 +171,7 @@ export default {
 				'ShipperPor': '货物发货单'
 			},
 			carrierOrder: {},
-			isPhotoVisible: false,
+			isPhotoVisible: false, 
 			currentDispatchTaskID: '',
 			currentShipperArea: '',
 			currentConsigneeArea: '',
@@ -190,7 +190,7 @@ export default {
 			for (let i = this.carrierCargo.length - 1; i >= 0; i--) {
 				sum += this.carrierCargo[i][o]
 			}
-			return sum
+			return sum.toFixed(2)
 		},
 		getInfo() {
 			const carrierOrderID = this.$route.query.carrierOrderID

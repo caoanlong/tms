@@ -14,7 +14,7 @@
 						<div class="block-content">
 							<p>发货单位：{{carrier.shipperCompanyName}}</p>
 							<p>发货人：{{carrier.shipperName}}{{carrier.shipperPhone?('/'+carrier.shipperPhone):''}}</p>
-							<p>发货地：{{carrier.shipperArea}}</p>
+							<p>发货地：{{carrier.shipperArea}} {{carrier.shipperLocationAddress}}</p>
 							<p>详细地址：{{carrier.shipperDetailAddress}}</p>
 							<p class="datetime">装车时间：{{carrier.shipperDate | getdatefromtimestamp(true)}}（预计装车）<span class="c2" v-if="carrier.shipperActualDate">{{carrier.shipperActualDate | getdatefromtimestamp()}}（实际装车）</span></p>
 						</div>
@@ -26,7 +26,7 @@
 						<div class="block-content">
 							<p class="companyName">收货单位：{{carrier.consigneeCompanyName}}</p>
 							<p>收货人：{{carrier.consigneeName}}{{carrier.consigneePhone?('/'+carrier.consigneePhone):''}}</p>
-							<p class="area">收货地：{{carrier.consigneeArea}}</p>
+							<p>收货地：{{carrier.consigneeArea}} {{carrier.consigneeLocationAddress}}</p>
 							<p>详细地址：{{carrier.consigneeDetailAddress}}</p>
 							<p class="datetime">到货时间：{{carrier.consigneeDate | getdatefromtimestamp(true)}}（预计到货） <span class="c2" v-if="carrier.consigneeActualDate">{{carrier.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</span></p>
 						</div>
@@ -34,114 +34,112 @@
 				</el-col>
 			</el-row>
 			<el-row style="margin-bottom:20px">
-				<el-col :span="24">
-					<div class="section-block personInfo">
-						<span class="block-title">车辆及人员信息</span>
-						<div class="block-content">
-							<el-row :gutter="20">
-								<el-col :span="6">
-									<p>车牌号码：{{taskDetail.plateNo}}</p>
-									<p v-if="taskDetail.trailerPlateNo">挂车车牌：{{taskDetail.trailerPlateNo}}</p>
-								</el-col>
-								<el-col :span="6">
-									<div class="driver">
-										<p class="name">{{taskDetail.driverName}}<span class="tag">司机</span></p>
-										<p class="phone">{{taskDetail.driverPhone}}</p>
-									</div>
-								</el-col>
-								<el-col :span="6">
-									<div class="escort" v-if="taskDetail.superCargoName">
-										<p class="name">{{taskDetail.superCargoName}}<span class="tag">押运</span></p>
-										<p class="phone">{{taskDetail.superCargoPhone}}</p>
-									</div>
-								</el-col>
-								<el-col :span="6">
-									<div class="dispatcher">
-										<p class="name">{{taskDetail.dispatcherName}}<span class="tag">调度</span></p>
-										<p class="phone">{{taskDetail.dispatcherMobile}}</p>
-									</div>
-								</el-col>
-							</el-row>
-						</div>
+				<div class="section-block personInfo">
+					<span class="block-title">车辆及人员信息</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="6">
+								<p>车牌号码：{{taskDetail.plateNo}}</p>
+								<p v-if="taskDetail.trailerPlateNo">挂车车牌：{{taskDetail.trailerPlateNo}}</p>
+							</el-col>
+							<el-col :span="6">
+								<div class="driver">
+									<p class="name">{{taskDetail.driverName}}<span class="tag">司机</span></p>
+									<p class="phone">{{taskDetail.driverPhone}}</p>
+								</div>
+							</el-col>
+							<el-col :span="6">
+								<div class="escort" v-if="taskDetail.superCargoName">
+									<p class="name">{{taskDetail.superCargoName}}<span class="tag">押运</span></p>
+									<p class="phone">{{taskDetail.superCargoPhone}}</p>
+								</div>
+							</el-col>
+							<el-col :span="6">
+								<div class="dispatcher">
+									<p class="name">{{taskDetail.dispatcherName}}<span class="tag">调度</span></p>
+									<p class="phone">{{taskDetail.dispatcherMobile}}</p>
+								</div>
+							</el-col>
+						</el-row>
 					</div>
-				</el-col>
+				</div>
 			</el-row>
 			<el-row style="margin-bottom:20px">
-				<el-col :span="24">
-					<div class="section-block personInfo">
-						<span class="block-title">货物清单</span>
-						<div class="block-content" style="padding:10px 0 20px">
-							<el-table :data="cargoList" border style="width: 100%" size="mini" stripe>
-								<el-table-column label="承运单号" prop="carrierOrderNo" align="center"></el-table-column>
-								<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
-								<el-table-column label="货物重量" align="center">
-									<template slot-scope="scope">
-										<span >{{scope.row.cargoWeight? scope.row.cargoWeight+'吨':'0吨'}}</span>
-									</template>
-								</el-table-column>
-								<el-table-column label="货物体积" align="center">
-									<template slot-scope="scope">
-										<span >{{scope.row.cargoVolume? scope.row.cargoVolume+'方':'0方'}}</span>
-									</template>
-								</el-table-column>
-								<el-table-column label="货物数量" align="center">
-									<template slot-scope="scope">
-										<span >{{scope.row.cargoNum? scope.row.cargoNum+scope.row.cargoUnitName:'0'}}</span>
-									</template>
-								</el-table-column>
-							</el-table>
-						</div>
+				<div class="section-block fare">
+					<span class="block-title">货物清单</span>
+					<div class="block-content" style="padding:10px 0 20px">
+						<table>
+							<tr>
+								<th>承运单号</th>
+								<th>货物名称</th>
+								<th>货物重量</th>
+								<th>货物体积</th>
+								<th>货物数量</th>
+							</tr>
+							<tr class="text-center" v-for="(item, index) in cargoList" :key="index">
+								<td>{{item.carrierOrderNo}}</td>
+								<td>{{item.cargoName}}</td>
+								<td>{{item.cargoWeight ? item.cargoWeight + '吨' : '0吨'}}</td>
+								<td>{{item.cargoVolume ? item.cargoVolume + '方' : '0方'}}</td>
+								<td>{{item.cargoNum ? item.cargoNum + item.cargoUnitName : '0'}}</td>
+							</tr>
+							<tr class="text-center">
+								<td>合计</td>
+								<td></td>
+								<td>{{cargoList.reduce((prev, cur) => prev + cur.cargoWeight, 0)}}吨</td>
+								<td>{{cargoList.reduce((prev, cur) => prev + cur.cargoVolume, 0)}}方</td>
+								<td>{{cargoList.reduce((prev, cur) => prev + cur.cargoNum, 0)}}</td>
+							</tr>
+						</table>
 					</div>
-				</el-col>
+				</div>
 			</el-row>
 			<el-row v-if="!isHideAmount">
-				<el-col :span="24">
-					<div class="section-block fare">
-						<span class="block-title">付款费用</span>
-						<span class="editBtn" v-show="type == 'edit'" v-if="!isEdit" @click="editFare">编辑</span>
-						<span class="editBtn" v-show="type == 'edit'" v-else @click="saveFare">保存</span>
-						<div class="block-content" style="padding:10px 0 20px">
-							<table>
-								<tr>
-									<th width="100">付给人员</th>
-									<th>现付</th>
-									<th>到付</th>
-									<th>回单结</th>
-									<th>月结</th>
-									<th>收货方付款</th>
-									<th>合计</th>
-								</tr>
-								<tr class="text-center">
-									<td>司机</td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCashAmount"></el-input></td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCodAmount"></el-input></td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverPorAmount"></el-input></td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverMonthlyAmont"></el-input></td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCosigneeAmount"></el-input></td>
-									<td class="totalNum">{{totalDriver}}</td>
-								</tr>
-								<tr class="text-center" v-if="taskDetail.superCargoName">
-									<td>随行人员</td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCashAmount"></el-input></td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCodAmount"></el-input></td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCorAmount"></el-input></td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoMonthlyAmount"></el-input></td>
-									<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCosigneeAmount"></el-input></td>
-									<td class="totalNum">{{totalsuperCargo}}</td>
-								</tr>
-								<tr class="text-center">
-									<td>合计</td>
-									<td class="totalNum">{{Number(this.task.driverCashAmount ? this.task.driverCashAmount : 0)+ Number(this.task.superCargoCashAmount ? this.task.superCargoCashAmount : 0)}}</td>
-									<td class="totalNum">{{Number(this.task.driverCodAmount ? this.task.driverCodAmount : 0)+ Number(this.task.superCargoCodAmount ? this.task.superCargoCodAmount : 0)}}</td>
-									<td class="totalNum">{{Number(this.task.driverPorAmount ? this.task.driverPorAmount : 0)+ Number(this.task.superCargoCorAmount ? this.task.superCargoCorAmount : 0)}}</td>
-									<td class="totalNum">{{Number(this.task.driverMonthlyAmont ? this.task.driverMonthlyAmont : 0)+ Number(this.task.superCargoMonthlyAmount ? this.task.superCargoMonthlyAmount : 0)}}</td>
-									<td class="totalNum">{{Number(this.task.driverCosigneeAmount ? this.task.driverCosigneeAmount : 0)+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)}}</td>
-									<td class="totalNum">{{totalAll}}</td>
-								</tr>
-							</table>
-						</div>
+				<div class="section-block fare">
+					<span class="block-title">付款费用</span>
+					<span class="editBtn" v-show="type == 'edit'" v-if="!isEdit" @click="editFare">编辑</span>
+					<span class="editBtn" v-show="type == 'edit'" v-else @click="saveFare">保存</span>
+					<div class="block-content" style="padding:10px 0 20px">
+						<table>
+							<tr>
+								<th width="100">付给人员</th>
+								<th>现付</th>
+								<th>到付</th>
+								<th>回单结</th>
+								<th>月结</th>
+								<th>收货方付款</th>
+								<th>合计</th>
+							</tr>
+							<tr class="text-center">
+								<td>司机</td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCashAmount"></el-input></td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCodAmount"></el-input></td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverPorAmount"></el-input></td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverMonthlyAmont"></el-input></td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.driverCosigneeAmount"></el-input></td>
+								<td class="totalNum">{{totalDriver}}</td>
+							</tr>
+							<tr class="text-center" v-if="taskDetail.superCargoName">
+								<td>随行人员</td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCashAmount"></el-input></td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCodAmount"></el-input></td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoCorAmount"></el-input></td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCargoMonthlyAmount"></el-input></td>
+								<td><el-input size="mini" :disabled="!isEdit || type == 'view'" v-model="task.superCosigneeAmount"></el-input></td>
+								<td class="totalNum">{{totalsuperCargo}}</td>
+							</tr>
+							<tr class="text-center">
+								<td>合计</td>
+								<td class="totalNum">{{(Number(this.task.driverCashAmount ? this.task.driverCashAmount : 0)+ Number(this.task.superCargoCashAmount ? this.task.superCargoCashAmount : 0)).toFixed(2)}}</td>
+								<td class="totalNum">{{(Number(this.task.driverCodAmount ? this.task.driverCodAmount : 0)+ Number(this.task.superCargoCodAmount ? this.task.superCargoCodAmount : 0)).toFixed(2)}}</td>
+								<td class="totalNum">{{(Number(this.task.driverPorAmount ? this.task.driverPorAmount : 0)+ Number(this.task.superCargoCorAmount ? this.task.superCargoCorAmount : 0)).toFixed(2)}}</td>
+								<td class="totalNum">{{(Number(this.task.driverMonthlyAmont ? this.task.driverMonthlyAmont : 0)+ Number(this.task.superCargoMonthlyAmount ? this.task.superCargoMonthlyAmount : 0)).toFixed(2)}}</td>
+								<td class="totalNum">{{(Number(this.task.driverCosigneeAmount ? this.task.driverCosigneeAmount : 0)+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)).toFixed(2)}}</td>
+								<td class="totalNum">{{totalAll}}</td>
+							</tr>
+						</table>
 					</div>
-				</el-col>
+				</div>
 			</el-row>
 		</el-card>
 		<el-card class="box-card" v-if="loadImgs.length>0 || arriveImgs.length>0 || backImgs.length>0 || exceptImgs.length>0">
@@ -233,21 +231,21 @@ export default {
 	},
 	computed:{
 		totalDriver:function(){
-			return Number(this.task.driverCashAmount ? this.task.driverCashAmount : 0) 
+			return (Number(this.task.driverCashAmount ? this.task.driverCashAmount : 0) 
 			+ Number(this.task.driverCodAmount ? this.task.driverCodAmount : 0) 
 			+ Number(this.task.driverPorAmount ? this.task.driverPorAmount : 0) 
 			+ Number(this.task.driverMonthlyAmont ? this.task.driverMonthlyAmont : 0) 
-			+ Number(this.task.driverCosigneeAmount ? this.task.driverCosigneeAmount : 0)
+			+ Number(this.task.driverCosigneeAmount ? this.task.driverCosigneeAmount : 0)).toFixed(2)
 		},
 		totalsuperCargo:function(){
-			return Number(this.task.superCargoCashAmount ? this.task.superCargoCashAmount : 0) 
+			return (Number(this.task.superCargoCashAmount ? this.task.superCargoCashAmount : 0) 
 			+ Number(this.task.superCargoCodAmount ? this.task.superCargoCodAmount : 0) 
 			+ Number(this.task.superCargoCorAmount ? this.task.superCargoCorAmount : 0) 
 			+ Number(this.task.superCargoMonthlyAmount ? this.task.superCargoMonthlyAmount : 0) 
-			+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)
+			+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)).toFixed(2)
 		},
 		totalAll:function(){
-			return Number(this.task.driverCashAmount ? this.task.driverCashAmount : 0) 
+			return (Number(this.task.driverCashAmount ? this.task.driverCashAmount : 0) 
 			+ Number(this.task.driverCodAmount ? this.task.driverCodAmount : 0) 
 			+ Number(this.task.driverPorAmount ? this.task.driverPorAmount : 0) 
 			+ Number(this.task.driverMonthlyAmont ? this.task.driverMonthlyAmont : 0) 
@@ -256,7 +254,7 @@ export default {
 			+ Number(this.task.superCargoCodAmount ? this.task.superCargoCodAmount : 0) 
 			+ Number(this.task.superCargoCorAmount ? this.task.superCargoCorAmount : 0) 
 			+ Number(this.task.superCargoMonthlyAmount ? this.task.superCargoMonthlyAmount : 0) 
-			+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)
+			+ Number(this.task.superCosigneeAmount ? this.task.superCosigneeAmount : 0)).toFixed(2)
 		},
 		resizeImg: () => resizeImg
 	},

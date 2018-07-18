@@ -32,7 +32,9 @@
 						<el-row :gutter="20">
 							<el-col :span="8">
 								<el-form-item label="挂车牌号码" prop="trailerPlateNo" v-if="truck.truckCategory == 'Tractor'">
-									<el-input v-model="truck.trailerPlateNo" disabled></el-input>
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.trailerPlateNo" @change="handSelectTrailer">
+										<el-option v-for="item in trailers" :label="item.plateNo" :value="item" :key="item.truckID"></el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
@@ -1038,6 +1040,7 @@ export default {
 			driverLicTime: [],
 			gpsValidDate: [],
 			managementAgreementDate: [],
+			trailers: [],
 			truck: {
 				code: '',
 				trailerPlateNo: '',
@@ -1193,6 +1196,7 @@ export default {
 	},
 	components: { ImageUpload, DistPicker, SelectPosition },
 	created() {
+		this.getTrailers()
 		this.getInfo()
 	},
 	mounted() {
@@ -1289,6 +1293,10 @@ export default {
 			this.truck.managementAgreementBeginDate = date[0].getTime()
 			this.truck.managementAgreementExpireDate = date[1].getTime()
 		},
+		handSelectTrailer(data) {
+			this.truck.trailerPlateNo = data.plateNo
+			this.truck.trailerID = data.truckID
+		},
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 			if (!this.truck.primaryDriverName) this.truck.primaryDriver = ''
@@ -1318,6 +1326,15 @@ export default {
 				this.driverLicTime = [res.driverLicBeginTime, res.driverLicExpiresTime]
 				this.gpsValidDate = [res.gpsValidBeginDate, res.gpsValidEndDate]
 				this.managementAgreementDate = [res.managementAgreementBeginDate, res.managementAgreementExpireDate]
+			})
+		},
+		getTrailers() {
+			Truck.find({
+				current: 1,
+				size: 1000,
+				truckCategory: 'Trailer'
+			}).then(res => {
+				this.trailers = res.records
 			})
 		},
 		back() {

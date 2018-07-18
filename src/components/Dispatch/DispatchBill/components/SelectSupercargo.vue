@@ -125,6 +125,8 @@ export default {
                 Message.error('装车日期必填！')
                 return
             }
+            this.pageIndex = 1
+			this.pageSize = 10
             this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
         },
         reset() {
