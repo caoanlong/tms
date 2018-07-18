@@ -414,7 +414,7 @@ export default {
 			for (let i = this.carrierbillInfo.carrierCargo.length - 1; i >= 0; i--) {
 				sum += Number(this.carrierbillInfo.carrierCargo[i][o])
 			}
-			return sum
+			return sum.toFixed(2)
 		},
 		getUnits() {
 			CargoUnit.find({

@@ -38,11 +38,6 @@
 							</div>
 							<div>
 								<span class="tit">车辆类型</span>
-								<!-- <span class="ctt" v-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</span>
-								<span class="ctt" v-else-if="truck.truckType == 'Van'">厢式货车</span>
-								<span class="ctt" v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
-								<span class="ctt" v-else-if="truck.truckType == 'HeavyVan'">重型厢式货车</span>
-								<span class="ctt" v-else-if="truck.truckType == 'HeavyContainerSemitrailer'">重型集装箱半挂车</span> -->
 								<span v-if="truck.truckType == 'TankTruck'">罐式货车</span>
 								<span v-else-if="truck.truckType == 'VanTruck'">厢式货车</span>
 								<span v-else-if="truck.truckType == 'BarrackTruck'">仓栅货车</span>
@@ -593,6 +588,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
@@ -623,8 +619,17 @@ export default {
 			truck: {}
 		}
 	},
+	computed: {
+		...mapGetters(['visitedViews'])
+	},
 	components: { ImageUpload, SelectPosition },
 	created() {
+		if (sessionStorage.getItem('visitedViews')) {
+			const views = JSON.parse(sessionStorage.getItem('visitedViews'))
+			views.forEach(item => {
+				this.$store.dispatch('addVisitedViews', item)
+			})
+		}
 		this.getInfo()
 	},
 	mounted() {
@@ -653,12 +658,24 @@ export default {
 			"current": "active" 		//选中的样式
 		})
 	},
+	beforeDestroy() {
+		sessionStorage.removeItem('visitedViews')
+	},
 	methods: {
 		print() {
+			const views = this.visitedViews.map(item => {
+				return {
+					name: item.name,
+					path: item.path,
+					query: item.query,
+					meta: { title: item.title}
+				}
+			})
+			sessionStorage.setItem('visitedViews', JSON.stringify(views))
 			let truckElem = this.$refs.truck
 			const winElem = window.document.body.innerHTML
 			window.document.body.innerHTML = truckElem.innerHTML
-			// document.execCommand('print')
+			// // document.execCommand('print')
 			window.print()
 			window.document.body.innerHTML = winElem
 			window.location.reload()

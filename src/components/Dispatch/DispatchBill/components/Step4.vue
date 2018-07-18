@@ -49,11 +49,11 @@
 								<td><el-input size="mini" v-model="task.driverCosigneeAmount"></el-input></td>
 								<td>
 									{{
-										Number(task.driverCashAmount ? task.driverCashAmount : 0) 
+										(Number(task.driverCashAmount ? task.driverCashAmount : 0) 
 										+ Number(task.driverCodAmount ? task.driverCodAmount : 0) 
 										+ Number(task.driverPorAmount ? task.driverPorAmount : 0) 
 										+ Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
-										+ Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0)
+										+ Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0)).toFixed(2)
 									}}
 								</td>
 							</tr>
@@ -66,11 +66,11 @@
 								<td><el-input size="mini" v-model="task.superCosigneeAmount"></el-input></td>
 								<td>
 									{{
-										Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
+										(Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
 										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
 										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
 										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
-										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)
+										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)).toFixed(2)
 									}}
 								</td>
 							</tr>
@@ -78,37 +78,37 @@
 								<td>合计</td>
 								<td>
 									{{
-										Number(task.driverCashAmount ? task.driverCashAmount : 0) 
-										+ Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0) 
+										(Number(task.driverCashAmount ? task.driverCashAmount : 0) 
+										+ Number(task.superCargoCashAmount ? task.superCargoCashAmount : 0)).toFixed(2)
 									}}
 								</td>
 								<td>
 									{{
-										Number(task.driverCodAmount ? task.driverCodAmount : 0) 
-										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
+										(Number(task.driverCodAmount ? task.driverCodAmount : 0) 
+										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0)).toFixed(2) 
 									}}
 								</td>
 								<td>
 									{{
-										Number(task.driverPorAmount ? task.driverPorAmount : 0) 
-										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
+										(Number(task.driverPorAmount ? task.driverPorAmount : 0) 
+										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0)).toFixed(2) 
 									}}
 								</td>
 								<td>
 									{{
-										Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
-										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
+										(Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
+										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0)).toFixed(2)
 									}}
 								</td>
 								<td>
 									{{
-										Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0) 
-										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0) 
+										(Number(task.driverCosigneeAmount ? task.driverCosigneeAmount : 0) 
+										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)).toFixed(2)
 									}}
 								</td>
 								<td>
 									{{
-										Number(task.driverCashAmount ? task.driverCashAmount : 0) 
+										(Number(task.driverCashAmount ? task.driverCashAmount : 0) 
 										+ Number(task.driverCodAmount ? task.driverCodAmount : 0) 
 										+ Number(task.driverPorAmount ? task.driverPorAmount : 0) 
 										+ Number(task.driverMonthlyAmont ? task.driverMonthlyAmont : 0) 
@@ -117,7 +117,7 @@
 										+ Number(task.superCargoCodAmount ? task.superCargoCodAmount : 0) 
 										+ Number(task.superCargoCorAmount ? task.superCargoCorAmount : 0) 
 										+ Number(task.superCargoMonthlyAmount ? task.superCargoMonthlyAmount : 0) 
-										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)
+										+ Number(task.superCosigneeAmount ? task.superCosigneeAmount : 0)).toFixed(2)
 									}}
 								</td>
 							</tr>
@@ -162,7 +162,7 @@ export default {
 					+ Number(item.superCosigneeAmount ? item.superCosigneeAmount : 0)
 				amount += itemAmount
 			})
-			return amount
+			return amount.toFixed(2)
 		},
 		resizeImg: () => resizeImg
 	},

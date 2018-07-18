@@ -345,6 +345,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
@@ -369,8 +370,17 @@ export default {
 			superCargo: {}
 		}
 	},
+	computed: {
+		...mapGetters(['visitedViews'])
+	},
 	components: { ImageUpload, SelectPosition },
 	created() {
+		if (sessionStorage.getItem('visitedViews')) {
+			const views = JSON.parse(sessionStorage.getItem('visitedViews'))
+			views.forEach(item => {
+				this.$store.dispatch('addVisitedViews', item)
+			})
+		}
 		this.getInfo()
 	},
 	mounted() {
@@ -393,8 +403,20 @@ export default {
 			"current": "active" 		//选中的样式
 		})
 	},
+	beforeDestroy() {
+		sessionStorage.removeItem('visitedViews')
+	},
 	methods: {
 		print() {
+			const views = this.visitedViews.map(item => {
+				return {
+					name: item.name,
+					path: item.path,
+					query: item.query,
+					meta: { title: item.title}
+				}
+			})
+			sessionStorage.setItem('visitedViews', JSON.stringify(views))
 			let superCargoElem = this.$refs.superCargo
 			const winElem = window.document.body.innerHTML
 			window.document.body.innerHTML = superCargoElem.innerHTML
