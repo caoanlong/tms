@@ -63,7 +63,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="联系方式" prop="shipperPhone">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperPhone"></el-input>
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperPhone" @input="inputShipperPhone"></el-input>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -135,7 +135,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="联系方式" prop="consigneePhone">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneePhone"></el-input>
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneePhone" @input="inputConsigneePhone"></el-input>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
