@@ -1413,7 +1413,7 @@ export default {
 			})
 		},
 		getTrailers(queryString, cb) {
-			this.truck.trailerID = ''
+			// this.truck.trailerID = ''
 			Truck.find({
 				current: 1,
 				size: 1000,
