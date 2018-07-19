@@ -33,7 +33,7 @@
 							<el-col :span="8">
 								<el-form-item label="挂车牌号码" prop="trailerID" v-if="truck.truckCategory == 'Tractor'">
 									<el-autocomplete  style="width:100%"
-										value-key="realName" 
+										value-key="plateNo" 
 										v-model="truck.trailerPlateNo"
 										:fetch-suggestions="getTrailers"
 										placeholder="请输入..." 
