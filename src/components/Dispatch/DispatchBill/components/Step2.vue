@@ -6,7 +6,7 @@
 				<span class="infoItem">{{item.shipperArea}}</span>
 				<span class="infoItem">-></span>
 				<span class="infoItem">{{item.consigneeArea}}</span>
-				<span class="infoItem">{{item.consigneeDate | getdatefromtimestamp(true)}}（预约到达）</span>
+				<span class="infoItem">{{item.consigneeDate | getdatefromtimestamp('min')}}（预约到达）</span>
 			</div>
 			<el-table border 
 				ref="multipleTable" 
