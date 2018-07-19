@@ -31,10 +31,14 @@
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="8">
-								<el-form-item label="挂车牌号码" prop="trailerPlateNo" v-if="truck.truckCategory == 'Tractor'">
-									<el-select placeholder="请选择" style="width:100%" v-model="truck.trailerPlateNo" @change="handSelectTrailer">
-										<el-option v-for="item in trailers" :label="item.plateNo" :value="item" :key="item.truckID"></el-option>
-									</el-select>
+								<el-form-item label="挂车牌号码" prop="trailerID" v-if="truck.truckCategory == 'Tractor'">
+									<el-autocomplete  style="width:100%"
+										value-key="realName" 
+										v-model="truck.trailerPlateNo"
+										:fetch-suggestions="getTrailers"
+										placeholder="请输入..." 
+										@select="handSelectTrailer">
+									</el-autocomplete>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
@@ -1329,6 +1333,7 @@ export default {
 				truckCategory: [ { required: true , message: '请选择车辆类别'} ],
 				plateNoColor: [ { required: true , message: '请选择车牌颜色'} ],
 				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'}],
+				trailerID: [ { required: true , message: '请选择挂车牌号码'}],
 				plateNo: [ { required: true , message: '请输入车牌号码'}, { validator: checkPlateNo } ],
 				truckType: [ { required: true , message: '请选择车牌类型'} ],
 				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ],
@@ -1352,9 +1357,6 @@ export default {
 		}
 	},
 	components: { ImageUpload, DistPicker, SelectPosition },
-	created() {
-		this.getTrailers()
-	},
 	mounted() {
 		LiftEffect({
 			"control1": ".lift-nav", 	//侧栏电梯的容器
@@ -1410,6 +1412,17 @@ export default {
 				cb(list)
 			})
 		},
+		getTrailers(queryString, cb) {
+			this.truck.trailerID = ''
+			Truck.find({
+				current: 1,
+				size: 1000,
+				plateNo: queryString,
+				truckCategory: 'Trailer'
+			}).then(res => {
+				cb(res.records)
+			})
+		},
 		handSelectPrimaryDriver(data) { 
 			this.truck.primaryDriver = data.comSupercargoID
 			this.truck.primaryDriverName = data.realName
@@ -1459,6 +1472,9 @@ export default {
 			this.truck.trailerPlateNo = data.plateNo
 			this.truck.trailerID = data.truckID
 		},
+		inputTrailer() {
+			this.truck.trailerID = ''
+		},
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 			if (!this.truck.primaryDriverName) this.truck.primaryDriver = ''
@@ -1475,15 +1491,6 @@ export default {
 						this.$router.push({name: 'truck'})
 					})
 				}
-			})
-		},
-		getTrailers() {
-			Truck.find({
-				current: 1,
-				size: 1000,
-				truckCategory: 'Trailer'
-			}).then(res => {
-				this.trailers = res.records
 			})
 		},
 		back() {

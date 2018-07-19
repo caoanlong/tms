@@ -31,10 +31,14 @@
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="8">
-								<el-form-item label="挂车牌号码" prop="trailerPlateNo" v-if="truck.truckCategory == 'Tractor'">
-									<el-select placeholder="请选择" style="width:100%" v-model="truck.trailerPlateNo" @change="handSelectTrailer">
-										<el-option v-for="item in trailers" :label="item.plateNo" :value="item" :key="item.truckID"></el-option>
-									</el-select>
+								<el-form-item label="挂车牌号码" prop="trailerID" v-if="truck.truckCategory == 'Tractor'">
+									<el-autocomplete  style="width:100%"
+										value-key="realName" 
+										v-model="truck.trailerPlateNo"
+										:fetch-suggestions="getTrailers"
+										placeholder="请输入..." 
+										@select="handSelectTrailer">
+									</el-autocomplete>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
@@ -1172,6 +1176,7 @@ export default {
 				truckCategory: [ { required: true , message: '请选择车辆类别'} ],
 				plateNoColor: [ { required: true , message: '请选择车牌颜色'} ],
 				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'}],
+				trailerID: [ { required: true , message: '请选择挂车牌号码'}],
 				plateNo: [ { required: true , message: '请输入车牌号码'}, { validator: checkPlateNo } ],
 				truckType: [ { required: true , message: '请选择车牌类型'} ],
 				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ],
@@ -1254,6 +1259,16 @@ export default {
 				cb(list)
 			})
 		},
+		getTrailers(queryString, cb) {
+			Truck.find({
+				current: 1,
+				size: 1000,
+				plateNo: queryString,
+				truckCategory: 'Trailer'
+			}).then(res => {
+				cb(res.records)
+			})
+		},
 		handSelectPrimaryDriver(data) { this.truck.primaryDriver = data.comSupercargoID },
 		handSelectSecondaryDriver(data) { this.truck.secondaryDriver = data.comSupercargoID },
 		handleTruckFrontPic(res) { this.truck.truckFrontPic = res.length == 0 ? '' : res[0] },
@@ -1326,15 +1341,6 @@ export default {
 				this.driverLicTime = [res.driverLicBeginTime, res.driverLicExpiresTime]
 				this.gpsValidDate = [res.gpsValidBeginDate, res.gpsValidEndDate]
 				this.managementAgreementDate = [res.managementAgreementBeginDate, res.managementAgreementExpireDate]
-			})
-		},
-		getTrailers() {
-			Truck.find({
-				current: 1,
-				size: 1000,
-				truckCategory: 'Trailer'
-			}).then(res => {
-				this.trailers = res.records
 			})
 		},
 		back() {
