@@ -1236,6 +1236,7 @@ export default {
 				current: 1,
 				size: 1000,
 				type: 'driver',
+				editTruckID:this.$route.query.truckID,
 				keyword: queryString
 			}).then(res => {
 				const list = res.records
@@ -1250,6 +1251,7 @@ export default {
 				current: 1,
 				size: 1000,
 				type: 'driver',
+				editTruckID:this.$route.query.truckID,
 				keyword: queryString
 			}).then(res => {
 				const list = res.records
