@@ -74,7 +74,7 @@ export default {
 	},
 	methods:{
 		showDialog(data, data1) {
-			return
+			// return
 			console.log(data)
 			if(data == 'companyInfo'){
 				this.showCompanyInfo= data1

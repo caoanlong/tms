@@ -15,9 +15,9 @@
 						<i class="el-icon-caret-bottom"></i>
 					</div>
 					<el-dropdown-menu slot="dropdown">
-						<!-- <router-link :to="{name: 'userprofile'}">
+						<router-link :to="{name: 'userprofile'}">
 							<el-dropdown-item>个人资料</el-dropdown-item>
-						</router-link> -->
+						</router-link>
 						<!-- <el-dropdown-item>
 							<span style="display:block;">账号设置</span>
 						</el-dropdown-item> -->
@@ -54,7 +54,7 @@ export default {
 			e.target.onerror = null
 		},
 		sendToParent(type){
-			this.$emit('listenToChild',type,true);
+			this.$emit('listenToChild',type,true)
 		}
 	}
 }
