@@ -1323,10 +1323,11 @@ export default {
 						return
 					})
 				} else {
-					delete this.truck.plateNo
-					delete this.truck.trailerPlateNo
-					delete this.truck.truckCategory
-					Truck.update(this.truck).then(res => {
+					const truckInfo = Object.assign({}, this.truck)
+					delete truckInfo.plateNo
+					delete truckInfo.truckCategory
+					// delete this.truck.trailerPlateNo
+					Truck.update(truckInfo).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'truck'})
 					})

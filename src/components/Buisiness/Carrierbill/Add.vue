@@ -169,7 +169,6 @@
 							<el-row class="block-content">
 								<el-form-item label="到货时间" prop="consigneeDate">
 									<el-date-picker 
-										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										format="yyyy-MM-dd HH:mm"
 										type="datetime" 
 										style="width:100%" 
@@ -668,6 +667,7 @@ export default {
 	width 130px
 	line-height 2
 	margin-right 10px
+	font-size 14px
 	span
 		color red
 </style>

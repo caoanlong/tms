@@ -138,10 +138,11 @@
 								<span v-else>已作废</span>
 							</td>
 							<td class="text-center">{{taskItem.cargoName}}</td>
-							<td class="text-center">
+							<td class="text-center" v-if="taskItem.loadWeightSum || taskItem.loadVolumeSum || taskItem.loadVolumeSum">
 								{{taskItem.loadWeightSum ? taskItem.loadWeightSum + '吨' : ''}}
 								{{taskItem.loadVolumeSum ? (taskItem.loadWeightSum ? '/' : '') + taskItem.loadVolumeSum + '方' : ''}}
 							</td>
+							<td class="text-center" v-else>0</td>
 							<td class="text-center">{{taskItem.loadNumSum}}</td>
 							<td class="text-center">{{taskItem.shipperArea}}</td>
 							<td class="text-center" width="120">{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
@@ -227,6 +228,7 @@ export default {
 			this.find.customerID = ''
 			this.find.companyName = ''
 			this.find.status = ''
+			this.rangeDate = ''
 			this.find.beginDispatchDate = ''
 			this.find.endDispatchDate = ''
 			this.pageIndex = 1

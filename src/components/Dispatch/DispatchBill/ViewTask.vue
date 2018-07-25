@@ -16,7 +16,7 @@
 							<p>发货人：{{carrier.shipperName}}{{carrier.shipperPhone?('/'+carrier.shipperPhone):''}}</p>
 							<p>发货地：{{carrier.shipperArea}} {{carrier.shipperLocationAddress}}</p>
 							<p>详细地址：{{carrier.shipperDetailAddress}}</p>
-							<p class="datetime">装车时间：{{carrier.shipperDate | getdatefromtimestamp('min')}}（预计装车）<span class="c2" v-if="carrier.shipperActualDate">{{carrier.shipperActualDate | getdatefromtimestamp()}}（实际装车）</span></p>
+							<p class="datetime">装车时间：{{task.shipperDate | getdatefromtimestamp('min')}}（预计装车）<span class="c2" v-if="task.shipperActualDate">{{task.shipperActualDate | getdatefromtimestamp()}}（实际装车）</span></p>
 						</div>
 					</div>
 				</el-col>
@@ -28,7 +28,7 @@
 							<p>收货人：{{carrier.consigneeName}}{{carrier.consigneePhone?('/'+carrier.consigneePhone):''}}</p>
 							<p>收货地：{{carrier.consigneeArea}} {{carrier.consigneeLocationAddress}}</p>
 							<p>详细地址：{{carrier.consigneeDetailAddress}}</p>
-							<p class="datetime">到货时间：{{carrier.consigneeDate | getdatefromtimestamp('min')}}（预计到货） <span class="c2" v-if="carrier.consigneeActualDate">{{carrier.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</span></p>
+							<p class="datetime">到货时间：{{task.consigneeDate | getdatefromtimestamp('min')}}（预计到货） <span class="c2" v-if="task.consigneeActualDate">{{task.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</span></p>
 						</div>
 					</div>
 				</el-col>

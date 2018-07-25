@@ -69,7 +69,9 @@
 								validator: (rule, value, callback) => {
 									if (value > scope.row.remainingCargoNum) {
 										callback('配载数量不能大于待配数量！')
-									} else {
+									} else if(value<1) {
+										callback('配载数量不能为空！')
+									}else {
 										callback()
 									}
 								}

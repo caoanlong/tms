@@ -14,7 +14,7 @@
 						@select="handSelectShipper">
 					</el-autocomplete>
 				</el-form-item>
-				<el-form-item label="发货时间">
+				<el-form-item label="委托时间">
 					<el-date-picker
 						v-model="findRangeDate"
 						type="daterange"

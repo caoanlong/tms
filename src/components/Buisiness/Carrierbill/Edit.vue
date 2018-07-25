@@ -439,20 +439,25 @@ export default {
 			}).then(res => { cb(res.records) })
 		},
 		getShipperLocation(queryString, cb) {
-			if (!this.searchShipperAreaHash) {
-				Message.error('请选择发货地！')
-				return
-			}
+			const location = searchLocationByCity(distData[this.selectedShipperArea[0]][this.selectedShipperArea[1]])
+			this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
+			
+			// if (!this.searchShipperAreaHash) {
+			// 	Message.error('请选择发货地！')
+			// 	return
+			// }
 			CrossProxy.getEleLocation({
 				geohash: this.searchShipperAreaHash,
 				keyword: queryString
 			}).then(res => { cb(res) })
 		},
 		getConsigneeLocation(queryString, cb) {
-			if (!this.searchConsigneeAreaHash) {
-				Message.error('请选择收货地！')
-				return
-			}
+			const location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
+			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
+			// if (!this.searchConsigneeAreaHash) {
+			// 	Message.error('请选择收货地！')
+			// 	return
+			// }
 			CrossProxy.getEleLocation({
 				geohash: this.searchConsigneeAreaHash,
 				keyword: queryString
@@ -534,6 +539,7 @@ export default {
 		handleSelectedShipperArea(data) {
 			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
 			this.carrierbillInfo.shipperArea = searchAreaByKey(data[data.length - 1])
+			this.carrierbillInfo.shipperLocationAddress= ''
 			if (data[1]) {
 				const location = searchLocationByCity(distData[data[0]][data[1]])
 				this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
@@ -542,6 +548,7 @@ export default {
 		handleSelectedConsigneeArea(data) {
 			this.carrierbillInfo.consigneeAreaID = data[data.length - 1]
 			this.carrierbillInfo.consigneeArea = searchAreaByKey(data[data.length - 1])
+			this.carrierbillInfo.consigneeLocationAddress = ''
 			if (data[1]) {
 				const location = searchLocationByCity(distData[data[0]][data[1]])
 				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
@@ -675,6 +682,7 @@ export default {
 	width 130px
 	line-height 2
 	margin-right 10px
+	font-size 14px
 	span
 		color red
 </style>
