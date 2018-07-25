@@ -115,12 +115,14 @@ export default {
 	padding-left 180px
 	background #424242
 .right-container
-	padding-top 40px
+	padding-top 60px
 	.breadcrumb-container
 		position fixed
 		top 84px
 		z-index 100
-		width 100%
+		left 180px
+		right 0
+		padding 0 20px
 		background-color #ffffff
 		border-bottom 1px solid #dddddd
 .fullBg

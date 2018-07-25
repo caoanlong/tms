@@ -44,7 +44,6 @@ export default {
 		display inline-block
 		font-size 14px
 		line-height 40px
-		margin-left 20px
 		.no-redirect 
 			color #666
 			font-weight normal
