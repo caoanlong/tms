@@ -86,8 +86,8 @@
 							<tr class="text-center">
 								<td>合计</td>
 								<td></td>
-								<td>{{cargoList.reduce((prev, cur) => prev + cur.cargoWeight, 0)}}吨</td>
-								<td>{{cargoList.reduce((prev, cur) => prev + cur.cargoVolume, 0)}}方</td>
+								<td>{{Number(cargoList.reduce((prev, cur) => prev + cur.cargoWeight, 0)).toFixed(2)}}吨</td>
+								<td>{{Number(cargoList.reduce((prev, cur) => prev + cur.cargoVolume, 0)).toFixed(2)}}方</td>
 								<td>{{cargoList.reduce((prev, cur) => prev + cur.cargoNum, 0)}}</td>
 							</tr>
 						</table>
