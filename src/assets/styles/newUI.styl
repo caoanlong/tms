@@ -370,6 +370,40 @@ $color-22 = #3a8ee6
         left 10px
         padding 0 10px
         color #bfcbd9
-        background-color #fff
+        background-color $color-1
     .block-content
         margin 0 20px
+
+.companyInfoDialog
+    width 660px
+    border-radius 4px
+    overflow hidden
+    .el-dialog__header
+    .el-dialog__body
+        padding 0
+    
+    .el-dialog__headerbtn 
+        z-index 10
+        .el-dialog__close
+            color $color-1
+.editCompanyInfoDialog
+.accountInfoDialog
+    .el-dialog__body
+        border-top 1px solid #ddd
+.accountInfoDialog
+    width 660px
+    border-radius 4px
+    overflow hidden
+    .el-tabs__header
+        &.is-left
+            margin-right 0
+    .el-dialog__body
+        padding 0 0 30px
+        .el-tabs__content
+            width 565px
+            padding 20px
+            .otherInfo
+                margin 15px 0
+        
+        
+    
