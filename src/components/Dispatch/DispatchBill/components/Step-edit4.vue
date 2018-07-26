@@ -224,11 +224,11 @@ export default {
 					+ Number(item.superCargoCorAmount ? item.superCargoCorAmount : 0) 
 					+ Number(item.superCargoMonthlyAmount ? item.superCargoMonthlyAmount : 0) 
 					+ Number(item.superCosigneeAmount ? item.superCosigneeAmount : 0),
-					'driverCashAmount': item.driverCashAmount,
-					'driverCodAmount': item.driverCodAmount,
-					'driverPorAmount': item.driverPorAmount,
-					'driverMonthlyAmont': item.driverMonthlyAmont,
-					'driverCosigneeAmount': item.driverCosigneeAmount,
+					'driverCashAmount': Number(item.driverCashAmount?item.driverCashAmount:0),
+					'driverCodAmount': Number(item.driverCodAmount?item.driverCodAmount:0),
+					'driverPorAmount': Number(item.driverPorAmount?item.driverPorAmount:0),
+					'driverMonthlyAmont': Number(item.driverMonthlyAmont?item.driverMonthlyAmont:0),
+					'driverCosigneeAmount': Number(item.driverCosigneeAmount?item.driverCosigneeAmount:0),
 					'superCargoCashAmount': this.selectedTruck.superCargo ? item.superCargoCashAmount : 0,
 					'superCargoCodAmount': this.selectedTruck.superCargo ? item.superCargoCodAmount : 0,
 					'superCargoCorAmount': this.selectedTruck.superCargo ? item.superCargoCorAmount : 0,
