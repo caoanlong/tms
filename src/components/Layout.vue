@@ -253,7 +253,7 @@ export default {
 		dist: () => dist
 	},
 	created() {
-		// this.getCompanyInfo()
+		this.getCompanyInfo()
 	},
 	components: {
 		Navbar,
@@ -265,12 +265,10 @@ export default {
 	},
 	methods:{
 		getCompanyInfo() {
-			CompanyInfo.find({
-				companyID: this.find.customerID
-				
+			CompanyInfo.findById({
+				companyID: this.userInfo.companyID
 			}).then(res => {
-				this.dispatchBillList = res.records
-				this.count = res.total
+				console.log(this.userInfo.companyID)
 			})
 		},
 		showDialog(type, boo) {
