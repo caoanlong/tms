@@ -6,6 +6,7 @@ const user = {
 		name: localStorage.getItem('name'),
 		mobile: localStorage.getItem('mobile'),
 		companyName: localStorage.getItem('companyName'),
+		companyID: localStorage.getItem('companyID'),
 		token: localStorage.getItem('token')
 	},
 	mutations: {
@@ -24,6 +25,10 @@ const user = {
 		SET_COMPANYNAME: (state, companyName) => {
 			state.companyName = companyName
 			localStorage.setItem('companyName', companyName)
+		},
+		SET_COMPANYID: (state, companyID) => {
+			state.companyID = companyID
+			localStorage.setItem('companyID', companyID)
 		},
 		SET_TOKEN: (state, token) => {
 			state.token = token
@@ -55,6 +60,7 @@ const user = {
 					commit('SET_NAME', res.data.data.userName)
 					commit('SET_MOBILE', res.data.data.mobile)
 					commit('SET_COMPANYNAME', res.data.data.companyName)
+					commit('SET_COMPANYID', res.data.data.companyID)
 				})
 			})
 		}

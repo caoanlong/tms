@@ -19,14 +19,14 @@
 				<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
 				<img v-else src="../assets/imgs/defaultLogo.png" height="128" width="128">
 			</div>
-			<p class="companyName">昆明安化物流有限公司</p>
-			<p class="companyArea">所在地区：云南昆明</p>
-			<p class="companyAddress">联系地址：云南昆明官渡区彩云北路235号，浩宏驾驶广场23栋2340室</p>
-			<p class="servicesTel">客服电话：400236548</p>
+			<p class="companyName">{{companyDetail.name}}</p>
+			<p class="companyArea">所在地区：{{companyDetail.areaName}}</p>
+			<p class="companyAddress">联系地址：{{companyDetail.address}}</p>
+			<p class="servicesTel">客服电话：{{companyDetail.phone}}</p>
 		</div>
 		<div class="otherInfo">
-			<p class="companyType">企业类型：物流公司</p>
-			<p class="companySort">经营行业：危险品运输</p>
+			<p class="companyType">企业类型：{{companyDetail.enterpriseType}}</p>
+			<p class="companySort">所属行业：{{companyDetail.industry}}</p>
 		</div>
 		<div class="footer">
 			<span class="sysV">危化标准版</span>
@@ -43,14 +43,14 @@
 					</el-col>
 					<el-col :span="24">
 						<el-form-item label="企业名称">
-							<el-input placeholder="请输入企业名称"></el-input>
+							<el-input placeholder="请输入企业名称" v-model="companyDetail.name"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 						<el-col :span="12">
 							<el-form-item label="企业类型">
-								<el-select style="width: 100%" placeholder="请选择企业类型">
+								<el-select style="width: 100%" placeholder="请选择企业类型" v-model="companyDetail.enterpriseType">
 									<el-option label="其他" value="其他"></el-option>
 									<el-option label="原材料生产商" value="原材料生产商"></el-option>
 									<el-option label="制造厂商" value="制造厂商"></el-option>
@@ -63,7 +63,7 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="所属行业">
-								<el-select style="width: 100%" placeholder="请选择所属行业">
+								<el-select style="width: 100%" placeholder="请选择所属行业" v-model="companyDetail.industry">
 									<el-option label="其他" value="其他"></el-option>
 									<el-option label="危险品" value="危险品"></el-option>
 									<el-option label="快消品" value="快消品"></el-option>
@@ -84,38 +84,38 @@
 					<el-row>
 						<el-col :span="24">
 							<el-form-item label="详细地址">
-								<el-input placeholder="请输入详细地址"></el-input>
+								<el-input placeholder="请输入详细地址" v-model="companyDetail.address"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="20">
 						<el-col :span="12">
 							<el-form-item label="负责人">
-								<el-input placeholder="请输入负责人"></el-input>
+								<el-input placeholder="请输入负责人" v-model="companyDetail.respoName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="联系电话">
-								<el-input placeholder="请输入联系电话"></el-input>
+								<el-input placeholder="请输入联系电话" v-model="companyDetail.respoMobile"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="20">
 						<el-col :span="12">
 							<el-form-item label="联系人">
-								<el-input placeholder="请输入联系人"></el-input>
+								<el-input placeholder="请输入联系人" v-model="companyDetail.contactsName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="联系电话">
-								<el-input placeholder="请输入联系电话"></el-input>
+								<el-input placeholder="请输入联系电话" v-model="companyDetail.contactsMobile"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="20">
 						<el-col :span="24">
 							<el-form-item label="是否经营性运输">
-								<el-switch>
+								<el-switch v-model="companyDetail.operationalFlag">
 								</el-switch>
 							</el-form-item>
 						</el-col>
@@ -123,31 +123,31 @@
 					<el-row :gutter="20">
 						<el-col :span="12">
 							<el-form-item label="传真">
-								<el-input placeholder="请输入传真"></el-input>
+								<el-input placeholder="请输入传真" v-model="companyDetail.fax"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="客服电话">
-								<el-input placeholder="请输入客服电话"></el-input>
+								<el-input placeholder="请输入客服电话" v-model="companyDetail.phone"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="20">
 						<el-col>
 							<el-form-item label="邮政编码">
-								<el-input placeholder="请输入邮政编码"></el-input>
+								<el-input placeholder="请输入邮政编码" v-model="companyDetail.zipCode"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col>
 							<el-form-item label="邮箱">
-								<el-input placeholder="请输入邮箱"></el-input>
+								<el-input placeholder="请输入邮箱" v-model="companyDetail.email"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
 						<el-col :span="24">
 							<el-form-item label="经营类型">
-								<el-input type="textarea" resize="none">
+								<el-input type="textarea" resize="none" v-model="companyDetail.businessType">
 								</el-input>
 							</el-form-item>
 						</el-col>
@@ -156,7 +156,7 @@
 						<el-col :span="24">
 							<el-form-item>
 								<el-button @click="editCompanyInfoDialog = false">取消</el-button>
-								<el-button type="primary">保存</el-button>
+								<el-button type="primary" @click="saveCompanyInfo">保存</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -223,6 +223,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import { Message } from 'element-ui'
 import Sidebar from './CommonComponents/SideBar'
 import Navbar from './CommonComponents/NavBar'
 import AppMain from './CommonComponents/AppMain'
@@ -240,6 +241,7 @@ export default {
 			editCompanyInfoDialog: false,
 			accountInfoDialog: false,
 			selectedArea: [],
+			companyDetail:{}
 		}
 	},
 	name: 'layout',
@@ -268,7 +270,12 @@ export default {
 			CompanyInfo.findById({
 				companyID: this.userInfo.companyID
 			}).then(res => {
-				console.log(this.userInfo.companyID)
+				this.companyDetail = res
+			})
+		},
+		saveCompanyInfo(){
+			CompanyInfo.modify(this.companyDetail).then(res => {
+				Message.success(res.msg)
 			})
 		},
 		showDialog(type, boo) {

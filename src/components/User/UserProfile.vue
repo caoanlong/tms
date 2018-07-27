@@ -22,8 +22,6 @@
 							<el-input auto-complete="off" disabled v-model="user.nickName" v-if="isEdit" :class="isEdit?'text-input':''"></el-input>
 							<p v-text="user.nickName" v-else></p>
 						</el-form-item>
-					
-					
 						<el-form-item label="会员真实姓名">
 							<el-input auto-complete="off" v-if="isEdit" v-model="user.realName" :class="isEdit?'text-input':''"></el-input>
 							<p v-text="user.realName" v-else></p>
@@ -36,8 +34,6 @@
 							<el-input auto-complete="off" disabled v-model="user.userName" v-if="isEdit" :class="isEdit?'text-input':''"></el-input>
 							<p v-text="user.userName" v-else></p>
 						</el-form-item>
-					
-					
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
 							<el-button type="primary" v-show="isEdit" @click="editUser">保存</el-button>
