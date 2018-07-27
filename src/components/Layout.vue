@@ -16,8 +16,7 @@
 	<el-dialog :visible.sync="companyInfoDialog" custom-class="companyInfoDialog">
 		<div class="baseInfo">
 			<div class="companylogo">
-				<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
-				<img v-else src="../assets/imgs/defaultLogo.png" height="128" width="128">
+				<img :src="companyDetail.logoUrl ? resizeImg(companyDetail.logoUrl, '_100x100.') : defaultImg" />
 			</div>
 			<p class="companyName">{{companyDetail.name}}</p>
 			<p class="companyArea">所在地区：{{companyDetail.areaName}}</p>
@@ -37,7 +36,7 @@
 				<el-row :gutter="20">
 					<el-col :span="24">
 						<el-form-item label="企业Logo">
-							<ImageUpload :limitNum="1" class="fl"></ImageUpload>
+							<ImageUpload :files="[companyDetail.logoUrl]" @imgUrlBack="handleAvatarSuccess" :fixed="true" class="fl" :limitNum="1"/>
 							<p class="tips fl">上传的企业Logo，将在点击底部保存按钮保存后生效</p>
 						</el-form-item>
 					</el-col>
@@ -115,7 +114,7 @@
 					<el-row :gutter="20">
 						<el-col :span="24">
 							<el-form-item label="是否经营性运输">
-								<el-switch v-model="companyDetail.operationalFlag">
+								<el-switch v-model="companyDetail.operationalFlag" active-value="Y" inactive-value="N">
 								</el-switch>
 							</el-form-item>
 						</el-col>
@@ -166,54 +165,62 @@
 	<el-dialog title="账号设置" :visible.sync="accountInfoDialog" custom-class="accountInfoDialog" top="10vh">
 		<el-tabs tab-position="left" style="height:300px">
 			<el-tab-pane label="个人资料">
-				<el-form label-width="80px" size="small">
-					<el-row gutter="20">
+				<el-form label-width="80px" size="small" :model="MemDetail">
+					<el-row :gutter="20">
 						<el-col :span="6">
 							<div class="userFace">
-								<ImageUpload :limitNum="1"></ImageUpload>
+								<ImageUpload :files="[MemDetail.headPic]" @imgUrlBack="handleAvatarSuccess1" :fixed="true" :limitNum="1"></ImageUpload>
+
 							</div>
 						</el-col>
 						<el-col :span="18">
 							<el-form-item label="我的姓名">
-								<el-input placeholder="请输入"></el-input>
+								<el-input placeholder="请输入" v-model="MemDetail.realName"></el-input>
 							</el-form-item>
 							<el-form-item label="手机号码">
-								<el-input placeholder="请输入手机号码" disabled></el-input>
+								<el-input placeholder="请输入手机号码" v-model="MemDetail.mobile" disabled></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
-						<el-input type="textarea" resize="none" class="otherInfo" rows="4" disabled></el-input>
+						<div class="otherInfo">
+							<p>企业名称：{{MemDetail.companyName}}</p>
+							<p>企业角色：{{MemDetail.roleName}}</p>
+						</div>
 					</el-row>
 					<el-row>
 						<el-col :span="24" class="text-center">
 							<el-button size="small" @click="accountInfoDialog = false">取消</el-button>
-							<el-button type="primary" size="small">保存</el-button>
+							<el-button type="primary" @click="saveMemInfo" size="small">保存</el-button>
 						</el-col>
 					</el-row>
 				</el-form>
 			</el-tab-pane>
 			<el-tab-pane label="密码修改">
-				<el-form label-width="90px" size="small">
+
+				<el-form label-width="100px" size="small" :model="memPwd" :rules="rules" ref="ruleForm">
+					<!-- 为了取消chrome自动填充密码 -->
+					<input type="password" id="disabledAutoComplete" name="disabledAutoComplete" style="display:none">
+					<!-- 为了取消chrome自动填充密码 -->
 					<el-row>
-						<el-form-item label="旧密码">
-							<el-input placeholder="请输入旧密码"></el-input>
+						<el-form-item label="旧密码" prop="oldPassword">
+							<el-input type="password" auto-complete="off" placeholder="请输入旧密码" v-model="memPwd.oldPassword" trigger-on-focus="false"></el-input>
 						</el-form-item>
 					</el-row>
 					<el-row>
-						<el-form-item label="新密码">
-							<el-input placeholder="请输入新密码"></el-input>
+						<el-form-item label="新密码" prop="newPassword">
+							<el-input type="password" auto-complete="off" placeholder="请输入新密码" v-model="memPwd.newPassword" trigger-on-focus="false"></el-input>
 						</el-form-item>
 					</el-row>
 					<el-row>
-						<el-form-item label="确认新密码">
-							<el-input placeholder="请再次输入新密码"></el-input>
+						<el-form-item label="确认新密码" prop="confirmPassword">
+							<el-input type="password" auto-complete="off" placeholder="请再次输入新密码" v-model="memPwd.confirmPassword" trigger-on-focus="false"></el-input>
 						</el-form-item>
 					</el-row>
 					<el-row>
 						<el-col :span="24" class="text-center">
 							<el-button size="small" @click="accountInfoDialog = false">取消</el-button>
-							<el-button type="primary" size="small">保存</el-button>
+							<el-button type="primary" size="small" @click="changePassword">保存</el-button>
 						</el-col>
 					</el-row>
 				</el-form>
@@ -234,6 +241,9 @@ import ImageUpload from './CommonComponents/ImageUpload'
 import dist from '../assets/data/dist.json'
 import distData from '../assets/data/distpicker.data'
 import CompanyInfo from '../api/CompanyInfo'
+import MemInfo from '../api/MemInfo'
+import { defaultImg } from '../assets/icons/icons'
+import { resizeImg,areaIdToArrayId } from '../common/utils'
 export default {
 	data(){
 		return{
@@ -241,7 +251,30 @@ export default {
 			editCompanyInfoDialog: false,
 			accountInfoDialog: false,
 			selectedArea: [],
-			companyDetail:{}
+			companyDetail:{},
+			MemDetail:{},
+			memPwd:{
+				oldPassword:'',
+				newPassword:'',
+				confirmPassword:''
+			},
+			rules: {
+				oldPassword: [
+					{required: true, message: '请输入旧密码'},
+					{min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}
+				],
+				newPassword: [
+					{required: true, message: '请输入新密码'},
+					{min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}
+				],
+				confirmPassword: [
+					{required: true, message: '请再次输入新密码'},
+					{min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'},
+					{validator: (rule, value, callback) => {
+						value == this.memPwd.newPassword ? callback() : callback(new Error('两次输入密码不一致!'))
+					}}
+				],
+			}
 		}
 	},
 	name: 'layout',
@@ -252,10 +285,9 @@ export default {
 		...mapGetters([
 			'userInfo',
 		]),
-		dist: () => dist
-	},
-	created() {
-		this.getCompanyInfo()
+		dist: () => dist,
+		defaultImg: () => defaultImg,
+		resizeImg: () => resizeImg
 	},
 	components: {
 		Navbar,
@@ -271,27 +303,62 @@ export default {
 				companyID: this.userInfo.companyID
 			}).then(res => {
 				this.companyDetail = res
+				this.selectedArea = areaIdToArrayId(res.areaID)
+				console.log(this.selectedArea)
 			})
 		},
 		saveCompanyInfo(){
 			CompanyInfo.modify(this.companyDetail).then(res => {
-				Message.success(res.msg)
+				Message.success('保存成功！')
+				this.editCompanyInfoDialog = false
+			})
+		},
+		getMemInfo(){
+			MemInfo.detail().then(res =>{
+				this.MemDetail = res.data.data
+				console.log(this.MemDetail)
+			})
+		},
+		saveMemInfo(){
+			let data = {
+				headPic:this.MemDetail.headPic,
+				realName:this.MemDetail.realName
+			}
+			MemInfo.modify(data).then(res =>{
+				Message.success('保存成功！')
+				this.accountInfoDialog = false
+			})
+		},
+		changePassword(){
+			let data = this.memPwd
+			this.$refs['ruleForm'].validate(valid => {
+				if (valid) {
+					MemInfo.changePwd(data).then(res =>{
+						console.log(data)
+						Message.success('保存成功！')
+						this.accountInfoDialog = false
+					})
+				}
 			})
 		},
 		showDialog(type, boo) {
 			if(type == 'companyInfo'){
 				this.companyInfoDialog = true
+				this.getCompanyInfo()
 			}else if(type == 'accountInfo'){
 				this.accountInfoDialog = true
+				this.getMemInfo()
 			}
 		},
 		handleSelectedArea(data) {
-            this.companyAddress.areaID = data[data.length - 1]
-            if (data[1]) {
-				const location = searchLocationByCity(distData[data[0]][data[1]])
-				this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
-			}
-        }
+            this.companyDetail.areaID = data[data.length - 1]
+        },
+        handleAvatarSuccess(res) {
+			this.companyDetail.logoUrl = res
+		},
+        handleAvatarSuccess1(res) {
+			this.MemDetail.headPic = res
+		}
 	}
 }
 </script>
@@ -330,7 +397,7 @@ export default {
 	background rgba(0,0,0,.3)
 	z-index 1999
 .companyInfoDialog
-.personInfoDialog
+.accountInfoDialog
 	.baseInfo
 		min-height 150px
 		position relative
@@ -385,4 +452,13 @@ export default {
 		font-size 12px
 		color #999
 		margin 0 0 0 10px
+.accountInfoDialog
+	.otherInfo
+		border 1px solid #dcdfe6
+		margin 15px 0
+		padding 15px
+		border-radius 4px
+		p
+			font-size 14px
+			color #999
 </style>

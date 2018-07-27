@@ -1,8 +1,9 @@
 <template>
 	<div class="fixHead">
 		<div class="logo" @click="sendToParent('companyInfo')">
-			<img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
-			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180">
+			<!-- <img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
+			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180"> -->
+			<img :src="userInfo && userInfo.logoUrl ? resizeImg(userInfo.logoUrl, '_100x100.') : defaultImg" />
 			<span class="companyName">{{companyName}}</span>
 		</div>
 		<el-menu class="navbar" mode="horizontal">
@@ -31,14 +32,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+import { defaultImg } from '../../../assets/icons/icons'
+import { resizeImg } from '../../../common/utils'
 export default {
 	computed: {
 		...mapGetters([
 			'name',
 			'companyName',
 			'userInfo',
-		])
+		]),
+		defaultImg: () => defaultImg,
+		resizeImg: () => resizeImg
 	},
 	methods: {
 		logout() {
