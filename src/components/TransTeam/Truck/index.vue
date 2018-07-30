@@ -110,11 +110,6 @@ export default {
 			}
 			return extension || extension2 && isLt2M
 		},
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			this.find.plateNo = ''
 			this.find.keyword = ''
@@ -138,6 +133,8 @@ export default {
 			this.endDate = date[1]
 		},
 		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					this.getList()
@@ -208,7 +205,7 @@ export default {
 	.handle
 		width 180px
 	.driver
-		width 200px
+		width 240px
 	.mobile
 		width 140px
 </style>

@@ -197,7 +197,6 @@
 				</el-form>
 			</el-tab-pane>
 			<el-tab-pane label="密码修改">
-
 				<el-form label-width="100px" size="small" :model="memPwd" :rules="rules" ref="ruleForm">
 					<!-- 为了取消chrome自动填充密码 -->
 					<input type="password" id="disabledAutoComplete" name="disabledAutoComplete" style="display:none">
@@ -354,10 +353,10 @@ export default {
             this.companyDetail.areaID = data[data.length - 1]
         },
         handleAvatarSuccess(res) {
-			this.companyDetail.logoUrl = res
+			this.companyDetail.logoUrl = res[0]
 		},
         handleAvatarSuccess1(res) {
-			this.MemDetail.headPic = res
+			this.MemDetail.headPic = res[0]
 		}
 	}
 }

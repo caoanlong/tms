@@ -67,7 +67,10 @@ export default {
 			total: 0,
 			tableData: [],
 			selectedList: [],
-			isInviteVisible: false
+			isInviteVisible: false,
+			ExpireWarn:{
+				
+			}
 		}
 	},
 	components: { Page, InviteDriver },

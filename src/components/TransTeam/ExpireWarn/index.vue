@@ -5,22 +5,20 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="到期对象">
-						<el-input placeholder="车牌号/姓名" v-model="findcompanyName"></el-input>
+						<el-input placeholder="车牌号/姓名" v-model="findrealName"></el-input>
 					</el-form-item>
 					<el-form-item label="对象类型">
-						<el-select placeholder="全部">
+						<el-select placeholder="全部" v-model="findobjType">
 							<el-option label="全部" value=""></el-option>
-							<el-option label="司机" value="Agreed"></el-option>
-							<el-option label="车辆" value="Invited"></el-option>
-							<el-option label="公司" value="Rejected"></el-option>
-							<el-option label="押运员" value="Relieved"></el-option>
+							<el-option label="司机" value="Driver"></el-option>
+							<el-option label="车辆" value="Truck"></el-option>
+							<el-option label="押运员" value="Comsupercargo"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="到期类型">
-						<el-select placeholder="全部">
-							<el-option label="全部" ></el-option>
-							<el-option label="身份证" ></el-option>
-							<el-option label="驾驶证" ></el-option>
+					<el-form-item label="到期类型" >
+						<el-select placeholder="全部" v-model="findexpiredCertificate">
+							<el-option label="全部" value=""></el-option>
+							<el-option v-for="item in expiredCertificateSorts" :label="item.value" :value="item.key" :key="item.value"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -37,13 +35,33 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="到期对象" prop="realName" align="center"></el-table-column>
 					<el-table-column label="手机号" prop="mobile" align="center"></el-table-column>
-					<el-table-column label="对象类型" prop="remark" align="center"></el-table-column>
-					<el-table-column label="证件类型" prop="remark" align="center"></el-table-column>
-					<el-table-column label="到期日期" prop="remark" align="center"></el-table-column>
-					<el-table-column label="状态" prop="remark" align="center"></el-table-column>
+					<el-table-column label="对象类型" prop="objType" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.objType == 'Truck'">车辆</span>
+							<span v-else-if="scope.row.objType == 'Driver'">司机</span>
+							<span v-else>押运员</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="证件类型" align="center">
+						<template slot-scope="scope">
+							<span>{{expiredCertificateSort[scope.row.expiredCertificate]}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="到期日期" align="center">
+						<template slot-scope="scope">
+							{{scope.row.archiveTime | getdatefromtimestamp(true)}}
+						</template>
+					</el-table-column>
+					<el-table-column label="状态" prop="predictType" align="center">
+						<template slot-scope="scope">
+							<el-tag size="mini" type="danger" v-if="scope.row.predictType == 'Unexpired'">即将过期</el-tag>
+							<el-tag size="mini" type="danger" v-else-if="scope.row.predictType == 'Expired'">已经过期</el-tag>
+							<el-tag v-else>正常</el-tag>
+						</template>
+					</el-table-column>
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini">更新资料</el-button>
+							<el-button type="primary" size="mini" @click="updataInfo(scope.row.objRecordID,scope.row.objType)">更新资料</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -66,20 +84,17 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request, { baseURL } from '../../../common/request'
-import Driver from '../../../api/Driver'
+import RecordWarn from '../../../api/RecordWarn'
 import Page from '../../CommonComponents/Page'
 import { deleteConfirm } from '../../../common/utils'
 export default {
 	data() {
 		return {
 			dialogFormVisible:false,
-			findcompanyName: '',
-			findcompanyArea: '',
-			findcontactName: '',
-			findcontactPhone: '',
-			findRangeDate: [],
-			findcreateTimeBegin: '',
-			findcreateTimeEnd: '',
+			findrealName: '',
+			findobjType: '',
+			findexpiredCertificate: '',
+
 			pageIndex: 1,
 			pageSize: 10,
 			total:0,
@@ -88,13 +103,42 @@ export default {
 			importFileUrl: baseURL + '/customer/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=shipperAndConsignor.xlsx&&Authorization=' +localStorage.getItem("token"),
-			templateTit:'shipperAndConsignor.xlsx'
+			templateTit:'shipperAndConsignor.xlsx',
+			expiredCertificateSort:{
+				DriverLicExpiresTime:"行驶证",
+				RoadTransportLicAnnualPeriod:"道路运输许可证",
+				GpsValidEndDate:"GPS续费",
+				SaliInsuranceExpires:"交强险",
+				BizInsuranceExpires:"商业险",
+				CarrierRiskInsuranceExpires:"承运险",
+				CargoInsuranceExpireDate:"货运险",
+				TankQCExpires:"罐体监测",
+				SafetyValvesQCExpires:"罐体安全阀监测",
+				PressureGaugeQCExpires:"罐体压力表监测",
+				NextRankEvaluteTime:"技术等级下次评定",
+				SecondSecurityDepositDate:"二次安全保证金",
+				ManagementAgreementExpireDate:"管理协议",
+				SafetyLiabilityLetterExpireDate:"安全责任书",
+				IdCardExpirationTime:"身份证",
+				DriverLicenseEndTime:"驾驶证",
+				QualificationExpirationDate:"危货从业资格证",
+				IntegrityExamineEndTime:"诚信考核证",
+				LaborContractEndTime:"聘用合同",
+				EscortLicenseExpireDate:"押运证",
+			},
+			expiredCertificateSorts:[]
 		}
 	},
 	components: {
 		Page
 	},
 	created() {
+		this.expiredCertificateSorts = Object.keys(this.expiredCertificateSort).map(item =>{
+			return {
+				key:item,
+				value:this.expiredCertificateSort[item]
+			}
+		})
 		this.getList()
 	},
 	methods: {
@@ -104,13 +148,9 @@ export default {
 			this.getList()
 		},
 		reset() {
-			this.findcompanyArea = ''
-			this.findcompanyName = ''
-			this.findcontactName = ''
-			this.findcontactPhone = ''
-			this.findcreateTimeBegin = ''
-			this.findcreateTimeEnd = ''
-			this.findRangeDate = []
+			this.findrealName=''
+			this.findobjType=''
+			this.findexpiredCertificate=''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
@@ -156,15 +196,23 @@ export default {
 			return extension || extension2 && isLt2M
 		},
 		getList() {
-			Driver.find({
+			RecordWarn.findList({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.findKeyword,
-				cooperateRelation: this.findCooperateRelation
+				realName:this.findrealName,
+				objType:this.findobjType,
+				expiredCertificate:this.findexpiredCertificate
 			}).then(res => {
 				this.tableData = res.records
-				this.count = res.total
+				this.total = res.total
 			})
+		},
+		updataInfo(id,objType){
+			if(objType == 'Truck'){
+				this.$router.push({name: 'edittruck', query: { truckID:id }})
+			}else{
+				this.$router.push({name: 'editsupercargo', query: { comSupercargoID:id }})
+			}
 		},
 		add() { 
 			this.dialogFormVisible = true

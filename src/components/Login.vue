@@ -19,13 +19,16 @@
 				</div>
 				<!-- 登录 -->
 				<el-form :model="login" :rules="loginRules" ref="loginForm" style="margin-top:20px" v-if="loginOrRegister == 'login'">
+					<!-- 为了取消chrome自动填充密码 -->
+					<input type="password" id="disabledAutoComplete" name="disabledAutoComplete" style="display:none">
+					<!-- 为了取消chrome自动填充密码 -->
 					<el-form-item prop="username">
-						<el-input v-model="login.username" placeholder="请输入用户名">
+						<el-input  auto-complete="off" v-model="login.username" placeholder="请输入用户名">
 							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="password">
-						<el-input :type="passwordType" v-model="login.password" placeholder="请输入密码">
+						<el-input  auto-complete="off" :type="passwordType" v-model="login.password" placeholder="请输入密码">
 							<template slot="prefix">
 								<svg-icon class="ico" icon-class="password"></svg-icon>
 							</template>
@@ -46,12 +49,12 @@
 				<!-- 注册 -->
 				<el-form :model="register" :rules="registerRules" ref="registerForm" style="margin-top:20px" v-if="loginOrRegister == 'register'">
 					<el-form-item prop="mobile">
-						<el-input v-model="register.mobile" placeholder="请输入手机号">
+						<el-input  auto-complete="off" v-model="register.mobile" placeholder="请输入手机号">
 							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="vcode">
-						<el-input v-model="register.vcode" placeholder="请输入验证码">
+						<el-input  auto-complete="off" v-model="register.vcode" placeholder="请输入验证码">
 							<template slot="prefix"><svg-icon class="ico" icon-class="email"></svg-icon></template>
 							<template slot="suffix">
 								<el-button type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
@@ -59,7 +62,7 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="password">
-						<el-input :type="passwordType" v-model="register.password" placeholder="请输入密码">
+						<el-input  auto-complete="off" :type="passwordType" v-model="register.password" placeholder="请输入密码">
 							<template slot="prefix">
 								<svg-icon class="ico" icon-class="password"></svg-icon>
 							</template>
@@ -72,12 +75,12 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="contact">
-						<el-input v-model="register.contact" placeholder="请输入联系人">
+						<el-input  auto-complete="off" v-model="register.contact" placeholder="请输入联系人">
 							<template slot="prefix"><svg-icon class="ico" icon-class="peoples"></svg-icon></template>
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="company">
-						<el-input v-model="register.company" placeholder="请输入公司名称">
+						<el-input  auto-complete="off" v-model="register.company" placeholder="请输入公司名称">
 							<template slot="prefix"><svg-icon class="ico" icon-class="excel"></svg-icon></template>
 						</el-input>
 					</el-form-item>
@@ -99,7 +102,7 @@
 						</el-col>
 					</el-row>
 					<el-form-item prop="address">
-						<el-input v-model="register.address" placeholder="请输入公司所在地址">
+						<el-input  auto-complete="off" v-model="register.address" placeholder="请输入公司所在地址">
 							<template slot="prefix"><svg-icon class="ico" icon-class="home-icon"></svg-icon></template>
 						</el-input>
 					</el-form-item>
@@ -111,7 +114,7 @@
 				<!-- 忘记密码 -->
 				<el-form :model="findPassword" :rules="findPasswordRules" ref="findPasswordForm" style="margin-top:20px" v-if="loginOrRegister == 'findpassword'">
 					<el-form-item prop="mobile">
-						<el-input v-model="findPassword.mobile" placeholder="请输入手机号">
+						<el-input  auto-complete="off" v-model="findPassword.mobile" placeholder="请输入手机号">
 							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
 						</el-input>
 					</el-form-item>
@@ -124,7 +127,7 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="password">
-						<el-input :type="passwordType" v-model="findPassword.password" placeholder="请输入密码">
+						<el-input  auto-complete="off" :type="passwordType" v-model="findPassword.password" placeholder="请输入密码">
 							<template slot="prefix">
 								<svg-icon class="ico" icon-class="password"></svg-icon>
 							</template>
@@ -137,7 +140,7 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="confirmPassword">
-						<el-input :type="passwordType" v-model="findPassword.confirmPassword" placeholder="请重复输入密码">
+						<el-input  auto-complete="off" :type="passwordType" v-model="findPassword.confirmPassword" placeholder="请重复输入密码">
 							<template slot="prefix">
 								<svg-icon class="ico" icon-class="password"></svg-icon>
 							</template>
