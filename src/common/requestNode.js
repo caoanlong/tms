@@ -36,7 +36,7 @@ service.interceptors.response.use(
 	},
 	error => {
 		Message.error(error.toString())
-		return
+		return Promise.reject('error')
 	})
 
 export default service

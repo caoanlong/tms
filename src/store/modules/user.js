@@ -2,7 +2,7 @@ import request from '../../common/request'
 
 const user = {
 	state: {
-		userInfo: localStorage.getItem('userInfo'),
+		userInfo: JSON.parse(localStorage.getItem('userInfo')),
 		name: localStorage.getItem('name'),
 		mobile: localStorage.getItem('mobile'),
 		companyName: localStorage.getItem('companyName'),

@@ -140,8 +140,7 @@ export function closeConfirm (id, callback) {
 	}).then(() => {
 		callback && callback(id)
 	}).catch(err => {
-		console.log(err)
-		Message({ type: 'info', message: '已取消关闭'})
+		Message.info('已取消关闭')
 	})
 }
 
@@ -153,7 +152,7 @@ export function cancelConfirm (id, callback) {
 	}).then(() => {
 		callback && callback(id)
 	}).catch(() => {
-		Message({ type: 'info', message: '已取消操作'})
+		Message.info('已取消操作')
 	})
 }
 
