@@ -28,7 +28,7 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-			'menus',
+			// 'menus',
 			'sidebar'
 		]),
 		isCollapse() {

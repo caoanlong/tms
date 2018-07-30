@@ -597,7 +597,7 @@ let routerMap = [
 						path: '/usermanage',
 						name: 'usermanage',
 						meta: {
-							title: '员工管理'
+							title: '账号权限'
 						},
 						component: () => import('../components/System/Usermanage/index')
 					},
@@ -605,7 +605,7 @@ let routerMap = [
 						path: '/adduser',
 						name: 'adduser',
 						meta: {
-							title: '添加员工'
+							title: '添加账号'
 						},
 						component: () => import('../components/System/Usermanage/Add')
 					},
@@ -613,7 +613,7 @@ let routerMap = [
 						path: '/edituser',
 						name: 'edituser',
 						meta: {
-							title: '编辑员工'
+							title: '编辑账号'
 						},
 						component: () => import('../components/System/Usermanage/Edit')
 					},
@@ -621,7 +621,7 @@ let routerMap = [
 						path: '/viewuser',
 						name: 'viewuser',
 						meta: {
-							title: '查看员工'
+							title: '查看账号'
 						},
 						component: () => import('../components/System/Usermanage/View')
 					},

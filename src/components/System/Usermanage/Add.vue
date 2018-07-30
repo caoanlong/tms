@@ -1,211 +1,108 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">添加员工</div>
-			<el-form label-width="120px" :model="user" :rules="rules" ref="ruleForm">
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="头像" prop="HeadPic">
-							<ImageUpload :files="[user.HeadPic]" @imgUrlBack="handleAvatarSuccess" :fixed="true"/>
+			<div slot="header" class="clearfix">添加账号</div>
+			<el-row>
+				<el-col :span="14" :offset="5">
+					<el-form label-width="120px" :model="sysMember" :rules="rules" ref="ruleForm">
+						<el-form-item label="头像" prop="headPic">
+							<ImageUpload :files="[sysMember.headPic]" @imgUrlBack="handleHeadPicSuccess" :fixed="true"/>
 						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="姓名" prop="RealName">
-							<el-input auto-complete="off" v-model="user.RealName"></el-input>
+						<el-form-item label="姓名" prop="realName">
+							<el-input auto-complete="off" v-model="sysMember.realName"></el-input>
 						</el-form-item>
-						<el-form-item label="手机号码" prop="Mobile">
-							<el-input auto-complete="off" v-model="user.Mobile"></el-input>
+						<el-form-item label="手机号" prop="mobile">
+							<el-input auto-complete="off" v-model="sysMember.mobile"></el-input>
 						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="员工编号" prop="StaffCode">
-							<el-input auto-complete="off" v-model="user.StaffCode"></el-input>
-						</el-form-item>
-						<el-form-item label="入职时间" prop="EntryDate">
-							<el-date-picker style="width:100%" placeholder="选择入职时间" v-model="user.EntryDate" value-format="timestamp"></el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="职位类型" prop="PositionType">
-							<el-input auto-complete="off" v-model="user.PositionType"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="职位名称" prop="Position">
-							<el-input auto-complete="off" v-model="user.Position"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="工作状态" prop="WorkStatus">
-							<el-select v-model="user.WorkStatus" placeholder="请选择工作状态" style="width:100%">
-								<el-option value="Free" label="空闲中">空闲中</el-option>
-								<el-option value="Working" label="工作中">工作中</el-option>
+						<el-form-item label="角色权限" prop="roleIDs">
+							<el-select style="width: 100%" v-model="sysMember.roleIDs" multiple placeholder="请选择">
+								<el-option v-for="role in roles" :key="role.roleID" :label="role.roleName" :value="role.roleID"></el-option>
 							</el-select>
 						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="资料状态" prop="Status">
-							<el-select v-model="user.Status" placeholder="请选择资料状态" style="width:100%">
-								<el-option value="Passed" label="通过">通过</el-option>
-								<el-option value="NotPassed" label="审核中">审核中</el-option>
-								<el-option value="Other" label="其他">其他</el-option>
-							</el-select>
+						<el-form-item label="密码" prop="password">
+							<el-input auto-complete="off" type="password" v-model="sysMember.password"></el-input>
 						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="是否离职" prop="InLeave">
-							<el-switch v-model="user.InLeave"></el-switch>
+						<el-form-item label="再次输入" prop="confirmPassword">
+							<el-input auto-complete="off" type="password" v-model="sysMember.confirmPassword"></el-input>
 						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-form-item label="角色权限" prop="sys_roles">
-					<el-select style="width: 100%" v-model="user.sys_roles" multiple placeholder="请选择">
-						<el-option v-for="role in roles" :key="role.Role_ID" :label="role.RoleName" :value="role.Role_ID">
-						</el-option>
-					</el-select>
-				</el-form-item>
-				<el-form-item label="备注">
-					<el-input type="textarea" resize="none" v-model="user.Remark" :rows="5"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" @click="addUser">立即创建</el-button>
-					<el-button @click="back">取消</el-button>
-				</el-form-item>
-			</el-form>
+						<el-form-item>
+							<el-button @click="back">取消</el-button>
+							<el-button type="primary" @click="add">保存</el-button>
+						</el-form-item>
+					</el-form>
+				</el-col>
+			</el-row>
 		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
-import requestNode from '../../../common/requestNode'
 import { Message } from 'element-ui'
 import ImageUpload from '../../CommonComponents/ImageUpload'
+import SysMember from '../../../api/SysMember'
+import SysRole from '../../../api/SysRole'
 import { checkMobile, checkTel } from '../../../common/validator'
 export default {
 	data() {
 		return {
-			user: {
-				Company_ID: '',
-				Organization_ID: '',
-				StaffCode: '',
-				RealName: '',
-				Mobile: '',
-				PositionType: '',
-				HeadPic: '',
-				EntryDate: '',
-				Position: '',
-				Remark: '',
-				WorkStatus: '',
-				Status: '',
-				InLeave: false,
-				sys_roles: []
+			sysMember: {
+				headPic: '',
+				realName: '',
+				mobile: '',
+				roleIDs: [],
+				password: '',
+				confirmPassword: ''
 			},
 			roles: [],
 			rules: {
-				Mobile: [
-					{required: true, validator: checkMobile}
+				realName: [
+					{ required: true, message: '请输入姓名' },
+					{ min: 2, max: 20, message: '长度在 2 到 20 个字符' }
 				],
-				StaffCode: [
-					{required: true, message: '请输入员工编号'},
-					{ min: 2, max: 20, message: '长度在 2 到 20 个字符'}
+				mobile: [
+					{ required: true, message: '请输入手机号' },
+					{ required: true, validator: checkMobile }
 				],
-				RealName: [
-					{required: true, message: '请输入姓名'},
-					{ min: 2, max: 20, message: '长度在 2 到 20 个字符'}
+				roleIDs: [
+					{ required: true, message: '请选择角色' }
 				],
-
-				PositionType: [
-					{required: true, message: '请选择职位类型'}
+				password: [
+					{ required: true, message: '请输入密码' },
+					{ min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字' }
 				],
-				Position: [
-					{required: true, message: '请输入职位名称'}
-				],
-				EntryDate: [
-					{required: true, message: '请选择入职时间'}
-				],
-				sys_roles: [
-					{required: true, message: '请选择角色'}
-				],
+				confirmPassword: [
+					{ required: true, message: '请再次输入密码' },
+					{ validator: (rule, value, callback) => {
+						value == this.sysMember.password ? callback() : callback(new Error('两次输入密码不一致!'))
+					} }
+				]
 			}
 		}
 	},
 	created() {
 		this.getRoles()
-		this.getCompanys()
 	},
 	methods: {
-		addUser() {
-			let data = this.user
-			data.InLeave = data.InLeave ? 'Y' : 'N'
-			console.log(data)
+		add() {
 			this.$refs['ruleForm'].validate(valid => {
-				if (valid) {
-					requestNode({
-						url: '/com_staff/add',
-						method: 'post',
-						data
-					}).then(res => {
-						if (res.data.code == 0) {
-							console.log(res.data)
-							Message.success(res.data.msg)
-							this.$router.push({ name: 'usermanage' })
-						} else {
-							Message.error(res.data.msg)
-						}
-					})
-				}
+				if (!valid) return
+				this.sysMember.roleIDs = this.sysMember.roleIDs.join(',')
+				SysMember.add(this.sysMember).then(res => {
+					Message.success(res.data.msg)
+					this.$router.push({name: 'usermanage'})
+				}).catch(err => {
+					this.sysMember.roleIDs = this.sysMember.roleIDs.split(',')
+				})
 			})
 		},
 		getRoles() {
-			let params = {
-				pageSize: 100
-			}
-			requestNode({
-				url: '/sys_role/list',
-				method: 'get',
-				params
+			SysRole.find({
+				pageSize: 1000
 			}).then(res => {
-				if (res.data.code == 0) {
-					let Oroles = res.data.data.rows
-					this.roles = Oroles.map(item => {
-						return {
-							Role_ID: item.Role_ID,
-							RoleName: item.RoleName
-						}
-					})
-				} else {
-					Message.error(res.data.msg)
-				}
+				this.roles = res.records
 			})
 		},
-		getCompanys(Organization_PID) {
-			let params = {
-				Organization_PID
-			}
-			requestNode({
-				url: '/sys_organization/list',
-				method: 'get',
-				params
-			}).then(res => {
-				if (res.data.code == 0) {
-					if (Organization_PID) {
-						this.departments = res.data.data
-					} else {
-						this.companys = res.data.data
-					}
-				} else {
-					Message.error(res.data.msg)
-				}
-			})
-		},
-		selectCompany(Organization_ID) {
-			this.getCompanys(Organization_ID)
-		},
-		handleAvatarSuccess(res) {
-			this.user.HeadPic = res[0]
+		handleHeadPicSuccess(res) {
+			this.sysMember.headPic = res[0]
 		},
 		back() {
 			this.$router.go(-1)

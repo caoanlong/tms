@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="姓名">
-						<el-input placeholder="姓名" v-model="findName"></el-input>
+						<el-input placeholder="姓名" v-model="find.realName"></el-input>
 					</el-form-item>
 					<el-form-item label="手机号">
-						<el-input placeholder="登录名" v-model="findMobile"></el-input>
+						<el-input placeholder="登录名" v-model="find.mobile"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -18,78 +18,63 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="users" @selection-change="selectionChange" border style="width: 100%" size="mini">
-					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="姓名" prop="RealName"></el-table-column>
-					<el-table-column label="员工编号" prop="StaffCode"></el-table-column>
-					<el-table-column label="手机号码" prop="Mobile" align="center" width="100"></el-table-column>
-					<el-table-column label="职位名称" prop="Position"></el-table-column>
-					<el-table-column label="职位类型" prop="PositionType"></el-table-column>
-					<el-table-column label="资料状态" align="center">
+				<el-table :data="tableList" border style="width: 100%" size="mini">
+					<el-table-column label="账号" prop="mobile"></el-table-column>
+					<el-table-column label="姓名" prop="realName"></el-table-column>
+					<el-table-column label="角色" prop="roleNames"></el-table-column>
+					<!-- <el-table-column label="状态" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.Status=='Passed'">通过</span>
-							<span v-else-if="scope.row.Status=='NotPassed'">审核中</span>
-							<span v-else>其它</span>
+							<span v-if="scope.row.status == 'Passed'">启用</span>
+							<span v-else-if="scope.row.status == 'NotPassed'">停用</span>
 						</template>
-					</el-table-column>
-					<el-table-column label="工作状态" align="center">
-						<template slot-scope="scope">
-							<span v-if="scope.row.WorkStatus=='Free'">空闲中</span>
-							<span v-else>工作中</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="创建时间" prop="CreateTime" width="140" align="center">
-						<template slot-scope="scope">
-							<span v-if="scope.row.CreateTime">{{ new Date(scope.row.CreateTime).getTime() | getdatefromtimestamp()}}</span>
-						</template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id:scope.row.Staff_ID}">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.Staff_ID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.Staff_ID}" >删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'role', id: scope.row.memberID}">角色</el-dropdown-item>
+									<!-- <el-dropdown-item :command="{type: 'disable', id: scope.row.memberID}">停用</el-dropdown-item> -->
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.memberID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
+		<select-role :showSelectRole="showSelectRole" :memberID="curMemberID" @selected-role="selectedRole"></select-role>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import requestNode from '../../../common/requestNode'
-import ComStaff from '../../../api/ComStaff'
+import SysMember from '../../../api/SysMember'
 import Page from '../../CommonComponents/Page'
-import { deleteConfirmArr } from '../../../common/utils'
+import SelectRole from './components/SelectRole'
+import { deleteConfirm } from '../../../common/utils'
 export default {
 	data() {
 		return {
-			users: [],
 			pageIndex: 1,
 			pageSize: 10,
-			findName: '',
-			findMobile: '',
-			count: 0,
-			selectedList: [],
+			total: 0,
+			find: {
+				realName: '',
+				mobile: ''
+			},
+			tableList: [],
+			showSelectRole: false,
+			curMemberID: ''
 		}
 	},
-	components: { Page },
+	components: { Page, SelectRole },
 	created() {
 		this.getList()
 	},
 	methods: {
-		selectionChange(data) {
-			this.selectedList = data.map(item => item.Staff_ID)
-		},
 		pageChange(index) {
 			this.pageIndex = index
 			this.getList()
@@ -104,43 +89,47 @@ export default {
 			this.getList()
 		},
 		reset() {
-			this.findName = ''
-			this.findMobile = ''
+			this.find.realName = ''
+			this.find.mobile = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
 		},
 		getList() {
-			ComStaff.find({
+			SysMember.find({
 				pageIndex: this.pageIndex,
 				pageSize: this.pageSize,
-				Mobile: this.findMobile,
-				RealName: this.findName
+				mobile: this.find.mobile,
+				realName: this.find.realName
 			}).then(res => {
-				this.count = res.count
-				this.users = res.rows
+				this.total = res.total
+				this.tableList = res.records
 			})
 		},
 		handleCommand(e) {
-			if(e.type == 'view'){
-				this.$router.push({name: 'viewuser', query: { Staff_ID: e.id }})
-			}else if(e.type == 'edit'){
-				this.$router.push({ name: 'edituser' , query: {  Staff_ID: e.id } })
-			}else if(e.type == 'delete'){
+			if(e.type == 'role'){
+				this.curMemberID = e.id
+				this.showSelectRole = true
+			} else if (e.type == 'disable') {
+				
+			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}
 		},
 		add() {
 			this.$router.push({ name: 'adduser' })
 		},
-		del(Role_ID) {
-			deleteConfirmArr(Role_ID, ids => {
-				console.log(ids)
-				ComStaff.del({ ids }).then(res => {
-					Message({ type: 'success', message: '删除成功!' })
+		del(memberID) {
+			deleteConfirm(memberID, memberID => {
+				SysMember.del({ memberID }).then(res => {
+					Message.success('删除成功!')
 					this.getList()
 				})
-			}, this.selectedList)
+			})
+		},
+		selectedRole(bool) {
+			this.showSelectRole = false
+			bool && this.search()
 		}
 	}
 }

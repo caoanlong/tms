@@ -11,7 +11,7 @@
 				<el-tooltip effect="dark" content="navbar.theme" placement="bottom"></el-tooltip>
 				<el-dropdown class="avatar-container right-menu-item">
 					<div class="avatar-wrapper">
-						<img class="user-avatar" src="errorImg" @error="errorImg">
+						<img class="user-avatar" :src="userInfo && userInfo.headPic ? resizeImg(userInfo.headPic, '_100x100.') : errorImg">
 						<span class="user-text">你好！{{name}}</span>
 						<i class="el-icon-caret-bottom"></i>
 					</div>
