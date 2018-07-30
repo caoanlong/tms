@@ -21,7 +21,7 @@
 					<template slot-scope="scope">
 						<span>{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}}</span>
 						<span>{{scope.row.remainingCargoVolume ? '/' + (scope.row.remainingCargoVolume + '方') : ''}}</span>
-						<span>{{scope.row.remainingCargoNum ? '/' + (scope.row.remainingCargoNum + scope.row.cargoUnitName) : ''}}</span>
+						<span>{{scope.row.remainingCargoNum ? '/' + (scope.row.remainingCargoNum + (scope.row.cargoUnitName?scope.row.cargoUnitName:'')) : ''}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="配载重量" align="center">
