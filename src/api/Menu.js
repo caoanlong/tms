@@ -1,5 +1,5 @@
 import Base from './Base'
-import request from '../common/requestNode'
+import request from '../common/request'
 /**
  * this._find = "/list"
  * this._findById = "/detail"
@@ -12,15 +12,6 @@ class Menu extends Base {
         super(url, req).initURI({
             findById: '/info',
             update: '/update',
-        })
-    }
-    findAll() {
-        return new Promise((resolve, reject) => {
-            this.request({
-                url: this.baseUrl + '/list/all'
-            }).then(res => {
-                resolve(res.data.data)
-            })
         })
     }
 }

@@ -40,7 +40,7 @@
 						<div class="section-block">
 							<span class="block-title">发货信息</span>
 							<el-row class="block-content">
-								<el-form-item label="发货单位" prop="shipperCompanyName">
+								<el-form-item label="发货单位" prop="shipperID">
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
 										v-model="carrierbillInfo.shipperCompanyName"
@@ -112,7 +112,7 @@
 						<div class="section-block">
 							<span class="block-title">到货信息</span>
 							<el-row class="block-content">
-								<el-form-item label="收货单位" prop="consigneeCompanyName">
+								<el-form-item label="收货单位" prop="consigneeID">
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
 										v-model="carrierbillInfo.consigneeCompanyName"
@@ -382,14 +382,14 @@ export default {
 				commissionDate: [ {required: true, message: '请选择委托时间'} ],
 				consignorName: [ {required: true, message: '请输入托运人'} ],
 				carrierrName: [ {required: true, message: '请输入承运人'} ],
-				shipperCompanyName: [ {required: true, message: '请输入发货单位'} ],
+				shipperID: [ {required: true, message: '请选择发货单位'} ],
 				shipperName: [ { required: true, message: '请输入发货人'} ],
 				shipperPhone: [ { required: true, validator: checkTel} ],
 				shipperDate: [ {required: true, message: '请选择发货时间', trigger: 'change'} ],
 				shipperAreaID: [ {required: true, message: '请选择发货地'} ],
 				shipperLocationAddress: [ {required: true, message: '请选择定位地址'} ],
 				// shipperDetailAddress: [ { required: true, message: '请输入发货详细地址'} ],
-				consigneeCompanyName: [ {required: true, message: '请输入收货单位'} ],
+				consigneeID: [ {required: true, message: '请选择收货单位'} ],
 				consigneeName: [ { required: true, message: '请输入收货人'} ],
 				consigneePhone: [ { required: true, validator: checkTel} ],
 				consigneeDate: [ {required: true, message: '请选择收货时间', trigger: 'change'} ],
@@ -432,12 +432,14 @@ export default {
 			}).then(res => { cb(res.records) })
 		},
 		getShipperCompany(queryString, cb) {
+			this.carrierbillInfo.shipperID = ''
 			Customer.find({
 				customerType: 'Shipper',
 				keyword: queryString
 			}).then(res => { cb(res.records) })
 		},
 		getConsigneeCompany(queryString, cb) {
+			this.carrierbillInfo.consigneeID = ''
 			Customer.find({
 				customerType: 'Consignee',
 				keyword: queryString

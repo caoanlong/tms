@@ -94,7 +94,7 @@ response => {
 },
 error => {
 	Message.error(error.toString())
-	return
+	return Promise.reject('error')
 })
 
 export default service
