@@ -285,38 +285,6 @@ let routerMap = [
 							title: '查看运费模板'
 						},
 						component: () => import ('../components/Finance/SettleConfig/View'),
-					},
-					{
-						path: '/receivablesum',
-						name: 'receivablesum',
-						meta: {
-							title: '应收汇总'
-						},
-						component: () => import ('../components/Finance/Receivablesum/index'),
-					},
-					{
-						path: '/receivableinfo',
-						name: 'receivableinfo',
-						meta: {
-							title: '应收明细'
-						},
-						component: () => import ('../components/Finance/Receivableinfo/index'),
-					},
-					{
-						path: '/payablesum',
-						name: 'payablesum',
-						meta: {
-							title: '应付汇总'
-						},
-						component: () => import ('../components/Finance/Payablesum/index'),
-					},
-					{
-						path: '/payableinfo',
-						name: 'payableinfo',
-						meta: {
-							title: '应付明细'
-						},
-						component: () => import ('../components/Finance/Payableinfo/index'),
 					}
 				]
 			},
@@ -394,76 +362,12 @@ let routerMap = [
 						component: () => import ('../components/TransTeam/SuperCargo/View'),
 					},
 					{
-						path: '/driver',
-						name: 'driver',
-						meta: {
-							title: '司机'
-						},
-						component: () => import ('../components/TransTeam/Driver/index'),
-					},
-					{
-						path: '/adddriver',
-						name: 'adddriver',
-						meta: {
-							title: '添加司机'
-						},
-						component: () => import ('../components/TransTeam/Driver/Add'),
-					},
-					{
-						path: '/editdriver',
-						name: 'editdriver',
-						meta: {
-							title: '编辑司机'
-						},
-						component: () => import ('../components/TransTeam/Driver/Edit'),
-					},
-					{
-						path: '/viewdriver',
-						name: 'viewdriver',
-						meta: {
-							title: '查看司机'
-						},
-						component: () => import ('../components/TransTeam/Driver/View'),
-					},
-					{
 						path: '/refdriverapp',
 						name: 'refdriverapp',
 						meta: {
 							title: '关联司机APP'
 						},
 						component: () => import ('../components/TransTeam/RefDriverApp/index'),
-					},
-					{
-						path: '/transinfo',
-						name: 'transinfo',
-						meta: {
-							title: '运输档案'
-						},
-						component: () => import ('../components/TransTeam/TransInfo/index'),
-					},
-					{
-						path: '/addtransinfo',
-						name: 'addtransinfo',
-						meta: {
-							title: '添加运输档案'
-						},
-						component: () => import ('../components/TransTeam/TransInfo/Add'),
-					},
-					{
-						path: '/edittransinfo',
-						name: 'edittransinfo',
-						meta: {
-							title: '编辑运输档案'
-						},
-						component: () => import ('../components/TransTeam/TransInfo/Edit'),
-					},
-					{
-						path: '/viewtransinfo',
-						name: 'viewtransinfo',
-						meta: {
-							title: '查看运输档案'
-						},
-						component: () => import ('../components/TransTeam/TransInfo/View'),
 					},
 					{
 						path: '/expirewarn',
@@ -626,28 +530,12 @@ let routerMap = [
 						component: () => import('../components/System/Usermanage/View')
 					},
 					{
-						path: '/menumanage',
-						name: 'menumanage',
-						meta: {
-							title: '菜单管理'
-						},
-						component: () => import('../components/System/Menumanage')
-					},
-					{
 						path: '/rolemanage',
 						name: 'rolemanage',
 						meta: {
 							title: '角色管理'
 						},
 						component: () => import('../components/System/Rolemanage')
-					},
-					{
-						path: '/orgmange',
-						name: 'orgmange',
-						meta: {
-							title: '机构管理'
-						},
-						component: () => import('../components/System/Orgmange')
 					}
 				]
 			}
