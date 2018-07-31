@@ -42,6 +42,7 @@ export default {
 			'userInfo',
 		]),
 		defaultImg: () => defaultImg,
+		errorImg: () => require('../../../assets/imgs/avatar.gif'),
 		resizeImg: () => resizeImg
 	},
 	methods: {
@@ -49,10 +50,6 @@ export default {
 			this.$store.dispatch('loginOut').then(() => {
 				location.reload()
 			})
-		},
-		errorImg (e) {
-			e.target.src = require('../../../assets/imgs/avatar.gif')
-			e.target.onerror = null
 		},
 		sendToParent(type){
 			this.$emit('listenToChild',type,true)
