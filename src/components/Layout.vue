@@ -240,7 +240,7 @@ import ImageUpload from './CommonComponents/ImageUpload'
 import dist from '../assets/data/dist.json'
 import distData from '../assets/data/distpicker.data'
 import CompanyInfo from '../api/CompanyInfo'
-import MemInfo from '../api/MemInfo'
+import Member from '../api/Member'
 import { defaultImg } from '../assets/icons/icons'
 import { resizeImg,areaIdToArrayId } from '../common/utils'
 export default {
@@ -313,7 +313,7 @@ export default {
 			})
 		},
 		getMemInfo(){
-			MemInfo.detail().then(res =>{
+			Member.detail().then(res =>{
 				this.MemDetail = res.data.data
 				
 			})
@@ -324,7 +324,7 @@ export default {
 				realName:this.MemDetail.realName
 			}
 			console.log(this.MemDetail)
-			MemInfo.modify(data).then(res =>{
+			Member.modify(data).then(res =>{
 				Message.success('保存成功！')
 				this.accountInfoDialog = false
 			})
@@ -333,7 +333,7 @@ export default {
 			let data = this.memPwd
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					MemInfo.changePwd(data).then(res =>{
+					Member.changePwd(data).then(res =>{
 						console.log(data)
 						Message.success('保存成功！')
 						this.accountInfoDialog = false

@@ -26,6 +26,27 @@ class Member extends Base {
             data
         })
     }
+    detail(data) {
+        return this.request({
+            url: this.baseUrl + '/info/detail',
+            method: 'get',
+            data
+        })
+    }
+    modify(data) {
+        return this.request({
+            url: this.baseUrl + '/info/modify',
+            method: 'post',
+            data
+        })
+    }
+    changePwd(data) {
+        return this.request({
+            url: this.baseUrl + '/password/update',
+            method: 'post',
+            data
+        })
+    }
 }
 
 export default new Member('/mem', request)
