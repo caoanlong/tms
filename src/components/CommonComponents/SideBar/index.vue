@@ -28,13 +28,13 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-			// 'menus',
+			'menus',
 			'sidebar'
 		]),
 		isCollapse() {
 			return !this.sidebar.opened
 		},
-		menus: () => menus
+		// menus: () => menus
 	},
 	watch: {
 		fullHeight (val) {

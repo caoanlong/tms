@@ -13,7 +13,7 @@
 							</el-col>
 							<el-col :span="8">
 								<el-form-item label="车辆类别" prop="truckCategory">
-									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckCategory" @change="truck.truckType = ''">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.truckCategory" @change="handSelectTruckCategory">
 										<el-option label="整车" value="WholeVehicle"></el-option>
 										<el-option label="牵引车" value="Tractor"></el-option>
 										<el-option label="挂车" value="Trailer"></el-option>
@@ -1472,7 +1472,8 @@ export default {
 			this.truck.trailerPlateNo = data.plateNo
 			this.truck.trailerID = data.truckID
 		},
-		inputTrailer() {
+		handSelect() {
+			this.truck.truckType = ''
 			this.truck.trailerID = ''
 		},
 		save() {
