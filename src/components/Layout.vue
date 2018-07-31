@@ -315,7 +315,7 @@ export default {
 		getMemInfo(){
 			MemInfo.detail().then(res =>{
 				this.MemDetail = res.data.data
-				console.log(this.MemDetail)
+				
 			})
 		},
 		saveMemInfo(){
@@ -323,6 +323,7 @@ export default {
 				headPic:this.MemDetail.headPic,
 				realName:this.MemDetail.realName
 			}
+			console.log(this.MemDetail)
 			MemInfo.modify(data).then(res =>{
 				Message.success('保存成功！')
 				this.accountInfoDialog = false
@@ -353,10 +354,10 @@ export default {
             this.companyDetail.areaID = data[data.length - 1]
         },
         handleAvatarSuccess(res) {
-			this.companyDetail.logoUrl = res[0]
+			this.companyDetail.logoUrl = res.length==0?'':res[0]
 		},
         handleAvatarSuccess1(res) {
-			this.MemDetail.headPic = res[0]
+			this.MemDetail.headPic = res.length==0?'':res[0]
 		}
 	}
 }
