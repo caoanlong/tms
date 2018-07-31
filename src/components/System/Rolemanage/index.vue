@@ -37,7 +37,7 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.roleID}" >删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.roleID}" v-if="scope.row.roleType != 'SysAdmin'">删除</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'setAuth', id: scope.row.roleID}" >权限设置</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'setMember', id: scope.row.roleID}" >分配用户</el-dropdown-item>
 								</el-dropdown-menu>
