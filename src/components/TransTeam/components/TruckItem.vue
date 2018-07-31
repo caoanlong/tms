@@ -23,16 +23,13 @@
 					<el-tag size="mini" type="info" v-else-if="truck.truckCategory == 'WholeVehicle'">整车</el-tag>
 					<el-tag size="mini" type="success" v-if="truck.workStatus == 'Free'">空闲中</el-tag>
 					<el-tag size="mini" type="success" v-else-if="truck.workStatus == 'Working'">作业中</el-tag>
-					<el-tooltip placement="right" effect="light">
-						<!-- <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
-							<div slot="content">
-								<el-tag size="mini" type="danger" v-for="item in scope.row.expiredCertificate" :key="item">{{
-									expireWarnJson[item]
-								}}</el-tag>
-
-							</div>
-							<el-tag size="mini" type="danger" v-if="scope.row.expiredCertificate">到期</el-tag>
-						</el-tooltip> -->
+					<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
+						<div slot="content">
+							<el-tag size="mini" type="danger" v-for="(item,index) in truckExp" :key="index">{{
+								expireWarnJson[item]
+							}}</el-tag>
+						</div>
+						<el-tag size="mini" type="danger" v-if="truck.expiredCertificate.length>0">到期</el-tag>
 					</el-tooltip>
 				</p>
 				<p>{{Number(truck.length)/1000}}米/{{Number(truck.loads)/1000}}吨/{{truck.loadVolume}}方</p>
@@ -52,6 +49,14 @@
 				</el-tooltip>
 				<el-tag type="info" size="mini" v-else>APP</el-tag>
 				<el-tag type="success" size="mini">主驾</el-tag>
+				<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
+					<div slot="content">
+						<el-tag size="mini" type="danger" v-for="(item,index) in primaryDriverExp" :key="index">{{
+							expireWarnJson[item]
+						}}</el-tag>
+					</div>
+					<el-tag size="mini" type="danger" v-if="truck.primaryDriver.expiredCertificate.length>0">到期</el-tag>
+				</el-tooltip>
 			</div>
 			<div class="driverInfo link text-center" v-else @click="add('primary')" v-show="truck.truckCategory != 'Trailer'">+添加主驾</div>
 			<div class="driverInfo" v-if="truck.secondaryDriver && truck.secondaryDriver.realName">
@@ -62,6 +67,14 @@
 				</el-tooltip>
 				<el-tag type="info" size="mini" v-else>APP</el-tag> 
 				<el-tag type="success" size="mini">副驾</el-tag>
+				<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
+					<div slot="content">
+						<el-tag size="mini" type="danger" v-for="(item,index) in secondaryDriverExp" :key="index">{{
+							expireWarnJson[item]
+						}}</el-tag>
+					</div>
+					<el-tag size="mini" type="danger" v-if="truck.secondaryDriver.expiredCertificate.length>0">到期</el-tag>
+				</el-tooltip>
 			</div>
 			<div class="driverInfo link text-center" v-else @click="add('second')" v-show="truck.truckCategory != 'Trailer'">+添加副驾</div>
 		</div>
@@ -97,8 +110,34 @@ export default {
 	},
 	data() {
 		return {
-		   type: 'primary',
-		   dialogVisible: false
+			type: 'primary',
+			dialogVisible: false,
+			truckExp:[],
+			primaryDriverExp:[],
+			secondaryDriverExp:[],
+			expireWarnJson:{
+				DriverLicExpiresTime:"行驶证到期",
+				RoadTransportLicAnnualPeriod:"道路运输证到期 ",
+				GpsValidEndDate:"GPS到期 ",
+				SaliInsuranceExpires:"交强险到期 ",
+				BizInsuranceExpires:"商业险到期 ",
+				CarrierRiskInsuranceExpires:"承运险到期 ",
+				CargoInsuranceExpireDate:"货运险到期 ",
+				TankQCExpires:"罐体监测到期 ",
+				SafetyValvesQCExpires:"罐体安全阀监测到期 ",
+				PressureGaugeQCExpires:"罐体压力表监测到期 ",
+				secondaMaintainTime:"二级维护下次维护日期到期 ",
+				NextRankEvaluteTime:"技术等级下次评定到期",
+				SecondSecurityDepositDate:"二次安全保证金到期 ",
+				ManagementAgreementExpireDate:"管理协议到期 ",
+				SafetyLiabilityLetterExpireDate:"安全责任书到期",
+				IdCardExpirationTime:"身份证到期 ",
+				DriverLicenseEndTime:"驾驶证到期 ",
+				QualificationExpirationDate:"危货从业资格证到期 ",
+				IntegrityExamineEndTime:"诚信考核证到期 ",
+				LaborContractEndTime:"聘用合同到期 ",
+				EscortLicenseExpireDate:"押运证到期"
+			}
 		}
 	},
 	computed: {
@@ -106,6 +145,9 @@ export default {
 		resizeImg: () => resizeImg
 	},
 	components: { SelectSuperCargo },
+	created(){
+		this.ExpTooltip()
+	},
 	methods: {
 		add(type) {
 			this.type = type
@@ -117,6 +159,7 @@ export default {
 				comTruckID: this.truck.truckID
 			}).then(res => {
 				Message.success(res.data.msg)
+				console.log(res)
 				this.$emit('refresh')
 			})
 		},
@@ -146,6 +189,11 @@ export default {
 		handleSelect(bool) {
 			this.dialogVisible = false
 			bool && this.$emit('refresh')
+		},
+		ExpTooltip(){
+			this.truckExp = this.truck.expiredCertificate.split(",")
+			this.primaryDriverExp = this.truck.primaryDriver.expiredCertificate?this.truck.primaryDriver.expiredCertificate.split(","):[]
+			this.secondaryDriverExp = this.truck.secondaryDriver.expiredCertificate?this.truck.secondaryDriver.expiredCertificate.split(","):[]
 		}
 	}
 }

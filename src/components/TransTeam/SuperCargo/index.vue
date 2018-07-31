@@ -50,10 +50,9 @@
 							<span class="link" @click="view(scope.row.comSupercargoID)">{{scope.row.realName}}</span>
 							<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 								<div slot="content">
-									<el-tag size="mini" type="danger" v-for="item in scope.row.expiredCertificate" :key="item">{{
+									<el-tag size="mini" type="danger" v-for="(item,index) in scope.row.expiredCertificate" :key="index">{{
 										expireWarnJson[item]
 									}}</el-tag>
-
 								</div>
 								<el-tag size="mini" type="danger" v-if="scope.row.expiredCertificate.length>0">到期</el-tag>
 							</el-tooltip>
