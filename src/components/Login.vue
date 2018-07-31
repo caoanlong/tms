@@ -18,7 +18,7 @@
 					<div v-show="loginOrRegister == 'findpassword'" class="tab-item findpwd active">找回密码</div>
 				</div>
 				<!-- 登录 -->
-				<el-form :model="login" :rules="loginRules" ref="loginForm" style="margin-top:20px" v-if="loginOrRegister == 'login'">
+				<el-form auto-complete="off" :model="login" :rules="loginRules" ref="loginForm" style="margin-top:20px" v-if="loginOrRegister == 'login'">
 					<!-- 为了取消chrome自动填充密码 -->
 					<input type="password" id="disabledAutoComplete" name="disabledAutoComplete" style="display:none">
 					<!-- 为了取消chrome自动填充密码 -->
@@ -112,14 +112,14 @@
 					<el-button class="login-btn" type="primary" :disabled="!checked" @click="handRegister">注册</el-button>
 				</el-form>
 				<!-- 忘记密码 -->
-				<el-form :model="findPassword" :rules="findPasswordRules" ref="findPasswordForm" style="margin-top:20px" v-if="loginOrRegister == 'findpassword'">
+				<el-form auto-complete="new-password" :model="findPassword" :rules="findPasswordRules" ref="findPasswordForm" style="margin-top:20px" v-if="loginOrRegister == 'findpassword'">
 					<el-form-item prop="mobile">
 						<el-input  auto-complete="off" v-model="findPassword.mobile" placeholder="请输入手机号">
 							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="vcode">
-						<el-input v-model="findPassword.vcode" placeholder="请输入验证码">
+						<el-input  auto-complete="off" v-model="findPassword.vcode" placeholder="请输入验证码">
 							<template slot="prefix"><svg-icon class="ico" icon-class="email"></svg-icon></template>
 							<template slot="suffix">
 								<el-button type="default" size="mini" :disabled="isGetVCode" @click="getVCode">{{getVcodeText}}</el-button>
@@ -336,7 +336,7 @@ export default {
 					}).then(() => {
 						this.$router.push({name: 'home'})
 						this.$store.dispatch('getUserInfo')
-						// this.$store.dispatch('getMenu')
+						this.$store.dispatch('getMenu')
 					})
 				})
 			})
@@ -372,7 +372,7 @@ export default {
 					}).then(() => {
 						this.$router.push({name: 'home'})
 						this.$store.dispatch('getUserInfo')
-						// this.$store.dispatch('getMenu')
+						this.$store.dispatch('getMenu')
 					})
 				})
 			})

@@ -10,10 +10,9 @@ import request from '../common/request'
 class Menu extends Base {
     constructor(url, req) {
         super(url, req).initURI({
-            findById: '/info',
-            update: '/update',
+            find: '/findList'
         })
     }
 }
 
-export default new Menu('/sys_menu', request)
+export default new Menu('/sys/menu', request)
