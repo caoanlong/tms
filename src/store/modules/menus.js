@@ -1,4 +1,4 @@
-import Member from '../../api/Member'
+import Menu from '../../api/Menu'
 
 const menu = {
 	state: {
@@ -7,7 +7,7 @@ const menu = {
 	},
 	mutations: {
 		GET_MENU: (state) => {
-			Member.menuList().then(res => {
+			Menu.find().then(res => {
 				state.menus = res.menus
 				state.permissions = res.permissions.join(',')
 				sessionStorage.setItem('menus', JSON.stringify(res.menus))

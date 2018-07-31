@@ -26,11 +26,6 @@ class Member extends Base {
             data
         })
     }
-    menuList() {
-        return this.request({
-            url: this.baseUrl + '/menuList'
-        })
-    }
 }
 
 export default new Member('/mem', request)
