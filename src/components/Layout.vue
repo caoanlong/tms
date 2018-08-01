@@ -32,16 +32,16 @@
 			<span class="editCompanyInfo" @click="editCompanyInfoDialog = true"><svg-icon icon-class="edit"></svg-icon> 修改企业资料</span>
 		</div>
 		<el-dialog title="修改企业资料" :visible.sync="editCompanyInfoDialog" append-to-body custom-class="editCompanyInfoDialog" top="5vh">
-			<el-form label-width="140px" size="small">
+			<el-form label-width="140px" size="small" :model="companyDetail" :rules="rules1" ref="ruleForm1">
 				<el-row :gutter="20">
 					<el-col :span="24">
-						<el-form-item label="企业Logo">
+						<el-form-item label="企业Logo" prop="logoUrl">
 							<ImageUpload :files="[companyDetail.logoUrl]" @imgUrlBack="handleAvatarSuccess" :fixed="true" class="fl" :limitNum="1"/>
 							<p class="tips fl">上传的企业Logo，将在点击底部保存按钮保存后生效</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="24">
-						<el-form-item label="企业名称">
+						<el-form-item label="企业名称" prop="name">
 							<el-input placeholder="请输入企业名称" v-model="companyDetail.name"></el-input>
 						</el-form-item>
 					</el-col>
@@ -73,7 +73,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="24">
-							<el-form-item label="所在地区">
+							<el-form-item label="所在地区" prop="areaName">
 								<el-cascader style="width:100%" :options="dist" 
                                 change-on-select v-model="selectedArea" @change="handleSelectedArea">
                             </el-cascader>
@@ -82,31 +82,31 @@
 					</el-row>
 					<el-row>
 						<el-col :span="24">
-							<el-form-item label="详细地址">
+							<el-form-item label="详细地址" prop="address">
 								<el-input placeholder="请输入详细地址" v-model="companyDetail.address"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="20">
 						<el-col :span="12">
-							<el-form-item label="负责人">
+							<el-form-item label="负责人"  prop="respoName">
 								<el-input placeholder="请输入负责人" v-model="companyDetail.respoName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="联系电话">
+							<el-form-item label="联系电话" prop="respoMobile">
 								<el-input placeholder="请输入联系电话" v-model="companyDetail.respoMobile"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="20">
 						<el-col :span="12">
-							<el-form-item label="联系人">
+							<el-form-item label="联系人" prop="contactsName">
 								<el-input placeholder="请输入联系人" v-model="companyDetail.contactsName"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="联系电话">
+							<el-form-item label="联系电话" prop="contactsMobile">
 								<el-input placeholder="请输入联系电话" v-model="companyDetail.contactsMobile"></el-input>
 							</el-form-item>
 						</el-col>
@@ -121,24 +121,24 @@
 					</el-row>
 					<el-row :gutter="20">
 						<el-col :span="12">
-							<el-form-item label="传真">
+							<el-form-item label="传真" prop="fax">
 								<el-input placeholder="请输入传真" v-model="companyDetail.fax"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="客服电话">
+							<el-form-item label="客服电话" prop="phone">
 								<el-input placeholder="请输入客服电话" v-model="companyDetail.phone"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row :gutter="20">
 						<el-col>
-							<el-form-item label="邮政编码">
+							<el-form-item label="邮政编码" prop="zipCode">
 								<el-input placeholder="请输入邮政编码" v-model="companyDetail.zipCode"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col>
-							<el-form-item label="邮箱">
+							<el-form-item label="邮箱" prop="email">
 								<el-input placeholder="请输入邮箱" v-model="companyDetail.email"></el-input>
 							</el-form-item>
 						</el-col>
@@ -240,9 +240,10 @@ import ImageUpload from './CommonComponents/ImageUpload'
 import dist from '../assets/data/dist.json'
 import distData from '../assets/data/distpicker.data'
 import CompanyInfo from '../api/CompanyInfo'
-import MemInfo from '../api/MemInfo'
+import Member from '../api/Member'
 import { defaultImg } from '../assets/icons/icons'
 import { resizeImg,areaIdToArrayId } from '../common/utils'
+import { checkTel,checkZipCode, checkEmail,checkFax} from '../common/validator'
 export default {
 	data(){
 		return{
@@ -273,6 +274,39 @@ export default {
 						value == this.memPwd.newPassword ? callback() : callback(new Error('两次输入密码不一致!'))
 					}}
 				],
+			},
+			rules1: {
+				logoUrl: [
+					{required: true, message: '请上传公司logo'},
+				],
+				name: [
+					{required: true, message: '请输入企业名称'},
+				],
+				areaName: [
+					{required: true, message: '请选择公司所在区域'},
+				],
+				address: [
+					{required: true, message: '请输入公司详细地址'},
+				],
+				respoName: [
+					{required: true, message: '请输入负责人'},
+				],
+				respoMobile: [
+					{required: true, message: '请输入负责人联系电话'},
+					{validator: checkTel},
+				],
+				phone: [
+					{validator: checkTel},
+				],
+				fax: [
+					{validator: checkFax},
+				],
+				zipCode:[
+					{validator: checkZipCode}
+				],
+				email:[
+					{validator: checkEmail}
+				]
 			}
 		}
 	},
@@ -307,15 +341,20 @@ export default {
 			})
 		},
 		saveCompanyInfo(){
-			CompanyInfo.modify(this.companyDetail).then(res => {
-				Message.success('保存成功！')
-				this.editCompanyInfoDialog = false
+			let data = this.memPwd
+			this.$refs['ruleForm1'].validate(valid => {
+				if (valid) {
+					CompanyInfo.modify(this.companyDetail).then(res => {
+						Message.success('保存成功！')
+						this.editCompanyInfoDialog = false
+					})
+				}
 			})
 		},
 		getMemInfo(){
-			MemInfo.detail().then(res =>{
+			Member.detail().then(res =>{
 				this.MemDetail = res.data.data
-				console.log(this.MemDetail)
+				
 			})
 		},
 		saveMemInfo(){
@@ -323,7 +362,8 @@ export default {
 				headPic:this.MemDetail.headPic,
 				realName:this.MemDetail.realName
 			}
-			MemInfo.modify(data).then(res =>{
+			console.log(this.MemDetail)
+			Member.modify(data).then(res =>{
 				Message.success('保存成功！')
 				this.accountInfoDialog = false
 			})
@@ -332,7 +372,7 @@ export default {
 			let data = this.memPwd
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					MemInfo.changePwd(data).then(res =>{
+					Member.changePwd(data).then(res =>{
 						console.log(data)
 						Message.success('保存成功！')
 						this.accountInfoDialog = false
@@ -353,10 +393,10 @@ export default {
             this.companyDetail.areaID = data[data.length - 1]
         },
         handleAvatarSuccess(res) {
-			this.companyDetail.logoUrl = res[0]
+			this.companyDetail.logoUrl = res.length==0?'':res[0]
 		},
         handleAvatarSuccess1(res) {
-			this.MemDetail.headPic = res[0]
+			this.MemDetail.headPic = res.length==0?'':res[0]
 		}
 	}
 }

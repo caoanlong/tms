@@ -14,7 +14,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="dialogFormVisible = true">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="addRole">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
@@ -171,6 +171,10 @@ export default {
 		setMember(roleID) {
 			this.showSetMember = true
 			this.setRoleID = roleID
+		},
+		addRole(){
+			this.roleName = ''
+			this.dialogFormVisible = true
 		}
 	}
 }

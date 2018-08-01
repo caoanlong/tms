@@ -176,3 +176,13 @@ export const limitLength100 = (rule, value, callback) => {
 		callback()
 	}
 }
+
+// 验证邮编
+export const checkZipCode = (rule, value, callback) => {
+	const regZipCode = /^[0-9]{6}$/
+	if (!regZipCode.test(value)&& value) {  
+		callback(new Error('请输入正确的邮编'))
+	} else {  
+		callback()
+	} 
+}
