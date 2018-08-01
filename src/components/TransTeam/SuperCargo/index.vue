@@ -122,6 +122,7 @@ export default {
 				SafetyValvesQCExpires:"罐体安全阀监测到期 ",
 				PressureGaugeQCExpires:"罐体压力表监测到期 ",
 				secondaMaintainTime:"二级维护下次维护日期到期 ",
+				NextSecondLevel:"二级维护下次维护",
 				NextRankEvaluteTime:"技术等级下次评定到期",
 				SecondSecurityDepositDate:"二次安全保证金到期 ",
 				ManagementAgreementExpireDate:"管理协议到期 ",

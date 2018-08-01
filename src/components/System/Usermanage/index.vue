@@ -97,8 +97,8 @@ export default {
 		},
 		getList() {
 			SysMember.find({
-				pageIndex: this.pageIndex,
-				pageSize: this.pageSize,
+				current: this.pageIndex,
+				size: this.pageSize,
 				mobile: this.find.mobile,
 				realName: this.find.realName
 			}).then(res => {
