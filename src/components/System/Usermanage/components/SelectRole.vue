@@ -8,7 +8,12 @@
             size="mini">
             <el-table-column type="selection" align="center"></el-table-column>
             <el-table-column label="角色" prop="roleName"></el-table-column>
-            <el-table-column label="拥有权限" prop="num"></el-table-column>
+            <el-table-column label="拥有权限">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.roleType == 'SysSuperAdmin'">全部</span>
+                    <span v-else>{{scope.row.num}}</span>
+                </template>
+            </el-table-column>
         </el-table>
         <div class="section-block" v-if="selectedRoles.length > 0">
             <span class="block-title">已配置角色</span>
