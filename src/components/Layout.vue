@@ -142,7 +142,7 @@
 					<el-row>
 						<el-col :span="24">
 							<el-form-item>
-								<el-button @click="editCompanyInfoDialog = false">取消</el-button>
+								<el-button @click="cancelEditcompanyInfo">取消</el-button>
 								<el-button type="primary" @click="saveCompanyInfo">保存</el-button>
 							</el-form-item>
 						</el-col>
@@ -178,7 +178,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="24" class="text-center">
-							<el-button size="small" @click="accountInfoDialog = false">取消</el-button>
+							<el-button size="small" @click="accountInfoDialog = false" >取消</el-button>
 							<el-button type="primary" @click="saveMemInfo" size="small">保存</el-button>
 						</el-col>
 					</el-row>
@@ -321,7 +321,6 @@ export default {
 			}).then(res => {
 				this.companyDetail = res
 				this.selectedArea = areaIdToArrayId(res.areaID)
-				console.log(this.selectedArea)
 			})
 		},
 		saveCompanyInfo(){
@@ -334,6 +333,10 @@ export default {
 					})
 				}
 			})
+		},
+		cancelEditcompanyInfo(){
+			this.getCompanyInfo()
+			this.editCompanyInfoDialog = false
 		},
 		getMemInfo(){
 			Member.detail().then(res =>{
@@ -433,7 +436,7 @@ export default {
 			font-size 14px
 			line-height 24px
 			&.companyName
-				font-size 24px
+				font-size 18px
 				margin-bottom 10px
 		.companylogo
 			width 110px
@@ -450,7 +453,7 @@ export default {
 		p
 			margin 0
 			padding 0
-			font-size 16px
+			font-size 14px
 			line-height 30px
 	.footer
 		height 72px
