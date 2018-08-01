@@ -1472,7 +1472,7 @@ export default {
 			this.truck.trailerPlateNo = data.plateNo
 			this.truck.trailerID = data.truckID
 		},
-		handSelect() {
+		handSelectTruckCategory() {
 			this.truck.truckType = ''
 			this.truck.trailerID = ''
 		},

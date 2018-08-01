@@ -1,16 +1,11 @@
 <template>
 	<div class="main-content">
-		<!-- <el-form label-width="140px">
-			<el-form-item label="收货地">
-				<dist-picker></dist-picker>
-			</el-form-item>
-		</el-form> -->
 		<el-row :gutter="20">
 			<el-col :span="12">
 				<el-card class="box-card dashboardItem">
 					<div slot="header" class="clearfix">
 						<el-badge :value="0" :max="99" class="item"><span>待处理运单</span></el-badge>
-						<router-link tag="a" class="more" :to="{name: 'carrierbills'}">查看更多</router-link>
+						<router-link tag="a" class="more" :to="{name: 'carrierbill'}">查看更多</router-link>
 					</div>
 					<div class="table">
 						<el-table :data="tableData" border style="width: 100%" size="mini" :height="250">
@@ -220,7 +215,7 @@
 				<el-card class="box-card dashboardItem">
 					<div slot="header" class="clearfix">
 						<el-badge :value="0" :max="99" class="item"><span>可用人员</span></el-badge>
-						<router-link tag="a" class="more" :to="{name: 'person'}">查看更多</router-link>
+						<router-link tag="a" class="more" :to="{name: 'supercargo'}">查看更多</router-link>
 					</div>
 					<div class="table">
 						<el-table :data="tableData3" border style="width: 100%" size="mini" :height="250">
@@ -313,7 +308,6 @@ import Carrierbill from "../../api/Carrierbill"
 import Dispatchbill from "../../api/Dispatchbill"
 import Truck from "../../api/Truck"
 import Staff from "../../api/Staff"
-import DistPicker from '../CommonComponents/DistPicker2'
 export default {
 	name: 'home',
 	data() {
@@ -332,7 +326,6 @@ export default {
 			}
 		}
 	},
-	components: { DistPicker },
 	created() {
 		// this.getCarrierOrder()
 		// this.getDispatchOrder()

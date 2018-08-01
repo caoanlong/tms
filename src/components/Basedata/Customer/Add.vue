@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">添加企业</div>
-			<el-row>
+			<el-row style="padding-bottom: 100px">
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="企业LOGO">
@@ -19,13 +19,7 @@
 							</el-select>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">
-							<el-cascader 
-								style="width:100%" 
-								:options="dist" 
-								change-on-select 
-								v-model="selectedArea" 
-								@change="handleSelectedArea">
-							</el-cascader>
+							<dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
 						</el-form-item>
 						<el-form-item label="联系人" prop="contactName">
 							<el-input v-model="recdeliverycomp.contactName"></el-input>
@@ -45,9 +39,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import dist from '../../../assets/data/dist.json'
 import Customer from '../../../api/Customer'
 import ImageUpload from '../../CommonComponents/ImageUpload'
+import DistPicker from '../../CommonComponents/DistPicker2'
 import { checkTel } from '../../../common/validator'
 export default {
 	data() {
@@ -70,9 +64,7 @@ export default {
 			}
 		}
 	},
-	computed: {
-		dist: () => dist
-	},
+	components: { ImageUpload, DistPicker },
 	methods: {
 		handleLogoSuccess(res) {
 			this.recdeliverycomp.logoUrl = res.length == 0 ? '' : res[0]
@@ -92,9 +84,6 @@ export default {
 		back() {
 			this.$router.go(-1)
 		}
-	},
-	components: {
-		ImageUpload
 	}
 }
 </script>

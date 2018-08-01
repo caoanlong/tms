@@ -1,44 +1,132 @@
 <template>
     <div class="dist-picker">
-        <div class="dist-input" @click.stop="clickPicker">
-            <span class="dist-placeholder">请选择</span>
-            <span></span>
+        <div class="dist-input" :style="{'height': height + 'px', 'line-height': height + 'px'}" @click.stop="clickPicker">
+            <span class="dist-placeholder" v-if="selectList.length == 0">请选择</span>
+            <span v-else>{{selectList.map(item => item.value).join(' / ')}}</span>
             <span class="arrow" :class="status ? 'active' : ''"></span>
         </div>
         <div class="dist-select" @click.stop="() => false" v-if="status">
 			<div class="up">
 				<div class="level">
 					<div class="level-item" :class="level == 1 ? 'active' : ''" @click="changeLevel(1)">省</div>
-					<div class="level-item" :class="level == 2 ? 'active' : ''" @click="changeLevel(2)">市</div>
-					<div class="level-item" :class="level == 3 ? 'active' : ''" @click="changeLevel(3)">区</div>
+					<div class="level-item" :class="level == 2 ? 'active' : ''" @click="changeLevel(2)" v-if="selectList[0]">市</div>
+					<div class="level-item" :class="level == 3 ? 'active' : ''" @click="changeLevel(3)" v-if="selectList[1]">区</div>
+				</div>
+				<div class="list">
+					<el-button 
+						class="item" 
+						:class="selectList.map(item => item.key).includes(item.key) ? '' : 'no-active'"
+						size="mini" 
+						:type="selectList.map(item => item.key).includes(item.key) ? 'primary' : 'text'" 
+						v-for="item in list" 
+						:key="item.key" 
+						@click="selectDist(item)">
+						{{item.value}}
+					</el-button>
 				</div>
 			</div>
 			<div class="down">
-				<el-button class="clear" size="mini">清空</el-button>
+				<el-button class="clear" size="mini" @click="clear">清空</el-button>
 			</div>
 		</div>
     </div>
 </template>
 <script>
 import ChineseDistricts from '../../../assets/data/distpicker.data'
+import { searchAreaObjByKey } from '../../../common/utils'
+function transJsonToList(key) {
+	const distJson = ChineseDistricts[key]
+	return Object.keys(distJson).map(item => {
+		return { 'key': item, 'value': distJson[item] }
+	})
+}
 export default {
+	props: {
+		height: {
+			type: Number,
+			default: 32
+		},
+		distList: Array
+	},
     data() {
         return {
 			status: false,
 			level: 1,
+			list: [],
+			selectList: []
         }
-    },
+	},
+	watch: {
+		distList: {
+			handler(newVal) {
+				this.selectList = searchAreaObjByKey(newVal)
+			},
+			deep: true
+		},
+		status(bool) {
+			if (bool) {
+				if (this.selectList.length == 0) {
+					this.list = transJsonToList(100000)
+				} else if (this.selectList.length == 1) {
+					this.level = 1
+					this.list = transJsonToList(100000)
+				} else if (this.selectList.length == 2) {
+					this.level = 2
+					this.list = transJsonToList(this.selectList[0].key)
+				} else if (this.selectList.length == 3) {
+					this.level = 3
+					this.list = transJsonToList(this.selectList[1].key)
+				}
+			} else {
+				if (this.selectList.length > 0) {
+					this.$emit('hand-select', this.selectList.map(item => item.key))
+				}
+			}
+		}
+	},
     created() {
         document.body.addEventListener('click', () => {
             this.status = false
-        })
+		})
     },
     methods: {
         clickPicker() {
-            this.status = !this.status
+			if (this.status) {
+				this.status = false
+			} else {
+				this.status = true
+			}
 		},
 		changeLevel(x) {
 			this.level = x
+			if (this.level == 1) {
+				this.list = transJsonToList(100000)
+			} else if (this.level == 2) {
+				this.list = transJsonToList(this.selectList[0].key)
+			} else if (this.level == 3) {
+				this.list = transJsonToList(this.selectList[1].key)
+			}
+		},
+		selectDist(item) {
+			if (this.level == 1) {
+				this.level = 2
+				this.selectList = [item]
+				this.list = transJsonToList(item.key)
+			} else if (this.level == 2) {
+				this.level = 3
+				this.selectList[1] = item
+				this.selectList.splice(2, 1)
+				this.list = transJsonToList(item.key)
+			} else if (this.level == 3) {
+				this.selectList[2] = item
+				this.status = false
+			}
+		},
+		clear() {
+			this.level = 1
+			this.selectList = []
+			this.list = []
+			this.status = false
 		}
     }
 }
@@ -48,12 +136,8 @@ export default {
 $blue = #409eff
 .dist-picker
 	position relative
-	top 5px
 	.dist-input
 		position relative
-		width 250px
-		height 32px
-		line-height 32px
 		padding-left 10px
 		color #666
 		border 1px solid #dcdfe6
@@ -65,8 +149,8 @@ $blue = #409eff
 			display block
 			width 8px
 			height 8px
-			border-top 2px solid #bbb
-			border-left 2px solid #bbb
+			border-top 1px solid #bbb
+			border-left 1px solid #bbb
 			transform rotate(225deg)
 			&.active
 				transform rotate(45deg)
@@ -79,7 +163,7 @@ $blue = #409eff
 		background-color #fff
 		box-shadow 0 4px 16px 0 rgba(0,0,0,.2)
 		.up
-			padding 0 20px
+			padding 0 20px 0 30px
 			.level
 				color #666
 				height 40px
@@ -93,6 +177,12 @@ $blue = #409eff
 					&.active
 						color $blue
 						border-bottom 2px solid $blue
+			.list
+				.item
+					&:first-child
+						margin-left 10px
+					&.no-active
+						color #666
 		.down
 			position relative
 			width 100%

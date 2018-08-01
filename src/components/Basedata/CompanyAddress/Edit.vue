@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">编辑收发货单位地址</div>
-			<el-row>
+			<el-row style="padding-bottom: 100px">
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="companyAddress" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="所属企业" prop="customerID">
@@ -21,13 +21,7 @@
 							<el-input v-model="companyAddress.contactPhone" placeholder="请输入..."></el-input>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="areaID">
-                            <el-cascader 
-                                style="width:100%" 
-                                :options="dist" 
-                                change-on-select 
-                                v-model="selectedArea" 
-                                @change="handleSelectedArea">
-                            </el-cascader>
+                            <dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
 						</el-form-item>
 						<el-form-item label="定位地址" prop="locationAddress">
                             <el-autocomplete  style="width:100%"
@@ -56,12 +50,12 @@
 import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
 import CustomerAddress from '../../../api/CustomerAddress'
-import dist from '../../../assets/data/dist.json'
 import distData from '../../../assets/data/distpicker.data'
 import { searchLocationByCity, areaIdToArrayId } from '../../../common/utils'
 import Geohash from '../../../common/Geohash'
 import CrossProxy from '../../../api/CrossProxy'
 import { checkTel } from '../../../common/validator'
+import DistPicker from '../../CommonComponents/DistPicker2'
 export default {
 	data() {
 		return {
@@ -87,10 +81,8 @@ export default {
 				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}]
 			}
 		}
-    },
-    computed: {
-		dist: () => dist
 	},
+	components: { DistPicker },
 	created() {
 		this.getInfo()
 	},
