@@ -89,18 +89,6 @@
 					</el-row>
 					<el-row :gutter="20">
 						<el-col :span="12">
-							<el-form-item label="负责人"  prop="respoName">
-								<el-input placeholder="请输入负责人" v-model="companyDetail.respoName"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="联系电话" prop="respoMobile">
-								<el-input placeholder="请输入联系电话" v-model="companyDetail.respoMobile"></el-input>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row :gutter="20">
-						<el-col :span="12">
 							<el-form-item label="联系人" prop="contactsName">
 								<el-input placeholder="请输入联系人" v-model="companyDetail.contactsName"></el-input>
 							</el-form-item>
@@ -288,11 +276,7 @@ export default {
 				address: [
 					{required: true, message: '请输入公司详细地址'},
 				],
-				respoName: [
-					{required: true, message: '请输入负责人'},
-				],
-				respoMobile: [
-					{required: true, message: '请输入负责人联系电话'},
+				contactsMobile: [
 					{validator: checkTel},
 				],
 				phone: [

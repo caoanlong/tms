@@ -27,16 +27,12 @@
 							<el-option label="已完成" value="Finished"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="调度时间">
-						<el-date-picker
-							v-model="rangeDate"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							value-format="timestamp"
-							:clearable="false"
-							@change="selectDateRange">
+					<el-form-item label="调度时间从">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.beginDispatchDate">
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item label="至">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.endDispatchDate">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>

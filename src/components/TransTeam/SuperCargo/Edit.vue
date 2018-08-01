@@ -94,9 +94,9 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-row>
+						<el-row :gutter="20">
 							<el-col :span="12">
-								<el-form-item label="有效期开始" prop="idCardBeginTime">
+								<el-form-item label="有效期从" prop="idCardBeginTime">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() < curDate}"
 										type="date"
@@ -107,7 +107,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="有效期结束" prop="idCardExpirationTime">
+								<el-form-item label="有效期至" prop="idCardExpirationTime">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate}"
 										type="date"
@@ -232,9 +232,9 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-row >
+						<el-row :gutter="20">
 							<el-col :span="12">
-								<el-form-item label="有效期开始" prop="driverLicenseBeginTime">
+								<el-form-item label="有效期从" prop="driverLicenseBeginTime">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() < curDate}"
 										type="date"
@@ -245,7 +245,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="有效期结束" prop="driverLicenseEndTime">
+								<el-form-item label="有效期至" prop="driverLicenseEndTime">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate}"
 										type="date"
@@ -347,9 +347,9 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-row>
+						<el-row :gutter="20">
 							<el-col :span="12">
-								<el-form-item label="有效期开始">
+								<el-form-item label="有效期从">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() < curDate}"
 										type="date"
@@ -360,7 +360,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="有效期结束">
+								<el-form-item label="有效期至">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate}"
 										type="date"
@@ -636,9 +636,9 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-row>
+						<el-row :gutter="20">
 							<el-col :span="12">
-								<el-form-item label="有效期开始">
+								<el-form-item label="有效期从">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() < curDate}"
 										type="date"
@@ -649,7 +649,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="有效期结束">
+								<el-form-item label="有效期至">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate}"
 										type="date"

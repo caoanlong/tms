@@ -15,16 +15,12 @@
 							<el-option value="Closed" label="已关闭">已关闭</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="委托时间">
-						<el-date-picker
-							v-model="rangeDate"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							value-format="timestamp"
-							:clearable="false"
-							@change="selectDateRange">
+					<el-form-item label="委托时间从" prop="begin">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.begin">
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item label="至" prop="end">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.end">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -39,12 +35,12 @@
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="单号" prop="carrierOrderNo" width="170">
+					<el-table-column label="单号" prop="carrierOrderNo" width="170"  align="center">
 						<template slot-scope="scope">
 							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="状态" prop="status">
+					<el-table-column label="状态" prop="status" align="center">
 						<template slot-scope="scope">
 							<el-tag size="mini" class="statusTag" type="warning" v-if="scope.row.status == 'Committed'">未执行</el-tag>
 							<el-tag size="mini" class="statusTag" type="primary" v-else-if="scope.row.status == 'Running'">执行中</el-tag>
@@ -55,7 +51,7 @@
 					<el-table-column label="货物" prop="cargoName"></el-table-column>
 					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
-					<el-table-column label="委托时间" prop="commissionDate" width="100">
+					<el-table-column label="委托时间" prop="commissionDate" width="100" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.commissionDate">{{ new Date(scope.row.commissionDate).getTime() | getdatefromtimestamp(true)}}</span>
 						</template>
@@ -121,10 +117,6 @@ export default {
 		this.getList()
 	},
 	methods: {
-		selectDateRange(date) {
-			this.find.begin = date[0]
-			this.find.end = date[1]
-		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.carrierOrderID)
 		},
@@ -138,7 +130,6 @@ export default {
 			this.find.status = ''
 			this.find.begin = ''
 			this.find.end = ''
-			this.rangeDate = []
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
