@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="分配用户" :visible.sync="showSetMember" width="600px">
+    <el-dialog title="分配用户" :visible.sync="showSetMember" :show-close="false" :close-on-click-modal="false" width="600px">
         <el-table 
             ref="memberTable"
             :data="members" 
