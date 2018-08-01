@@ -20,6 +20,29 @@ export function searchAreaByKey (areaKey) {
 	}
 }
 
+export function searchAreaObjByKey (keys) {
+	let list = []
+	for (let i = 0; i < keys.length; i++) {
+		if (i == 0) {
+			list[0] = {
+				'key': keys[i],
+				'value': ChineseDistricts[100000][keys[i]]
+			}
+		} else if (i == 1) {
+			list[1] = {
+				'key': keys[i],
+				'value': ChineseDistricts[list[0].key][keys[i]]
+			}
+		} else if (i == 2) {
+			list[2] = {
+				'key': keys[i],
+				'value': ChineseDistricts[list[1].key][keys[i]]
+			}
+		}
+	}
+	return list
+}
+
 export function areaIdToArrayId (areaId) {
 	return [(areaId.substr(0, 2) + '0000'), (areaId.substr(0, 4) + '00'), areaId]
 }

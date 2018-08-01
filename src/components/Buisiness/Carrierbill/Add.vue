@@ -68,13 +68,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="发货地" prop="shipperAreaID">
-									<el-cascader 
-										style="width:100%" 
-										:options="dist" 
-										change-on-select 
-										v-model="selectedShipperArea" 
-										@change="handleSelectedShipperArea">
-									</el-cascader>
+									<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea"></dist-picker>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -140,13 +134,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="收货地" prop="consigneeAreaID">
-									<el-cascader 
-										style="width:100%" 
-										:options="dist" 
-										change-on-select 
-										v-model="selectedConsigneeArea" 
-										@change="handleSelectedConsigneeArea">
-									</el-cascader>
+									<dist-picker :distList="selectedConsigneeArea" @hand-select="handleSelectedConsigneeArea"></dist-picker>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -320,7 +308,6 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
-import dist from '../../../assets/data/dist.json'
 import Carrierbill from '../../../api/Carrierbill'
 import Customer from '../../../api/Customer'
 import CrossProxy from '../../../api/CrossProxy'
@@ -331,6 +318,7 @@ import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../..
 import { checkTel } from '../../../common/validators'
 import distData from '../../../assets/data/distpicker.data'
 import Geohash from '../../../common/Geohash'
+import DistPicker from '../../CommonComponents/DistPicker2'
 export default {
 	data() {
 		return {
@@ -401,9 +389,7 @@ export default {
 			}
 		}
 	},
-	computed: {
-		dist: () => dist
-	},
+	components: { DistPicker },
 	created() {
 		this.getUnits()
 	},
@@ -541,6 +527,7 @@ export default {
 		handleSelectedShipperArea(data) {
 			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
 			this.carrierbillInfo.shipperArea = searchAreaByKey(data[data.length - 1])
+			if (this.selectedShipperArea[1] != data[1]) this.carrierbillInfo.shipperLocationAddress= ''
 			if (data[1]) {
 				const location = searchLocationByCity(distData[data[0]][data[1]])
 				this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
@@ -549,6 +536,7 @@ export default {
 		handleSelectedConsigneeArea(data) {
 			this.carrierbillInfo.consigneeAreaID = data[data.length - 1]
 			this.carrierbillInfo.consigneeArea = searchAreaByKey(data[data.length - 1])
+			if (this.selectedConsigneeArea[1] != data[1]) this.carrierbillInfo.consigneeLocationAddress= ''
 			if (data[1]) {
 				const location = searchLocationByCity(distData[data[0]][data[1]])
 				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
