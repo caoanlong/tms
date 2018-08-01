@@ -19,10 +19,11 @@
 				</div>
 				<!-- 登录 -->
 				<el-form auto-complete="off" :model="login" :rules="loginRules" ref="loginForm" style="margin-top:20px" v-if="loginOrRegister == 'login'">
-					<!-- 为了取消chrome自动填充密码 -->
+					
+					<el-form-item prop="username">
+						<!-- 为了取消chrome自动填充密码 -->
 					<input type="password" id="disabledAutoComplete" name="disabledAutoComplete" style="display:none">
 					<!-- 为了取消chrome自动填充密码 -->
-					<el-form-item prop="username">
 						<el-input  auto-complete="off" v-model="login.username" placeholder="请输入用户名">
 							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
 						</el-input>
@@ -49,6 +50,9 @@
 				<!-- 注册 -->
 				<el-form :model="register" :rules="registerRules" ref="registerForm" style="margin-top:20px" v-if="loginOrRegister == 'register'">
 					<el-form-item prop="mobile">
+						<!-- 为了取消chrome自动填充密码 -->
+						<input type="password" id="disabledAutoComplete2" name="disabledAutoComplete2" style="display:none">
+						<!-- 为了取消chrome自动填充密码 -->
 						<el-input  auto-complete="off" v-model="register.mobile" placeholder="请输入手机号">
 							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>
 						</el-input>
@@ -113,6 +117,9 @@
 				</el-form>
 				<!-- 忘记密码 -->
 				<el-form auto-complete="new-password" :model="findPassword" :rules="findPasswordRules" ref="findPasswordForm" style="margin-top:20px" v-if="loginOrRegister == 'findpassword'">
+					<!-- 为了取消chrome自动填充密码 -->
+					<input type="password" id="disabledAutoComplete3" name="disabledAutoComplete3" style="display:none">
+					<!-- 为了取消chrome自动填充密码 -->
 					<el-form-item prop="mobile">
 						<el-input  auto-complete="off" v-model="findPassword.mobile" placeholder="请输入手机号">
 							<template slot="prefix"><svg-icon class="ico" icon-class="customer"></svg-icon></template>

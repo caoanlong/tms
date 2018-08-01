@@ -38,8 +38,6 @@ export function validatAlphabets(str) {
  */
 export function validateEmail(email) {
 	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-	console.log(re.test(email),email)
-
 	return re.test(email)
 }
 
@@ -181,8 +179,8 @@ export const limitLength100 = (rule, value, callback) => {
 
 // 验证邮编
 export const checkZipCode = (rule, value, callback) => {
-	const regZipCode = /^[1-9][0-9]{5}$/
-	if (!regZipCode.test(value)) {  
+	const regZipCode = /^[0-9]{6}$/
+	if (!regZipCode.test(value)&& value) {  
 		callback(new Error('请输入正确的邮编'))
 	} else {  
 		callback()
