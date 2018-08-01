@@ -8,7 +8,7 @@
 						<el-input placeholder="车牌号/姓名" v-model="findrealName"></el-input>
 					</el-form-item>
 					<el-form-item label="对象类型">
-						<el-select placeholder="全部" v-model="findobjType">
+						<el-select placeholder="全部" v-model="findobjType" @change="cccc">
 							<el-option label="全部" value=""></el-option>
 							<el-option label="司机" value="Driver"></el-option>
 							<el-option label="车辆" value="Truck"></el-option>
@@ -16,9 +16,9 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="到期类型" >
-						<el-select placeholder="全部" v-model="findexpiredCertificate">
+						<el-select placeholder="请选择到期类型" v-model="findexpiredCertificate">
 							<el-option label="全部" value=""></el-option>
-							<el-option v-for="item in expiredCertificateSorts" :label="item.value" :value="item.key" :key="item.value"></el-option>
+							<el-option v-for="(item,index) in expOption" :label="item.value" :value="item.key" :key="index"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -104,10 +104,10 @@ export default {
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=shipperAndConsignor.xlsx&&Authorization=' +localStorage.getItem("token"),
 			templateTit:'shipperAndConsignor.xlsx',
-			expiredCertificateSort:{
+			TruckOption:{
 				DriverLicExpiresTime:"行驶证",
 				RoadTransportLicAnnualPeriod:"道路运输许可证",
-				GpsValidEndDate:"GPS续费",
+				GpsValidEndDate:"GPS",
 				SaliInsuranceExpires:"交强险",
 				BizInsuranceExpires:"商业险",
 				CarrierRiskInsuranceExpires:"承运险",
@@ -119,6 +119,8 @@ export default {
 				SecondSecurityDepositDate:"二次安全保证金",
 				ManagementAgreementExpireDate:"管理协议",
 				SafetyLiabilityLetterExpireDate:"安全责任书",
+			},
+			DriverOption:{
 				IdCardExpirationTime:"身份证",
 				DriverLicenseEndTime:"驾驶证",
 				QualificationExpirationDate:"危货从业资格证",
@@ -126,7 +128,16 @@ export default {
 				LaborContractEndTime:"聘用合同",
 				EscortLicenseExpireDate:"押运证",
 			},
-			expiredCertificateSorts:[]
+			ComsupercargoOption:{
+				IdCardExpirationTime:"身份证",
+				LaborContractEndTime:"聘用合同",
+				EscortLicenseExpireDate:"押运证",
+			},
+			expiredCertificateSorts:[],
+			TruckOptions:[],
+			DriverOptions:[],
+			ComsupercargoOptions:[],
+			expOption:[]
 		}
 	},
 	components: {
@@ -139,7 +150,31 @@ export default {
 				value:this.expiredCertificateSort[item]
 			}
 		})
+		this.TruckOptions = Object.keys(this.TruckOption).map(item =>{
+			return {
+				key:item,
+				value:this.TruckOption[item]
+			}
+		})
+		this.DriverOptions = Object.keys(this.DriverOption).map(item =>{
+			return {
+				key:item,
+				value:this.DriverOption[item]
+			}
+		})
+		this.ComsupercargoOptions = Object.keys(this.ComsupercargoOption).map(item =>{
+			return {
+				key:item,
+				value:this.ComsupercargoOption[item]
+			}
+		})
+		this.expOption = this.expiredCertificateSorts
 		this.getList()
+	},
+	computed:{
+		expiredCertificateSort(){
+			return Object.assign(this.TruckOption,this.DriverOption)
+		}
 	},
 	methods: {
 		search() {
@@ -162,10 +197,6 @@ export default {
 		pageSizeChange(size) {
 			this.pageSize = size
 			this.getList() 
-		},
-		selectDateRange(date) {
-			this.findcreateTimeBegin = date[0]
-			this.findcreateTimeEnd = date[1]
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.customerID)
@@ -233,6 +264,18 @@ export default {
 					this.getList()
 				})
 			}, this.selectedList)
+		},
+		cccc(){
+			if(this.findobjType =='Truck'){
+				this.expOption = this.TruckOptions
+			}else if(this.findobjType =='Driver'){
+				this.expOption = this.DriverOptions
+			}else if(this.findobjType =='Comsupercargo'){
+				this.expOption = this.ComsupercargoOptions
+			}else{
+				this.expOption = this.expiredCertificateSorts
+			}
+			
 		}
 	}
 }

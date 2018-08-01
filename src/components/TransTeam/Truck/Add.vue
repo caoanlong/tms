@@ -1,6 +1,6 @@
 <template>
 	<div class="main-content" style="padding-left:200px">
-		<el-form label-width="100px" size="mini" :model="truck" :rules="rules" ref="ruleForm" >
+		<el-form label-width="140px" size="mini" :model="truck" :rules="rules" ref="ruleForm" >
 			<el-card class="box-card">
 				<el-row class="section-block target1" style="margin-bottom:20px">
 					<span class="block-title">基本信息</span>
@@ -133,12 +133,12 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="车主/单位名称" label-width="120px">
+								<el-form-item label="车主/单位名称">
 									<el-input v-model="truck.carOwnerName"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="车主/单位电话" label-width="120px">
+								<el-form-item label="车主/单位电话">
 									<el-input v-model="truck.carOwnerMobile"></el-input>
 								</el-form-item>
 							</el-col>
@@ -146,12 +146,12 @@
 						</el-row>
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="车主/单位地址" label-width="120px">
+								<el-form-item label="车主/单位地址">
 									<el-input v-model="truck.carOwnerAddress"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="所有权类型" label-width="120px">
+								<el-form-item label="所有权类型">
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.propertyType">
 										<el-option label="单位" value="单位"></el-option>
 										<el-option label="挂靠" value="挂靠"></el-option>
@@ -167,7 +167,7 @@
 					<div class="block-content">
 						<el-row :gutter="20">
 							<el-col :span="12">
-								<el-form-item label="注册日期">
+								<el-form-item label="注册日期" >
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
@@ -179,7 +179,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="发证日期">
+								<el-form-item label="发证日期" >
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
@@ -192,17 +192,16 @@
 							</el-col>
 						</el-row>
 						<el-row :gutter="20">
-							<el-col :span="24">
-								<el-form-item label="行驶证有效期">
-									<el-date-picker
-										type="daterange"
-										range-separator="至"
-										start-placeholder="开始日期"
-										end-placeholder="结束日期" 
-										style="width:100%" 
-										v-model="driverLicTime" 
-										@change="handSelectDriverLicTime">
-										<!-- driverLicBeginTime,driverLicExpiresTime -->
+							<el-col :span="12">
+								<el-form-item label="有效期从">
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" value-format="timestamp" v-model="truck.driverLicBeginTime" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="有效期至" >
+									<!-- driverLicBeginTime,driverLicExpiresTime -->
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" value-format="timestamp" v-model="truck.driverLicExpiresTime" style="width:100%">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
@@ -274,7 +273,7 @@
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="24">
-								<el-form-item label="道路运输许可证" label-width="110px">
+								<el-form-item label="道路运输许可证">
 									<div class="uploadTruckPicItem">
 										<ImageUpload 
 											:width="80" :height="80" 
@@ -331,17 +330,16 @@
 							</el-col>
 						</el-row>
 						<el-row :gutter="20">
-							<el-col :span="24">
-								<el-form-item label="有效期">
-									<el-date-picker
-										type="daterange"
-										range-separator="至"
-										start-placeholder="开始日期"
-										end-placeholder="结束日期" 
-										style="width:100%" 
-										v-model="gpsValidDate" 
-										@change="handSelectGpsValidDate">
-										<!-- gpSValidBeginDate, gpSValidEndDate -->
+							<el-col :span="12">
+								<!-- gpSValidBeginDate, gpSValidEndDate -->
+								<el-form-item label="有效期从">
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="truck.gpSValidBeginDate" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="有效期至">
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="truck.gpSValidEndDate" style="width:100%">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
@@ -777,7 +775,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
-								<el-form-item label="安全卡发放日期" label-width="110px">
+								<el-form-item label="安全卡发放日期">
 									<el-date-picker
 										type="date"
 										placeholder="选择日期" 
@@ -800,7 +798,7 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="罐体类型" label-width="140px">
+								<el-form-item label="罐体类型">
 									<el-select style="width: 100%" v-model="truck.cannedType" placeholder="请选择">
 										<el-option label="常压罐" value="常压罐"></el-option>
 										<el-option label="压力罐" value="压力罐"></el-option>
@@ -808,14 +806,14 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="容积" label-width="140px" prop="tankVolume">
+								<el-form-item label="容积" prop="tankVolume">
 									<el-input v-model="truck.tankVolume"><template slot="append">m³</template></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row :gutter="20">
 							<el-col :span="12">
-								<el-form-item label="罐体检测有效期至" label-width="140px">
+								<el-form-item label="罐体检测有效期至">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
@@ -827,7 +825,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="安全阀监测有效期至" label-width="140px">
+								<el-form-item label="安全阀监测有效期至">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
@@ -839,7 +837,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="压力表监测有效期至" label-width="140px">
+								<el-form-item label="压力表监测有效期至">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
@@ -853,7 +851,7 @@
 						</el-row>
 						<el-row >
 							<el-col :span="24">
-								<el-form-item label="照片" label-width="140px">
+								<el-form-item label="照片">
 									<div class="uploadTruckPicItem">
 										<ImageUpload 
 											:width="80" :height="80" 
@@ -880,12 +878,12 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="金额" label-width="140px" prop="securityDepositAmount">
+								<el-form-item label="金额" prop="securityDepositAmount">
 									<el-input v-model="truck.securityDepositAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="日期" label-width="140px">
+								<el-form-item label="日期">
 									<el-date-picker
 										type="date"
 										placeholder="选择日期" 
@@ -898,12 +896,12 @@
 						</el-row>
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="二次安全保证金" label-width="140px" prop="secondSecurityDepositAmount">
+								<el-form-item label="二次安全保证金" prop="secondSecurityDepositAmount">
 									<el-input v-model="truck.secondSecurityDepositAmount"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="二次安全保证金日期" label-width="140px">
+								<el-form-item label="二次安全保证金日期">
 									<el-date-picker
 										type="date"
 										placeholder="选择日期" 
@@ -916,7 +914,7 @@
 						</el-row>
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="缴费日期" label-width="140px">
+								<el-form-item label="缴费日期">
 									<el-date-picker
 										type="date"
 										placeholder="选择日期" 
@@ -929,7 +927,7 @@
 						</el-row>
 						<el-row>
 							<el-col :span="24">
-								<el-form-item label="保证金备注"  label-width="140px">
+								<el-form-item label="保证金备注" >
 									<el-input type="textarea" :rows="3" resize="none" v-model="truck.securityDepositNote"></el-input>
 								</el-form-item>
 							</el-col>
@@ -941,7 +939,7 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="等级评定"  label-width="140px">
+								<el-form-item label="等级评定" >
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.rank">
 										<el-option label="一级" value="1"></el-option>
 										<el-option label="二级" value="2"></el-option>
@@ -950,7 +948,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="评级日期" label-width="140px">
+								<el-form-item label="评级日期">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
@@ -964,7 +962,7 @@
 						</el-row>
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="下次评级日期" label-width="140px">
+								<el-form-item label="下次评级日期">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
@@ -978,13 +976,13 @@
 						</el-row>
 						<el-row>
 							<el-col :span="24">
-								<el-form-item label="审验备注" label-width="140px">
+								<el-form-item label="审验备注">
 									<el-input type="textarea" :rows="3" resize="none" v-model="truck.rankRemark"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-col :span="24">
-							<el-form-item label="照片" label-width="140px">
+							<el-form-item label="照片">
 								<div class="uploadTruckPicItem">
 									<ImageUpload 
 										:width="80" :height="80" 
@@ -1010,7 +1008,7 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="维护日期" label-width="140px">
+								<el-form-item label="维护日期">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
 										type="date"
@@ -1022,7 +1020,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="下次维护" label-width="140px">
+								<el-form-item label="下次维护">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
@@ -1041,12 +1039,12 @@
 					<div class="block-content">
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="金额" label-width="140px" prop="managementAgreementAmount">
+								<el-form-item label="金额" prop="managementAgreementAmount">
 									<el-input v-model="truck.managementAgreementAmount"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="缴费日期" label-width="140px">
+								<el-form-item label="缴费日期">
 									<el-date-picker
 										type="date"
 										placeholder="选择日期" 
@@ -1058,24 +1056,23 @@
 							</el-col>
 						</el-row>
 						<el-row >
-							<el-col :span="24">
-								<el-form-item label="有效期" label-width="140px">
-									<el-date-picker
-										type="daterange"
-										range-separator="至"
-										start-placeholder="开始日期"
-										end-placeholder="结束日期" 
-										style="width:100%" 
-										v-model="managementAgreementDate" 
-										@change="handSelectManagementAgreementDate">
-										<!-- managementAgreementBeginDate, managementAgreementExpireDate -->
+							<el-col :span="12">
+								<!-- managementAgreementBeginDate, managementAgreementExpireDate -->
+								<el-form-item label="有效期从">
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="truck.managementAgreementBeginDate" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="有效期至">
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="truck.managementAgreementExpireDate" style="width:100%">
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="安全责任书到期日" label-width="140px">
+								<el-form-item label="安全责任书到期日">
 									<el-date-picker 
 										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
 										type="date"
@@ -1087,12 +1084,12 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="12">
-								<el-form-item label="元/轴/月" label-width="140px" prop="managementAgreementMoneyPerMonth">
+								<el-form-item label="元/轴/月" prop="managementAgreementMoneyPerMonth">
 									<el-input v-model="truck.managementAgreementMoneyPerMonth"><template slot="append">元</template></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="24">
-								<el-form-item label="协议备注" label-width="140px">
+								<el-form-item label="协议备注">
 									<el-input type="textarea" :rows="3" resize="none" v-model="truck.managementAgreementNote"></el-input>
 								</el-form-item>
 							</el-col>

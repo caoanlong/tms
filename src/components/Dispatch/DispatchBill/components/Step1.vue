@@ -14,16 +14,12 @@
 						@select="handSelectShipper">
 					</el-autocomplete>
 				</el-form-item>
-				<el-form-item label="委托时间">
-					<el-date-picker
-						v-model="findRangeDate"
-						type="daterange"
-						range-separator="至"
-						start-placeholder="开始日期"
-						end-placeholder="结束日期"
-						value-format="timestamp"
-						:clearable="false"
-						@change="selectDateRange">
+				<el-form-item label="委托时间从">
+					<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.beginDate">
+					</el-date-picker>
+				</el-form-item>
+				<el-form-item label="至">
+					<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.endDate">
 					</el-date-picker>
 				</el-form-item>
 				<el-form-item>
@@ -127,10 +123,6 @@ export default {
 		handSelectShipper(data){
 			this.find.companyName = data.companyName
 			this.find.customerID = data.customerID
-		},
-		selectDateRange(date) {
-			this.find.beginDate = date[0]
-			this.find.endDate = date[1]
 		},
 		pageChange(index) {
 			this.pageIndex = index
