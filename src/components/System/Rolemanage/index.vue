@@ -32,6 +32,7 @@
 							<span v-else-if="scope.row.roleType == 'SysMember'">自定义角色</span>
 						</template>
 					</el-table-column>
+					<el-table-column label="用户数量" prop="userNum" align="center"></el-table-column>
 					<el-table-column width="100" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">

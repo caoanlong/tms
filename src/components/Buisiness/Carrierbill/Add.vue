@@ -556,8 +556,8 @@ export default {
 					if (!valid) {
 						this.$nextTick(() => {
 							Message.error($('.el-form-item__error:first').text())
-							return
 						})
+						return
 					}
 					resolve()
 				})

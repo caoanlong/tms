@@ -1472,6 +1472,7 @@ export default {
 		handSelectTruckCategory() {
 			this.truck.truckType = ''
 			this.truck.trailerID = ''
+			this.truck.trailerPlateNo = ''
 		},
 		save() {
 			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'

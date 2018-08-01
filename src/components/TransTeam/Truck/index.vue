@@ -42,7 +42,7 @@
 						<div class="handle fl">操作</div>
 					</div>
 				</div>
-				<TruckItem v-for="(truck, index) in tableData" :key="index" :truck="truck" @refresh="refresh"></TruckItem>
+				<TruckItem v-for="(truck, index) in tableData" :key="index" :truck="truck" :isRefresh="isRefresh" @refresh="refresh"></TruckItem>
 			</div>
 			</div>
 			<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
@@ -71,6 +71,7 @@ export default {
 			count: 0,
 			tableData: [],
 			selectedList: [],
+			isRefresh: 0,
 			rules: {
 				plateNo: [ {min: 1, max: 20, message: '长度在 1 到 20 个字符'} ]
 			},
@@ -151,6 +152,7 @@ export default {
 			}).then(res => {
 				this.tableData = res.records
 				this.count = res.total
+				this.isRefresh++
 			})
 		},
 		handleCommand(e) {

@@ -106,6 +106,7 @@ import SelectSuperCargo from './SelectSuperCargo'
 import Truck from '../../../api/Truck'
 export default {
 	props: {
+		isRefresh: Number,
 		truck: Object
 	},
 	data() {
@@ -140,13 +141,18 @@ export default {
 			}
 		}
 	},
+	watch: {
+		isRefresh() {
+			this.expTooltip()
+		}
+	},
 	computed: {
 		defaultImg: () => defaultImg,
 		resizeImg: () => resizeImg
 	},
 	components: { SelectSuperCargo },
-	created(){
-		this.ExpTooltip()
+	created() {
+		this.expTooltip()
 	},
 	methods: {
 		add(type) {
@@ -190,7 +196,7 @@ export default {
 			this.dialogVisible = false
 			bool && this.$emit('refresh')
 		},
-		ExpTooltip(){
+		expTooltip(){
 			this.truckExp = this.truck.expiredCertificate.split(",")
 			this.primaryDriverExp = this.truck.primaryDriver.expiredCertificate?this.truck.primaryDriver.expiredCertificate.split(","):[]
 			this.secondaryDriverExp = this.truck.secondaryDriver.expiredCertificate?this.truck.secondaryDriver.expiredCertificate.split(","):[]
