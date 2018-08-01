@@ -123,6 +123,7 @@ export default {
 		},
 		pageSizeChange(size) {
 			this.pageSize = size
+			this.pageIndex = 1
 			this.getList() 
 		},
 		selectionChange(data) {

@@ -74,7 +74,11 @@ export default {
 			this.recdeliverycomp.logoUrl = res.length == 0 ? '' : res[0]
 		},
 		handleSelectedArea(data) {
-			this.recdeliverycomp.companyAreaID = data[data.length - 1]
+			if (data) {
+				this.recdeliverycomp.companyAreaID = data[data.length - 1]
+			} else {
+				this.recdeliverycomp.companyAreaID = ''
+			}
 		},
 		save() {
 			this.$refs['ruleForm'].validate(valid => {

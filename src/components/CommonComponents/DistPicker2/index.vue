@@ -80,6 +80,8 @@ export default {
 			} else {
 				if (this.selectList.length > 0) {
 					this.$emit('hand-select', this.selectList.map(item => item.key))
+				} else {
+					this.$emit('hand-select', false)
 				}
 			}
 		}

@@ -6,7 +6,7 @@
             @select="selectRoleChange" 
             border style="width: 100%;max-height:400px" 
             size="mini">
-            <el-table-column type="selection" align="center"></el-table-column>
+            <el-table-column type="selection" align="center" :selectable="(row) => row.roleType != 'SysSuperAdmin'"></el-table-column>
             <el-table-column label="角色" prop="roleName"></el-table-column>
             <el-table-column label="拥有权限">
                 <template slot-scope="scope">

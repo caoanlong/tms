@@ -1,6 +1,6 @@
 <template>
     <el-dialog title="权限设置" :visible.sync="showSetAuth" :show-close="false" :close-on-click-modal="false" width="30%">
-        <el-tree
+        <el-tree 
             :data="menus"
             show-checkbox
             default-expand-all
@@ -21,19 +21,6 @@
 <script>
 import { Message } from 'element-ui'
 import SysRole from '../../../../api/SysRole'
-function walkTree(tree, id, sets) {
-    for (let i = 0; i < tree.length; i++) {
-        const node = tree[i]
-        // console.log(id)
-        if (node.menuID == id && node.menuPID) {
-            // console.log(node.menuPID)
-            sets.add(node.menuPID)
-        }
-        if (node.children && node.children.length > 0) {
-            walkTree(node.children, id, sets)
-        }
-    }
-}
 export default {
     props: {
         showSetAuth: {
@@ -64,12 +51,6 @@ export default {
             this.$emit('selected-auth')
         },
         submitSetAuth() {
-            const sets = new Set(this.selectedMenuId)
-            for (let i = 0; i < this.selectedMenuId.length; i++) {
-                const id = this.selectedMenuId[i]
-                walkTree(this.menus, id, sets)
-            }
-            this.selectedMenuId = Array.from(sets)
             SysRole.addAuthority({
                 roleID: this.setRoleID,
 				menuIDs: this.selectedMenuId.join(',')
@@ -85,11 +66,7 @@ export default {
             })
 		},
         selectMenu(data, isSelected) {
-			if (isSelected) {
-                this.selectedMenuId.push(data.menuID)
-			} else {
-				this.selectedMenuId.splice(this.selectedMenuId.indexOf(data.menuID), 1)
-            }
+            this.selectedMenuId = this.$refs['tree'].getCheckedKeys()
 		}
     }
 }

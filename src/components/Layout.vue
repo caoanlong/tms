@@ -158,7 +158,6 @@
 						<el-col :span="6">
 							<div class="userFace">
 								<ImageUpload :files="[MemDetail.headPic]" @imgUrlBack="handleAvatarSuccess1" :fixed="true" :limitNum="1"></ImageUpload>
-
 							</div>
 						</el-col>
 						<el-col :span="18">
@@ -345,18 +344,17 @@ export default {
 			})
 		},
 		saveMemInfo(){
-			let data = {
-				headPic:this.MemDetail.headPic,
-				realName:this.MemDetail.realName
-			}
-			console.log(this.MemDetail)
-			Member.modify(data).then(res =>{
+			Member.modify({
+				headPic: this.MemDetail.headPic,
+				realName: this.MemDetail.realName
+			}).then(res =>{
 				Message.success('保存成功！')
 				this.accountInfoDialog = false
+				this.$store.dispatch('getUserInfo')
 			})
 		},
 		changePassword(){
-			let data = this.memPwd
+			const data = this.memPwd
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					Member.changePwd(data).then(res =>{
@@ -380,10 +378,10 @@ export default {
             this.companyDetail.areaID = data[data.length - 1]
         },
         handleAvatarSuccess(res) {
-			this.companyDetail.logoUrl = res.length==0?'':res[0]
+			this.companyDetail.logoUrl = res.length == 0 ? '' : res[0]
 		},
         handleAvatarSuccess1(res) {
-			this.MemDetail.headPic = res.length==0?'':res[0]
+			this.MemDetail.headPic = res.length == 0 ? '': res[0]
 		}
 	}
 }

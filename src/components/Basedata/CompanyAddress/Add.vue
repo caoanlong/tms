@@ -102,10 +102,15 @@ export default {
 			this.companyAddress.companyName = data.companyName
 		},
 		handleSelectedArea(data) {
-            this.companyAddress.areaID = data[data.length - 1]
-            if (data[1]) {
-				const location = searchLocationByCity(distData[data[0]][data[1]])
-				this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
+			if (data) {
+				this.companyAddress.areaID = data[data.length - 1]
+				if (data[1]) {
+					const location = searchLocationByCity(distData[data[0]][data[1]])
+					this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
+				}
+			} else {
+				this.companyAddress.areaID = ''
+				this.searchAreaHash = ''
 			}
         },
         handSelectLocation(data) {
