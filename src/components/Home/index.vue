@@ -1,5 +1,10 @@
 <template>
 	<div class="main-content">
+		<!-- <el-form label-width="140px">
+			<el-form-item label="收货地">
+				<dist-picker></dist-picker>
+			</el-form-item>
+		</el-form> -->
 		<el-row :gutter="20">
 			<el-col :span="12">
 				<el-card class="box-card dashboardItem">
@@ -308,6 +313,7 @@ import Carrierbill from "../../api/Carrierbill"
 import Dispatchbill from "../../api/Dispatchbill"
 import Truck from "../../api/Truck"
 import Staff from "../../api/Staff"
+import DistPicker from '../CommonComponents/DistPicker2'
 export default {
 	name: 'home',
 	data() {
@@ -326,11 +332,12 @@ export default {
 			}
 		}
 	},
+	components: { DistPicker },
 	created() {
-		this.getCarrierOrder()
-		this.getDispatchOrder()
-		this.getTruckList()
-		this.getStaffList()
+		// this.getCarrierOrder()
+		// this.getDispatchOrder()
+		// this.getTruckList()
+		// this.getStaffList()
 	},
 	methods: {
 		getCarrierOrder() {

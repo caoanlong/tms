@@ -31,7 +31,7 @@
 						</template>
 					</el-table-column> -->
 					<el-table-column width="80" align="center" fixed="right">
-						<template slot-scope="scope">
+						<template slot-scope="scope" v-if="!scope.row.registerMemberFlag">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
