@@ -137,9 +137,10 @@ export default {
 			this.getList()
 		},
 		getList() {
+			console.log(this.pageIndex)
 			SysRole.find({
-				pageIndex: this.pageIndex,
-				pageSize: this.pageSize,
+				current: this.pageIndex,
+				size: this.pageSize,
 				roleName: this.find.roleName
 			}).then(res => {
 				this.tableData = res.records

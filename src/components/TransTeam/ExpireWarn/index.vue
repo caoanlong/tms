@@ -118,6 +118,7 @@ export default {
 				NextRankEvaluteTime:"技术等级下次评定",
 				SecondSecurityDepositDate:"二次安全保证金",
 				ManagementAgreementExpireDate:"管理协议",
+				NextSecondLevel:"二级维护下次维护",
 				SafetyLiabilityLetterExpireDate:"安全责任书",
 			},
 			DriverOption:{
