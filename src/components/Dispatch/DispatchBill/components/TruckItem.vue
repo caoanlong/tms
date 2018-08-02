@@ -180,16 +180,16 @@ export default {
 				} else {
 					this.truck.superCargo = data
 				}
+				this.expTooltip()
 			}
 			this.$emit('selectTruck', this.truck)
 			this.flag = true
 			this.selectDialogVisible = false
 		},
-		expTooltip(){
+		expTooltip() {
 			this.truckExp = this.truck.expiredCertificate?this.truck.expiredCertificate.split(","):[]
 			this.primaryDriverExp = this.truck.primaryDriver && this.truck.primaryDriver.expiredCertificate?this.truck.primaryDriver.expiredCertificate.split(","):[]
 			this.superCargoExp = this.truck.superCargo && this.truck.superCargo.expiredCertificate?this.truck.superCargo.expiredCertificate.split(","):[]
-			console.log(this.truck.superCargo.expiredCertificate)
 		}
 	}
 }

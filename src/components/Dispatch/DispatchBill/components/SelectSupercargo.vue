@@ -51,9 +51,9 @@
                     <el-tag type="success" size="mini" v-else-if="scope.row.isSecondary == 'Y'">副驾</el-tag>
                     <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                         <div slot="content">
-                            <el-tag size="mini" type="danger" v-for="(item,index) in scope.row.expiredCertificate" :key="index">{{
-                                expireWarnJson[item]
-                            }}</el-tag>
+                            <el-tag size="mini" type="danger" v-for="(item,index) in scope.row.expiredCertificate.split(',')" :key="index">
+                                {{ expireWarnJson[item] }}
+                            </el-tag>
                         </div>
                         <el-tag size="mini" type="danger" v-if="scope.row.expiredCertificate.length>0">到期</el-tag>
                     </el-tooltip>
@@ -132,24 +132,26 @@ export default {
     components: { Page },
     methods: {
         handleCurrentChange(data) {
-            if (this.type == 'primary') {
-                if (data.appStatus != 'Y') {
-                    Message.error('该司机未在APP激活！')
-                    return
+            if (data) {
+                if (this.type == 'primary') {
+                    if (data.appStatus != 'Y') {
+                        Message.error('该司机未在APP激活！')
+                        return
+                    }
+                    if (this.truck.superCargo && this.truck.superCargo.supercargoType == 'SupercargoDriver' 
+                        && data.comSupercargoID == this.truck.superCargo.comSupercargoID) {
+                        Message.error('该司机已经是押运员了！')
+                        return
+                    }
+                } else {
+                    if (this.truck.primaryDriver && this.truck.primaryDriver.supercargoType == 'SupercargoDriver' 
+                        && data.comSupercargoID == this.truck.primaryDriver.comSupercargoID) {
+                        Message.error('该押运员已经是司机了！')
+                        return
+                    }
                 }
-                if (this.truck.superCargo && this.truck.superCargo.supercargoType == 'SupercargoDriver' 
-                    && data.comSupercargoID == this.truck.superCargo.comSupercargoID) {
-                    Message.error('该司机已经是押运员了！')
-                    return
-                }
-            } else {
-                if (this.truck.primaryDriver && this.truck.primaryDriver.supercargoType == 'SupercargoDriver' 
-                    && data.comSupercargoID == this.truck.primaryDriver.comSupercargoID) {
-                    Message.error('该押运员已经是司机了！')
-                    return
-                }
+                this.$emit('control', true, data, this.type)
             }
-            data && this.$emit('control', true, data, this.type)
         },
         search() {
             if (!this.find.shipperDate) {
@@ -199,7 +201,6 @@ export default {
                         supercargoType:item.supercargoType,
                         workStatus: item.workStatus,
                         expiredCertificate: item.expiredCertificate
-                        ? (item.expiredCertificate.indexOf(',') ? item.expiredCertificate.split(',') : [item.expiredCertificate]) : []
                     }
                 })
                 this.total = res.total
@@ -223,7 +224,6 @@ export default {
                         supercargoType:item.supercargoType,
                         workStatus: item.workStatus,
                         expiredCertificate: item.expiredCertificate
-                        ? (item.expiredCertificate.indexOf(',') ? item.expiredCertificate.split(',') : [item.expiredCertificate]) : []
                     }
                 })
                 this.total = res.total

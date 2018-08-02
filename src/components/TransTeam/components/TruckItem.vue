@@ -127,7 +127,6 @@ export default {
 				TankQCExpires:"罐体监测到期 ",
 				SafetyValvesQCExpires:"罐体安全阀监测到期 ",
 				PressureGaugeQCExpires:"罐体压力表监测到期 ",
-				secondaMaintainTime:"二级维护下次维护日期到期 ",
 				NextRankEvaluteTime:"技术等级下次评定到期",
 				SecondSecurityDepositDate:"二次安全保证金到期 ",
 				NextSecondLevel:"二级维护下次维护",
@@ -139,6 +138,23 @@ export default {
 				IntegrityExamineEndTime:"诚信考核证到期 ",
 				LaborContractEndTime:"聘用合同到期 ",
 				EscortLicenseExpireDate:"押运证到期"
+			},
+			expiredCertificate: {
+				SecondSecurityDepositDate,
+				NextRankEvaluteTime,
+				PressureGaugeQCExpires,
+				SafetyValvesQCExpires,
+				TankQCExpires,
+				CargoInsuranceExpireDate,
+				CarrierRiskInsuranceExpires,
+				BizInsuranceExpires,
+				SaliInsuranceExpires,
+				GpsValidEndDate,
+				RoadTransportLicAnnualPeriod,
+				NextSecondLevel,
+				DriverLicExpiresTime,
+				SafetyLiabilityLetterExpireDate,
+				ManagementAgreementExpireDate
 			}
 		}
 	},
