@@ -36,6 +36,7 @@
 				<div class="escortColumn">随行人员</div>
 			</div>
 			<TruckItem 
+				:isRefresh="isRefresh"
 				v-for="(item, index) in truck" 
 				:truck="item" :key="index" 
 				:isSelected="selectedTruck && (selectedTruck.truckID == item.truckID)" 
@@ -68,6 +69,7 @@ export default {
 			pageIndex: 1,
 			pageSize: 10,
 			total: 0,
+			isRefresh: 0,
 			truck: [],
 			dispatchOrderID: this.$route.query.dispatchOrderID
 		}
@@ -153,6 +155,7 @@ export default {
 					}
 				})
 				this.$store.dispatch('setTruck', currentTruck)
+				this.isRefresh++
 			})
 		},
 		back() {
