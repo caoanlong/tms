@@ -171,9 +171,7 @@
 					<el-row>
 						<el-col :span="24">
 							<el-form-item label="所在地区" prop="areaName">
-								<el-cascader style="width:100%" :options="dist" 
-                                change-on-select v-model="selectedArea" @change="handleSelectedArea">
-                            </el-cascader>
+                            	<dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -322,8 +320,7 @@ import TagsView from './CommonComponents/TagsView'
 import Breadcrumb from './CommonComponents/Breadcrumb'
 import { mapGetters } from 'vuex'
 import ImageUpload from './CommonComponents/ImageUpload'
-import dist from '../assets/data/dist.json'
-import distData from '../assets/data/distpicker.data'
+import DistPicker from './CommonComponents/DistPicker2'
 import CompanyInfo from '../api/CompanyInfo'
 import Member from '../api/Member'
 import { defaultImg } from '../assets/icons/icons'
@@ -410,7 +407,8 @@ export default {
 		AppMain,
 		TagsView,
 		Breadcrumb,
-		ImageUpload
+		ImageUpload,
+		DistPicker
 	},
 	methods:{
 		getCompanyInfo() {
@@ -418,16 +416,16 @@ export default {
 				companyID: this.userInfo.companyID
 			}).then(res => {
 				this.companyDetail = res
-				this.selectedArea = areaIdToArrayId(res.areaID)
+				this.selectedArea = areaIdToArrayId(String(res.areaID))
 			})
 		},
 		saveCompanyInfo(){
-			let data = this.memPwd
+			this.companyDetail.areaName = searchAreaByKey(this.companyDetail.areaID)
 			this.$refs['ruleForm1'].validate(valid => {
 				if (valid) {
 					CompanyInfo.modify(this.companyDetail).then(res => {
 						Message.success('保存成功！')
-						this.editCompanyInfoDialog = false
+						this.cancelEditcompanyInfo()
 					})
 				}
 			})
@@ -457,7 +455,6 @@ export default {
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					Member.changePwd(data).then(res =>{
-						console.log(data)
 						Message.success('保存成功！')
 						this.accountInfoDialog = false
 					})
@@ -473,9 +470,13 @@ export default {
 				this.getMemInfo()
 			}
 		},
-		handleSelectedArea(data) {
-            this.companyDetail.areaID = data[data.length - 1]
-        },
+        handleSelectedArea(data) {
+			if (data) {
+				this.companyDetail.areaID = data[data.length - 1]
+			} else {
+				this.companyDetail.areaID = ''
+			}
+		},
         handleAvatarSuccess(res) {
 			this.companyDetail.logoUrl = res.length == 0 ? '' : res[0]
 		},
