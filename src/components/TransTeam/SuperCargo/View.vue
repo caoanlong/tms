@@ -155,7 +155,7 @@
 								</div>
 								<div>
 									<span class="tit">从业资格类别</span>
-									<span class="ctt">类别{{superCargo.qualificationType}}</span>
+									<span class="ctt">{{superCargo.qualificationType}}</span>
 								</div>
 							</el-col>
 							<el-col :span="12">
