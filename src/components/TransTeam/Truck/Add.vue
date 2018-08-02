@@ -1339,17 +1339,17 @@ export default {
 				high: [ { required: true , message: '请输入车高'}, { validator: checkInt } ],
 				loads: [ { required: true , message: '请输入车辆装载重量'}, { validator: checkInt } ],
 				loadVolume: [ { required: true , message: '请输入车辆装载容积'}, { validator: checkInt } ],
-				gpsCostAmount: [ { validator: checkFloat2 } ],
-				saliInsuranceAmount: [ { validator: checkFloat2 } ],
-				saliInsuranceTaxAmount: [ { validator: checkFloat2 } ],
-				bizInsuranceAmount: [ { validator: checkFloat2 } ],
-				carrierRiskInsuranceAmount: [ { validator: checkFloat2 } ],
-				cargoInsuranceAmount: [ { validator: checkFloat2 } ],
-				tankVolume: [ { validator: checkFloat2 } ],
-				securityDepositAmount: [ { validator: checkFloat2 } ],
-				secondSecurityDepositAmount: [ { validator: checkFloat2 } ],
-				managementAgreementAmount: [ { validator: checkFloat2 } ],
-				managementAgreementMoneyPerMonth: [ { validator: checkFloat2 } ]
+				gpsCostAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				saliInsuranceAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				saliInsuranceTaxAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				bizInsuranceAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				carrierRiskInsuranceAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				cargoInsuranceAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				tankVolume: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				securityDepositAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				secondSecurityDepositAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				managementAgreementAmount: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ],
+				managementAgreementMoneyPerMonth: [ { validator: checkFloat2 }, { min: 1, max: 8, message: '长度在 1 到 8 位'} ]
 			}
 		}
 	},
