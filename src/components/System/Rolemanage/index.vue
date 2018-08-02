@@ -23,7 +23,7 @@
 					:data="tableData" 
 					@selection-change="selectChange" 
 					border style="width: 100%" size="mini">
-					<el-table-column type="selection" align="center" width="40"></el-table-column>
+					<el-table-column type="selection" align="center" width="40" :selectable="(row) => row.roleType != 'SysAdmin'"></el-table-column>
 					<el-table-column label="角色名称" prop="roleName" align="center"></el-table-column>
 					<el-table-column label="角色类型" prop="roleType" align="center">
 						<template slot-scope="scope">
