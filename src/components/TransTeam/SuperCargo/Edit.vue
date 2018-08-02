@@ -718,6 +718,7 @@ import { checkTel, checkIDCard, checkDriverLicenseNum } from '../../../common/va
 export default {
 	data() {
 		return {
+			fromRoute:'',
 			titleList: [
 				'基本信息',
 				'身份证',
@@ -821,6 +822,11 @@ export default {
 		}
 	},
 	components: { ImageUpload, SelectPosition },
+	beforeRouteEnter (to, from, next) {
+		next(vm => {
+			vm.fromRoute = from.name
+		})
+	},
 	created() {
 		this.getInfo()
 	},
@@ -915,7 +921,7 @@ export default {
 				} else {
 					SuperCargo.update(this.superCargo).then(res => {
 						Message.success(res.data.msg)
-						this.$router.push({name: 'supercargo'})
+						this.$router.push({name: this.fromRoute})
 					})
 				}
 			})
