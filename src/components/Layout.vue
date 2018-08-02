@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<el-dialog :visible.sync="companyInfoDialog" custom-class="companyInfoDialog">
-		<router-link tag="div" class="baseInfo">
+		<div class="baseInfo"  @click="viewCompanyInfoDialog = true">
 			<div class="companylogo">
 				<img :src="companyDetail.logoUrl ? resizeImg(companyDetail.logoUrl, '_100x100.') : defaultImg" />
 			</div>
@@ -22,7 +22,7 @@
 			<p class="companyArea">所在地区：{{companyDetail.areaName}}</p>
 			<p class="companyAddress">联系地址：{{companyDetail.address}}</p>
 			<p class="servicesTel">客服电话：{{companyDetail.phone}}</p>
-		</router-link>
+		</div>
 		<div class="otherInfo">
 			<p class="companyType">企业类型：{{companyDetail.enterpriseType}}</p>
 			<p class="companySort">所属行业：{{companyDetail.industry}}</p>
@@ -31,6 +31,103 @@
 			<span class="sysV">危化标准版</span>
 			<span class="editCompanyInfo" @click="editCompanyInfoDialog = true"><svg-icon icon-class="edit"></svg-icon> 修改企业资料</span>
 		</div>
+		<!-- 企业资料详情 -->
+		<el-dialog title="企业资料详情" :visible.sync="viewCompanyInfoDialog" append-to-body custom-class="viewCompanyInfoDialog" top="5vh">
+			
+			<el-form label-width="140px" size="small">
+				<el-row :gutter="20">
+					<el-col :span="24">
+						<el-form-item label="企业Logo">
+							<ImageUpload :files="[companyDetail.logoUrl]" @imgUrlBack="handleAvatarSuccess" :fixed="true" class="fl" :limitNum="1" :isPreview="true"/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="24">
+						<el-form-item label="企业名称" prop="name">
+							<p>{{companyDetail.name}}</p>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row :gutter="20">
+						<el-col :span="12">
+							<el-form-item label="企业类型">
+								<p>{{companyDetail.enterpriseType}}</p>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="所属行业">
+								<p>{{companyDetail.industry}}</p>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="24">
+							<el-form-item label="所在地区">
+								<p v-if="companyDetail.areaID">{{companyDetail.areaID | searchAreaByKey}}</p>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="24">
+							<el-form-item label="详细地址" prop="address">
+								<p>{{companyDetail.address}}</p>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row :gutter="20">
+						<el-col :span="12">
+							<el-form-item label="联系人" prop="contactsName">
+								<p>{{companyDetail.contactsName}}</p>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="联系电话" prop="contactsMobile">
+								<p>{{companyDetail.contactsMobile}}</p>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row :gutter="20">
+						<el-col :span="24">
+							<el-form-item label="是否经营性运输">
+								<p v-if="companyDetail.operationalFlag=='Y'">是</p>
+								<p v-else>否</p>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row :gutter="20">
+						<el-col :span="12">
+							<el-form-item label="传真">
+								<p>{{companyDetail.fax}}</p>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="客服电话">
+								<p>{{companyDetail.phone}}</p>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row :gutter="20">
+						<el-col>
+							<el-form-item label="邮政编码">
+								<p>{{companyDetail.zipCode}}</p>
+							</el-form-item>
+						</el-col>
+						<el-col>
+							<el-form-item label="邮箱">
+								<p>{{companyDetail.email}}</p>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="24">
+							<el-form-item label="经营类型">
+								<p>{{companyDetail.businessType}}</p>
+							</el-form-item>
+						</el-col>
+					</el-row>
+			</el-form>
+		</el-dialog>
+		<!-- 企业资料详情 -->
+		<!-- 修改企业资料 -->
 		<el-dialog title="修改企业资料" :visible.sync="editCompanyInfoDialog" append-to-body custom-class="editCompanyInfoDialog" top="5vh">
 			<el-form label-width="140px" size="small" :model="companyDetail" :rules="rules1" ref="ruleForm1">
 				<el-row :gutter="20">
@@ -149,6 +246,7 @@
 					</el-row>
 			</el-form>
 		</el-dialog>
+		<!-- 修改企业资料 -->
 	</el-dialog>
 	<el-dialog title="账号设置" :visible.sync="accountInfoDialog" custom-class="accountInfoDialog" top="10vh">
 		<el-tabs tab-position="left" style="height:300px">
@@ -229,13 +327,14 @@ import distData from '../assets/data/distpicker.data'
 import CompanyInfo from '../api/CompanyInfo'
 import Member from '../api/Member'
 import { defaultImg } from '../assets/icons/icons'
-import { resizeImg,areaIdToArrayId } from '../common/utils'
+import { resizeImg,areaIdToArrayId,searchAreaByKey } from '../common/utils'
 import { checkTel,checkZipCode, checkEmail,checkFax} from '../common/validator'
 export default {
 	data(){
 		return{
 			companyInfoDialog:false,
 			editCompanyInfoDialog: false,
+			viewCompanyInfoDialog:false,
 			accountInfoDialog: false,
 			selectedArea: [],
 			companyDetail:{},
@@ -485,4 +584,11 @@ export default {
 		p
 			font-size 14px
 			color #999
+.viewCompanyInfoDialog
+	p
+		margin 0
+		line-height 32px
+		min-height 32px
+		border-bottom 1px solid #ddd
+		color #999
 </style>
