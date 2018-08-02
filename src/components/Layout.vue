@@ -128,7 +128,7 @@
 		</el-dialog>
 		<!-- 企业资料详情 -->
 		<!-- 修改企业资料 -->
-		<el-dialog title="修改企业资料" :visible.sync="editCompanyInfoDialog" append-to-body custom-class="editCompanyInfoDialog" top="5vh">
+		<el-dialog title="修改企业资料" :visible.sync="editCompanyInfoDialog" append-to-body custom-class="editCompanyInfoDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
 			<el-form label-width="140px" size="small" :model="companyDetail" :rules="rules1" ref="ruleForm1">
 				<el-row :gutter="20">
 					<el-col :span="24">

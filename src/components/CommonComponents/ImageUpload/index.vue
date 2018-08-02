@@ -112,6 +112,12 @@ export default {
 			if (this.$refs.uploadFile.value != '') {
 				let arr = this.$refs.uploadFile.files[0].name.split('.')
 				let suffix = arr[arr.length-1].toLowerCase()
+				let picSize = this.$refs.uploadFile.files[0].size
+				console.log(picSize)
+				if(picSize>5120000){
+					Message.error('图片大小不能大于5MB')
+					return
+				}
 				if (suffix != 'jpg' && suffix != 'jpeg' && suffix != 'png' && suffix != 'gif') {
 					Message.error('图片格式只支持jpg、png和gif！')
 					return
