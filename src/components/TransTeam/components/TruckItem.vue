@@ -138,23 +138,6 @@ export default {
 				IntegrityExamineEndTime:"诚信考核证到期 ",
 				LaborContractEndTime:"聘用合同到期 ",
 				EscortLicenseExpireDate:"押运证到期"
-			},
-			expiredCertificate: {
-				SecondSecurityDepositDate,
-				NextRankEvaluteTime,
-				PressureGaugeQCExpires,
-				SafetyValvesQCExpires,
-				TankQCExpires,
-				CargoInsuranceExpireDate,
-				CarrierRiskInsuranceExpires,
-				BizInsuranceExpires,
-				SaliInsuranceExpires,
-				GpsValidEndDate,
-				RoadTransportLicAnnualPeriod,
-				NextSecondLevel,
-				DriverLicExpiresTime,
-				SafetyLiabilityLetterExpireDate,
-				ManagementAgreementExpireDate
 			}
 		}
 	},
