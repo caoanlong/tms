@@ -116,6 +116,8 @@ export default {
 			this.find.keyword = ''
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.count = 0
+			this.tableData = []
 			this.getList()
 		},
 		pageChange(index) {
@@ -137,6 +139,8 @@ export default {
 		search() {
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.count = 0
+			this.tableData = []
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
 					this.getList()

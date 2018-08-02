@@ -29,7 +29,7 @@
 		</div>
 		<div class="footer">
 			<span class="sysV">危化标准版</span>
-			<span class="editCompanyInfo" @click="editCompanyInfoDialog = true"><svg-icon icon-class="edit"></svg-icon> 修改企业资料</span>
+			<span class="editCompanyInfo" @click="modifyCompany"><svg-icon icon-class="edit"></svg-icon> 修改企业资料</span>
 		</div>
 		<!-- 企业资料详情 -->
 		<el-dialog title="企业资料详情" :visible.sync="viewCompanyInfoDialog" append-to-body custom-class="viewCompanyInfoDialog" top="5vh">
@@ -411,6 +411,10 @@ export default {
 		DistPicker
 	},
 	methods:{
+		modifyCompany() {
+			this.editCompanyInfoDialog = true
+			this.getCompanyInfo()
+		},
 		getCompanyInfo() {
 			CompanyInfo.findById({
 				companyID: this.userInfo.companyID
@@ -422,6 +426,7 @@ export default {
 		saveCompanyInfo(){
 			this.companyDetail.areaName = searchAreaByKey(this.companyDetail.areaID)
 			this.$refs['ruleForm1'].validate(valid => {
+				console.log(valid)
 				if (valid) {
 					CompanyInfo.modify(this.companyDetail).then(res => {
 						Message.success('保存成功！')
@@ -471,6 +476,7 @@ export default {
 			}
 		},
         handleSelectedArea(data) {
+			console.log(data)
 			if (data) {
 				this.companyDetail.areaID = data[data.length - 1]
 			} else {
