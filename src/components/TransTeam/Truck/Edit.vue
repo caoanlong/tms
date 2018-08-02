@@ -1019,6 +1019,7 @@ import { checkPlateNo, checkInt, checkFloat2, limitLength8 } from '../../../comm
 export default {
 	data() {
 		return {
+			fromRoute:'',
 			titleList: [
 				'基本信息',
 				'所属单位/车主',
@@ -1197,6 +1198,11 @@ export default {
 		}
 	},
 	components: { ImageUpload, DistPicker, SelectPosition },
+	beforeRouteEnter (to, from, next) {
+		next(vm => {
+			vm.fromRoute = from.name
+		})
+	},
 	created() {
 		this.getInfo()
 	},
@@ -1327,7 +1333,7 @@ export default {
 					// delete this.truck.trailerPlateNo
 					Truck.update(truckInfo).then(res => {
 						Message.success(res.data.msg)
-						this.$router.push({name: 'truck'})
+						this.$router.push({name: this.fromRoute})
 					})
 				}
 			})
