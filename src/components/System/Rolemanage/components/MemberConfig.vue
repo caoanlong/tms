@@ -4,7 +4,7 @@
             ref="memberTable"
             :data="members" 
             height="400"
-            @select="selectMemberChange" 
+            @selection-change="selectMemberChange" 
             border style="width: 100%" 
             size="mini">
             <el-table-column type="selection" align="center"></el-table-column>
