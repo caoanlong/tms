@@ -170,7 +170,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="24">
-							<el-form-item label="所在地区" prop="areaName">
+							<el-form-item label="所在地区" prop="areaID">
                             	<dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
 							</el-form-item>
 						</el-col>
@@ -365,7 +365,7 @@ export default {
 				name: [
 					{required: true, message: '请输入企业名称'},
 				],
-				areaName: [
+				areaID: [
 					{required: true, message: '请选择公司所在区域'},
 				],
 				address: [
