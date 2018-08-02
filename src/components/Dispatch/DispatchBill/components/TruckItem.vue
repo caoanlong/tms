@@ -109,6 +109,7 @@ export default {
 			type: Boolean,
 			default: false
 		},
+		isRefresh: Number,
 		truck: {
 			type: Object,
 			default: () => {}
@@ -146,6 +147,11 @@ export default {
 				LaborContractEndTime:"聘用合同到期 ",
 				EscortLicenseExpireDate:"押运证到期"
 			}
+		}
+	},
+	watch: {
+		isRefresh() {
+			this.expTooltip()
 		}
 	},
 	created() {
