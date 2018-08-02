@@ -130,6 +130,7 @@ export default {
 				secondaMaintainTime:"二级维护下次维护日期到期 ",
 				NextRankEvaluteTime:"技术等级下次评定到期",
 				SecondSecurityDepositDate:"二次安全保证金到期 ",
+				NextSecondLevel:"二级维护下次维护",
 				ManagementAgreementExpireDate:"管理协议到期 ",
 				SafetyLiabilityLetterExpireDate:"安全责任书到期",
 				IdCardExpirationTime:"身份证到期 ",
