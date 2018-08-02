@@ -19,9 +19,9 @@
 			</div>
 			<input type="file" name="" @change.stop="addImg" ref="uploadFile"/>
 		</div>
-		<el-dialog title="裁剪图片" :visible.sync="isShowCropper">
+		<el-dialog title="裁剪图片" :visible.sync="isShowCropper" :modal="false">
 			<vueCropper
-				style="height: 600px" 
+				style="height: 600px;" 
 				ref="cropper"
 				:autoCrop="true"
 				:autoCropWidth="200"
@@ -141,19 +141,23 @@ export default {
 			})
 		},
 		uploadFile(data, cb) {
-			let url = baseURL + "/sys/picture/upload"
-			let headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
-			let params = formDataReq({
+			const url = baseURL + "/sys/picture/upload"
+			const headers = { 'Content-type': 'multipart/form-data;charset=UTF-8' }
+			const params = formDataReq({
 				"file": data
 			})
 			axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 			axios.post(url, params, headers).then(res => {
 				this.fileUrl.push(res.data.data)
 				this.$emit('imgUrlBack', this.fileUrl)
-				this.isUploaded = false
+				setTimeout(() => {
+					this.isUploaded = false
+				}, 1500)
 				cb && cb()
 			}).catch(err => {
-				this.isUploaded = false
+				setTimeout(() => {
+					this.isUploaded = false
+				}, 1500)
 				console.log('服务器异常' + err)
 			})
 		},
@@ -175,80 +179,81 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-	.imgUpload
-		.imgLi
-			float left
-			border 1px solid #f0f0f0
+.imgUpload
+	z-index 9999
+	.imgLi
+		float left
+		border 1px solid #f0f0f0
+		border-radius 6px
+		text-align center
+		position relative
+		margin 0 5px 5px 0
+		.controller
+			position absolute
+			top 0
+			left 0
+			width 100%
+			height 100%
 			border-radius 6px
-			text-align center
-			position relative
-			margin 0 5px 5px 0
-			.controller
-				position absolute
-				top 0
-				left 0
-				width 100%
-				height 100%
-				border-radius 6px
-				background-color rgba(0, 0, 0, .5)
-				display none
-				.controllerBtn
-					position absolute
-					left 0
-					top 0
-					right 0
-					bottom 0
-					margin auto
-					width 80px
-					height 40px
-					cursor pointer
-					display flex
-					.perviewBtn
-						flex 1
-						width 40px
-						height 40px
-						background-image url('../../../assets/imgs/perview.png')
-						background-repeat no-repeat
-						background-size 26px
-						background-position center
-					.delBtn
-						flex 1
-						width 40px
-						height 40px
-						background-image url('../../../assets/imgs/trush.png')
-						background-repeat no-repeat
-						background-size 26px
-						background-position center
-			img
-				display block
-				width 100%
-				height 100%
-				border-radius 6px
-			&:hover
-				.controller
-					display block
-		.addBtn
-			float left
-			border 1px dashed #d9d9d9
-			border-radius 6px
-			color #8c939d
-			position relative
-			text-align center
-			margin 0 5px 5px 0
-			&:hover
-				border-color #409eff
-			.addIcon
+			background-color rgba(0, 0, 0, .5)
+			display none
+			.controllerBtn
 				position absolute
 				left 0
 				top 0
 				right 0
 				bottom 0
 				margin auto
-				width 100%
-				height 52px
-			input
+				width 80px
+				height 40px
+				cursor pointer
+				display flex
+				.perviewBtn
+					flex 1
+					width 40px
+					height 40px
+					background-image url('../../../assets/imgs/perview.png')
+					background-repeat no-repeat
+					background-size 26px
+					background-position center
+				.delBtn
+					flex 1
+					width 40px
+					height 40px
+					background-image url('../../../assets/imgs/trush.png')
+					background-repeat no-repeat
+					background-size 26px
+					background-position center
+		img
+			display block
+			width 100%
+			height 100%
+			border-radius 6px
+		&:hover
+			.controller
 				display block
-				width 100%
-				height 100%
-				opacity 0
+	.addBtn
+		float left
+		border 1px dashed #d9d9d9
+		border-radius 6px
+		color #8c939d
+		position relative
+		text-align center
+		margin 0 5px 5px 0
+		&:hover
+			border-color #409eff
+		.addIcon
+			position absolute
+			left 0
+			top 0
+			right 0
+			bottom 0
+			margin auto
+			width 100%
+			height 52px
+		input
+			display block
+			width 100%
+			height 100%
+			opacity 0
 </style>

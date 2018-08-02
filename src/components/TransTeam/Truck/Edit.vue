@@ -1312,7 +1312,6 @@ export default {
 			this.truck.trailerID = data.truckID
 		},
 		save() {
-			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 			if (!this.truck.primaryDriverName) this.truck.primaryDriver = ''
 			if (!this.truck.secondaryDriverName) this.truck.secondaryDriver = ''
 			this.$refs['ruleForm'].validate(valid => {
@@ -1323,6 +1322,7 @@ export default {
 					})
 				} else {
 					const truckInfo = Object.assign({}, this.truck)
+					truckInfo.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 					delete truckInfo.plateNo
 					delete truckInfo.truckCategory
 					// delete this.truck.trailerPlateNo

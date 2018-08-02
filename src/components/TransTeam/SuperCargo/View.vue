@@ -33,7 +33,7 @@
 							<el-col :span="9">
 								<div>
 									<span class="tit">性别</span>
-									<span class="ctt">{{superCargo.sex == 'Y' ? '男' : '女'}}</span>
+									<span class="ctt">{{superCargo.sex == 'M' ? '男' : '女'}}</span>
 								</div>
 								<div>
 									<span class="tit">合作关系</span>

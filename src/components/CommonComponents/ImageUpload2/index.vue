@@ -156,19 +156,23 @@ export default {
 			})
 		},
 		uploadFile(data, cb) {
-			let url = baseURL + "/sys/picture/upload"
-			let headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
-			let params = formDataReq({
+			const url = baseURL + "/sys/picture/upload"
+			const headers = {'Content-type':'multipart/form-data;charset=UTF-8'}
+			const params = formDataReq({
 				"file": data
 			})
 			axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 			axios.post(url, params, headers).then(res => {
 				this.fileUrl.push(res.data.data)
 				this.$emit('imgUrlBack', this.fileUrl)
-				this.isUploaded = false
+				setTimeout(() => {
+					this.isUploaded = false
+				}, 1500)
 				cb && cb()
 			}).catch(err => {
-				this.isUploaded = false
+				setTimeout(() => {
+					this.isUploaded = false
+				}, 1500)
 				console.log('服务器异常' + err)
 			})
 		},

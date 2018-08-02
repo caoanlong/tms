@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<el-dialog :visible.sync="companyInfoDialog" custom-class="companyInfoDialog">
-		<div class="baseInfo">
+		<router-link tag="div" class="baseInfo">
 			<div class="companylogo">
 				<img :src="companyDetail.logoUrl ? resizeImg(companyDetail.logoUrl, '_100x100.') : defaultImg" />
 			</div>
@@ -22,7 +22,7 @@
 			<p class="companyArea">所在地区：{{companyDetail.areaName}}</p>
 			<p class="companyAddress">联系地址：{{companyDetail.address}}</p>
 			<p class="servicesTel">客服电话：{{companyDetail.phone}}</p>
-		</div>
+		</router-link>
 		<div class="otherInfo">
 			<p class="companyType">企业类型：{{companyDetail.enterpriseType}}</p>
 			<p class="companySort">所属行业：{{companyDetail.industry}}</p>

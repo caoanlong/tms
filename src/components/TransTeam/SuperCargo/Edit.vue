@@ -14,7 +14,7 @@
 							<el-col :span="12">
 								<el-form-item label="性别" prop="sex">
 									<el-select placeholder="请选择" style="width:100%" v-model="superCargo.sex">
-										<el-option label="男" value="Y"></el-option>
+										<el-option label="男" value="M"></el-option>
 										<el-option label="女" value="F"></el-option>
 									</el-select>
 								</el-form-item>

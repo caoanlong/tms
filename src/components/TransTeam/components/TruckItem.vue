@@ -198,8 +198,8 @@ export default {
 		},
 		expTooltip(){
 			this.truckExp = this.truck.expiredCertificate.split(",")
-			this.primaryDriverExp = this.truck.primaryDriver.expiredCertificate?this.truck.primaryDriver.expiredCertificate.split(","):[]
-			this.secondaryDriverExp = this.truck.secondaryDriver.expiredCertificate?this.truck.secondaryDriver.expiredCertificate.split(","):[]
+			this.primaryDriverExp = this.truck.primaryDriver && this.truck.primaryDriver.expiredCertificate ? this.truck.primaryDriver.expiredCertificate.split(","):[]
+			this.secondaryDriverExp = this.truck.secondaryDriver && this.truck.secondaryDriver.expiredCertificate ? this.truck.secondaryDriver.expiredCertificate.split(","):[]
 		}
 	}
 }

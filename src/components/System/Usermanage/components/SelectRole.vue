@@ -3,6 +3,7 @@
         <el-table 
             ref="roleTable"
             :data="roles" 
+            height="250"
             @select="selectRoleChange" 
             border style="width: 100%;max-height:400px" 
             size="mini">
@@ -80,7 +81,10 @@ export default {
             })
         },
         getRoleList() {
-            SysMember.roleList({ memberID: this.memberID }).then(res => {
+            SysMember.roleList({
+                size: 1000,
+                memberID: this.memberID
+            }).then(res => {
                 this.roles = res.data.data
                 this.selectedRoles = this.roles.filter(item => item.hasRole)
                 this.$nextTick(() => {

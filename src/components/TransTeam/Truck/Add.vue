@@ -1475,9 +1475,10 @@ export default {
 			this.truck.trailerPlateNo = ''
 		},
 		save() {
-			this.truck.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 			if (!this.truck.primaryDriverName) this.truck.primaryDriver = ''
 			if (!this.truck.secondaryDriverName) this.truck.secondaryDriver = ''
+			const data = Object.assign({}, this.truck)
+			data.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) {
 					this.$nextTick(() => {
@@ -1485,7 +1486,7 @@ export default {
 						return
 					})
 				} else {
-					Truck.add(this.truck).then(res => {
+					Truck.add(data).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'truck'})
 					})
