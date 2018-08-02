@@ -159,6 +159,16 @@ export const checkArrayNull = (rule, value, callback) => {
 		callback()
 	}
 }
+
+// 限制长度8
+export const limitLength8 = (rule, value, callback) => {
+	if (value.length > 8) {
+		callback(new Error('长度不能超过8'))
+	} else {
+		callback()
+	}
+}
+
 // 限制长度50
 export const limitLength50 = (rule, value, callback) => {
 	if (value.length > 50) {
