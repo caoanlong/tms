@@ -1198,7 +1198,6 @@ export default {
 	},
 	components: { ImageUpload, DistPicker, SelectPosition },
 	created() {
-		this.getTrailers()
 		this.getInfo()
 	},
 	mounted() {
