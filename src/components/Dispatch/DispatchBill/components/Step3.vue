@@ -130,6 +130,7 @@ export default {
 				Message.error('装车时间必填！')
 				return
 			}
+			this.truck = []
 			Dispatchbill.findTrucks({
 				current: this.pageIndex,
 				size: this.pageSize,

@@ -4,7 +4,7 @@
             ref="roleTable"
             :data="roles" 
             height="250"
-            @select="selectRoleChange" 
+            @selection-change="selectRoleChange" 
             border style="width: 100%;max-height:400px" 
             size="mini">
             <el-table-column type="selection" align="center" :selectable="(row) => row.roleType != 'SysSuperAdmin'"></el-table-column>
@@ -54,7 +54,7 @@ export default {
     },
     watch: {
         showSelectRole(newVal) {
-            newVal && this.getRoleList()
+            this.getRoleList()
         }
     },
     methods: {
@@ -75,8 +75,9 @@ export default {
         },
         closeTag(id) {
             this.selectedRoles.splice(this.selectedRoles.map(item => item.roleID).indexOf(id), 1)
+            const list = Array.from(this.selectedRoles)
             this.$refs.roleTable.clearSelection()
-            this.selectedRoles.forEach(row => {
+            list.forEach(row => {
                 this.$refs.roleTable.toggleRowSelection(row)
             })
         },
