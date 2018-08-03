@@ -1,6 +1,6 @@
 <template>
     <div class="dist-picker">
-        <div class="dist-input" :style="{'height': height + 'px', 'line-height': height + 'px'}" @click.stop="clickPicker">
+        <div class="dist-input" :class="valid" :style="{'height': height + 'px', 'line-height': height + 'px'}" @click.stop="clickPicker">
             <span class="dist-placeholder" v-if="selectList.length == 0">请选择</span>
             <span v-else>{{selectList.map(item => item.value).join(' / ')}}</span>
             <span class="arrow" :class="status ? 'active' : ''"></span>
@@ -46,14 +46,15 @@ export default {
 			type: Number,
 			default: 32
 		},
-		distList: Array
+		distList: Array,
 	},
     data() {
         return {
 			status: false,
 			level: 1,
 			list: [],
-			selectList: []
+			selectList: [],
+			valid: ''
         }
 	},
 	watch: {
@@ -129,6 +130,12 @@ export default {
 			this.selectList = []
 			this.list = []
 			this.status = false
+		},
+		/**
+		 * @param status(err, pass)
+		 */
+		validate(status) {
+			this.valid = status
 		}
     }
 }
@@ -144,6 +151,10 @@ $blue = #409eff
 		color #666
 		border 1px solid #dcdfe6
 		border-radius 4px
+		&.pass
+			border 1px solid #67c23a
+		&.err
+			border 1px solid #f56c6c
 		.arrow
 			position absolute
 			top 11px

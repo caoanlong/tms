@@ -58,12 +58,12 @@ export default {
             this.selectedMembers = data
 		},
 		getMembers() {
+            this.members = []
             SysRole.findMemberList({ roleID: this.setRoleID}).then(res => {
                 this.members = res.memList
                 this.selectedMembers = this.members.filter(item => item.checked == 'Y')
                 this.$nextTick(() => {
                     this.selectedMembers.forEach(row => {
-                        console.log(row.realName)
                         this.$refs.memberTable.toggleRowSelection(row)
                     })
                 })

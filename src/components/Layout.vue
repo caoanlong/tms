@@ -145,7 +145,7 @@
 				</el-row>
 				<el-row :gutter="20">
 						<el-col :span="12">
-							<el-form-item label="企业类型">
+							<el-form-item label="企业类型" prop="enterpriseType">
 								<el-select style="width: 100%" placeholder="请选择企业类型" v-model="companyDetail.enterpriseType">
 									<el-option label="其他" value="其他"></el-option>
 									<el-option label="原材料生产商" value="原材料生产商"></el-option>
@@ -158,7 +158,7 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="所属行业">
+							<el-form-item label="所属行业" prop="industry">
 								<el-select style="width: 100%" placeholder="请选择所属行业" v-model="companyDetail.industry">
 									<el-option label="其他" value="其他"></el-option>
 									<el-option label="危险品" value="危险品"></el-option>
@@ -171,7 +171,7 @@
 					<el-row>
 						<el-col :span="24">
 							<el-form-item label="所在地区" prop="areaID">
-                            	<dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
+                            	<dist-picker ref="distPicker" :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -228,7 +228,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="24">
-							<el-form-item label="经营类型">
+							<el-form-item label="经营类型" prop="businessType">
 								<el-input type="textarea" resize="none" v-model="companyDetail.businessType">
 								</el-input>
 							</el-form-item>
@@ -359,33 +359,19 @@ export default {
 				],
 			},
 			rules1: {
-				logoUrl: [
-					{required: true, message: '请上传公司logo'},
-				],
-				name: [
-					{required: true, message: '请输入企业名称'},
-				],
-				areaID: [
-					{required: true, message: '请选择公司所在区域'},
-				],
-				address: [
-					{required: true, message: '请输入公司详细地址'},
-				],
-				contactsMobile: [
-					{validator: checkTel},
-				],
-				phone: [
-					{validator: checkTel},
-				],
-				fax: [
-					{validator: checkFax},
-				],
-				zipCode:[
-					{validator: checkZipCode}
-				],
-				email:[
-					{validator: checkEmail}
-				]
+				logoUrl: [ {required: true, message: '请上传公司logo'} ],
+				name: [ {required: true, message: '请输入企业名称'} ],
+				enterpriseType: [ {min: 0} ],
+				industry: [ {min: 0} ],
+				areaID: [ {required: true, message: '请选择公司所在区域'} ],
+				address: [ {required: true, message: '请输入公司详细地址'} ],
+				contactsName: [ {min: 0} ],
+				contactsMobile: [ {validator: checkTel} ],
+				phone: [ {validator: checkTel} ],
+				fax: [ {validator: checkFax} ],
+				zipCode:[ {validator: checkZipCode} ],
+				email:[ {validator: checkEmail} ],
+				businessType:[ {min: 0} ]
 			}
 		}
 	},
@@ -424,15 +410,17 @@ export default {
 			})
 		},
 		saveCompanyInfo(){
-			this.companyDetail.areaName = searchAreaByKey(this.companyDetail.areaID)
-			this.$refs['ruleForm1'].validate(valid => {
-				console.log(valid)
-				if (valid) {
-					CompanyInfo.modify(this.companyDetail).then(res => {
-						Message.success('保存成功！')
-						this.cancelEditcompanyInfo()
-					})
+			this.$refs['ruleForm1'].validate((valid, object) => {
+				if (!valid) {
+					if (object.areaID) this.$refs['distPicker'].validate('err')
+					return
 				}
+				this.$refs['distPicker'].validate('pass')
+				this.companyDetail.areaName = searchAreaByKey(this.companyDetail.areaID)
+				CompanyInfo.modify(this.companyDetail).then(res => {
+					Message.success('保存成功！')
+					this.cancelEditcompanyInfo()
+				})
 			})
 		},
 		cancelEditcompanyInfo(){
@@ -476,7 +464,6 @@ export default {
 			}
 		},
         handleSelectedArea(data) {
-			console.log(data)
 			if (data) {
 				this.companyDetail.areaID = data[data.length - 1]
 			} else {

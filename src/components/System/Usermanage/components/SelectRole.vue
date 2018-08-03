@@ -82,6 +82,7 @@ export default {
             })
         },
         getRoleList() {
+            this.roles = []
             SysMember.roleList({
                 size: 1000,
                 memberID: this.memberID

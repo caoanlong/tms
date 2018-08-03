@@ -5,7 +5,7 @@
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="cargo" :rules="rules" ref="ruleForm" size="small">
-						<el-form-item label="发货单位" prop="customerID">
+						<el-form-item label="发货单位">
 							<el-autocomplete  style="width:100%"
 								value-key="companyName" 
 								v-model="cargo.shipperCompanyName"
@@ -124,7 +124,6 @@ export default {
 			},
 			isFold:false,
 			rules: {
-				customerID: [{required: true, message: '请选择发货单位'}],
 				cargoName: [{required: true, message: '请输入货物名称'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cargoType: [{required: true, message: '请选择货物类型'}],
 				dangerousCoodsCategory: [{required: true, message: '请输入危险品类别'}],
@@ -168,19 +167,20 @@ export default {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				CargoGeneralName.add(this.cargo).then(res => {
+				const data = Object.assign({}, this.cargo)
+				if (!data.customerID) data.customerID = 1
+				CargoGeneralName.add(data).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'cargo'})
 				})
 			})
 		},
 		getShipperCompanys(queryString, cb) {
+			this.cargo.customerID = ''
 			Customer.suggest({
 				customerType: 'Shipper',
 				companyName: queryString
-			}).then(res => {
-				cb(res)
-			})
+			}).then(res => { cb(res) })
 		},
 		handSelectShipper(data){
 			this.cargo.customerID = data.customerID
