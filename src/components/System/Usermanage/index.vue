@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="姓名">
-						<el-input placeholder="姓名" v-model="find.realName"></el-input>
+						<el-input placeholder="请输入员工姓名" v-model="find.realName"></el-input>
 					</el-form-item>
 					<el-form-item label="手机号">
-						<el-input placeholder="登录名" v-model="find.mobile"></el-input>
+						<el-input placeholder="请输入员工手机号" v-model="find.mobile"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
