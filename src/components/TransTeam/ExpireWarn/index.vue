@@ -181,8 +181,6 @@ export default {
 		search() {
 			this.pageIndex = 1
 			this.pageSize = 10
-			this.total = 0
-			this.tableData = []
 			this.getList()
 		},
 		reset() {
@@ -191,8 +189,6 @@ export default {
 			this.findexpiredCertificate=''
 			this.pageIndex = 1
 			this.pageSize = 10
-			this.total = 0
-			this.tableData = []
 			this.getList()
 		},
 		pageChange(index) {
@@ -233,6 +229,7 @@ export default {
 			return extension || extension2 && isLt2M
 		},
 		getList() {
+			this.tableData = []
 			RecordWarn.findList({
 				current: this.pageIndex,
 				size: this.pageSize,

@@ -38,7 +38,7 @@ export default {
     },
     watch: {
         showSetMember(newVal) {
-            newVal && this.getMembers()
+            this.getMembers()
         }
     },
     methods: {
@@ -63,6 +63,7 @@ export default {
                 this.selectedMembers = this.members.filter(item => item.checked == 'Y')
                 this.$nextTick(() => {
                     this.selectedMembers.forEach(row => {
+                        console.log(row.realName)
                         this.$refs.memberTable.toggleRowSelection(row)
                     })
                 })

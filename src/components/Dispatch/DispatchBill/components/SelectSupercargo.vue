@@ -180,6 +180,7 @@ export default {
 			this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList() 
         },
         getDriverList() {
+            this.superCargos = []
 			Dispatchbill.findDrivers({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -208,6 +209,7 @@ export default {
 			})
         },
         getSuperCagoList() {
+            this.superCargos = []
 			Dispatchbill.findStaffs({
 				current: this.pageIndex,
 				size: this.pageSize,

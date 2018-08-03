@@ -123,6 +123,7 @@ export default {
 			this.getList() 
         },
         getList() {
+            this.superCargos = []
 			Truck.findDriverList({
 				current: this.pageIndex,
 				size: this.pageSize,
