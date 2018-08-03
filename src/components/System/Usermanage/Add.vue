@@ -96,7 +96,7 @@ export default {
 		},
 		getRoles() {
 			SysRole.find({
-				pageSize: 1000
+				size: 1000
 			}).then(res => {
 				this.roles = res.records
 			})

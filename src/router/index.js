@@ -514,14 +514,6 @@ let routerMap = [
 						component: () => import('../components/System/Usermanage/Add')
 					},
 					{
-						path: '/edituser',
-						name: 'edituser',
-						meta: {
-							title: '编辑账号'
-						},
-						component: () => import('../components/System/Usermanage/Edit')
-					},
-					{
 						path: '/viewuser',
 						name: 'viewuser',
 						meta: {
