@@ -13,7 +13,6 @@
                         :files="loadImgs" 
                         :limitNum="10" 
                         @imgUrlBack="imgLoadUrlBack" 
-                        :isUseCropper="false" 
                         :isPreview="isPreview">
                     </ImageUpload>
                 </div>
@@ -26,7 +25,6 @@
                         :files="arriveImgs" 
                         :limitNum="10" 
                         @imgUrlBack="imgArriveUrlBack" 
-                        :isUseCropper="false" 
                         :isPreview="isPreview">
                     </ImageUpload>
                 </div>
@@ -39,7 +37,6 @@
                         :files="backImgs" 
                         :limitNum="10" 
                         @imgUrlBack="imgBackUrlBack" 
-                        :isUseCropper="false" 
                         :isPreview="isPreview">
                     </ImageUpload>
                 </div>
@@ -52,7 +49,6 @@
                         :files="exceptImgs" 
                         :limitNum="10" 
                         @imgUrlBack="imgExceptUrlBack" 
-                        :isUseCropper="false" 
                         :isPreview="isPreview">
                     </ImageUpload>
                 </div>
