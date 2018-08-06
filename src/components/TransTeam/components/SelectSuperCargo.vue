@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="驾驶员列表" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false">
+    <el-dialog title="驾驶员列表" width="60%" :visible.sync="dialogVisible" :show-close="false" :close-on-click-modal="false">
         <el-form :inline="true" size="mini">
             <el-form-item label="驾驶员">
                 <el-input placeholder="姓名/手机号" v-model="find.keyword"></el-input>
