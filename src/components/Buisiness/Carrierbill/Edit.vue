@@ -410,7 +410,16 @@ export default {
 				size: 1000,
 				customerID: this.carrierbillInfo.shipperID,
 				cargoName: queryString
-			}).then(res => { cb(res.records) })
+			}).then(res => {
+				const obj = {}, result = [], list = res.records
+				for (let i = 0; i < list.length; i++) {
+					if (!obj[list[i].cargoName]) {
+						obj[list[i].cargoName]  = 1
+						result.push(list[i])
+					}
+				}
+				cb(result)
+			})
 		},
 		getShipperCompany(queryString, cb) {
 			this.carrierbillInfo.shipperID = ''
@@ -479,12 +488,18 @@ export default {
 			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
 		},
 		handSelectShipperCompany(data) {
-			this.carrierbillInfo.shipperCompanyName = data.companyName
+			this.carrierbillInfo.shipperCompanyName = ' '
 			this.carrierbillInfo.shipperID = data.customerID
+			this.$nextTick(() => {
+				this.carrierbillInfo.shipperCompanyName = data.companyName
+			})
 		},
 		handSelectConsigneeCompany(data) {
-			this.carrierbillInfo.consigneeCompanyName = data.companyName
+			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID = data.customerID
+			this.$nextTick(() => {
+				this.carrierbillInfo.consigneeCompanyName = data.companyName
+			})
 		},
 		handSelectShipper(data) {
 			this.carrierbillInfo.shipperName = data.contactName
