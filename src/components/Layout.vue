@@ -481,11 +481,11 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .app-wrapper
-	position fixed
+	position absolute
 	left 180px
 	bottom 0
-	top 123px
 	right 0
+	top 123px
 	padding 20px
 	overflow hidden
 	overflow-y auto
