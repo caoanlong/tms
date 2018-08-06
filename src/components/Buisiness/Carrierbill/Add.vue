@@ -488,12 +488,18 @@ export default {
 			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
 		},
 		handSelectShipperCompany(data) {
-			this.carrierbillInfo.shipperCompanyName = data.companyName
+			this.carrierbillInfo.shipperCompanyName = ' '
 			this.carrierbillInfo.shipperID = data.customerID
+			this.$nextTick(() => {
+				this.carrierbillInfo.shipperCompanyName = data.companyName
+			})
 		},
 		handSelectConsigneeCompany(data) {
-			this.carrierbillInfo.consigneeCompanyName = data.companyName
+			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID = data.customerID
+			this.$nextTick(() => {
+				this.carrierbillInfo.consigneeCompanyName = data.companyName
+			})
 		},
 		handSelectShipper(data) {
 			this.carrierbillInfo.shipperName = data.contactName
