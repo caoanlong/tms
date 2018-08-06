@@ -166,7 +166,7 @@ export default {
 		overflow hidden
 		overflow-x auto
 		.tit
-			min-width 1210px
+			min-width 1250px
 			display flex
 			background #fff
 			border 1px solid #f0f0f0

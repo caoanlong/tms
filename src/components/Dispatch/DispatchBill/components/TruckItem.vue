@@ -209,7 +209,7 @@ export default {
 		height 72px
 		position relative
 		display flex
-		min-width 1210px
+		min-width 1250px
 		.selectColumn
 			flex 0 0 70px
 			position relative
