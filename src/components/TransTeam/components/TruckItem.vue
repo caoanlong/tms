@@ -84,14 +84,14 @@
 		</div>
 		<div class="handle" v-show="truck.truckCategory != 'Trailer'">
 			<div class="handleItem">
-				<span style="color: #ccc" v-if="truck.primaryDriver">设为主驾</span>
-				<span @click="add('primary')" v-if="truck.primaryDriver">人员替换</span>
-				<span @click="delSuperCargo(truck.primaryDriver.comSupercargoID, '主驾')" v-if="truck.primaryDriver">删除</span>
+				<span style="color: #ccc" v-if="truck.primaryDriver && truck.primaryDriver.comSupercargoID">设为主驾</span>
+				<span @click="add('primary')" v-if="truck.primaryDriver && truck.primaryDriver.comSupercargoID">人员替换</span>
+				<span @click="delSuperCargo(truck.primaryDriver.comSupercargoID, '主驾')" v-if="truck.primaryDriver && truck.primaryDriver.comSupercargoID">删除</span>
 			</div>
 			<div class="handleItem">
-				<span @click="primary" v-if="truck.secondaryDriver">设为主驾</span>
-				<span @click="add('second')" v-if="truck.secondaryDriver">人员替换</span>
-				<span @click="delSuperCargo(truck.secondaryDriver.comSupercargoID, '副驾')" v-if="truck.secondaryDriver">删除</span>
+				<span @click="primary" v-if="truck.secondaryDriver && truck.secondaryDriver.comSupercargoID">设为主驾</span>
+				<span @click="add('second')" v-if="truck.secondaryDriver && truck.secondaryDriver.comSupercargoID">人员替换</span>
+				<span @click="delSuperCargo(truck.secondaryDriver.comSupercargoID, '副驾')" v-if="truck.secondaryDriver && truck.secondaryDriver.comSupercargoID">删除</span>
 			</div>
 		</div>
 		<SelectSuperCargo :dialogVisible="dialogVisible" :type="type" :truckID="truck.truckID" @control="handleSelect"></SelectSuperCargo>
