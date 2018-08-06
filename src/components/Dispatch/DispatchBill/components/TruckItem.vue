@@ -283,7 +283,8 @@ export default {
 			.replaceBtn
 				right 10px
 				bottom 10px		
-				
+		.truckColumn
+			min-width 420px		
 	.section-block
 		margin 20px 0 10px
 		.selectedDriverList

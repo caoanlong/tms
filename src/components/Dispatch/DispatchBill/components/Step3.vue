@@ -182,6 +182,8 @@ export default {
 				padding 10px
 				min-width 380px
 				border-left 1px solid #f0f0f0
+			.truckColumn
+				min-width 420px
 			.selectColumn
 				flex 0 0 70px
 				text-align center
