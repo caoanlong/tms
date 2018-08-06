@@ -6,8 +6,8 @@
 			<tags-view></tags-view>
 		</div>
 	</div>
+	<sidebar class="sidebar-container"></sidebar>
 	<div class="app-wrapper clearfix">
-		<sidebar class="sidebar-container"></sidebar>
 		<div class="main-container right-container" >
 			<breadcrumb class="breadcrumb-container"></breadcrumb>
 			<app-main></app-main>
@@ -481,10 +481,14 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .app-wrapper
-	position relative
-	height 100%
-	padding-top 84px
-	margin-left 180px
+	position fixed
+	left 180px
+	bottom 0
+	top 123px
+	right 0
+	padding 20px
+	overflow hidden
+	overflow-y auto
 .header
 	position fixed
 	top 0
@@ -495,7 +499,6 @@ export default {
 	padding-left 180px
 	background #424242
 .right-container
-	padding-top 60px
 	.breadcrumb-container
 		position fixed
 		top 84px

@@ -17,9 +17,9 @@ export default function LiftEffect(json) {
 	function Selected(index) {
 		$(json.control2).children().eq(index).addClass(json.current).siblings().removeClass(json.current);
 	}
-	$(window).on("scroll", Check);
+	$('.app-wrapper').on("scroll", Check);
 	function Check() {
-		var wst = $(window).scrollTop();
+		var wst = $('.app-wrapper').scrollTop();
 		// if (wst >= $(json.target[0]).offset().top - 100) {
 		// 	$(json.control1).fadeIn(500);
 		// } else {
@@ -30,7 +30,7 @@ export default function LiftEffect(json) {
 		for (var i = 0; i < array.length; i++) {
 			key++;
 			if (flag) {
-				if (wst >= array[array.length - key] - 300) {
+				if (wst >= array[array.length - key] ) {
 					var index = array.length - key;
 					flag = false;
 				} else {
@@ -43,17 +43,17 @@ export default function LiftEffect(json) {
 	}
 
 	$(json.control2).children().on("click", function () {
-		$(window).off("scroll");
+		$('.app-wrapper').off("scroll");
 		var index = $(this).index();
 		Selected(index);
 		var flag = true;
 		for (var i = 0; i < array.length; i++) {
 			if (flag) {
 				if (index == i) {
-					$("html,body").stop().animate({
+					$('.app-wrapper').stop().animate({
 						"scrollTop": array[i] - 175
 					}, 500, function () {
-						$(window).on("scroll", Check);
+						$('.app-wrapper').on("scroll", Check);
 					});
 					flag = false;
 				} else {
