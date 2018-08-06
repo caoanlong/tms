@@ -246,9 +246,9 @@
 		</el-dialog>
 		<!-- 修改企业资料 -->
 	</el-dialog>
-	<el-dialog title="账号设置" :visible.sync="accountInfoDialog" custom-class="accountInfoDialog" top="10vh">
-		<el-tabs tab-position="left" style="height:300px">
-			<el-tab-pane label="个人资料">
+	<el-dialog title="账号设置" :visible.sync="accountInfoDialog" custom-class="accountInfoDialog" top="10vh" :close-on-press-escape="false" :close-on-click-modal="false">
+		<el-tabs tab-position="left" style="height:300px" v-model="activeName" @tab-click="handleTabClick">
+			<el-tab-pane label="个人资料" name="tab1">
 				<el-form label-width="80px" size="small" :model="MemDetail">
 					<el-row :gutter="20">
 						<el-col :span="6">
@@ -279,7 +279,7 @@
 					</el-row>
 				</el-form>
 			</el-tab-pane>
-			<el-tab-pane label="密码修改">
+			<el-tab-pane label="密码修改" name="tab2">
 				<el-form label-width="100px" size="small" :model="memPwd" :rules="rules" ref="ruleForm">
 					<!-- 为了取消chrome自动填充密码 -->
 					<input type="password" id="disabledAutoComplete" name="disabledAutoComplete" style="display:none">
@@ -335,6 +335,7 @@ export default {
 			accountInfoDialog: false,
 			selectedArea: [],
 			companyDetail:{},
+			activeName: 'tab1',
 			MemDetail:{},
 			memPwd:{
 				oldPassword:'',
@@ -455,10 +456,12 @@ export default {
 			})
 		},
 		showDialog(type, boo) {
+			console.log(this.activeName)
 			if(type == 'companyInfo'){
 				this.companyInfoDialog = true
 				this.getCompanyInfo()
 			}else if(type == 'accountInfo'){
+				this.activeName = 'tab1'
 				this.accountInfoDialog = true
 				this.getMemInfo()
 			}
@@ -475,6 +478,12 @@ export default {
 		},
         handleAvatarSuccess1(res) {
 			this.MemDetail.headPic = res.length == 0 ? '': res[0]
+		},
+		handleTabClick(tab, event){
+			this.memPwd.oldPassword=''
+			this.memPwd.newPassword=''
+			this.memPwd.confirmPassword=''
+			this.$refs['ruleForm'].resetFields()
 		}
 	}
 }
