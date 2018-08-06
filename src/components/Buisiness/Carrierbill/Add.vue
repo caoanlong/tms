@@ -415,7 +415,16 @@ export default {
 				size: 1000,
 				customerID: this.carrierbillInfo.shipperID,
 				cargoName: queryString
-			}).then(res => { cb(res.records) })
+			}).then(res => {
+				const obj = {}, result = [], list = res.records
+				for (let i = 0; i < list.length; i++) {
+					if (!obj[list[i].cargoName]) {
+						obj[list[i].cargoName]  = 1
+						result.push(list[i])
+					}
+				}
+				cb(result)
+			})
 		},
 		getShipperCompany(queryString, cb) {
 			this.carrierbillInfo.shipperID = ''
