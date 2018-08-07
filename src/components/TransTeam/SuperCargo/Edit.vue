@@ -31,6 +31,7 @@
 									<el-select placeholder="请选择" style="width:100%" v-model="superCargo.cooperateRelation">
 										<el-option label="挂靠" value="Attach"></el-option>
 										<el-option label="自有" value="Self"></el-option>
+										<el-option label="社会" value="Social"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
