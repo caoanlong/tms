@@ -189,6 +189,7 @@
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
 									<el-autocomplete 
 										style="width:130px" 
+										popper-class="auto-complete-list"
 										value-key="cargoName" 
 										v-model="item.cargoName" 
 										:fetch-suggestions="getCargos"
