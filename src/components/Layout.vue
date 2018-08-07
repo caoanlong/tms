@@ -419,6 +419,7 @@ export default {
 				this.$refs['distPicker'].validate('pass')
 				this.companyDetail.areaName = searchAreaByKey(this.companyDetail.areaID)
 				CompanyInfo.modify(this.companyDetail).then(res => {
+					this.$store.dispatch('getUserInfo')
 					Message.success('保存成功！')
 					this.cancelEditcompanyInfo()
 				})
