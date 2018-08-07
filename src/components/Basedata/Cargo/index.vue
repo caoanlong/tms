@@ -79,6 +79,22 @@ export default {
 	components: {
 		Page
 	},
+	beforeRouteEnter(to, from, next) {
+		if (from.name == 'editcargo') {
+			this.pageIndex = sessionStorage.getItem('pageIndex') || 1
+			this.pageSize = sessionStorage.getItem('pageSize') || 10
+			this.find = JSON.parse(sessionStorage.getItem('find')) || { shipperCompanyName: '', cargoName: '' }
+		}
+		next()
+	},
+	beforeRouteLeave(to, from, next) {
+		if (to.name == 'editcargo') {
+			sessionStorage.setItem('pageIndex', this.pageIndex)
+			sessionStorage.setItem('pageSize', this.pageSize)
+			sessionStorage.setItem('find', JSON.stringify(this.find))
+		}
+		next()
+	},
 	created() {
 		this.getList()
 	},
