@@ -76,7 +76,7 @@
 					<el-tag size="mini" type="danger" v-if="truck.secondaryDriver.expiredCertificate.length>0">到期</el-tag>
 				</el-tooltip>
 			</div>
-			<div class="driverInfo link text-center" v-else @click="add('second')" v-show="truck.truckCategory != 'Trailer'">+添加副驾</div>
+			<div class="driverInfo link text-center" v-else @click="add('second')" v-show="truck.truckCategory != 'Trailer'&&truck.primaryDriver">+添加副驾</div>
 		</div>
 		<div class="mobile" v-show="truck.truckCategory != 'Trailer'">
 			<div class="mobileItem">{{truck.primaryDriver && truck.primaryDriver.mobile}}</div>
