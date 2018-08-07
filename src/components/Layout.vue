@@ -28,7 +28,7 @@
 			<p class="companySort">所属行业：{{companyDetail.industry}}</p>
 		</div>
 		<div class="footer">
-			<span class="sysV">危化标准版</span>
+			<!-- <span class="sysV">危化标准版</span> -->
 			<span class="editCompanyInfo" @click="modifyCompany"><svg-icon icon-class="edit"></svg-icon> 修改企业资料</span>
 		</div>
 		<!-- 企业资料详情 -->
@@ -457,7 +457,6 @@ export default {
 			})
 		},
 		showDialog(type, boo) {
-			console.log(this.activeName)
 			if(type == 'companyInfo'){
 				this.companyInfoDialog = true
 				this.getCompanyInfo()
