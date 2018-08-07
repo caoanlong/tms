@@ -104,10 +104,14 @@ export default {
 		handleSelectedArea(data) {
 			if (data) {
 				this.companyAddress.areaID = data[data.length - 1]
-				if (data[1]) {
-					const location = searchLocationByCity(distData[data[0]][data[1]])
-					this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
+				let location = null
+				if (data[2]) {
+					location = searchLocationByCity(distData[data[1]][data[2]])
 				}
+				if (data[1] && !data[2] || !location) {
+					location = searchLocationByCity(distData[data[0]][data[1]])
+				}
+				this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
 			} else {
 				this.companyAddress.areaID = ''
 				this.searchAreaHash = ''

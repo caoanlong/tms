@@ -512,10 +512,15 @@ export default {
 			this.carrierbillInfo.shipperAreaID = data.areaID
 			this.carrierbillInfo.shipperAddressID = data.customerAddressID
 			this.selectedShipperArea = areaIdToArrayId(data.areaID)
-			if (this.selectedShipperArea[1]) {
-				const location = searchLocationByCity(distData[this.selectedShipperArea[0]][this.selectedShipperArea[1]])
-				this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
+			// 取不到区县取城市
+			let location = null
+			if (this.selectedShipperArea[2]) {
+				location = searchLocationByCity(distData[this.selectedShipperArea[1]][this.selectedShipperArea[2]])
 			}
+			if (this.selectedShipperArea[1] && !this.selectedShipperArea[2] || !location) {
+				location = searchLocationByCity(distData[this.selectedShipperArea[0]][this.selectedShipperArea[1]])
+			}
+			this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
 		},
 		inputShipperPhone() {
 			this.carrierbillInfo.shipperAddressID = ''
@@ -531,31 +536,58 @@ export default {
 			this.carrierbillInfo.consigneeAreaID = data.areaID
 			this.carrierbillInfo.consigneeAddressID = data.customerAddressID
 			this.selectedConsigneeArea = areaIdToArrayId(data.areaID)
-			if (this.selectedConsigneeArea[1]) {
-				const location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
-				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
+			// 取不到区县取城市
+			let location = null
+			if (this.selectedConsigneeArea[2]) {
+				location = searchLocationByCity(distData[this.selectedConsigneeArea[1]][this.selectedConsigneeArea[2]])
 			}
+			if (this.selectedConsigneeArea[1] && !this.selectedConsigneeArea[2] || !location) {
+				location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
+			}
+			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
 		},
 		inputConsigneePhone() {
 			this.carrierbillInfo.consigneeAddressID = ''
 		},
 		handleSelectedShipperArea(data) {
+			if (!data) return
 			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
 			this.carrierbillInfo.shipperArea = searchAreaByKey(data[data.length - 1])
-			if (this.selectedShipperArea[1] != data[1]) this.carrierbillInfo.shipperLocationAddress= ''
-			if (data[1]) {
-				const location = searchLocationByCity(distData[data[0]][data[1]])
-				this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
+			// 取不到区县取城市
+			let location = null
+			let currentData = ''
+			if (data[2]) {
+				location = searchLocationByCity(distData[data[1]][data[2]])
+				if (location) currentData = data[2]
 			}
+			if (data[1] && !data[2] || !location) {
+				location = searchLocationByCity(distData[data[0]][data[1]])
+				if (location) currentData = data[1]
+			}
+			if (this.selectedShipperArea[1] != currentData && this.selectedShipperArea[2] != currentData) {
+				this.carrierbillInfo.shipperLocationAddress = ''
+			}
+			this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
 		},
 		handleSelectedConsigneeArea(data) {
+			if (!data) return
 			this.carrierbillInfo.consigneeAreaID = data[data.length - 1]
 			this.carrierbillInfo.consigneeArea = searchAreaByKey(data[data.length - 1])
-			if (this.selectedConsigneeArea[1] != data[1]) this.carrierbillInfo.consigneeLocationAddress= ''
-			if (data[1]) {
-				const location = searchLocationByCity(distData[data[0]][data[1]])
-				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
+			// 取不到区县取城市
+			let location = null
+			let currentData = ''
+			if (data[2]) {
+				location = searchLocationByCity(distData[data[1]][data[2]])
+				if (location) currentData = data[2]
 			}
+			if (data[1] && !data[2] || !location) {
+				location = searchLocationByCity(distData[data[0]][data[1]])
+				if (location) currentData = data[1]
+			}
+			if (this.selectedConsigneeArea[1] != currentData && this.selectedConsigneeArea[1] != currentData) {
+				this.carrierbillInfo.consigneeLocationAddress= ''
+			}
+			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
 		},
 		handSelectShipperLocation(data) {
 			this.carrierbillInfo.shipperLocationLng = data.longitude
