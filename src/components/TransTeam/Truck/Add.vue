@@ -70,7 +70,6 @@
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.cooperateRelation">
 										<el-option label="挂靠" value="Attach"></el-option>
 										<el-option label="自有" value="Self"></el-option>
-										<el-option label="社会" value="Social"></el-option>
 									</el-select>
 								</el-form-item>
 							</el-col>
@@ -155,6 +154,7 @@
 								<el-form-item label="所有权类型">
 									<el-select placeholder="请选择" style="width:100%" v-model="truck.propertyType">
 										<el-option label="单位" value="单位"></el-option>
+										<el-option label="挂靠" value="挂靠"></el-option>
 										<el-option label="个人" value="个人"></el-option>
 									</el-select>
 								</el-form-item>
