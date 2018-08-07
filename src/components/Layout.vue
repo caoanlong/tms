@@ -457,7 +457,6 @@ export default {
 			})
 		},
 		showDialog(type, boo) {
-			console.log(this.activeName)
 			if(type == 'companyInfo'){
 				this.companyInfoDialog = true
 				this.getCompanyInfo()
