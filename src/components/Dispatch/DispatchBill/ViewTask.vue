@@ -312,16 +312,16 @@ export default {
 			const dispatchTaskID = this.$route.query.dispatchTaskID
 			Task.modifyFreight({
 				'dispatchTaskID': dispatchTaskID,
-				'driverCashAmount': this.task.driverCashAmount,
-				'driverCodAmount': this.task.driverCodAmount,
-				'driverPorAmount': this.task.driverPorAmount,
-				'driverMonthlyAmont': this.task.driverMonthlyAmont,
-				'driverCosigneeAmount': this.task.driverCosigneeAmount,
-				'superCargoCashAmount': this.task.superCargoCashAmount,
-				'superCargoCodAmount': this.task.superCargoCodAmount,
-				'superCargoCorAmount': this.task.superCargoCorAmount,
-				'superCargoMonthlyAmount': this.task.superCargoMonthlyAmount,
-				'superCosigneeAmount': this.task.superCosigneeAmount
+				'driverCashAmount': this.task.driverCashAmount || 0,
+				'driverCodAmount': this.task.driverCodAmount || 0,
+				'driverPorAmount': this.task.driverPorAmount || 0,
+				'driverMonthlyAmont': this.task.driverMonthlyAmont || 0,
+				'driverCosigneeAmount': this.task.driverCosigneeAmount || 0,
+				'superCargoCashAmount': this.task.superCargoCashAmount || 0,
+				'superCargoCodAmount': this.task.superCargoCodAmount || 0,
+				'superCargoCorAmount': this.task.superCargoCorAmount || 0,
+				'superCargoMonthlyAmount': this.task.superCargoMonthlyAmount || 0,
+				'superCosigneeAmount': this.task.superCosigneeAmount || 0
 			}).then(res => {
 				this.isEdit = false
 				Message.success(res.data.msg)
