@@ -12,17 +12,29 @@
 					<div class="level-item" :class="level == 2 ? 'active' : ''" @click="changeLevel(2)" v-if="selectList[0]">市</div>
 					<div class="level-item" :class="level == 3 ? 'active' : ''" @click="changeLevel(3)" v-if="selectList[1]">区</div>
 				</div>
-				<div class="list">
-					<el-button 
+				<div class="list" v-if="level == 1">
+					<div class="items" v-for="type in distLetterTypes" :key="type">
+						<div class="item-left">{{type}}</div>
+						<div 
+							class="item" 
+							v-if="distLetters[item.key] == type"
+							:class="selectList.map(item => item.key).includes(item.key) ? 'active' : ''"
+							v-for="item in list" 
+							:key="item.key" 
+							@click="selectDist(item)">
+							{{item.value}}
+						</div>
+					</div>
+				</div>
+				<div class="list" v-else>
+					<div 
 						class="item" 
-						:class="selectList.map(item => item.key).includes(item.key) ? '' : 'no-active'"
-						size="mini" 
-						:type="selectList.map(item => item.key).includes(item.key) ? 'primary' : 'text'" 
+						:class="selectList.map(item => item.key).includes(item.key) ? 'active' : ''"
 						v-for="item in list" 
 						:key="item.key" 
 						@click="selectDist(item)">
 						{{item.value}}
-					</el-button>
+					</div>
 				</div>
 			</div>
 			<div class="down">
@@ -33,6 +45,7 @@
 </template>
 <script>
 import ChineseDistricts from '../../../assets/data/distpicker.data'
+import { distLetters, distLetterTypes } from '../../../assets/data/distLetters'
 import { searchAreaObjByKey } from '../../../common/utils'
 function transJsonToList(key) {
 	const distJson = ChineseDistricts[key]
@@ -86,6 +99,10 @@ export default {
 				}
 			}
 		}
+	},
+	computed: {
+		distLetters: () => distLetters,
+		distLetterTypes: () => distLetterTypes
 	},
     created() {
         document.body.addEventListener('click', () => {
@@ -143,6 +160,7 @@ export default {
 
 <style lang="stylus" scoped>
 $blue = #409eff
+$width = 400px
 .dist-picker
 	position relative
 	.dist-input
@@ -172,7 +190,7 @@ $blue = #409eff
 	.dist-select
 		position absolute
 		z-index 999
-		width 400px
+		width $width
 		background-color #fff
 		box-shadow 0 4px 16px 0 rgba(0,0,0,.2)
 		.up
@@ -191,11 +209,26 @@ $blue = #409eff
 						color $blue
 						border-bottom 2px solid $blue
 			.list
+				padding 10px 0
+				.items
+					position relative
+					padding-left 40px
+					.item-left
+						position absolute
+						left 0
+						top 0
+						width 30px
+						font-size 12px
+						color $blue
 				.item
-					&:first-child
-						margin-left 10px
-					&.no-active
-						color #666
+					display inline-block
+					padding 0 10px
+					cursor pointer
+					&:hover
+						background-color rgb(153,213,251)
+					&.active
+						border 1px solid #0097f5
+						background-color rgba(0,151,245,.1)
 		.down
 			position relative
 			width 100%
