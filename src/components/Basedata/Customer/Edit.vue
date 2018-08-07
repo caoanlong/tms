@@ -2,7 +2,7 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">编辑企业</div>
-			<el-row style="padding-bottom: 100px">
+			<el-row style="padding-bottom: 200px">
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="企业LOGO">
