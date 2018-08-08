@@ -220,7 +220,7 @@
 										<td style="border-spacing:0">
 											<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
 													validator: (rule, value, callback) => {
-														if (item.dispatchType=='Volume'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
+														if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
 															callback('请输入体积')
 														}
 													}
@@ -609,31 +609,16 @@ export default {
 					resolve()
 				})
 			}).then(() => {
-				new Promise((resolve, reject) => {
-					this.$refs['cargoRuleForm'].validate(valid => {
-						if (!valid) return 
-						resolve()
-					})
-				}).then(() => {
-					const cargos = this.carrierbillInfo.carrierCargo
-					for (let i = 0; i < cargos.length; i++) {
-						if (cargos[i].dispatchType =='Quantity' && !cargos[i].cargoNum) {
-							Message.error(`货物“${cargos[i].cargoName}”的数量必填！`)
-							return
-						}else if(cargos[i].dispatchType =='Quantity' && !cargos[i].cargoUnitName){
-							Message.error(`货物“${cargos[i].cargoVolume}”的单位必填！`)
-							return
-						}else if(cargos[i].dispatchType =='Volumn' && !cargos[i].cargoVolume){
-							Message.error(`货物“${cargos[i].cargoName}”的体积必填！`)
-							return
-						}else if(cargos[i].dispatchType =='Weight' && !cargos[i].cargoWeight){
-							Message.error(`货物“${cargos[i].cargoName}”的重量必填！`)
-							return
-						}
-					}
+				this.$refs['cargoRuleForm'].validate(valid => {
+					if (!valid) return 
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
+					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
+						const cargo = carrierbill.carrierCargo[i]
+						if (!cargo.cargoWeight) cargo.cargoWeight = 0
+						if (!cargo.cargoVolume) cargo.cargoVolume = 0
+						if (!cargo.cargoNum) cargo.cargoNum = 0
+					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
-
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
 					Carrierbill.add(carrierbill).then(res => {
 						Message.success(res.data.msg)
