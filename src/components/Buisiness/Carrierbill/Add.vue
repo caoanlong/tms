@@ -173,93 +173,95 @@
 					<div class="section-block">
 						<span class="block-title">货物信息</span>
 						<div class="cargoTable">
-							<table class="cargoList">
-								<tr>
-									<th>客户单号</th>
-									<th><span>*</span>货名</th>
-									<th><span>*</span>配载方式</th>
-									<th>重量</th>
-									<th>体积</th>
-									<th>数量</th>
-									<th>单位</th>
-									<th>操作</th>
-								</tr>
-								<tbody>
-									<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index" :model="carrierbillInfo" ref="cargoRuleForm">
-										<td><el-form-item label-width="0"><el-input placeholder="请输入..." v-model="item.customizedNo"  size="mini"></el-input></el-form-item></td>
-										<td>
-											<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
-												<el-autocomplete style="width:120px" popper-class="auto-complete-list"
-												value-key="cargoName" v-model="item.cargoName" :fetch-suggestions="getCargos"
-												placeholder="请输入..." @select="handSelectCargo" @input="inputSelectCargo(index)"  size="mini">
-												</el-autocomplete>
-										</el-form-item>
-									</td>
-										<td>
-											<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
-												<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:120px"  size="mini">
-													<el-option label="按数量配载" value="Quantity"></el-option>
-													<el-option label="按体积配载" value="Volumn"></el-option>
-													<el-option label="按重量配载" value="Weight"></el-option>
-												</el-select>
-											</el-form-item>
-										</td>
-										<td style="border-spacing:0">
-											<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoWeight'" :rules="[{ validator: checkFloat2 },{
-													validator: (rule, value, callback) => {
-														if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
-															callback('请输入重量')
-														}
-													}
-												}]">
-												<el-input placeholder="货物重量" v-model="item.cargoWeight" size="mini">
-													<template slot="append">吨</template>
-												</el-input>
-											</el-form-item>
-										</td>
-										<td style="border-spacing:0">
-											<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
-													validator: (rule, value, callback) => {
-														if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
-															callback('请输入体积')
-														}
-													}
-												}]">
-												<el-input placeholder="货物体积" v-model="item.cargoVolume" size="mini" ><template slot="append">方</template></el-input>
-											</el-form-item>
-										</td>
-										<td>
-											<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{
-													validator: (rule, value, callback) => {
-														if (item.dispatchType=='Quantity'&&(!item.cargoNum || item.cargoNum == '0')) {
-															callback('请输入数量')
-														}
-													}
-												}]">
-												<el-input-number v-model="item.cargoNum" :min="0"  size="mini"></el-input-number>
-											</el-form-item>
-										</td>
-										<td><el-form-item label-width="0"><el-select v-model="item.cargoUnitName" placeholder="请选择"  size="mini">
-											<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
-										</el-select></el-form-item></td>
-										<td>
-											<el-form-item label-width="0">
-												<el-button type="text" icon="el-icon-plus" @click="addItem" v-if="index == 0"  size="mini">添加</el-button>
-												<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-else  size="mini">删除</el-button>
-											</el-form-item>
-										</td>
-									</tr>
-								</tbody>
-								<tfoot>
+							<el-form label-width="0" size="small" :model="carrierbillInfo" ref="cargoRuleForm">
+								<table class="cargoList">
 									<tr>
-										<td colspan="3" align="right">合计：</td>
-										<td align="center">{{sum('cargoWeight')}}吨</td>
-										<td align="center">{{sum('cargoVolume')}}方</td>
-										<td align="center">{{ parseInt(sum('cargoNum'))}}</td>
-										<td colspan="2"></td>
+										<th>客户单号</th>
+										<th><span>*</span>货名</th>
+										<th><span>*</span>配载方式</th>
+										<th>重量</th>
+										<th>体积</th>
+										<th>数量</th>
+										<th>单位</th>
+										<th>操作</th>
 									</tr>
-								</tfoot>
-							</table>
+									<tbody>
+										<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
+											<td><el-form-item label-width="0"><el-input placeholder="请输入..." v-model="item.customizedNo"></el-input></el-form-item></td>
+											<td>
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
+													<el-autocomplete style="width:120px" popper-class="auto-complete-list"
+													value-key="cargoName" v-model="item.cargoName" :fetch-suggestions="getCargos"
+													placeholder="请输入..." @select="handSelectCargo" @input="inputSelectCargo(index)">
+													</el-autocomplete>
+												</el-form-item>
+											</td>
+											<td>
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
+													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:120px">
+														<el-option label="按数量配载" value="Quantity"></el-option>
+														<el-option label="按体积配载" value="Volumn"></el-option>
+														<el-option label="按重量配载" value="Weight"></el-option>
+													</el-select>
+												</el-form-item>
+											</td>
+											<td style="border-spacing:0">
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoWeight'" :rules="[{ validator: checkFloat2 },{
+														validator: (rule, value, callback) => {
+															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
+																callback('请输入重量')
+															}
+														}
+													}]">
+													<el-input placeholder="货物重量" v-model="item.cargoWeight">
+														<template slot="append">吨</template>
+													</el-input>
+												</el-form-item>
+											</td>
+											<td style="border-spacing:0">
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
+														validator: (rule, value, callback) => {
+															if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
+																callback('请输入体积')
+															}
+														}
+													}]">
+													<el-input placeholder="货物体积" v-model="item.cargoVolume"><template slot="append">方</template></el-input>
+												</el-form-item>
+											</td>
+											<td>
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{
+														validator: (rule, value, callback) => {
+															if (item.dispatchType=='Quantity'&&(!item.cargoNum || item.cargoNum == '0')) {
+																callback('请输入数量')
+															}
+														}
+													}]">
+													<el-input-number v-model="item.cargoNum" :min="0"></el-input-number>
+												</el-form-item>
+											</td>
+											<td><el-form-item label-width="0"><el-select v-model="item.cargoUnitName" placeholder="请选择">
+												<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
+											</el-select></el-form-item></td>
+											<td>
+												<el-form-item label-width="0">
+													<el-button type="text" icon="el-icon-plus" @click="addItem" v-if="index == 0">添加</el-button>
+													<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-else>删除</el-button>
+												</el-form-item>
+											</td>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="3" align="right">合计：</td>
+											<td align="center">{{sum('cargoWeight')}}吨</td>
+											<td align="center">{{sum('cargoVolume')}}方</td>
+											<td align="center">{{ parseInt(sum('cargoNum'))}}</td>
+											<td colspan="2"></td>
+										</tr>
+									</tfoot>
+								</table>
+							</el-form>
 						</div>
 					</div>
 				</el-row>
