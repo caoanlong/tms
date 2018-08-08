@@ -176,43 +176,35 @@
 						<el-row style="margin: 0 20px">
 							<div class="text-center cargo-title">客户单号</div>
 							<div class="text-center cargo-title"><span>*</span>货名</div>
-							<div class="text-center cargo-title"><span>*</span>数量</div>
-							<div class="text-center cargo-title"><span>*</span>单位</div>
+							<div class="text-center cargo-title"><span>*</span>配载方式</div>
 							<div class="text-center cargo-title">重量</div>
 							<div class="text-center cargo-title">体积</div>
-							<div class="text-center cargo-title">操作</div>
+							<div class="text-center cargo-title">数量</div>
+							<div class="text-center cargo-title">单位</div>
+							<div class="text-center cargo-title"  style="width:90px;margin-right:0">操作</div>
 						</el-row>
 						<el-form class="block-content" :model="carrierbillInfo" :inline="true" size="mini" ref="cargoRuleForm">
 							<el-row  v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
 								<el-form-item>
-									<el-input placeholder="请输入..." style="width:130px" v-model="item.customizedNo"></el-input>
+									<el-input placeholder="请输入..." style="width:120px" v-model="item.customizedNo"></el-input>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
 									<el-autocomplete 
-										style="width:130px" 
+										style="width:120px" 
+										popper-class="auto-complete-list"
 										value-key="cargoName" 
-										v-model="item.cargoName"
+										v-model="item.cargoName" 
 										:fetch-suggestions="getCargos"
 										placeholder="请输入..."
 										@select="handSelectCargo" 
 										@input="inputSelectCargo(index)">
 									</el-autocomplete>
 								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" 
-									:rules="[{ required: true, message: '请输入数量'}, { validator: (rule, value, callback) => {
-										const r = /^\+?[1-9][0-9]*$/
-										if (r.test(value) || value == 0) {
-											callback()
-										} else {
-											callback('请输入正确的正整数')
-										}
-									} }]">
-									<el-input-number style="width:130px" v-model="item.cargoNum" :min="1"></el-input-number>
-								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" 
-									:rules="[{ required: true, message: '请选择单位'}]">
-									<el-select style="width:130px" v-model="item.cargoUnitName" placeholder="请选择">
-										<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
+								<el-form-item :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
+									<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:120px">
+										<el-option label="按数量配载" value="Quantity"></el-option>
+										<el-option label="按体积配载" value="Volumn"></el-option>
+										<el-option label="按重量配载" value="Weight"></el-option>
 									</el-select>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoWeight'" 
@@ -224,7 +216,7 @@
 											callback('请输入正确的数字')
 										}
 									} }]">
-									<el-input placeholder="货物重量" style="width:130px" v-model="item.cargoWeight">
+									<el-input placeholder="货物重量" style="width:120px" v-model="item.cargoWeight">
 										<template slot="append">吨</template>
 									</el-input>
 								</el-form-item>
@@ -237,30 +229,55 @@
 											callback('请输入正确的数字')
 										}
 									} }]">
-									<el-input placeholder="货物体积" style="width:130px" v-model="item.cargoVolume">
+									<el-input placeholder="货物体积" style="width:120px" v-model="item.cargoVolume">
 										<template slot="append">方</template>
 									</el-input>
 								</el-form-item>
-								<el-form-item>
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" 
+									:rules="[{ required: true, message: '请输入数量'}, { validator: (rule, value, callback) => {
+										const r = /^\+?[1-9][0-9]*$/
+										if (r.test(value) || value == 0) {
+											callback()
+										} else {
+											callback('请输入正确的正整数')
+										}
+									} }]">
+									<el-input-number style="width:120px" v-model="item.cargoNum" :min="0"></el-input-number>
+								</el-form-item>
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" 
+									:rules="[{ required: true, message: '请选择单位'}]">
+									<el-select style="width:120px" v-model="item.cargoUnitName" placeholder="请选择">
+										<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
+									</el-select>
+								</el-form-item>
+								<el-form-item style="width:90px;margin-right:0;text-align:center">
+									<el-button 
+										type="text" 
+										icon="el-icon-plus" 
+										style="position:relative;left:40px" 
+										@click="addItem" 
+										v-if="index == 0" >
+										添加
+									</el-button>
 									<el-button 
 										type="text" 
 										icon="el-icon-delete" 
 										style="color:#F56C6C;position:relative;left:40px" 
 										@click="removeItem(index)" 
-										v-show="carrierbillInfo.carrierCargo.length > 1">
+										v-else>
 										删除
 									</el-button>
 								</el-form-item>
 							</el-row>
-							<el-button type="text" icon="el-icon-plus" class="add-cargo-btn" @click="addItem">添加</el-button>
 						</el-form>
 						<el-row style="margin: 0 20px 10px 20px">
 							<div class="text-center cargo-title"></div>
-							<div class="text-center cargo-title">合计：</div>
-							<div class="text-center cargo-title">{{sum('cargoNum')}}</div>
 							<div class="text-center cargo-title"></div>
+							<div class="text-center cargo-title">合计：</div>
+							
 							<div class="text-center cargo-title">{{sum('cargoWeight')}}吨</div>
 							<div class="text-center cargo-title">{{sum('cargoVolume')}}方</div>
+							<div class="text-center cargo-title">{{ parseInt(sum('cargoNum'))}}</div>
 						</el-row>
 					</div>
 				</el-row>
@@ -714,7 +731,7 @@ export default {
 	background-color #fff
 .cargo-title
 	display inline-block
-	width 130px
+	width 120px
 	line-height 2
 	margin-right 10px
 	font-size 14px

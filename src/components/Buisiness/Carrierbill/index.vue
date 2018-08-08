@@ -35,12 +35,12 @@
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="单号" prop="carrierOrderNo" width="170"  align="center">
+					<el-table-column label="单号" width="170"  align="center">
 						<template slot-scope="scope">
 							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="状态" prop="status" align="center">
+					<el-table-column label="状态" align="center" width='80'>
 						<template slot-scope="scope">
 							<el-tag size="mini" class="statusTag" type="warning" v-if="scope.row.status == 'Committed'">未执行</el-tag>
 							<el-tag size="mini" class="statusTag" type="primary" v-else-if="scope.row.status == 'Running'">执行中</el-tag>
@@ -51,23 +51,21 @@
 					<el-table-column label="货物" prop="cargoName"></el-table-column>
 					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
-					<el-table-column label="委托时间" prop="commissionDate" width="100" align="center">
+					<el-table-column label="委托时间" width="100" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.commissionDate">{{ new Date(scope.row.commissionDate).getTime() | getdatefromtimestamp(true)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
 					<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
-					<el-table-column label="原数量" prop="cargoNumSum"></el-table-column>
 					<el-table-column label="原货量">
 						<template slot-scope="scope">
-							<span>{{scope.row.cargoWeightSum + '吨'}}/{{scope.row.cargoVolumeSum + '方'}}</span>
+							<span>{{scope.row.cargoWeightSum?scope.row.cargoWeightSum:0}}吨/{{scope.row.cargoVolumeSum?scope.row.cargoVolumeSum:0}}方/{{scope.row.cargoNumSum}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="数量(余)" prop="remainingCargoNum"></el-table-column>
-					<el-table-column label="货量(余)">
+					<el-table-column label="待配载量">
 						<template slot-scope="scope">
-							<span>{{scope.row.remainingCargoWeight + '吨'}}/{{scope.row.remainingCargoVolume + '方'}}</span>
+							<span>{{scope.row.remainingCargoWeight}}吨/{{scope.row.remainingCargoVolume}}方/{{scope.row.remainingCargoNum}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">

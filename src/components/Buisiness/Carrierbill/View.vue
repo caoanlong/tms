@@ -45,33 +45,35 @@
 						<tr>
 							<th>客户单号</th>
 							<th>货物名称</th>
-							<th>数量</th>
-							<th>体积</th>
-							<th>重量</th>
-							<th>剩余货量</th>
+							<th>配载方式</th>
+							<th>原货量</th>
+							<th>待配载量</th>
 						</tr>
 						<tr class="is-center" v-for="item in carrierCargo" :key="item.carrierCargoID">
 							<td>{{item.customizedNo}}</td>
 							<td>{{item.cargoName}}</td>
-							<td>{{item.cargoNum}}{{item.cargoUnitName}}</td>
-							<td>{{item.cargoVolume + '方'}}</td>
-							<td>{{item.cargoWeight + '吨'}}</td>
 							<td>
-								{{item.remainingCargoNum + item.cargoUnitName}}
-								{{'/' + item.remainingCargoVolume + '方'}}
-								{{'/' + item.remainingCargoWeight + '吨'}}
+								<span v-if="item.dispatchType =='Quantity'">按数量配载</span>
+								<span v-else-if="item.dispatchType =='Volumn'">按体积配载</span>
+								<span v-else>按重量配载</span>
+								<!-- 按数量配载 Quantity   按体积配载 Volumn   按重量配载 Weight -->
+							</td>
+							<td>{{item.cargoVolume}}方/{{item.cargoWeight}}吨/{{item.cargoNum}}{{item.cargoUnitName}}</td>
+							<td>
+								{{item.remainingCargoVolume}}方/
+								{{item.remainingCargoWeight}}吨/
+								{{item.remainingCargoNum}}{{item.cargoUnitName}}
 							</td>
 						</tr>
 						<tr class="total is-center">
 							<td>合计</td>
 							<td></td>
-							<td>{{sum('cargoNum')}}</td>
-							<td>{{sum('cargoVolume') + '方'}}</td>
-							<td>{{sum('cargoWeight') + '吨'}}</td>
+							<td></td>
+							<td>{{sum('cargoVolume') + ''}}方/{{sum('cargoWeight') + ''}}吨/{{ parseInt(sum('cargoNum'))}}</td>
 							<td>
-								<span>{{sum('remainingCargoNum')}}</span>
-								<span>/{{sum('remainingCargoVolume')}}方</span>
-								<span>/{{sum('remainingCargoWeight')}}吨</span>	
+								<span>{{sum('remainingCargoVolume')}}方/</span>
+								<span>{{sum('remainingCargoWeight')}}吨/</span>	
+								<span>{{ parseInt(sum('remainingCargoNum'))}}</span>
 							</td>
 						</tr>
 					</table>

@@ -175,20 +175,21 @@
 						<el-row style="margin: 0 20px">
 							<div class="text-center cargo-title">客户单号</div>
 							<div class="text-center cargo-title"><span>*</span>货名</div>
-							<div class="text-center cargo-title"><span>*</span>数量</div>
-							<div class="text-center cargo-title"><span>*</span>单位</div>
+							<div class="text-center cargo-title"><span>*</span>配载方式</div>
 							<div class="text-center cargo-title">重量</div>
 							<div class="text-center cargo-title">体积</div>
+							<div class="text-center cargo-title">数量</div>
+							<div class="text-center cargo-title">单位</div>
 							<div class="text-center cargo-title">操作</div>
 						</el-row>
 						<el-form class="block-content" :model="carrierbillInfo" :inline="true" size="mini" ref="cargoRuleForm">
 							<el-row  v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
 								<el-form-item>
-									<el-input placeholder="请输入..." style="width:130px" v-model="item.customizedNo"></el-input>
+									<el-input placeholder="请输入..." style="width:120px" v-model="item.customizedNo"></el-input>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
 									<el-autocomplete 
-										style="width:130px" 
+										style="width:120px" 
 										popper-class="auto-complete-list"
 										value-key="cargoName" 
 										v-model="item.cargoName" 
@@ -198,21 +199,11 @@
 										@input="inputSelectCargo(index)">
 									</el-autocomplete>
 								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" 
-									:rules="[{ required: true, message: '请输入数量'}, { validator: (rule, value, callback) => {
-										const r = /^\+?[1-9][0-9]*$/
-										if (r.test(value) || value == 0) {
-											callback()
-										} else {
-											callback('请输入正确的正整数')
-										}
-									} }]">
-									<el-input-number style="width:130px" v-model="item.cargoNum" :min="1"></el-input-number>
-								</el-form-item>
-								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" 
-									:rules="[{ required: true, message: '请选择单位'}]">
-									<el-select style="width:130px" v-model="item.cargoUnitName" placeholder="请选择">
-										<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
+								<el-form-item :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
+									<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:120px">
+										<el-option label="按数量配载" value="Quantity"></el-option>
+										<el-option label="按体积配载" value="Volumn"></el-option>
+										<el-option label="按重量配载" value="Weight"></el-option>
 									</el-select>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoWeight'" 
@@ -224,7 +215,7 @@
 											callback('请输入正确的数字')
 										}
 									} }]">
-									<el-input placeholder="货物重量" style="width:130px" v-model="item.cargoWeight">
+									<el-input placeholder="货物重量" style="width:120px" v-model="item.cargoWeight">
 										<template slot="append">吨</template>
 									</el-input>
 								</el-form-item>
@@ -237,11 +228,28 @@
 											callback('请输入正确的数字')
 										}
 									} }]">
-									<el-input placeholder="货物体积" style="width:130px" v-model="item.cargoVolume">
+									<el-input placeholder="货物体积" style="width:120px" v-model="item.cargoVolume">
 										<template slot="append">方</template>
 									</el-input>
 								</el-form-item>
-								<el-form-item>
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoNum'" 
+									:rules="[{ required: true, message: '请输入数量'}, { validator: (rule, value, callback) => {
+										const r = /^\+?[1-9][0-9]*$/
+										if (r.test(value) || value == 0) {
+											callback()
+										} else {
+											callback('请输入正确的正整数')
+										}
+									} }]">
+									<el-input-number style="width:120px" v-model="item.cargoNum" :min="0"></el-input-number>
+								</el-form-item>
+								<el-form-item :prop="'carrierCargo.' + index + '.cargoUnitName'" 
+									:rules="[{ required: true, message: '请选择单位'}]">
+									<el-select style="width:120px" v-model="item.cargoUnitName" placeholder="请选择">
+										<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
+									</el-select>
+								</el-form-item>
+								
 									<el-button 
 										type="text" 
 										icon="el-icon-plus" 
@@ -258,16 +266,17 @@
 										v-else>
 										删除
 									</el-button>
-								</el-form-item>
+								
 							</el-row>
 						</el-form>
 						<el-row style="margin: 0 20px 10px 20px">
 							<div class="text-center cargo-title"></div>
-							<div class="text-center cargo-title">合计：</div>
-							<div class="text-center cargo-title">{{sum('cargoNum')}}</div>
 							<div class="text-center cargo-title"></div>
+							<div class="text-center cargo-title">合计：</div>
+							
 							<div class="text-center cargo-title">{{sum('cargoWeight')}}吨</div>
 							<div class="text-center cargo-title">{{sum('cargoVolume')}}方</div>
+							<div class="text-center cargo-title">{{ parseInt(sum('cargoNum'))}}</div>
 						</el-row>
 					</div>
 				</el-row>
@@ -354,13 +363,15 @@ export default {
 					customizedNo: '',
 					cargoNameID: '',
 					cargoName: '',
-					cargoNum: '',
-					cargoUnitName: '',
-					cargoWeight: '',
-					cargoVolume: ''
-				}],                     /** String货物清单（JSON串）*/
+					dispatchType:'',
+					cargoWeight:0,
+					cargoVolume: 0,
+					cargoNum: 0,
+					cargoUnitName: ''
+				}],                    /** String货物清单（JSON串）*/
 				freight: '',                    /** BigDecimal运费*/
-				porRequire: []                  /** String 回单要求*/
+				porRequire: []                /** String 回单要求*/
+				
 			},
 			selectedShipperArea: [],
 			selectedConsigneeArea: [],
@@ -618,13 +629,24 @@ export default {
 				}).then(() => {
 					const cargos = this.carrierbillInfo.carrierCargo
 					for (let i = 0; i < cargos.length; i++) {
-						if (!cargos[i].cargoWeight && !cargos[i].cargoVolume) {
-							Message.error(`货物“${cargos[i].cargoName}”的重量和体积必填一项！`)
+						if (cargos[i].dispatchType =='Quantity' && !cargos[i].cargoNum) {
+							Message.error(`货物“${cargos[i].cargoName}”的数量必填！`)
+							return
+						}else if(cargos[i].dispatchType =='Quantity' && !cargos[i].cargoUnitName){
+							Message.error(`货物“${cargos[i].cargoVolume}”的单位必填！`)
+							return
+						}else if(cargos[i].dispatchType =='Volumn' && !cargos[i].cargoVolume){
+							Message.error(`货物“${cargos[i].cargoName}”的体积必填！`)
+							return
+						}else if(cargos[i].dispatchType =='Weight' && !cargos[i].cargoWeight){
+							Message.error(`货物“${cargos[i].cargoName}”的重量必填！`)
 							return
 						}
+						
 					}
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
+
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
 					Carrierbill.add(carrierbill).then(res => {
 						Message.success(res.data.msg)
@@ -702,7 +724,7 @@ export default {
 	background-color #fff
 .cargo-title
 	display inline-block
-	width 130px
+	width 120px
 	line-height 2
 	margin-right 10px
 	font-size 14px
