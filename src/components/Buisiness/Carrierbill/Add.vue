@@ -600,6 +600,7 @@ export default {
 		save() {
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
+					console.log(valid)
 					if (!valid) {
 						this.$nextTick(() => {
 							Message.error($('.el-form-item__error:first').text())
@@ -609,7 +610,8 @@ export default {
 					resolve()
 				})
 			}).then(() => {
-				this.$refs['cargoRuleForm'].validate(valid => {
+				this.$refs['cargoRuleForm'].validate((valid,gg) => {
+					console.log(valid,gg)
 					if (!valid) return 
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
 					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
