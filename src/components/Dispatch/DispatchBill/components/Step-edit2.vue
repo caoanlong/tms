@@ -17,6 +17,19 @@
 				@select-all="selectionAll($event, item)">
 				<el-table-column type="selection" width="40" align="center" :selectable="() => dispatchOrderID ? false : true"></el-table-column>
 				<el-table-column label="货物名称" align="center" prop="cargoName">	</el-table-column>
+				<el-table-column label="配载方式" align="center">
+					<template slot-scope="scope">
+						<el-form :model="scope.row" ref="ruleForm">
+							<el-form-item prop="dispatchType" :rules="[{ required: true, message: '请选择配载方式'}]">
+								<el-select size="mini" v-model="scope.row.dispatchType" placeholder="请选择配载方式" style="width:130px">
+									<el-option label="按数量配载" value="Quantity"></el-option>
+									<el-option label="按体积配载" value="Volumn"></el-option>
+									<el-option label="按重量配载" value="Weight"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-form>
+					</template>
+				</el-table-column>
 				<el-table-column label="待配货量" align="center">
 					<template slot-scope="scope">
 						<span>{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}}</span>
@@ -31,6 +44,8 @@
 								validator: (rule, value, callback) => {
 									if (value > scope.row.remainingCargoWeight) {
 										callback('配载重量不能大于待配重量！')
+									} else if (scope.row.dispatchType == 'Weight' && (!scope.row.cargoWeightNew || scope.row.cargoWeightNew == '0')) {
+										callback('配载重量不能为空！')
 									} else {
 										callback()
 									}
@@ -50,6 +65,8 @@
 								validator: (rule, value, callback) => {
 									if (value > scope.row.remainingCargoVolume) {
 										callback('配载体积不能大于待配体积！')
+									} else if (scope.row.dispatchType == 'Volumn' && (!scope.row.cargoVolumeNew || scope.row.cargoVolumeNew == '0')) {
+										callback('配载体积不能为空！')
 									} else {
 										callback()
 									}
@@ -69,6 +86,8 @@
 								validator: (rule, value, callback) => {
 									if (value > scope.row.remainingCargoNum) {
 										callback('配载数量不能大于待配数量！')
+									} else if (scope.row.dispatchType == 'Quantity' && (!scope.row.cargoNumNew || scope.row.cargoNumNew == '0')) {
+										callback('配载数量不能为空！')
 									} else {
 										callback()
 									}
