@@ -128,7 +128,6 @@ export default {
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.cargoNameID)
-			console.log(this.selectedList)
 		},
 		getList() {
 			CargoGeneralName.find({

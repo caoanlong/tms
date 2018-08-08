@@ -16,7 +16,18 @@
 				@select="selectionSimple" 
 				@select-all="selectionAll($event, item)">
 				<el-table-column type="selection" width="40" align="center"></el-table-column>
-				<el-table-column label="货物名称" align="center" prop="cargoName">	</el-table-column>
+				<el-table-column label="货物名称" align="center" prop="cargoName"></el-table-column>
+				<el-table-column label="配载规则" align="center">
+					<el-form :model="scope.row" ref="ruleForm">
+						<el-form-item prop="dispatchType" :rules="[{ required: true, message: '请选择配载方式'}]">
+							<el-select v-model="scope.row.dispatchType" placeholder="请选择配载方式" style="width:130px">
+								<el-option label="按数量配载" value="Quantity"></el-option>
+								<el-option label="按体积配载" value="Volumn"></el-option>
+								<el-option label="按重量配载" value="Weight"></el-option>
+							</el-select>
+						</el-form-item>
+					</el-form>
+				</el-table-column>
 				<el-table-column label="待配货量" align="center">
 					<template slot-scope="scope">
 						<span>{{scope.row.remainingCargoWeight ? (scope.row.remainingCargoWeight + '吨') : ''}}</span>
@@ -221,9 +232,7 @@ export default {
 					const item = this.$refs['ruleForm'][i]
 					if (this.selectedCargos.map(cargo => cargo.carrierCargoID).includes(item.model.carrierCargoID)) {
 						item.validate(valid => {
-							if (!valid) {
-								flag = false
-							}
+							if (!valid) flag = false
 						})
 					}
 				}

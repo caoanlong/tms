@@ -62,7 +62,6 @@ export default {
     },
     methods: {
         pageChange(index) {
-            console.log(index)
             this.$emit('pageChange', index)
         },
         pageSizeChange(size) {

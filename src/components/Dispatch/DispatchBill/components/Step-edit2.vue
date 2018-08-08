@@ -229,9 +229,7 @@ export default {
 					const item = this.$refs['ruleForm'][i]
 					if (this.selectedCargos.map(cargo => cargo.carrierCargoID).includes(item.model.carrierCargoID)) {
 						item.validate(valid => {
-							if (!valid) {
-								flag = false
-							}
+							if (!valid) flag = false
 						})
 					}
 				}
