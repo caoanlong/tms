@@ -210,6 +210,8 @@
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
 																callback('请输入重量')
+															}else{
+																callback()
 															}
 														}
 													}]">
@@ -223,6 +225,8 @@
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
 																callback('请输入体积')
+															}else{
+																callback()
 															}
 														}
 													}]">
@@ -234,6 +238,8 @@
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Quantity'&&(!item.cargoNum || item.cargoNum == '0')) {
 																callback('请输入数量')
+															}else{
+																callback()
 															}
 														}
 													}]">
@@ -602,7 +608,6 @@ export default {
 		save() {
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
-					console.log(valid)
 					if (!valid) {
 						this.$nextTick(() => {
 							Message.error($('.el-form-item__error:first').text())
@@ -612,8 +617,7 @@ export default {
 					resolve()
 				})
 			}).then(() => {
-				this.$refs['cargoRuleForm'].validate((valid,gg) => {
-					console.log(valid,gg)
+				this.$refs['cargoRuleForm'].validate(valid => {
 					if (!valid) return 
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
 					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
