@@ -15,6 +15,7 @@
         <el-col :span="12">
             <div class="pagination">
                 <el-pagination 
+                    ref="page"
                     :page-size="pageSize" 
                     align="right" 
                     background layout="prev, pager, next" 
@@ -31,12 +32,18 @@
 export default {
     props: {
         total: Number,
-        pageSize: Number,
-        pageIndex: Number
+        pageSize: {
+            type: Number,
+            default: 10
+        },
+        pageIndex: {
+            type: Number,
+            default: 1
+        }
     },
     data() {
         return {
-            pageIndexX: 1,
+            pageIndexX: 2,
             pageSizeX: 10
         }
     },
@@ -48,8 +55,14 @@ export default {
             this.pageSizeX = newVal
         }
     },
+    mounted() {
+        this.pageIndexX = this.pageIndex
+        this.pageSizeX = this.pageSize
+        this.$refs['page'].internalCurrentPage = this.pageIndex
+    },
     methods: {
         pageChange(index) {
+            console.log(index)
             this.$emit('pageChange', index)
         },
         pageSizeChange(size) {

@@ -1979,9 +1979,9 @@ element-china-area-data@^4.0.0:
     china-area-data "^4.0.0"
     uglify-js "^3.1.4"
 
-element-ui@^2.4.1:
-  version "2.4.3"
-  resolved "http://registry.npm.taobao.org/element-ui/download/element-ui-2.4.3.tgz#17a09ba6332b17a90002d86070697dcdb88fe0a5"
+element-ui@^2.4.5:
+  version "2.4.5"
+  resolved "http://registry.npm.taobao.org/element-ui/download/element-ui-2.4.5.tgz#ca1d0fc3f6ec0b5ca2a717655e6778a8e24ca673"
   dependencies:
     async-validator "~1.8.1"
     babel-helper-vue-jsx-merge-props "^2.0.0"
