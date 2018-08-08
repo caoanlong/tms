@@ -208,14 +208,25 @@
 									</el-select>
 								</el-form-item>
 								<el-form-item :prop="'carrierCargo.' + index + '.cargoWeight'" 
-									:rules="[{ validator: (rule, value, callback) => {
-										const r = /^[0-9]+(.[0-9]{1,2})?$/
-										if (r.test(value) || value == 0) {
-											callback()
-										} else {
-											callback('请输入正确的数字')
+									:rules="[
+										{	validator: (rule, value, callback) => {
+												const r = /^[0-9]+(.[0-9]{1,2})?$/
+												if (r.test(value) || value == 0) {
+													callback()
+												} else {
+													callback('请输入正确的数字')
+												}
+											}
+										},{
+											validator: (rule, value, callback) => {
+												if (item.dispatchType=='Weight' &&(!value || value == '0')) {
+													callback('请输入重量')
+												} else {
+													callback()
+												}
+											}
 										}
-									} }]">
+									]">
 									<el-input placeholder="货物重量" style="width:120px" v-model="item.cargoWeight">
 										<template slot="append">吨</template>
 									</el-input>
@@ -626,20 +637,16 @@ export default {
 					resolve()
 				})
 			}).then(() => {
-				new Promise((resolve, reject) => {
-					this.$refs['cargoRuleForm'].validate(valid => {
-						if (!valid) return 
-						resolve()
-					})
-				}).then(() => {
-					const cargos = this.carrierbillInfo.carrierCargo
-					for (let i = 0; i < cargos.length; i++) {
-						if (!cargos[i].cargoWeight && !cargos[i].cargoVolume) {
-							Message.error(`货物“${cargos[i].cargoName}”的重量和体积必填一项！`)
-							return
-						}
-					}
+				this.$refs['cargoRuleForm'].validate(valid => {
+					console.log(valid)
+					if (!valid) return 
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
+					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
+						const cargo = carrierbill.carrierCargo[i]
+						if (!cargo.cargoWeight) cargo.cargoWeight = 0
+						if (!cargo.cargoVolume) cargo.cargoVolume = 0
+						if (!cargo.cargoNum) cargo.cargoNum = 0
+					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
 					Carrierbill.update(carrierbill).then(res => {

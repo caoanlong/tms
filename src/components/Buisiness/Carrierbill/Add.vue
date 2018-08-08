@@ -186,6 +186,7 @@
 										<th>操作</th>
 									</tr>
 									<tbody>
+										
 										<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
 											<td><el-form-item label-width="0"><el-input placeholder="请输入..." v-model="item.customizedNo"></el-input></el-form-item></td>
 											<td>
@@ -208,8 +209,10 @@
 											<td style="border-spacing:0">
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoWeight'" :rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
+															if (item.dispatchType=='Weight' &&(!value || value == '0')) {
 																callback('请输入重量')
+															} else {
+																callback()
 															}
 														}
 													}]">
@@ -221,7 +224,7 @@
 											<td style="border-spacing:0">
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
+															if (item.dispatchType=='Volumn'&&(!value|| value == '0')) {
 																callback('请输入体积')
 															}
 														}
@@ -232,7 +235,7 @@
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{
 														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Quantity'&&(!item.cargoNum || item.cargoNum == '0')) {
+															if (item.dispatchType=='Quantity'&&(!value || value == '0')) {
 																callback('请输入数量')
 															}
 														}
@@ -250,6 +253,7 @@
 												</el-form-item>
 											</td>
 										</tr>
+										
 									</tbody>
 									<tfoot>
 										<tr>
@@ -601,6 +605,28 @@ export default {
 		},
 		save() {
 			new Promise((resolve, reject) => {
+				this.$refs['cargoRuleForm'].validate(valid => {
+					console.log(111111)
+					if (!valid) return 
+					resolve()
+				})
+			}).then(() => {
+				const carrierbill = Object.assign({}, this.carrierbillInfo)
+				for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
+					const cargo = carrierbill.carrierCargo[i]
+					if (!cargo.cargoWeight) cargo.cargoWeight = 0
+					if (!cargo.cargoVolume) cargo.cargoVolume = 0
+					if (!cargo.cargoNum) cargo.cargoNum = 0
+				}
+				carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
+				carrierbill.porRequire = carrierbill.porRequire.join(',')
+				Carrierbill.add(carrierbill).then(res => {
+					Message.success(res.data.msg)
+					this.$router.push({name: 'carrierbill'})
+				})
+			})
+			return
+			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					console.log(valid)
 					if (!valid) {
@@ -612,23 +638,7 @@ export default {
 					resolve()
 				})
 			}).then(() => {
-				this.$refs['cargoRuleForm'].validate((valid,gg) => {
-					console.log(valid,gg)
-					if (!valid) return 
-					const carrierbill = Object.assign({}, this.carrierbillInfo)
-					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
-						const cargo = carrierbill.carrierCargo[i]
-						if (!cargo.cargoWeight) cargo.cargoWeight = 0
-						if (!cargo.cargoVolume) cargo.cargoVolume = 0
-						if (!cargo.cargoNum) cargo.cargoNum = 0
-					}
-					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
-					carrierbill.porRequire = carrierbill.porRequire.join(',')
-					Carrierbill.add(carrierbill).then(res => {
-						Message.success(res.data.msg)
-						this.$router.push({name: 'carrierbill'})
-					})
-				})
+				
 			})
 		},
 		addItem() {
