@@ -20,9 +20,9 @@
 							<tr v-for="cargoItem in task.cargo" :key="cargoItem.carrierCargoID">
 								<td align="center">{{task.carrierOrderNo}}</td>
 								<td align="center">{{cargoItem.cargoName}}</td>
-								<td align="center">{{cargoItem.cargoWeightNew ? cargoItem.cargoWeightNew + '吨' : ''}}</td>
-								<td align="center">{{cargoItem.cargoVolumeNew ? cargoItem.cargoVolumeNew + '方' : ''}}</td>
-								<td align="center">{{cargoItem.cargoNumNew ? cargoItem.cargoNumNew + cargoItem.cargoUnitName : ''}}</td>
+								<td align="center">{{cargoItem.cargoWeightNew ? cargoItem.cargoWeightNew + '吨' : '0吨'}}</td>
+								<td align="center">{{cargoItem.cargoVolumeNew ? cargoItem.cargoVolumeNew + '方' : '0方'}}</td>
+								<td align="center">{{cargoItem.cargoNumNew ? cargoItem.cargoNumNew + cargoItem.cargoUnitName : '0'}}</td>
 							</tr>
 						</table>
 					</div>
