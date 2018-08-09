@@ -21,7 +21,7 @@
 					<template slot-scope="scope">
 						<el-form :model="scope.row" ref="ruleForm">
 							<el-form-item prop="dispatchType" :rules="[{ required: true, message: '请选择配载方式'}]">
-								<el-select size="mini" v-model="scope.row.dispatchType" placeholder="请选择配载方式" style="width:130px">
+								<el-select size="mini" v-model="scope.row.dispatchType" placeholder="请选择配载方式" style="width:130px" disabled>
 									<el-option label="按数量配载" value="Quantity"></el-option>
 									<el-option label="按体积配载" value="Volumn"></el-option>
 									<el-option label="按重量配载" value="Weight"></el-option>
