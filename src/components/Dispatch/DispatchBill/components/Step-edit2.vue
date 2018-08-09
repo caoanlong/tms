@@ -254,16 +254,6 @@ export default {
 				}
 				flag ? resolve() : reject()
 			}).then(() => {
-				for (let i = 0; i < this.selectedCargos.length; i++) {
-					const cargo = this.selectedCargos[i]
-					if (cargo.remainingCargoWeight || cargo.remainingCargoVolume) {
-						if ((!cargo.cargoWeightNew || Number(cargo.cargoWeightNew) <= 0) 
-							&& (!cargo.cargoVolumeNew || Number(cargo.cargoVolumeNew) <= 0)) {
-							Message.error(`货物“${cargo.cargoName}”的配载重量和体积必填一项！`)
-							return
-						}
-					}
-				}
 				this.$emit('nextStep', 3)
 			}).catch(err => { })
 		},
