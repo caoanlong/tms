@@ -37,7 +37,9 @@
 								</div>
 								<div>
 									<span class="tit">合作关系</span>
-									<span class="ctt">{{superCargo.cooperateRelation == 'Self' ? '自有车辆' : '挂靠'}}</span>
+									<span class="ctt" v-if="superCargo.cooperateRelation == 'Self'">自有</span>m 
+									<span class="ctt" v-else-if="superCargo.cooperateRelation == 'Attach'">挂靠</span>
+									<span class="ctt" v-else-if="superCargo.cooperateRelation == 'Social'">社会</span>
 								</div>
 								<div>
 									<span class="tit">合同有效期</span>

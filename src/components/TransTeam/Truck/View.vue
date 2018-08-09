@@ -23,6 +23,7 @@
 								<span class="tit">车辆归属</span>
 								<span class="ctt" v-if="truck.cooperateRelation == 'Self'">自有</span>
 								<span class="ctt" v-else-if="truck.cooperateRelation == 'Attach'">挂靠</span>
+								<span class="ctt" v-else-if="truck.cooperateRelation == 'Social'">社会</span>
 							</div>
 						</el-col>
 						<el-col :span="12">
