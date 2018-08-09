@@ -82,7 +82,7 @@
 				<el-table-column label="配载数量" align="center">
 					<template slot-scope="scope">
 						<el-form :model="scope.row" ref="ruleForm">
-							<el-form-item prop="cargoNumNew" :rules="[{ required: true, message: '请输入配载件数'}, { validator: checkInt }, {
+							<el-form-item prop="cargoNumNew" :rules="[{ validator: checkInt }, {
 								validator: (rule, value, callback) => {
 									if (value > scope.row.remainingCargoNum) {
 										callback('配载数量不能大于待配数量！')
