@@ -64,12 +64,18 @@ let routerMap = [
 				component: () => import('../components/Dispatch'),
 				redirect: '/dispatchbill',
 				children: [
-					// {
-					// 	path: '/dispatchbills',
-					// 	name: 'dispatchbills',
-					// 	meta: { title: '调度单' },
-					// 	component: () => import('../components/Dispatch/DispatchBill/index'),
-					// },
+					{
+						path: '/dispatching',
+						name: 'dispatching',
+						meta: { title: '待调度' },
+						component: () => import('../components/Dispatch/Dispatching'),
+					},
+					{
+						path: '/dispatched',
+						name: 'dispatched',
+						meta: { title: '已调度' },
+						component: () => import('../components/Dispatch/dispatched'),
+					},
 					// {
 					// 	path: '/adddispatchbill',
 					// 	name: 'adddispatchbill',

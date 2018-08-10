@@ -21,7 +21,7 @@
 import { mapGetters } from 'vuex'
 import ScrollBar from '../ScrollBar'
 import SidebarItem from './SidebarItem'
-// import menus from '../../../assets/data/menu.json'
+import menus from '../../../assets/data/menu.json'
 export default {
 	name: 'sideBar',
 	data(){
@@ -32,13 +32,13 @@ export default {
 	},
 	computed: {
 		...mapGetters([
-			'menus',
+			// 'menus',
 			'sidebar'
 		]),
 		isCollapse() {
 			return !this.sidebar.opened
 		},
-		// menus: () => menus
+		menus: () => menus
 	},
 	watch: {
 		fullHeight (val) {
