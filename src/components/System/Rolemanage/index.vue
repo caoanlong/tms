@@ -86,7 +86,7 @@ export default {
 			selectedList: [],
 			setRoleID: '',
 			showSetAuth: false,
-			showSetMember:false
+			showSetMember: false
 		}
 	},
 	components: { Page, AuthConfig, MemberConfig },

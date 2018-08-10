@@ -77,7 +77,7 @@
 								</el-input>
 							</el-form-item>
 						</el-form>
-					</template>					
+					</template>
 				</el-table-column>
 				<el-table-column label="配载数量" align="center">
 					<template slot-scope="scope">
