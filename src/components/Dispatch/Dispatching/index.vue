@@ -227,9 +227,10 @@
 <script type="text/javascript">
 import distData from '../../../assets/data/distpicker.data'
 import DistPicker from '../../CommonComponents/DistPicker2'
-import Page from '../../CommonComponents/Page'
+import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 	export default {
+		mixins: [baseMixin], 
 		data(){
 			return {
 				find: {
@@ -247,21 +248,11 @@ import Dispatchbill from '../../../api/Dispatchbill'
 				dispatchBillList:[]
 			}
 		},
-		components: { DistPicker ,Page},
+		components: { DistPicker},
 		created() {
 			this.getList()
 		},
 		methods:{
-			search() {
-				this.pageIndex = 1
-				this.pageSize = 10
-				this.getList()
-			},
-			reset() {
-				this.pageIndex = 1
-				this.pageSize = 10
-				this.getList()
-			},
 			handleSelectedShipperArea(data) {
 				if (!data) return
 				this.carrierbillInfo.shipperAreaID = data[data.length - 1]
@@ -301,15 +292,6 @@ import Dispatchbill from '../../../api/Dispatchbill'
 					this.carrierbillInfo.consigneeLocationAddress= ''
 				}
 				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
-			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			pageSizeChange(size) {
-				this.pageSize = size
-				this.pageIndex = 1
-				this.getList() 
 			},
 			getList () {
 				// Dispatchbill.find({

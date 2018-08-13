@@ -44,31 +44,63 @@
 			<div class="tableBox">
 				<table class="dispatchTable">
 					<tr>
-						<th>承运单</th>
-						<th>状态</th>
-						<th>货物</th>
-						<th>货量</th>
-						<th>件数</th>
-						<th>装车地</th>
-						<th>装车时间</th>
-						<th>送货地</th>
-						<th>送货时间</th>
-						<th>操作</th>
+						<th class="w1">承运单</th>
+						<th class="w4">状态</th>
+						<th class="w3">货物</th>
+						<th class="w1">货量</th>
+						<th class="w1">件数</th>
+						<th class="w2">装车地</th>
+						<th class="w1">装车时间</th>
+						<th class="w2">送货地</th>
+						<th class="w1">送货时间</th>
+						<th class="w1">操作</th>
 					</tr>
+					<template v-for="(item,index) in 5">
+						<tr>
+							<td colspan="10" class="blank"></td>
+						</tr>
+						<tr>
+							<td colspan="10" class="txt-l">
+								<div class="dispatchbillTit">
+									<span class="num">调度单号：23456788801</span>
+									<el-tag type="info" size="mini">抢</el-tag>
+									<span class="truckInfo">云A-23567 <b class="c3">¥6000.00元</b></span>
+									<el-tag size="mini">抢单中</el-tag>
+								</div>
+								<div class="handler">
+									<span class="c1">抢单人数（3）</span>
+									<span class="c1">跟踪</span>
+									<span class="c2">取消调度</span>
+									<span class="c1">重新调度</span>
+									<span class="c1">关闭</span>
+								</div>
+							</td>
+						</tr>
+						<tr v-for="(cargoIten,index) in 2" :key="index">
+							<td>6564997</td>
+							<td>待装车</td>
+							<td class="txt-l">啤酒，可乐...</td>
+							<td>2200kg/2.3m³</td>
+							<td>332</td>
+							<td>云南昆明</td>
+							<td>2018-03-01 22:22</td>
+							<td>广东深圳</td>
+							<td>2018-03-01 22:22</td>
+							<td>查看照片</td>
+						</tr>
+					</template>
 				</table>
-				<DispatchItem></DispatchItem>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
-	import DispatchItem from '../Common/DispatchItem'
+	import { baseMixin } from '../../../common/mixin'
 	export default {
+		mixins: [baseMixin], 
 		data(){
 			return{
-				pageIndex: 1,
-				pageSize: 10,
-				total: 0,
 				isCur:0
 			}
 		},
@@ -112,9 +144,6 @@
 				// 	this.total = res.total
 				// })
 			},
-		},
-		components:{
-			DispatchItem
 		}
 	}
 </script>
@@ -160,5 +189,43 @@
 			td
 				padding 10px 15px
 				background #fff
-				white-space  nowrap 	
+				white-space  nowrap 
+				text-align center
+				&.blank
+					padding 5px 0
+				&.txt-l
+					text-align left	
+				&.w1
+					width 140px
+				&.w2
+					width 200px
+				&.w3
+					width 300px
+				&.w4
+					width 100px
+				.dispatchbillTit
+					float left
+					height 20px
+					.num
+						color #409EFF
+						margin-right 10px
+						cursor pointer
+					.truckInfo
+						width 300px
+						padding 0 10px
+						display inline-block
+						b
+							font-weight normal
+				.handler
+					float right
+					height 20px
+					span
+						margin-left 20px
+						cursor pointer
+	.c1
+		color #409EFF
+	.c2
+		color #999
+	.c3
+		color #f60				
 </style>
