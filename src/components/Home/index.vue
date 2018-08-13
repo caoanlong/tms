@@ -56,7 +56,7 @@
 				<el-card class="box-card dashboardItem">
 					<div slot="header" class="clearfix">
 						<el-badge :value="0" :max="99" class="item"><span>运输中</span></el-badge>
-						<router-link tag="a" class="more" :to="{name: 'dispatchbills'}">查看更多</router-link>
+						<router-link tag="a" class="more" :to="{name: 'dispatched'}">查看更多</router-link>
 					</div>
 					<div class="table">
 						<el-table :data="tableData1" border style="width: 100%" size="mini" :height="250">

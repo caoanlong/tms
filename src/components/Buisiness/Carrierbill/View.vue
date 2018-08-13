@@ -164,7 +164,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Carrierbill from '../../../api/Carrierbill'
-import UploadPhoto from '../../Dispatch/DispatchBill/components/UploadPhoto'
+import UploadPhoto from './UploadPhoto/UploadPhoto'
 export default {
 	data() {
 		return {

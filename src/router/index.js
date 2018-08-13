@@ -65,35 +65,41 @@ let routerMap = [
 				redirect: '/dispatchbill',
 				children: [
 					{
-						path: '/dispatchbills',
-						name: 'dispatchbills',
-						meta: { title: '调度单' },
-						component: () => import('../components/Dispatch/DispatchBill/index'),
+						path: '/dispatching',
+						name: 'dispatching',
+						meta: { title: '待调度' },
+						component: () => import('../components/Dispatch/Dispatching'),
 					},
 					{
-						path: '/adddispatchbill',
-						name: 'adddispatchbill',
-						meta: { title: '添加调度单' },
-						component: () => import('../components/Dispatch/DispatchBill/Add'),
+						path: '/dispatched',
+						name: 'dispatched',
+						meta: { title: '已调度' },
+						component: () => import('../components/Dispatch/dispatched'),
 					},
-					{
-						path: '/editdispatchbill',
-						name: 'editdispatchbill',
-						meta: { title: '编辑调度单' },
-						component: () => import('../components/Dispatch/DispatchBill/Edit'),
-					},
-					{
-						path: '/viewdispatchbill',
-						name: 'viewdispatchbill',
-						meta: { title: '调度单详情' },
-						component: () => import('../components/Dispatch/DispatchBill/View')
-					},
-					{
-						path: '/viewtaskdetail',
-						name: 'viewtaskdetail',
-						meta: { title: '任务单详情' },
-						component: () => import('../components/Dispatch/DispatchBill/ViewTask')
-					}
+					// {
+					// 	path: '/adddispatchbill',
+					// 	name: 'adddispatchbill',
+					// 	meta: { title: '添加调度单' },
+					// 	component: () => import('../components/Dispatch/DispatchBill/Add'),
+					// },
+					// {
+					// 	path: '/editdispatchbill',
+					// 	name: 'editdispatchbill',
+					// 	meta: { title: '编辑调度单' },
+					// 	component: () => import('../components/Dispatch/DispatchBill/Edit'),
+					// },
+					// {
+					// 	path: '/viewdispatchbill',
+					// 	name: 'viewdispatchbill',
+					// 	meta: { title: '调度单详情' },
+					// 	component: () => import('../components/Dispatch/DispatchBill/View')
+					// },
+					// {
+					// 	path: '/viewtaskdetail',
+					// 	name: 'viewtaskdetail',
+					// 	meta: { title: '任务单详情' },
+					// 	component: () => import('../components/Dispatch/DispatchBill/ViewTask')
+					// }
 				]
 			},
 			{
