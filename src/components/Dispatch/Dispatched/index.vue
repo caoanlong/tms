@@ -5,13 +5,13 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="调度单号/货物名称/司机/车牌号"></el-input>
+						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item label="收发单位">
-						<el-input placeholder="收发单位"></el-input>
+						<el-input placeholder="收发单位" v-model="find.recdeliverycomp"></el-input>
 					</el-form-item>
 					<el-form-item label="调度状态">
-						<el-select placeholder="全部">
+						<el-select placeholder="全部" v-model="find.dispatchStatus">
 							<el-option value="" label="全部">全部</el-option>
 							<el-option value="11111" label="未接单">未接单</el-option>
 							<el-option value="22222" label="已接单">已接单</el-option>
@@ -20,7 +20,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度类型">
-						<el-select placeholder="全部">
+						<el-select placeholder="全部" v-model="find.dispatchSort">
 							<el-option value="" label="全部">全部</el-option>
 							<el-option value="11111" label="指派">指派</el-option>
 							<el-option value="22222" label="报价">报价</el-option>
@@ -28,11 +28,11 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.begin">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.end">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -55,7 +55,7 @@
 						<th class="w1">送货时间</th>
 						<th class="w1">操作</th>
 					</tr>
-					<template v-for="(item,index) in 5">
+					<template v-for="item in 5">
 						<tr>
 							<td colspan="10" class="blank"></td>
 						</tr>
@@ -64,7 +64,7 @@
 								<div class="dispatchbillTit">
 									<span class="num">调度单号：23456788801</span>
 									<el-tag type="info" size="mini">抢</el-tag>
-									<span class="truckInfo">云A-23567 <b class="c3">¥6000.00元</b></span>
+									<div class="quoteInfo">云A-23567 <b class="c3">¥6000.00元</b></div>
 									<el-tag size="mini">抢单中</el-tag>
 								</div>
 								<div class="handler">
@@ -76,7 +76,7 @@
 								</div>
 							</td>
 						</tr>
-						<tr v-for="(cargoIten,index) in 2" :key="index">
+						<tr>
 							<td>6564997</td>
 							<td>待装车</td>
 							<td class="txt-l">啤酒，可乐...</td>
@@ -101,7 +101,15 @@
 		mixins: [baseMixin], 
 		data(){
 			return{
-				isCur:0
+				isCur:0,
+				find:{
+					keyword:'',
+					recdeliverycomp:'',
+					dispatchStatus:'',
+					dispatchSort:'',
+					begin:'',
+					end:''
+				}
 			}
 		},
 		created() {
@@ -210,12 +218,17 @@
 						color #409EFF
 						margin-right 10px
 						cursor pointer
-					.truckInfo
+					.quoteInfo
 						width 300px
 						padding 0 10px
 						display inline-block
+						vertical-align top
+						height 20px
+						line-height 20px
+						overflow hidden
 						b
 							font-weight normal
+							margin-left 10px
 				.handler
 					float right
 					height 20px
