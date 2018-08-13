@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">承运单列表</div>
+			<div slot="header" class="clearfix">调度配载</div>
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="关键字">
@@ -12,29 +12,29 @@
 					</el-form-item>
 					<el-form-item label="收货地">
 						<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
-					</el-form-item>
+					</el-form-item><br/>
 					<el-form-item label="委托时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
 						</el-date-picker>
-					</el-form-item>
+					</el-form-item><br/>
 					<el-form-item label="到货时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
 						</el-date-picker>
-					</el-form-item>
+					</el-form-item><br/>
 					<el-form-item label="装车时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -49,26 +49,11 @@
 					<thead>
 						<tr>
 							<th width="64">选择</th>
-							<th>
-								<p>承运单号</p>
-								<p>委托时间</p>
-							</th>
-							<th>
-								<p>发货方</p>
-								<p>到货方</p>
-							</th>
-							<th>
-								<p>装车地区</p>
-								<p>卸货地区</p>
-							</th>
-							<th>
-								<p>装车地址</p>
-								<p>卸货地址</p>
-							</th>
-							<th>
-								<p>装车时间</p>
-								<p>到货时间</p>
-							</th>
+							<th><p>承运单号</p><p>委托时间</p></th>
+							<th><p>发货方</p><p>到货方</p></th>
+							<th><p>装车地区</p><p>卸货地区</p></th>
+							<th><p>装车地址</p><p>卸货地址</p></th>
+							<th><p>装车时间</p><p>到货时间</p></th>
 							<th>货物</th>
 							<th>订单量</th>
 							<th>已调度量</th>
@@ -159,7 +144,6 @@
 									</td>
 									<td align="center">spc{{index+1}}水泥</td>
 									<td align="center">按数量</td>
-									
 								</tr>
 							</tbody>
 						</table>

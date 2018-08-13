@@ -57,14 +57,18 @@
 					</tr>
 					<template v-for="item in 5">
 						<tr>
-							<td colspan="10" class="blank"></td>
+							<td colspan="10" class="blank">{{item}}</td>
 						</tr>
 						<tr>
 							<td colspan="10" class="txt-l">
 								<div class="dispatchbillTit">
 									<span class="num">调度单号：23456788801</span>
 									<el-tag type="info" size="mini">抢</el-tag>
-									<div class="quoteInfo">云A-23567 <b class="c3">¥6000.00元</b></div>
+									<div class="quoteInfo">
+										<div class="quoteList" v-autoscroll>
+											<div v-for="i in 5" :key="i">{{i}}云A-23567 <b class="c3">¥6000.00元</b></div>
+										</div>
+									</div>
 									<el-tag size="mini">抢单中</el-tag>
 								</div>
 								<div class="handler">
@@ -109,11 +113,36 @@
 					dispatchSort:'',
 					begin:'',
 					end:''
+				},
+				timer: null
+			}
+		},
+		directives: {
+			autoscroll: {
+				bind: (el) => {
+					let index = 1
+					const num = $(el).children().length
+					const newEl = $(el).html()
+					$(el).html(newEl + newEl)
+					this.timer = setInterval(() => {
+						if (index == num + 1) {
+							index = 1
+							$(el).css({top: '0'})
+						}
+						$(el).animate({top: `-${20*index}px`})
+						index++
+					}, 2000)
+				},
+				unbind: () => {
+					this.timer = null
 				}
 			}
 		},
 		created() {
 			this.getList()
+		},
+		destroyed() {
+			this.timer = null
 		},
 		methods:{
 			tabClick(val){
@@ -226,9 +255,12 @@
 						height 20px
 						line-height 20px
 						overflow hidden
-						b
-							font-weight normal
-							margin-left 10px
+						position relative
+						.quoteList
+							position absolute
+							b
+								font-weight normal
+								margin-left 10px
 				.handler
 					float right
 					height 20px
