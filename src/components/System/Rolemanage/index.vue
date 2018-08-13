@@ -121,7 +121,7 @@ export default {
 		pageSizeChange(size) {
 			this.pageSize = size
 			this.pageIndex = 1
-			this.getList() 
+			this.getList()
 		},
 		selectChange(data) {
 			this.selectedList = data.map(item => item.roleID)
