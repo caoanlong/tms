@@ -119,7 +119,6 @@ export default {
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.customerAddressID)
-			console.log(this.selectedList)
 		},
 		getList() {
 			CustomerAddress.find({
@@ -137,7 +136,7 @@ export default {
 			if(e.type == 'view'){
 				this.$router.push({name: 'viewcompanyaddress', query: { customerAddressID: e.id }})
 			}else if(e.type == 'edit'){
-				this.$router.push({ name: 'editcompanyaddress' , query: { customerAddressID: e.id } })
+				this.$router.push({ name: 'editcompanyaddress', query: { customerAddressID: e.id } })
 			}else if(e.type == 'delete'){
 				this.del(e.id)
 			}
