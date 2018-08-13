@@ -60,24 +60,17 @@
 import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
 import CargoGeneralName from '../../../api/CargoGeneralName'
-import Page from '../../CommonComponents/Page'
+import { baseMixin } from '../../../common/mixin'
 import { deleteConfirm } from '../../../common/utils'
 export default {
+	mixins: [baseMixin], 
 	data() {
 		return {
 			find: {
 				shipperCompanyName: '',
 				cargoName: ''
-			},
-			pageIndex: 1,
-			pageSize: 10,
-			total:0,
-			tableData: [],
-			selectedList: []
+			}
 		}
-	},
-	components: {
-		Page
 	},
 	beforeRouteLeave(to, from, next) {
 		if (to.name == 'editcargo') {
@@ -100,11 +93,6 @@ export default {
 		this.getList()
 	},
 	methods: {
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			sessionStorage.removeItem('pageIndex')
 			sessionStorage.removeItem('pageSize')

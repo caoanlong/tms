@@ -79,24 +79,19 @@ import { Message } from 'element-ui'
 import CargoUnit from '../../../api/CargoUnit'
 import Customer from '../../../api/Customer'
 import CustomerAddress from '../../../api/CustomerAddress'
-import Page from '../../CommonComponents/Page'
+import { baseMixin } from '../../../common/mixin'
 import { deleteConfirm } from '../../../common/utils'
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
 			dialogFormVisible: false,
 			find: { keyword: '', address: '', customerID: '', companyName: '' },
 			unit: '',
-			pageIndex: 1,
-			pageSize: 10,
-			total:0,
-			tableData: [],
-			selectedList: [],
 			customerID: this.$route.query.customerID,
 			companyName: this.$route.query.companyName
 		}
 	},
-	components: { Page },
 	created() {
 		if (this.customerID) this.find.customerID = this.customerID
 		if (this.companyName) this.find.companyName = this.companyName
@@ -114,11 +109,6 @@ export default {
 			this.find.customerID = data.customerID
 			this.find.companyName = data.companyName
 		},
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			this.find.keyword = ''
 			this.find.address = ''
@@ -126,15 +116,6 @@ export default {
 			this.find.companyName = ''
 			this.pageIndex = 1
 			this.getList()
-		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.customerAddressID)

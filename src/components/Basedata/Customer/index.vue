@@ -68,47 +68,28 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
-import Page from '../../CommonComponents/Page'
+import { baseMixin } from '../../../common/mixin'
 import { deleteConfirm } from '../../../common/utils'
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
 			find: {
 				keyword: '',
 				customerType: ''
-			},
-			pageIndex: 1,
-			pageSize: 10,
-			total:0,
-			tableData: [],
-			selectedList: []
+			}
 		}
 	},
-	components: { Page },
 	created() {
 		this.getList()
 	},
 	methods: {
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			this.find.keyword = ''
 			this.find.customerType = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
-		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.customerID)

@@ -50,54 +50,32 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import CargoUnit from '../../../api/CargoUnit'
-import Page from '../../CommonComponents/Page'
+import { baseMixin } from '../../../common/mixin'
 import { deleteConfirm } from '../../../common/utils'
 export default {
+	mixins: [baseMixin], 
 	data() {
 		return {
 			dialogFormVisible: false,
 			find: { unit: '' },
 			unit: { unit: ''},
-			pageIndex: 1,
-			pageSize: 10,
-			total:0,
-			tableData: [],
-			selectedList: [],
 			rules: {
 				unit: [{required: true, message: '请输入货物单位'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
 			}
 		}
 	},
-	components: {
-		Page
-	},
 	created() {
 		this.getList()
 	},
 	methods: {
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			this.find.unit = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
 		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
-		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.cargoUnitID)
-			console.log(this.selectedList)
 		},
 		getList() {
 			CargoUnit.find({
