@@ -28,11 +28,9 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.begin">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.end">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.begin">
+						</el-date-picker><span class="tracto">至</span>
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.end">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -42,7 +40,7 @@
 				</el-form>
 			</div>
 			<div class="tableBox">
-				<table class="dispatchTable">
+				<table class="customerTable">
 					<tr>
 						<th class="w1">承运单</th>
 						<th class="w4">状态</th>
@@ -62,7 +60,7 @@
 						<tr>
 							<td colspan="10" class="txt-l">
 								<div class="dispatchbillTit">
-									<span class="num">调度单号：23456788801</span>
+									<span class="num" @click="view">调度单号：23456788801</span>
 									<el-tag type="info" size="mini">抢</el-tag>
 									<div class="quoteInfo">
 										<div class="quoteList" v-autoscroll>
@@ -72,7 +70,7 @@
 									<el-tag size="mini">抢单中</el-tag>
 								</div>
 								<div class="handler">
-									<span class="c1">抢单人数（3）</span>
+									<span class="c1" @click="scramble">抢单人数（3）</span>
 									<span class="c1">跟踪</span>
 									<span class="c2">取消调度</span>
 									<span class="c1">重新调度</span>
@@ -97,6 +95,65 @@
 				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
+		<el-dialog title="报价详情" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
+			<p class="c1">货物： 啤酒、王老吉、可口可乐</p>
+			<p class="c1">货量： 2吨 / 4.6方</p>
+			<p class="c1">1装1卸  预计里程680公里</p>
+			<div class="tableBox">
+				<table class="customerTable">
+					<caption>抢单人数（3）</caption>
+					<thead>
+						<tr>
+							<th>车辆</th>
+							<th>司机</th>
+							<th>运费</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<template v-for="item in 3">
+							<tr><td colspan="4" class="blank"></td></tr>
+							<tr>
+								<td class="txt-l">
+									<p>粤B-55555 
+										<el-tag size="mini">GPS</el-tag>
+										<el-tooltip placement="right" effect="light">
+											<div slot="content">
+												<el-tag size="mini" type="danger">GPS到期</el-tag>
+											</div>
+											<el-tag size="mini" type="danger">到期</el-tag>
+										</el-tooltip>
+									</p>
+									<p>9.6米/高栏/22吨/3.5方</p>
+								</td>
+								<td class="txt-l">
+									<p>郝晓晓
+										<el-tooltip placement="right" effect="light">
+											<div slot="content">
+												<el-tag size="mini" type="danger">身份证到期</el-tag>
+											</div>
+											<el-tag size="mini" type="danger">到期</el-tag>
+										</el-tooltip>
+									</p>
+									<p>13424389894</p>
+								</td>
+								<td class="c1"><span class="tags">定</span>1500元/车</td>
+								<td rowspan="2"><span class="c1 selectTruck">选TA承运</span></td>
+							</tr>
+							<tr>
+								<td colspan="3" class="c2">
+									<span class="fl"><i class="el-icon-location"></i>1小时前 昆明五华区彩云北路56号</span>
+									<span class="fr">距离装车地 23公里</span>
+								</td>
+							</tr>
+						</template>
+					</tbody>
+				</table>
+			</div>
+			<div slot="footer" class="dialog-footer text-center">
+				<el-button @click="scrambleDialog = false" size="small">关闭</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
@@ -114,11 +171,13 @@
 					begin:'',
 					end:''
 				},
-				timer: null
+				timer: null,
+				scrambleDialog:false
 			}
 		},
 		directives: {
 			autoscroll: {
+
 				bind: el => {
 					let index = 1
 					const num = $(el).children().length
@@ -148,6 +207,9 @@
 			tabClick(val){
 				this.isCur = val
 			},
+			view(){
+				this.$router.push({ name: 'viewdispatchbill' })
+			},
 			getList () {
 				// Dispatchbill.find({
 				// 	current: this.pageIndex,
@@ -162,6 +224,9 @@
 				// 	this.total = res.total
 				// })
 			},
+			scramble(){
+				this.scrambleDialog= true
+			}
 		}
 	}
 </script>
@@ -194,11 +259,15 @@
 		width 100%
 		overflow hidden
 		overflow-x auto
-		.dispatchTable
+		.customerTable
 			font-size 14px
 			background #dcdfe6
 			border-spacing 1px
 			width 100%
+			caption
+				text-align left
+				height 30px
+				line-height 30px
 			th
 				background #f2f2f2
 				color #666
@@ -221,6 +290,21 @@
 					width 300px
 				&.w4
 					width 100px
+				.tags
+					background #409EFF
+					color #fff
+					width 18px
+					height 18px
+					display inline-block
+					border-radius 4px
+					font-size 12px
+					line-height 18px
+					text-align center
+					margin-right 4px
+				p
+					margin 0
+					padding 0
+					line-height 24px
 				.dispatchbillTit
 					float left
 					height 20px
@@ -248,10 +332,11 @@
 					span
 						margin-left 20px
 						cursor pointer
-	.c1
-		color #409EFF
-	.c2
-		color #999
-	.c3
-		color #f60				
+
+	.c3			
+		color #f60
+	.selectTruck
+		cursor pointer
+	.tracto
+		padding 0 5px 0 8px		
 </style>
