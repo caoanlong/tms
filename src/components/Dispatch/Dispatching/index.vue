@@ -4,43 +4,42 @@
 			<div slot="header" class="clearfix">调度配载</div>
 			<div class="search">
 				<el-form :inline="true" size="small">
-					<el-form-item label="关键字">
-						<el-input placeholder="承运单号/货物名称/发货方/到货方"></el-input>
-					</el-form-item>
-					<el-form-item label="发货地">
-						<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
-					</el-form-item>
-					<el-form-item label="收货地">
-						<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
-					</el-form-item><br/>
+					<el-row>
+						<el-form-item label="关键字">
+							<el-input placeholder="承运单号/货物名称/发货方/到货方"></el-input>
+						</el-form-item>
+						<el-form-item label="发货地">
+							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
+						</el-form-item>
+						<el-form-item label="收货地">
+							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
+						</el-form-item>
+					</el-row>
+					<el-row>					
 					<el-form-item label="委托时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+						</el-date-picker><span class="tracto">至</span>
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
-						</el-date-picker>
-					</el-form-item><br/>
+				
 					<el-form-item label="到货时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+						</el-date-picker><span class="tracto">至</span>
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
-						</el-date-picker>
-					</el-form-item><br/>
 					<el-form-item label="装车时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+						</el-date-picker><span class="tracto">至</span>
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">搜索</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
+				</el-row>
 				</el-form>
 			</div>
 			<div class="tableTit">待调度的承运单</div>
@@ -206,10 +205,137 @@
 		</el-row>
 		<el-row style="margin-top:20px">
 			<el-col :span="24" class="text-center">
-				<el-button type="primary">发布派车单</el-button>
-				<el-button type="success">发布抢单</el-button>
+				<el-button type="primary" @click="publishDispatchOrder">发布派车单</el-button>
+				<el-button type="success" @click="publishOrder">发布抢单</el-button>
 			</el-col>
 		</el-row>
+		<el-dialog title="发布派车单" :visible.sync="DispatchOrderDialog" custom-class="DispatchOrderDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
+			<el-form size="small">
+				<el-row class="baseInfo">
+					<p>总配载：<span class="tag">数</span><span class="num">1200</span><span class="tag">重</span><span class="num">30</span><span class="tag">体</span><span class="num">18</span></p>
+					<p><b>3</b>装<b>3</b>卸  预计总里程<b>160</b>公里</p>
+				</el-row>
+				<el-row>
+					<table class="dialogTable">
+						<caption>车辆人员</caption>
+						<thead>
+							<tr>
+								<th>车辆</th>
+								<th>驾驶员</th>
+								<th>随行人员</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td align="center"><span class="addbtn">+ 添加车辆</span></td>
+								<td align="center"><span class="addbtn">+ 添加驾驶员</span></td>
+								<td align="center"><span class="addbtn">+ 添加随行人员</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</el-row>
+				<el-row>
+					<table class="dialogTable">
+						<caption>任务运费&支付方式</caption>
+						<thead>
+							<tr>
+								<th>费用科目</th>
+								<th>费用类型</th>
+								<th>收款人</th>
+								<th>支付方式</th>
+								<th>金额</th>
+								<th><span class="addbtn">+ 添加费用</span></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td align="center"></td>
+								<td align="center"></td>
+								<td align="center"></td>
+								<td align="center"></td>
+								<td align="center"></td>
+								<td align="center"><span class="delbtn">删除</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</el-row>
+				<el-row>
+					<p class="totalFrete">总运费：30000.00元</p>
+				</el-row>
+				<el-row>
+					<el-form-item label="接单截止时间">
+						<el-date-picker type="date" :clearable="false" value-format="timestamp">
+						</el-date-picker>
+					</el-form-item>
+				</el-row>
+				<el-row style="margin-top:20px">
+					<el-col :span="24">
+						<el-form-item label-width="0" class="text-center">
+							<el-button @click="cancelDispatchOrder">取消</el-button>
+							<el-button type="primary" @click="saveDispatchOrder">保存</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				
+			</el-form>
+		</el-dialog>
+		<el-dialog title="发布抢单" :visible.sync="OrderDialog" custom-class="OrderDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
+			<el-form size="small" :inline="true">
+				<el-row class="baseInfo">
+					<p>总配载：<span class="tag">数</span><span class="num">1200</span><span class="tag">重</span><span class="num">30</span><span class="tag">体</span><span class="num">18</span></p>
+					<p><b>3</b>装<b>3</b>卸  预计总里程<b>160</b>公里</p>
+				</el-row>
+				<el-row>
+					<div class="section-title">用车需求</div>
+					<el-form-item label="车型">
+						<el-select placeholder="请选择车型">
+							<el-option value="车型1" label="车型1">车型1</el-option>
+							<el-option value="车型2" label="车型2">车型2</el-option>
+							<el-option value="车型3" label="车型3">车型3</el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="车长">
+						<el-input placeholder="请输入车长"><template slot="append">米</template></el-input>
+					</el-form-item>
+				</el-row>
+				<el-row>
+					<el-form-item label="报价类型">
+						<el-radio-group>
+							<el-radio label="司机报价"></el-radio>
+							<el-radio label="定价抢单"></el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="一口价金额">
+						<el-input placeholder="请输入金额"><template slot="append">元</template></el-input>
+					</el-form-item>
+				</el-row>
+				<el-row>
+					<el-form-item label="运费支付方式">
+						<el-radio-group>
+							<el-radio label="预付"></el-radio>
+							<el-radio label="到付"></el-radio>
+							<el-radio label="收货方付"></el-radio>
+							<el-radio label="回单付"></el-radio>
+						</el-radio-group>
+					</el-form-item>
+				</el-row>
+				<el-row>
+					<el-form-item label="接单截止时间">
+						<el-date-picker type="date" :clearable="false" value-format="timestamp">
+						</el-date-picker>
+					</el-form-item>
+				</el-row>
+				<el-row style="margin-top:20px" class="text-center">
+					<el-col :span="24">
+						<el-form-item>
+							<el-button @click="cancelOrder" size="small">取消</el-button>
+							<el-button type="primary" @click="saveOrder" size="small">保存</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				
+			</el-form>
+		</el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
@@ -221,6 +347,8 @@ import Dispatchbill from '../../../api/Dispatchbill'
 		mixins: [baseMixin], 
 		data(){
 			return {
+				DispatchOrderDialog:false,
+				OrderDialog:false,
 				find: {
 					keyword: '',
 					customerID: '',
@@ -337,14 +465,28 @@ import Dispatchbill from '../../../api/Dispatchbill'
 					}
 				]
 			},
+			// 发布派车单
+			publishDispatchOrder(){
+				this.DispatchOrderDialog = true
+			},
+			cancelDispatchOrder(){
+				this.DispatchOrderDialog = false
+			},
+			// 发布抢单
+			publishOrder(){
+				this.OrderDialog = true
+			},
+			cancelOrder(){
+				this.OrderDialog = false
+			},
 		}
 	}
 </script>
 <style lang="stylus" scoped>
-.tableBox
-	width 100%
-	overflow hidden
-	overflow-x auto
+	.tableBox
+		width 100%
+		overflow hidden
+		overflow-x auto
 	.dispatchTable
 		font-size 14px
 		background #dcdfe6
@@ -445,4 +587,54 @@ import Dispatchbill from '../../../api/Dispatchbill'
 	line-height 40px
 	font-size 14px
 	font-weight bold
+.DispatchOrderDialog
+.OrderDialog
+	.baseInfo
+		p
+			color #409EFF
+			span
+				margin-right 20px
+				&.tag
+					color #fff
+					background #409EFF
+					font-size 12px
+					height 18px
+					width 18px
+					line-height 18px
+					text-align center
+					display inline-block
+					border-radius 4px
+					margin-right 5px
+			b
+				padding 0 2px
+	.section-title
+		height 40px
+		line-height 40px
+		border-bottom 1px solid #f2f2f2
+		margin-bottom 20px
+.dialogTable
+	font-size 14px
+	background #dcdfe6
+	border-spacing 1px
+	width 100%
+	caption
+		height 40px
+		line-height 40px
+		text-align left
+		
+	th
+		background #f2f2f2
+		color #666
+		padding 10px 15px
+	td
+		padding 10px 15px
+		background #fff
+	.addbtn
+	.delbtn
+		color #409EFF
+		cursor pointer
+.totalFrete
+	color #409EFF
+.tracto
+	padding 0 5px 0 8px
 </style>

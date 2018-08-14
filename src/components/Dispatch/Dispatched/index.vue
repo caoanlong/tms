@@ -57,7 +57,7 @@
 					</tr>
 					<template v-for="item in 5">
 						<tr>
-							<td colspan="10" class="blank">{{item}}</td>
+							<td colspan="10" class="blank"></td>
 						</tr>
 						<tr>
 							<td colspan="10" class="txt-l">
