@@ -20,7 +20,8 @@ $color-19 = #c9302c
 $color-20 = #c6e2ff
 $color-21 = #ecf5ff
 $color-22 = #3a8ee6
-
+$color-23 = #ddd
+$color-24 = #999
 @charset "UTF-8"
 
 #app
@@ -351,7 +352,7 @@ $color-22 = #3a8ee6
 .editCompanyInfoDialog
 .accountInfoDialog
     .el-dialog__body
-        border-top 1px solid #ddd
+        border-top 1px solid $color-23
 .accountInfoDialog
     border-radius 4px
     overflow hidden
@@ -375,6 +376,14 @@ $color-22 = #3a8ee6
         padding-bottom 0
 .DispatchOrderDialog
 .OrderDialog
+.scrambleDialog
     .el-dialog__body
-        border-top 1px solid #ddd
+        border-top 1px solid $color-23
         padding 0 20px
+.c1
+    color $color-2
+.c2
+    color $color-24
+.dispatchbillDetail
+    .el-card__body
+        font-size 14px

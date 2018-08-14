@@ -88,12 +88,12 @@ let routerMap = [
 					// 	meta: { title: '编辑调度单' },
 					// 	component: () => import('../components/Dispatch/DispatchBill/Edit'),
 					// },
-					// {
-					// 	path: '/viewdispatchbill',
-					// 	name: 'viewdispatchbill',
-					// 	meta: { title: '调度单详情' },
-					// 	component: () => import('../components/Dispatch/DispatchBill/View')
-					// },
+					{
+						path: '/viewdispatchbill',
+						name: 'viewdispatchbill',
+						meta: { title: '调度单详情' },
+						component: () => import('../components/Dispatch/dispatched/View')
+					},
 					// {
 					// 	path: '/viewtaskdetail',
 					// 	name: 'viewtaskdetail',
