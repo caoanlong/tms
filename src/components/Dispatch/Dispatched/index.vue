@@ -119,7 +119,7 @@
 		},
 		directives: {
 			autoscroll: {
-				bind: (el) => {
+				bind: el => {
 					let index = 1
 					const num = $(el).children().length
 					const newEl = $(el).html()
@@ -147,25 +147,6 @@
 		methods:{
 			tabClick(val){
 				this.isCur = val
-			},
-			search() {
-				this.pageIndex = 1
-				this.pageSize = 10
-				this.getList()
-			},
-			reset() {
-				this.pageIndex = 1
-				this.pageSize = 10
-				this.getList()
-			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			pageSizeChange(size) {
-				this.pageSize = size
-				this.pageIndex = 1
-				this.getList() 
 			},
 			getList () {
 				// Dispatchbill.find({
