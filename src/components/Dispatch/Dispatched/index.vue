@@ -28,11 +28,9 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.begin">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.end">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.begin">
+						</el-date-picker><span class="tracto">至</span>
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.end">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -339,5 +337,6 @@
 		color #f60
 	.selectTruck
 		cursor pointer
-				
+	.tracto
+		padding 0 5px 0 8px		
 </style>
