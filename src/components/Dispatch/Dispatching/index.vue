@@ -60,34 +60,38 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr v-for="(item,index) in 5" :key="index">
+						<tr v-for="(item, index) in tableData" :key="index">
 							<td class="wfCheck">
-								<span class="checkbox selected"><label></label></span>
+								<span 
+									class="checkbox" 
+									:class="selectedList.map(i => i.carrierOrderNo).includes(item.carrierOrderNo) ? 'selected' : ''"
+									@click="handSelectCarrierOrder(item)">
+								</span>
 							</td>
 							<td align="center">
-								<p>{{index+102336654}}</p>
-								<p>2018-03-0{{index+1}}</p>
+								<p>{{item.carrierOrderNo}}</p>
+								<p>{{item.commissionDate}}</p>
 							</td>
 							<td align="center">
-								<p>{{index +1}}号工厂</p>
-								<p>漳县罗凯</p>
+								<p>{{item.shipperName}}</p>
+								<p>{{item.consigneeName}}</p>
 							</td>
 							<td align="center">
-								<p><span class="from">发</span>云南昆明</p>
-								<p><span class="to">到</span>云南普洱</p>
+								<p><span class="from">发</span>{{item.shipperArea}}</p>
+								<p><span class="to">到</span>{{item.consigneeArea}}</p>
 							</td>
-							<td class="address">
-								<p>五华区彩云北路23040号，92栋</p>
-								<p>官渡区彩云北路23040号，93栋</p>
+							<td align="center" class="address">
+								<p>{{item.shipperDetailAddress}}</p>
+								<p>{{item.consigneeDetailAddress}}</p>
 							</td>
 							<td align="center">
-								<p>2018-03-0{{index+1}} 22:00</p>
-								<p>2018-03-0{{index+4}} 22:00</p>
+								<p>{{item.shipperDate}}</p>
+								<p>{{item.consigneeDate}}</p>
 							</td>
-							<td align="center">spc{{index+1}}水泥</td>
-							<td align="center">2000袋/100吨</td>
-							<td align="center">500袋/20吨</td>
-							<td align="center">1500袋/100吨</td>
+							<td align="center">{{item.cargoName}}</td>
+							<td align="center">{{item.orderNum}}</td>
+							<td align="center">{{item.dispatchedNum}}</td>
+							<td align="center">{{item.restNum}}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -353,11 +357,7 @@ import Dispatchbill from '../../../api/Dispatchbill'
 					beginDispatchDate: '',
 					endDispatchDate: ''
 				},
-				pageIndex: 1,
-				pageSize: 10,
-				total: 0,
-				selectedShipperArea: [],
-				dispatchBillList:[]
+				selectedShipperArea: []
 			}
 		},
 		components: { DistPicker},
@@ -365,6 +365,14 @@ import Dispatchbill from '../../../api/Dispatchbill'
 			this.getList()
 		},
 		methods:{
+			handSelectCarrierOrder(item) {
+				const index = this.selectedList.map(i => i.carrierOrderNo).indexOf(item.carrierOrderNo)
+				if (index > -1) {
+					this.selectedList.splice(index, 1)
+				} else {
+					this.selectedList.push(item)
+				}
+			},
 			handleSelectedShipperArea(data) {
 				if (!data) return
 				this.carrierbillInfo.shipperAreaID = data[data.length - 1]
@@ -406,18 +414,56 @@ import Dispatchbill from '../../../api/Dispatchbill'
 				this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
 			},
 			getList () {
-				// Dispatchbill.find({
-				// 	current: this.pageIndex,
-				// 	size: this.pageSize,
-				// 	keyword: this.find.keyword,
-				// 	customerID: this.find.customerID,
-				// 	status: this.find.status,
-				// 	beginDispatchDate: this.find.beginDispatchDate,
-				// 	endDispatchDate: this.find.endDispatchDate
-				// }).then(res => {
-				// 	this.dispatchBillList = res.records
-				// 	this.total = res.total
-				// })
+				this.tableData = [
+					{
+						carrierOrderNo: '102336654',
+						commissionDate: '2018-07-11 00:00:00',
+						shipperName: '1号工厂',
+						consigneeName: '漳县罗凯',
+						shipperArea: '云南昆明',
+						consigneeArea: '云南普洱',
+						shipperDetailAddress: '五华区彩云北路23040号92栋',
+						consigneeDetailAddress: '官渡区彩云北路23040号93栋',
+						shipperDate: '2018-03-01 22:00',
+						consigneeDate: '2018-03-04 22:00',
+						cargoName: 'spc1水泥',
+						orderNum: '2000袋/100吨',
+						dispatchedNum: '500袋/20吨',
+						restNum: '1500袋/100吨'
+					},
+					{
+						carrierOrderNo: '102336655',
+						commissionDate: '2018-07-11 00:00:00',
+						shipperName: '2号工厂',
+						consigneeName: '龚键',
+						shipperArea: '云南昆明',
+						consigneeArea: '云南普洱',
+						shipperDetailAddress: '五华区彩云北路23040号92栋',
+						consigneeDetailAddress: '官渡区彩云北路23040号93栋',
+						shipperDate: '2018-03-01 22:00',
+						consigneeDate: '2018-03-04 22:00',
+						cargoName: 'spc1水泥',
+						orderNum: '2000袋/100吨',
+						dispatchedNum: '500袋/20吨',
+						restNum: '1500袋/100吨'
+					},
+					{
+						carrierOrderNo: '102336656',
+						commissionDate: '2018-07-11 00:00:00',
+						shipperName: '3号工厂',
+						consigneeName: '龙哥',
+						shipperArea: '云南昆明',
+						consigneeArea: '云南普洱',
+						shipperDetailAddress: '五华区彩云北路23040号92栋',
+						consigneeDetailAddress: '官渡区彩云北路23040号93栋',
+						shipperDate: '2018-03-01 22:00',
+						consigneeDate: '2018-03-04 22:00',
+						cargoName: 'spc1水泥',
+						orderNum: '2000袋/100吨',
+						dispatchedNum: '500袋/20吨',
+						restNum: '1500袋/100吨'
+					}
+				]
 			},
 			// 发布派车单
 			publishDispatchOrder(){
