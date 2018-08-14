@@ -4,43 +4,42 @@
 			<div slot="header" class="clearfix">调度配载</div>
 			<div class="search">
 				<el-form :inline="true" size="small">
-					<el-form-item label="关键字">
-						<el-input placeholder="承运单号/货物名称/发货方/到货方"></el-input>
-					</el-form-item>
-					<el-form-item label="发货地">
-						<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
-					</el-form-item>
-					<el-form-item label="收货地">
-						<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
-					</el-form-item><br/>
+					<el-row>
+						<el-form-item label="关键字">
+							<el-input placeholder="承运单号/货物名称/发货方/到货方"></el-input>
+						</el-form-item>
+						<el-form-item label="发货地">
+							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
+						</el-form-item>
+						<el-form-item label="收货地">
+							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
+						</el-form-item>
+					</el-row>
+					<el-row>					
 					<el-form-item label="委托时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+						</el-date-picker><span class="tracto">至</span>
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
-						</el-date-picker>
-					</el-form-item><br/>
+				
 					<el-form-item label="到货时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+						</el-date-picker><span class="tracto">至</span>
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
-						</el-date-picker>
-					</el-form-item><br/>
 					<el-form-item label="装车时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+						</el-date-picker><span class="tracto">至</span>
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">搜索</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
 					</el-form-item>
+				</el-row>
 				</el-form>
 			</div>
 			<div class="tableTit">待调度的承运单</div>
@@ -261,7 +260,7 @@
 				</el-row>
 				<el-row>
 					<el-form-item label="接单截止时间">
-						<el-date-picker type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker type="date" :clearable="false" value-format="timestamp">
 						</el-date-picker>
 					</el-form-item>
 				</el-row>
@@ -302,7 +301,7 @@
 							<el-radio label="定价抢单"></el-radio>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="一品价金额">
+					<el-form-item label="一口价金额">
 						<el-input placeholder="请输入金额"><template slot="append">元</template></el-input>
 					</el-form-item>
 				</el-row>
@@ -318,7 +317,7 @@
 				</el-row>
 				<el-row>
 					<el-form-item label="接单截止时间">
-						<el-date-picker type="date" :clearable="false" value-format="timestamp" >
+						<el-date-picker type="date" :clearable="false" value-format="timestamp">
 						</el-date-picker>
 					</el-form-item>
 				</el-row>
@@ -590,4 +589,6 @@ import Dispatchbill from '../../../api/Dispatchbill'
 		cursor pointer
 .totalFrete
 	color #409EFF
+.tracto
+	padding 0 5px 0 8px
 </style>
