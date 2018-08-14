@@ -225,7 +225,7 @@
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
 																callback('请输入体积')
-															}else{
+															}else {
 																callback()
 															}
 														}
