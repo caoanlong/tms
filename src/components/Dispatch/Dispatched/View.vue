@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">调度详情</div>
 			<el-row :gutter="40">
 				<el-col :span="17" style="border-right:1px solid #ddd">
-					<p><span class="c1">调度单号：20180607162821798123</span><span class="fr c2">由 罗凯 创建调度单 2018/07/10 11:26</span></p>
+					<p><span class="c1">调度单号：{{dispatchOrder.dispatchOrderNo}}</span><span class="fr c2">由 <span class="c1">{{dispatchOrder.dispatchName}}</span> 创建调度单 <span class="c6">{{dispatchOrder.dispatchTime | getdatefromtimestamp}}</span></span></p>
 					<p>行驶数据</p>
 					<div class="lineInfo">
 						<span class="fl c1"><i class="el-icon-location"></i> 昆明五华区彩云北路56号</span>
@@ -18,7 +18,10 @@
 							<td>总里程 110公里 已用时 11小时19分钟</td>
 						</tr>
 					</table>
-					<p>总货量：<span class="c1">重量22吨 体积8.8方</span></p>
+					<p>总货量：
+						<span class="c1" v-if="dispatchOrder.loadWeightSum">重量 {{dispatchOrder.loadWeightSum}} 吨 </span>
+						<span class="c1" v-if="dispatchOrder.loadVolumeSum">体积 {{dispatchOrder.loadVolumeSum}} 方</span>
+					</p>
 					<p>运费<span class="fr carriage" @click="carriageDetail">3000元 <svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon></span></p>
 					<table class="wf-table" v-show="ShowCarriageDetail">
 						<thead>
@@ -28,7 +31,7 @@
 								<th>收款人</th>
 								<th>支付方式</th>
 								<th>金额</th>
-								<th><span class="addbtn">+ 添加费用</span></th>
+								<th><span class="addbtn" @click="addItem">+ 添加费用</span></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -101,15 +104,15 @@
 						</tfoot>
 					</table>
 					<p>运输任务（<span class="circle"></span> 色数字代表装卸执行顺序，来源线路规划排序） <span class="fr c1">预计总里程160公里</span></p>
-					<TaskItem v-for="(item,index) in 4" :key="index"></TaskItem>
+					<TaskItem v-for="(item,index) in dispatchOrder.dispatchTaskList" :taskItem="item" :index="index" :key="item.carrierOrderID"></TaskItem>
 				</el-col>
 				<el-col :span="7">
 					<p>运输车辆人员</p>
 					<div class="truckInfo c2">
-						<p><label>车牌号</label>云AD0046 12.5米/高栏货车</p>
-						<p><label>挂车牌</label>云AD0046</p>
-						<p><label>司机</label>韩燚垚 15559608506</p>
-						<p><label>押运员</label>韩燚垚 15559608506</p>
+						<p><label>车牌号</label>{{dispatchOrder.plateNo}} 12.5米/高栏货车</p>
+						<p v-if="dispatchOrder.trailerPlateNo"><label>挂车牌</label>{{dispatchOrder.trailerPlateNo}}</p>
+						<p><label>司机</label>{{dispatchOrder.driverName}} {{dispatchOrder.driverMobile}}</p>
+						<p v-if="dispatchOrder.superCargoName"><label>押运员</label>{{dispatchOrder.superCargoName}} {{dispatchOrder.superCargoMobile}}</p>
 					</div>
 					<p class="dispatchLogTit">调度日志</p>
 					<ul class="dispatchLog">
@@ -130,26 +133,33 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import TaskItem from './common/TaskItem/'
+import Dispatchbill from '../../../api/Dispatchbill'
+import TaskItem from './common/TaskItem'
 export default {
 	data() {
 		return {
-			ShowCarriageDetail:false
+			ShowCarriageDetail:false,
+			dispatchOrder: {}
 		}
 	},
-
 	created() {
-		this.getInfo()
+		this.getDetail()
 	},
 	methods: {
-		getInfo() {
-
+		getDetail() {
+			const dispatchOrderID = this.$route.query.dispatchOrderID
+			Dispatchbill.findById({ dispatchOrderID }).then(res => {
+				this.dispatchOrder = res
+			})
 		},
 		back() {
 			this.$router.go(-1)
 		},
 		carriageDetail(){
 			this.ShowCarriageDetail = !this.ShowCarriageDetail
+		},
+		addItem(){
+			
 		}
 	},
 	components:{
@@ -178,6 +188,7 @@ export default {
 	.carriage
 		color #666
 		cursor pointer
+		user-select none
 		.unfold
 			transform rotate(180deg)
 			transition all .5s
