@@ -28,8 +28,8 @@
 		<div class="picCon" v-if="taskItem.dispatchTaskPicList.length>0">
 			<ImageUpload :isShowType="true" :objs="taskItem.dispatchTaskPicList" :files="taskItem.dispatchTaskPicList.map(item => item.minURL)" :isPreview="true"/>
 		</div>
-		<div class="cargoTit">承运货物<span class="fr">重量2吨 体积1.8方</span></div>
-		<div class="cargoList">
+		<div class="cargoTit">承运货物<span class="fr c1 total" @click="unfold">重量2吨 体积1.8方 <svg-icon icon-class="arrow-down" :class="isFold?'':'unfold'"></svg-icon></span></div>
+		<div class="cargoList" v-if="isFold ">
 			<p><span class="fl">啤酒</span><span class="fr">300袋 / 1000吨 / 1.4方</span></p>
 			<p><span class="fl">可口可乐</span><span class="fr">400箱 / 1000吨 / 1.8方</span></p>
 			<p><span class="fl">王老吉</span><span class="fr">200件 / 1000吨 / 1.2方</span></p>
@@ -37,14 +37,21 @@
 	</div>
 </template>
 <script>
-import { defaultImg } from '../../../../../assets/icons/icons'
-import { resizeImg } from '../../../../../common/utils'
-import ImageUpload from '../../../../CommonComponents/ImageUpload2'
+import { defaultImg } from '../../../../assets/icons/icons'
+import { resizeImg } from '../../../../common/utils'
+import ImageUpload from '../../../CommonComponents/ImageUpload2'
 export default {
+	data(){
+		return{
+			isFold:false
+		}
+	},
 	props:{
 		index:{
-			type: Number,
-			default: 1
+			type: Number
+		},
+		selectIndex:{
+			type: Number
 		},
 		taskItem:{
 			type: Object
@@ -55,6 +62,11 @@ export default {
 		resizeImg: () => resizeImg
 	},
 	components: {ImageUpload},
+	methods:{
+		unfold(){
+			this.isFold = !this.isFold
+		}
+	}
 }
 </script>
 <style lang="stylus" scoped>
@@ -67,8 +79,17 @@ export default {
 		border-bottom 1px solid #e2ecf6
 	.picTit
 	.cargoTit
+	.picCon
 		padding 10px 15px
 		border-top 1px solid #e2ecf6
+	.cargoTit
+		.total
+			cursor pointer
+			user-select none
+			.svg-icon
+				&.unfold
+					transform rotate(180deg)
+					transition all .5s
 	.baseInfo
 		display flex
 		.from

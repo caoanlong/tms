@@ -31,7 +31,7 @@
 								<th>收款人</th>
 								<th>支付方式</th>
 								<th>金额</th>
-								<th><span class="addbtn">+ 添加费用</span></th>
+								<th><span class="addbtn" @click="addItem">+ 添加费用</span></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -134,7 +134,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../../api/Dispatchbill'
-import TaskItem from './common/TaskItem/'
+import TaskItem from './common/TaskItem'
 export default {
 	data() {
 		return {
@@ -185,6 +185,7 @@ export default {
 	.carriage
 		color #666
 		cursor pointer
+		user-select none
 		.unfold
 			transform rotate(180deg)
 			transition all .5s

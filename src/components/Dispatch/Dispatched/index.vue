@@ -99,8 +99,8 @@
 						</tr>
 					</template>
 				</table>
-				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
+			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
 		<el-dialog title="报价详情" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
 			<p class="c1">货物： 啤酒、王老吉、可口可乐</p>
@@ -118,7 +118,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<template v-for="item in 3">
+						<template v-for="item in 13">
 							<tr><td colspan="4" class="blank"></td></tr>
 							<tr>
 								<td class="txt-l">
@@ -234,8 +234,8 @@
 				this.isCur = val
 			},
 			view(dispatchOrderID) {
-			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
-		},
+				this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
+			},
 			getList () {
 				Dispatchbill.find({
 					current: this.pageIndex,
@@ -286,7 +286,7 @@
 		overflow hidden
 		overflow-x auto
 		.customerTable
-			font-size 14px
+			font-size 12px
 			background #dcdfe6
 			border-spacing 1px
 			width 100%
@@ -295,17 +295,7 @@
 				height 30px
 				line-height 30px
 			th
-				background #f2f2f2
-				color #666
-				padding 10px 15px
-				white-space  nowrap
 			td
-				padding 10px 15px
-				background #fff
-				white-space  nowrap 
-				text-align center
-				&.blank
-					padding 5px 0
 				&.txt-l
 					text-align left	
 				&.w1
@@ -316,6 +306,20 @@
 					width 300px
 				&.w4
 					width 100px
+			th
+				background #f2f2f2
+				color #666
+				padding 10px 15px
+				white-space  nowrap
+			td
+				padding 10px 15px
+				background #fff
+				color #999
+				white-space  nowrap 
+				text-align center
+				&.blank
+					padding 5px 0
+					background #f8f8f8
 				.tags
 					background #409EFF
 					color #fff
@@ -357,6 +361,7 @@
 					height 20px
 					span
 						margin-left 20px
+						line-height 20px
 						cursor pointer
 
 	.c3			
