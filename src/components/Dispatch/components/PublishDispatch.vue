@@ -1,12 +1,25 @@
 <template>
-    <el-dialog title="发布派车单" :visible.sync="DispatchOrderDialog" custom-class="DispatchOrderDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
+    <el-dialog title="发布派车单" 
+        :visible="isVisible" 
+        custom-class="dispatch-order-dialog" 
+        :show-close="true" 
+        :fullscreen="true" 
+        :modal="false"
+        :close-on-press-escape="false" 
+        :close-on-click-modal="false" 
+        @close="close">
         <el-form size="small">
-            <el-row class="baseInfo">
-                <p>总配载：<span class="tag">数</span><span class="num">1200</span><span class="tag">重</span><span class="num">30</span><span class="tag">体</span><span class="num">18</span></p>
-                <p><b>3</b>装<b>3</b>卸  预计总里程<b>160</b>公里</p>
-            </el-row>
+            <div class="num-info">
+                <span class="num-tit">配载总量</span>
+                <span class="num-label"><span>数</span>{{totalNum}}</span>
+                <span class="num-label"><span>重</span>{{totalWeight}}</span>
+                <span class="num-label"><span>体</span>{{totalVolume}}</span>
+            </div>
+            <div class="num-info">
+                <span class="num-tit">预计里程{{totalDistance}}公里</span>
+            </div>
             <el-row>
-                <table class="dialogTable">
+                <table class="dialog-table">
                     <caption>车辆人员</caption>
                     <thead>
                         <tr>
@@ -17,15 +30,15 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td align="center"><span class="addbtn">+ 添加车辆</span></td>
-                            <td align="center"><span class="addbtn">+ 添加驾驶员</span></td>
-                            <td align="center"><span class="addbtn">+ 添加随行人员</span></td>
+                            <td align="center"><span class="add-btn">+ 添加车辆</span></td>
+                            <td align="center"><span class="add-btn">+ 添加驾驶员</span></td>
+                            <td align="center"><span class="add-btn">+ 添加随行人员</span></td>
                         </tr>
                     </tbody>
                 </table>
             </el-row>
             <el-row>
-                <table class="dialogTable">
+                <table class="dialog-table">
                     <caption>任务运费&支付方式</caption>
                     <thead>
                         <tr>
@@ -34,7 +47,7 @@
                             <th>收款人</th>
                             <th>支付方式</th>
                             <th>金额</th>
-                            <th><span class="addbtn">+ 添加费用</span></th>
+                            <th><span class="add-btn">+ 添加费用</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,14 +57,14 @@
                             <td align="center"></td>
                             <td align="center"></td>
                             <td align="center"></td>
-                            <td align="center"><span class="delbtn">删除</span></td>
+                            <td align="center"><span class="del-btn">删除</span></td>
                         </tr>
                     </tbody>
                 </table>
             </el-row>
-            <el-row>
-                <p class="totalFrete">总运费：30000.00元</p>
-            </el-row>
+            <div class="num-info">
+                <span class="num-tit">总运费：{{totalFreight}}元</span>
+            </div>
             <el-row>
                 <el-form-item label="接单截止时间">
                     <el-date-picker type="date" :clearable="false" value-format="timestamp">
@@ -61,8 +74,8 @@
             <el-row style="margin-top:20px">
                 <el-col :span="24">
                     <el-form-item label-width="0" class="text-center">
-                        <el-button @click="cancelDispatchOrder">取消</el-button>
-                        <el-button type="primary">保存</el-button>
+                        <el-button @click="close">取消</el-button>
+                        <el-button type="primary">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -72,14 +85,84 @@
 
 <script>
 export default {
+    props: {
+        totalNum: {
+            type: Number,
+            default: 0
+        },
+        totalWeight: {
+            type: Number,
+            default: 0
+        },
+        totalVolume: {
+            type: Number,
+            default: 0
+        },
+        totalDistance: {
+            type: Number,
+            default: 0
+        },
+        isVisible: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
-
+            totalFreight: 0
+        }
+    },
+    methods: {
+        close() {
+            this.$emit('cancel')
         }
     }
 }
 </script>
 <style lang="stylus" scoped>
-
+.dispatch-order-dialog
+    .num-info
+        height 40px
+        line-height 40px
+        font-size 14px
+        text-align left
+        .num-tit
+            color #409EFF
+            font-weight 600
+            margin-right 10px
+        .num-label
+            margin-right 10px
+            span
+                width 18px
+                height 18px
+                display inline-block
+                color #fff
+                border-radius 4px
+                font-size 12px
+                line-height 18px
+                text-align center
+                font-weight 800
+                margin-right 4px
+                background-color #409EFF
+    .dialog-table
+        font-size 14px
+        background #dcdfe6
+        border-spacing 1px
+        width 100%
+        caption
+            height 40px
+            line-height 40px
+            text-align left
+            
+        th
+            background #f2f2f2
+            color #666
+            padding 10px 15px
+        td
+            padding 10px 15px
+            background #fff
+        .add-btn,.del-btn
+            color #409EFF
+            cursor pointer
 </style>
 

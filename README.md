@@ -1,6 +1,6 @@
 # TMS
 
-> A admin system for Anhua with Vue.js
+> A admin system for TMS with Vue.js
 
 ## Build Setup
 

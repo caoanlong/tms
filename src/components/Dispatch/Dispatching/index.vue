@@ -12,26 +12,61 @@
 							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
 						</el-form-item>
 						<el-form-item label="收货地">
-							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
+							<dist-picker :distList="selectedConsigneeArea" @hand-select="handleSelectedConsigneeArea" style="width:250px"></dist-picker>
 						</el-form-item>
 					</el-row>
 					<el-row>					
 						<el-form-item label="委托时间从">
-							<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
-							</el-date-picker><span class="tracto">至</span>
-							<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+							<el-date-picker 
+								:picker-options="{ disabledDate: (curDate) => new Date() < curDate}" 
+								type="date" 
+								:clearable="false" 
+								value-format="timestamp" 
+								style="width:160px" 
+								v-model="find.commissionDateBegin">
+							</el-date-picker>
+							<span class="tracto">至</span>
+							<el-date-picker 
+								:picker-options="{ disabledDate: (curDate) => new Date() > curDate}" 
+								type="date" 
+								:clearable="false" 
+								value-format="timestamp" 
+								style="width:160px" 
+								v-model="find.commissionDateEnd">
 							</el-date-picker>
 						</el-form-item>
 						<el-form-item label="到货时间从">
-							<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
-							</el-date-picker><span class="tracto">至</span>
-							<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+							<el-date-picker 
+								:picker-options="{ disabledDate: (curDate) => new Date() < curDate}" 
+								type="date" 
+								:clearable="false" 
+								value-format="timestamp" 
+								style="width:160px">
+							</el-date-picker>
+							<span class="tracto">至</span>
+							<el-date-picker 
+								:picker-options="{ disabledDate: (curDate) => new Date() > curDate}" 
+								type="date" 
+								:clearable="false" 
+								value-format="timestamp" 
+								style="width:160px">
 							</el-date-picker>
 						</el-form-item>
 						<el-form-item label="装车时间从">
-							<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
-							</el-date-picker><span class="tracto">至</span>
-							<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px">
+							<el-date-picker 
+								:picker-options="{ disabledDate: (curDate) => new Date() < curDate}" 
+								type="date" 
+								:clearable="false" 
+								value-format="timestamp" 
+								style="width:160px">
+							</el-date-picker>
+							<span class="tracto">至</span>
+							<el-date-picker 
+								:picker-options="{ disabledDate: (curDate) => new Date() > curDate}" 
+								type="date" 
+								:clearable="false" 
+								value-format="timestamp" 
+								style="width:160px">
 							</el-date-picker>
 						</el-form-item>
 						<el-form-item>
@@ -267,7 +302,7 @@
 										<span v-if="item.type == '装车'">{{item.shipperArea}}</span>
 										<span v-else>{{item.consigneeArea}}</span>
 									</td>
-									<td align="center">10公里</td>
+									<td align="center">{{item.distance}}公里</td>
 									<td align="center">{{item.date | getdatefromtimestamp('min')}}</td>
 								</tr>
 							</tbody>
@@ -295,7 +330,7 @@
 						</table>
 					</div>
 					<div class="num-info">
-						<span class="num-tit">预计里程160公里</span>
+						<span class="num-tit">预计里程{{totalDistance}}公里</span>
 					</div>
 				</el-card>
 			</el-col>
@@ -306,12 +341,22 @@
 				<el-button type="success" @click="publish('grab')">发布抢单</el-button>
 			</el-col>
 		</el-row>
+		<publish-dispatch 
+			:totalNum="totalNum" 
+			:totalWeight="totalWeight" 
+			:totalVolume="totalVolume" 
+			:totalDistance="totalDistance" 
+			:isVisible="dispatchDialog" 
+			@cancel="handClosePublish">
+		</publish-dispatch>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import axios from 'axios'
 import distData from '../../../assets/data/distpicker.data'
 import DistPicker from '../../CommonComponents/DistPicker2'
+import PublishDispatch from '../components/PublishDispatch'
 import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { checkFloat2, checkInt } from '../../../common/valid'
@@ -319,19 +364,21 @@ export default {
 	mixins: [baseMixin], 
 	data(){
 		return {
-			dispatchDialog:false,
-			grabDialog:false,
+			dispatchDialog: false,
+			grabDialog: false,
 			find: {
 				keyword: '',
 				customerID: '',
 				companyName: '',
 				status: '',
-				beginDispatchDate: '',
-				endDispatchDate: ''
+				commissionDateBegin: '',
+				commissionDateEnd: ''
 			},
 			selectedShipperArea: [],
+			selectedConsigneeArea: [],
 			selectedListNoRepeat: [],
-			transLines: []
+			transLines: [],
+			totalDistance: 0
 		}
 	},
 	computed: {
@@ -339,24 +386,27 @@ export default {
 		checkInt: () => checkInt,
 		totalWeight() {
 			const values = this.selectedList.map(item => Number(item.cargoWeight ? item.cargoWeight : 0))
-			return values.reduce((prev, curr) => {
+			const val = values.reduce((prev, curr) => {
 				return prev + curr
 			}, 0).toFixed(2)
+			return Number(val)
 		},
 		totalVolume() {
 			const values = this.selectedList.map(item => Number(item.cargoVolume ? item.cargoVolume : 0))
-			return values.reduce((prev, curr) => {
+			const val = values.reduce((prev, curr) => {
 				return prev + curr
 			}, 0).toFixed(2)
+			return Number(val)
 		},
 		totalNum() {
 			const values = this.selectedList.map(item => Number(item.cargoNum ? item.cargoNum : 0))
-			return values.reduce((prev, curr) => {
+			const val = values.reduce((prev, curr) => {
 				return prev + curr
 			}, 0).toFixed(2)
-		},
+			return Number(val)
+		}
 	},
-	components: { DistPicker },
+	components: { DistPicker, PublishDispatch },
 	created() {
 		this.getList()
 	},
@@ -383,6 +433,9 @@ export default {
 			this.selectedListNoRepeat = this.arrayUnique(this.selectedList, 'carrierOrderID')
 			this.transLineCreate()
 		},
+		/**
+		 * 修改排序
+		 */
 		changeSort(i, type) {
 			const list = [...this.transLines]
 			const current = list[i]
@@ -393,8 +446,20 @@ export default {
 				list[i] = list[i+1]
 				list[i+1] = current
 			}
+			if (list[0].type == '卸货') {
+				Message.error('第一条必须为装车！')
+				return
+			}
+			if (list[list.length-1].type == '装车') {
+				Message.error('最后一条必须为卸货！')
+				return
+			}
 			this.transLines = list
+			this.getDistance()
 		},
+		/**
+		 * 生成线路
+		 */
 		transLineCreate() {
 			this.transLines = []
 			this.selectedListNoRepeat.forEach((i, x) => {
@@ -404,13 +469,17 @@ export default {
 						carrierOrderID: i.carrierOrderID,
 						carrierOrderNo: i.carrierOrderNo,
 						shipperArea: i.shipperArea,
-						date: i.shipperDate
+						date: i.shipperDate,
+						lat: i.shipperLocationLat,
+						lng: i.shipperLocationLng
 					},{
 						type: '卸货',
 						carrierOrderID: i.carrierOrderID,
 						carrierOrderNo: i.carrierOrderNo,
 						consigneeArea: i.consigneeArea,
 						date: i.consigneeDate,
+						lat: i.consigneeLocationLat,
+						lng: i.consigneeLocationLng
 					}
 				])
 			})
@@ -420,6 +489,27 @@ export default {
 				} else {
 					return a.date - b.date
 				}
+			})
+			this.getDistance()
+		},
+		/**
+		 * 调用高德地图接口获取距离
+		 */
+		getDistance() {
+			const list = this.transLines.map(item => item.lng + ',' + item.lat)
+			const origins = list.join('|')
+			const destination = list[list.length-1]
+			const key = '3a29e75c898b755e250dfcf99c3ebd45'
+			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${key}`}).then(res => {
+				const results = res.data.results
+				const arrays = [...this.transLines]
+				this.totalDistance = 0
+				arrays.forEach((item,i) => {
+					item.distance = (Number(results[i].distance)/1000).toFixed(2)
+					this.totalDistance += Number(item.distance)
+				})
+				this.totalDistance = Number(this.totalDistance.toFixed(2))
+				this.transLines = arrays
 			})
 		},
 		handleSelectedShipperArea(data) {
@@ -482,7 +572,11 @@ export default {
 					remainingCargoNum: 1500,
 					remainingCargoVolume: 5,
 					remainingCargoWeight: 100,
-					dispatchType: 'Quantity'
+					dispatchType: 'Quantity',
+					shipperLocationLat: 22.543707,
+					shipperLocationLng: 114.061151,
+					consigneeLocationLat: 39.904239,
+					consigneeLocationLng: 116.406468
 				},
 				{
 					carrierOrderID: 1,
@@ -502,7 +596,11 @@ export default {
 					remainingCargoNum: 1500,
 					remainingCargoVolume: 5,
 					remainingCargoWeight: 100,
-					dispatchType: 'Quantity'
+					dispatchType: 'Quantity',
+					shipperLocationLat: 22.543707,
+					shipperLocationLng: 114.061151,
+					consigneeLocationLat: 39.904239,
+					consigneeLocationLng: 116.406468
 				},
 				{
 					carrierOrderID: 2,
@@ -522,7 +620,11 @@ export default {
 					remainingCargoNum: 1500,
 					remainingCargoVolume: 5,
 					remainingCargoWeight: 100,
-					dispatchType: 'Volumn'
+					dispatchType: 'Volumn',
+					shipperLocationLat: 22.543707,
+					shipperLocationLng: 114.061151,
+					consigneeLocationLat: 39.904239,
+					consigneeLocationLng: 116.406468
 				},
 				{
 					carrierOrderID: 3,
@@ -542,13 +644,18 @@ export default {
 					remainingCargoNum: 1500,
 					remainingCargoVolume: 5,
 					remainingCargoWeight: 100,
-					dispatchType: 'Weight'
+					dispatchType: 'Weight',
+					shipperLocationLat: 22.543707,
+					shipperLocationLng: 114.061151,
+					consigneeLocationLat: 39.904239,
+					consigneeLocationLng: 116.406468
 				}
 			]
 		},
 		// 发布派车单&发布抢单
 		publish(type){
 			this[type + 'Dialog'] = true
+			return
 			if (this.selectedList.length == 0) {
 				Message.error(`请选择承运单！`)
 				return
@@ -565,6 +672,12 @@ export default {
 			}).then(() => {
 				this[type + 'Dialog'] = true
 			}).catch(err => {})
+		},
+		/**
+		 * 关闭发布派车单窗口
+		 */
+		handClosePublish(data) {
+			this.dispatchDialog = false
 		},
 		arrayUnique(arr, attr) {
 			const hash = {}
