@@ -37,8 +37,9 @@
 				</el-row>
 				<el-row>
 					<el-col :span="12">
-						<div class="section-block">
+						<div class="section-block posr">
 							<span class="block-title">发货信息</span>
+							<span class="addCompany">新增企业地址</span>
 							<el-row class="block-content">
 								<el-form-item label="发货单位" prop="shipperID">
 									<el-autocomplete  style="width:100%"
@@ -52,42 +53,10 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="发货人" prop="shipperName">
-									<el-autocomplete  style="width:100%"
-										value-key="contactName" 
-										v-model="carrierbillInfo.shipperName"
-										:fetch-suggestions="getShipper"
-										placeholder="请输入..."
-										@select="handSelectShipper">
-									</el-autocomplete>
+									
 								</el-form-item>
 							</el-row>
-							<el-row class="block-content">
-								<el-form-item label="联系方式" prop="shipperPhone">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperPhone" @input="inputShipperPhone"></el-input>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
-								<el-form-item label="发货地" prop="shipperAreaID">
-									<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea"></dist-picker>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
-								<el-form-item label="定位地址" prop="shipperLocationAddress">
-									<el-autocomplete  style="width:100%"
-										value-key="name" 
-										prefix-icon="el-icon-location"
-										v-model="carrierbillInfo.shipperLocationAddress"
-										:fetch-suggestions="getShipperLocation"
-										placeholder="请输入..."
-										@select="handSelectShipperLocation">
-									</el-autocomplete>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
-								<el-form-item label="详细地址" prop="shipperDetailAddress">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperDetailAddress"></el-input>
-								</el-form-item>
-							</el-row>
+							
 							<el-row class="block-content">
 								<el-form-item label="发货时间" prop="shipperDate">
 									<el-date-picker 
@@ -103,8 +72,9 @@
 						</div>
 					</el-col>
 					<el-col :span="12">
-						<div class="section-block">
+						<div class="section-block posr">
 							<span class="block-title">到货信息</span>
+							<span class="addCompany">新增企业地址</span>
 							<el-row class="block-content">
 								<el-form-item label="收货单位" prop="consigneeID">
 									<el-autocomplete  style="width:100%"
@@ -725,5 +695,16 @@ export default {
 			td
 				padding 10px 12px
 
-			
+.addCompany
+	background #409eff
+	color #FFF
+	cursor pointer
+	border-radius 4px
+	padding 0 12px
+	font-size 12px
+	line-height 24px
+	height 24px
+	position absolute
+	right 10px
+	top -10px		
 </style>

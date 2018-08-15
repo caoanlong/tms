@@ -157,6 +157,9 @@ export default {
 		},
 		carriageDetail(){
 			this.ShowCarriageDetail = !this.ShowCarriageDetail
+		},
+		addItem(){
+			
 		}
 	},
 	components:{
