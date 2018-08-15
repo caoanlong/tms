@@ -52,11 +52,10 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货人" prop="shipperName">
-									
+								<el-form-item label="发货地址">
+									<DropdownSelect :itemlist="itemlist" :placeholder="placeholder" :nodatatext="nodatatext"></DropdownSelect>
 								</el-form-item>
 							</el-row>
-							
 							<el-row class="block-content">
 								<el-form-item label="发货时间" prop="shipperDate">
 									<el-date-picker 
@@ -87,41 +86,8 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="收货人" prop="consigneeName">
-									<el-autocomplete  style="width:100%"
-										value-key="contactName" 
-										v-model="carrierbillInfo.consigneeName"
-										:fetch-suggestions="getConsignee"
-										placeholder="请输入..."
-										@select="handSelectConsignee">
-									</el-autocomplete>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
-								<el-form-item label="联系方式" prop="consigneePhone">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneePhone" @input="inputConsigneePhone"></el-input>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
-								<el-form-item label="收货地" prop="consigneeAreaID">
-									<dist-picker :distList="selectedConsigneeArea" @hand-select="handleSelectedConsigneeArea"></dist-picker>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
-								<el-form-item label="定位地址" prop="consigneeLocationAddress">
-									<el-autocomplete  style="width:100%"
-										value-key="name" 
-										prefix-icon="el-icon-location" 
-										v-model="carrierbillInfo.consigneeLocationAddress"
-										:fetch-suggestions="getConsigneeLocation"
-										placeholder="请输入..."
-										@select="handSelectConsigneeLocation">
-									</el-autocomplete>
-								</el-form-item>
-							</el-row>
-							<el-row class="block-content">
-								<el-form-item label="详细地址" prop="consigneeDetailAddress">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.consigneeDetailAddress"></el-input>
+								<el-form-item label="收货地址">
+									
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -290,10 +256,12 @@ import { checkTel } from '../../../common/validators'
 import distData from '../../../assets/data/distpicker.data'
 import Geohash from '../../../common/Geohash'
 import DistPicker from '../../CommonComponents/DistPicker2'
+import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		return {
+			selectAddressPop:false,
 			units: [],
 			carrierbillInfo: {
 				shipperNo: '',                  /** String 发货单号*/
@@ -363,7 +331,7 @@ export default {
 			}
 		}
 	},
-	components: { DistPicker },
+	components: { DistPicker ,DropdownSelect},
 	computed: {
 		checkInt: () => checkInt,
 		checkFloat2: () => checkFloat2
@@ -621,6 +589,9 @@ export default {
 		},
 		back() {
 			this.$router.go(-1)
+		},
+		selectAddress(){
+			this.selectAddressPop=true
 		}
 	}
 }
@@ -706,5 +677,31 @@ export default {
 	height 24px
 	position absolute
 	right 10px
-	top -10px		
+	top -10px
+.customerAddressComponents
+	background  #fff
+	width 100%
+	border-radius 4px
+	border 1px solid #dcdfe6
+	box-sizing border-box
+	color #606266
+	display inline-block
+	vertical-align top
+	height 96px
+	line-height 32px
+	cursor pointer
+	padding 0 15px
+	font-size 13.3333px
+	position relative
+	.AddressPop
+		position absolute
+		background #fff
+		top 96px
+		left 0
+		right 0
+		border 1px solid #dcdfe6
+		width 100%
+		height 32px
+		z-index 10
+		width 100%
 </style>
