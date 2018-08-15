@@ -101,7 +101,7 @@
 						</tfoot>
 					</table>
 					<p>运输任务（<span class="circle"></span> 色数字代表装卸执行顺序，来源线路规划排序） <span class="fr c1">预计总里程160公里</span></p>
-					<TaskItem></TaskItem>
+					<TaskItem v-for="(item,index) in 4" :key="index"></TaskItem>
 				</el-col>
 				<el-col :span="7">
 					<p>运输车辆人员</p>
@@ -111,6 +111,18 @@
 						<p><label>司机</label>韩燚垚 15559608506</p>
 						<p><label>押运员</label>韩燚垚 15559608506</p>
 					</div>
+					<p class="dispatchLogTit">调度日志</p>
+					<ul class="dispatchLog">
+						<li><p>抢单成功 2018/07/10 11:26</p></li>
+						<li><p>开始装车 2018/07/10 11:26</p>
+						<p>装车地址：北京市大兴区后查路</p></li>
+						<li><p>上传装车照片  2018/07/10 11:26</p></li>
+						<li><p>上传到货照片  2018/07/10 11:26</p></li>
+						<li><p>上传回单照片  2018/07/10 11:26</p></li>
+						<li><p>上传在途照片  2018/07/10 11:26</p></li>
+						<li><p>开始到货  2018/07/10 11:26</p>
+						<p>到货地址：北京市大兴区后查路</p></li>
+					</ul>
 				</el-col>
 			</el-row>
 		</el-card>
@@ -118,7 +130,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import TaskItem from './common/TaskItem'
+import TaskItem from './common/TaskItem/'
 export default {
 	data() {
 		return {
@@ -151,6 +163,7 @@ export default {
 	p
 		line-height 30px
 	.truckInfo
+		padding-bottom 10px
 		label
 			width 60px
 			text-align right
@@ -184,4 +197,25 @@ export default {
 		display inline-block
 		border-radius 6px
 		vertical-align middle
+	.dispatchLogTit
+		border-top 1px solid #ddd
+		padding-top 10px
+	.dispatchLog
+		padding-left 40px
+		li
+			padding 5px 
+			list-style none
+			position relative
+			&:before
+				content ""
+				width 6px
+				height 6px
+				background #ccc
+				display block
+				position absolute
+				left -10px
+				top 12px
+			p
+				line-height 20px
+				color #999
 </style>
