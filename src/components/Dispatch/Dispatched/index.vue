@@ -11,7 +11,7 @@
 						<el-input placeholder="收发单位" v-model="find.recdeliverycomp"></el-input>
 					</el-form-item>
 					<el-form-item label="调度状态">
-						<el-select placeholder="全部" v-model="find.dispatchStatus">
+						<el-select placeholder="全部" v-model="find.dispatchStatus" style="width:120px">
 							<el-option value="" label="全部">全部</el-option>
 							<el-option value="11111" label="未接单">未接单</el-option>
 							<el-option value="22222" label="已接单">已接单</el-option>
@@ -20,7 +20,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度类型">
-						<el-select placeholder="全部" v-model="find.dispatchSort">
+						<el-select placeholder="全部" v-model="find.dispatchSort" style="width:120px">
 							<el-option value="" label="全部">全部</el-option>
 							<el-option value="11111" label="指派">指派</el-option>
 							<el-option value="22222" label="报价">报价</el-option>
@@ -53,14 +53,14 @@
 						<th class="w1">送货时间</th>
 						<th class="w1">操作</th>
 					</tr>
-					<template v-for="item in 5">
+					<template v-for="item in dispatchBillList">
 						<tr>
 							<td colspan="10" class="blank"></td>
 						</tr>
 						<tr>
 							<td colspan="10" class="txt-l">
 								<div class="dispatchbillTit">
-									<span class="num" @click="view">调度单号：23456788801</span>
+									<span class="num" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
 									<el-tag type="info" size="mini">抢</el-tag>
 									<div class="quoteInfo">
 										<div class="quoteList" v-autoscroll>
@@ -78,16 +78,23 @@
 								</div>
 							</td>
 						</tr>
-						<tr>
-							<td>6564997</td>
-							<td>待装车</td>
-							<td class="txt-l">啤酒，可乐...</td>
-							<td>2200kg/2.3m³</td>
-							<td>332</td>
-							<td>云南昆明</td>
-							<td>2018-03-01 22:22</td>
-							<td>广东深圳</td>
-							<td>2018-03-01 22:22</td>
+						<tr v-for="taskItem in item.dispatchTaskList">
+							<td>{{taskItem.taskNo}}</td>
+							<td><el-tag size="mini" v-if="taskItem.status == 'Committed'">待装车</el-tag>
+								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
+								<el-tag size="mini" type="success" v-else-if="taskItem.status == 'Signed'">已签收</el-tag>
+								<el-tag size="mini" type="info" v-else>已作废</el-tag></td>
+							<td class="txt-l">{{taskItem.cargoName}}</td>
+							<td class="text-center" v-if="taskItem.loadWeightSum || taskItem.loadVolumeSum || taskItem.loadVolumeSum">
+								{{taskItem.loadWeightSum ? taskItem.loadWeightSum + '吨' : ''}}
+								{{taskItem.loadVolumeSum ? (taskItem.loadWeightSum ? '/' : '') + taskItem.loadVolumeSum + '方' : ''}}
+							</td>
+							<td v-else>0</td>
+							<td>{{taskItem.loadNumSum}}</td>
+							<td>{{taskItem.shipperArea}}</td>
+							<td>{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
+							<td>{{taskItem.consigneeArea}}</td>
+							<td>{{taskItem.consigneeDate | getdatefromtimestamp(true)}}</td>
 							<td>查看照片</td>
 						</tr>
 					</template>
@@ -157,7 +164,9 @@
 	</div>
 </template>
 <script type="text/javascript">
+	import { PAGEINDEX, PAGESIZE, TOTAL } from '../../../common/const'
 	import { baseMixin } from '../../../common/mixin'
+	import Dispatchbill from '../../../api/Dispatchbill'
 	export default {
 		mixins: [baseMixin], 
 		data(){
@@ -172,7 +181,8 @@
 					end:''
 				},
 				timer: null,
-				scrambleDialog:false
+				scrambleDialog:false,
+				dispatchBillList: [],
 			}
 		},
 		directives: {
@@ -204,25 +214,41 @@
 			this.timer = null
 		},
 		methods:{
+			search() {
+				this.pageIndex = PAGEINDEX
+				this.pageSize = PAGESIZE
+				this.getList()
+			},
+			reset() {
+				this.find.keyword=''
+				this.find.recdeliverycomp=''
+				this.find.dispatchStatus=''
+				this.find.dispatchSort=''
+				this.find.begin=''
+				this.find.end=''
+				this.pageIndex = PAGEINDEX
+				this.pageSize = PAGESIZE
+				this.getList()
+			},
 			tabClick(val){
 				this.isCur = val
 			},
-			view(){
-				this.$router.push({ name: 'viewdispatchbill' })
-			},
+			view(dispatchOrderID) {
+			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
+		},
 			getList () {
-				// Dispatchbill.find({
-				// 	current: this.pageIndex,
-				// 	size: this.pageSize,
-				// 	keyword: this.find.keyword,
-				// 	customerID: this.find.customerID,
-				// 	status: this.find.status,
-				// 	beginDispatchDate: this.find.beginDispatchDate,
-				// 	endDispatchDate: this.find.endDispatchDate
-				// }).then(res => {
-				// 	this.dispatchBillList = res.records
-				// 	this.total = res.total
-				// })
+				Dispatchbill.find({
+					current: this.pageIndex,
+					size: this.pageSize,
+					keyword: this.find.keyword,
+					customerID: this.find.customerID,
+					status: this.find.status,
+					beginDispatchDate: this.find.begin,
+					endDispatchDate: this.find.end
+				}).then(res => {
+					this.dispatchBillList = res.records
+					this.total = res.total
+				})
 			},
 			scramble(){
 				this.scrambleDialog= true

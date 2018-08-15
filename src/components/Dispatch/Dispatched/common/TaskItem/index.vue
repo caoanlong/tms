@@ -1,32 +1,32 @@
 <template>
 	<div class="taskItem">
-		<div class="title">任务1（承运单477899）</div>
+		<div class="title">任务{{index+1}}（承运单：{{taskItem.taskNo}}）</div>
 		<div class="baseInfo">
 			<div class="from">
 				<div class="hasPic">
 					<img :src="defaultImg" class="pic" />
-					<p>一号工厂</p>
-					<p>刘大脑袋 13424389894</p>
+					<p>{{taskItem.shipperCompanyName}}</p>
+					<p>{{taskItem.shipperName}}{{taskItem.shipperPhone?('/'+taskItem.shipperPhone):''}}</p>
 				</div>
-				<p><span class="sequenceTag">1</span>云南 昆明 嘉定区纬五路555号</p>
-				<p>2018-07-06 06:30（预约）</p>
-				<p>2018-07-06 06:30（实际）</p>
+				<p><span class="sequenceTag">1</span>{{taskItem.shipperArea}} {{taskItem.shipperLocationAddress}} {{taskItem.shipperDetailAddress}}</p>
+				<p class="c2">{{taskItem.shipperDate | getdatefromtimestamp('min')}}（预计装车）</p>
+				<p class="c6" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp()}}（实际装车）</p>
 			</div>
 			<div class="arrow"><svg-icon icon-class="arrowBig"></svg-icon></div>
 			<div class="to">
 				<div class="hasPic">
 					<img :src="defaultImg" class="pic" />
-					<p>散客罗凯</p>
-					<p>罗凯 13424389984</p>
+					<p>{{taskItem.consigneeCompanyName}}</p>
+					<p>{{taskItem.consigneeName}}{{taskItem.consigneePhone?('/'+taskItem.consigneePhone):''}}</p>
 				</div>
-				<p><span class="sequenceTag">2</span>云南 普洱市 嘉定区纬五路555号</p>
-				<p>2018-07-06 06:30（预约）</p>
-				<p>2018-07-06 06:30（实际）</p>
+				<p><span class="sequenceTag">2</span>{{taskItem.consigneeArea}} {{taskItem.consigneeLocationAddress}} {{taskItem.consigneeDetailAddress}}</p>
+				<p class="c2">{{taskItem.consigneeDate | getdatefromtimestamp('min')}}（预计到货）</p>
+				<p class="c6" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</p>
 			</div>
 		</div>
-		<div class="picTit">任务照片（4）</div>
-		<div class="picCon">
-			
+		<div class="picTit" v-if="taskItem.dispatchTaskPicList.length>0">任务照片（{{taskItem.dispatchTaskPicList.length}}）</div>
+		<div class="picCon" v-if="taskItem.dispatchTaskPicList.length>0">
+			<ImageUpload :isShowType="true" :objs="taskItem.dispatchTaskPicList" :files="taskItem.dispatchTaskPicList.map(item => item.minURL)" :isPreview="true"/>
 		</div>
 		<div class="cargoTit">承运货物<span class="fr">重量2吨 体积1.8方</span></div>
 		<div class="cargoList">
@@ -38,10 +38,23 @@
 </template>
 <script>
 import { defaultImg } from '../../../../../assets/icons/icons'
+import { resizeImg } from '../../../../../common/utils'
+import ImageUpload from '../../../../CommonComponents/ImageUpload2'
 export default {
+	props:{
+		index:{
+			type: Number,
+			default: 1
+		},
+		taskItem:{
+			type: Object
+		}
+	},
 	computed: {
-		defaultImg: () => defaultImg
-	}
+		defaultImg: () => defaultImg,
+		resizeImg: () => resizeImg
+	},
+	components: {ImageUpload},
 }
 </script>
 <style lang="stylus" scoped>
