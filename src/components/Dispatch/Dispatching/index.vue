@@ -808,7 +808,7 @@ export default {
 			td
 				padding 10px 15px
 	table
-		font-size 14px
+		font-size 12px
 		background-color #dcdfe6
 		border-spacing 1px
 		width 100%

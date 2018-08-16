@@ -6,7 +6,6 @@ import Vue from 'vue'
 
 import 'normalize.css/normalize.css'
 
-
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './assets/styles/index.styl'
@@ -21,6 +20,7 @@ import store from './store'
 import * as filters from './filters'
 
 import globalConf from './common/globalConf'
+
 // icon
 import './assets/icons'
 

@@ -274,7 +274,7 @@ export default {
         &.selected
             background-position -28px 0
 .dialog-table
-    font-size 14px
+    font-size 12px
     background #dcdfe6
     border-spacing 1px
     width 100%
