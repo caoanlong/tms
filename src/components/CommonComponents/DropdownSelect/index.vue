@@ -1,9 +1,10 @@
 <template>
 	<div class="select-search">
-		<div class="results" @click="ExpandPop" v-model="placeholderValue">	
+		<div class="results" @click.stop="ExpandPop" v-model="placeholderValue">	
 			<p><span class="name">{{placeholderValue.name}}</span><span class="mobile">{{placeholderValue.mobile}}</span></p>
 			<p class="area">{{placeholderValue.areaName}}</p>
 			<p class="address">{{placeholderValue.address}}</p>
+			<i class="el-icon-arrow-down selectIcon"></i>
 		</div>
 		<div class="select-body" v-if="isExpand">
 			<el-input type="text" placeholder="关键字" v-model="searchVal" @keyup="selectByKey" prefix-icon="el-icon-search" autofocus="isExpand" ></el-input>
@@ -51,6 +52,11 @@
 					return temp;
 				}
 			}
+		},
+		created() {
+			document.body.addEventListener('click', () => {
+				this.isExpand = false
+			})
 		},
 		props: {
 			placeholder:String,
@@ -114,22 +120,23 @@
 		methods: {
 			ExpandPop(){
 				this.isExpand = !this.isExpand
+				this.searchVal = ''
 			},
 			resetDefaultStatus () {
-				this.searchVal = '';
-				this.resultVal = '';
-				this.currentIndex = '';
+				this.searchVal = ''
+				this.resultVal = ''
+				this.currentIndex = ''
 				this.optList.forEach(item => {
 					this.$set(item, 'active', false);
 				})
 			},
 			selectByKey () {
 				if (this.optList.length === 1) {
-					this.searchVal = this.optList[0].name;
-					this.resultVal = this.optList[0].value;
-					this.placeholderValue = this.optList[0];
-					this.isExpand = false;
-					this.$emit('selectValue', { text: this.searchVal, value: this.resultVal })
+					this.searchVal = this.optList[0].name
+					this.resultVal = this.optList[0].value
+					this.placeholderValue = this.optList[0]
+					this.isExpand = false
+					this.$emit('selectValue', { name: this.searchVal, value: this.resultVal })
 				} else {
 					this.optList.forEach(item => {
 						if (this.searchVal === item.name || item.active === true) {
@@ -137,7 +144,7 @@
 							this.placeholderValue = item;
 							this.resultVal = item.value;
 							this.isExpand = false;
-							this.$emit('selectValue', { text: this.searchVal, value: this.resultVal })
+							this.$emit('selectValue', { name: this.searchVal, value: this.resultVal })
 						}
 					})
 				}
@@ -153,7 +160,7 @@
 					}
 					this.$set(item, 'active', false)
 				})
-				this.$emit('selectValue', { text: this.searchVal, value: this.resultVal })
+				this.$emit('selectValue', { name: this.searchVal, value: this.resultVal })
 				this.resetDefaultStatus()
 				this.currentIndex = index
 			},
@@ -202,6 +209,11 @@
 			color #666
 			.mobile
 				margin-left 10px
+		.selectIcon
+			position absolute
+			right 0
+			top 50%
+			transform translateY(-50%)
 	.select-body
 		position absolute
 		top 94px
