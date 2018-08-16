@@ -53,7 +53,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="发货地址">
-									<DropdownSelect :itemlist="itemlist" :placeholder="placeholder" :nodatatext="nodatatext"></DropdownSelect>
+									<DropdownSelect></DropdownSelect>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -87,7 +87,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="收货地址">
-									
+									<DropdownSelect></DropdownSelect>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -262,6 +262,9 @@ export default {
 	data() {
 		return {
 			selectAddressPop:false,
+			placeholder1:'请选择发货地址',
+			placeholder2:'请选择收货地址',
+			nodatatext:'暂无数据',
 			units: [],
 			carrierbillInfo: {
 				shipperNo: '',                  /** String 发货单号*/
