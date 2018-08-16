@@ -381,9 +381,19 @@
 			:totalWeight="totalWeight" 
 			:totalVolume="totalVolume" 
 			:totalDistance="totalDistance" 
+			:transLines="transLines" 
 			:isVisible="dispatchDialog" 
 			@cancel="handClosePublish">
 		</publish-dispatch>
+		<grab-order 
+			:totalNum="totalNum" 
+			:totalWeight="totalWeight" 
+			:totalVolume="totalVolume" 
+			:totalDistance="totalDistance" 
+			:transLines="transLines" 
+			:isVisible="grabDialog" 
+			@cancel="handCloseGrab">
+		</grab-order>
 	</div>
 </template>
 <script type="text/javascript">
@@ -392,7 +402,9 @@ import axios from 'axios'
 import distData from '../../../assets/data/distpicker.data'
 import DistPicker from '../../CommonComponents/DistPicker2'
 import PublishDispatch from '../components/PublishDispatch'
+import GrabOrder from '../components/GrabOrder'
 import { baseMixin } from '../../../common/mixin'
+import { MAPKEY } from '../../../common/const'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { checkFloat2, checkInt } from '../../../common/valid'
 export default {
@@ -442,7 +454,7 @@ export default {
 			return Number(val)
 		}
 	},
-	components: { DistPicker, PublishDispatch },
+	components: { DistPicker, PublishDispatch, GrabOrder },
 	created() {
 		this.getList()
 	},
@@ -541,8 +553,7 @@ export default {
 			const list = this.transLines.map(item => item.lng + ',' + item.lat)
 			const origins = list.join('|')
 			const destination = list[list.length-1]
-			const key = '3a29e75c898b755e250dfcf99c3ebd45'
-			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${key}`}).then(res => {
+			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${MAPKEY}`}).then(res => {
 				const results = res.data.results
 				const arrays = [...this.transLines]
 				this.totalDistance = 0
@@ -720,6 +731,12 @@ export default {
 		 */
 		handClosePublish(data) {
 			this.dispatchDialog = false
+		},
+		/**
+		 * 关闭发布抢单
+		 */
+		handCloseGrab(data) {
+			this.grabDialog = false
 		},
 		arrayUnique(arr, attr) {
 			const hash = {}

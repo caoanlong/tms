@@ -4,7 +4,6 @@
             width="80%" 
             title="发布派车单" 
             :visible="isVisible" 
-            custom-class="dispatch-order-dialog" 
             :show-close="false" 
             :close-on-press-escape="false" 
             :close-on-click-modal="false">
@@ -16,7 +15,11 @@
                     <span class="num-label"><span>体</span>{{totalVolume}}</span>
                 </div>
                 <div class="num-info">
-                    <span class="num-tit">预计里程{{totalDistance}}公里</span>
+                    <span class="num-tit">
+                        {{transLines.filter(item => item.type == '装车').length}}装
+                        {{transLines.filter(item => item.type == '卸货').length}}卸
+                        &nbsp;&nbsp;预计里程{{totalDistance}}公里
+                    </span>
                 </div>
                 <el-row>
                     <table class="dialog-table">
@@ -122,7 +125,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in freight" :key="index">
-                                <td align="center">
+                                <td align="center" style="padding:0 15px">
                                     <span style="position:relative;top:-10px" v-if="index === 0">运费</span>
                                     <el-form :model="item" ref="ruleForm" v-else>
                                         <el-form-item prop="subject" :rules="[{ required: true , message: '请选择费用科目' }]">
@@ -139,7 +142,7 @@
                                 <td align="center">
                                     <span style="position:relative;top:-10px">{{item.type}}</span>
                                 </td>
-                                <td align="center">
+                                <td align="center" style="padding:0 5px">
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="payee" :rules="[{ required: true , message: '请选择收款人' }]">
                                             <el-select size="mini" v-model="item.payee" placeholder="请选择">
@@ -153,7 +156,7 @@
                                         </el-form-item>
                                     </el-form>
                                 </td>
-                                <td align="center">
+                                <td align="center" style="padding:0 5px">
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="method" :rules="[{ required: true , message: '请选择支付方式' }]">
                                             <el-select size="mini" v-model="item.method" placeholder="请选择">
@@ -165,7 +168,7 @@
                                         </el-form-item>
                                     </el-form>
                                 </td>
-                                <td align="center">
+                                <td align="center" style="padding:0 15px">
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="amount" :rules="[{
 												validator: (rule, value, callback) => {
@@ -195,17 +198,19 @@
                 </div>
                 <el-row>
                     <el-form-item label="接单截止时间">
-                        <el-date-picker type="date" :clearable="false" value-format="timestamp">
+                        <el-date-picker 
+                            v-model="endTime"
+                            type="date" 
+                            :clearable="false" 
+                            value-format="timestamp">
                         </el-date-picker>
                     </el-form-item>
                 </el-row>
                 <el-row style="margin-top:20px">
-                    <el-col :span="24">
-                        <el-form-item label-width="0" class="text-center">
-                            <el-button @click="close">取消</el-button>
-                            <el-button type="primary" @click="publish">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
-                        </el-form-item>
-                    </el-col>
+                    <el-form-item label-width="0" class="text-center">
+                        <el-button @click="close">取消</el-button>
+                        <el-button type="primary" @click="publish">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
+                    </el-form-item>
                 </el-row>
             </el-form>
         </el-dialog>
@@ -236,6 +241,7 @@ export default {
             type: Number,
             default: 0
         },
+        transLines: Array,
         isVisible: {
             type: Boolean,
             default: false
@@ -243,7 +249,6 @@ export default {
     },
     data() {
         return {
-            totalFreight: 0,
             truckDialog: false,
             personDialog: false,
             selectedTruck: {},
@@ -255,6 +260,7 @@ export default {
                 'method': '',
                 'amount': ''
             }],
+            endTime: '',
             persons: [],
             expireWarnJson:{
                 DriverLicExpiresTime: "行驶证到期",
@@ -279,6 +285,15 @@ export default {
                 LaborContractEndTime: "聘用合同到期 ",
                 EscortLicenseExpireDate: "押运证到期"
             }
+        }
+    },
+    computed: {
+        totalFreight() {
+            const values = this.freight.map(item => Number(item.amount ? item.amount : 0))
+			const val = values.reduce((prev, curr) => {
+				return prev + curr
+			}, 0).toFixed(2)
+			return Number(val)
         }
     },
     methods: {
@@ -345,49 +360,48 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.dispatch-order-dialog
-    .num-info
+.num-info
+    height 40px
+    line-height 40px
+    font-size 14px
+    text-align left
+    .num-tit
+        color #409EFF
+        font-weight 600
+        margin-right 10px
+    .num-label
+        margin-right 10px
+        span
+            width 18px
+            height 18px
+            display inline-block
+            color #fff
+            border-radius 4px
+            font-size 12px
+            line-height 18px
+            text-align center
+            font-weight 800
+            margin-right 4px
+            background-color #409EFF
+.dialog-table
+    font-size 14px
+    background #dcdfe6
+    border-spacing 1px
+    width 100%
+    caption
         height 40px
         line-height 40px
-        font-size 14px
         text-align left
-        .num-tit
-            color #409EFF
-            font-weight 600
-            margin-right 10px
-        .num-label
-            margin-right 10px
-            span
-                width 18px
-                height 18px
-                display inline-block
-                color #fff
-                border-radius 4px
-                font-size 12px
-                line-height 18px
-                text-align center
-                font-weight 800
-                margin-right 4px
-                background-color #409EFF
-    .dialog-table
-        font-size 14px
-        background #dcdfe6
-        border-spacing 1px
-        width 100%
-        caption
-            height 40px
-            line-height 40px
-            text-align left
-            
-        th
-            background #f2f2f2
-            color #666
-            padding 10px 15px
-        td
-            padding 10px 15px
-            background #fff
-        .add-btn,.del-btn
-            color #409EFF
-            cursor pointer
+        
+    th
+        background #f2f2f2
+        color #666
+        padding 10px 15px
+    td
+        padding 10px 15px
+        background #fff
+    .add-btn,.del-btn
+        color #409EFF
+        cursor pointer
 </style>
 
