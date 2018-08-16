@@ -82,11 +82,46 @@
 					<table class="table-main" style="padding-left:50px">
 						<thead>
 							<tr>
-								<th><p>承运单号</p><p>委托时间</p></th>
-								<th><p>发货方</p><p>到货方</p></th>
-								<th><p>装车地区</p><p>卸货地区</p></th>
-								<th><p>装车地址</p><p>卸货地址</p></th>
-								<th><p>装车时间</p><p>到货时间</p></th>
+								<th>
+									<p class="cursor" @click="sort('carrierOrderNo')">
+										承运单号&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'carrierOrderNo' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+									<p class="cursor" @click="sort('commissionDate')">
+										委托时间&nbsp;<svg-icon class="arrow" :class="find.sort == 'commissionDate' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+								</th>
+								<th>
+									<p class="cursor" @click="sort('shipperName')">
+										发货方&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'shipperName' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+									<p class="cursor" @click="sort('consigneeName')">
+										到货方&nbsp;<svg-icon class="arrow" :class="find.sort == 'consigneeName' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+								</th>
+								<th>
+									<p class="cursor" @click="sort('shipperArea')">
+										装车地区&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'shipperArea' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+									<p class="cursor" @click="sort('consigneeArea')">
+										卸货地区&nbsp;<svg-icon class="arrow" :class="find.sort == 'consigneeArea' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+								</th>
+								<th>
+									<p class="cursor" @click="sort('shipperDetailAddress')">
+										装车地址&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'shipperDetailAddress' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+									<p class="cursor" @click="sort('consigneeDetailAddress')">
+										卸货地址&nbsp;<svg-icon class="arrow" :class="find.sort == 'consigneeDetailAddress' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+								</th>
+								<th>
+									<p class="cursor" @click="sort('shipperDate')">
+										装车时间&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'shipperDate' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+									<p class="cursor" @click="sort('consigneeDate')">
+										到货时间&nbsp;<svg-icon class="arrow" :class="find.sort == 'consigneeDate' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									</p>
+								</th>
 								<th>货物</th>
 								<th>订单量</th>
 								<th>剩余量</th>
@@ -346,9 +381,19 @@
 			:totalWeight="totalWeight" 
 			:totalVolume="totalVolume" 
 			:totalDistance="totalDistance" 
+			:transLines="transLines" 
 			:isVisible="dispatchDialog" 
 			@cancel="handClosePublish">
 		</publish-dispatch>
+		<grab-order 
+			:totalNum="totalNum" 
+			:totalWeight="totalWeight" 
+			:totalVolume="totalVolume" 
+			:totalDistance="totalDistance" 
+			:transLines="transLines" 
+			:isVisible="grabDialog" 
+			@cancel="handCloseGrab">
+		</grab-order>
 	</div>
 </template>
 <script type="text/javascript">
@@ -357,7 +402,9 @@ import axios from 'axios'
 import distData from '../../../assets/data/distpicker.data'
 import DistPicker from '../../CommonComponents/DistPicker2'
 import PublishDispatch from '../components/PublishDispatch'
+import GrabOrder from '../components/GrabOrder'
 import { baseMixin } from '../../../common/mixin'
+import { MAPKEY } from '../../../common/const'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { checkFloat2, checkInt } from '../../../common/valid'
 export default {
@@ -372,7 +419,8 @@ export default {
 				companyName: '',
 				status: '',
 				commissionDateBegin: '',
-				commissionDateEnd: ''
+				commissionDateEnd: '',
+				sort: 'carrierOrderNo'
 			},
 			selectedShipperArea: [],
 			selectedConsigneeArea: [],
@@ -406,11 +454,17 @@ export default {
 			return Number(val)
 		}
 	},
-	components: { DistPicker, PublishDispatch },
+	components: { DistPicker, PublishDispatch, GrabOrder },
 	created() {
 		this.getList()
 	},
 	methods:{
+		/**
+		 * 排序搜索
+		 */
+		sort(type) {
+			this.find.sort = type
+		},
 		/**
 		 * 上面列表勾选承运单
 		 */
@@ -499,8 +553,7 @@ export default {
 			const list = this.transLines.map(item => item.lng + ',' + item.lat)
 			const origins = list.join('|')
 			const destination = list[list.length-1]
-			const key = '3a29e75c898b755e250dfcf99c3ebd45'
-			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${key}`}).then(res => {
+			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${MAPKEY}`}).then(res => {
 				const results = res.data.results
 				const arrays = [...this.transLines]
 				this.totalDistance = 0
@@ -679,6 +732,12 @@ export default {
 		handClosePublish(data) {
 			this.dispatchDialog = false
 		},
+		/**
+		 * 关闭发布抢单
+		 */
+		handCloseGrab(data) {
+			this.grabDialog = false
+		},
 		arrayUnique(arr, attr) {
 			const hash = {}
 			return arr.reduce((item, next) => {
@@ -740,6 +799,12 @@ export default {
 				&.disabled
 					color #ddd
 					cursor not-allowed
+			.arrow
+				color #cccccc
+				&.active
+					color #409EFF
+				&.arrow-up
+					transform rotate(180deg)
 			td
 				padding 10px 15px
 	table
