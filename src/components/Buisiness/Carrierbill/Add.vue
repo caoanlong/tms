@@ -93,21 +93,15 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货地址" v-if="carrierbillInfo.consigneeCompanyName">
-									<div class="addressBox" v-if="consigneeAddress.length==0">
-										<p class="placeholder" >暂无地址,请添加收货单位地址</p>
-									</div>
-									<div class="addressBox" v-else-if="consigneeAddress.length==1">
-										<p><span class="name">{{consigneeAddress[0].contactName}}</span><span class="mobile">{{consigneeAddress[0].contactPhone}}</span></p>
-										<p class="area">{{consigneeAddress[0].contactArea}}</p>
-										<p class="address">{{consigneeAddress[0].contactArea}}{{consigneeAddress[0].detailAddress}}</p>
-									</div>
-									<DropdownSelect :mapData="consigneeAddress" :placeholder="placeholder2"  @searchBykey="searchBykey" v-else></DropdownSelect>
-								</el-form-item>
-								<el-form-item label="发货地址" v-else>
-									<div class="addressBox">	
-										<p class="placeholder">请选择收货单位</p>
-									</div>
+								<el-form-item label="收货地址">
+									<dropdown-select 
+										addressType="收货单位"
+										:addressData="selectedConsigneeAddress" 
+										:companyData="selectedConsignee" 
+										:placeholder="placeholder2" 
+										@select="handSelectConsigneeAddress" 
+										:fetch-suggestions="getConsigneeAddress">
+									</dropdown-select>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -293,7 +287,6 @@ export default {
 			currentCompanyName: '',
 			placeholder1:'请选择发货地址',
 			placeholder2:'请选择收货地址',
-			nodatatext:'暂无数据',
 			units: [],
 			shipperAddress:[],
 			consigneeAddress:[],
@@ -339,11 +332,9 @@ export default {
 				
 			},
 			selectedShipper: null,
+			selectedConsignee: null,
 			selectedShipperAddress: null,
-			selectedShipperArea: [],
-			selectedConsigneeArea: [],
-			searchShipperAreaHash: '',
-			searchConsigneeAreaHash: '',
+			selectedConsigneeAddress: null,
 			rules: {
 				shipperNo: [ {required: true, message: '请输入发货单号'} ],
 				commissionDate: [ {required: true, message: '请选择委托时间'} ],
@@ -435,14 +426,15 @@ export default {
 				}
 			})
 		},
-		getConsigneeAddress(id){
+		getConsigneeAddress(queryString, cb){
 			Customer.addressSuggest({
-				customerID:id,
-				keyword:this.searchKeyWord
+				customerID: this.carrierbillInfo.consigneeID,
+				keyword: queryString
 			}).then(res => {
-				this.consigneeAddress = res
-				if(this.consigneeAddress.length>1){
-					this.showPlaceholder = true
+				if (queryString || cb) {
+					cb(res)
+				} else {
+					this.selectedConsigneeAddress = res[0]
 				}
 			})
 		},
@@ -471,7 +463,7 @@ export default {
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.consigneeCompanyName = data.companyName
-				this.getConsigneeAddress(data.customerID)
+				this.getConsigneeAddress(false, false)
 			})
 		},
 		handSelectShipper(data) {
@@ -517,6 +509,9 @@ export default {
 			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
 		},
 		handSelectshipperAddress(data) {
+			console.log(data)
+		},
+		handSelectConsigneeAddress(data) {
 			console.log(data)
 		},
 		save() {

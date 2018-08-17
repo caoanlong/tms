@@ -90,6 +90,7 @@ export default {
 		},
 		selectItem(item) {
 			this.selectedAddress = item
+			this.isExpand = false
 		}
 	}
 }
