@@ -68,30 +68,26 @@ export default {
                 const position = positions[i]
                 const item = new AMap.Marker({
                     position,
-                    icon: new AMap.Icon({            
+                    icon: new AMap.Icon({         
                         size: new AMap.Size(50, 50),  //图标大小
                         image: "./static/imgs/photo-marker.png",
                         imageSize: new AMap.Size(50, 50)
-                    })  
+                    })
                 })
                 imgs = ['./static/imgs/01.png', './static/imgs/02.png']
                 item.content = `<div class="info-window-img" id="infoWindow">
-                    <div class="left-arrow" onclick="if(imgIndex == 0) return;imgIndex--;console.log(imgs[imgIndex]);document.getElementById('photoInfoWin').src=imgs[imgIndex]"></div>
+                    <div class="left-arrow" onclick="if(imgIndex == 0) return;imgIndex--;document.getElementById('photoInfoWin').src=imgs[imgIndex];document.getElementById('numCount').innerHTML=(imgIndex+1)+'/'+imgs.length"></div>
                     <img id="photoInfoWin" src="${imgs[imgIndex]}"/>
-                    <div class="right-arrow" onclick="if(imgIndex == imgs.length-1) return;imgIndex++;console.log(imgs[imgIndex]);document.getElementById('photoInfoWin').src=imgs[imgIndex]"></div>
+                    <div id="numCount">${imgIndex+1}/${imgs.length}</div>
+                    <div class="right-arrow" onclick="if(imgIndex == imgs.length-1) return;imgIndex++;document.getElementById('photoInfoWin').src=imgs[imgIndex];document.getElementById('numCount').innerHTML=(imgIndex+1)+'/'+imgs.length"></div>
                 </div>`
                 item.on('click', this.showPhoto)
                 list.push(item)
             }
             return list
         },
-		increment(type) {
-            return function() {
-                console.log(type)
-                type == 'left' ? imgIndex-- : imgIndex++
-            }
-        },
         showPhoto(e) {
+            window.imgIndex = 0
             this.infoWindow.setContent(e.target.content)
             this.infoWindow.open(this.map, e.target.getPosition())
         },
@@ -107,10 +103,17 @@ export default {
     display flex
     align-items center
     max-height 300px
-    padding 0 10px
+    padding 0 10px 20px 10px
     &:hover
         .left-arrow,.right-arrow
             display block
+    #numCount
+        position absolute
+        bottom 30px
+        left 10px
+        width 100%
+        text-align center
+        color #999
     .left-arrow
         display none
         position absolute
