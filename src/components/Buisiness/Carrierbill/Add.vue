@@ -453,7 +453,7 @@ export default {
 			this.carrierbillInfo.shipperID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.shipperCompanyName = data.companyName
-				this.getShipperAddress(false, false)
+				this.getShipperAddress('', false)
 			})
 		},
 		handSelectConsigneeCompany(data) {
@@ -462,7 +462,7 @@ export default {
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.consigneeCompanyName = data.companyName
-				this.getConsigneeAddress(false, false)
+				this.getConsigneeAddress('', false)
 			})
 		},
 		handSelectShipper(data) {
