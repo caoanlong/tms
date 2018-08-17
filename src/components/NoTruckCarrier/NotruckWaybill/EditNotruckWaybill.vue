@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">编辑运单</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">编辑运单</div>
 			<el-row>
 				<el-col :span="8">
 					<el-form label-width="160px">
@@ -178,7 +178,7 @@
 				</el-col>
 			</el-row>
 
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">

@@ -1,6 +1,6 @@
 <template>
 	<div class="main-content">
-				<el-card class="box-card">
+		<el-card class="box-card">
 			<div slot="header" class="clearfix">添加运单</div>
 			<el-row>
 				<el-col :span="8">

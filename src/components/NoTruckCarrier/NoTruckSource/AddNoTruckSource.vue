@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
-		<div class="wf-card">
-			<div class="header clearfix">添加车源</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">添加车源</div>
 			<el-row>
 				<el-col :span="8">
 					<el-form label-width="130px">
@@ -77,7 +77,7 @@
 					</el-form>
 				</el-col>
 			</el-row>
-		</div>
+		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
