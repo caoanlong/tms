@@ -420,7 +420,11 @@ export default {
 				if (queryString || cb) {
 					cb(res)
 				} else {
-					this.selectedShipperAddress = res[0]
+					if (res.length == 1) {
+						this.selectedShipperAddress = res[0]
+					} else {
+						cb(res)
+					}
 				}
 			})
 		},
@@ -432,7 +436,11 @@ export default {
 				if (queryString || cb) {
 					cb(res)
 				} else {
-					this.selectedConsigneeAddress = res[0]
+					if (res.length == 1) {
+						this.selectedConsigneeAddress = res[0]
+					} else {
+						cb(res)
+					}
 				}
 			})
 		},
