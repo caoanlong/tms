@@ -1,24 +1,34 @@
 <template>
 	<div class="select-search" @mouseleave="hide">
-		<div class="results" @click.stop="ExpandPop" v-model="results">
-			<p v-if="placeholderStatus" style="color:#C0C4CC">{{placeholder}}</p>
-			<p><span class="name">{{results.contactName}}</span><span class="mobile">{{results.contactPhone}}</span></p>
-			<p class="area">{{results.contactArea}}</p>
-			<p class="address">{{results.contactArea}}{{results.detailAddress}}</p>
-			<i class="el-icon-arrow-down selectIcon"></i>
+		<p class="placeholder" v-if="!companyData || (companyData && companyData.customerAddressNum == 0)">{{placeholder}}</p>
+		<div class="selected-address" @click.stop="expandPop" v-if="companyData && companyData.customerAddressNum > 0">
+			<p class="placeholder" v-if="!selectedAddress.customerAddressID">{{placeholder}}</p>
+			<p><span class="name">{{selectedAddress.contactName}}</span><span class="mobile">{{selectedAddress.contactPhone}}</span></p>
+			<p class="area">{{selectedAddress.contactArea}}</p>
+			<p class="address">{{selectedAddress.contactArea}}{{selectedAddress.detailAddress}}</p>
 		</div>
 		<div class="select-body" v-if="isExpand"  @click.stop="() => false">
-			<el-input type="text" placeholder="关键字" v-model="searchVal" @keyup="selectByKey" prefix-icon="el-icon-search" autofocus="isExpand" @input ="inputFunc"></el-input>
+			<el-input 
+				type="text" 
+				placeholder="关键字" 
+				prefix-icon="el-icon-search" 
+				:autofocus="isExpand" 
+				@focus="suggestions('')" 
+				@input="suggestions">
+			</el-input>
 			<transition name="el-fade-in-linear" mode="out-in">
-				<div class="typeahead-filter" v-show="optList">
+				<div class="typeahead-filter" v-show="optList.length">
 					<transition-group tag="ul" name="el-fade-in-linear">
-						<li v-for="(item,index) in optList " :key="index" :class="index == currentIndex? 'active':''" @click="selectChild(index)">
+						<li 
+							v-for="(item, index) in optList " :key="index" 
+							:class="item.customerAddressID == selectedAddress.customerAddressID ? 'active':''"
+							@click="selectItem(item)">
 							<p><span class="name">{{item.contactName}}</span><span class="mobile">{{item.contactPhone}}</span></p>
 							<p class="area">{{item.contactArea}}</p>
 							<p class="address">{{item.contactArea}}{{item.detailAddress}}</p>
 						</li>
 					</transition-group>
-					<p class="noFound" v-show="optList && optList.length === 0">未能查询到,请重新输入!</p>
+					<p class="noFound" v-show="optList.length === 0">未能查询到,请重新输入!</p>
 				</div>
 			</transition>
 		</div>
@@ -26,97 +36,63 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				results: '',
-				isExpand: false,
-				searchVal: '',
-				resultVal: '',
-				searchList: [],
-				currentIndex: -1,
-				placeholderStatus:true
-			}
+export default {
+	props: {
+		addressType:{
+			type: String,
+			default: ''
 		},
-		computed: {
-			optList () {
-				let temp = [];
-				if (this.searchVal === '') {
-					return this.mapData;
-				} else {
-					this.currentIndex = -1; 
-					this.mapData.forEach(item => {
-						item.active = false;
-					})
-					return temp;
+		companyData: Object,
+		addressData: Object,
+		fetchSuggestions: Function
+	},
+	data() {
+		return {
+			selectedAddress: {},
+			optList: [],
+			isExpand: false,
+			placeholder: '请选择'
+		}
+	},
+	watch: {
+		companyData: {
+			handler(val) {
+				if (val.customerAddressNum == 0) {
+					this.placeholder = `暂无地址,请添加${this.addressType}地址`
 				}
-			}
+			},
+			deep: true
 		},
-		created() {
-			document.body.addEventListener('click', () => {
-				this.isExpand = false
+		addressData: {
+			handler(val) {
+				val && (this.selectedAddress = val)
+			},
+			deep: true
+		}
+	},
+	created() {
+		this.placeholder = `请选择${this.addressType}地址`
+		document.body.addEventListener('click', () => {
+			this.isExpand = false
+		})
+	},
+	methods: {
+		suggestions(queryString) {
+			this.fetchSuggestions(queryString, (res) => {
+				this.optList = res
 			})
 		},
-		props: {
-			placeholder:{type:String,default:''},
-			mapData:Array
-
+		hide(){
+			this.isExpand = false
 		},
-		methods: {
-			hide(){
-				this.isExpand = false
-			},
-			ExpandPop(){
-				this.isExpand = !this.isExpand
-				this.searchVal = ''
-			},
-			resetDefaultStatus () {
-				this.searchVal = ''
-				this.resultVal = ''
-				this.currentIndex = ''
-				this.optList.forEach(item => {
-					this.$set(item, 'active', false);
-				})
-			},
-			selectByKey () {
-				if (this.optList.length === 1) {
-					this.searchVal = this.optList[0].name
-					this.resultVal = this.optList[0].value
-					this.results = this.optList[0]
-					this.isExpand = false
-					this.$emit('searchBykey', { keyword: this.searchVal})
-				} else {
-					this.optList.forEach(item => {
-						if (this.searchVal === item.name || item.active === true) {
-							this.searchVal = item.name;
-							this.results = item;
-							this.isExpand = false;
-							this.$emit('searchBykey', { keyword: this.searchVal })
-						}
-					})
-				}
-				this.resetDefaultStatus();
-			},
-			selectChild (index) {
-				this.mapData.forEach((item, innerIndex) => {
-					if (index === innerIndex || item.active) {
-						// this.searchVal = item.keyword
-						this.results = item
-						this.isExpand = false
-					}
-					this.$set(item, 'active', false)
-				})
-				this.$emit('searchBykey', { keyword: this.searchVal })
-				this.placeholderStatus = false
-				this.resetDefaultStatus()
-				this.currentIndex = index
-				
-			},
-			inputFunc(val){
-				console.log(val)
-			}
+		expandPop(){
+			this.isExpand = !this.isExpand
+		},
+		selectItem(item) {
+			this.selectedAddress = item
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .el-fade-in-linear-enter-active
@@ -133,6 +109,22 @@
 .fade-in-linear-leave
 .fade-in-linear-leave-active
 	opacity 0
+.selected-address
+	height 96px
+.addressBox
+	background  #fff
+	width 100%
+	border-radius 4px
+	border 1px solid #dcdfe6
+	box-sizing border-box
+	color #606266
+	display inline-block
+	vertical-align top
+	height 96px
+	line-height 32px
+	cursor pointer
+	padding 0 15px
+	font-size 13.3333px
 .select-search
 	background  #fff
 	width 100%
@@ -148,6 +140,8 @@
 	padding 0 15px
 	font-size 13.3333px
 	position relative
+	.placeholder
+		color #C0C4CC
 	.results
 		position absolute
 		top 0
