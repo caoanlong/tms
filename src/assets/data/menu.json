@@ -131,7 +131,7 @@
         "sortNumber": 4,
         "href": "/notruckcarrier",
         "icon": "example",
-        "isShow": "N",
+        "isShow": "Y",
         "permission": null,
         "createBy": "1007116169212780546",
         "createDate": "2018-06-11T10:11:09.000Z",

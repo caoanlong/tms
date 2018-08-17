@@ -1,20 +1,21 @@
 <template>
-	<div class="select-search">
-		<div class="results" @click.stop="ExpandPop" v-model="placeholderValue">	
-			<p><span class="name">{{placeholderValue.name}}</span><span class="mobile">{{placeholderValue.mobile}}</span></p>
-			<p class="area">{{placeholderValue.areaName}}</p>
-			<p class="address">{{placeholderValue.address}}</p>
+	<div class="select-search" @mouseleave="hide">
+		<div class="results" @click.stop="ExpandPop" v-model="results">
+			<p v-if="placeholderStatus" style="color:#C0C4CC">{{placeholder}}</p>
+			<p><span class="name">{{results.contactName}}</span><span class="mobile">{{results.contactPhone}}</span></p>
+			<p class="area">{{results.contactArea}}</p>
+			<p class="address">{{results.contactArea}}{{results.detailAddress}}</p>
 			<i class="el-icon-arrow-down selectIcon"></i>
 		</div>
-		<div class="select-body" v-if="isExpand">
-			<el-input type="text" placeholder="关键字" v-model="searchVal" @keyup="selectByKey" prefix-icon="el-icon-search" autofocus="isExpand" ></el-input>
+		<div class="select-body" v-if="isExpand"  @click.stop="() => false">
+			<el-input type="text" placeholder="关键字" v-model="searchVal" @keyup="selectByKey" prefix-icon="el-icon-search" autofocus="isExpand" @input ="inputFunc"></el-input>
 			<transition name="el-fade-in-linear" mode="out-in">
 				<div class="typeahead-filter" v-show="optList">
 					<transition-group tag="ul" name="el-fade-in-linear">
 						<li v-for="(item,index) in optList " :key="index" :class="index == currentIndex? 'active':''" @click="selectChild(index)">
-							<p><span class="name">{{item.name}}</span><span class="mobile">{{item.mobile}}</span></p>
-							<p class="area">{{item.areaName}}</p>
-							<p class="address">{{item.address}}</p>
+							<p><span class="name">{{item.contactName}}</span><span class="mobile">{{item.contactPhone}}</span></p>
+							<p class="area">{{item.contactArea}}</p>
+							<p class="address">{{item.contactArea}}{{item.detailAddress}}</p>
 						</li>
 					</transition-group>
 					<p class="noFound" v-show="optList && optList.length === 0">未能查询到,请重新输入!</p>
@@ -28,12 +29,13 @@
 	export default {
 		data() {
 			return {
-				placeholderValue: '',
+				results: '',
 				isExpand: false,
 				searchVal: '',
 				resultVal: '',
 				searchList: [],
 				currentIndex: -1,
+				placeholderStatus:true
 			}
 		},
 		computed: {
@@ -45,9 +47,6 @@
 					this.currentIndex = -1; 
 					this.mapData.forEach(item => {
 						item.active = false;
-						if (item.name.indexOf(this.searchVal.toLowerCase().trim()) !== -1) {
-							temp.push(item)
-						}
 					})
 					return temp;
 				}
@@ -59,65 +58,14 @@
 			})
 		},
 		props: {
-			placeholder:String,
-			mapData: {
-				type: Array,
-				default: function () {
-					return [
-						{
-							name: 'wofsdf',
-							mobile:'13800138000',
-							areaName:'云南省昆明市官渡区',
-							address:'云南省昆明市官渡区浩宏物流信息中心',
-							value: 0
-						},
-						{
-							name: '我是技术渣1',
-							mobile:'13800138000',
-							areaName:'云南省昆明市官渡区',
-							address:'云南省昆明市官渡区浩宏物流信息中心',
-							value: 1
-						},
-						{
-							name: '我是技术渣2',
-							mobile:'13800138000',
-							areaName:'云南省昆明市官渡区',
-							address:'云南省昆明市官渡区浩宏物流信息中心',
-							value: 2
-						},
-						{
-							name: '我是天坑',
-							mobile:'13800138000',
-							areaName:'云南省昆明市官渡区',
-							address:'云南省昆明市官渡区浩宏物流信息中心',
-							value: 3
-						},
-						{
-							name: '我是天坑,分身乏术',
-							mobile:'13800138000',
-							areaName:'云南省昆明市官渡区',
-							address:'云南省昆明市官渡区浩宏物流信息中心',
-							value: 4
-						},
-						{
-							name: '我是天坑2,分身乏术',
-							mobile:'13800138000',
-							areaName:'云南省昆明市官渡区',
-							address:'云南省昆明市官渡区浩宏物流信息中心',
-							value: 5
-						},
-						{
-							name: '我是天坑3,分身乏术',
-							mobile:'13800138000',
-							areaName:'云南省昆明市官渡区',
-							address:'云南省昆明市官渡区浩宏物流信息中心',
-							value: 6
-						}
-					]
-				}
-			}
+			placeholder:{type:String,default:''},
+			mapData:Array
+
 		},
 		methods: {
+			hide(){
+				this.isExpand = false
+			},
 			ExpandPop(){
 				this.isExpand = !this.isExpand
 				this.searchVal = ''
@@ -134,17 +82,16 @@
 				if (this.optList.length === 1) {
 					this.searchVal = this.optList[0].name
 					this.resultVal = this.optList[0].value
-					this.placeholderValue = this.optList[0]
+					this.results = this.optList[0]
 					this.isExpand = false
-					this.$emit('selectValue', { name: this.searchVal, value: this.resultVal })
+					this.$emit('searchBykey', { keyword: this.searchVal})
 				} else {
 					this.optList.forEach(item => {
 						if (this.searchVal === item.name || item.active === true) {
 							this.searchVal = item.name;
-							this.placeholderValue = item;
-							this.resultVal = item.value;
+							this.results = item;
 							this.isExpand = false;
-							this.$emit('selectValue', { name: this.searchVal, value: this.resultVal })
+							this.$emit('searchBykey', { keyword: this.searchVal })
 						}
 					})
 				}
@@ -153,17 +100,21 @@
 			selectChild (index) {
 				this.mapData.forEach((item, innerIndex) => {
 					if (index === innerIndex || item.active) {
-						this.searchVal = item.name
-						this.resultVal = item.value
-						this.placeholderValue = item
+						// this.searchVal = item.keyword
+						this.results = item
 						this.isExpand = false
 					}
 					this.$set(item, 'active', false)
 				})
-				this.$emit('selectValue', { name: this.searchVal, value: this.resultVal })
+				this.$emit('searchBykey', { keyword: this.searchVal })
+				this.placeholderStatus = false
 				this.resetDefaultStatus()
 				this.currentIndex = index
+				
 			},
+			inputFunc(val){
+				console.log(val)
+			}
 		}
 	}
 </script>

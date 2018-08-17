@@ -3,6 +3,7 @@
 		<el-card class="box-card hasTit">
 			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
+					<p>{{searchKeyWord}}</p>
 					<el-col :span="8">
 						<el-form-item label="发货单号" prop="shipperNo">
 							<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperNo"></el-input>
@@ -52,8 +53,21 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货地址">
-									<DropdownSelect></DropdownSelect>
+								<el-form-item label="发货地址" v-if="carrierbillInfo.shipperCompanyName">
+									<div class="addressBox" v-if="shipperAddress.length==0">
+										<p class="placeholder" >暂无地址,请添加发货单位地址</p>
+									</div>
+									<div class="addressBox" v-else-if="shipperAddress.length==1">
+										<p><span class="name">{{shipperAddress[0].contactName}}</span><span class="mobile">{{shipperAddress[0].contactPhone}}</span></p>
+										<p class="area">{{shipperAddress[0].contactArea}}</p>
+										<p class="address">{{shipperAddress[0].contactArea}}{{shipperAddress[0].detailAddress}}</p>
+									</div>
+									<DropdownSelect :mapData="shipperAddress" :placeholder="placeholder1" @searchBykey="searchBykey" v-else></DropdownSelect>
+								</el-form-item>
+								<el-form-item label="发货地址" v-else>
+									<div class="addressBox">	
+										<p class="placeholder">请选择发货单位</p>
+									</div>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -86,8 +100,21 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="收货地址">
-									<DropdownSelect></DropdownSelect>
+								<el-form-item label="发货地址" v-if="carrierbillInfo.consigneeCompanyName">
+									<div class="addressBox" v-if="consigneeAddress.length==0">
+										<p class="placeholder" >暂无地址,请添加收货单位地址</p>
+									</div>
+									<div class="addressBox" v-else-if="consigneeAddress.length==1">
+										<p><span class="name">{{consigneeAddress[0].contactName}}</span><span class="mobile">{{consigneeAddress[0].contactPhone}}</span></p>
+										<p class="area">{{consigneeAddress[0].contactArea}}</p>
+										<p class="address">{{consigneeAddress[0].contactArea}}{{consigneeAddress[0].detailAddress}}</p>
+									</div>
+									<DropdownSelect :mapData="consigneeAddress" :placeholder="placeholder2"  @searchBykey="searchBykey" v-else></DropdownSelect>
+								</el-form-item>
+								<el-form-item label="发货地址" v-else>
+									<div class="addressBox">	
+										<p class="placeholder">请选择收货单位</p>
+									</div>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -261,11 +288,13 @@ import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		return {
-			selectAddressPop:false,
 			placeholder1:'请选择发货地址',
 			placeholder2:'请选择收货地址',
 			nodatatext:'暂无数据',
 			units: [],
+			shipperAddress:[],
+			consigneeAddress:[],
+			searchKeyWord:'',
 			carrierbillInfo: {
 				shipperNo: '',                  /** String 发货单号*/
 				transportType: '公路运输',              /** String 运输方式*/
@@ -380,7 +409,7 @@ export default {
 			Customer.find({
 				customerType: 'Shipper',
 				keyword: queryString
-			}).then(res => { cb(res.records) })
+			}).then(res => {cb(res.records) })
 		},
 		getConsigneeCompany(queryString, cb) {
 			this.carrierbillInfo.consigneeID = ''
@@ -389,41 +418,27 @@ export default {
 				keyword: queryString
 			}).then(res => { cb(res.records) })
 		},
-		getShipperLocation(queryString, cb) {
-			if (!this.searchShipperAreaHash) {
-				Message.error('请选择发货地！')
-				return
-			}
-			CrossProxy.getEleLocation({
-				geohash: this.searchShipperAreaHash,
-				keyword: queryString
-			}).then(res => { cb(res) })
+		getShipperAddress(id){
+			Customer.addressSuggest({
+				customerID:id,
+				keyword:this.searchKeyWord
+			}).then(res => {
+				this.shipperAddress = res
+				if(this.shipperAddress.length>1){
+					this.showPlaceholder = true
+				}
+			})
 		},
-		getConsigneeLocation(queryString, cb) {
-			if (!this.searchConsigneeAreaHash) {
-				Message.error('请选择收货地！')
-				return
-			}
-			CrossProxy.getEleLocation({
-				geohash: this.searchConsigneeAreaHash,
-				keyword: queryString
-			}).then(res => { cb(res) })
-		},
-		getShipper(queryString, cb) {
-			CustomerAddress.find({
-				current: 1,
-				size: 10,
-				contactName: queryString,
-				customerID: this.carrierbillInfo.shipperID
-			}).then(res => { cb(res.records) })
-		},
-		getConsignee(queryString, cb) {
-			CustomerAddress.find({
-				current: 1,
-				size: 10,
-				contactName: queryString,
-				customerID: this.carrierbillInfo.consigneeID
-			}).then(res => { cb(res.records) })
+		getConsigneeAddress(id){
+			Customer.addressSuggest({
+				customerID:id,
+				keyword:this.searchKeyWord
+			}).then(res => {
+				this.consigneeAddress = res
+				if(this.consigneeAddress.length>1){
+					this.showPlaceholder = true
+				}
+			})
 		},
 		handSelectCargo(data) {
 			this.carrierbillInfo.carrierCargo.forEach(item => {
@@ -441,6 +456,7 @@ export default {
 			this.carrierbillInfo.shipperID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.shipperCompanyName = data.companyName
+				this.getShipperAddress(data.customerID)
 			})
 		},
 		handSelectConsigneeCompany(data) {
@@ -448,6 +464,7 @@ export default {
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.consigneeCompanyName = data.companyName
+				this.getConsigneeAddress(data.customerID)
 			})
 		},
 		handSelectShipper(data) {
@@ -471,9 +488,6 @@ export default {
 			}
 			this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
 		},
-		inputShipperPhone() {
-			this.carrierbillInfo.shipperAddressID = ''
-		},
 		handSelectConsignee(data) {
 			this.carrierbillInfo.consigneeName = data.contactName
 			this.carrierbillInfo.consigneeArea = data.companyArea
@@ -494,57 +508,6 @@ export default {
 				location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
 			}
 			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
-		},
-		inputConsigneePhone() {
-			this.carrierbillInfo.consigneeAddressID = ''
-		},
-		handleSelectedShipperArea(data) {
-			if (!data) return
-			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
-			this.carrierbillInfo.shipperArea = searchAreaByKey(data[data.length - 1])
-			// 取不到区县取城市
-			let location = null
-			let currentData = ''
-			if (data[2]) {
-				location = searchLocationByCity(distData[data[1]][data[2]])
-				if (location) currentData = data[2]
-			}
-			if (data[1] && !data[2] || !location) {
-				location = searchLocationByCity(distData[data[0]][data[1]])
-				if (location) currentData = data[1]
-			}
-			if (this.selectedShipperArea[1] != currentData && this.selectedShipperArea[2] != currentData) {
-				this.carrierbillInfo.shipperLocationAddress = ''
-			}
-			this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
-		},
-		handleSelectedConsigneeArea(data) {
-			if (!data) return
-			this.carrierbillInfo.consigneeAreaID = data[data.length - 1]
-			this.carrierbillInfo.consigneeArea = searchAreaByKey(data[data.length - 1])
-			// 取不到区县取城市
-			let location = null
-			let currentData = ''
-			if (data[2]) {
-				location = searchLocationByCity(distData[data[1]][data[2]])
-				if (location) currentData = data[2]
-			}
-			if (data[1] && !data[2] || !location) {
-				location = searchLocationByCity(distData[data[0]][data[1]])
-				if (location) currentData = data[1]
-			}
-			if (this.selectedConsigneeArea[1] != currentData && this.selectedConsigneeArea[1] != currentData) {
-				this.carrierbillInfo.consigneeLocationAddress= ''
-			}
-			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
-		},
-		handSelectShipperLocation(data) {
-			this.carrierbillInfo.shipperLocationLng = data.longitude
-			this.carrierbillInfo.shipperLocationLat = data.latitude
-		},
-		handSelectConsigneeLocation(data) {
-			this.carrierbillInfo.consigneeLocationLng = data.longitude
-			this.carrierbillInfo.consigneeLocationLat = data.latitude
 		},
 		save() {
 			new Promise((resolve, reject) => {
@@ -680,8 +643,8 @@ export default {
 	height 24px
 	position absolute
 	right 10px
-	top -10px
-.customerAddressComponents
+	top -12px
+.addressBox
 	background  #fff
 	width 100%
 	border-radius 4px
@@ -695,16 +658,6 @@ export default {
 	cursor pointer
 	padding 0 15px
 	font-size 13.3333px
-	position relative
-	.AddressPop
-		position absolute
-		background #fff
-		top 96px
-		left 0
-		right 0
-		border 1px solid #dcdfe6
-		width 100%
-		height 32px
-		z-index 10
-		width 100%
+	.placeholder
+		color #C0C4CC
 </style>
