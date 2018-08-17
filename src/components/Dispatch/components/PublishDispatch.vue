@@ -384,7 +384,7 @@ export default {
             margin-right 4px
             background-color #409EFF
 .dialog-table
-    font-size 14px
+    font-size 12px
     background #dcdfe6
     border-spacing 1px
     width 100%

@@ -71,14 +71,14 @@
 								</div>
 								<div class="handler">
 									<span class="c1" @click="scramble">抢单人数（3）</span>
-									<span class="c1">跟踪</span>
+									<span class="c1" @click="trail">跟踪</span>
 									<span class="c2">取消调度</span>
-									<span class="c1">重新调度</span>
+									<router-link tag="span" class="c1" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
 									<span class="c1">关闭</span>
 								</div>
 							</td>
 						</tr>
-						<tr v-for="taskItem in item.dispatchTaskList">
+						<tr v-for="taskItem in item.dispatchTaskList" :key="taskItem.taskNo">
 							<td>{{taskItem.taskNo}}</td>
 							<td><el-tag size="mini" v-if="taskItem.status == 'Committed'">待装车</el-tag>
 								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
@@ -161,100 +161,113 @@
 				<el-button @click="scrambleDialog = false" size="small">关闭</el-button>
 			</div>
 		</el-dialog>
+		<trail-map 
+			v-if="trailDialog" 
+			@cancel="handCloseTrail">
+		</trail-map>
 	</div>
 </template>
 <script type="text/javascript">
-	import { PAGEINDEX, PAGESIZE, TOTAL } from '../../../common/const'
-	import { baseMixin } from '../../../common/mixin'
-	import Dispatchbill from '../../../api/Dispatchbill'
-	export default {
-		mixins: [baseMixin], 
-		data(){
-			return{
-				isCur:0,
-				find:{
-					keyword:'',
-					recdeliverycomp:'',
-					dispatchStatus:'',
-					dispatchSort:'',
-					begin:'',
-					end:''
-				},
-				timer: null,
-				scrambleDialog:false,
-				dispatchBillList: [],
-			}
-		},
-		directives: {
-			autoscroll: {
+import { PAGEINDEX, PAGESIZE, TOTAL } from '../../../common/const'
+import { baseMixin } from '../../../common/mixin'
+import Dispatchbill from '../../../api/Dispatchbill'
+import TrailMap from '../components/TrailMap'
+export default {
+	mixins: [baseMixin],
+	components: { TrailMap },
+	data(){
+		return{
+			isCur:0,
+			find:{
+				keyword:'',
+				recdeliverycomp:'',
+				dispatchStatus:'',
+				dispatchSort:'',
+				begin:'',
+				end:''
+			},
+			timer: null,
+			scrambleDialog: false,
+			trailDialog: false,
+			dispatchBillList: [],
+		}
+	},
+	directives: {
+		autoscroll: {
 
-				bind: el => {
-					let index = 1
-					const num = $(el).children().length
-					const newEl = $(el).html()
-					$(el).html(newEl + newEl)
-					this.timer = setInterval(() => {
-						if (index == num + 1) {
-							index = 1
-							$(el).css({top: '0'})
-						}
-						$(el).animate({top: `-${20*index}px`})
-						index++
-					}, 2000)
-				},
-				unbind: () => {
-					this.timer = null
-				}
-			}
-		},
-		created() {
-			this.getList()
-		},
-		destroyed() {
-			this.timer = null
-		},
-		methods:{
-			search() {
-				this.pageIndex = PAGEINDEX
-				this.pageSize = PAGESIZE
-				this.getList()
+			bind: el => {
+				let index = 1
+				const num = $(el).children().length
+				const newEl = $(el).html()
+				$(el).html(newEl + newEl)
+				this.timer = setInterval(() => {
+					if (index == num + 1) {
+						index = 1
+						$(el).css({top: '0'})
+					}
+					$(el).animate({top: `-${20*index}px`})
+					index++
+				}, 2000)
 			},
-			reset() {
-				this.find.keyword=''
-				this.find.recdeliverycomp=''
-				this.find.dispatchStatus=''
-				this.find.dispatchSort=''
-				this.find.begin=''
-				this.find.end=''
-				this.pageIndex = PAGEINDEX
-				this.pageSize = PAGESIZE
-				this.getList()
-			},
-			tabClick(val){
-				this.isCur = val
-			},
-			view(dispatchOrderID) {
-				this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
-			},
-			getList () {
-				Dispatchbill.find({
-					current: this.pageIndex,
-					size: this.pageSize,
-					keyword: this.find.keyword,
-					customerID: this.find.customerID,
-					status: this.find.status,
-					beginDispatchDate: this.find.begin,
-					endDispatchDate: this.find.end
-				}).then(res => {
-					this.dispatchBillList = res.records
-					this.total = res.total
-				})
-			},
-			scramble(){
-				this.scrambleDialog= true
+			unbind: () => {
+				this.timer = null
 			}
 		}
+	},
+	created() {
+		this.getList()
+	},
+	destroyed() {
+		this.timer = null
+	},
+	methods:{
+		search() {
+			this.pageIndex = PAGEINDEX
+			this.pageSize = PAGESIZE
+			this.getList()
+		},
+		reset() {
+			this.find.keyword=''
+			this.find.recdeliverycomp=''
+			this.find.dispatchStatus=''
+			this.find.dispatchSort=''
+			this.find.begin=''
+			this.find.end=''
+			this.pageIndex = PAGEINDEX
+			this.pageSize = PAGESIZE
+			this.getList()
+		},
+		tabClick(val){
+			this.isCur = val
+		},
+		view(dispatchOrderID) {
+			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
+		},
+		getList() {
+			Dispatchbill.find({
+				current: this.pageIndex,
+				size: this.pageSize,
+				keyword: this.find.keyword,
+				customerID: this.find.customerID,
+				status: this.find.status,
+				beginDispatchDate: this.find.begin,
+				endDispatchDate: this.find.end
+			}).then(res => {
+				this.dispatchBillList = res.records
+				this.total = res.total
+			})
+		},
+		scramble() {
+			this.scrambleDialog = true
+		},
+		handCloseTrail() {
+			this.trailDialog = false
+		},
+		trail() {
+			this.trailDialog = true
+		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 	.tab

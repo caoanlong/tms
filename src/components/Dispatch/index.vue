@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<router-view></router-view>
+		<router-view :key="Date.now()"></router-view>
 	</div>
 </template>
 <script type="text/javascript">

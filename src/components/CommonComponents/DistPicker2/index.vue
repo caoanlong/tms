@@ -17,7 +17,7 @@
 						<div class="item-left">{{type}}</div>
 						<div 
 							class="item" 
-							v-if="distLetters[item.key] == type"
+							v-if="distLetters[item.key] == type" 
 							:class="selectList.map(item => item.key).includes(item.key) ? 'active' : ''"
 							v-for="item in list" 
 							:key="item.key" 
