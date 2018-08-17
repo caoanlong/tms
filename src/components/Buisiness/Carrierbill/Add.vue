@@ -52,21 +52,15 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货地址" v-if="carrierbillInfo.shipperCompanyName">
-									<div class="addressBox" v-if="shipperAddress.length==0">
-										<p class="placeholder" >暂无地址,请添加发货单位地址</p>
-									</div>
-									<div class="addressBox" v-else-if="shipperAddress.length==1">
-										<p><span class="name">{{shipperAddress[0].contactName}}</span><span class="mobile">{{shipperAddress[0].contactPhone}}</span></p>
-										<p class="area">{{shipperAddress[0].contactArea}}</p>
-										<p class="address">{{shipperAddress[0].contactArea}}{{shipperAddress[0].detailAddress}}</p>
-									</div>
-									<DropdownSelect :mapData="shipperAddress" :placeholder="placeholder1" @searchBykey="searchBykey" v-else></DropdownSelect>
-								</el-form-item>
-								<el-form-item label="发货地址" v-else>
-									<div class="addressBox">	
-										<p class="placeholder">请选择发货单位</p>
-									</div>
+								<el-form-item label="发货地址">
+									<dropdown-select 
+										addressType="发货单位"
+										:addressData="selectedShipperAddress" 
+										:companyData="selectedShipper" 
+										:placeholder="placeholder1" 
+										@select="handSelectshipperAddress" 
+										:fetch-suggestions="getShipperAddress">
+									</dropdown-select>
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
@@ -344,6 +338,8 @@ export default {
 				porRequire: []                /** String 回单要求*/
 				
 			},
+			selectedShipper: null,
+			selectedShipperAddress: null,
 			selectedShipperArea: [],
 			selectedConsigneeArea: [],
 			searchShipperAreaHash: '',
@@ -427,14 +423,15 @@ export default {
 				keyword: queryString
 			}).then(res => { cb(res.records) })
 		},
-		getShipperAddress(id){
+		getShipperAddress(queryString, cb){
 			Customer.addressSuggest({
-				customerID:id,
-				keyword:this.searchKeyWord
+				customerID: this.carrierbillInfo.shipperID,
+				keyword: queryString
 			}).then(res => {
-				this.shipperAddress = res
-				if(this.shipperAddress.length>1){
-					this.showPlaceholder = true
+				if (queryString || cb) {
+					cb(res)
+				} else {
+					this.selectedShipperAddress = res[0]
 				}
 			})
 		},
@@ -461,11 +458,12 @@ export default {
 			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
 		},
 		handSelectShipperCompany(data) {
+			this.selectedShipper = data
 			this.carrierbillInfo.shipperCompanyName = ' '
 			this.carrierbillInfo.shipperID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.shipperCompanyName = data.companyName
-				this.getShipperAddress(data.customerID)
+				this.getShipperAddress(false, false)
 			})
 		},
 		handSelectConsigneeCompany(data) {
@@ -517,6 +515,9 @@ export default {
 				location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
 			}
 			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
+		},
+		handSelectshipperAddress(data) {
+			console.log(data)
 		},
 		save() {
 			new Promise((resolve, reject) => {
