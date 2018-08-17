@@ -91,6 +91,7 @@ export default {
 		selectItem(item) {
 			this.selectedAddress = item
 			this.isExpand = false
+			this.$emit('select', item)
 		}
 	}
 }

@@ -57,7 +57,6 @@
 										addressType="发货单位"
 										:addressData="selectedShipperAddress" 
 										:companyData="selectedShipper" 
-										:placeholder="placeholder1" 
 										@select="handSelectshipperAddress" 
 										:fetch-suggestions="getShipperAddress">
 									</dropdown-select>
@@ -98,7 +97,6 @@
 										addressType="收货单位"
 										:addressData="selectedConsigneeAddress" 
 										:companyData="selectedConsignee" 
-										:placeholder="placeholder2" 
 										@select="handSelectConsigneeAddress" 
 										:fetch-suggestions="getConsigneeAddress">
 									</dropdown-select>
@@ -459,6 +457,7 @@ export default {
 			})
 		},
 		handSelectConsigneeCompany(data) {
+			this.selectedConsignee = data
 			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.$nextTick(() => {
