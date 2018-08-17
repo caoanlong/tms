@@ -76,6 +76,12 @@ let routerMap = [
 						meta: { title: '已调度' },
 						component: () => import('../components/Dispatch/dispatched'),
 					},
+					{
+						path: '/redispatching',
+						name: 'redispatching',
+						meta: { title: '重新调度' },
+						component: () => import('../components/Dispatch/Dispatching'),
+					},
 					// {
 					// 	path: '/adddispatchbill',
 					// 	name: 'adddispatchbill',

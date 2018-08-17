@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">调度配载</div>
+			<div slot="header" class="clearfix">{{$route.query.dispatchOrderID ? '重新调度配载' : '调度配载'}}</div>
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-row>
@@ -456,7 +456,9 @@ export default {
 	},
 	components: { DistPicker, PublishDispatch, GrabOrder },
 	created() {
+		const dispatchOrderID = this.$route.query.dispatchOrderID
 		this.getList()
+		dispatchOrderID && this.getSelectedList()
 	},
 	methods:{
 		/**
@@ -704,6 +706,63 @@ export default {
 					consigneeLocationLng: 116.406468
 				}
 			]
+		},
+		/**
+		 * 重新调度时获取已选择的承运单
+		 */
+		getSelectedList() {
+			this.selectedList = [
+				{
+					carrierOrderID: 1,
+					carrierCargoID: 2,
+					carrierOrderNo: '102336654',
+					commissionDate: 1531238400000,
+					shipperName: '1号工厂',
+					consigneeName: '漳县罗凯',
+					shipperArea: '云南昆明',
+					consigneeArea: '云南普洱',
+					shipperDetailAddress: '五华区彩云北路23040号92栋',
+					consigneeDetailAddress: '官渡区彩云北路23040号93栋',
+					shipperDate: 1519999200000,
+					consigneeDate: 1520172000000,
+					cargoName: '飞机杯',
+					orderNum: '2000袋/100吨',
+					remainingCargoNum: 1500,
+					remainingCargoVolume: 5,
+					remainingCargoWeight: 100,
+					dispatchType: 'Quantity',
+					shipperLocationLat: 22.543707,
+					shipperLocationLng: 114.061151,
+					consigneeLocationLat: 39.904239,
+					consigneeLocationLng: 116.406468
+				},
+				{
+					carrierOrderID: 2,
+					carrierCargoID: 3,
+					carrierOrderNo: '102336655',
+					commissionDate: 1531238400000,
+					shipperName: '2号工厂',
+					consigneeName: '龚键',
+					shipperArea: '湖北武汉',
+					consigneeArea: '广东深圳',
+					shipperDetailAddress: '五华区彩云北路23040号92栋',
+					consigneeDetailAddress: '官渡区彩云北路23040号93栋',
+					shipperDate: 1520085600000,
+					consigneeDate: 1520258400000,
+					cargoName: '充气娃娃',
+					orderNum: '2000袋/100吨',
+					remainingCargoNum: 1500,
+					remainingCargoVolume: 5,
+					remainingCargoWeight: 100,
+					dispatchType: 'Volumn',
+					shipperLocationLat: 22.543707,
+					shipperLocationLng: 114.061151,
+					consigneeLocationLat: 39.904239,
+					consigneeLocationLng: 116.406468
+				}
+			]
+			this.selectedListNoRepeat = this.arrayUnique(this.selectedList, 'carrierOrderID')
+			this.transLineCreate()
 		},
 		// 发布派车单&发布抢单
 		publish(type){

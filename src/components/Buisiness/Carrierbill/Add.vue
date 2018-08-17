@@ -39,7 +39,7 @@
 					<el-col :span="12">
 						<div class="section-block posr">
 							<span class="block-title">发货信息</span>
-							<span class="addCompany">新增企业地址</span>
+							<span class="addCompany" @click="addAddress('shipper')">新增企业地址</span>
 							<el-row class="block-content">
 								<el-form-item label="发货单位" prop="shipperID">
 									<el-autocomplete  style="width:100%"
@@ -73,7 +73,7 @@
 					<el-col :span="12">
 						<div class="section-block posr">
 							<span class="block-title">到货信息</span>
-							<span class="addCompany">新增企业地址</span>
+							<span class="addCompany" @click="addAddress('consignee')">新增企业地址</span>
 							<el-row class="block-content">
 								<el-form-item label="收货单位" prop="consigneeID">
 									<el-autocomplete  style="width:100%"
@@ -240,6 +240,12 @@
 				</el-row>
 			</el-form>
 		</el-card>
+		<add-com-address 
+			:isVisible="addressDialog" 
+			:customerID="currentCustomerID" 
+			:companyName="currentCompanyName" 
+			@control="handAddress">
+		</add-com-address>
 	</div>
 </template>
 <script type="text/javascript">
@@ -257,11 +263,14 @@ import distData from '../../../assets/data/distpicker.data'
 import Geohash from '../../../common/Geohash'
 import DistPicker from '../../CommonComponents/DistPicker2'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
+import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		return {
-			selectAddressPop:false,
+			addressDialog: false,
+			currentCustomerID: '',
+			currentCompanyName: '',
 			placeholder1:'请选择发货地址',
 			placeholder2:'请选择收货地址',
 			nodatatext:'暂无数据',
@@ -334,7 +343,7 @@ export default {
 			}
 		}
 	},
-	components: { DistPicker ,DropdownSelect},
+	components: { DistPicker, DropdownSelect, AddComAddress},
 	computed: {
 		checkInt: () => checkInt,
 		checkFloat2: () => checkFloat2
@@ -590,11 +599,24 @@ export default {
 		removeItem(index) {
 			this.carrierbillInfo.carrierCargo.splice(index, 1)
 		},
+		/**
+		 * 添加企业地址
+		 */
+		addAddress(type) {
+			if (type == 'shipper') {
+				this.currentCustomerID = this.carrierbillInfo.shipperID
+				this.currentCompanyName = this.carrierbillInfo.shipperCompanyName
+			} else if (type == 'consignee') {
+				this.currentCustomerID = this.carrierbillInfo.consigneeID
+				this.currentCompanyName = this.carrierbillInfo.consigneeCompanyName
+			}
+			this.addressDialog = true
+		},
+		handAddress() {
+			this.addressDialog = false
+		},
 		back() {
 			this.$router.go(-1)
-		},
-		selectAddress(){
-			this.selectAddressPop=true
 		}
 	}
 }

@@ -73,7 +73,7 @@
 									<span class="c1" @click="scramble">抢单人数（3）</span>
 									<span class="c1" @click="trail">跟踪</span>
 									<span class="c2">取消调度</span>
-									<span class="c1">重新调度</span>
+									<router-link tag="span" class="c1" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
 									<span class="c1">关闭</span>
 								</div>
 							</td>
