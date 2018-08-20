@@ -81,10 +81,6 @@ export default {
 	},
 	methods: {
 		suggestions(queryString) {
-			// if (!queryString) {
-			// 	// Message.error('')
-			// 	return
-			// }
 			this.fetchSuggestions(queryString, (res) => {
 				this.optList = res
 			})
