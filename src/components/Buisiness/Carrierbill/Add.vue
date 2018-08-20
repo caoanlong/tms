@@ -423,7 +423,7 @@ export default {
 					if (res.length == 1) {
 						this.selectedShipperAddress = res[0]
 					} else {
-						cb(res)
+						cb && cb(res)
 					}
 				}
 			})
@@ -439,7 +439,7 @@ export default {
 					if (res.length == 1) {
 						this.selectedConsigneeAddress = res[0]
 					} else {
-						cb(res)
+						cb && cb(res)
 					}
 				}
 			})
@@ -459,6 +459,7 @@ export default {
 			this.selectedShipper = data
 			this.carrierbillInfo.shipperCompanyName = ' '
 			this.carrierbillInfo.shipperID = data.customerID
+			if (data.customerAddressNum != 1) this.selectedShipperAddress = null
 			this.$nextTick(() => {
 				this.carrierbillInfo.shipperCompanyName = data.companyName
 				this.getShipperAddress('', false)
@@ -468,6 +469,7 @@ export default {
 			this.selectedConsignee = data
 			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID = data.customerID
+			if (data.customerAddressNum != 1) this.selectedConsigneeAddress = null
 			this.$nextTick(() => {
 				this.carrierbillInfo.consigneeCompanyName = data.companyName
 				this.getConsigneeAddress('', false)

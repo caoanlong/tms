@@ -65,7 +65,7 @@ export default {
 		},
 		addressData: {
 			handler(val) {
-				val && (this.selectedAddress = val)
+				this.selectedAddress = val ? val : {}
 			},
 			deep: true
 		}
