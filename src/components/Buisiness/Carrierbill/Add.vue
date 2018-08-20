@@ -357,7 +357,7 @@ export default {
 			}
 		}
 	},
-	components: { DistPicker, DropdownSelect, AddComAddress},
+	components: { DropdownSelect, AddComAddress},
 	computed: {
 		checkInt: () => checkInt,
 		checkFloat2: () => checkFloat2
@@ -422,6 +422,7 @@ export default {
 				} else {
 					if (res.length == 1) {
 						this.selectedShipperAddress = res[0]
+						this.handSelectshipperAddress(res[0])
 					} else {
 						cb && cb(res)
 					}
@@ -438,6 +439,7 @@ export default {
 				} else {
 					if (res.length == 1) {
 						this.selectedConsigneeAddress = res[0]
+						this.handSelectConsigneeAddress(res[0])
 					} else {
 						cb && cb(res)
 					}
@@ -475,53 +477,27 @@ export default {
 				this.getConsigneeAddress('', false)
 			})
 		},
-		handSelectShipper(data) {
+		handSelectshipperAddress(data) {
+			this.carrierbillInfo.shipperAreaID = data.areaID
+			this.carrierbillInfo.shipperAddressID = data.customerAddressID
 			this.carrierbillInfo.shipperName = data.contactName
-			this.carrierbillInfo.shipperArea = data.companyArea
+			this.carrierbillInfo.shipperPhone = data.contactPhone
+			this.carrierbillInfo.shipperArea = data.contactArea
 			this.carrierbillInfo.shipperDetailAddress = data.detailAddress
 			this.carrierbillInfo.shipperLocationAddress = data.locationAddress
 			this.carrierbillInfo.shipperLocationLng = data.locationLng
 			this.carrierbillInfo.shipperLocationLat = data.locationLat
-			this.carrierbillInfo.shipperPhone = data.contactPhone
-			this.carrierbillInfo.shipperAreaID = data.areaID
-			this.carrierbillInfo.shipperAddressID = data.customerAddressID
-			this.selectedShipperArea = areaIdToArrayId(data.areaID)
-			// 取不到区县取城市
-			let location = null
-			if (this.selectedShipperArea[2]) {
-				location = searchLocationByCity(distData[this.selectedShipperArea[1]][this.selectedShipperArea[2]])
-			}
-			if (this.selectedShipperArea[1] && !this.selectedShipperArea[2] || !location) {
-				location = searchLocationByCity(distData[this.selectedShipperArea[0]][this.selectedShipperArea[1]])
-			}
-			this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
 		},
-		handSelectConsignee(data) {
+		handSelectConsigneeAddress(data) {
+			this.carrierbillInfo.consigneeAreaID = data.areaID
+			this.carrierbillInfo.consigneeAddressID = data.customerAddressID
 			this.carrierbillInfo.consigneeName = data.contactName
-			this.carrierbillInfo.consigneeArea = data.companyArea
+			this.carrierbillInfo.consigneePhone = data.contactPhone
+			this.carrierbillInfo.consigneeArea = data.contactArea
 			this.carrierbillInfo.consigneeDetailAddress = data.detailAddress
 			this.carrierbillInfo.consigneeLocationAddress = data.locationAddress
 			this.carrierbillInfo.consigneeLocationLng = data.locationLng
 			this.carrierbillInfo.consigneeLocationLat = data.locationLat
-			this.carrierbillInfo.consigneePhone = data.contactPhone
-			this.carrierbillInfo.consigneeAreaID = data.areaID
-			this.carrierbillInfo.consigneeAddressID = data.customerAddressID
-			this.selectedConsigneeArea = areaIdToArrayId(data.areaID)
-			// 取不到区县取城市
-			let location = null
-			if (this.selectedConsigneeArea[2]) {
-				location = searchLocationByCity(distData[this.selectedConsigneeArea[1]][this.selectedConsigneeArea[2]])
-			}
-			if (this.selectedConsigneeArea[1] && !this.selectedConsigneeArea[2] || !location) {
-				location = searchLocationByCity(distData[this.selectedConsigneeArea[0]][this.selectedConsigneeArea[1]])
-			}
-			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
-		},
-		handSelectshipperAddress(data) {
-			console.log(data)
-		},
-		handSelectConsigneeAddress(data) {
-			console.log(data)
 		},
 		save() {
 			new Promise((resolve, reject) => {
