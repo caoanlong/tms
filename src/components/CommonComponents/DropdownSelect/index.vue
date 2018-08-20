@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 export default {
 	props: {
 		addressType:{
@@ -78,15 +79,20 @@ export default {
 	},
 	methods: {
 		suggestions(queryString) {
+			// if (!queryString) {
+			// 	// Message.error('')
+			// 	return
+			// }
 			this.fetchSuggestions(queryString, (res) => {
 				this.optList = res
 			})
 		},
-		hide(){
+		hide() {
 			this.isExpand = false
 		},
-		expandPop(){
+		expandPop() {
 			this.isExpand = !this.isExpand
+			if (this.isExpand) this.suggestions('')
 		},
 		selectItem(item) {
 			this.selectedAddress = item
