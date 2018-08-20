@@ -2,79 +2,107 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">编辑车源</div>
-			<el-row>
-				<el-col :span="8">
-					<el-form label-width="130px">
+			<el-form label-width="130px" model="TruckInfo" :rules="rules" ref="ruleForm">
+				<el-row gutter="20">
+					<el-col :span="8">
 						<el-form-item label="报文参考号">
-							<el-input v-model="TruckInfo.messageReferenceNumber" :disabled="true"></el-input>
+							<el-input v-model="apkInfo.messageReferenceNumber" :disabled="true"></el-input>
 						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="单证名称">
+							<el-input v-model="apkInfo.documentName" :disabled="true"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="报文版本号">
+							<el-input v-model="apkInfo.documentVersionNumber" :disabled="true"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row gutter="20">
+					<el-col :span="8">
 						<el-form-item label="发送方代码">
-							<el-input v-model="TruckInfo.senderCode" :disabled="true"></el-input>
+							<el-input v-model="apkInfo.senderCode" :disabled="true"></el-input>
 						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="接收方代码">
+							<el-input v-model="apkInfo.recipientCode" :disabled="true"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="发送日期时间">
+							<el-input v-model="apkInfo.messageSendingDateTime" :disabled="true"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row gutter="20">
+					<el-col :span="8">
 						<el-form-item label="报文功能代码">
-							<el-input v-model="TruckInfo.messageFunctionCode" :disabled="true"></el-input>
+							<el-input v-model="apkInfo.messageFunctionCode" :disabled="true"></el-input>
 						</el-form-item>
-						<el-form-item label="车辆长度">
-							<el-select v-model="TruckInfo.vehicleLength" placeholder="请选择车辆类型" style="width:100%">
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="车辆牌照号" prop="vehicleNumber">
+							<el-input v-model="TruckInfo.vehicleNumber" placeholder="请输入车辆牌照号"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="车辆类型" prop="vehicleClassificationCode">
+							<el-select v-model="TruckInfo.vehicleClassificationCode" placeholder="请选择车辆类型" style="width:100%">
+								<el-option v-for="item in TruckType" :key="item.ConstStd_ID" :label="item.Value+' '+item.Name" :value="item.Value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row gutter="20">
+					<el-col :span="8">
+						<el-form-item label="车辆长度" prop="vehicleLength">
+							<el-select v-model="TruckInfo.vehicleLength" placeholder="请选择车辆长度" style="width:100%">
 								<el-option v-for="item in TruckLength" :key="item.ConstStd_ID" :label="item.Name " :value="item.Value">
 								</el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="出发地区代码">
-							<el-input v-model="TruckInfo.countrySubdivisionCode"></el-input>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="核定载质量" prop="vehicleTonnage">
+							<el-input v-model="TruckInfo.vehicleTonnage" placeholder="请输入核定载质量"></el-input>
 						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="130px">
-						<el-form-item label="单证名称">
-							<el-input v-model="TruckInfo.documentName" :disabled="true"></el-input>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="出发地" prop="placeOfLoading">
+							<el-input v-model="TruckInfo.placeOfLoading" placeholder="请输入出发地"></el-input>
 						</el-form-item>
-						<el-form-item label="接收方代码">
-							<el-input v-model="TruckInfo.recipientCode" :disabled="true"></el-input>
+					</el-col>
+				</el-row>
+				<el-row gutter="20">
+					<el-col :span="8">
+						<el-form-item label="出发地区代码" prop="countrySubdivisionCode">
+							<el-input v-model="TruckInfo.countrySubdivisionCode" placeholder="请输入出发地区代码"></el-input>
 						</el-form-item>
-						<el-form-item label="车辆牌照号">
-							<el-input v-model="TruckInfo.vehicleNumber"></el-input>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="目的地" prop="goodsReceiptPlace">
+							<el-input v-model="TruckInfo.goodsReceiptPlace" placeholder="请输入目的地"></el-input>
 						</el-form-item>
-						<el-form-item label="核定载质量">
-							<el-input v-model="TruckInfo.vehicleTonnage"></el-input>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="目的地地区代码" prop="destinationCountrySubdivisionCode">
+							<el-input v-model="TruckInfo.destinationCountrySubdivisionCode" placeholder="请输入目的地地区代码"></el-input>
 						</el-form-item>
-						<el-form-item label="目的地地区代码">
-							<el-input v-model="TruckInfo.destinationCountrySubdivisionCode"></el-input>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="8">
-					<el-form label-width="130px">
-						<el-form-item label="报文版本号">
-							<el-input v-model="TruckInfo.documentVersionNumber" :disabled="true"></el-input>
-						</el-form-item>
-						<el-form-item label="发送日期时间">
-							<el-input v-model="TruckInfo.messageSendingDateTime" :disabled="true"></el-input>
-						</el-form-item>
-						<el-form-item label="车辆类型">
-							<el-select v-model="TruckInfo.vehicleClassificationCode" placeholder="请选择车辆类型" style="width:100%">
-								<el-option v-for="item in TruckType" :key="item.ConstStd_ID" :label="item.Name " :value="item.Value">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="出发地">
-							<el-input v-model="TruckInfo.placeOfLoading"></el-input>
-						</el-form-item>
-						<el-form-item label="目的地">
-							<el-input v-model="TruckInfo.goodsReceiptPlace"></el-input>
-						</el-form-item>
-					</el-form>
-				</el-col>
-				<el-col :span="24">
-					<el-form label-width="130px">
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="24">
 						<el-form-item>
-							<el-button type="primary" @click="SaveTruck">保存</el-button>
+							<el-button type="primary" @click="save">保存</el-button>
 							<el-button @click.native="back">取消</el-button>
 						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
+					</el-col>
+				</el-row>
+			</el-form>
 		</el-card>
 	</div>
 </template>
