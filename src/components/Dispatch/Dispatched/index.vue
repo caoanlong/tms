@@ -38,8 +38,8 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="search">搜索</el-button>
-						<el-button type="default" @click="reset">重置</el-button>
+						<el-button type="primary" @click="search(isCur)">搜索</el-button>
+						<el-button type="default" @click="reset(isCur)">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -84,8 +84,7 @@
 									<el-tag size="mini" type="success" v-else>已完成</el-tag>
 								</div>
 								<div class="handler">
-									<span class="c1" @click="scramble" v-if="item.grabNum>0">抢单人数（{{item.grabNum}}）</span>
-									<span class="noCursor" v-else>抢单人数（{{item.grabNum}}）</span>
+									<span class="c1" @click="scramble" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
 									<span class="c1" @click="trail">跟踪</span>
 									<span class="c2">取消调度</span>
 									<router-link tag="span" class="c1" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
@@ -236,10 +235,14 @@ export default {
 		this.timer = null
 	},
 	methods:{
-		search() {
+		search(val) {
 			this.pageIndex = PAGEINDEX
 			this.pageSize = PAGESIZE
-			this.getList()
+			if(val==0){
+				this.getList()
+			}else{
+				this.getHistoryList()
+			}
 		},
 		resetSearch(){
 			this.find.keyword=''
@@ -251,9 +254,13 @@ export default {
 			this.pageIndex = PAGEINDEX
 			this.pageSize = PAGESIZE
 		},
-		reset() {
+		reset(val) {
 			this.resetSearch()
-			this.getList()
+			if(val==0){
+				this.getList()
+			}else{
+				this.getHistoryList()
+			}
 		},
 		tabClick(val){
 			this.isCur = val
