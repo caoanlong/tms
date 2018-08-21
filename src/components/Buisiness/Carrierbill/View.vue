@@ -84,6 +84,7 @@
 				<div class="block-content">
 					<table class="wf-table">
 						<tr>
+							<th>调度单号</th>
 							<th>任务单号</th>
 							<th>状态</th>
 							<th>车牌号</th>
@@ -94,11 +95,13 @@
 							<th>运输照片</th>
 						</tr>
 						<tr class="is-center" v-for="(transport, index) in transports" :key="index">
-							<td><span class="link" @click="viewTask(transport.dispatchTaskID)">{{transport.taskNo}}</span></td>
+							<td><span class="link" @click="viewdispatchbill(transport.dispatchOrderID)">{{transport.dispatchOrderNo}}</span></td>
+							<td>{{transport.taskNo}}</td>
 							<td>
+								<!-- 'Committed'：待装车,'Loaded'：已装运,'Signed'：已签收 -->
 								<span v-if="transport.status == 'Committed'">待装车</span>
 								<span v-else-if="transport.status == 'Loaded'">已装运</span>
-								<span v-else-if="transport.status == 'Signed'">已签收</span>
+								<span v-else>已签收</span>
 							</td>
 							<td>
 								{{transport.plateNo}}
@@ -219,8 +222,8 @@ export default {
 		handUploadPhoto(bool) {
 			this.isPhotoVisible = false
 		},
-		viewTask(dispatchTaskID) {
-			this.$router.push({name: 'viewtaskdetail', query: { dispatchTaskID, type: 'view', isHideAmount: true }})
+		viewdispatchbill(dispatchOrderID) {
+			this.$router.push({name: 'viewdispatchbill', query: { dispatchOrderID, type: 'view', isHideAmount: true }})
 		},
 		back() {
 			this.$router.go(-1)
