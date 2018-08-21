@@ -1,5 +1,6 @@
 import Base from './Base'
 import request from '../common/request'
+import requestByJson from '../common/requestByJson'
 
 class Dispatchbill extends Base {
     constructor(url, req) {
@@ -115,6 +116,17 @@ class Dispatchbill extends Base {
             }).then(res => {
                 resolve(res.data.data)
             })
+        })
+    }
+    /**
+     * 发布派车单
+     * @param {*} data 
+     */
+    add(data) {
+        return requestByJson({
+            url: this.baseUrl + '/add',
+            method: 'post',
+            data
         })
     }
 }

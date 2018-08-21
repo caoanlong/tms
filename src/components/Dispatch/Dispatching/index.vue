@@ -6,13 +6,21 @@
 				<el-form :inline="true" size="small">
 					<el-row>
 						<el-form-item label="关键字">
-							<el-input placeholder="承运单号/货物名称/发货方/到货方"></el-input>
+							<el-input placeholder="承运单号/货物名称/发货方/到货方" v-model="find.keyword"></el-input>
 						</el-form-item>
 						<el-form-item label="发货地">
-							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea" style="width:250px"></dist-picker>
+							<dist-picker 
+								:distList="selectedShipperArea" 
+								@hand-select="handleSelectedShipperArea" 
+								style="width:250px">
+							</dist-picker>
 						</el-form-item>
 						<el-form-item label="收货地">
-							<dist-picker :distList="selectedConsigneeArea" @hand-select="handleSelectedConsigneeArea" style="width:250px"></dist-picker>
+							<dist-picker 
+								:distList="selectedConsigneeArea" 
+								@hand-select="handleSelectedConsigneeArea" 
+								style="width:250px">
+							</dist-picker>
 						</el-form-item>
 					</el-row>
 					<el-row>					
@@ -41,7 +49,8 @@
 								type="date" 
 								:clearable="false" 
 								value-format="timestamp" 
-								style="width:160px">
+								style="width:160px" 
+								v-model="find.consigneeDateBegin">
 							</el-date-picker>
 							<span class="tracto">至</span>
 							<el-date-picker 
@@ -49,7 +58,8 @@
 								type="date" 
 								:clearable="false" 
 								value-format="timestamp" 
-								style="width:160px">
+								style="width:160px" 
+								v-model="find.consigneeDateEnd">
 							</el-date-picker>
 						</el-form-item>
 						<el-form-item label="装车时间从">
@@ -58,7 +68,8 @@
 								type="date" 
 								:clearable="false" 
 								value-format="timestamp" 
-								style="width:160px">
+								style="width:160px" 
+								v-model="find.shipperDateBegin">
 							</el-date-picker>
 							<span class="tracto">至</span>
 							<el-date-picker 
@@ -66,7 +77,8 @@
 								type="date" 
 								:clearable="false" 
 								value-format="timestamp" 
-								style="width:160px">
+								style="width:160px" 
+								v-model="find.shipperDateEnd">
 							</el-date-picker>
 						</el-form-item>
 						<el-form-item>
@@ -134,8 +146,8 @@
 									<p>{{item.commissionDate}}</p>
 								</td>
 								<td align="center">
-									<p>{{item.shipperName}}</p>
-									<p>{{item.consigneeName}}</p>
+									<p>{{item.shipperCompanyName}}</p>
+									<p>{{item.consigneeCompanyName}}</p>
 								</td>
 								<td align="center">
 									<p><span class="from">发</span>{{item.shipperArea}}</p>
@@ -150,7 +162,11 @@
 									<p>{{item.consigneeDate | getdatefromtimestamp('min')}}</p>
 								</td>
 								<td align="center">{{item.cargoName}}</td>
-								<td align="center">{{item.orderNum}}</td>
+								<td align="center">
+									{{item.cargoWeight ? item.cargoWeight + '吨/' : '0吨/'}}
+									{{item.cargoVolume ? item.cargoVolume + '方/' : '0方/'}}
+									{{item.cargoNum ? item.cargoNum + '件' : '0件'}}
+								</td>
 								<td align="center">
 									{{item.remainingCargoWeight ? item.remainingCargoWeight + '吨/' : '0吨/'}}
 									{{item.remainingCargoVolume ? item.remainingCargoVolume + '方/' : '0方/'}}
@@ -202,8 +218,8 @@
 								<tr style="height:93px" v-for="(item, index) in selectedList" :key="index">
 									<td align="center">{{item.carrierOrderNo}}</td>
 									<td align="center">
-										<p>{{item.shipperName}}</p>
-										<p>{{item.consigneeName}}</p>
+										<p>{{item.shipperCompanyName}}</p>
+										<p>{{item.consigneeCompanyName}}</p>
 									</td>
 									<td align="center">
 										<p><span class="from">发</span>{{item.shipperArea}}</p>
@@ -238,10 +254,10 @@
 									<td align="center">
 										<p style="position:relative;top:8px"><span class="surplus">余</span>{{item.remainingCargoNum ? item.remainingCargoNum + '件' : '0件'}}</p>
 										<el-form :model="item" ref="ruleForm">
-											<el-form-item prop="cargoNum" :rules="[{
+											<el-form-item prop="cargoNumNew" :rules="[{
 												validator: (rule, value, callback) => {
 													const r = /^[1-9]\d*$/
-													if (item.dispatchType == 'Quantity' && (!item.cargoNum || item.cargoNum == '0')) {
+													if (item.dispatchType == 'Quantity' && (!value || value == '0')) {
 														callback('请输入数量')
 													} else if (value > item.remainingCargoNum) {
 														callback('配载数量不能大于待配数量！')
@@ -252,17 +268,17 @@
 													}
 												}
 											}]">
-												<el-input size="mini" v-model="item.cargoNum"></el-input>
+												<el-input size="mini" v-model="item.cargoNumNew"></el-input>
 											</el-form-item>
 										</el-form>
 									</td>
 									<td align="center">
 										<p style="position:relative;top:8px"><span class="surplus">余</span>{{item.remainingCargoWeight ? item.remainingCargoWeight + '吨' : '0吨'}}</p>
 										<el-form :model="item" ref="ruleForm">
-											<el-form-item prop="cargoWeight" :rules="[{
+											<el-form-item prop="cargoWeightNew" :rules="[{
 												validator: (rule, value, callback) => {
 													const r = /(^[1-9]\d*\.\d{1,2}$)|(^0{1}\.\d{1,2}$)|(^[1-9]\d*$)/
-													if (item.dispatchType == 'Weight' && (!item.cargoWeight || item.cargoWeight == '0')) {
+													if (item.dispatchType == 'Weight' && (!value || value == '0')) {
 														callback('请输入重量')
 													} else if (value > item.remainingCargoWeight) {
 														callback('配载重量不能大于待配重量！')
@@ -273,17 +289,17 @@
 													}
 												}
 											}]">
-												<el-input size="mini" v-model="item.cargoWeight"></el-input>
+												<el-input size="mini" v-model="item.cargoWeightNew"></el-input>
 											</el-form-item>
 										</el-form>
 									</td>
 									<td align="center">
 										<p style="position:relative;top:8px"><span class="surplus">余</span>{{item.remainingCargoVolume ? item.remainingCargoVolume + '方' : '0方'}}</p>
 										<el-form :model="item" ref="ruleForm">
-											<el-form-item prop="cargoVolume" :rules="[{
+											<el-form-item prop="cargoVolumeNew" :rules="[{
 												validator: (rule, value, callback) => {
 													const r = /(^[1-9]\d*\.\d{1,2}$)|(^0{1}\.\d{1,2}$)|(^[1-9]\d*$)/
-													if (item.dispatchType == 'Volumn' && (!item.cargoVolume || item.cargoVolume == '0')) {
+													if (item.dispatchType == 'Volumn' && (!value || value == '0')) {
 														callback('请输入体积')
 													} else if (value > item.remainingCargoVolume) {
 														callback('配载体积不能大于待配体积！')
@@ -294,7 +310,7 @@
 													}
 												}
 											}]">
-												<el-input size="mini" v-model="item.cargoVolume"></el-input>
+												<el-input size="mini" v-model="item.cargoVolumeNew"></el-input>
 											</el-form-item>
 										</el-form>
 									</td>
@@ -332,13 +348,10 @@
 								<tr style="height:50px" v-for="(item, index) in transLines" :key="index">
 									<td align="center">{{index+1}}</td>
 									<td align="center">{{item.carrierOrderNo}}</td>
-									<td align="center" :class="item.type == '装车' ? 'load' : 'unload'">{{item.type}}</td>
-									<td align="center">
-										<span v-if="item.type == '装车'">{{item.shipperArea}}</span>
-										<span v-else>{{item.consigneeArea}}</span>
-									</td>
-									<td align="center">{{item.distance}}公里</td>
-									<td align="center">{{item.date | getdatefromtimestamp('min')}}</td>
+									<td align="center" :class="item.type">{{item.type == 'Load' ? '装车' : '卸货'}}</td>
+									<td align="center">{{item.address}}</td>
+									<td align="center">{{item.nodeDistance}}公里</td>
+									<td align="center">{{item.requireTime | getdatefromtimestamp('min')}}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -382,6 +395,7 @@
 			:totalVolume="totalVolume" 
 			:totalDistance="totalDistance" 
 			:transLines="transLines" 
+			:dispatchTaskCargoList="selectedListNoRepeat" 
 			:isVisible="dispatchDialog" 
 			@cancel="handClosePublish">
 		</publish-dispatch>
@@ -404,8 +418,8 @@ import DistPicker from '../../CommonComponents/DistPicker2'
 import PublishDispatch from '../components/PublishDispatch'
 import GrabOrder from '../components/GrabOrder'
 import { baseMixin } from '../../../common/mixin'
-import { MAPKEY } from '../../../common/const'
-import Dispatchbill from '../../../api/Dispatchbill'
+import { MAPKEY, PAGEINDEX, PAGESIZE } from '../../../common/const'
+import Carrierbill from '../../../api/Carrierbill'
 import { checkFloat2, checkInt } from '../../../common/valid'
 export default {
 	mixins: [baseMixin], 
@@ -415,12 +429,16 @@ export default {
 			grabDialog: false,
 			find: {
 				keyword: '',
-				customerID: '',
-				companyName: '',
-				status: '',
+				shipperAreaID: '',
+				consigneeAreaID: '',
 				commissionDateBegin: '',
 				commissionDateEnd: '',
-				sort: 'carrierOrderNo'
+				shipperDateBegin: '',
+				shipperDateEnd: '',
+				consigneeDateBegin: '',
+				consigneeDateEnd: '',
+				orderBy: 'CarrierOrderNo',
+				sortType: 'asc'
 			},
 			selectedShipperArea: [],
 			selectedConsigneeArea: [],
@@ -433,21 +451,21 @@ export default {
 		checkFloat2: () => checkFloat2,
 		checkInt: () => checkInt,
 		totalWeight() {
-			const values = this.selectedList.map(item => Number(item.cargoWeight ? item.cargoWeight : 0))
+			const values = this.selectedList.map(item => Number(item.cargoWeightNew ? item.cargoWeightNew : 0))
 			const val = values.reduce((prev, curr) => {
 				return prev + curr
 			}, 0).toFixed(2)
 			return Number(val)
 		},
 		totalVolume() {
-			const values = this.selectedList.map(item => Number(item.cargoVolume ? item.cargoVolume : 0))
+			const values = this.selectedList.map(item => Number(item.cargoVolumeNew ? item.cargoVolumeNew : 0))
 			const val = values.reduce((prev, curr) => {
 				return prev + curr
 			}, 0).toFixed(2)
 			return Number(val)
 		},
 		totalNum() {
-			const values = this.selectedList.map(item => Number(item.cargoNum ? item.cargoNum : 0))
+			const values = this.selectedList.map(item => Number(item.cargoNumNew ? item.cargoNumNew : 0))
 			const val = values.reduce((prev, curr) => {
 				return prev + curr
 			}, 0).toFixed(2)
@@ -461,6 +479,24 @@ export default {
 		dispatchOrderID && this.getSelectedList()
 	},
 	methods:{
+		reset() {
+			this.find.keyword = ''
+			this.find.shipperAreaID = ''
+			this.find.consigneeAreaID = ''
+			this.find.commissionDateBegin = ''
+			this.find.commissionDateEnd = ''
+			this.find.shipperDateBegin = ''
+			this.find.shipperDateEnd = ''
+			this.find.consigneeDateBegin = ''
+			this.find.consigneeDateEnd = ''
+			this.find.orderBy = 'CarrierOrderNo'
+			this.find.sortType = 'asc'
+			this.selectedShipperArea = []
+			this.selectedConsigneeArea = []
+			this.pageIndex = PAGEINDEX
+			this.pageSize = PAGESIZE
+			this.getList()
+		},
 		/**
 		 * 排序搜索
 		 */
@@ -502,11 +538,11 @@ export default {
 				list[i] = list[i+1]
 				list[i+1] = current
 			}
-			if (list[0].type == '卸货') {
+			if (list[0].type == 'Unload') {
 				Message.error('第一条必须为装车！')
 				return
 			}
-			if (list[list.length-1].type == '装车') {
+			if (list[list.length-1].type == 'Load') {
 				Message.error('最后一条必须为卸货！')
 				return
 			}
@@ -521,21 +557,23 @@ export default {
 			this.selectedListNoRepeat.forEach((i, x) => {
 				this.transLines.push(...[
 					{
-						type: '装车',
+						type: 'Load',
 						carrierOrderID: i.carrierOrderID,
 						carrierOrderNo: i.carrierOrderNo,
-						shipperArea: i.shipperArea,
-						date: i.shipperDate,
-						lat: i.shipperLocationLat,
-						lng: i.shipperLocationLng
+						address: i.shipperArea,
+						areaID: i.shipperAreaID,
+						requireTime: i.shipperDate,
+						latitude: i.shipperLocationLat,
+						longitude: i.shipperLocationLng
 					},{
-						type: '卸货',
+						type: 'Unload',
 						carrierOrderID: i.carrierOrderID,
 						carrierOrderNo: i.carrierOrderNo,
-						consigneeArea: i.consigneeArea,
-						date: i.consigneeDate,
-						lat: i.consigneeLocationLat,
-						lng: i.consigneeLocationLng
+						address: i.consigneeArea,
+						areaID: i.consigneeAreaID,
+						requireTime: i.consigneeDate,
+						latitude: i.consigneeLocationLat,
+						longitude: i.consigneeLocationLng
 					}
 				])
 			})
@@ -552,7 +590,7 @@ export default {
 		 * 调用高德地图接口获取距离
 		 */
 		getDistance() {
-			const list = this.transLines.map(item => item.lng + ',' + item.lat)
+			const list = this.transLines.map(item => item.longitude + ',' + item.latitude)
 			const origins = list.join('|')
 			const destination = list[list.length-1]
 			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${MAPKEY}`}).then(res => {
@@ -560,8 +598,9 @@ export default {
 				const arrays = [...this.transLines]
 				this.totalDistance = 0
 				arrays.forEach((item,i) => {
-					item.distance = (Number(results[i].distance)/1000).toFixed(2)
-					this.totalDistance += Number(item.distance)
+					item.sequence = i+1
+					item.nodeDistance = Number((Number(results[i].distance)/1000).toFixed(2))
+					this.totalDistance += item.nodeDistance
 				})
 				this.totalDistance = Number(this.totalDistance.toFixed(2))
 				this.transLines = arrays
@@ -569,143 +608,21 @@ export default {
 		},
 		handleSelectedShipperArea(data) {
 			if (!data) return
-			this.carrierbillInfo.shipperAreaID = data[data.length - 1]
-			this.carrierbillInfo.shipperArea = searchAreaByKey(data[data.length - 1])
-			// 取不到区县取城市
-			let location = null
-			let currentData = ''
-			if (data[2]) {
-				location = searchLocationByCity(distData[data[1]][data[2]])
-				if (location) currentData = data[2]
-			}
-			if (data[1] && !data[2] || !location) {
-				location = searchLocationByCity(distData[data[0]][data[1]])
-				if (location) currentData = data[1]
-			}
-			if (this.selectedShipperArea[1] != currentData && this.selectedShipperArea[2] != currentData) {
-				this.carrierbillInfo.shipperLocationAddress = ''
-			}
-			this.searchShipperAreaHash = Geohash.encode(location.latitude, location.longitude)
+			this.find.shipperAreaID = data[data.length - 1]
 		},
 		handleSelectedConsigneeArea(data) {
 			if (!data) return
-			this.carrierbillInfo.consigneeAreaID = data[data.length - 1]
-			this.carrierbillInfo.consigneeArea = searchAreaByKey(data[data.length - 1])
-			// 取不到区县取城市
-			let location = null
-			let currentData = ''
-			if (data[2]) {
-				location = searchLocationByCity(distData[data[1]][data[2]])
-				if (location) currentData = data[2]
-			}
-			if (data[1] && !data[2] || !location) {
-				location = searchLocationByCity(distData[data[0]][data[1]])
-				if (location) currentData = data[1]
-			}
-			if (this.selectedConsigneeArea[1] != currentData && this.selectedConsigneeArea[1] != currentData) {
-				this.carrierbillInfo.consigneeLocationAddress= ''
-			}
-			this.searchConsigneeAreaHash = Geohash.encode(location.latitude, location.longitude)
+			this.find.consigneeAreaID = data[data.length - 1]
 		},
 		getList () {
-			this.tableData = [
-				{
-					carrierOrderID: 1,
-					carrierCargoID: 1,
-					carrierOrderNo: '102336654',
-					commissionDate: 1531238400000,
-					shipperName: '1号工厂',
-					consigneeName: '漳县罗凯',
-					shipperArea: '云南昆明',
-					consigneeArea: '云南普洱',
-					shipperDetailAddress: '五华区彩云北路23040号92栋',
-					consigneeDetailAddress: '官渡区彩云北路23040号93栋',
-					shipperDate: 1519912800000,
-					consigneeDate: 1520085600000,
-					cargoName: 'spc1水泥',
-					orderNum: '2000袋/100吨',
-					remainingCargoNum: 1500,
-					remainingCargoVolume: 5,
-					remainingCargoWeight: 100,
-					dispatchType: 'Quantity',
-					shipperLocationLat: 22.543707,
-					shipperLocationLng: 114.061151,
-					consigneeLocationLat: 39.904239,
-					consigneeLocationLng: 116.406468
-				},
-				{
-					carrierOrderID: 1,
-					carrierCargoID: 2,
-					carrierOrderNo: '102336654',
-					commissionDate: 1531238400000,
-					shipperName: '1号工厂',
-					consigneeName: '漳县罗凯',
-					shipperArea: '云南昆明',
-					consigneeArea: '云南普洱',
-					shipperDetailAddress: '五华区彩云北路23040号92栋',
-					consigneeDetailAddress: '官渡区彩云北路23040号93栋',
-					shipperDate: 1519999200000,
-					consigneeDate: 1520172000000,
-					cargoName: '飞机杯',
-					orderNum: '2000袋/100吨',
-					remainingCargoNum: 1500,
-					remainingCargoVolume: 5,
-					remainingCargoWeight: 100,
-					dispatchType: 'Quantity',
-					shipperLocationLat: 22.543707,
-					shipperLocationLng: 114.061151,
-					consigneeLocationLat: 39.904239,
-					consigneeLocationLng: 116.406468
-				},
-				{
-					carrierOrderID: 2,
-					carrierCargoID: 3,
-					carrierOrderNo: '102336655',
-					commissionDate: 1531238400000,
-					shipperName: '2号工厂',
-					consigneeName: '龚键',
-					shipperArea: '湖北武汉',
-					consigneeArea: '广东深圳',
-					shipperDetailAddress: '五华区彩云北路23040号92栋',
-					consigneeDetailAddress: '官渡区彩云北路23040号93栋',
-					shipperDate: 1520085600000,
-					consigneeDate: 1520258400000,
-					cargoName: '充气娃娃',
-					orderNum: '2000袋/100吨',
-					remainingCargoNum: 1500,
-					remainingCargoVolume: 5,
-					remainingCargoWeight: 100,
-					dispatchType: 'Volumn',
-					shipperLocationLat: 22.543707,
-					shipperLocationLng: 114.061151,
-					consigneeLocationLat: 39.904239,
-					consigneeLocationLng: 116.406468
-				},
-				{
-					carrierOrderID: 3,
-					carrierCargoID: 4,
-					carrierOrderNo: '102336656',
-					commissionDate: 1531238400000,
-					shipperName: '3号工厂',
-					consigneeName: '龙哥',
-					shipperArea: '云南昆明',
-					consigneeArea: '云南普洱',
-					shipperDetailAddress: '五华区彩云北路23040号92栋',
-					consigneeDetailAddress: '官渡区彩云北路23040号93栋',
-					shipperDate: 1520172000000,
-					consigneeDate: 1520344800000,
-					cargoName: '啤酒',
-					orderNum: '2000袋/100吨',
-					remainingCargoNum: 1500,
-					remainingCargoVolume: 5,
-					remainingCargoWeight: 100,
-					dispatchType: 'Weight',
-					shipperLocationLat: 22.543707,
-					shipperLocationLng: 114.061151,
-					consigneeLocationLat: 39.904239,
-					consigneeLocationLng: 116.406468
-				}
-			]
+			const params = Object.assign(this.find, {
+				current: this.pageIndex ,
+				size: this.pageSize
+			})
+			Carrierbill.findPreDispatch(params).then(res => {
+				this.total = res.total
+				this.tableData = res.records
+			})
 		},
 		/**
 		 * 重新调度时获取已选择的承运单
@@ -766,8 +683,6 @@ export default {
 		},
 		// 发布派车单&发布抢单
 		publish(type){
-			this[type + 'Dialog'] = true
-			return
 			if (this.selectedList.length == 0) {
 				Message.error(`请选择承运单！`)
 				return
@@ -920,9 +835,9 @@ export default {
 						background #f8f8f8	
 .tracto
 	padding 0 5px 0 8px
-.load
+.Load
 	color #409EFF
-.unload
+.Unload
 	color #ff6900
 .num-info
 	height 40px

@@ -55,7 +55,7 @@
                                 <el-tag 
                                     size="mini" 
                                     type="danger" 
-                                    v-for="(x, index) in item.expiredCertificate.split(',')" 
+                                    v-for="(x, index) in item.expiredCertificateList" 
                                     :key="index" 
                                     v-if="item.expiredCertificate">
                                     {{ expireWarnJson[x] }}
@@ -75,7 +75,7 @@
                                 <el-tag 
                                     size="mini" 
                                     type="danger" 
-                                    v-for="(x, index) in item.primaryDriver ? item.primaryDriver.expiredCertificate.split(',') : []" 
+                                    v-for="(x, index) in item.primaryDriverExpiredCertificateList" 
                                     :key="index" 
                                     v-if="item.primaryDriver.expiredCertificate">
                                     {{ expireWarnJson[x] }}
@@ -183,7 +183,12 @@ export default {
                 workStatus: this.find.workStatus
 			}).then(res => {
                 this.total = res.total
-                this.tableData = res.records
+                const list = res.records
+                this.tableData = list.map(item => Object.assign(item, {
+                    expiredCertificateList: item.expiredCertificate ? item.expiredCertificate.split(',') : [],
+                    primaryDriverExpiredCertificateList: (item.primaryDriver && item.primaryDriver.expiredCertificate) 
+                    ? item.primaryDriver.expiredCertificate.split(',') : []
+                }))
 			})
         },
         close(bool) {
