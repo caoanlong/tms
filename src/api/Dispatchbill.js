@@ -117,6 +117,16 @@ class Dispatchbill extends Base {
             })
         })
     }
+    findDispatchHistoryList(params){
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/dispatchHistoryList',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
 }
 
 export default new Dispatchbill('/biz/dispatchOrder', request)

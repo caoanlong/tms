@@ -70,7 +70,8 @@
 									<el-tag type="info" size="mini" v-else-if="item.type=='Grab'">抢</el-tag>
 									<el-tag type="info" size="mini" v-else>报</el-tag>
 									<div class="quoteInfo">
-										<div class="quoteList" v-autoscroll>
+										<span v-if="item.type=='Assign'">{{item.plateNo}}</span>
+										<div class="quoteList" v-autoscroll v-else>
 											<div v-for="i in 5" :key="i">{{i}}云A-23567 <b class="c3">¥6000.00元</b></div>
 										</div>
 									</div>
@@ -92,7 +93,7 @@
 								</div>
 							</td>
 						</tr>
-						<tr v-for="taskItem in item.dispatchTaskCargoVOList" :key="taskItem.carrierOrderNo">
+						<tr v-for="taskItem in item.dispatchTaskCargoVOList" :key="taskItem.carrierOrderID">
 							<td>{{taskItem.carrierOrderNo}}</td>
 							<td><el-tag size="mini" v-if="taskItem.status == 'Committed'">待装车</el-tag>
 								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
@@ -240,19 +241,28 @@ export default {
 			this.pageSize = PAGESIZE
 			this.getList()
 		},
-		reset() {
+		resetSearch(){
 			this.find.keyword=''
-			this.find.recdeliverycomp=''
-			this.find.dispatchStatus=''
-			this.find.dispatchSort=''
-			this.find.begin=''
-			this.find.end=''
+			this.find.shipperConsignee=''
+			this.find.status=''
+			this.find.type=''
+			this.find.dispatchBeginTime=''
+			this.find.dispatchEndTime=''
 			this.pageIndex = PAGEINDEX
 			this.pageSize = PAGESIZE
+		},
+		reset() {
+			this.resetSearch()
 			this.getList()
 		},
 		tabClick(val){
 			this.isCur = val
+			this.resetSearch()
+			if(val==0){
+				this.getList()
+			}else{
+				this.getHistoryList()
+			}
 		},
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
@@ -264,6 +274,22 @@ export default {
 				keyword: this.find.keyword,
 				shipperConsignee: this.find.shipperConsignee,
 				status: this.find.status,
+				type: this.find.type,
+				dispatchBeginTime: this.find.dispatchBeginTime,
+				dispatchEndTime: this.find.dispatchEndTime
+			}).then(res => {
+				this.dispatchBillList = res.records
+				this.total = res.total
+			})
+		},
+		getHistoryList() {
+			Dispatchbill.findDispatchHistoryList({
+				current: this.pageIndex,
+				size: this.pageSize,
+				keyword: this.find.keyword,
+				shipperConsignee: this.find.shipperConsignee,
+				status: this.find.status,
+				type: this.find.type,
 				dispatchBeginTime: this.find.dispatchBeginTime,
 				dispatchEndTime: this.find.dispatchEndTime
 			}).then(res => {
