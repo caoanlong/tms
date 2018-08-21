@@ -8,29 +8,33 @@
 						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item label="收发单位">
-						<el-input placeholder="收发单位" v-model="find.recdeliverycomp"></el-input>
+						<el-input placeholder="收发单位" v-model="find.shipperConsignee"></el-input>
 					</el-form-item>
 					<el-form-item label="调度状态">
-						<el-select placeholder="全部" v-model="find.dispatchStatus" style="width:120px">
+						<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
+						<el-select placeholder="全部" v-model="find.status" style="width:120px">
 							<el-option value="" label="全部">全部</el-option>
-							<el-option value="11111" label="未接单">未接单</el-option>
-							<el-option value="22222" label="已接单">已接单</el-option>
-							<el-option value="33333" label="已取消">已取消</el-option>
-							<el-option value="44444" label="被拒绝">被拒绝</el-option>
+							<el-option value="Committed" label="未接单">未接单</el-option>
+							<el-option value="Ordered" label="已接单">已接单</el-option>
+							<el-option value="Canceled" label="已取消">已取消</el-option>
+							<el-option value="Rejected" label="被拒绝">被拒绝</el-option>
+							<el-option value="Closed" label="已关闭">已关闭</el-option>
+							<el-option value="Finished" label="已完成">已完成</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度类型">
-						<el-select placeholder="全部" v-model="find.dispatchSort" style="width:120px">
+						<!-- Assign("指派"),Grab("抢单"),Offer("报价") -->
+						<el-select placeholder="全部" v-model="find.type" style="width:120px">
 							<el-option value="" label="全部">全部</el-option>
-							<el-option value="11111" label="指派">指派</el-option>
-							<el-option value="22222" label="报价">报价</el-option>
-							<el-option value="33333" label="抢单">抢单</el-option>
+							<el-option value="Assign" label="指派">指派</el-option>
+							<el-option value="Grab" label="抢单">抢单</el-option>
+							<el-option value="Offer" label="报价">报价</el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.begin">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.dispatchBeginTime">
 						</el-date-picker><span class="tracto">至</span>
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.end">
+						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.dispatchEndTime">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -61,16 +65,26 @@
 							<td colspan="10" class="txt-l">
 								<div class="dispatchbillTit">
 									<span class="num" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
-									<el-tag type="info" size="mini">抢</el-tag>
+									<!-- Assign("指派"),Grab("抢单"),Offer("报价") -->
+									<el-tag type="info" size="mini" v-if="item.type=='Assign'">派</el-tag>
+									<el-tag type="info" size="mini" v-else-if="item.type=='Grab'">抢</el-tag>
+									<el-tag type="info" size="mini" v-else>报</el-tag>
 									<div class="quoteInfo">
 										<div class="quoteList" v-autoscroll>
 											<div v-for="i in 5" :key="i">{{i}}云A-23567 <b class="c3">¥6000.00元</b></div>
 										</div>
 									</div>
-									<el-tag size="mini">抢单中</el-tag>
+									<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
+									<el-tag size="mini" type="info" v-if="item.status == 'Committed'">未接单</el-tag>
+									<el-tag size="mini" v-else-if="item.status == 'Ordered'">已接单</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status == 'Canceled'">已取消</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status == 'Rejected'">已拒绝</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status == 'Closed'">已关闭</el-tag>
+									<el-tag size="mini" type="success" v-else>已完成</el-tag>
 								</div>
 								<div class="handler">
-									<span class="c1" @click="scramble">抢单人数（3）</span>
+									<span class="c1" @click="scramble" v-if="item.grabNum>0">抢单人数（{{item.grabNum}}）</span>
+									<span class="noCursor" v-else>抢单人数（{{item.grabNum}}）</span>
 									<span class="c1" @click="trail">跟踪</span>
 									<span class="c2">取消调度</span>
 									<router-link tag="span" class="c1" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
@@ -78,19 +92,19 @@
 								</div>
 							</td>
 						</tr>
-						<tr v-for="taskItem in item.dispatchTaskList" :key="taskItem.taskNo">
-							<td>{{taskItem.taskNo}}</td>
+						<tr v-for="taskItem in item.dispatchTaskCargoVOList" :key="taskItem.carrierOrderNo">
+							<td>{{taskItem.carrierOrderNo}}</td>
 							<td><el-tag size="mini" v-if="taskItem.status == 'Committed'">待装车</el-tag>
 								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
 								<el-tag size="mini" type="success" v-else-if="taskItem.status == 'Signed'">已签收</el-tag>
 								<el-tag size="mini" type="info" v-else>已作废</el-tag></td>
 							<td class="txt-l">{{taskItem.cargoName}}</td>
-							<td class="text-center" v-if="taskItem.loadWeightSum || taskItem.loadVolumeSum || taskItem.loadVolumeSum">
-								{{taskItem.loadWeightSum ? taskItem.loadWeightSum + '吨' : ''}}
-								{{taskItem.loadVolumeSum ? (taskItem.loadWeightSum ? '/' : '') + taskItem.loadVolumeSum + '方' : ''}}
+							<td class="text-center" v-if="taskItem.cargoWeight || taskItem.cargoVolume || taskItem.cargoVolume">
+								{{taskItem.cargoWeight ? taskItem.cargoWeight + '吨' : ''}}
+								{{taskItem.cargoVolume ? (taskItem.cargoWeight ? '/' : '') + taskItem.cargoVolume + '方' : ''}}
 							</td>
 							<td v-else>0</td>
-							<td>{{taskItem.loadNumSum}}</td>
+							<td>{{taskItem.cargoNum}}</td>
 							<td>{{taskItem.shipperArea}}</td>
 							<td>{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
 							<td>{{taskItem.consigneeArea}}</td>
@@ -180,11 +194,11 @@ export default {
 			isCur:0,
 			find:{
 				keyword:'',
-				recdeliverycomp:'',
-				dispatchStatus:'',
-				dispatchSort:'',
-				begin:'',
-				end:''
+				shipperConsignee:'',
+				status:'',
+				type:'',
+				dispatchBeginTime:'',
+				dispatchEndTime:''
 			},
 			timer: null,
 			scrambleDialog: false,
@@ -244,14 +258,14 @@ export default {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
 		},
 		getList() {
-			Dispatchbill.find({
+			Dispatchbill.findDispatchedList({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
-				customerID: this.find.customerID,
+				shipperConsignee: this.find.shipperConsignee,
 				status: this.find.status,
-				beginDispatchDate: this.find.begin,
-				endDispatchDate: this.find.end
+				dispatchBeginTime: this.find.dispatchBeginTime,
+				dispatchEndTime: this.find.dispatchEndTime
 			}).then(res => {
 				this.dispatchBillList = res.records
 				this.total = res.total
@@ -376,6 +390,8 @@ export default {
 						margin-left 20px
 						line-height 20px
 						cursor pointer
+						&.noCursor
+							cursor auto
 
 	.c3			
 		color #f60

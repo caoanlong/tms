@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="报文参考号：">
-						<el-input placeholder="报文参考号" v-model="findMessageReferenceNumber"></el-input>
+						<el-input placeholder="报文参考号" v-model="findMessageReferenceNumber" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary"  @click.native="search">查询</el-button>
@@ -29,7 +29,6 @@
 				</el-upload>
 				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
 				<a :href="templateUrl" download="goodssource.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
-				<!-- <button @click="doPrint">打印</button> -->
 			</div>
 			<div class="table" id="table">
 				<!--startprint-->
@@ -79,7 +78,7 @@ export default {
 		return {
 			downloadLoading: false,
 			importFileUrl: baseURL + '/notruckCargosource/importExcel',
-			exportExcelUrl: baseURL + '/notruckCargosource/export',
+			exportExcelUrl: '',
 			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=goodssource.xlsx ',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			pageIndex: 1,
@@ -91,6 +90,7 @@ export default {
 	},
 	components: { Page },
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -103,7 +103,15 @@ export default {
 			this.findMessageReferenceNumber = ''
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
+		},
+		resetExportExcelUrl(){
+			this.exportExcelUrl = baseURL + '/notruckCargosource/export' + localStorage.getItem("token") 
+				+ '&messageReferenceNumber=' + this.findMessageReferenceNumber
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
 		},
 		pageChange() {
 			this.pageIndex = index

@@ -1,8 +1,8 @@
 <template>
 	<div class="select-search" @mouseleave="hide">
 		<p class="placeholder" v-if="!companyData || (companyData && companyData.customerAddressNum == 0)">{{placeholder}}</p>
-		<div class="selected-address" @click.stop="expandPop" v-if="companyData && companyData.customerAddressNum > 0">
-			<p class="placeholder" v-if="!selectedAddress.customerAddressID">{{placeholder}}</p>
+		<div class="selected-address" @click.stop="expandPop" v-if="(companyData && companyData.customerAddressNum > 0) || selectedAddress.contactName ">
+			<p class="placeholder" v-if="!selectedAddress.contactName">{{placeholder}}</p>
 			<p><span class="name">{{selectedAddress.contactName}}</span><span class="mobile">{{selectedAddress.contactPhone}}</span></p>
 			<p class="area">{{selectedAddress.contactArea}}</p>
 			<p class="address">{{selectedAddress.contactArea}}{{selectedAddress.detailAddress}}</p>
@@ -66,6 +66,7 @@ export default {
 		},
 		addressData: {
 			handler(val) {
+				console.log(val)
 				this.selectedAddress = val ? val : {}
 			},
 			deep: true
@@ -76,6 +77,7 @@ export default {
 		document.body.addEventListener('click', () => {
 			this.isExpand = false
 		})
+
 	},
 	methods: {
 		suggestions(queryString) {
