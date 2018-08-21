@@ -29,7 +29,6 @@
 				</el-upload>
 				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
 				<a :href="templateUrl" download="goodssource.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
-				<!-- <button @click="doPrint">打印</button> -->
 			</div>
 			<div class="table" id="table">
 				<!--startprint-->
