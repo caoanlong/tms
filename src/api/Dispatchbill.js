@@ -127,6 +127,17 @@ class Dispatchbill extends Base {
             })
         })
     }
+	/**
+     * 发布派车单
+     * @param {*} data 
+     */
+    add(data) {
+        return requestByJson({
+            url: this.baseUrl + '/add',
+            method: 'post',
+            data
+        })
+    }
 }
 
 export default new Dispatchbill('/biz/dispatchOrder', request)

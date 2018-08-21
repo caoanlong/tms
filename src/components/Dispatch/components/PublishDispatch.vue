@@ -16,8 +16,8 @@
                 </div>
                 <div class="num-info">
                     <span class="num-tit">
-                        {{transLines.filter(item => item.type == '装车').length}}装
-                        {{transLines.filter(item => item.type == '卸货').length}}卸
+                        {{transLines.filter(item => item.type == 'Load').length}}装
+                        {{transLines.filter(item => item.type == 'Unload').length}}卸
                         &nbsp;&nbsp;预计里程{{totalDistance}}公里
                     </span>
                 </div>
@@ -124,28 +124,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in freight" :key="index">
+                            <tr v-for="(item, index) in bizDispatchFeeList" :key="index">
                                 <td align="center" style="padding:0 15px">
-                                    <span style="position:relative;top:-10px" v-if="index === 0">运费</span>
+                                    <span style="position:relative;top:-10px" v-if="index === 0">{{item.item == 'Freight' ? '运费' : ''}}</span>
                                     <el-form :model="item" ref="ruleForm" v-else>
-                                        <el-form-item prop="subject" :rules="[{ required: true , message: '请选择费用科目' }]">
-                                            <el-select size="mini" v-model="item.subject" placeholder="请选择">
-                                                <el-option label="路桥费" value="路桥费"></el-option>
-                                                <el-option label="中转费" value="中转费"></el-option>
-                                                <el-option label="罚款" value="罚款"></el-option>
-                                                <el-option label="绕路费" value="绕路费"></el-option>
-                                                <el-option label="其他" value="其他"></el-option>
+                                        <el-form-item prop="item" :rules="[{ required: true , message: '请选择费用科目' }]">
+                                            <el-select size="mini" v-model="item.item" placeholder="请选择">
+                                                <el-option label="路桥费" value="RoadBridge"></el-option>
+                                                <el-option label="中转费" value="Transit"></el-option>
+                                                <el-option label="罚款" value="Fine"></el-option>
+                                                <el-option label="绕路费" value="Detour"></el-option>
+                                                <el-option label="其他" value="Other"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-form>
                                 </td>
                                 <td align="center">
-                                    <span style="position:relative;top:-10px">{{item.type}}</span>
+                                    <span style="position:relative;top:-10px">{{item.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
                                 </td>
                                 <td align="center" style="padding:0 5px">
                                     <el-form :model="item" ref="ruleForm">
-                                        <el-form-item prop="payee" :rules="[{ required: true , message: '请选择收款人' }]">
-                                            <el-select size="mini" v-model="item.payee" placeholder="请选择">
+                                        <el-form-item prop="comSupercargoID" :rules="[{ required: true , message: '请选择收款人' }]">
+                                            <el-select size="mini" v-model="item.comSupercargoID" placeholder="请选择">
                                                 <el-option 
                                                     :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName" 
                                                     :value="person.comSupercargoID" 
@@ -158,12 +158,12 @@
                                 </td>
                                 <td align="center" style="padding:0 5px">
                                     <el-form :model="item" ref="ruleForm">
-                                        <el-form-item prop="method" :rules="[{ required: true , message: '请选择支付方式' }]">
-                                            <el-select size="mini" v-model="item.method" placeholder="请选择">
-                                                <el-option label="到付" value="到付"></el-option>
-                                                <el-option label="预付" value="预付"></el-option>
-                                                <el-option label="回单结" value="回单结"></el-option>
-                                                <el-option label="收货方付" value="收货方付"></el-option>
+                                        <el-form-item prop="payMode" :rules="[{ required: true , message: '请选择支付方式' }]">
+                                            <el-select size="mini" v-model="item.payMode" placeholder="请选择">
+                                                <el-option label="到付" value="PayOnDelivery"></el-option>
+                                                <el-option label="预付" value="Prepay"></el-option>
+                                                <el-option label="回单结" value="PayOnReceipt"></el-option>
+                                                <el-option label="收货方付" value="PayByConsignee"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-form>
@@ -220,8 +220,10 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
+import Dispatchbill from '../../../api/Dispatchbill'
 export default {
     components: { SelectTruck, SelectPerson },
     props: {
@@ -242,6 +244,7 @@ export default {
             default: 0
         },
         transLines: Array,
+        dispatchTaskCargoList: Array,
         isVisible: {
             type: Boolean,
             default: false
@@ -253,12 +256,12 @@ export default {
             personDialog: false,
             selectedTruck: {},
             personType: 'primary',
-            freight: [{
-                'subject': '运费',
-                'type': '基础运费',
-                'payee': '',
-                'method': '',
-                'amount': ''
+            bizDispatchFeeList: [{
+                item: 'Freight',  // 费用科目
+                category: 'Basic', // 费用类型
+                comSupercargoID: '',  // 收款人
+                payMode: 'Prepay',  // 支付方式
+                amount: ''  // 金额
             }],
             endTime: '',
             persons: [],
@@ -289,7 +292,7 @@ export default {
     },
     computed: {
         totalFreight() {
-            const values = this.freight.map(item => Number(item.amount ? item.amount : 0))
+            const values = this.bizDispatchFeeList.map(item => Number(item.amount ? item.amount : 0))
 			const val = values.reduce((prev, curr) => {
 				return prev + curr
 			}, 0).toFixed(2)
@@ -319,16 +322,16 @@ export default {
             this.personDialog = true
         },
         addFreight() {
-            this.freight.push({
-                'subject': '',
-                'type': '附加费',
-                'payee': '',
-                'method': '',
-                'amount': ''
+            this.bizDispatchFeeList.push({
+                item: '',
+                category: 'Attach',
+                comSupercargoID: '',
+                payMode: '',
+                amount: ''
             })
         },
         delFreight(i) {
-            this.freight.splice(i, 1)
+            this.bizDispatchFeeList.splice(i, 1)
         },
         createPersons() {
             if (this.selectedTruck.primaryDriver && this.selectedTruck.superCargo) {
@@ -350,7 +353,30 @@ export default {
 				}
 				flag ? resolve() : reject()
 			}).then(() => {
-				this.close()
+                const dispatchTaskCargoList = this.dispatchTaskCargoList.map(item => {
+                    return {
+                        carrierCargoID: item.carrierCargoID,
+                        carrierOrderID: item.carrierOrderID,
+                        cargoWeight: item.cargoWeightNew,
+                        cargoVolume: item.cargoVolumeNew,
+                        cargoNum: item.cargoNumNew
+                    }
+                })
+                const dispatchTaskList = this.dispatchTaskCargoList.map(item => {
+                    return {carrierOrderID: item.carrierOrderID}
+                })
+                Dispatchbill.add({
+                    truckID: this.selectedTruck.truckID,
+                    driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.comSupercargoID : '',
+                    superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.comSupercargoID : '',
+                    bizDispatchFeeList: this.bizDispatchFeeList,
+                    dispatchTaskCargoList,
+                    dispatchTaskList,
+                    bizDispatchNodeList: this.transLines
+                }).then(res => {
+                    Message.success(res.msg)
+                    this.close()
+                })
 			}).catch(err => {})
         },
         close() {
