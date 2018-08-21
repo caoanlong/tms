@@ -109,7 +109,7 @@
 							<td>{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
 							<td>{{taskItem.consigneeArea}}</td>
 							<td>{{taskItem.consigneeDate | getdatefromtimestamp(true)}}</td>
-							<td>查看照片</td>
+							<td><el-button type="primary" size="mini" @click="viewPhotos(taskItem.carrierOrderID,taskItem.shipperArea,taskItem.consigneeArea)">查看照片</el-button></td>
 						</tr>
 					</template>
 				</table>
@@ -179,6 +179,14 @@
 			v-if="trailDialog" 
 			@cancel="handCloseTrail">
 		</trail-map>
+		<UploadPhoto 
+			:isPreview="true" 
+			:isVisible="isPhotoVisible" 
+			@control="handUploadPhoto" 
+			:dispatchTaskID="currentDispatchTaskID" 
+			:shipperArea="currentShipperArea" 
+			:consigneeArea="currentConsigneeArea">
+		</UploadPhoto>
 	</div>
 </template>
 <script type="text/javascript">
@@ -186,9 +194,10 @@ import { PAGEINDEX, PAGESIZE, TOTAL } from '../../../common/const'
 import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
+import UploadPhoto from './common/UploadPhoto'
 export default {
 	mixins: [baseMixin],
-	components: { TrailMap },
+	components: { TrailMap,UploadPhoto },
 	data(){
 		return{
 			isCur:0,
@@ -204,6 +213,10 @@ export default {
 			scrambleDialog: false,
 			trailDialog: false,
 			dispatchBillList: [],
+			currentDispatchTaskID: '',
+			currentShipperArea: '',
+			currentConsigneeArea: '',
+			isPhotoVisible: false,
 		}
 	},
 	directives: {
@@ -273,6 +286,16 @@ export default {
 		},
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
+		},
+		// 查看照片弹窗回调
+		viewPhotos(carrierOrderID,shipperArea,consigneeArea) {
+			this.currentDispatchTaskID = carrierOrderID
+			this.currentShipperArea = shipperArea
+			this.currentConsigneeArea = consigneeArea
+			this.isPhotoVisible = true
+		},
+		handUploadPhoto(bool) {
+			this.isPhotoVisible = false
 		},
 		getList() {
 			Dispatchbill.findDispatchedList({
