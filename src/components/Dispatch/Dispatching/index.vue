@@ -703,8 +703,9 @@ export default {
 		/**
 		 * 关闭发布派车单窗口
 		 */
-		handClosePublish(data) {
+		handClosePublish(bool) {
 			this.dispatchDialog = false
+			if (bool) this.getList()
 		},
 		/**
 		 * 关闭发布抢单

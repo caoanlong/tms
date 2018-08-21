@@ -199,7 +199,7 @@
                 <el-row>
                     <el-form-item label="接单截止时间">
                         <el-date-picker 
-                            v-model="endTime"
+                            v-model="endDate"
                             type="date" 
                             :clearable="false" 
                             value-format="timestamp">
@@ -263,7 +263,7 @@ export default {
                 payMode: 'Prepay',  // 支付方式
                 amount: ''  // 金额
             }],
-            endTime: '',
+            endDate: '',
             persons: [],
             expireWarnJson:{
                 DriverLicExpiresTime: "行驶证到期",
@@ -372,10 +372,11 @@ export default {
                     bizDispatchFeeList: this.bizDispatchFeeList,
                     dispatchTaskCargoList,
                     dispatchTaskList,
-                    bizDispatchNodeList: this.transLines
+                    bizDispatchNodeList: this.transLines,
+                    endDate: this.endDate
                 }).then(res => {
-                    Message.success(res.msg)
-                    this.close()
+                    Message.success(res.data.msg)
+                    this.$emit('cancel', true)
                 })
 			}).catch(err => {})
         },

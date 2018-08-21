@@ -1,5 +1,6 @@
 import Base from './Base'
 import request from '../common/request'
+import requestByJson from '../common/requestByJson'
 
 class Dispatchbill extends Base {
     constructor(url, req) {
