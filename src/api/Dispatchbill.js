@@ -1,6 +1,5 @@
 import Base from './Base'
 import request from '../common/request'
-import requestByJson from '../common/requestByJson'
 
 class Dispatchbill extends Base {
     constructor(url, req) {
@@ -118,7 +117,17 @@ class Dispatchbill extends Base {
             })
         })
     }
-    /**
+    findDispatchHistoryList(params){
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/dispatchHistoryList',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
+	/**
      * 发布派车单
      * @param {*} data 
      */

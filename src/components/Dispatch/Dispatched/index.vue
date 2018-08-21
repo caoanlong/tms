@@ -38,8 +38,8 @@
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="search">搜索</el-button>
-						<el-button type="default" @click="reset">重置</el-button>
+						<el-button type="primary" @click="search(isCur)">搜索</el-button>
+						<el-button type="default" @click="reset(isCur)">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -70,7 +70,8 @@
 									<el-tag type="info" size="mini" v-else-if="item.type=='Grab'">抢</el-tag>
 									<el-tag type="info" size="mini" v-else>报</el-tag>
 									<div class="quoteInfo">
-										<div class="quoteList" v-autoscroll>
+										<span v-if="item.type=='Assign'">{{item.plateNo}}</span>
+										<div class="quoteList" v-autoscroll v-else>
 											<div v-for="i in 5" :key="i">{{i}}云A-23567 <b class="c3">¥6000.00元</b></div>
 										</div>
 									</div>
@@ -83,8 +84,7 @@
 									<el-tag size="mini" type="success" v-else>已完成</el-tag>
 								</div>
 								<div class="handler">
-									<span class="c1" @click="scramble" v-if="item.grabNum>0">抢单人数（{{item.grabNum}}）</span>
-									<span class="noCursor" v-else>抢单人数（{{item.grabNum}}）</span>
+									<span class="c1" @click="scramble" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
 									<span class="c1" @click="trail">跟踪</span>
 									<span class="c2">取消调度</span>
 									<router-link tag="span" class="c1" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
@@ -92,7 +92,7 @@
 								</div>
 							</td>
 						</tr>
-						<tr v-for="taskItem in item.dispatchTaskCargoVOList" :key="taskItem.carrierOrderNo">
+						<tr v-for="taskItem in item.dispatchTaskCargoVOList" :key="taskItem.carrierOrderID">
 							<td>{{taskItem.carrierOrderNo}}</td>
 							<td><el-tag size="mini" v-if="taskItem.status == 'Committed'">待装车</el-tag>
 								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
@@ -235,24 +235,41 @@ export default {
 		this.timer = null
 	},
 	methods:{
-		search() {
+		search(val) {
 			this.pageIndex = PAGEINDEX
 			this.pageSize = PAGESIZE
-			this.getList()
+			if(val==0){
+				this.getList()
+			}else{
+				this.getHistoryList()
+			}
 		},
-		reset() {
+		resetSearch(){
 			this.find.keyword=''
-			this.find.recdeliverycomp=''
-			this.find.dispatchStatus=''
-			this.find.dispatchSort=''
-			this.find.begin=''
-			this.find.end=''
+			this.find.shipperConsignee=''
+			this.find.status=''
+			this.find.type=''
+			this.find.dispatchBeginTime=''
+			this.find.dispatchEndTime=''
 			this.pageIndex = PAGEINDEX
 			this.pageSize = PAGESIZE
-			this.getList()
+		},
+		reset(val) {
+			this.resetSearch()
+			if(val==0){
+				this.getList()
+			}else{
+				this.getHistoryList()
+			}
 		},
 		tabClick(val){
 			this.isCur = val
+			this.resetSearch()
+			if(val==0){
+				this.getList()
+			}else{
+				this.getHistoryList()
+			}
 		},
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
@@ -264,6 +281,22 @@ export default {
 				keyword: this.find.keyword,
 				shipperConsignee: this.find.shipperConsignee,
 				status: this.find.status,
+				type: this.find.type,
+				dispatchBeginTime: this.find.dispatchBeginTime,
+				dispatchEndTime: this.find.dispatchEndTime
+			}).then(res => {
+				this.dispatchBillList = res.records
+				this.total = res.total
+			})
+		},
+		getHistoryList() {
+			Dispatchbill.findDispatchHistoryList({
+				current: this.pageIndex,
+				size: this.pageSize,
+				keyword: this.find.keyword,
+				shipperConsignee: this.find.shipperConsignee,
+				status: this.find.status,
+				type: this.find.type,
 				dispatchBeginTime: this.find.dispatchBeginTime,
 				dispatchEndTime: this.find.dispatchEndTime
 			}).then(res => {
