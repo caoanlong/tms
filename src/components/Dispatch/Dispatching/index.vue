@@ -405,6 +405,7 @@
 			:totalVolume="totalVolume" 
 			:totalDistance="totalDistance" 
 			:transLines="transLines" 
+			:dispatchTaskCargoList="selectedListNoRepeat" 
 			:isVisible="grabDialog" 
 			@cancel="handCloseGrab">
 		</grab-order>
@@ -710,8 +711,9 @@ export default {
 		/**
 		 * 关闭发布抢单
 		 */
-		handCloseGrab(data) {
+		handCloseGrab(bool) {
 			this.grabDialog = false
+			if (bool) this.getList()
 		},
 		arrayUnique(arr, attr) {
 			const hash = {}

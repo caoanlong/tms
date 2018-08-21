@@ -144,8 +144,8 @@
                                 </td>
                                 <td align="center" style="padding:0 5px">
                                     <el-form :model="item" ref="ruleForm">
-                                        <el-form-item prop="comSupercargoID" :rules="[{ required: true , message: '请选择收款人' }]">
-                                            <el-select size="mini" v-model="item.comSupercargoID" placeholder="请选择">
+                                        <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
+                                            <el-select size="mini" v-model="item.superCargoID" placeholder="请选择">
                                                 <el-option 
                                                     :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName" 
                                                     :value="person.comSupercargoID" 
@@ -259,7 +259,7 @@ export default {
             bizDispatchFeeList: [{
                 item: 'Freight',  // 费用科目
                 category: 'Basic', // 费用类型
-                comSupercargoID: '',  // 收款人
+                superCargoID: '',  // 收款人
                 payMode: 'Prepay',  // 支付方式
                 amount: ''  // 金额
             }],
@@ -325,7 +325,7 @@ export default {
             this.bizDispatchFeeList.push({
                 item: '',
                 category: 'Attach',
-                comSupercargoID: '',
+                superCargoID: '',
                 payMode: '',
                 amount: ''
             })
@@ -362,8 +362,8 @@ export default {
                         cargoNum: item.cargoNumNew
                     }
                 })
-                const dispatchTaskList = this.dispatchTaskCargoList.map(item => {
-                    return {carrierOrderID: item.carrierOrderID}
+                const dispatchTaskList  = this.dispatchTaskCargoList.map(item => {
+                    return { carrierOrderID: item.carrierOrderID }
                 })
                 Dispatchbill.add({
                     truckID: this.selectedTruck.truckID,
