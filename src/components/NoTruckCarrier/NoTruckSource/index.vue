@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="报文参考号：">
-						<el-input  placeholder="报文参考号" v-model="findMessageReferenceNumber"></el-input>
+						<el-input  placeholder="报文参考号" v-model="findMessageReferenceNumber" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="单证名称：">
-						<el-input  placeholder="单证名称" v-model="findDocumentName"></el-input>
+						<el-input  placeholder="单证名称" v-model="findDocumentName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary"  @click.native="search">查询</el-button>
@@ -73,7 +73,7 @@ export default {
 		return {
 			downloadLoading: false,
 			importFileUrl: baseURL + '/notruckTrucksource/importExcel',
-			exportExcelUrl: baseURL + '/notruckTrucksource/export',
+			exportExcelUrl: '',
 			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=trucksource.xlsx ',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			pageIndex: 1,
@@ -86,6 +86,7 @@ export default {
 	},
 	components: { Page },
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -99,7 +100,16 @@ export default {
 			this.findDocumentName = ''
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
+		},
+		resetExportExcelUrl(){
+			this.exportExcelUrl = baseURL + '/notruckTrucksource/export' + localStorage.getItem("token") 
+				+ '&messageReferenceNumber=' + this.findMessageReferenceNumber
+				+ '&documentName=' + this.findDocumentName
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
 		},
 		pageChange(index) {
 			this.pageIndex = index
