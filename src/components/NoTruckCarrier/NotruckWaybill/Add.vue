@@ -3,6 +3,96 @@
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">添加运单</div>
 			<el-form label-width="160px" size="mini">
+				<el-row class="section-block">
+					<span class="block-title">基本信息</span>
+					<div class="block-content">
+						<el-row>
+							<el-col :span="8">
+								<el-form-item label="原始单号">
+									<el-input v-model="WaybillInfo.originalAddNumber"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="托运单号">
+									<el-input v-model="WaybillInfo.shippingNoteNumber"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="承运人">
+									<el-input v-model="WaybillInfo.carrier"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								<el-form-item label="统一社会信用代码">
+									<el-input v-model="WaybillInfo.uniformSocialCreditCode"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="许可证编号">
+									<el-input v-model="WaybillInfo.waybillLicenseNumber"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="托运日期时间">
+									<el-date-picker 
+										style="width:100%" 
+										type="date" 
+										placeholder="请选择" 
+										value-format="timestamp" 
+										v-model="WaybillInfo.dteOfShipment">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block">
+					<span class="block-title">发货方</span>
+					<div class="block-content">
+						<el-row>
+							<el-col :span="8">
+								<el-form-item label="原始单号">
+									<el-input v-model="WaybillInfo.originalAddNumber"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="托运单号">
+									<el-input v-model="WaybillInfo.shippingNoteNumber"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="承运人">
+									<el-input v-model="WaybillInfo.carrier"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="8">
+								<el-form-item label="统一社会信用代码">
+									<el-input v-model="WaybillInfo.uniformSocialCreditCode"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="许可证编号">
+									<el-input v-model="WaybillInfo.waybillLicenseNumber"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="托运日期时间">
+									<el-date-picker 
+										style="width:100%" 
+										type="date" 
+										placeholder="请选择" 
+										value-format="timestamp" 
+										v-model="WaybillInfo.dteOfShipment">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="报文参考号">
@@ -43,58 +133,37 @@
 							<el-input v-model="apkInfo.messageFunctionCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
-						<el-form-item label="原始单号">
-							<el-input v-model="WaybillInfo.originalAddNumber"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="托运单号">
-							<el-input v-model="WaybillInfo.shippingNoteNumber"></el-input>
-						</el-form-item>
-					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="8">
-						<el-form-item label="承运人">
-							<el-input v-model="WaybillInfo.carrier"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="统一社会信用代码">
-							<el-input v-model="WaybillInfo.uniformSocialCreditCode"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="许可证编号">
-							<el-input v-model="WaybillInfo.waybillLicenseNumber"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
-						<el-form-item label="托运日期时间">
-							<el-input v-model="WaybillInfo.dteOfShipment"></el-input>
-						</el-form-item>
-					</el-col>
 					<el-col :span="8">
 						<el-form-item label="业务类型代码">
 							<el-select v-model="WaybillInfo.serviceTypeCode" placeholder="请选择业务类型" style="width:100%">
-								<el-option v-for="item in notruck_business" :key="item.ConstStd_ID" :label="item.NAME" :value="item.VALUE">
-								</el-option>
+								<el-option v-for="item in notruck_business" :key="item.ConstStd_ID" :label="item.NAME" :value="item.VALUE"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="实际发运日期时间">
-							<el-input v-model="WaybillInfo.dateActualShipment"></el-input>
+							<el-date-picker 
+								style="width:100%" 
+								type="date" 
+								placeholder="请选择" 
+								value-format="timestamp" 
+								v-model="WaybillInfo.dateActualShipment">
+							</el-date-picker>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="收货日期时间">
-							<el-input v-model="WaybillInfo.dateOfDelivery"></el-input>
+							<el-date-picker 
+								style="width:100%" 
+								type="date" 
+								placeholder="请选择" 
+								value-format="timestamp" 
+								v-model="WaybillInfo.dateOfDelivery">
+							</el-date-picker>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
