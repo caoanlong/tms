@@ -128,6 +128,17 @@ class Dispatchbill extends Base {
             })
         })
     }
+    // 获取调度单费用清单
+    findFees(params){
+         return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/fees',
+                params
+            }).then(res => {
+                resolve(res.data.data)
+            })
+        })
+    }
 	/**
      * 发布派车单
      * @param {*} data 
