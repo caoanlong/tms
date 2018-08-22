@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">调度详情</div>
 			<el-row :gutter="40">
 				<el-col :span="17" style="border-right:1px solid #ddd">
-					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span><span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c6">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span></p>
+					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span><span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span></p>
 					<p>行驶数据</p>
 					<div class="lineInfo">
 						<span class="fl c1"><i class="el-icon-location"></i> 昆明五华区彩云北路56号</span>
@@ -13,7 +13,7 @@
 					<table class="wf-table">
 						<tr>
 							<td align="center" width="100">预计</td>
-							<td>总里程 160公里 用时 16小时19分钟</td>
+							<td>总里程 {{dispatchOrderDetail.distance}}公里 用时 16小时19分钟</td>
 							<td align="center" width="100">实际</td>
 							<td>总里程 110公里 已用时 11小时19分钟</td>
 						</tr>
@@ -23,7 +23,7 @@
 						<span class="c1" v-if="dispatchOrderDetail.loadVolumeSum"><span class="num-label">体</span> {{dispatchOrderDetail.loadVolumeSum}} 方</span>
 						<span class="c1" v-if="dispatchOrderDetail.loadNumSum"><span class="num-label">数</span> {{dispatchOrderDetail.loadNumSum}}</span>
 					</p>
-					<p>运费<span class="fr carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 <svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon></span></p>
+					<p>运费<span class="fr c1 carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 <svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon></span></p>
 					<table class="wf-table" v-show="ShowCarriageDetail">
                         <thead>
                             <tr>
@@ -141,7 +141,7 @@
 
 						<p v-if="dispatchOrderDetail.trailerPlateNo"><label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} {{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{dispatchOrderDetail.trailerTruckType}}</p>
 						<p><label>司机</label>{{dispatchOrderDetail.driverName}} {{dispatchOrderDetail.driverMobile}}</p>
-						<p v-if="dispatchOrder.superCargoName"><label>押运员</label>{{dispatchOrderDetail.superCargoName}} {{dispatchOrderDetail.superCargoMobile}}</p>
+						<p v-if="dispatchOrderDetail.superCargoName"><label>押运员</label>{{dispatchOrderDetail.superCargoName}} {{dispatchOrderDetail.superCargoMobile}}</p>
 					</div>
 					<p class="dispatchLogTit">调度日志</p>
 					<ul class="dispatchLog">
@@ -232,7 +232,6 @@ export default {
 		margin-bottom 10px
 		background url("../../../assets/imgs/mapBg.jpg") no-repeat left center
 	.carriage
-		color #666
 		cursor pointer
 		user-select none
 		.unfold
