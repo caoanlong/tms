@@ -629,6 +629,10 @@ export default {
 		 * 重新调度时获取已选择的承运单
 		 */
 		getSelectedList() {
+			const dispatchOrderID = this.$route.query.dispatchOrderID
+			Carrierbill.findPreReDispatch({ dispatchOrderID }).then(res => {
+				console.log(res)
+			})
 			this.selectedList = [
 				{
 					carrierOrderID: 1,
