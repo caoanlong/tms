@@ -706,14 +706,14 @@ export default {
 		 */
 		handClosePublish(bool) {
 			this.dispatchDialog = false
-			if (bool) this.getList()
+			if (bool) this.$router.push({name: 'dispatched'})
 		},
 		/**
 		 * 关闭发布抢单
 		 */
 		handCloseGrab(bool) {
 			this.grabDialog = false
-			if (bool) this.getList()
+			if (bool) this.$router.push({name: 'dispatched'})
 		},
 		arrayUnique(arr, attr) {
 			const hash = {}

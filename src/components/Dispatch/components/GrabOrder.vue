@@ -48,7 +48,7 @@
                     <el-radio label="Offer" value="Offer">司机报价</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="一口价金额" v-if="grabOrder.type == 'Offer'" prop="freight">
+            <el-form-item label="一口价金额" v-if="grabOrder.type == 'Grab'" prop="freight">
                 <el-input style="width:250px" placeholder="请输入..." v-model="grabOrder.freight"><template slot="append">元</template></el-input>
             </el-form-item>
             <el-form-item label="运费支付方式" prop="payMode">
