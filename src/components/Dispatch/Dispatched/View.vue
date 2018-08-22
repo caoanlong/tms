@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">调度详情</div>
 			<el-row :gutter="40">
 				<el-col :span="17" style="border-right:1px solid #ddd">
-					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span><span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c6">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span></p>
+					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span><span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span></p>
 					<p>行驶数据</p>
 					<div class="lineInfo">
 						<span class="fl c1"><i class="el-icon-location"></i> 昆明五华区彩云北路56号</span>
@@ -13,9 +13,9 @@
 					<table class="wf-table">
 						<tr>
 							<td align="center" width="100">预计</td>
-							<td>总里程 160公里 用时 16小时19分钟</td>
+							<td>总里程 {{dispatchOrderDetail.distance}}公里 用时 {{dispatchOrderDetail.estimatedTime | formatDuring}}</td>
 							<td align="center" width="100">实际</td>
-							<td>总里程 110公里 已用时 11小时19分钟</td>
+							<td>总里程 110公里 <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring}}</span></td>
 						</tr>
 					</table>
 					<p>总货量：
@@ -23,7 +23,7 @@
 						<span class="c1" v-if="dispatchOrderDetail.loadVolumeSum"><span class="num-label">体</span> {{dispatchOrderDetail.loadVolumeSum}} 方</span>
 						<span class="c1" v-if="dispatchOrderDetail.loadNumSum"><span class="num-label">数</span> {{dispatchOrderDetail.loadNumSum}}</span>
 					</p>
-					<p>运费<span class="fr carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 <svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon></span></p>
+					<p>运费<span class="fr c1 carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 <svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon></span></p>
 					<table class="wf-table" v-show="ShowCarriageDetail">
                         <thead>
                             <tr>
@@ -132,7 +132,7 @@
                         </tbody>
                     </table>
 					<p>运输任务（<span class="circle"></span> 色数字代表装卸执行顺序，来源线路规划排序） <span class="fr c1" v-if="dispatchOrderDetail.distance">预计总里程{{Number(dispatchOrderDetail.distance/1000).toFixed(2)}}公里</span></p>
-					<TaskItem v-for="(item,index) in dispatchOrder.dispatchTaskList" :taskItem="item" :index="index" :key="item.carrierOrderID"></TaskItem>
+					<TaskItem v-for="(item,index) in dispatchTask" :taskItem="item" :index="index" :key="item.carrierOrderID"></TaskItem>
 				</el-col>
 				<el-col :span="7">
 					<p>运输车辆人员</p>
@@ -141,11 +141,16 @@
 
 						<p v-if="dispatchOrderDetail.trailerPlateNo"><label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} {{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{dispatchOrderDetail.trailerTruckType}}</p>
 						<p><label>司机</label>{{dispatchOrderDetail.driverName}} {{dispatchOrderDetail.driverMobile}}</p>
-						<p v-if="dispatchOrder.superCargoName"><label>押运员</label>{{dispatchOrderDetail.superCargoName}} {{dispatchOrderDetail.superCargoMobile}}</p>
+						<p v-if="dispatchOrderDetail.superCargoName"><label>押运员</label>{{dispatchOrderDetail.superCargoName}} {{dispatchOrderDetail.superCargoMobile}}</p>
 					</div>
 					<p class="dispatchLogTit">调度日志</p>
 					<ul class="dispatchLog">
 						<li><p>抢单成功 2018/07/10 11:26</p></li>
+						<li v-for="logsItem in dispatchLogs" :key="logsItem.dispatchLogID">
+							<span class="action"></span><span class="description">{{logsItem.description}}</span>
+						</li>
+
+
 						<li><p>开始装车 2018/07/10 11:26</p>
 						<p>装车地址：北京市大兴区后查路</p></li>
 						<li><p>上传装车照片  2018/07/10 11:26</p></li>
@@ -171,12 +176,16 @@ export default {
 			dispatchOrder: {},
 			dispatchOrderDetail:{},
 			bizDispatchFeeList: [],
-			dispatchOrderFees:{}
+			dispatchOrderFees:{},
+			dispatchTask:{},
+			dispatchLogs:{}
 		}
 	},
 	created() {
 		this.getDetail()
 		this.getFees()
+		this.getTaskList()
+		this.getLogs()
 	},
 	methods: {
 		getDetail() {
@@ -190,6 +199,18 @@ export default {
 			const dispatchOrderID = this.$route.query.dispatchOrderID
 			Dispatchbill.findFees({ dispatchOrderID }).then(res => {
 				this.dispatchOrderFees = res
+			})
+		},
+		getTaskList() {
+			const dispatchOrderID = this.$route.query.dispatchOrderID
+			Dispatchbill.findDispatchTaskList({ dispatchOrderID }).then(res => {
+				this.dispatchTask = res
+			})
+		},
+		getLogs() {
+			const dispatchOrderID = this.$route.query.dispatchOrderID
+			Dispatchbill.findDispatchLogs({ dispatchOrderID }).then(res => {
+				this.dispatchLogs = res
 			})
 		},
 		back() {
@@ -232,7 +253,6 @@ export default {
 		margin-bottom 10px
 		background url("../../../assets/imgs/mapBg.jpg") no-repeat left center
 	.carriage
-		color #666
 		cursor pointer
 		user-select none
 		.unfold
