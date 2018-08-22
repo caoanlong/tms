@@ -32,7 +32,7 @@
                                 <th>收款人</th>
                                 <th>支付方式</th>
                                 <th>金额</th>
-                                <th width="100"><el-button size="mini" type="primary" @click="addFreight">添加费用</el-button></th>
+                                <th width="100" v-if="!dispatchOrderDetail.status=='Canceled' || !dispatchOrderDetail.status=='Rejected'"><el-button size="mini" type="primary" @click="addFreight">添加费用</el-button></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,7 +62,7 @@
                                 <td>
                                     {{feesItem.amount}}元
                                 </td>
-                                <td></td>
+                                <td v-if="!dispatchOrderDetail.status=='Canceled' || !dispatchOrderDetail.status=='Rejected'"></td>
                             </tr>
                             <tr v-for="(item, index) in bizDispatchFeeList" :key="index">
                                 <td>
@@ -144,22 +144,26 @@
 						<p v-if="dispatchOrderDetail.superCargoName"><label>押运员</label>{{dispatchOrderDetail.superCargoName}} {{dispatchOrderDetail.superCargoMobile}}</p>
 					</div>
 					<p class="dispatchLogTit">调度日志</p>
-					<ul class="dispatchLog">
-						<li><p>抢单成功 2018/07/10 11:26</p></li>
+					<ul class="dispatchLog" v-if="dispatchLogs.length>0">
+						<!-- 日志动作: Accept-接单 Offer-报价/抢单 Comfirm-确认抢单/报价 Load-装车 Unload-到货 Upload-运输上报 Refuse-拒绝接单 Canceled-取消 Overdue-超时取消  -->
 						<li v-for="logsItem in dispatchLogs" :key="logsItem.dispatchLogID">
-							<span class="action"></span><span class="description">{{logsItem.description}}</span>
+							<p>
+								<span class="action" v-if="logsItem.action =='Accept'">接单</span>
+								<span class="action" v-else-if="logsItem.action =='Offer'">报价/抢单</span>
+								<span class="action" v-else-if="logsItem.action =='Comfirm'">确认抢单/报价</span>
+								<span class="action" v-else-if="logsItem.action =='Load'">装车</span>
+								<span class="action" v-else-if="logsItem.action =='Unload'">到货</span>
+								<span class="action" v-else-if="logsItem.action =='Upload'">运输上报</span>
+								<span class="action" v-else-if="logsItem.action =='Refuse'">拒绝接单</span>
+								<span class="action" v-else>超时取消</span>
+								<span class="dateTime">{{logsItem.createTime | getdatefromtimestamp }}</span>
+							</p>
+							<p>{{logsItem.description}}</p>
+							<p v-if="logsItem.action =='Load'">装车地址：{{logsItem.posAddress}}</p>
+							<p v-if="logsItem.action =='Unload'">到货地址：{{logsItem.posAddress}}</p>
 						</li>
-
-
-						<li><p>开始装车 2018/07/10 11:26</p>
-						<p>装车地址：北京市大兴区后查路</p></li>
-						<li><p>上传装车照片  2018/07/10 11:26</p></li>
-						<li><p>上传到货照片  2018/07/10 11:26</p></li>
-						<li><p>上传回单照片  2018/07/10 11:26</p></li>
-						<li><p>上传在途照片  2018/07/10 11:26</p></li>
-						<li><p>开始到货  2018/07/10 11:26</p>
-						<p>到货地址：北京市大兴区后查路</p></li>
 					</ul>
+					<p v-else class="dispatchLog c2">暂无调度日志</p>
 				</el-col>
 			</el-row>
 		</el-card>
