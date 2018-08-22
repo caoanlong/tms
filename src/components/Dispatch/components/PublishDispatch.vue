@@ -145,10 +145,10 @@
                                 <td align="center" style="padding:0 5px">
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
-                                            <el-select size="mini" v-model="item.superCargoID" placeholder="请选择">
+                                            <el-select size="mini" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
                                                 <el-option 
                                                     :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName" 
-                                                    :value="person.comSupercargoID" 
+                                                    :value="person" 
                                                     v-for="person in persons" 
                                                     :key="person.comSupercargoID">
                                                 </el-option>
@@ -259,7 +259,9 @@ export default {
             bizDispatchFeeList: [{
                 item: 'Freight',  // 费用科目
                 category: 'Basic', // 费用类型
+                superCargo: '',  // 收款人
                 superCargoID: '',  // 收款人
+                superCargoName: '',  // 收款人
                 payMode: 'Prepay',  // 支付方式
                 amount: ''  // 金额
             }],
@@ -314,6 +316,10 @@ export default {
             }
             this.createPersons()
         },
+        handSelectItem(data, index) {
+            this.bizDispatchFeeList[index].superCargoID = data.comSupercargoID
+            this.bizDispatchFeeList[index].superCargoName = data.realName
+        },
         addTruck() {
             this.truckDialog = true
         },
@@ -325,7 +331,9 @@ export default {
             this.bizDispatchFeeList.push({
                 item: '',
                 category: 'Attach',
-                superCargoID: '',
+                superCargo: '',  // 收款人
+                superCargoID: '',  // 收款人
+                superCargoName: '',  // 收款人
                 payMode: '',
                 amount: ''
             })
@@ -365,15 +373,26 @@ export default {
                 const dispatchTaskList  = this.dispatchTaskCargoList.map(item => {
                     return { carrierOrderID: item.carrierOrderID }
                 })
+                const bizDispatchFeeList = this.bizDispatchFeeList.map(item => {
+                    return {
+                        item: item.item,
+                        category: item.category,
+                        superCargoID: item.superCargoID,
+                        superCargoName: item.superCargoName,
+                        payMode: item.payMode,
+                        amount: item.amount
+                    }
+                })
                 Dispatchbill.add({
                     truckID: this.selectedTruck.truckID,
                     driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.comSupercargoID : '',
                     superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.comSupercargoID : '',
-                    bizDispatchFeeList: this.bizDispatchFeeList,
+                    bizDispatchFeeList,
                     dispatchTaskCargoList,
                     dispatchTaskList,
                     bizDispatchNodeList: this.transLines,
-                    endDate: this.endDate
+                    endDate: this.endDate,
+                    distance: this.totalDistance
                 }).then(res => {
                     Message.success(res.data.msg)
                     this.$emit('cancel', true)

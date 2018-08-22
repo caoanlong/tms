@@ -540,11 +540,11 @@ export default {
 				list[i+1] = current
 			}
 			if (list[0].type == 'Unload') {
-				Message.error('第一条必须为装车！')
+				Message.error('最后一条必须为卸货！')
 				return
 			}
 			if (list[list.length-1].type == 'Load') {
-				Message.error('最后一条必须为卸货！')
+				Message.error('第一条必须为装车！')
 				return
 			}
 			this.transLines = list

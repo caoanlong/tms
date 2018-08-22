@@ -147,7 +147,8 @@ export default {
                     type: this.grabOrder.type,
                     freight: this.grabOrder.freight,
                     payMode: this.grabOrder.payMode,
-                    endDate: this.grabOrder.endDate
+                    endDate: this.grabOrder.endDate,
+                    distance: this.totalDistance
                 }).then(res => {
                     Message.success(res.data.msg)
                     this.$emit('cancel', true)
