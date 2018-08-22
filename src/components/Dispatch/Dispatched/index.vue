@@ -86,6 +86,7 @@
 								<div class="handler">
 									<span class="c1" @click="scramble" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
 									<el-button type="text" size="mini" @click="trail">跟踪</el-button>
+									<router-link tag="span" class="c1" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
 									<!-- 未接单 -->
 									<span v-if="item.status == 'Committed'">
 										<el-button type="text" size="mini" :disabled="
