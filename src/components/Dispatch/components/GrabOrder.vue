@@ -5,7 +5,7 @@
         :show-close="false"
         :close-on-press-escape="false" 
         :close-on-click-modal="false">
-        <el-form label-width="100px" size="small" :model="grabOrder" :rules="rules" ref="ruleForm">
+        <el-form label-width="110px" size="small" :model="grabOrder" :rules="rules" ref="ruleForm">
            <div class="num-info">
                 <span class="num-tit">配载总量</span>
                 <span class="num-label"><span>数</span>{{totalNum}}</span>
@@ -14,8 +14,8 @@
             </div>
             <div class="num-info">
                 <span class="num-tit">
-                    {{transLines.filter(item => item.type == '装车').length}}装
-                    {{transLines.filter(item => item.type == '卸货').length}}卸
+                    {{transLines.filter(item => item.type == 'Load').length}}装
+                    {{transLines.filter(item => item.type == 'Unload').length}}卸
                     &nbsp;&nbsp;预计里程{{totalDistance}}公里
                 </span>
             </div>
@@ -25,62 +25,60 @@
                     <el-row :gutter="20">
 						<el-col :span="12">
                             <el-form-item label-width="70px" label="车型">
-                                <el-select placeholder="请选择车型" v-model="grabOrder.truckType">
-                                    <el-option value="车型1" label="车型1"></el-option>
-                                    <el-option value="车型2" label="车型2"></el-option>
-                                    <el-option value="车型3" label="车型3"></el-option>
+                                <el-select placeholder="请选择车型" v-model="grabOrder.requiredTruckType">
+                                    <el-option label="罐式货车" value="TankTruck"></el-option>
+                                    <el-option label="厢式货车" value="VanTruck"></el-option>
+                                    <el-option label="仓栅货车" value="BarrackTruck"></el-option>
+                                    <el-option label="栏板货车" value="TailgateTruck"></el-option>
+                                    <el-option label="自卸货车" value="DumpTruck"></el-option>
                                 </el-select>
                             </el-form-item>
 						</el-col>
                         <el-col :span="12">
-                            <el-form-item label-width="70px" label="车长" prop="truckLength">
-                                <el-input placeholder="请输入车长" v-model="grabOrder.truckLength"><template slot="append">米</template></el-input>
+                            <el-form-item label-width="70px" label="车长" prop="requiredTruckLength">
+                                <el-input placeholder="请输入车长" v-model="grabOrder.requiredTruckLength"><template slot="append">米</template></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                 </div>
             </el-row>
-            <el-row>
-                <el-form-item label="报价类型">
-                    <el-radio-group v-model="grabOrder.priceType">
-                        <el-radio label="司机报价">司机报价</el-radio>
-                        <el-radio label="定价抢单">定价抢单</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-            </el-row>
-            <el-row>
-                <el-form-item label="运费支付方式">
-                    <el-radio-group v-model="grabOrder.payMethod">
-                        <el-radio label="预付">预付</el-radio>
-                        <el-radio label="到付">到付</el-radio>
-                        <el-radio label="收货方付">收货方付</el-radio>
-                        <el-radio label="回单结">回单结</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-            </el-row>
-            <el-row>
-                <el-form-item label="接单截止时间">
-                    <el-date-picker 
-                        v-model="grabOrder.endTime"
-                        type="date" 
-                        :clearable="false" 
-                        value-format="timestamp">
-                    </el-date-picker>
-                </el-form-item>
-            </el-row>
+            <el-form-item label="报价类型" prop="type">
+                <el-radio-group v-model="grabOrder.type">
+                    <el-radio label="Grab" value="Grab">定价抢单</el-radio>
+                    <el-radio label="Offer" value="Offer">司机报价</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="一口价金额" v-if="grabOrder.type == 'Grab'" prop="freight">
+                <el-input style="width:250px" placeholder="请输入..." v-model="grabOrder.freight"><template slot="append">元</template></el-input>
+            </el-form-item>
+            <el-form-item label="运费支付方式" prop="payMode">
+                <el-radio-group v-model="grabOrder.payMode">
+                    <el-radio label="PayOnDelivery" value="PayOnDelivery">到付</el-radio>
+                    <el-radio label="Prepay" value="Prepay">预付</el-radio>
+                    <el-radio label="PayOnReceipt" value="PayOnReceipt">回单结</el-radio>
+                    <el-radio label="PayByConsignee" value="PayByConsignee">收货方付</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="接单截止时间">
+                <el-date-picker 
+                    v-model="grabOrder.endDate"
+                    type="date" 
+                    :clearable="false" 
+                    value-format="timestamp">
+                </el-date-picker>
+            </el-form-item>
             <el-row style="margin-top:20px" class="text-center">
-                <el-form-item>
-                    <el-button @click="close" size="small">取消</el-button>
-                    <el-button type="primary" @click="publish" size="small">保存</el-button>
-                </el-form-item>
+                <el-button @click="close" size="small">取消</el-button>
+                <el-button type="primary" @click="publish" size="small">保存</el-button>
             </el-row>
-            
         </el-form>
     </el-dialog>
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import { checkFloat2 } from '../../../common/valid'
+import Dispatchbill from '../../../api/Dispatchbill'
 export default {
     props: {
         totalNum: {
@@ -100,6 +98,7 @@ export default {
             default: 0
         },
         transLines: Array,
+        dispatchTaskCargoList: Array,
         isVisible: {
             type: Boolean,
             default: false
@@ -108,23 +107,52 @@ export default {
     data() {
         return {
             grabOrder: {
-                truckType: '',
-                truckLength: '',
-                priceType: '司机报价',
-                payMethod: '预付',
-                endTime: ''
+                requiredTruckType: '',
+                requiredTruckLength: '',
+                type: 'Grab',
+                payMode: 'Prepay',
+                endDate: '',
+                freight: ''
             },
             rules: {
-                truckLength: [{ validator: checkFloat2 }]
+                requiredTruckLength: [{ validator: checkFloat2 }],
+                type: [{ required: true , message: '请选择报价类型' }],
+                freight: [{ required: true , message: '请输入一口价' }],
+                payMode: [{ required: true , message: '请选择运费支付方式' }]
             }
         }
     },
     methods: {
         publish() {
             this.$refs['ruleForm'].validate(valid => {
-                console.log(valid)
                 if (!valid) return
-                this.close()
+                const dispatchTaskCargoList = this.dispatchTaskCargoList.map(item => {
+                    return {
+                        carrierCargoID: item.carrierCargoID,
+                        carrierOrderID: item.carrierOrderID,
+                        cargoWeight: item.cargoWeightNew,
+                        cargoVolume: item.cargoVolumeNew,
+                        cargoNum: item.cargoNumNew
+                    }
+                })
+                const dispatchTaskList  = this.dispatchTaskCargoList.map(item => {
+                    return { carrierOrderID: item.carrierOrderID }
+                })
+                Dispatchbill.add({
+                    dispatchTaskCargoList,
+                    dispatchTaskList,
+                    bizDispatchNodeList: this.transLines,
+                    requiredTruckType: this.grabOrder.requiredTruckType,
+                    requiredTruckLength: this.grabOrder.requiredTruckLength,
+                    type: this.grabOrder.type,
+                    freight: this.grabOrder.freight,
+                    payMode: this.grabOrder.payMode,
+                    endDate: this.grabOrder.endDate,
+                    distance: this.totalDistance
+                }).then(res => {
+                    Message.success(res.data.msg)
+                    this.$emit('cancel', true)
+                })
             })
         },
         close() {
