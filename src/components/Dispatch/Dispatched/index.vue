@@ -85,10 +85,28 @@
 								</div>
 								<div class="handler">
 									<span class="c1" @click="scramble" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
-									<span class="c1" @click="trail">跟踪</span>
-									<span class="c2">取消调度</span>
-									<router-link tag="span" class="c1" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
-									<span class="c1">关闭</span>
+									<el-button type="text" size="mini" @click="trail">跟踪</el-button>
+									<!-- 未接单 -->
+									<span v-if="item.status == 'Committed'">
+										<el-button type="text" size="mini" :disabled="
+											item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Loaded') 
+											|| item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Signed')
+										" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
+										<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
+									</span>
+									<!-- 已接单 -->
+									<span v-else-if="item.status == 'Ordered'">
+										<el-button type="text" size="mini" :disabled="
+											item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Loaded') 
+											|| item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Signed')
+										" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
+										<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
+									</span>
+									<!-- 已取消 已拒绝-->
+									<span v-else>
+										<el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
+										<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
+									</span>
 								</div>
 							</td>
 						</tr>
@@ -195,6 +213,7 @@ import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from './common/UploadPhoto'
+import {closeConfirm, cancelConfirm } from '../../../common/utils'
 export default {
 	mixins: [baseMixin],
 	components: { TrailMap,UploadPhoto },
@@ -335,7 +354,24 @@ export default {
 		},
 		trail() {
 			this.trailDialog = true
+		},
+		closeDispatchOrder(id){
+			closeConfirm(id, dispatchOrderID => {
+				Dispatchbill.close({ dispatchOrderID }).then(res => {
+					Message.success('关闭调度成功!')
+					this.getList()
+				})
+			})
+		},
+		cancelDispatchOrder(id) {
+			cancelConfirm(id, dispatchOrderID => {
+				Dispatchbill.cancel({ dispatchOrderID }).then(res =>{
+					Message.success('已成功取消调度单!')
+					this.getList()
+				})
+			})
 		}
+
 	}
 }
 </script>
@@ -420,18 +456,20 @@ export default {
 					line-height 24px
 				.dispatchbillTit
 					float left
-					height 20px
+					height 28px
+					
 					.num
 						color #409EFF
 						margin-right 10px
 						cursor pointer
+						line-height 28px
 					.quoteInfo
 						width 300px
 						padding 0 10px
 						display inline-block
 						vertical-align top
-						height 20px
-						line-height 20px
+						height 28px
+						line-height 28px
 						overflow hidden
 						position relative
 						.quoteList
@@ -441,10 +479,11 @@ export default {
 								margin-left 10px
 				.handler
 					float right
-					height 20px
+					height 28px
 					span
 						margin-left 20px
-						line-height 20px
+						line-height 28px
+						vertical-align top
 						cursor pointer
 						&.noCursor
 							cursor auto

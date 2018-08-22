@@ -4,35 +4,41 @@
 		<div class="baseInfo">
 			<div class="from">
 				<div class="hasPic">
-					<img :src="defaultImg" class="pic" />
-					<p>{{taskItem.shipperCompanyName}}</p>
+					<!-- Committed-待执行 Loaded-已装运 Signed-已签收 -->
+
+					<img :src="taskItem.shipperLogoUrl ? resizeImg(taskItem.shipperLogoUrl, '_100x100.') : defaultImg" class="pic"/>
+					<p>{{taskItem.shipperCompanyName}} 
+						<el-tag size="mini" v-if="taskItem.status=='Committed'" type="info">未装车</el-tag>
+						<el-tag size="mini" v-else >已装车</el-tag>
+					</p>
 					<p>{{taskItem.shipperName}}{{taskItem.shipperPhone?('/'+taskItem.shipperPhone):''}}</p>
 				</div>
-				<p><span class="sequenceTag">1</span>{{taskItem.shipperArea}} {{taskItem.shipperLocationAddress}} {{taskItem.shipperDetailAddress}}</p>
+				<p><span class="sequenceTag">{{taskItem.shipperSequence}}</span>{{taskItem.shipperArea}} {{taskItem.shipperLocationAddress}} {{taskItem.shipperDetailAddress}}</p>
 				<p class="c2">{{taskItem.shipperDate | getdatefromtimestamp('min')}}（预计装车）</p>
-				<p class="c6" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp()}}（实际装车）</p>
+				<p class="c6" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp()}}（实际装车）<el-tag size="mini" type="danger" v-if="isLoadedOverTime=='Y'">延迟装车</el-tag></p>
 			</div>
 			<div class="arrow"><svg-icon icon-class="arrowBig"></svg-icon></div>
 			<div class="to">
 				<div class="hasPic">
-					<img :src="defaultImg" class="pic" />
-					<p>{{taskItem.consigneeCompanyName}}</p>
+					<img :src="taskItem.consigneeLogoUrl ? resizeImg(taskItem.consigneeLogoUrl, '_100x100.') : defaultImg" class="pic"/>
+					<p>{{taskItem.consigneeCompanyName}}
+						<el-tag size="mini" v-if="taskItem.status=='Signed'" type="success">已卸货</el-tag>
+						<el-tag size="mini" v-else type="info">未卸货</el-tag>
+					</p>
 					<p>{{taskItem.consigneeName}}{{taskItem.consigneePhone?('/'+taskItem.consigneePhone):''}}</p>
 				</div>
-				<p><span class="sequenceTag">2</span>{{taskItem.consigneeArea}} {{taskItem.consigneeLocationAddress}} {{taskItem.consigneeDetailAddress}}</p>
+				<p><span class="sequenceTag">{{taskItem.consigneeSequence}}</span>{{taskItem.consigneeArea}} {{taskItem.consigneeLocationAddress}} {{taskItem.consigneeDetailAddress}}</p>
 				<p class="c2">{{taskItem.consigneeDate | getdatefromtimestamp('min')}}（预计到货）</p>
-				<p class="c6" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp()}}（实际到货）</p>
+				<p class="c6" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp()}}（实际到货）<el-tag size="mini" type="danger" v-if="isArrivedOverTime=='Y'">延迟到货</el-tag></p>
 			</div>
 		</div>
 		<div class="picTit" v-if="taskItem.dispatchTaskPicList.length>0">任务照片（{{taskItem.dispatchTaskPicList.length}}）</div>
 		<div class="picCon" v-if="taskItem.dispatchTaskPicList.length>0">
 			<ImageUpload :isShowType="true" :objs="taskItem.dispatchTaskPicList" :files="taskItem.dispatchTaskPicList.map(item => item.minURL)" :isPreview="true"/>
 		</div>
-		<div class="cargoTit">承运货物<span class="fr c1 total" @click="unfold">重量2吨 体积1.8方 <svg-icon icon-class="arrow-down" :class="isFold?'':'unfold'"></svg-icon></span></div>
+		<div class="cargoTit">承运货物<span class="fr c1 total" @click="unfold">重量{{taskItem.loadWeightSum}}吨 体积{{taskItem.loadVolumeSum}}方 数量{{taskItem.loadWeightSum}} <svg-icon icon-class="arrow-down" :class="isFold?'':'unfold'"></svg-icon></span></div>
 		<div class="cargoList" v-if="isFold ">
-			<p><span class="fl">啤酒</span><span class="fr">300袋 / 1000吨 / 1.4方</span></p>
-			<p><span class="fl">可口可乐</span><span class="fr">400箱 / 1000吨 / 1.8方</span></p>
-			<p><span class="fl">王老吉</span><span class="fr">200件 / 1000吨 / 1.2方</span></p>
+			<p v-for="cargoItem in taskItem.bizDispatchTaskCargoList" :key="cargoItem.dispatchTaskID"><span class="fl">{{cargoItem.cargoName}}</span><span class="fr"> {{cargoItem.cargoWeight}}吨 / {{cargoItem.cargoVolume}}方 / {{cargoItem.cargoNum}}{{cargoItem.cargoUnitName}} </span></p>
 		</div>
 	</div>
 </template>

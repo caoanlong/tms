@@ -222,3 +222,10 @@ export function getCooikie(key) {
 	}
 	return ""
 }
+export function formatDuring(data) {
+	let days = parseInt(data / (1000 * 60 * 60 * 24))
+	let hours = parseInt((data % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+	let minutes = parseInt((data % (1000 * 60 * 60)) / (1000 * 60))
+	let seconds = (data % (1000 * 60)) / 1000
+	return (days?(days + " 天 "):'') + ( hours?(hours + " 小时 "):'' ) + (minutes?(minutes + " 分钟 "):'' )+ (seconds?(seconds + " 秒 "):'')
+}
