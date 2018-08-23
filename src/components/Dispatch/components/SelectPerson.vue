@@ -46,11 +46,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="item in tableData" :key="item.comSupercargoID">
+                <tr v-for="item in tableData" :key="item.supercargoID">
                     <td class="wf-check">
                         <span 
                             class="checkbox" 
-                            :class="selected.comSupercargoID == item.comSupercargoID ? 'selected' : ''"
+                            :class="selected.supercargoID == item.supercargoID ? 'selected' : ''"
                             @click="handSelect(item)">
                         </span>
                     </td>
@@ -156,13 +156,13 @@ export default {
                     return
                 }
                 if (this.truck.superCargo && this.truck.superCargo.supercargoType == 'SupercargoDriver' 
-                    && data.comSupercargoID == this.truck.superCargo.comSupercargoID) {
+                    && data.supercargoID == this.truck.superCargo.supercargoID) {
                     Message.error('该司机已经是押运员了！')
                     return
                 }
             } else {
                 if (this.truck.primaryDriver && this.truck.primaryDriver.supercargoType == 'SupercargoDriver' 
-                    && data.comSupercargoID == this.truck.primaryDriver.comSupercargoID) {
+                    && data.supercargoID == this.truck.primaryDriver.supercargoID) {
                     Message.error('该押运员已经是司机了！')
                     return
                 }
@@ -209,7 +209,7 @@ export default {
                 const list = res.records.map(item => {
                     return {
                         appStatus: item.appStatus,
-                        comSupercargoID: item.comSupercargoID,
+                        supercargoID: item.supercargoID,
                         mobile: item.mobile,
                         headPic:item.headPic,
                         isPrimary:item.isPrimary,
@@ -235,7 +235,7 @@ export default {
 			}).then(res => {
                 const list = res.records.map(item => {
                     return {
-                        comSupercargoID: item.comSupercargoID,
+                        supercargoID: item.supercargoID,
                         mobile: item.mobile,
                         headPic:item.headPic,
                         realName:item.realName,

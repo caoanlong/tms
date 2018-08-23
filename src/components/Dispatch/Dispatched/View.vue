@@ -84,12 +84,12 @@
                                 <td>
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
-                                            <el-select size="mini" value-key="comSupercargoID" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
+                                            <el-select size="mini" value-key="supercargoID" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
                                                 <el-option 
                                                     :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName" 
                                                     :value="person" 
                                                     v-for="person in persons" 
-                                                    :key="person.comSupercargoID">
+                                                    :key="person.supercargoID">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
@@ -225,13 +225,13 @@ export default {
 		createPersons() {
             if (this.dispatchOrderDetail.driverID) {
                 this.persons.push({
-                	comSupercargoID:this.dispatchOrderDetail.driverID,
+                	supercargoID:this.dispatchOrderDetail.driverID,
 					realName:this.dispatchOrderDetail.driverName
 				})
 			}
 			if (this.dispatchOrderDetail.superCargoID) {
                 this.persons.push({
-                	comSupercargoID:this.dispatchOrderDetail.superCargoID,
+                	supercargoID:this.dispatchOrderDetail.superCargoID,
 					realName:this.dispatchOrderDetail.superCargoName
 				})
             }
@@ -251,7 +251,7 @@ export default {
         },
         handSelectItem(data, index) {
         	console.log(data)
-            this.bizDispatchFeeList[index].superCargoID = data.comSupercargoID
+            this.bizDispatchFeeList[index].superCargoID = data.supercargoID
             this.bizDispatchFeeList[index].superCargoName = data.realName
         },
         saveFreight(){

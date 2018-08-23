@@ -245,7 +245,7 @@ export default {
 			if(objType == 'Truck'){
 				this.$router.push({name: 'edittruck', query: { truckID:id }})
 			}else{
-				this.$router.push({name: 'editsupercargo', query: { comSupercargoID:id }})
+				this.$router.push({name: 'editsupercargo', query: { supercargoID:id }})
 			}
 		},
 		add() { 

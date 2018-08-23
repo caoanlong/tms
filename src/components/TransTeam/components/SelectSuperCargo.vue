@@ -94,9 +94,9 @@ export default {
         handleCurrentChange(data) {
             const obj = { truckID: this.truckID }
             if (this.type == 'primary') {
-                obj.primaryDriver = data.comSupercargoID
+                obj.primaryDriver = data.supercargoID
             } else {
-                obj.secondaryDriver = data.comSupercargoID
+                obj.secondaryDriver = data.supercargoID
             }
             Truck.changeDriver(obj).then(res => {
                 Message.success(res.data.msg)
@@ -131,7 +131,7 @@ export default {
 			}).then(res => {
                 const list = res.records.map(item => {
                     return {
-                        comSupercargoID: item.comSupercargoID,
+                        supercargoID: item.supercargoID,
                         realName: item.realName,
                         mobile: item.mobile,
                         expiredCertificate: item.expiredCertificate 

@@ -47,7 +47,7 @@
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="姓名" prop="realName">
 						<template slot-scope="scope">
-							<span class="link" @click="view(scope.row.comSupercargoID)">{{scope.row.realName}}</span>
+							<span class="link" @click="view(scope.row.supercargoID)">{{scope.row.realName}}</span>
 							<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 								<div slot="content">
 									<el-tag size="mini" type="danger" v-for="(item,index) in scope.row.expiredCertificate" :key="index">{{
@@ -74,8 +74,8 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.comSupercargoID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.comSupercargoID}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.supercargoID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.supercargoID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -189,7 +189,7 @@ export default {
 			this.getList() 
 		},
 		selectionChange(data) {
-			this.selectedList = data.map(item => item.comSupercargoID)
+			this.selectedList = data.map(item => item.supercargoID)
 		},
 		supercargoTypeChange(data) {
 			if (data.length == 2) {
@@ -208,7 +208,7 @@ export default {
 			}).then(res => {
 				const list = res.records.map(item => {
 					return {
-						comSupercargoID: item.comSupercargoID,
+						supercargoID: item.supercargoID,
 						realName: item.realName,
 						mobile: item.mobile,
 						supercargoType: item.supercargoType,
@@ -222,22 +222,22 @@ export default {
 		},
 		handleCommand(e) {
 			if (e.type == 'view') {
-				this.$router.push({name: 'viewsupercargo', query: { comSupercargoID: e.id}})
+				this.$router.push({name: 'viewsupercargo', query: { supercargoID: e.id}})
 			} else if (e.type == 'edit') {
-				this.$router.push({name: 'editsupercargo', query: { comSupercargoID: e.id}})
+				this.$router.push({name: 'editsupercargo', query: { supercargoID: e.id}})
 			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}
 		},
-		view(comSupercargoID) {
-			this.$router.push({name: 'viewsupercargo', query: { comSupercargoID }})
+		view(supercargoID) {
+			this.$router.push({name: 'viewsupercargo', query: { supercargoID }})
 		},
 		add() {
 			this.$router.push({name: 'addsupercargo'})
 		},
-		del(comSupercargoID) {
-			deleteConfirm(comSupercargoID, comSupercargoIDs => {
-				SuperCargo.del({ comSupercargoIDs }).then(res => {
+		del(supercargoID) {
+			deleteConfirm(supercargoID, supercargoIDs => {
+				SuperCargo.del({ supercargoIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

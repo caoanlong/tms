@@ -40,7 +40,7 @@
 					</el-table-column>
                     <el-table-column label="操作" align="center">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" @click="invite(scope.row.comSupercargoID)">邀请</el-button>
+							<el-button type="default" size="mini" @click="invite(scope.row.supercargoID)">邀请</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -104,7 +104,7 @@ export default {
 			this.getList() 
         },
         selectionChange(data) {
-			this.selectedList = data.map(item => item.comSupercargoID)
+			this.selectedList = data.map(item => item.supercargoID)
 		},
         getList() {
 			DriverInvitation.findNotLinkedList({
@@ -117,14 +117,14 @@ export default {
 				this.total = res.total
 			})
         },
-        invite(comSupercargoID) {
-            let comSupercargoIDs = []
-            if (comSupercargoID && (typeof comSupercargoID == 'string' || typeof comSupercargoID == 'number')) {
-                comSupercargoIDs = comSupercargoID
+        invite(supercargoID) {
+            let supercargoIDs = []
+            if (supercargoID && (typeof supercargoID == 'string' || typeof supercargoID == 'number')) {
+                supercargoIDs = supercargoID
             } else {
-                comSupercargoIDs = this.selectedList.join(',')
+                supercargoIDs = this.selectedList.join(',')
             }
-            if(comSupercargoIDs.length == 0) {
+            if(supercargoIDs.length == 0) {
                 Message.warning('请选择')
                 return
             }
@@ -133,7 +133,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                DriverInvitation.add({ comSupercargoIDs }).then(res => {
+                DriverInvitation.add({ supercargoIDs }).then(res => {
                     Message.success(res.data.msg)
                     this.$emit('callback', true)
                 })
