@@ -266,10 +266,6 @@ export default {
 		            dispatchOrderID
         		}
         	})
-        	console.log(Freight)
-        	return
-        	
-
         	Dispatchbill.feeModify({Freight}).then(res=>{
         		Message.success(res.data.msg)
         		this.getDetail()
