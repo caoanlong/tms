@@ -928,8 +928,8 @@ export default {
 			})
 		},
 		getInfo() {
-			const comSupercargoID = this.$route.query.comSupercargoID
-			SuperCargo.findById({ comSupercargoID }).then(res => {
+			const supercargoID = this.$route.query.supercargoID
+			SuperCargo.findById({ supercargoID }).then(res => {
 				this.superCargo = res
 				this.supercargoType = res.supercargoType == 'SupercargoDriver' ? ['Driver', 'Supercargo'] : [res.supercargoType]
 				this.idCardTime = [res.idCardBeginTime, res.idCardExpirationTime]

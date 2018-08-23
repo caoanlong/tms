@@ -428,8 +428,8 @@ export default {
 			window.location.reload()
 		},
 		getInfo() {
-			const comSupercargoID = this.$route.query.comSupercargoID
-			SuperCargo.findById({ comSupercargoID }).then(res => {
+			const supercargoID = this.$route.query.supercargoID
+			SuperCargo.findById({ supercargoID }).then(res => {
 				this.superCargo = res
 				this.otherPic = res.otherPic1.split(',')
 			})

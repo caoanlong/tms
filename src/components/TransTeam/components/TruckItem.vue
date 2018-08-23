@@ -84,14 +84,14 @@
 		</div>
 		<div class="handle" v-show="truck.truckCategory != 'Trailer'">
 			<div class="handleItem">
-				<span style="color: #ccc" v-if="truck.primaryDriver && truck.primaryDriver.comSupercargoID">设为主驾</span>
-				<span @click="add('primary')" v-if="truck.primaryDriver && truck.primaryDriver.comSupercargoID">人员替换</span>
-				<span @click="delSuperCargo(truck.primaryDriver.comSupercargoID, '主驾')" v-if="truck.primaryDriver && truck.primaryDriver.comSupercargoID">删除</span>
+				<span style="color: #ccc" v-if="truck.primaryDriver && truck.primaryDriver.supercargoID">设为主驾</span>
+				<span @click="add('primary')" v-if="truck.primaryDriver && truck.primaryDriver.supercargoID">人员替换</span>
+				<span @click="delSuperCargo(truck.primaryDriver.supercargoID, '主驾')" v-if="truck.primaryDriver && truck.primaryDriver.supercargoID">删除</span>
 			</div>
 			<div class="handleItem">
-				<span @click="primary" v-if="truck.secondaryDriver && truck.secondaryDriver.comSupercargoID">设为主驾</span>
-				<span @click="add('second')" v-if="truck.secondaryDriver && truck.secondaryDriver.comSupercargoID">人员替换</span>
-				<span @click="delSuperCargo(truck.secondaryDriver.comSupercargoID, '副驾')" v-if="truck.secondaryDriver && truck.secondaryDriver.comSupercargoID">删除</span>
+				<span @click="primary" v-if="truck.secondaryDriver && truck.secondaryDriver.supercargoID">设为主驾</span>
+				<span @click="add('second')" v-if="truck.secondaryDriver && truck.secondaryDriver.supercargoID">人员替换</span>
+				<span @click="delSuperCargo(truck.secondaryDriver.supercargoID, '副驾')" v-if="truck.secondaryDriver && truck.secondaryDriver.supercargoID">删除</span>
 			</div>
 		</div>
 		<SelectSuperCargo :dialogVisible="dialogVisible" :type="type" :truckID="truck.truckID" @control="handleSelect"></SelectSuperCargo>
@@ -161,7 +161,7 @@ export default {
 		},
 		primary() {
 			Truck.primary({
-				comSupercargoID: this.truck.secondaryDriver.comSupercargoID,
+				supercargoID: this.truck.secondaryDriver.supercargoID,
 				comTruckID: this.truck.truckID
 			}).then(res => {
 				Message.success(res.data.msg)
@@ -177,14 +177,14 @@ export default {
 				})
 			})
 		},
-		delSuperCargo(comSupercargoID, type) {
+		delSuperCargo(supercargoID, type) {
 			this.$confirm(`此操作将清空该车辆${type}, 是否继续?`, '提示', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
 				Truck.deleteDriver({
-					comSupercargoID,
+					supercargoID,
 					comTruckID: this.truck.truckID
 				}).then(res => {
 					Message.success(res.data.msg)

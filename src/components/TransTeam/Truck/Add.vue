@@ -1389,7 +1389,7 @@ export default {
 				keyword: queryString
 			}).then(res => {
 				const list = res.records
-				const idList = list.map(item => item.comSupercargoID)
+				const idList = list.map(item => item.supercargoID)
 				const index = idList.indexOf(this.truck.secondaryDriver)
 				if ( index > -1 && this.truck.secondaryDriverName) list.splice(index, 1)
 				cb(list)
@@ -1403,7 +1403,7 @@ export default {
 				keyword: queryString
 			}).then(res => {
 				const list = res.records
-				const idList = list.map(item => item.comSupercargoID)
+				const idList = list.map(item => item.supercargoID)
 				const index = idList.indexOf(this.truck.primaryDriver)
 				if ( index > -1 && this.truck.primaryDriverName) list.splice(index, 1)
 				cb(list)
@@ -1421,11 +1421,11 @@ export default {
 			})
 		},
 		handSelectPrimaryDriver(data) { 
-			this.truck.primaryDriver = data.comSupercargoID
+			this.truck.primaryDriver = data.supercargoID
 			this.truck.primaryDriverName = data.realName
 		},
 		handSelectSecondaryDriver(data) { 
-			this.truck.secondaryDriver = data.comSupercargoID
+			this.truck.secondaryDriver = data.supercargoID
 			this.truck.secondaryDriverName = data.realName
 		},
 		handleTruckFrontPic(res) { this.truck.truckFrontPic = res.length == 0 ? '' : res[0] },

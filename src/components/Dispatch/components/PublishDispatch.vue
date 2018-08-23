@@ -57,7 +57,7 @@
                                     <span class="add-btn" @click="addTruck" v-else>+ 添加车辆<b style="color:red">*</b></span>
                                 </td>
                                 <td align="center">
-                                    <span v-if="selectedTruck.primaryDriver && selectedTruck.primaryDriver.comSupercargoID">
+                                    <span v-if="selectedTruck.primaryDriver && selectedTruck.primaryDriver.supercargoID">
                                         <strong>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.realName}}</strong>
                                         <span>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.mobile}}</span>
                                         <el-tag size="mini" type="success" v-if="selectedTruck.primaryDriver">空闲</el-tag>
@@ -82,7 +82,7 @@
                                     <span class="add-btn" @click="addPerson('primary')" v-else v-show="selectedTruck.truckID">+ 添加驾驶员</span>
                                 </td>
                                 <td align="center">
-                                    <span v-if="selectedTruck.superCargo && selectedTruck.superCargo.comSupercargoID">
+                                    <span v-if="selectedTruck.superCargo && selectedTruck.superCargo.supercargoID">
                                         <strong>{{selectedTruck.superCargo && selectedTruck.superCargo.realName}}</strong>
                                         <span>{{selectedTruck.superCargo && selectedTruck.superCargo.mobile}}</span>
                                         <el-tag size="mini" type="success" v-if="selectedTruck.superCargo">空闲</el-tag>
@@ -145,12 +145,12 @@
                                 <td align="center" style="padding:0 5px">
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
-                                            <el-select size="mini" value-key="comSupercargoID" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
+                                            <el-select size="mini" value-key="supercargoID" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
                                                 <el-option 
                                                     :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName" 
                                                     :value="person" 
                                                     v-for="person in persons" 
-                                                    :key="person.comSupercargoID">
+                                                    :key="person.supercargoID">
                                                 </el-option>
                                             </el-select>
                                         </el-form-item>
@@ -317,7 +317,7 @@ export default {
             this.createPersons()
         },
         handSelectItem(data, index) {
-            this.bizDispatchFeeList[index].superCargoID = data.comSupercargoID
+            this.bizDispatchFeeList[index].superCargoID = data.supercargoID
             this.bizDispatchFeeList[index].superCargoName = data.realName
         },
         addTruck() {
@@ -385,8 +385,8 @@ export default {
                 })
                 Dispatchbill.add({
                     truckID: this.selectedTruck.truckID,
-                    driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.comSupercargoID : '',
-                    superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.comSupercargoID : '',
+                    driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
+                    superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',
                     bizDispatchFeeList,
                     dispatchTaskCargoList,
                     dispatchTaskList,
