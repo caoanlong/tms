@@ -32,7 +32,7 @@
                                 <th>收款人</th>
                                 <th>支付方式</th>
                                 <th>金额</th>
-                                <th width="100" v-if="!dispatchOrderDetail.status=='Canceled' || !dispatchOrderDetail.status=='Rejected'"><el-button size="mini" type="primary" @click="addFreight">添加费用</el-button></th>
+                                <th width="180" v-if="!(dispatchOrderDetail.status=='Canceled') || !(dispatchOrderDetail.status=='Rejected')"><el-button size="mini" type="primary" icon="el-icon-plus"@click="addFreight">添加</el-button><el-button size="mini" type="success" icon="el-icon-check" @click="saveFreight">保存</el-button></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,7 +62,7 @@
                                 <td>
                                     {{feesItem.amount}}元
                                 </td>
-                                <td v-if="!dispatchOrderDetail.status=='Canceled' || !dispatchOrderDetail.status=='Rejected'"></td>
+                                <td v-if="!(dispatchOrderDetail.status=='Canceled') || !(dispatchOrderDetail.status=='Rejected')"></td>
                             </tr>
                             <tr v-for="(item, index) in bizDispatchFeeList" :key="index">
                                 <td>
@@ -81,13 +81,13 @@
                                 <td>
                                     <span style="position:relative;top:-10px">{{item.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
                                 </td>
-                                <td style="padding:0 5px">
+                                <td>
                                     <el-form :model="item" ref="ruleForm">
-                                        <el-form-item prop="comSupercargoID" :rules="[{ required: true , message: '请选择收款人' }]">
-                                            <el-select size="mini" v-model="item.comSupercargoID" placeholder="请选择">
+                                        <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
+                                            <el-select size="mini" value-key="comSupercargoID" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
                                                 <el-option 
-                                                    :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName"
-                                                    :value="person.comSupercargoID" 
+                                                    :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName" 
+                                                    :value="person" 
                                                     v-for="person in persons" 
                                                     :key="person.comSupercargoID">
                                                 </el-option>
@@ -95,7 +95,7 @@
                                         </el-form-item>
                                     </el-form>
                                 </td>
-                                <td style="padding:0 5px">
+                                <td>
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="payMode" :rules="[{ required: true , message: '请选择支付方式' }]">
                                             <el-select size="mini" v-model="item.payMode" placeholder="请选择">
@@ -111,7 +111,7 @@
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="amount" :rules="[{
 												validator: (rule, value, callback) => {
-													const r = /(^[1-9]\d*\.\d{1,2}$)|(^0{1}\.\d{1,2}$)|(^[1-9]\d*$)/
+													const r = /\d+/
 													if (!item.amount || item.amount == '0') {
 														callback('请输入金额')
 													} else if (value && !r.test(value)) {
@@ -126,7 +126,7 @@
                                     </el-form>
                                 </td>
                                 <td>
-                                    <span style="position:relative;top:-10px" class="del-btn" @click="delFreight(index)">删除</span>
+                                    <span style="position:relative;top:-10px" class="delbtn c6" @click="delFreight(index)">删除</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -182,12 +182,14 @@ export default {
 			bizDispatchFeeList: [],
 			dispatchOrderFees:{},
 			dispatchTask:{},
-			dispatchLogs:{}
+			dispatchLogs:{},
+			persons:[]
 		}
 	},
 	created() {
 		this.getDetail()
 		this.getFees()
+		this.createPersons()
 		this.getTaskList()
 		this.getLogs()
 	},
@@ -220,6 +222,20 @@ export default {
 		back() {
 			this.$router.go(-1)
 		},
+		createPersons() {
+            if (this.dispatchOrderDetail.driverID) {
+                this.persons.push({
+                	comSupercargoID:this.dispatchOrderDetail.driverID,
+                	realName:this.dispatchOrderDetail.driverName}
+                	)
+            }
+            // if (this.dispatchOrderDetail.superCargoID) {
+            //     this.persons.push(
+            //     	this.dispatchOrderDetail.superCargoID + this.dispatchOrderDetail.superCargoName
+            //     	)
+            // }
+            console.log(this.persons)
+        },
 		carriageDetail(){
 			this.ShowCarriageDetail = !this.ShowCarriageDetail
 		},
@@ -227,10 +243,27 @@ export default {
             this.bizDispatchFeeList.push({
                 item: '',
                 category: 'Attach',
-                comSupercargoID: '',
+                superCargoID: '',
                 payMode: '',
                 amount: ''
             })
+            
+        },
+        handSelectItem(data, index) {
+        	console.log(data)
+            this.bizDispatchFeeList[index].superCargoID = data.comSupercargoID
+            this.bizDispatchFeeList[index].superCargoName = data.realName
+        },
+        saveFreight(){
+        	const dispatchOrderID = this.$route.query.dispatchOrderID
+        	const Freight = Object.assign({}, this.bizDispatchFeeList)
+        	console.log(Freight)
+        	return
+
+        	Dispatchbill.feeModify({Freight}).then(res=>{
+        		Message.success(res.data.msg)
+        		this.getDetail()
+        	})
         }
 	},
 	components:{
@@ -267,10 +300,9 @@ export default {
 		td
 			text-align center
 			color #666
-		.addbtn
-		.delbtn
-			color #409EFF
-			cursor pointer
+			.delbtn
+				cursor pointer
+			
 	.circle
 		width 12px
 		height 12px

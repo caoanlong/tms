@@ -128,7 +128,7 @@
 							<td>{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
 							<td>{{taskItem.consigneeArea}}</td>
 							<td>{{taskItem.consigneeDate | getdatefromtimestamp(true)}}</td>
-							<td><el-button type="primary" size="mini" @click="viewPhotos(taskItem.carrierOrderID,taskItem.shipperArea,taskItem.consigneeArea)">查看照片</el-button></td>
+							<td><el-button type="primary" size="mini" plain @click="viewPhotos(taskItem.carrierOrderID,taskItem.shipperArea,taskItem.consigneeArea)">查看照片</el-button></td>
 						</tr>
 					</template>
 				</table>

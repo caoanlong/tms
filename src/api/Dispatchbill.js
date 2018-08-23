@@ -161,6 +161,15 @@ class Dispatchbill extends Base {
             })
         })
     }
+    
+    //修改运费
+	feeModify(data){
+        return this.request({
+			url: this.baseUrl + '/fee/modify',
+			method: 'post',
+			data
+		})
+    }
 	/**
 	 * 发布派车单
 	 * @param {*} data 

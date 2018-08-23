@@ -143,17 +143,17 @@
 							<tr v-for="(item, index) in tableData" :key="index">
 								<td align="center">
 									<p>{{item.carrierOrderNo}}</p>
-									<p>{{item.commissionDate}}</p>
+									<p v-if="item.commissionDate">{{item.commissionDate | getdatefromtimestamp}}</p>
 								</td>
-								<td align="center">
+								<td>
 									<p>{{item.shipperCompanyName}}</p>
 									<p>{{item.consigneeCompanyName}}</p>
 								</td>
-								<td align="center">
+								<td>
 									<p><span class="from">发</span>{{item.shipperArea}}</p>
 									<p><span class="to">到</span>{{item.consigneeArea}}</p>
 								</td>
-								<td align="center" class="address">
+								<td class="address">
 									<p>{{item.shipperDetailAddress}}</p>
 									<p>{{item.consigneeDetailAddress}}</p>
 								</td>
@@ -217,15 +217,15 @@
 							<tbody>
 								<tr style="height:93px" v-for="(item, index) in selectedList" :key="index">
 									<td align="center">{{item.carrierOrderNo}}</td>
-									<td align="center">
+									<td>
 										<p>{{item.shipperCompanyName}}</p>
 										<p>{{item.consigneeCompanyName}}</p>
 									</td>
-									<td align="center">
+									<td>
 										<p><span class="from">发</span>{{item.shipperArea}}</p>
 										<p><span class="to">到</span>{{item.consigneeArea}}</p>
 									</td>
-									<td align="center" class="address">
+									<td class="address">
 										<p>{{item.shipperDetailAddress}}</p>
 										<p>{{item.consigneeDetailAddress}}</p>
 									</td>
