@@ -189,7 +189,6 @@ export default {
 	created() {
 		this.getDetail()
 		this.getFees()
-		this.createPersons()
 		this.getTaskList()
 		this.getLogs()
 	},
@@ -199,6 +198,7 @@ export default {
 			Dispatchbill.findById({ dispatchOrderID }).then(res => {
 				this.dispatchOrder = res
 				this.dispatchOrderDetail = res.detail
+				this.createPersons()
 			})
 		},
 		getFees() {
@@ -226,15 +226,15 @@ export default {
             if (this.dispatchOrderDetail.driverID) {
                 this.persons.push({
                 	comSupercargoID:this.dispatchOrderDetail.driverID,
-                	realName:this.dispatchOrderDetail.driverName}
-                	)
+					realName:this.dispatchOrderDetail.driverName
+				})
+			}
+			if (this.dispatchOrderDetail.superCargoID) {
+                this.persons.push({
+                	comSupercargoID:this.dispatchOrderDetail.superCargoID,
+					realName:this.dispatchOrderDetail.superCargoName
+				})
             }
-            // if (this.dispatchOrderDetail.superCargoID) {
-            //     this.persons.push(
-            //     	this.dispatchOrderDetail.superCargoID + this.dispatchOrderDetail.superCargoName
-            //     	)
-            // }
-            console.log(this.persons)
         },
 		carriageDetail(){
 			this.ShowCarriageDetail = !this.ShowCarriageDetail
