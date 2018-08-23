@@ -256,9 +256,19 @@ export default {
         },
         saveFreight(){
         	const dispatchOrderID = this.$route.query.dispatchOrderID
-        	const Freight = Object.assign({}, this.bizDispatchFeeList)
+        	const Freight = this.bizDispatchFeeList.map(item=>{
+        		return {
+        			item: item.item,
+		            category: item.category,
+		            superCargoID: item.superCargoID,
+		            payMode: item.payMode,
+		            amount: item.amount,
+		            dispatchOrderID
+        		}
+        	})
         	console.log(Freight)
         	return
+        	
 
         	Dispatchbill.feeModify({Freight}).then(res=>{
         		Message.success(res.data.msg)
