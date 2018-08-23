@@ -4,7 +4,16 @@
 			<div slot="header" class="clearfix">调度详情</div>
 			<el-row :gutter="40">
 				<el-col :span="17" style="border-right:1px solid #ddd">
-					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span><span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span></p>
+					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span>
+						<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
+						<el-tag size="mini" type="info" v-if="dispatchOrderDetail.status == 'Committed'">未接单</el-tag>
+						<el-tag size="mini" v-else-if="dispatchOrderDetail.status == 'Ordered'">已接单</el-tag>
+						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Canceled'">已取消</el-tag>
+						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Rejected'">已拒绝</el-tag>
+						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Closed'">已关闭</el-tag>
+						<el-tag size="mini" type="success" v-else>已完成</el-tag>
+						<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
+					</p>
 					<p>行驶数据</p>
 					<div class="lineInfo">
 						<span class="fl c1"><i class="el-icon-location"></i> 昆明五华区彩云北路56号</span>
@@ -33,7 +42,7 @@
 									<th width="110">收款人</th>
 									<th width="110">支付方式</th>
 									<th width="130">金额</th>
-									<th width="180" v-if="!(dispatchOrderDetail.status=='Canceled') || !(dispatchOrderDetail.status=='Rejected')">
+									<th width="180" v-if="(dispatchOrderDetail.status !='Canceled') && (dispatchOrderDetail.status !='Rejected')">
 										<el-button size="mini" type="primary" icon="el-icon-plus" @click="addFreight">添加</el-button>
 										<el-button size="mini" type="success" icon="el-icon-check" @click="saveFreight" v-if="bizDispatchFeeList.length">保存</el-button>
 									</th>
@@ -66,7 +75,7 @@
 									<td>
 										{{feesItem.amount}}元
 									</td>
-									<td v-if="!(dispatchOrderDetail.status=='Canceled') || !(dispatchOrderDetail.status=='Rejected')"></td>
+									<td v-if="(dispatchOrderDetail.status !='Canceled') && (dispatchOrderDetail.status !='Rejected')"></td>
 								</tr>
 								<tr v-for="(item, index) in bizDispatchFeeList" :key="index">
 									<td>
