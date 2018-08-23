@@ -28,11 +28,14 @@
                         <thead>
                             <tr>
                                 <th>费用科目</th>
-                                <th>费用类型</th>
+                                <th width="80">费用类型</th>
                                 <th>收款人</th>
                                 <th>支付方式</th>
                                 <th>金额</th>
-                                <th width="180" v-if="!(dispatchOrderDetail.status=='Canceled') || !(dispatchOrderDetail.status=='Rejected')"><el-button size="mini" type="primary" icon="el-icon-plus"@click="addFreight">添加</el-button><el-button size="mini" type="success" icon="el-icon-check" @click="saveFreight">保存</el-button></th>
+                                <th width="190" v-if="!(dispatchOrderDetail.status=='Canceled') || !(dispatchOrderDetail.status=='Rejected')">
+									<el-button size="mini" type="primary" icon="el-icon-plus" @click="addFreight">添加</el-button>
+									<el-button size="mini" type="success" icon="el-icon-check" @click="saveFreight" v-if="bizDispatchFeeList.length">保存</el-button>
+								</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -183,8 +186,7 @@ export default {
 			dispatchOrderFees:{},
 			dispatchTask:{},
 			dispatchLogs:{},
-			persons:[],
-			// isEdit:false
+			persons:[]
 		}
 	},
 	created() {
@@ -248,10 +250,8 @@ export default {
                 payMode: '',
                 amount: ''
             })
-            this.isEdit = true
         },
         handSelectItem(data, index) {
-        	console.log(data)
             this.bizDispatchFeeList[index].superCargoID = data.supercargoID
             this.bizDispatchFeeList[index].supercargoName = data.realName
         },
@@ -268,11 +268,10 @@ export default {
 		            dispatchOrderID
         		}
         	})
-        	console.log(bizDispatchFeeList)
         	Dispatchbill.feeModify({bizDispatchFeeList}).then(res=>{
+				this.bizDispatchFeeList = []
         		Message.success(res.data.msg)
         		this.getFees()
-        		this.isEdit = false
         	})
         }
 	},
