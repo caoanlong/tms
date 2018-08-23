@@ -72,7 +72,7 @@
 									<div class="quoteInfo">
 										<span v-if="item.type=='Assign'">{{item.plateNo}}</span>
 										<div class="quoteList" v-autoscroll v-else>
-											<div v-for="i in 5" :key="i">{{i}}云A-23567 <b class="c3">¥6000.00元</b></div>
+											<div class="quoteListItem" v-for="(quoteItem,i) in item.dispatchOfferVOList" :key="i">{{quoteItem.plateNo}}<b class="c1">{{quoteItem.amount}}元</b><sup v-if="i==0">new</sup></div>
 										</div>
 									</div>
 									<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
@@ -84,8 +84,9 @@
 									<el-tag size="mini" type="success" v-else>已完成</el-tag>
 								</div>
 								<div class="handler">
+									<span class="c1" @click="scramble" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
 									<span class="c1" @click="scramble" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
-									<el-button type="text" size="mini" @click="trail">跟踪</el-button>
+									<el-button type="text" size="mini" @click="trail" style="margin-left:20px">跟踪</el-button>
 									
 									<!-- 未接单 -->
 									<span v-if="item.status == 'Committed'">
@@ -242,10 +243,10 @@ export default {
 	},
 	directives: {
 		autoscroll: {
-
 			bind: el => {
 				let index = 1
 				const num = $(el).children().length
+				if(num<2) return
 				const newEl = $(el).html()
 				$(el).html(newEl + newEl)
 				this.timer = setInterval(() => {
@@ -253,7 +254,7 @@ export default {
 						index = 1
 						$(el).css({top: '0'})
 					}
-					$(el).animate({top: `-${20*index}px`})
+					$(el).animate({top: `-${28*index}px`})
 					index++
 				}, 2000)
 			},
@@ -476,9 +477,14 @@ export default {
 						position relative
 						.quoteList
 							position absolute
-							b
-								font-weight normal
-								margin-left 10px
+							.quoteListItem
+								b
+									font-weight normal
+									margin-left 10px
+								sup
+									color #f00
+									margin-left 5px
+									
 				.handler
 					float right
 					height 28px
