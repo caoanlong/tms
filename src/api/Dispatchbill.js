@@ -164,7 +164,7 @@ class Dispatchbill extends Base {
     
     //修改运费
 	feeModify(data){
-        return this.request({
+        return requestByJson({
 			url: this.baseUrl + '/fee/modify',
 			method: 'post',
 			data

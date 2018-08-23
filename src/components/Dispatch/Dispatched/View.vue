@@ -86,7 +86,7 @@
                                         <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
                                             <el-select size="mini" value-key="supercargoID" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
                                                 <el-option 
-                                                    :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName" 
+                                                    :label="person.realName" 
                                                     :value="person" 
                                                     v-for="person in persons" 
                                                     :key="person.supercargoID">
@@ -183,7 +183,8 @@ export default {
 			dispatchOrderFees:{},
 			dispatchTask:{},
 			dispatchLogs:{},
-			persons:[]
+			persons:[],
+			// isEdit:false
 		}
 	},
 	created() {
@@ -247,28 +248,31 @@ export default {
                 payMode: '',
                 amount: ''
             })
-            
+            this.isEdit = true
         },
         handSelectItem(data, index) {
         	console.log(data)
             this.bizDispatchFeeList[index].superCargoID = data.supercargoID
-            this.bizDispatchFeeList[index].superCargoName = data.realName
+            this.bizDispatchFeeList[index].supercargoName = data.realName
         },
         saveFreight(){
         	const dispatchOrderID = this.$route.query.dispatchOrderID
-        	const Freight = this.bizDispatchFeeList.map(item=>{
+        	const bizDispatchFeeList = this.bizDispatchFeeList.map(item=>{
         		return {
         			item: item.item,
 		            category: item.category,
 		            superCargoID: item.superCargoID,
 		            payMode: item.payMode,
+		            supercargoName:item.supercargoName,
 		            amount: item.amount,
 		            dispatchOrderID
         		}
         	})
-        	Dispatchbill.feeModify({Freight}).then(res=>{
+        	console.log(bizDispatchFeeList)
+        	Dispatchbill.feeModify({bizDispatchFeeList}).then(res=>{
         		Message.success(res.data.msg)
-        		this.getDetail()
+        		this.getFees()
+        		this.isEdit = false
         	})
         }
 	},
