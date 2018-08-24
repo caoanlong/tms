@@ -95,43 +95,163 @@
 						<thead>
 							<tr>
 								<th>
-									<p class="cursor" @click="sort('carrierOrderNo')">
-										承运单号&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'carrierOrderNo' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										承运单号&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'CarrierOrderNo' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('CarrierOrderNo', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'CarrierOrderNo' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('CarrierOrderNo', 'desc')"/>
+										</span>
 									</p>
-									<p class="cursor" @click="sort('commissionDate')">
-										委托时间&nbsp;<svg-icon class="arrow" :class="find.sort == 'commissionDate' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										委托时间&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'CommissionDate' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('CommissionDate', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'CommissionDate' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('CommissionDate', 'desc')"/>
+										</span>
 									</p>
 								</th>
 								<th>
-									<p class="cursor" @click="sort('shipperName')">
-										发货方&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'shipperName' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										发货方&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'ShipperCompanyName' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ShipperCompanyName', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'ShipperCompanyName' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ShipperCompanyName', 'desc')"/>
+										</span>
 									</p>
-									<p class="cursor" @click="sort('consigneeName')">
-										到货方&nbsp;<svg-icon class="arrow" :class="find.sort == 'consigneeName' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										到货方&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'ConsigneeCompanyName' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ConsigneeCompanyName', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'ConsigneeCompanyName' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ConsigneeCompanyName', 'desc')"/>
+										</span>
 									</p>
 								</th>
 								<th>
-									<p class="cursor" @click="sort('shipperArea')">
-										装车地区&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'shipperArea' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										装车地区&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'ShipperArea' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ShipperArea', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'ShipperArea' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ShipperArea', 'desc')"/>
+										</span>
 									</p>
-									<p class="cursor" @click="sort('consigneeArea')">
-										卸货地区&nbsp;<svg-icon class="arrow" :class="find.sort == 'consigneeArea' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										卸货地区&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'ConsigneeArea' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ConsigneeArea', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'ConsigneeArea' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ConsigneeArea', 'desc')"/>
+										</span>
 									</p>
 								</th>
 								<th>
-									<p class="cursor" @click="sort('shipperDetailAddress')">
-										装车地址&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'shipperDetailAddress' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										装车地址&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'ShipperAddress' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ShipperAddress', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'ShipperAddress' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ShipperAddress', 'desc')"/>
+										</span>
 									</p>
-									<p class="cursor" @click="sort('consigneeDetailAddress')">
-										卸货地址&nbsp;<svg-icon class="arrow" :class="find.sort == 'consigneeDetailAddress' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										卸货地址&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'ConsigneeAddress' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ConsigneeAddress', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'ConsigneeAddress' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ConsigneeAddress', 'desc')"/>
+										</span>
 									</p>
 								</th>
 								<th>
-									<p class="cursor" @click="sort('shipperDate')">
-										装车时间&nbsp;<svg-icon class="arrow arrow-up" :class="find.sort == 'shipperDate' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										装车时间&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'ShipperDate' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ShipperDate', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'ShipperDate' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ShipperDate', 'desc')"/>
+										</span>
 									</p>
-									<p class="cursor" @click="sort('consigneeDate')">
-										到货时间&nbsp;<svg-icon class="arrow" :class="find.sort == 'consigneeDate' ? 'active' : ''" icon-class="triangle"></svg-icon>
+									<p class="cursor">
+										到货时间&nbsp;
+										<span class="arrow-group">
+											<svg-icon 
+												class="arrow arrow-up" 
+												:class="find.orderBy == 'ConsigneeDate' && find.sortType == 'asc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ConsigneeDate', 'asc')"/>
+											<svg-icon 
+												class="arrow" 
+												:class="find.orderBy == 'ConsigneeDate' && find.sortType == 'desc' ? 'active' : ''" 
+												icon-class="triangle" 
+												@click.native="sort('ConsigneeDate', 'desc')"/>
+										</span>
 									</p>
 								</th>
 								<th>货物</th>
@@ -165,12 +285,12 @@
 								<td align="center">
 									{{item.cargoWeight ? item.cargoWeight + '吨/' : '0吨/'}}
 									{{item.cargoVolume ? item.cargoVolume + '方/' : '0方/'}}
-									{{item.cargoNum ? item.cargoNum + '件' : '0件'}}
+									{{item.cargoNum ? (item.cargoNum + item.cargoUnitName) : ('0' + item.cargoUnitName)}}
 								</td>
 								<td align="center">
 									{{item.remainingCargoWeight ? item.remainingCargoWeight + '吨/' : '0吨/'}}
 									{{item.remainingCargoVolume ? item.remainingCargoVolume + '方/' : '0方/'}}
-									{{item.remainingCargoNum ? item.remainingCargoNum + '件' : '0件'}}
+									{{item.remainingCargoNum ? (item.remainingCargoNum + item.cargoUnitName) : ('0' + item.cargoUnitName)}}
 								</td>
 							</tr>
 						</tbody>
@@ -252,7 +372,10 @@
 							<tbody>
 								<tr style="height:80px" v-for="(item, index) in selectedList" :key="index">
 									<td align="center">
-										<p style="position:relative;top:8px"><span class="surplus">余</span>{{item.remainingCargoNum ? item.remainingCargoNum + '件' : '0件'}}</p>
+										<p style="position:relative;top:8px">
+											<span class="surplus">余</span>
+											{{item.remainingCargoNum ? (item.remainingCargoNum + item.cargoUnitName) : ('0' + item.cargoUnitName)}}
+										</p>
 										<el-form :model="item" ref="ruleForm">
 											<el-form-item prop="cargoNumNew" :rules="[{
 												validator: (rule, value, callback) => {
@@ -273,7 +396,10 @@
 										</el-form>
 									</td>
 									<td align="center">
-										<p style="position:relative;top:8px"><span class="surplus">余</span>{{item.remainingCargoWeight ? item.remainingCargoWeight + '吨' : '0吨'}}</p>
+										<p style="position:relative;top:8px">
+											<span class="surplus">余</span>
+											{{item.remainingCargoWeight ? item.remainingCargoWeight + '吨' : '0吨'}}
+										</p>
 										<el-form :model="item" ref="ruleForm">
 											<el-form-item prop="cargoWeightNew" :rules="[{
 												validator: (rule, value, callback) => {
@@ -501,8 +627,10 @@ export default {
 		/**
 		 * 排序搜索
 		 */
-		sort(type) {
-			this.find.sort = type
+		sort(orderBy, sortType) {
+			this.find.orderBy = orderBy
+			this.find.sortType = sortType
+			this.search()
 		},
 		/**
 		 * 上面列表勾选承运单
@@ -630,8 +758,8 @@ export default {
 		 */
 		getSelectedList() {
 			const dispatchOrderID = this.$route.query.dispatchOrderID
-			Carrierbill.findPreReDispatch({ dispatchOrderID }).then(res => {
-				this.selectedList = res.records
+			Carrierbill.findDispatchedList({ dispatchOrderID }).then(res => {
+				this.selectedList = res
 				this.selectedListNoRepeat = this.arrayUnique(this.selectedList, 'carrierOrderID')
 				this.transLineCreate()
 			})
@@ -720,22 +848,31 @@ export default {
 		overflow hidden
 		overflow-x auto
 		.table-main
-			.icon
-				margin 0 4px
-				cursor pointer
-				&.up
-					color #409EFF
-				&.down
-					color #67C23A
-				&.disabled
-					color #ddd
-					cursor not-allowed
-			.arrow
-				color #cccccc
-				&.active
-					color #409EFF
-				&.arrow-up
-					transform rotate(180deg)
+			.arrow-group
+				display inline-block
+				position relative
+				width 14px
+				height 14px
+				.icon
+					margin 0 4px
+					cursor pointer
+					&.up
+						color #409EFF
+					&.down
+						color #67C23A
+					&.disabled
+						color #ddd
+						cursor not-allowed
+				.arrow
+					position absolute
+					left 0
+					top 8px
+					color #cccccc
+					&.active
+						color #409EFF
+					&.arrow-up
+						top -3px
+						transform rotate(180deg)
 			td
 				padding 10px 15px
 	table
