@@ -72,7 +72,7 @@
 									<div class="quoteInfo">
 										<span v-if="item.type=='Assign'">{{item.plateNo}}</span>
 										<div class="quoteList" v-autoscroll v-else>
-											<div class="quoteListItem" v-for="(quoteItem,i) in item.dispatchOfferVOList" :key="i">{{quoteItem.plateNo}}<b class="c1">{{quoteItem.amount}}元</b><sup v-if="i==0">new</sup></div>
+											<div class="quoteListItem" v-for="(quoteItem,i) in item.dispatchOfferVOList" :key="i">{{quoteItem.plateNo}}<b class="c1">{{quoteItem.amount}}元</b><sup class="forcefontsize8" v-if="i==0">new</sup></div>
 										</div>
 									</div>
 									<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
@@ -84,9 +84,9 @@
 									<el-tag size="mini" type="success" v-else>已完成</el-tag>
 								</div>
 								<div class="handler">
-									<span class="c1" @click="scramble" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
-									<span class="c1" @click="scramble" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
-									<el-button type="text" size="mini" @click="trail" style="margin-left:20px">跟踪</el-button>
+									<span class="c1" @click="scramble(item.dispatchOrderID)" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
+									<span class="c1" @click="scramble(item.dispatchOrderID)" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
+									<el-button type="text" size="mini" @click="trail(item.dispatchOrderID)" style="margin-left:20px">跟踪</el-button>
 									
 									<!-- 未接单 -->
 									<span v-if="item.status == 'Committed'">
@@ -138,12 +138,12 @@
 			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
 		<el-dialog title="报价详情" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
-			<p class="c1">货物： 啤酒、王老吉、可口可乐</p>
-			<p class="c1">货量： 2吨 / 4.6方</p>
-			<p class="c1">1装1卸  预计里程680公里</p>
+			<p class="c1">货物： {{scrambleList.cargoName}}</p>
+			<p class="c1">货量： {{scrambleList.cargoWeight}}吨 / {{scrambleList.cargoVolume}}方 / {{scrambleList.cargoNum}}</p>
+			<p class="c1">{{scrambleList.load}} 装 {{scrambleList.unLoad}} 卸  预计里程 {{scrambleList.mileages}} 公里</p>
 			<div class="tableBox">
 				<table class="customerTable">
-					<caption>抢单人数（3）</caption>
+					<caption>抢单人数（{{scrambleList.grabOfferNum}}）</caption>
 					<thead>
 						<tr>
 							<th>车辆</th>
@@ -153,12 +153,12 @@
 						</tr>
 					</thead>
 					<tbody>
-						<template v-for="item in 13">
+						<template v-for="item in scrambleList.grabOfferOrderDetailVOList">
 							<tr><td colspan="4" class="blank"></td></tr>
 							<tr>
 								<td class="txt-l">
-									<p>粤B-55555 
-										<el-tag size="mini">GPS</el-tag>
+									<p>{{item.plateNo}} 
+										<el-tag size="mini" v-if="item.gps">GPS</el-tag>
 										<el-tooltip placement="right" effect="light">
 											<div slot="content">
 												<el-tag size="mini" type="danger">GPS到期</el-tag>
@@ -166,10 +166,10 @@
 											<el-tag size="mini" type="danger">到期</el-tag>
 										</el-tooltip>
 									</p>
-									<p>9.6米/高栏/22吨/3.5方</p>
+									<p>{{Number(item.length/1000).toFixed(1)}} 米 / {{item.truckType}} / 22 吨 / 3.5 方</p>
 								</td>
 								<td class="txt-l">
-									<p>郝晓晓
+									<p>{{item.name}}
 										<el-tooltip placement="right" effect="light">
 											<div slot="content">
 												<el-tag size="mini" type="danger">身份证到期</el-tag>
@@ -177,15 +177,15 @@
 											<el-tag size="mini" type="danger">到期</el-tag>
 										</el-tooltip>
 									</p>
-									<p>13424389894</p>
+									<p>{{item.mobile}}</p>
 								</td>
-								<td class="c1"><span class="tags">定</span>1500元/车</td>
-								<td rowspan="2"><span class="c1 selectTruck">选TA承运</span></td>
+								<td class="c posr"><span class="tags">定</span>{{item.amount}}元/车 <img class="success" src="../../../assets/imgs/successIcon.png" height="48" v-if="item.status == 'Agreed'" /></td></td>
+								<td><span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID)" v-if="item.status != 'Agreed'">选TA承运</span></td>
 							</tr>
 							<tr>
-								<td colspan="3" class="c2">
-									<span class="fl"><i class="el-icon-location"></i>1小时前 昆明五华区彩云北路56号</span>
-									<span class="fr">距离装车地 23公里</span>
+								<td colspan="4" class="c2">
+									<span class="fl"><i class="el-icon-location"></i> {{Number(item.hours).toFixed(1)}} 小时前 {{item.posAddress}}</span>
+									<span class="fr">距离装车地 {{item.distance}} 公里</span>
 								</td>
 							</tr>
 						</template>
@@ -211,7 +211,8 @@
 	</div>
 </template>
 <script type="text/javascript">
-import { PAGEINDEX, PAGESIZE, TOTAL } from '../../../common/const'
+import axios from 'axios'
+import { MAPKEY,PAGEINDEX, PAGESIZE, TOTAL } from '../../../common/const'
 import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
@@ -239,6 +240,7 @@ export default {
 			currentShipperArea: '',
 			currentConsigneeArea: '',
 			isPhotoVisible: false,
+			scrambleList:[]
 		}
 	},
 	directives: {
@@ -349,14 +351,34 @@ export default {
 				this.total = res.total
 			})
 		},
-		scramble() {
+		scramble(dispatchOrderID) {
 			this.scrambleDialog = true
+			Dispatchbill.findgGrabOfferOrderList({
+				dispatchOrderID
+			}).then(res => {
+				this.scrambleList = res
+				const list = res.grabOfferOrderDetailVOList
+				list.forEach(item =>{
+					const location = item.longitude + ',' + item.latitude 
+					const loadLocation = item.loadLongitude  + ',' + item.loadLatitude
+					this.getDistance(loadLocation,location)
+				})
+			})
 		},
 		handCloseTrail() {
 			this.trailDialog = false
 		},
 		trail() {
 			this.trailDialog = true
+		},
+		confirmScramble(dispatchOfferID){
+			Dispatchbill.confirmScramble({
+				dispatchOfferID
+			}).then(res => {
+				Message.success('已成功选择承运人!')
+				this.scrambleDialog = false
+				this.getList()
+			})
 		},
 		closeDispatchOrder(id){
 			closeConfirm(id, dispatchOrderID => {
@@ -373,7 +395,31 @@ export default {
 					this.getList()
 				})
 			})
-		}
+		},
+		/**
+		 * 调用高德地图接口获取距离
+		 */
+		getDistance(loadLocation,location) {
+			axios({url: `https://restapi.amap.com/v3/distance?origins=${loadLocation}&destination=${location}&key=${MAPKEY}`}).then(res => {
+				const results = res.data.results
+				console.log(results[0].distance)
+				// const arrays = [...this.transLines]
+				// this.totalDistance = 0
+				// arrays.forEach((item,i) => {
+				// 	item.sequence = i+1
+				// 	item.nodeDistance = Number((Number(results[i].distance)/1000).toFixed(2))
+				// 	this.totalDistance += item.nodeDistance
+				// })
+				// this.totalDistance = Number(this.totalDistance.toFixed(2))
+				// this.transLines = arrays
+
+				this.scrambleList.grabOfferOrderDetailVOList= this.scrambleList.grabOfferOrderDetailVOList.map(item =>{
+					return Object.assign(item, {
+						"distance": Number((Number(results[0].distance)/1000).toFixed(2))
+					})
+				})
+			})
+		},
 
 	}
 }
@@ -453,6 +499,11 @@ export default {
 					line-height 18px
 					text-align center
 					margin-right 4px
+				.success
+					position absolute
+					right 10px
+					top 50%
+					transform translateY(-50%)
 				p
 					margin 0
 					padding 0
@@ -481,10 +532,13 @@ export default {
 								b
 									font-weight normal
 									margin-left 10px
-								sup
+								.forcefontsize8
 									color #f00
 									margin-left 5px
-									
+									display inline-block
+									font-size 12px
+									-webkit-text-size-adjust none
+									-webkit-transform scale(0.8,0.8)								
 				.handler
 					float right
 					height 28px
