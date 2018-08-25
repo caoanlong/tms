@@ -147,7 +147,7 @@
                                         <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
                                             <el-select size="mini" value-key="supercargoID" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
                                                 <el-option 
-                                                    :label="(person.supercargoType == 'SupercargoDriver' ? '司机-' : '押运-') + person.realName" 
+                                                    :label="(person.type == 'primary' ? '司机-' : '押运-') + person.realName" 
                                                     :value="person" 
                                                     v-for="person in persons" 
                                                     :key="person.supercargoID">
@@ -305,10 +305,14 @@ export default {
         handSelectTruck(data) {
             this.truckDialog = false
             this.selectedTruck = data ? data : {}
+            if (this.selectedTruck.primaryDriver) {
+                this.selectedTruck.primaryDriver.type = 'primary'
+            }
             this.createPersons()
         },
         handSelectPerson(data, type) {
             this.personDialog = false
+            data.type = type
             if (type == 'primary') {
                 this.selectedTruck.primaryDriver = data
             } else {

@@ -521,7 +521,7 @@
 			:totalVolume="totalVolume" 
 			:totalDistance="totalDistance" 
 			:transLines="transLines" 
-			:dispatchTaskCargoList="selectedListNoRepeat" 
+			:dispatchTaskCargoList="selectedList" 
 			:isVisible="dispatchDialog" 
 			@cancel="handClosePublish">
 		</publish-dispatch>
@@ -531,7 +531,7 @@
 			:totalVolume="totalVolume" 
 			:totalDistance="totalDistance" 
 			:transLines="transLines" 
-			:dispatchTaskCargoList="selectedListNoRepeat" 
+			:dispatchTaskCargoList="selectedList" 
 			:isVisible="grabDialog" 
 			@cancel="handCloseGrab">
 		</grab-order>
