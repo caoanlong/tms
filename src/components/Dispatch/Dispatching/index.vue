@@ -721,7 +721,8 @@ export default {
 		getDistance() {
 			const list = this.transLines.map(item => item.longitude + ',' + item.latitude)
 			const origins = list.join('|')
-			const destination = list[list.length-1]
+			// const destination = list[list.length-1]
+			const destination = list[0]
 			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${MAPKEY}`}).then(res => {
 				const results = res.data.results
 				const arrays = [...this.transLines]

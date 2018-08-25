@@ -68,7 +68,7 @@ export default {
                 const position = positions[i]
                 const item = new AMap.Marker({
                     position,
-                    icon: new AMap.Icon({         
+                    icon: new AMap.Icon({
                         size: new AMap.Size(50, 50),  //图标大小
                         image: "./static/imgs/photo-marker.png",
                         imageSize: new AMap.Size(50, 50)
