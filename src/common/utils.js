@@ -229,3 +229,12 @@ export function formatDuring(data) {
 	let seconds = (data % (1000 * 60)) / 1000
 	return (days?(days + " 天 "):'') + ( hours?(hours + " 小时 "):'' ) + (minutes?(minutes + " 分钟 "):'' )+ (seconds?(seconds + " 秒 "):'')
 }
+
+// 数组去重
+export function arrayUnique(arr, attr) {
+	const hash = {}
+	return arr.reduce((item, next) => {
+		hash[next[attr]] ? '' : hash[next[attr]] = true && item.push(next)
+		return item
+	}, [])
+}

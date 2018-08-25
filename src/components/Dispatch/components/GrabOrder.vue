@@ -79,6 +79,7 @@
 import { Message } from 'element-ui'
 import { checkFloat2 } from '../../../common/valid'
 import Dispatchbill from '../../../api/Dispatchbill'
+import { arrayUnique } from '../../../common/utils'
 export default {
     props: {
         totalNum: {
@@ -135,9 +136,10 @@ export default {
                         cargoNum: item.cargoNumNew
                     }
                 })
-                const dispatchTaskList  = this.dispatchTaskCargoList.map(item => {
+                const tasks = this.dispatchTaskCargoList.map(item => {
                     return { carrierOrderID: item.carrierOrderID }
                 })
+                const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
                 Dispatchbill.add({
                     dispatchTaskCargoList,
                     dispatchTaskList,

@@ -198,6 +198,7 @@
 		</el-dialog>
 		<trail-map 
 			v-if="trailDialog" 
+			:dispatchOrderID="currentDispatchOrderID" 
 			@cancel="handCloseTrail">
 		</trail-map>
 		<UploadPhoto 
@@ -240,7 +241,8 @@ export default {
 			currentShipperArea: '',
 			currentConsigneeArea: '',
 			isPhotoVisible: false,
-			scrambleList:[]
+			scrambleList:[],
+			currentDispatchOrderID: ''
 		}
 	},
 	directives: {
@@ -368,7 +370,8 @@ export default {
 		handCloseTrail() {
 			this.trailDialog = false
 		},
-		trail() {
+		trail(dispatchOrderID) {
+			this.currentDispatchOrderID = dispatchOrderID
 			this.trailDialog = true
 		},
 		confirmScramble(dispatchOfferID){

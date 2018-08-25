@@ -198,6 +198,13 @@ class Dispatchbill extends Base {
 			data
 		})
 	}
+	// 车辆轨迹
+	track(data) {
+		return this.request({
+            url: this.baseUrl + '/track',
+            data
+        })
+	}
 }
 
 export default new Dispatchbill('/biz/dispatchOrder', request)

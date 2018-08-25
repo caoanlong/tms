@@ -548,6 +548,7 @@ import { baseMixin } from '../../../common/mixin'
 import { MAPKEY, PAGEINDEX, PAGESIZE } from '../../../common/const'
 import Carrierbill from '../../../api/Carrierbill'
 import { checkFloat2, checkInt } from '../../../common/valid'
+import { arrayUnique } from '../../../common/utils'
 export default {
 	mixins: [baseMixin], 
 	data(){
@@ -642,7 +643,7 @@ export default {
 			} else {
 				this.selectedList.push(item)
 			}
-			this.selectedListNoRepeat = this.arrayUnique(this.selectedList, 'carrierOrderID')
+			this.selectedListNoRepeat = arrayUnique(this.selectedList, 'carrierOrderID')
 			this.transLineCreate()
 		},
 		/**
@@ -651,7 +652,7 @@ export default {
 		deleteCarrierOrder(item) {
 			const index = this.selectedList.map(i => i.carrierCargoID).indexOf(item.carrierCargoID)
 			this.selectedList.splice(index, 1)
-			this.selectedListNoRepeat = this.arrayUnique(this.selectedList, 'carrierOrderID')
+			this.selectedListNoRepeat = arrayUnique(this.selectedList, 'carrierOrderID')
 			this.transLineCreate()
 		},
 		/**
@@ -761,7 +762,7 @@ export default {
 			const dispatchOrderID = this.$route.query.dispatchOrderID
 			Carrierbill.findDispatchedList({ dispatchOrderID }).then(res => {
 				this.selectedList = res
-				this.selectedListNoRepeat = this.arrayUnique(this.selectedList, 'carrierOrderID')
+				this.selectedListNoRepeat = arrayUnique(this.selectedList, 'carrierOrderID')
 				this.transLineCreate()
 			})
 		},
@@ -797,13 +798,6 @@ export default {
 		handCloseGrab(bool) {
 			this.grabDialog = false
 			if (bool) this.$router.push({name: 'dispatched'})
-		},
-		arrayUnique(arr, attr) {
-			const hash = {}
-			return arr.reduce((item, next) => {
-				hash[next[attr]] ? '' : hash[next[attr]] = true && item.push(next)
-				return item
-			}, [])
 		}
 	}
 }
