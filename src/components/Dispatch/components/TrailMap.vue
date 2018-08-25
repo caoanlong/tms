@@ -12,7 +12,11 @@
 </template>
 
 <script>
+import Dispatchbill from '../../../api/Dispatchbill'
 export default {
+    props: {
+        dispatchOrderID: String
+    },
     data() {
         return {
             map: null,
@@ -37,6 +41,12 @@ export default {
         document.body.appendChild(odiv)
     },
     mounted() {
+        Dispatchbill.track({
+            dispatchOrderID: this.dispatchOrderID,
+            type: 'GPS'
+        }).then(res => {
+
+        })
         const path = [
             {lnglat: [116.303843, 39.983412]},
             {lnglat: [114.365526,30.735587]},

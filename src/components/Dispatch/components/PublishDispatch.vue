@@ -224,6 +224,7 @@ import { Message } from 'element-ui'
 import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
 import Dispatchbill from '../../../api/Dispatchbill'
+import { arrayUnique } from '../../../common/utils'
 export default {
     components: { SelectTruck, SelectPerson },
     props: {
@@ -374,9 +375,10 @@ export default {
                         cargoNum: item.cargoNumNew
                     }
                 })
-                const dispatchTaskList  = this.dispatchTaskCargoList.map(item => {
+                const tasks = this.dispatchTaskCargoList.map(item => {
                     return { carrierOrderID: item.carrierOrderID }
                 })
+                const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
                 const bizDispatchFeeList = this.bizDispatchFeeList.map(item => {
                     return {
                         item: item.item,
