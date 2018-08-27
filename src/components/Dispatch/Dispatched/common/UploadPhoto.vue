@@ -80,6 +80,7 @@ export default {
         dispatchTaskID: String,
         shipperArea: String,
         consigneeArea: String,
+        
     },
     data() {
         return {
@@ -100,6 +101,7 @@ export default {
     watch: {
         isVisible(newVal) {
             let dispatchTaskID = this.dispatchTaskID
+            console.log(this.dispatchTaskID)
             newVal && this.getImgs(dispatchTaskID)
         }
     },
