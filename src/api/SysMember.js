@@ -30,4 +30,4 @@ class SysMember extends Base {
     }
 }
 
-export default new SysMember('/sys/role/member', request)
+export default new SysMember('/sys/role/member', request())

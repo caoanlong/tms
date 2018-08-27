@@ -32,4 +32,4 @@ class DriverInvitation extends Base {
     }
 }
 
-export default new DriverInvitation('/driver/invitation', request)
+export default new DriverInvitation('/driver/invitation', request())

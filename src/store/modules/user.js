@@ -1,4 +1,4 @@
-import request from '../../common/request'
+import Member from '../../api/Member'
 
 const user = {
 	state: {
@@ -53,9 +53,7 @@ const user = {
 		},
 		getUserInfo({ commit }) {
 			return new Promise((resolve, reject) => {
-				request({
-					url: '/mem/info'
-				}).then(res => {
+				Member.info().then(res => {
 					commit('SET_USERINFO', res.data.data)
 					commit('SET_NAME', res.data.data.userName)
 					commit('SET_MOBILE', res.data.data.mobile)

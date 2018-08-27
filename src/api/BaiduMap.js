@@ -21,4 +21,4 @@ class BaiduMap {
     }
 }
 
-export default new BaiduMap('/baiduMap', request)
+export default new BaiduMap('/baiduMap', request())

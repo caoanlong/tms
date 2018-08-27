@@ -34,4 +34,4 @@ class Task extends Base {
         })
     }
 }
-export default new Task('/bizDispatchTask', request)
+export default new Task('/bizDispatchTask', request())

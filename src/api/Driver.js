@@ -23,4 +23,4 @@ class Driver extends Base {
     }
 }
 
-export default new Driver('/driver', request)
+export default new Driver('/driver', request())

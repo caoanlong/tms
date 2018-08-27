@@ -11,4 +11,4 @@ class CargoGeneralName extends Base {
     }
 }
 
-export default new CargoGeneralName('/cargoGeneralName', request)
+export default new CargoGeneralName('/cargoGeneralName', request())

@@ -22,4 +22,4 @@ class Staff extends Base {
 	}
 }
 
-export default new Staff('/staff', request)
+export default new Staff('/staff', request())

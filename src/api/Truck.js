@@ -109,4 +109,4 @@ class Truck extends Base {
     }
 }
 
-export default new Truck('/truck', request)
+export default new Truck('/truck', request())

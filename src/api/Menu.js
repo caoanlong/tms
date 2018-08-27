@@ -15,4 +15,4 @@ class Menu extends Base {
     }
 }
 
-export default new Menu('/sys/menu', request)
+export default new Menu('/sys/menu', request())

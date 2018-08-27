@@ -16,4 +16,4 @@ class ComStaff extends Base {
     }
 }
 
-export default new ComStaff('/com_staff', request)
+export default new ComStaff('/com_staff', request())

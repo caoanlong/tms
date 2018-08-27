@@ -14,4 +14,4 @@ class CompanyInfo extends Base {
     }
 }
 
-export default new CompanyInfo('/companyInfo', request)
+export default new CompanyInfo('/companyInfo', request())

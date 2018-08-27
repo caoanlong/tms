@@ -21,4 +21,4 @@ class NoTrucksource extends Base {
     }
 }
 
-export default new NoTrucksource('/notruckTrucksource', request)
+export default new NoTrucksource('/notruckTrucksource', request())

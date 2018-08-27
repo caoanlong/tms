@@ -13,4 +13,4 @@ class Common extends Base {
     }
 }
 
-export default new Common('/common', request)
+export default new Common('/common', request())

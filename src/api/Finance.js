@@ -47,4 +47,4 @@ class Finance extends Base {
     }
 }
 
-export default new Finance('/finance', request)
+export default new Finance('/finance', request())

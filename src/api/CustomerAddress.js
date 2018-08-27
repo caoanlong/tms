@@ -11,4 +11,4 @@ class Customer extends Base {
     }
 }
 
-export default new Customer('/customer/address', request)
+export default new Customer('/customer/address', request())

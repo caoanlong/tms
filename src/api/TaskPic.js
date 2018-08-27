@@ -20,4 +20,4 @@ class TaskPic extends Base {
     }
 }
 
-export default new TaskPic('/dispatchTaskPic', request)
+export default new TaskPic('/dispatchTaskPic', request())

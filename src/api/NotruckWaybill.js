@@ -21,4 +21,4 @@ class NotruckWaybill extends Base {
     }
 }
 
-export default new NotruckWaybill('/notruckWaybill', request)
+export default new NotruckWaybill('/notruckWaybill', request())

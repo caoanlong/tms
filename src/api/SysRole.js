@@ -51,4 +51,4 @@ class SysRole extends Base {
     }
 }
 
-export default new SysRole('/sys/role', request)
+export default new SysRole('/sys/role', request())

@@ -17,4 +17,4 @@ class CrossProxy {
     }
 }
 
-export default new CrossProxy('/cross/proxy', request)
+export default new CrossProxy('/cross/proxy', request())

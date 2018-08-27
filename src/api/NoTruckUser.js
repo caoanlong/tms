@@ -31,4 +31,4 @@ class NoTruckUser extends Base {
     }
 }
 
-export default new NoTruckUser('/noTruckUser', request)
+export default new NoTruckUser('/noTruckUser', request())

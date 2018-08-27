@@ -33,6 +33,13 @@ class Member extends Base {
             data
         })
     }
+    info(data) {
+        return this.request({
+            url: this.baseUrl + '/info',
+            method: 'get',
+            data
+        })
+    }
     modify(data) {
         return this.request({
             url: this.baseUrl + '/info/modify',
@@ -49,4 +56,4 @@ class Member extends Base {
     }
 }
 
-export default new Member('/mem', request)
+export default new Member('/mem', request())

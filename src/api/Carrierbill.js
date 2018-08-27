@@ -79,4 +79,4 @@ class Carrierbill extends Base {
     }
 }
 
-export default new Carrierbill('/biz/carrierOrder', request)
+export default new Carrierbill('/biz/carrierOrder', request())

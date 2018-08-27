@@ -41,4 +41,4 @@ class TransportRecord extends Base {
         })
     }
 }
-export default new TransportRecord('/transportRecord', request)
+export default new TransportRecord('/transportRecord', request())
