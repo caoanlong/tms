@@ -199,10 +199,10 @@ class Dispatchbill extends Base {
 		})
 	}
 	// 车辆轨迹
-	track(data) {
+	track(params) {
 		return this.request({
             url: this.baseUrl + '/track',
-            data
+            params
         })
 	}
 }

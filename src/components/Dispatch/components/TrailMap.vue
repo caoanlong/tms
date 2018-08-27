@@ -45,7 +45,7 @@ export default {
             dispatchOrderID: this.dispatchOrderID,
             type: 'GPS'
         }).then(res => {
-
+            console.log(res.data.data)
         })
         const path = [
             {lnglat: [116.303843, 39.983412]},
