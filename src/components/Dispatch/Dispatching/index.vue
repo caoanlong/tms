@@ -274,8 +274,8 @@
 									<p><span class="to">到</span>{{item.consigneeArea}}</p>
 								</td>
 								<td class="address">
-									<p>{{item.shipperDetailAddress}}</p>
-									<p>{{item.consigneeDetailAddress}}</p>
+									<p>{{item.shipperLocationAddress + '，' + item.shipperDetailAddress}}</p>
+									<p>{{item.consigneeLocationAddress + '，' + item.consigneeDetailAddress}}</p>
 								</td>
 								<td align="center">
 									<p>{{item.shipperDate | getdatefromtimestamp('min')}}</p>
@@ -346,8 +346,8 @@
 										<p><span class="to">到</span>{{item.consigneeArea}}</p>
 									</td>
 									<td class="address">
-										<p>{{item.shipperDetailAddress}}</p>
-										<p>{{item.consigneeDetailAddress}}</p>
+										<p>{{item.shipperLocationAddress + '，' + item.shipperDetailAddress}}</p>
+										<p>{{item.consigneeLocationAddress + '，' + item.consigneeDetailAddress}}</p>
 									</td>
 									<td align="center">{{item.cargoName}}</td>
 									<td align="center">
