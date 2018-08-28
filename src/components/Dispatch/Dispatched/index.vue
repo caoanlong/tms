@@ -113,7 +113,7 @@
 								</div>
 							</td>
 						</tr>
-						<tr v-for="taskItem in item.dispatchTaskCargoVOList" :key="taskItem.carrierOrderID">
+						<tr v-for="taskItem in item.dispatchTaskCargoVOList" :key="taskItem.dispatchTaskID">
 							<td>{{taskItem.carrierOrderNo}}</td>
 							<td><el-tag size="mini" v-if="taskItem.status == 'Committed'">待装车</el-tag>
 								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
@@ -130,7 +130,7 @@
 							<td>{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
 							<td>{{taskItem.consigneeArea}}</td>
 							<td>{{taskItem.consigneeDate | getdatefromtimestamp(true)}}</td>
-							<td><el-button type="primary" size="mini" plain @click="viewPhotos(taskItem.carrierOrderID,taskItem.shipperArea,taskItem.consigneeArea)">查看照片</el-button></td>
+							<td><el-button type="primary" size="mini" plain @click="viewPhotos(taskItem.dispatchTaskID,taskItem.shipperArea,taskItem.consigneeArea)">查看照片</el-button></td>
 						</tr>
 					</template>
 				</table>
@@ -314,8 +314,9 @@ export default {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
 		},
 		// 查看照片弹窗回调
-		viewPhotos(carrierOrderID,shipperArea,consigneeArea) {
-			this.currentDispatchTaskID = carrierOrderID
+		viewPhotos(dispatchTaskID,shipperArea,consigneeArea) {
+			console.log(dispatchTaskID,shipperArea,consigneeArea)
+			this.currentDispatchTaskID = dispatchTaskID
 			this.currentShipperArea = shipperArea
 			this.currentConsigneeArea = consigneeArea
 			this.isPhotoVisible = true
