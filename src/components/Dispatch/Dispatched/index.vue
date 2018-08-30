@@ -115,7 +115,7 @@
 						</tr>
 						<tr v-for="taskItem in item.dispatchTaskCargoVOList" :key="taskItem.dispatchTaskID">
 							<td>{{taskItem.carrierOrderNo}}</td>
-							<td><el-tag size="mini" v-if="taskItem.status == 'Committed'">待装车</el-tag>
+							<td><el-tag size="mini" type="warning" v-if="taskItem.status == 'Committed'">待装车</el-tag>
 								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
 								<el-tag size="mini" type="success" v-else-if="taskItem.status == 'Signed'">已签收</el-tag>
 								<el-tag size="mini" type="info" v-else>已作废</el-tag></td>

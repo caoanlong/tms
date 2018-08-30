@@ -1,6 +1,12 @@
 <template>
     <div class="map-container">
         <div class="title">轨迹</div>
+        <el-row type="flex" justify="center">
+            <el-radio-group v-model="tabPosition" style="margin-bottom: 10px;" @change="handTabChange">
+                <el-radio-button label="GPS"></el-radio-button>
+                <el-radio-button label="APP"></el-radio-button>
+            </el-radio-group>
+        </el-row>
         <div class="wrapper">
             <div class="tips">累计时长：{{time}}小时&nbsp;&nbsp;&nbsp;累计里程：{{distance}}km&nbsp;&nbsp;&nbsp;平均时速：{{speed}}km</div>
             <div id="amapWrapper"></div>
@@ -19,6 +25,7 @@ export default {
     },
     data() {
         return {
+            tabPosition: 'GPS',
             map: null,
             driving: null,
             infoWindow: null,
@@ -43,17 +50,7 @@ export default {
         document.body.appendChild(odiv)
     },
     mounted() {
-        Dispatchbill.track({
-            dispatchOrderID: this.dispatchOrderID,
-            type: 'APP'
-        }).then(res => {
-            this.locationList = res.locationList
-            this.dispatchTaskPicList = res.dispatchTaskPicList
-            const path = this.locationList.map(item => {
-                return { lnglat: item.loc.coordinates }
-            })
-            this.createMap(path, this.dispatchTaskPicList)
-        })
+        this.getTrack(this.tabPosition)
     },
     destroyed() {
         this.map.destroy()
@@ -61,6 +58,24 @@ export default {
         document.body.removeChild(document.getElementById('mapMask'))
     },
     methods: {
+        handTabChange(type) {
+            this.map.destroy()
+            this.driving = null
+            this.getTrack(type)
+        },
+        getTrack(type) {
+            Dispatchbill.track({
+                dispatchOrderID: this.dispatchOrderID,
+                type
+            }).then(res => {
+                this.locationList = res.locationList
+                this.dispatchTaskPicList = res.dispatchTaskPicList
+                const path = this.locationList.map(item => {
+                    return { lnglat: item.loc.coordinates }
+                })
+                this.createMap(path, this.dispatchTaskPicList)
+            })
+        },
         createMap(path, imgPath) {
             this.map = new AMap.Map('amapWrapper')
             this.driving = new AMap.TruckDriving({
