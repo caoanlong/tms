@@ -4,7 +4,7 @@ import { href, msgBox } from './request'
 
 export const baseURL = process.env.BASE_API
 
-export default function request () {
+export default function request (data) {
 	// create an axios instance
 	const service = axios.create({
 		baseURL: process.env.ENV_CONFIG == 'dev' ? (sessionStorage.getItem('baseURL') || baseURL) : baseURL, // api的base_url
@@ -58,5 +58,5 @@ export default function request () {
 		return Promise.reject('error')
 	})
 
-	return service
+	return data ? service(data) : service
 }

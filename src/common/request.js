@@ -41,7 +41,7 @@ export const msgBox = () => {
 	<div style="width:100%;height:100%;position:absolute;left:0;top:0;background-color:rgba(0,0,0,.3)"></div>`
 	return msgEl
 }
-export default function request () {
+export default function request (data) {
 	// create an axios instance
 	const service = axios.create({
 		baseURL: process.env.ENV_CONFIG == 'dev' ? (sessionStorage.getItem('baseURL') || baseURL) : baseURL, // api的base_url
@@ -97,5 +97,5 @@ export default function request () {
 		return Promise.reject('error')
 	})
 
-	return service
+	return data ? service(data) : service
 }

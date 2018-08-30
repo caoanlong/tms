@@ -363,7 +363,7 @@ export default {
 					item.validate(valid => {
 						if (!valid) flag = false
 					})
-				}
+                }
 				flag ? resolve() : reject()
 			}).then(() => {
                 const dispatchTaskCargoList = this.dispatchTaskCargoList.map(item => {

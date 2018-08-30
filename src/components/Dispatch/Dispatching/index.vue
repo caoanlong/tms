@@ -714,6 +714,7 @@ export default {
 					return a.date - b.date
 				}
 			})
+			this.transLines.map((item, i) => Object.assign(item, {sequence: i + 1}))
 			this.getDistance()
 		},
 		/**
