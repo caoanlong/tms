@@ -407,16 +407,6 @@ export default {
 			axios({url: `https://restapi.amap.com/v3/distance?origins=${loadLocation}&destination=${location}&key=${MAPKEY}`}).then(res => {
 				const results = res.data.results
 				console.log(results[0].distance)
-				// const arrays = [...this.transLines]
-				// this.totalDistance = 0
-				// arrays.forEach((item,i) => {
-				// 	item.sequence = i+1
-				// 	item.nodeDistance = Number((Number(results[i].distance)/1000).toFixed(2))
-				// 	this.totalDistance += item.nodeDistance
-				// })
-				// this.totalDistance = Number(this.totalDistance.toFixed(2))
-				// this.transLines = arrays
-
 				this.scrambleList.grabOfferOrderDetailVOList= this.scrambleList.grabOfferOrderDetailVOList.map(item =>{
 					return Object.assign(item, {
 						"distance": Number((Number(results[0].distance)/1000).toFixed(2))

@@ -16,15 +16,15 @@
 					</p>
 					<p>行驶数据</p>
 					<div class="lineInfo">
-						<span class="fl c1"><i class="el-icon-location"></i> 昆明五华区彩云北路56号</span>
-						<span class="fr c2">2018-07-07 07:00</span>
+						<span class="fl c1" v-if="dispatchOrderlocationList.length>0"><i class="el-icon-location"></i> {{dispatchOrderlocationList[dispatchOrderlocationList.length -1].posAddress}}</span>
+						<span class="fr c2" v-if="dispatchOrderlocationList.length>0">{{dispatchOrderlocationList[dispatchOrderlocationList.length -1].createTime | getdatefromtimestamp }}</span>
 					</div>
 					<table class="wf-table">
 						<tr>
 							<td align="center" width="100">预计</td>
-							<td>总里程 {{dispatchOrderDetail.distance}}公里 用时 {{dispatchOrderDetail.estimatedTime | formatDuring}}</td>
+							<td>总里程 {{dispatchOrderDetail.distance}}公里 用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</td>
 							<td align="center" width="100">实际</td>
-							<td>总里程 110公里 <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring}}</span></td>
+							<td>总里程 {{totalDistance?totalDistance:'0'}}公里 <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring('min')}}</span></td>
 						</tr>
 					</table>
 					<p>总货量：
@@ -151,10 +151,9 @@
 				<el-col :span="7">
 					<p>运输车辆人员</p>
 					<div class="truckInfo c2">
-						<p><label>车牌号</label>{{dispatchOrderDetail.plateNo}} {{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{dispatchOrderDetail.truckType}}</p>
-
+						<p v-if="dispatchOrderDetail.plateNo"><label>车牌号</label>{{dispatchOrderDetail.plateNo}} {{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{dispatchOrderDetail.truckType}}</p>
 						<p v-if="dispatchOrderDetail.trailerPlateNo"><label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} {{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{dispatchOrderDetail.trailerTruckType}}</p>
-						<p><label>司机</label>{{dispatchOrderDetail.driverName}} {{dispatchOrderDetail.driverMobile}}</p>
+						<p v-if="dispatchOrderDetail.driverName"><label>司机</label>{{dispatchOrderDetail.driverName}} {{dispatchOrderDetail.driverMobile}}</p>
 						<p v-if="dispatchOrderDetail.superCargoName"><label>押运员</label>{{dispatchOrderDetail.superCargoName}} {{dispatchOrderDetail.superCargoMobile}}</p>
 					</div>
 					<p class="dispatchLogTit">调度日志</p>
@@ -187,6 +186,8 @@
 import { Message } from 'element-ui'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TaskItem from './common/TaskItem'
+import axios from 'axios'
+import { MAPKEY } from '../../../common/const'
 export default {
 	data() {
 		return {
@@ -197,7 +198,9 @@ export default {
 			dispatchOrderFees:{},
 			dispatchTask:{},
 			dispatchLogs:{},
-			persons:[]
+			persons:[],
+			dispatchOrderlocationList:[],
+			totalDistance:''
 		}
 	},
 	created() {
@@ -205,6 +208,7 @@ export default {
 		this.getFees()
 		this.getTaskList()
 		this.getLogs()
+		
 	},
 	methods: {
 		getDetail() {
@@ -212,7 +216,11 @@ export default {
 			Dispatchbill.findById({ dispatchOrderID }).then(res => {
 				this.dispatchOrder = res
 				this.dispatchOrderDetail = res.detail
+				this.dispatchOrderlocationList = res.locationList
+				console.log(this.dispatchOrderlocationList)
+				
 				this.createPersons()
+				this.getDistance()
 			})
 		},
 		getFees() {
@@ -298,7 +306,29 @@ export default {
 					this.getFees()
 				})
 			}).catch(err => {})
-		}
+		},
+		/**
+		 * 调用高德地图接口获取距离
+		 */
+		getDistance() {
+			console.log(1)
+			const list = this.dispatchOrderlocationList.map(item => item.loc.longitude + ',' + item.loc.latitude)
+			const origins = list.join('|')
+			// const destination = list[list.length-1]
+			const destination = list[0]
+			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${MAPKEY}`}).then(res => {
+				const results = res.data.results
+				const arrays = [...this.dispatchOrderlocationList]
+				this.totalDistance = 0
+				arrays.forEach((item,i) => {
+					item.sequence = i+1
+					item.nodeDistance = Number((Number(results[i].distance)/1000).toFixed(2))
+					this.totalDistance += item.nodeDistance
+				})
+				this.totalDistance = Number(this.totalDistance.toFixed(2))
+				this.dispatchOrderlocationList = arrays
+			})
+		},
 	},
 	components:{
 		TaskItem

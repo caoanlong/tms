@@ -15,7 +15,7 @@
 				</div>
 				<p><span class="sequenceTag">{{taskItem.shipperSequence}}</span>{{taskItem.shipperArea}} {{taskItem.shipperLocationAddress}} {{taskItem.shipperDetailAddress}}</p>
 				<p class="c2">{{taskItem.shipperDate | getdatefromtimestamp('min')}}（预计装车）</p>
-				<p class="c6" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp()}}（实际装车）<el-tag size="mini" type="danger" v-if="isLoadedOverTime=='Y'">延迟装车</el-tag></p>
+				<p class="c6" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp('min')}}（实际装车）<el-tag size="mini" type="danger" v-if="taskItem.isLoadedOverTime=='Y'">延迟装车</el-tag></p>
 			</div>
 			<div class="arrow"><svg-icon icon-class="arrowBig"></svg-icon></div>
 			<div class="to">
@@ -29,14 +29,14 @@
 				</div>
 				<p><span class="sequenceTag">{{taskItem.consigneeSequence}}</span>{{taskItem.consigneeArea}} {{taskItem.consigneeLocationAddress}} {{taskItem.consigneeDetailAddress}}</p>
 				<p class="c2">{{taskItem.consigneeDate | getdatefromtimestamp('min')}}（预计到货）</p>
-				<p class="c6" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp()}}（实际到货）<el-tag size="mini" type="danger" v-if="isArrivedOverTime=='Y'">延迟到货</el-tag></p>
+				<p class="c6" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp('min')}}（实际到货）<el-tag size="mini" type="danger" v-if="isArrivedOverTime=='Y'">延迟到货</el-tag></p>
 			</div>
 		</div>
 		<div class="picTit" v-if="taskItem.dispatchTaskPicList.length>0">任务照片（{{taskItem.dispatchTaskPicList.length}}）</div>
 		<div class="picCon" v-if="taskItem.dispatchTaskPicList.length>0">
 			<ImageUpload :isShowType="true" :objs="taskItem.dispatchTaskPicList" :files="taskItem.dispatchTaskPicList.map(item => item.minURL)" :isPreview="true"/>
 		</div>
-		<div class="cargoTit">承运货物<span class="fr c1 total" @click="unfold">重量{{taskItem.loadWeightSum}}吨 体积{{taskItem.loadVolumeSum}}方 数量{{taskItem.loadWeightSum}} <svg-icon icon-class="arrow-down" :class="isFold?'':'unfold'"></svg-icon></span></div>
+		<div class="cargoTit">承运货物<span class="fr c1 total" @click="unfold">重量{{taskItem.loadWeightSum}}吨 体积{{taskItem.loadVolumeSum}}方 数量{{taskItem.loadNumSum}} <svg-icon icon-class="arrow-down" :class="isFold?'':'unfold'"></svg-icon></span></div>
 		<div class="cargoList" v-if="isFold ">
 			<p v-for="cargoItem in taskItem.bizDispatchTaskCargoList" :key="cargoItem.dispatchTaskID"><span class="fl">{{cargoItem.cargoName}}</span><span class="fr"> {{cargoItem.cargoWeight}}吨 / {{cargoItem.cargoVolume}}方 / {{cargoItem.cargoNum}}{{cargoItem.cargoUnitName}} </span></p>
 		</div>
