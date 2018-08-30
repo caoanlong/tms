@@ -475,7 +475,7 @@
 									<td align="center">{{index+1}}</td>
 									<td align="center">{{item.carrierOrderNo}}</td>
 									<td align="center" :class="item.type">{{item.type == 'Load' ? '装车' : '卸货'}}</td>
-									<td align="center">{{item.address}}</td>
+									<td align="center">{{item.areaName + item.posAddress + item.detailAddress}}</td>
 									<td align="center">{{item.nodeDistance}}公里</td>
 									<td align="center">{{item.requireTime | getdatefromtimestamp('min')}}</td>
 								</tr>
@@ -690,7 +690,9 @@ export default {
 						type: 'Load',
 						carrierOrderID: i.carrierOrderID,
 						carrierOrderNo: i.carrierOrderNo,
-						address: i.shipperArea,
+						detailAddress: i.shipperDetailAddress,
+						posAddress: i.shipperLocationAddress,
+						areaName: i.shipperArea,
 						areaID: i.shipperAreaID,
 						requireTime: i.shipperDate,
 						latitude: i.shipperLocationLat,
@@ -699,7 +701,9 @@ export default {
 						type: 'Unload',
 						carrierOrderID: i.carrierOrderID,
 						carrierOrderNo: i.carrierOrderNo,
-						address: i.consigneeArea,
+						detailAddress: i.consigneeDetailAddress,
+						posAddress: i.consigneeLocationAddress,
+						areaName: i.consigneeArea,
 						areaID: i.consigneeAreaID,
 						requireTime: i.consigneeDate,
 						latitude: i.consigneeLocationLat,
