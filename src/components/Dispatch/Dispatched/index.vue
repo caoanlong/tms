@@ -180,7 +180,7 @@
 									<p>{{item.mobile}}</p>
 								</td>
 								<td class="c posr"><span class="tags">定</span>{{item.amount}}元/车 <img class="success" src="../../../assets/imgs/successIcon.png" height="48" v-if="item.status == 'Agreed'" /></td></td>
-								<td><span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID)" v-if="item.status != 'Agreed'">选TA承运</span></td>
+								<td><span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID)" v-if="item.status == 'Committed'">选TA承运</span></td>
 							</tr>
 							<tr>
 								<td colspan="4" class="c2">
