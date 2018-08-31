@@ -86,7 +86,7 @@ let routerMap = [
 						path: '/viewdispatchbill',
 						name: 'viewdispatchbill',
 						meta: { title: '调度单详情' },
-						component: () => import('../components/Dispatch/dispatched/View')
+						component: () => import('../components/Dispatch/dispatched/View.vue')
 					}
 				]
 			},
