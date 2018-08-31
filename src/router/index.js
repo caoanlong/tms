@@ -74,7 +74,7 @@ let routerMap = [
 						path: '/dispatched',
 						name: 'dispatched',
 						meta: { title: '已调度' },
-						component: () => import('../components/Dispatch/dispatched'),
+						component: () => import('../components/Dispatch/Dispatched'),
 					},
 					{
 						path: '/redispatching',
@@ -86,7 +86,7 @@ let routerMap = [
 						path: '/viewdispatchbill',
 						name: 'viewdispatchbill',
 						meta: { title: '调度单详情' },
-						component: () => import('../components/Dispatch/dispatched/View')
+						component: () => import('../components/Dispatch/Dispatched/View')
 					}
 				]
 			},
