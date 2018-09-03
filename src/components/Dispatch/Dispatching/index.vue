@@ -566,7 +566,7 @@ export default {
 				consigneeDateBegin: '',
 				consigneeDateEnd: '',
 				orderBy: 'CarrierOrderNo',
-				sortType: 'asc'
+				sortType: 'desc'
 			},
 			selectedShipperArea: [],
 			selectedConsigneeArea: [],
@@ -618,7 +618,7 @@ export default {
 			this.find.consigneeDateBegin = ''
 			this.find.consigneeDateEnd = ''
 			this.find.orderBy = 'CarrierOrderNo'
-			this.find.sortType = 'asc'
+			this.find.sortType = 'desc'
 			this.selectedShipperArea = []
 			this.selectedConsigneeArea = []
 			this.pageIndex = PAGEINDEX
