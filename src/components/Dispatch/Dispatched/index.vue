@@ -212,6 +212,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import { Message } from 'element-ui'
 import axios from 'axios'
 import { MAPKEY,PAGEINDEX, PAGESIZE, TOTAL } from '../../../common/const'
 import { baseMixin } from '../../../common/mixin'
@@ -380,7 +381,7 @@ export default {
 				dispatchOfferID
 			}).then(res => {
 				Message.success('已成功选择承运人!')
-				this.scrambleDialog = false
+				this.scramble()
 				this.getList()
 			})
 		},
