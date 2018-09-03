@@ -1,11 +1,12 @@
 <template>
 	<div class="select-search" @mouseleave="hide">
-		<p class="placeholder" v-if="!companyData || (companyData && companyData.customerAddressNum == 0)">{{placeholder}}</p>
-		<div class="selected-address" @click.stop="expandPop" v-if="(companyData && companyData.customerAddressNum > 0) || selectedAddress.contactName ">
-			<p class="placeholder" v-if="!selectedAddress.contactName">{{placeholder}}</p>
-			<p><span class="name">{{selectedAddress.contactName}}</span><span class="mobile">{{selectedAddress.contactPhone}}</span></p>
-			<p class="area">{{selectedAddress.contactArea}}</p>
-			<p class="address">{{selectedAddress.contactArea}}{{selectedAddress.detailAddress}}</p>
+		<div class="selected-address" @click.stop="expandPop">
+			<div v-if="selectedAddress.contactName">
+				<p><span class="name">{{selectedAddress.contactName}}</span><span class="mobile">{{selectedAddress.contactPhone}}</span></p>
+				<p class="area">{{selectedAddress.contactArea}}</p>
+				<p class="address">{{selectedAddress.contactArea}}{{selectedAddress.detailAddress}}</p>
+			</div>
+			<p class="placeholder" v-else>{{placeholder}}</p>
 		</div>
 		<div class="select-body" v-if="isExpand"  @click.stop="() => false">
 			<el-input 
@@ -17,7 +18,7 @@
 				@input="suggestions">
 			</el-input>
 			<transition name="el-fade-in-linear" mode="out-in">
-				<div class="typeahead-filter" v-show="optList.length">
+				<div class="typeahead-filter" v-if="optList.length">
 					<transition-group tag="ul" name="el-fade-in-linear">
 						<li 
 							v-for="(item, index) in optList " :key="index" 
@@ -28,8 +29,8 @@
 							<p class="address">{{item.contactArea}}{{item.detailAddress}}</p>
 						</li>
 					</transition-group>
-					<p class="noFound" v-show="optList.length === 0">未能查询到,请重新输入!</p>
 				</div>
+				<p class="noFound" v-else>未能查询到,请重新输入!</p>
 			</transition>
 		</div>
 	</div>
@@ -43,8 +44,7 @@ export default {
 			type: String,
 			default: ''
 		},
-		companyData: Object,
-		addressData: Object,
+		isChangeCompany: Boolean,
 		fetchSuggestions: Function
 	},
 	data() {
@@ -56,20 +56,8 @@ export default {
 		}
 	},
 	watch: {
-		companyData: {
-			handler(val) {
-				if (val.customerAddressNum == 0) {
-					this.placeholder = `暂无地址,请添加${this.addressType}地址`
-				}
-			},
-			deep: true
-		},
-		addressData: {
-			handler(val) {
-				console.log(val)
-				this.selectedAddress = val ? val : {}
-			},
-			deep: true
+		isChangeCompany() {
+			this.selectedAddress = {}
 		}
 	},
 	created() {
@@ -77,7 +65,6 @@ export default {
 		document.body.addEventListener('click', () => {
 			this.isExpand = false
 		})
-
 	},
 	methods: {
 		suggestions(queryString) {

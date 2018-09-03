@@ -736,9 +736,9 @@ export default {
 				arrays.forEach((item,i) => {
 					item.sequence = i+1
 					item.nodeDistance = results[i].distance
-					this.totalDistance += Number(item.nodeDistance)
+					this.totalDistance += Number(item.nodeDistance)/1000
 				})
-				this.totalDistance = this.totalDistance
+				this.totalDistance = Number(this.totalDistance.toFixed(2))
 				this.transLines = arrays
 			})
 		},

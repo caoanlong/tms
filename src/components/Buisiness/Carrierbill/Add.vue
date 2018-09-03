@@ -55,8 +55,7 @@
 								<el-form-item label="发货地址">
 									<dropdown-select 
 										addressType="发货单位"
-										:addressData="selectedShipperAddress" 
-										:companyData="selectedShipper" 
+										:isChangeCompany="isChangeShipper" 
 										@select="handSelectshipperAddress" 
 										:fetch-suggestions="getShipperAddress">
 									</dropdown-select>
@@ -95,8 +94,7 @@
 								<el-form-item label="收货地址">
 									<dropdown-select 
 										addressType="收货单位"
-										:addressData="selectedConsigneeAddress" 
-										:companyData="selectedConsignee" 
+										:isChangeCompany="isChangeConsignee" 
 										@select="handSelectConsigneeAddress" 
 										:fetch-suggestions="getConsigneeAddress">
 									</dropdown-select>
@@ -254,8 +252,6 @@
 		</el-card>
 		<add-com-address 
 			:isVisible="addressDialog" 
-			:customerID="currentCustomerID" 
-			:companyName="currentCompanyName" 
 			@control="handAddress">
 		</add-com-address>
 	</div>
@@ -281,8 +277,8 @@ export default {
 	data() {
 		return {
 			addressDialog: false,
-			currentCustomerID: '',
-			currentCompanyName: '',
+			isChangeShipper: false,
+			isChangeConsignee: false,
 			placeholder1:'请选择发货地址',
 			placeholder2:'请选择收货地址',
 			units: [],
@@ -412,21 +408,12 @@ export default {
 				keyword: queryString
 			}).then(res => { cb(res.records) })
 		},
-		getShipperAddress(queryString, cb){
+		getShipperAddress(queryString, cb) {
 			Customer.addressSuggest({
 				customerID: this.carrierbillInfo.shipperID,
 				keyword: queryString
 			}).then(res => {
-				if (queryString || cb) {
-					cb(res)
-				} else {
-					if (res.length == 1) {
-						this.selectedShipperAddress = res[0]
-						this.handSelectshipperAddress(res[0])
-					} else {
-						cb && cb(res)
-					}
-				}
+				cb && cb(res)
 			})
 		},
 		getConsigneeAddress(queryString, cb){
@@ -434,16 +421,7 @@ export default {
 				customerID: this.carrierbillInfo.consigneeID,
 				keyword: queryString
 			}).then(res => {
-				if (queryString || cb) {
-					cb(res)
-				} else {
-					if (res.length == 1) {
-						this.selectedConsigneeAddress = res[0]
-						this.handSelectConsigneeAddress(res[0])
-					} else {
-						cb && cb(res)
-					}
-				}
+				cb && cb(res)
 			})
 		},
 		handSelectCargo(data) {
@@ -458,20 +436,20 @@ export default {
 			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
 		},
 		handSelectShipperCompany(data) {
+			this.isChangeShipper = !this.isChangeShipper
 			this.selectedShipper = data
 			this.carrierbillInfo.shipperCompanyName = ' '
 			this.carrierbillInfo.shipperID = data.customerID
-			if (data.customerAddressNum != 1) this.selectedShipperAddress = null
 			this.$nextTick(() => {
 				this.carrierbillInfo.shipperCompanyName = data.companyName
 				this.getShipperAddress('', false)
 			})
 		},
 		handSelectConsigneeCompany(data) {
+			this.isChangeConsignee = !this.isChangeConsignee
 			this.selectedConsignee = data
 			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID = data.customerID
-			if (data.customerAddressNum != 1) this.selectedConsigneeAddress = null
 			this.$nextTick(() => {
 				this.carrierbillInfo.consigneeCompanyName = data.companyName
 				this.getConsigneeAddress('', false)
@@ -547,13 +525,6 @@ export default {
 		 * 添加企业地址
 		 */
 		addAddress(type) {
-			if (type == 'shipper') {
-				this.currentCustomerID = this.carrierbillInfo.shipperID
-				this.currentCompanyName = this.carrierbillInfo.shipperCompanyName
-			} else if (type == 'consignee') {
-				this.currentCustomerID = this.carrierbillInfo.consigneeID
-				this.currentCompanyName = this.carrierbillInfo.consigneeCompanyName
-			}
 			this.addressDialog = true
 		},
 		handAddress() {

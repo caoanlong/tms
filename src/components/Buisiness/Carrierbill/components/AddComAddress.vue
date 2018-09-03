@@ -62,9 +62,7 @@ export default {
         isVisible: {
             type: Boolean,
             default: false
-        },
-        customerID: String,
-        companyName: String
+        }
     },
     data() {
         return {
@@ -89,22 +87,6 @@ export default {
 				locationAddress: [{required: true, message: '请输入定位地址'}],
 				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}]
 			}
-        }
-    },
-    watch: {
-        customerID(newVal) {
-            if (newVal) {
-                this.companyAddress.customerID = newVal
-            } else {
-                this.companyAddress.customerID = ''
-            }
-        },
-        companyName(newVal) {
-            if (newVal) {
-                this.companyAddress.companyName = newVal
-            } else {
-                this.companyAddress.companyName = ''
-            }
         }
     },
     components: { DistPicker },
@@ -154,11 +136,11 @@ export default {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
 				CustomerAddress.add(this.companyAddress).then(res => {
-					Message.success('保存成功！')
-					this.close()
+                    Message.success('保存成功！')
+                    this.close()
 				})
 			})
-		},
+        },
         close() {
             this.$refs['ruleForm'].resetFields()
             this.$emit('control')
