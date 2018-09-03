@@ -61,6 +61,7 @@
             </el-form-item>
             <el-form-item label="接单截止时间">
                 <el-date-picker 
+                    format="yyyy-MM-dd HH"
                     v-model="grabOrder.endDate"
                     type="date" 
                     :clearable="false" 
