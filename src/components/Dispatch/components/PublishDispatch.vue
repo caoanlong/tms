@@ -199,7 +199,7 @@
                 <el-row>
                     <el-form-item label="接单截止时间">
                         <el-date-picker 
-                            format="yyyy-MM-dd HH"
+                            format="yyyy-MM-dd HH:mm"
                             v-model="endDate"
                             type="date" 
                             :clearable="false" 
