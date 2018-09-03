@@ -555,7 +555,7 @@ export default {
 					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
-					Carrierbill.add(carrierbill).then(res => {
+					Carrierbill.update(carrierbill).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'carrierbill'})
 					})

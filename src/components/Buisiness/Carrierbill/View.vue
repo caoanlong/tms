@@ -223,6 +223,7 @@ export default {
 			this.isPhotoVisible = false
 		},
 		viewdispatchbill(dispatchOrderID) {
+			console.log(dispatchOrderID)
 			this.$router.push({name: 'viewdispatchbill', query: { dispatchOrderID, type: 'view', isHideAmount: true }})
 		},
 		back() {
