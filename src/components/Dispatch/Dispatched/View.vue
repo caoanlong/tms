@@ -32,7 +32,12 @@
 						<span class="c1" v-if="dispatchOrderDetail.loadVolumeSum"><span class="num-label">体</span> {{dispatchOrderDetail.loadVolumeSum}} 方</span>
 						<span class="c1" v-if="dispatchOrderDetail.loadNumSum"><span class="num-label">数</span> {{dispatchOrderDetail.loadNumSum}}</span>
 					</p>
-					<p>运费<span class="fr c1 carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 <svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon></span></p>
+					<p style="border-bottom:1px solid #ddd">
+						<strong>运费</strong>
+						<span class="fr c1 carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 
+							<svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon>
+						</span>
+					</p>
 					<div class="tableBox">
 						<table class="wf-table" v-show="ShowCarriageDetail" style="min-width:750px">
 							<thead>
@@ -151,10 +156,44 @@
 				<el-col :span="7">
 					<p>运输车辆人员</p>
 					<div class="truckInfo c2">
-						<p v-if="dispatchOrderDetail.plateNo"><label>车牌号</label>{{dispatchOrderDetail.plateNo}} {{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{dispatchOrderDetail.truckType}}</p>
-						<p v-if="dispatchOrderDetail.trailerPlateNo"><label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} {{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{dispatchOrderDetail.trailerTruckType}}</p>
-						<p v-if="dispatchOrderDetail.driverName"><label>司机</label>{{dispatchOrderDetail.driverName}} {{dispatchOrderDetail.driverMobile}}</p>
-						<p v-if="dispatchOrderDetail.superCargoName"><label>押运员</label>{{dispatchOrderDetail.superCargoName}} {{dispatchOrderDetail.superCargoMobile}}</p>
+						<p v-if="dispatchOrderDetail.plateNo">
+							<label>车牌号</label>{{dispatchOrderDetail.plateNo}} 
+							{{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/
+							<span v-if="dispatchOrderDetail.truckType == 'TankTruck'">罐式货车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'VanTruck'">厢式货车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'BarrackTruck'">仓栅货车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'TailgateTruck'">栏板货车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'DumpTruck'">自卸货车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'TankTrailer'">罐式挂车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'VanTrailer'">厢式挂车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'BarrackTrailer'">仓栅挂车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'TailgateTrailer'">栏板挂车</span>
+							<span v-else-if="dispatchOrderDetail.truckType == 'ContainerTrailer'">集装箱挂车</span>
+						</p>
+						<p v-if="dispatchOrderDetail.trailerPlateNo">
+							<label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} 
+							{{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/
+							<span v-if="dispatchOrderDetail.trailerTruckType == 'TankTruck'">罐式货车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'VanTruck'">厢式货车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'BarrackTruck'">仓栅货车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'TailgateTruck'">栏板货车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'DumpTruck'">自卸货车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'TankTrailer'">罐式挂车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'VanTrailer'">厢式挂车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'BarrackTrailer'">仓栅挂车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'TailgateTrailer'">栏板挂车</span>
+							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'ContainerTrailer'">集装箱挂车</span>
+						</p>
+						<p v-if="dispatchOrderDetail.driverName">
+							<label>司机</label>{{dispatchOrderDetail.driverName}} 
+							{{dispatchOrderDetail.driverMobile}}
+						</p>
+						<p v-if="dispatchOrderDetail.superCargoName">
+							<label>押运员</label>{{dispatchOrderDetail.superCargoName}} 
+							{{dispatchOrderDetail.superCargoMobile}}
+						</p>
 					</div>
 					<p class="dispatchLogTit">调度日志</p>
 					<ul class="dispatchLog" v-if="dispatchLogs.length>0">
