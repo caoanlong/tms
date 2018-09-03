@@ -199,9 +199,9 @@
                 <el-row>
                     <el-form-item label="接单截止时间">
                         <el-date-picker 
-                            format="yyyy-MM-dd HH:mm"
+                            format="yyyy-MM-dd hh"
                             v-model="endDate"
-                            type="date" 
+                            type="datetime" 
                             :clearable="false" 
                             value-format="timestamp">
                         </el-date-picker>

@@ -2,9 +2,13 @@
 	<div class="select-search" @mouseleave="hide">
 		<div class="selected-address" @click.stop="expandPop">
 			<div v-if="selectedAddress.contactName">
-				<p><span class="name">{{selectedAddress.contactName}}</span><span class="mobile">{{selectedAddress.contactPhone}}</span></p>
+				<p>
+					<span class="name">{{selectedAddress.contactName}}</span>
+					<span>&nbsp;</span>
+					<span class="mobile">{{selectedAddress.contactPhone}}</span>
+				</p>
 				<p class="area">{{selectedAddress.contactArea}}</p>
-				<p class="address">{{selectedAddress.contactArea}}{{selectedAddress.detailAddress}}</p>
+				<p class="address">{{selectedAddress.locationAddress}}{{selectedAddress.detailAddress}}</p>
 			</div>
 			<p class="placeholder" v-else>{{placeholder}}</p>
 		</div>
@@ -26,7 +30,7 @@
 							@click="selectItem(item)">
 							<p><span class="name">{{item.contactName}}</span><span class="mobile">{{item.contactPhone}}</span></p>
 							<p class="area">{{item.contactArea}}</p>
-							<p class="address">{{item.contactArea}}{{item.detailAddress}}</p>
+							<p class="address">{{item.locationAddress}}{{item.detailAddress}}</p>
 						</li>
 					</transition-group>
 				</div>
@@ -186,9 +190,6 @@ export default {
 					p
 						color #409EFF
 						.name
+							font-weight bold
 							color #409EFF
-						
-				
-
-			
 </style>
