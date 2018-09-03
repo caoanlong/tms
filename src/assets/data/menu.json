@@ -559,7 +559,7 @@
                 "menuID": "996572371018190848",
                 "menuPID": "996572312985800704",
                 "parentIds": "",
-                "name": "员工管理",
+                "name": "账号管理",
                 "target": "usermanage",
                 "sortNumber": 1,
                 "href": "/usermanage",
