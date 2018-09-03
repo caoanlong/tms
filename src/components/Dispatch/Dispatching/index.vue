@@ -476,7 +476,7 @@
 									<td align="center">{{item.carrierOrderNo}}</td>
 									<td align="center" :class="item.type">{{item.type == 'Load' ? '装车' : '卸货'}}</td>
 									<td align="center">{{item.areaName + item.posAddress + item.detailAddress}}</td>
-									<td align="center">{{item.nodeDistance}}公里</td>
+									<td align="center">{{(Number(item.nodeDistance)/1000).toFixed(2)}}公里</td>
 									<td align="center">{{item.requireTime | getdatefromtimestamp('min')}}</td>
 								</tr>
 							</tbody>
@@ -735,10 +735,10 @@ export default {
 				this.totalDistance = 0
 				arrays.forEach((item,i) => {
 					item.sequence = i+1
-					item.nodeDistance = Number((Number(results[i].distance)/1000).toFixed(2))
-					this.totalDistance += item.nodeDistance
+					item.nodeDistance = results[i].distance
+					this.totalDistance += Number(item.nodeDistance)
 				})
-				this.totalDistance = Number(this.totalDistance.toFixed(2))
+				this.totalDistance = this.totalDistance
 				this.transLines = arrays
 			})
 		},
