@@ -252,6 +252,7 @@
 		</el-card>
 		<add-com-address 
 			:isVisible="addressDialog" 
+			:company="currentCompany"
 			@control="handAddress">
 		</add-com-address>
 	</div>
@@ -276,6 +277,7 @@ import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		return {
+			currentCompany: {},
 			addressDialog: false,
 			isChangeShipper: false,
 			isChangeConsignee: false,
@@ -437,6 +439,7 @@ export default {
 		},
 		handSelectShipperCompany(data) {
 			this.isChangeShipper = !this.isChangeShipper
+			this.currentCompany = data
 			this.selectedShipper = data
 			this.carrierbillInfo.shipperCompanyName = ' '
 			this.carrierbillInfo.shipperID = data.customerID
@@ -447,6 +450,7 @@ export default {
 		},
 		handSelectConsigneeCompany(data) {
 			this.isChangeConsignee = !this.isChangeConsignee
+			this.currentCompany = data
 			this.selectedConsignee = data
 			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID = data.customerID

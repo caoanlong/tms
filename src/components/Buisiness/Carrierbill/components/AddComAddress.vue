@@ -62,6 +62,19 @@ export default {
         isVisible: {
             type: Boolean,
             default: false
+        },
+        company: Object
+    },
+    watch: {
+        isVisible() {
+            this.selectedArea = []
+            this.searchAreaHash = ''
+        },
+        company: {
+            handler(data) {
+                this.companyAddress.customerID = data.customerID
+                this.companyAddress.companyName = data.companyName
+            }
         }
     },
     data() {

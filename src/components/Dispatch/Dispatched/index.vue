@@ -81,6 +81,7 @@
 									<el-tag size="mini" type="info" v-else-if="item.status == 'Canceled'">已取消</el-tag>
 									<el-tag size="mini" type="info" v-else-if="item.status == 'Rejected'">已拒绝</el-tag>
 									<el-tag size="mini" type="info" v-else-if="item.status == 'Closed'">已关闭</el-tag>
+									<el-tag size="mini" type="info" v-else-if="item.status == 'Overdue'">超时取消</el-tag>
 									<el-tag size="mini" type="success" v-else>已完成</el-tag>
 								</div>
 								<div class="handler">
