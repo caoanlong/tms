@@ -252,8 +252,7 @@
 		</el-card>
 		<add-com-address 
 			:isVisible="addressDialog" 
-			:customerID="currentCustomerID" 
-			:companyName="currentCompanyName" 
+			:company="currentCompany" 
 			@control="handAddress">
 		</add-com-address>
 	</div>
