@@ -92,6 +92,7 @@ export default {
 					this.list = transJsonToList(this.selectList[1].key)
 				}
 			} else {
+				this.level = 1
 				if (this.selectList.length > 0) {
 					this.$emit('hand-select', this.selectList.map(item => item.key))
 				} else {

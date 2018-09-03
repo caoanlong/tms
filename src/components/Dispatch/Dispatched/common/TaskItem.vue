@@ -1,11 +1,10 @@
 <template>
 	<div class="taskItem">
-		<div class="title">任务{{index+1}}（承运单：{{taskItem.taskNo}}）</div>
+		<div class="title">任务{{index+1}}（承运单：{{taskItem.carrierOrderNo}}）</div>
 		<div class="baseInfo">
 			<div class="from">
 				<div class="hasPic">
 					<!-- Committed-待执行 Loaded-已装运 Signed-已签收 -->
-
 					<img :src="taskItem.shipperLogoUrl ? resizeImg(taskItem.shipperLogoUrl, '_100x100.') : defaultImg" class="pic"/>
 					<p>{{taskItem.shipperCompanyName}} 
 						<el-tag size="mini" v-if="taskItem.status=='Committed'" type="info">未装车</el-tag>

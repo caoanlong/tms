@@ -76,7 +76,11 @@
 										</div>
 									</div>
 									<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
-									<el-tag size="mini" type="info" v-if="item.status == 'Committed'">未接单</el-tag>
+									<span v-if="item.status == 'Committed'">
+										<el-tag size="mini" type="info" v-if="item.type=='Assign'">接单中</el-tag>
+										<el-tag size="mini" type="info" v-else-if="item.type=='Grab'">抢单中</el-tag>
+										<el-tag size="mini" type="info" v-else>报价中</el-tag>
+									</span>
 									<el-tag size="mini" v-else-if="item.status == 'Ordered'">已接单</el-tag>
 									<el-tag size="mini" type="info" v-else-if="item.status == 'Canceled'">已取消</el-tag>
 									<el-tag size="mini" type="info" v-else-if="item.status == 'Rejected'">已拒绝</el-tag>
@@ -167,7 +171,21 @@
 											<el-tag size="mini" type="danger">到期</el-tag>
 										</el-tooltip>
 									</p>
-									<p>{{Number(item.length/1000).toFixed(1)}} 米 / {{item.truckType}} / 22 吨 / 3.5 方</p>
+									<p>
+										{{Number(item.length/1000).toFixed(1)}} 米 /
+										<span v-if="item.truckType == 'TankTruck'">罐式货车</span>
+										<span v-else-if="item.truckType == 'VanTruck'">厢式货车</span>
+										<span v-else-if="item.truckType == 'BarrackTruck'">仓栅货车</span>
+										<span v-else-if="item.truckType == 'TailgateTruck'">栏板货车</span>
+										<span v-else-if="item.truckType == 'DumpTruck'">自卸货车</span>
+										<span v-else-if="item.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
+										<span v-else-if="item.truckType == 'TankTrailer'">罐式挂车</span>
+										<span v-else-if="item.truckType == 'VanTrailer'">厢式挂车</span>
+										<span v-else-if="item.truckType == 'BarrackTrailer'">仓栅挂车</span>
+										<span v-else-if="item.truckType == 'TailgateTrailer'">栏板挂车</span>
+										<span v-else-if="item.truckType == 'ContainerTrailer'">集装箱挂车</span>
+										/ 22 吨 / 3.5 方
+									</p>
 								</td>
 								<td class="txt-l">
 									<p>{{item.name}}
@@ -180,7 +198,7 @@
 									</p>
 									<p>{{item.mobile}}</p>
 								</td>
-								<td class="c posr"><span class="tags">定</span>{{item.amount}}元/车 <img class="success" src="../../../assets/imgs/successIcon.png" height="48" v-if="item.status == 'Agreed'" /></td></td>
+								<td class="c posr"><span class="tags">定</span>{{item.amount}}元 <img class="success" src="../../../assets/imgs/successIcon.png" height="48" v-if="item.status == 'Agreed'" /></td></td>
 								<td><span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID)" v-if="item.status == 'Committed'">选TA承运</span></td>
 							</tr>
 							<tr>
