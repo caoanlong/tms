@@ -15,7 +15,7 @@
 						<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
 					</p>
 					<p>行驶数据</p>
-					<div class="lineInfo">
+					<div class="lineInfo" @click="trail(dispatchOrderDetail.dispatchOrderID)">
 						<span class="fl c1" v-if="dispatchOrderlocationList.length>0"><i class="el-icon-location"></i> {{dispatchOrderlocationList[dispatchOrderlocationList.length -1].posAddress}}</span>
 						<span class="fr c2" v-if="dispatchOrderlocationList.length>0">{{dispatchOrderlocationList[dispatchOrderlocationList.length -1].createTime | getdatefromtimestamp }}</span>
 					</div>
@@ -180,12 +180,18 @@
 				</el-col>
 			</el-row>
 		</el-card>
+		<trail-map 
+			v-if="trailDialog" 
+			:dispatchOrderID="currentDispatchOrderID" 
+			@cancel="handCloseTrail">
+		</trail-map>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TaskItem from './common/TaskItem'
+import TrailMap from '../components/TrailMap'
 import axios from 'axios'
 import { MAPKEY } from '../../../common/const'
 export default {
@@ -200,9 +206,12 @@ export default {
 			dispatchLogs:{},
 			persons:[],
 			dispatchOrderlocationList:[],
-			totalDistance:''
+			totalDistance:'',
+			trailDialog: false,
+			currentDispatchOrderID: ''
 		}
 	},
+	components:{ TaskItem, TrailMap },
 	created() {
 		this.getDetail()
 		this.getFees()
@@ -211,6 +220,13 @@ export default {
 		
 	},
 	methods: {
+		handCloseTrail() {
+			this.trailDialog = false
+		},
+		trail(dispatchOrderID) {
+			this.currentDispatchOrderID = dispatchOrderID
+			this.trailDialog = true
+		},
 		getDetail() {
 			const dispatchOrderID = this.$route.query.dispatchOrderID
 			Dispatchbill.findById({ dispatchOrderID }).then(res => {
@@ -329,9 +345,6 @@ export default {
 				this.dispatchOrderlocationList = arrays
 			})
 		},
-	},
-	components:{
-		TaskItem
 	}
 }
 
