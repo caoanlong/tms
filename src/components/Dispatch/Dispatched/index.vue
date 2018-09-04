@@ -215,7 +215,11 @@
 									<span class="tags">定</span>{{item.amount}}元 
 									<img class="success" src="../../../assets/imgs/successIcon.png" height="48" v-if="item.status == 'Agreed'" />
 								</td>
-								<td><span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID)" v-if="item.status == 'Committed'">选TA承运</span></td>
+								<td>
+									<span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID,item.dispatchOrderID)" v-if="item.status == 'Committed'">选TA承运</span>
+									<p v-if="item.status == 'Agreed'"></p>
+									<p v-if="item.status == 'Agreed'"></p>
+								</td>
 							</tr>
 							<tr>
 								<td colspan="4" class="c2">
@@ -398,8 +402,9 @@ export default {
 				this.scrambleList = res
 				const list = res.grabOfferOrderDetailVOList
 				list.forEach(item =>{
-					const location = item.longitude + ',' + item.latitude 
+					const location = item.latitude + ',' +  item.longitude  
 					const loadLocation = item.loadLongitude  + ',' + item.loadLatitude
+					console.log(location,loadLocation)
 					this.getDistance(loadLocation,location)
 				})
 			})
@@ -411,12 +416,12 @@ export default {
 			this.currentDispatchOrderID = dispatchOrderID
 			this.trailDialog = true
 		},
-		confirmScramble(dispatchOfferID){
+		confirmScramble(dispatchOfferID,dispatchOrderID){
 			Dispatchbill.confirmScramble({
 				dispatchOfferID
 			}).then(res => {
 				Message.success('已成功选择承运人!')
-				this.scramble(dispatchOfferID)
+				this.scramble(dispatchOrderID)
 				this.getList()
 			})
 		},

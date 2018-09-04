@@ -207,6 +207,7 @@
 								<span class="action" v-else-if="logsItem.action =='Unload'">到货</span>
 								<span class="action" v-else-if="logsItem.action =='Upload'">运输上报</span>
 								<span class="action" v-else-if="logsItem.action =='Refuse'">拒绝接单</span>
+								<span class="action" v-else-if="logsItem.action =='Canceled'">取消</span>
 								<span class="action" v-else>超时取消</span>
 								<span class="dateTime">{{logsItem.createTime | getdatefromtimestamp }}</span>
 							</p>
@@ -359,6 +360,7 @@ export default {
 					this.bizDispatchFeeList = []
 					Message.success(res.data.msg)
 					this.getFees()
+					this.getDetail()
 				})
 			}).catch(err => {})
 		},
