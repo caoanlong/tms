@@ -66,14 +66,14 @@ export default {
         company: Object
     },
     watch: {
-        isVisible() {
+        isVisible(bool) {
             this.selectedArea = []
             this.searchAreaHash = ''
-        },
-        company: {
-            handler(data) {
-                this.companyAddress.customerID = data.customerID
-                this.companyAddress.companyName = data.companyName
+            this.companyAddress.customerID = ''
+            this.companyAddress.companyName = ''
+            if (bool) {
+                this.companyAddress.customerID = this.company ? this.company.customerID : ''
+                this.companyAddress.companyName = this.company ? this.company.companyName : ''
             }
         }
     },
@@ -103,6 +103,9 @@ export default {
         }
     },
     components: { DistPicker },
+    // created() {
+    //     console.log(this.company)
+    // },
     methods: {
         getCompanys(queryString, cb) {
 			Customer.suggest({

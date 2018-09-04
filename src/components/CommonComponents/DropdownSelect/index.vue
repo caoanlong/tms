@@ -48,6 +48,7 @@ export default {
 			type: String,
 			default: ''
 		},
+		selected: Object,
 		isChangeCompany: Boolean,
 		fetchSuggestions: Function
 	},
@@ -62,6 +63,17 @@ export default {
 	watch: {
 		isChangeCompany() {
 			this.selectedAddress = {}
+			this.fetchSuggestions('', (res) => {
+				if (res.length == 1) {
+					this.selectedAddress = res[0]
+				}
+			})
+		},
+		selected: {
+			handler(data) {
+				this.selectedAddress = data
+			},
+			deep: true
 		}
 	},
 	created() {

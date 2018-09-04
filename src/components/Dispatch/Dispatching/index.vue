@@ -64,7 +64,6 @@
 						</el-form-item>
 						<el-form-item label="装车时间从">
 							<el-date-picker 
-								:picker-options="{ disabledDate: (curDate) => new Date() < curDate}" 
 								type="date" 
 								:clearable="false" 
 								value-format="timestamp" 
@@ -73,7 +72,6 @@
 							</el-date-picker>
 							<span class="tracto">至</span>
 							<el-date-picker 
-								:picker-options="{ disabledDate: (curDate) => new Date() > curDate}" 
 								type="date" 
 								:clearable="false" 
 								value-format="timestamp" 
@@ -318,7 +316,7 @@
 			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
 
-		<el-row style="margin-top:20px" :gutter="20">
+		<!-- <el-row style="margin-top:20px" :gutter="20">
 			<el-col :span="14">
 				<el-card class="table-container">
 					<div class="table-tit">已选择的承运单</div>
@@ -508,6 +506,195 @@
 					</div>
 				</el-card>
 			</el-col>
+		</el-row> -->
+		<el-row style="margin-top:20px" :gutter="20">
+			<el-card class="table-container">
+				<div class="table-tit">已选择的承运单</div>
+				<div class="table-box">
+					<table class="table-main" style="padding-right: 399px">
+						<thead>
+							<tr>
+								<th>承运单号</th>
+								<th><p>发货方</p><p>到货方</p></th>
+								<th><p>装车地区</p><p>卸货地区</p></th>
+								<th><p>装车地址</p><p>卸货地址</p></th>
+								<th>货物</th>
+								<th>配载方式</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr style="height:93px" v-for="(item, index) in selectedList" :key="index">
+								<td align="center">{{item.carrierOrderNo}}</td>
+								<td>
+									<p>{{item.shipperCompanyName}}</p>
+									<p>{{item.consigneeCompanyName}}</p>
+								</td>
+								<td>
+									<p><span class="from">发</span>{{item.shipperArea}}</p>
+									<p><span class="to">到</span>{{item.consigneeArea}}</p>
+								</td>
+								<td class="address">
+									<p>{{item.shipperLocationAddress + '，' + item.shipperDetailAddress}}</p>
+									<p>{{item.consigneeLocationAddress + '，' + item.consigneeDetailAddress}}</p>
+								</td>
+								<td align="center">{{item.cargoName}}</td>
+								<td align="center">
+									<span v-if="item.dispatchType == 'Quantity'">按数量配载</span>
+									<span v-else-if="item.dispatchType == 'Volumn'">按体积配载</span>
+									<span v-else-if="item.dispatchType == 'Weight'">按重量配载</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="table-box-cong" style="top:60px;right:20px;width:400px">
+					<table>
+						<thead>
+							<tr style="height:61px">
+								<th>待配数量</th>
+								<th>待配重量</th>
+								<th>待配体积</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr style="height:80px" v-for="(item, index) in selectedList" :key="index">
+								<td align="center">
+									<p style="position:relative;top:8px">
+										<span class="surplus">余</span>
+										{{item.remainingCargoNum ? (item.remainingCargoNum + item.cargoUnitName) : ('0' + item.cargoUnitName)}}
+									</p>
+									<el-form :model="item" ref="ruleForm">
+										<el-form-item prop="cargoNumNew" :rules="[{
+											validator: (rule, value, callback) => {
+												const r = /^[1-9]\d*$/
+												if (item.dispatchType == 'Quantity' && (!value || value == '0')) {
+													callback('请输入数量')
+												} else if (value > item.remainingCargoNum) {
+													callback('配载数量不能大于待配数量！')
+												} else if (value && !r.test(value)) {
+													callback('请输入正确的数字')
+												} else {
+													callback()
+												}
+											}
+										}]">
+											<el-input size="mini" v-model="item.cargoNumNew"></el-input>
+										</el-form-item>
+									</el-form>
+								</td>
+								<td align="center">
+									<p style="position:relative;top:8px">
+										<span class="surplus">余</span>
+										{{item.remainingCargoWeight ? item.remainingCargoWeight + '吨' : '0吨'}}
+									</p>
+									<el-form :model="item" ref="ruleForm">
+										<el-form-item prop="cargoWeightNew" :rules="[{
+											validator: (rule, value, callback) => {
+												const r = /(^[1-9]\d*\.\d{1,2}$)|(^0{1}\.\d{1,2}$)|(^[1-9]\d*$)/
+												if (item.dispatchType == 'Weight' && (!value || value == '0')) {
+													callback('请输入重量')
+												} else if (value > item.remainingCargoWeight) {
+													callback('配载重量不能大于待配重量！')
+												} else if (value && !r.test(value)) {
+													callback('请输入正确的数字')
+												} else {
+													callback()
+												}
+											}
+										}]">
+											<el-input size="mini" v-model="item.cargoWeightNew"></el-input>
+										</el-form-item>
+									</el-form>
+								</td>
+								<td align="center">
+									<p style="position:relative;top:8px"><span class="surplus">余</span>{{item.remainingCargoVolume ? item.remainingCargoVolume + '方' : '0方'}}</p>
+									<el-form :model="item" ref="ruleForm">
+										<el-form-item prop="cargoVolumeNew" :rules="[{
+											validator: (rule, value, callback) => {
+												const r = /(^[1-9]\d*\.\d{1,2}$)|(^0{1}\.\d{1,2}$)|(^[1-9]\d*$)/
+												if (item.dispatchType == 'Volumn' && (!value || value == '0')) {
+													callback('请输入体积')
+												} else if (value > item.remainingCargoVolume) {
+													callback('配载体积不能大于待配体积！')
+												} else if (value && !r.test(value)) {
+													callback('请输入正确的数字')
+												} else {
+													callback()
+												}
+											}
+										}]">
+											<el-input size="mini" v-model="item.cargoVolumeNew"></el-input>
+										</el-form-item>
+									</el-form>
+								</td>
+								<td align="center">
+									<el-button size="mini" type="danger" icon="el-icon-delete" circle @click="deleteCarrierOrder(item)"></el-button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="num-info">
+					<span class="num-tit">配载总量</span>
+					<span class="num-label"><span>数</span>{{totalNum}}</span>
+					<span class="num-label"><span>重</span>{{totalWeight}}</span>
+					<span class="num-label"><span>体</span>{{totalVolume}}</span>
+				</div>
+			</el-card>
+		</el-row>
+		<el-row style="margin-top:20px" :gutter="20">
+			<el-card class="table-container">
+				<div class="table-tit">运输线路</div>
+				<div class="table-box">
+					<table class="table-main" style="padding-right: 79px">
+						<thead>
+							<tr>
+								<th>优先</th>
+								<th>承运单</th>
+								<th>类型</th>
+								<th>地点</th>
+								<th>距离</th>
+								<th>执行时间</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr style="height:50px" v-for="(item, index) in transLines" :key="index">
+								<td align="center">{{index+1}}</td>
+								<td align="center">{{item.carrierOrderNo}}</td>
+								<td align="center" :class="item.type">{{item.type == 'Load' ? '装车' : '卸货'}}</td>
+								<td align="center">{{item.areaName + item.posAddress + item.detailAddress}}</td>
+								<td align="center">{{(Number(item.nodeDistance)/1000).toFixed(2)}}公里</td>
+								<td align="center">{{item.requireTime | getdatefromtimestamp('min')}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="table-box-cong" style="top:60px;right:20px;width:80px">
+					<table>
+						<thead>
+							<tr>
+								<th>排序</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr style="height:50px" v-for="(item, index) in transLines" :key="index">
+								<td align="center">
+									<span class="up" @click="changeSort(index, 'up')">
+										<svg-icon icon-class="upArrow" class="icon up" :class="index == 0 ? 'disabled' : ''"></svg-icon>
+									</span>
+									<span class="down" @click="changeSort(index, 'down')">
+										<svg-icon icon-class="downArrow" class="icon down" :class="index == transLines.length-1 ? 'disabled' : ''"></svg-icon>
+									</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="num-info">
+					<span class="num-tit">预计里程{{totalDistance}}公里</span>
+				</div>
+			</el-card>
 		</el-row>
 		<el-row style="margin-top:20px">
 			<el-col :span="24" class="text-center">
@@ -662,18 +849,31 @@ export default {
 			const list = [...this.transLines]
 			const current = list[i]
 			if (type == 'up') {
+				if (i == 1 && list[i].type == 'Unload') {
+					Message.error('第一条必须为装车！')
+					return
+				}
+				if (i == (list.length - 1) && list[i-1].type == 'Load') {
+					Message.error('最后一条必须为卸货！')
+					return
+				}
 				list[i] = list[i-1]
 				list[i-1] = current
 			} else {
+				if (i == 0 && list[i+1].type == 'Unload') {
+					Message.error('第一条必须为装车！')
+					return
+				}
+				if (i == (list.length - 2) && list[i].type == 'Load') {
+					Message.error('最后一条必须为卸货！')
+					return
+				}
 				list[i] = list[i+1]
 				list[i+1] = current
 			}
-			if (list[0].type == 'Load') {
-				Message.error('最后一条必须为卸货！')
-				return
-			}
-			if (list[list.length-1].type == 'Unload') {
-				Message.error('第一条必须为装车！')
+			const carriers = list.filter(item => item.carrierOrderNo == list[i].carrierOrderNo)
+			if (carriers[0].type == 'Unload' || carriers[1].type == 'Load') {
+				Message.error('同一个承运单装车必须在卸货之前！')
 				return
 			}
 			this.transLines = list
@@ -685,37 +885,36 @@ export default {
 		transLineCreate() {
 			this.transLines = []
 			this.selectedListNoRepeat.forEach((i, x) => {
-				this.transLines.push(...[
-					{
-						type: 'Load',
-						carrierOrderID: i.carrierOrderID,
-						carrierOrderNo: i.carrierOrderNo,
-						detailAddress: i.shipperDetailAddress,
-						posAddress: i.shipperLocationAddress,
-						areaName: i.shipperArea,
-						areaID: i.shipperAreaID,
-						requireTime: i.shipperDate,
-						latitude: i.shipperLocationLat,
-						longitude: i.shipperLocationLng
-					},{
-						type: 'Unload',
-						carrierOrderID: i.carrierOrderID,
-						carrierOrderNo: i.carrierOrderNo,
-						detailAddress: i.consigneeDetailAddress,
-						posAddress: i.consigneeLocationAddress,
-						areaName: i.consigneeArea,
-						areaID: i.consigneeAreaID,
-						requireTime: i.consigneeDate,
-						latitude: i.consigneeLocationLat,
-						longitude: i.consigneeLocationLng
-					}
-				])
+				this.transLines.push({
+					type: 'Load',
+					carrierOrderID: i.carrierOrderID,
+					carrierOrderNo: i.carrierOrderNo,
+					detailAddress: i.shipperDetailAddress,
+					posAddress: i.shipperLocationAddress,
+					areaName: i.shipperArea,
+					areaID: i.shipperAreaID,
+					requireTime: i.shipperDate,
+					latitude: i.shipperLocationLat,
+					longitude: i.shipperLocationLng
+				})
+				this.transLines.push({
+					type: 'Unload',
+					carrierOrderID: i.carrierOrderID,
+					carrierOrderNo: i.carrierOrderNo,
+					detailAddress: i.consigneeDetailAddress,
+					posAddress: i.consigneeLocationAddress,
+					areaName: i.consigneeArea,
+					areaID: i.consigneeAreaID,
+					requireTime: i.consigneeDate,
+					latitude: i.consigneeLocationLat,
+					longitude: i.consigneeLocationLng
+				})
 			})
 			this.transLines.sort((a, b) => {
-				if (a.date == b.date) {
+				if (a.requireTime == b.requireTime) {
 					return a.carrierOrderNo - b.carrierOrderNo
 				} else {
-					return a.date - b.date
+					return a.requireTime - b.requireTime
 				}
 			})
 			this.transLines.map((item, i) => Object.assign(item, {sequence: i + 1}))

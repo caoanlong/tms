@@ -439,7 +439,6 @@ export default {
 		},
 		handSelectShipperCompany(data) {
 			this.isChangeShipper = !this.isChangeShipper
-			this.currentCompany = data
 			this.selectedShipper = data
 			this.carrierbillInfo.shipperCompanyName = ' '
 			this.carrierbillInfo.shipperID = data.customerID
@@ -450,7 +449,6 @@ export default {
 		},
 		handSelectConsigneeCompany(data) {
 			this.isChangeConsignee = !this.isChangeConsignee
-			this.currentCompany = data
 			this.selectedConsignee = data
 			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID = data.customerID
@@ -529,6 +527,11 @@ export default {
 		 * 添加企业地址
 		 */
 		addAddress(type) {
+			if (type == 'shipper') {
+				this.currentCompany = this.selectedShipper
+			} else {
+				this.currentCompany = this.selectedConsignee
+			}
 			this.addressDialog = true
 		},
 		handAddress() {

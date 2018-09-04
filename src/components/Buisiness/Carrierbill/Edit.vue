@@ -55,6 +55,7 @@
 								<el-form-item label="发货地址">
 									<dropdown-select 
 										addressType="发货单位"
+										:selected="selectedShipperAddress" 
 										:isChangeCompany="isChangeShipper" 
 										@select="handSelectshipperAddress" 
 										:fetch-suggestions="getShipperAddress">
@@ -93,7 +94,8 @@
 							<el-row class="block-content">
 								<el-form-item label="收货地址">
 									<dropdown-select 
-										addressType="收货单位"
+										addressType="收货单位" 
+										:selected="selectedConsigneeAddress" 
 										:isChangeCompany="isChangeConsignee" 
 										@select="handSelectConsigneeAddress" 
 										:fetch-suggestions="getConsigneeAddress">
@@ -375,21 +377,25 @@ export default {
 					this.carrierbillInfo.porRequire = [res.porRequire]
 				}
 				this.selectedShipper = {
-					customerAddressNum:1
+					customerAddressNum: 1
 				}
 				this.selectedShipperAddress = {
-					contactName:res.shipperName,
-					contactPhone:res.shipperPhone,
-					contactArea:res.shipperArea,
-					detailAddress:res.shipperDetailAddress
+					customerAddressID: res.shipperAddressID,
+					contactName: res.shipperName,
+					contactPhone: res.shipperPhone,
+					contactArea: res.shipperArea,
+					locationAddress: res.shipperLocationAddress,
+					detailAddress: res.shipperDetailAddress
 				}
 				this.selectedConsignee = {
-					customerAddressNum:1
+					customerAddressNum: 1
 				}
 				this.selectedConsigneeAddress = {
+					customerAddressID: res.consigneeAddressID,
 					contactName:res.consigneeName,
 					contactPhone:res.consigneePhone,
 					contactArea:res.consigneeArea,
+					locationAddress:res.consigneeLocationAddress,
 					detailAddress:res.consigneeDetailAddress
 				}
 			})
