@@ -32,9 +32,20 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度时间从">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.dispatchBeginTime">
-						</el-date-picker><span class="tracto">至</span>
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" style="width:160px" v-model="find.dispatchEndTime">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px" 
+							v-model="find.dispatchBeginTime">
+						</el-date-picker>
+						<span class="tracto">至</span>
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px" 
+							v-model="find.dispatchEndTime">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>

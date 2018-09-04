@@ -64,7 +64,6 @@
 						</el-form-item>
 						<el-form-item label="装车时间从">
 							<el-date-picker 
-								:picker-options="{ disabledDate: (curDate) => new Date() < curDate}" 
 								type="date" 
 								:clearable="false" 
 								value-format="timestamp" 
@@ -73,7 +72,6 @@
 							</el-date-picker>
 							<span class="tracto">至</span>
 							<el-date-picker 
-								:picker-options="{ disabledDate: (curDate) => new Date() > curDate}" 
 								type="date" 
 								:clearable="false" 
 								value-format="timestamp" 
