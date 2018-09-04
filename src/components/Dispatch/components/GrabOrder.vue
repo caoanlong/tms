@@ -16,7 +16,7 @@
                 <span class="num-tit">
                     {{transLines.filter(item => item.type == 'Load').length}}装
                     {{transLines.filter(item => item.type == 'Unload').length}}卸
-                    &nbsp;&nbsp;预计里程{{totalDistance}}公里
+                    &nbsp;&nbsp;预计里程{{(totalDistance/1000).toFixed(2)}}公里
                 </span>
             </div>
             <el-row class="section-block">

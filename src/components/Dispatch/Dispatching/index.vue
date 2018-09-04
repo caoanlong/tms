@@ -98,7 +98,7 @@
 										<span class="arrow-group">
 											<svg-icon 
 												class="arrow-up" 
-												:class="{'active': find.orderBy == 'CarrierOrderNo', 'rotate': find.orderBy == 'CarrierOrderNo' && find.sortType == 'desc'}" 
+												:class="{'active': find.orderBy == 'CarrierOrderNo', 'rotate': (find.orderBy == 'CarrierOrderNo' && find.sortType == 'desc')}" 
 												icon-class="triangle" 
 												@click.native="sort('CarrierOrderNo', find.sortType == 'desc' ? 'asc' : 'desc')">
 											</svg-icon>
@@ -109,7 +109,7 @@
 										<span class="arrow-group">
 											<svg-icon 
 												class="arrow-down" 
-												:class="{'active': find.orderBy == 'CommissionDate', 'rotate': find.orderBy == 'CommissionDate' && find.sortType == 'asc'}" 
+												:class="{'active': find.orderBy == 'CommissionDate', 'rotate': (find.orderBy == 'CommissionDate' && find.sortType == 'asc')}" 
 												icon-class="triangle" 
 												@click.native="sort('CommissionDate', find.sortType == 'desc' ? 'asc' : 'desc')">
 											</svg-icon>
@@ -121,30 +121,22 @@
 										发货方&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'ShipperCompanyName' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-up" 
+												:class="{'active': find.orderBy == 'ShipperCompanyName', 'rotate': (find.orderBy == 'ShipperCompanyName' && find.sortType == 'desc')}"
 												icon-class="triangle" 
-												@click.native="sort('ShipperCompanyName', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'ShipperCompanyName' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('ShipperCompanyName', 'desc')"/>
+												@click.native="sort('ShipperCompanyName', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 									<p class="cursor">
 										到货方&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'ConsigneeCompanyName' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-down" 
+												:class="{'active': find.orderBy == 'ConsigneeCompanyName', 'rotate': (find.orderBy == 'ConsigneeCompanyName' && find.sortType == 'asc')}"
 												icon-class="triangle" 
-												@click.native="sort('ConsigneeCompanyName', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'ConsigneeCompanyName' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('ConsigneeCompanyName', 'desc')"/>
+												@click.native="sort('ConsigneeCompanyName', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 								</th>
@@ -153,30 +145,22 @@
 										装车地区&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'ShipperArea' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-up" 
+												:class="{'active': find.orderBy == 'ShipperArea', 'rotate': (find.orderBy == 'ShipperArea' && find.sortType == 'desc')}"
 												icon-class="triangle" 
-												@click.native="sort('ShipperArea', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'ShipperArea' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('ShipperArea', 'desc')"/>
+												@click.native="sort('ShipperArea', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 									<p class="cursor">
 										卸货地区&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'ConsigneeArea' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-down" 
+												:class="{'active': find.orderBy == 'ConsigneeArea', 'rotate': (find.orderBy == 'ConsigneeArea' && find.sortType == 'asc')}"
 												icon-class="triangle" 
-												@click.native="sort('ConsigneeArea', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'ConsigneeArea' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('ConsigneeArea', 'desc')"/>
+												@click.native="sort('ConsigneeArea', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 								</th>
@@ -185,30 +169,22 @@
 										装车地址&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'ShipperAddress' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-up" 
+												:class="{'active': find.orderBy == 'ShipperAddress', 'rotate': (find.orderBy == 'ShipperAddress' && find.sortType == 'desc')}"
 												icon-class="triangle" 
-												@click.native="sort('ShipperAddress', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'ShipperAddress' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('ShipperAddress', 'desc')"/>
+												@click.native="sort('ShipperAddress', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 									<p class="cursor">
 										卸货地址&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'ConsigneeAddress' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-down" 
+												:class="{'active': find.orderBy == 'ConsigneeAddress', 'rotate': (find.orderBy == 'ConsigneeAddress' && find.sortType == 'asc')}"
 												icon-class="triangle" 
-												@click.native="sort('ConsigneeAddress', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'ConsigneeAddress' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('ConsigneeAddress', 'desc')"/>
+												@click.native="sort('ConsigneeAddress', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 								</th>
@@ -217,30 +193,22 @@
 										装车时间&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'ShipperDate' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-up" 
+												:class="{'active': find.orderBy == 'ShipperDate', 'rotate': (find.orderBy == 'ShipperDate' && find.sortType == 'desc')}"
 												icon-class="triangle" 
-												@click.native="sort('ShipperDate', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'ShipperDate' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('ShipperDate', 'desc')"/>
+												@click.native="sort('ShipperDate', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 									<p class="cursor">
 										到货时间&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'ConsigneeDate' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-down" 
+												:class="{'active': find.orderBy == 'ConsigneeDate', 'rotate': (find.orderBy == 'ConsigneeDate' && find.sortType == 'asc')}"
 												icon-class="triangle" 
-												@click.native="sort('ConsigneeDate', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'ConsigneeDate' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('ConsigneeDate', 'desc')"/>
+												@click.native="sort('ConsigneeDate', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 								</th>
@@ -684,7 +652,7 @@
 					</table>
 				</div>
 				<div class="num-info">
-					<span class="num-tit">预计里程{{totalDistance}}公里</span>
+					<span class="num-tit">预计里程{{(totalDistance/1000).toFixed(2)}}公里</span>
 				</div>
 			</el-card>
 		</el-row>
@@ -917,23 +885,23 @@ export default {
 		/**
 		 * 调用高德地图接口获取距离
 		 */
-		getDistance() {
+		async getDistance() {
 			const list = this.transLines.map(item => item.longitude + ',' + item.latitude)
-			const origins = list.join('|')
-			// const destination = list[list.length-1]
-			const destination = list[0]
-			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${MAPKEY}`}).then(res => {
-				const results = res.data.results
-				const arrays = [...this.transLines]
-				this.totalDistance = 0
-				arrays.forEach((item,i) => {
-					item.sequence = i+1
-					item.nodeDistance = results[i].distance
-					this.totalDistance += Number(item.nodeDistance)/1000
-				})
-				this.totalDistance = Number(this.totalDistance.toFixed(2))
-				this.transLines = arrays
+			const results = [0]
+			let i = 0
+			while(i < list.length) {
+				const res = await axios({url: `https://restapi.amap.com/v3/distance?origins=${list[i]}&destination=${list[i+1]}&key=${MAPKEY}`})
+				if (res.data.status == 1) results.push(res.data.results[0].distance)
+				i++
+			}
+			const arrays = [...this.transLines]
+			this.totalDistance = 0
+			arrays.forEach((item,i) => {
+				item.sequence = i+1
+				item.nodeDistance = results[i]
+				this.totalDistance += Number(item.nodeDistance)
 			})
+			this.transLines = arrays
 		},
 		handleSelectedShipperArea(data) {
 			if (!data) return
