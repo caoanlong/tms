@@ -662,18 +662,31 @@ export default {
 			const list = [...this.transLines]
 			const current = list[i]
 			if (type == 'up') {
+				if (i == 1 && list[i].type == 'Unload') {
+					Message.error('第一条必须为装车！')
+					return
+				}
+				if (i == (list.length - 1) && list[i-1].type == 'Load') {
+					Message.error('最后一条必须为卸货！')
+					return
+				}
 				list[i] = list[i-1]
 				list[i-1] = current
 			} else {
+				if (i == 0 && list[i+1].type == 'Unload') {
+					Message.error('第一条必须为装车！')
+					return
+				}
+				if (i == (list.length - 2) && list[i].type == 'Load') {
+					Message.error('最后一条必须为卸货！')
+					return
+				}
 				list[i] = list[i+1]
 				list[i+1] = current
 			}
-			if (list[0].type == 'Load') {
-				Message.error('最后一条必须为卸货！')
-				return
-			}
-			if (list[list.length-1].type == 'Unload') {
-				Message.error('第一条必须为装车！')
+			const carriers = list.filter(item => item.carrierOrderNo == list[i].carrierOrderNo)
+			if (carriers[0].type == 'Unload' || carriers[1].type == 'Load') {
+				Message.error('同一个承运单装车必须在卸货之前！')
 				return
 			}
 			this.transLines = list
@@ -685,37 +698,36 @@ export default {
 		transLineCreate() {
 			this.transLines = []
 			this.selectedListNoRepeat.forEach((i, x) => {
-				this.transLines.push(...[
-					{
-						type: 'Load',
-						carrierOrderID: i.carrierOrderID,
-						carrierOrderNo: i.carrierOrderNo,
-						detailAddress: i.shipperDetailAddress,
-						posAddress: i.shipperLocationAddress,
-						areaName: i.shipperArea,
-						areaID: i.shipperAreaID,
-						requireTime: i.shipperDate,
-						latitude: i.shipperLocationLat,
-						longitude: i.shipperLocationLng
-					},{
-						type: 'Unload',
-						carrierOrderID: i.carrierOrderID,
-						carrierOrderNo: i.carrierOrderNo,
-						detailAddress: i.consigneeDetailAddress,
-						posAddress: i.consigneeLocationAddress,
-						areaName: i.consigneeArea,
-						areaID: i.consigneeAreaID,
-						requireTime: i.consigneeDate,
-						latitude: i.consigneeLocationLat,
-						longitude: i.consigneeLocationLng
-					}
-				])
+				this.transLines.push({
+					type: 'Load',
+					carrierOrderID: i.carrierOrderID,
+					carrierOrderNo: i.carrierOrderNo,
+					detailAddress: i.shipperDetailAddress,
+					posAddress: i.shipperLocationAddress,
+					areaName: i.shipperArea,
+					areaID: i.shipperAreaID,
+					requireTime: i.shipperDate,
+					latitude: i.shipperLocationLat,
+					longitude: i.shipperLocationLng
+				})
+				this.transLines.push({
+					type: 'Unload',
+					carrierOrderID: i.carrierOrderID,
+					carrierOrderNo: i.carrierOrderNo,
+					detailAddress: i.consigneeDetailAddress,
+					posAddress: i.consigneeLocationAddress,
+					areaName: i.consigneeArea,
+					areaID: i.consigneeAreaID,
+					requireTime: i.consigneeDate,
+					latitude: i.consigneeLocationLat,
+					longitude: i.consigneeLocationLng
+				})
 			})
 			this.transLines.sort((a, b) => {
-				if (a.date == b.date) {
+				if (a.requireTime == b.requireTime) {
 					return a.carrierOrderNo - b.carrierOrderNo
 				} else {
-					return a.date - b.date
+					return a.requireTime - b.requireTime
 				}
 			})
 			this.transLines.map((item, i) => Object.assign(item, {sequence: i + 1}))
