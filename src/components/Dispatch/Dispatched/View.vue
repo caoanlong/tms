@@ -263,6 +263,7 @@ export default {
 			this.trailDialog = false
 		},
 		trail(dispatchOrderID) {
+			if (this.dispatchOrderDetail.status != 'Ordered' && this.dispatchOrderDetail.status != 'Finished') return
 			this.currentDispatchOrderID = dispatchOrderID
 			this.trailDialog = true
 		},
