@@ -113,6 +113,7 @@ export default {
             this.infoWindow.open(this.map, e.target.getPosition())
         },
         close() {
+            document.body.removeChild(document.getElementById('mapMask'))
             this.$emit('cancel')
         }
     }

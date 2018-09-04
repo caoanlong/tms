@@ -57,11 +57,12 @@
                     <el-radio label="Prepay" value="Prepay">预付</el-radio>
                     <el-radio label="PayOnReceipt" value="PayOnReceipt">回单结</el-radio>
                     <el-radio label="PayByConsignee" value="PayByConsignee">收货方付</el-radio>
+                    <el-radio label="PayMonthly" value="PayMonthly">月结</el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="接单截止时间">
                 <el-date-picker 
-                    format="yyyy-MM-dd hh"
+                    format="yyyy-MM-dd HH"
                     v-model="grabOrder.endDate"
                     type="datetime" 
                     :clearable="false" 

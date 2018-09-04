@@ -103,6 +103,7 @@
                                         </el-tooltip>
                                         &nbsp;&nbsp;&nbsp;
                                         <span class="add-btn" @click="addPerson('second')">更换</span>
+                                        <span class="add-btn" @click="delPerson('second')">删除</span>
                                     </span>
                                     <span class="add-btn" @click="addPerson('second')" v-else v-show="selectedTruck.truckID">+ 添加随行人员</span>
                                 </td>
@@ -164,6 +165,7 @@
                                                 <el-option label="预付" value="Prepay"></el-option>
                                                 <el-option label="回单结" value="PayOnReceipt"></el-option>
                                                 <el-option label="收货方付" value="PayByConsignee"></el-option>
+                                                <el-option label="月结" value="PayMonthly"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-form>
@@ -199,7 +201,7 @@
                 <el-row>
                     <el-form-item label="接单截止时间">
                         <el-date-picker 
-                            format="yyyy-MM-dd hh"
+                            format="yyyy-MM-dd HH"
                             v-model="endDate"
                             type="datetime" 
                             :clearable="false" 
@@ -334,6 +336,10 @@ export default {
             this.personType = type
             this.personDialog = true
         },
+        delPerson() {
+            this.selectedTruck.superCargo = null
+            this.createPersons()
+        },
         addFreight() {
             this.bizDispatchFeeList.push({
                 item: '',
@@ -356,8 +362,16 @@ export default {
             } else if (this.selectedTruck.superCargo) {
                 this.persons = [this.selectedTruck.superCargo]
             }
+            console.log(this.persons)
         },
         publish() {
+            for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
+                const element = this.bizDispatchFeeList[i]
+                if (!this.persons.map(item => item.supercargoID).includes(element.superCargo.supercargoID)) {
+                    Message.error(`第${i+1}行收款人请重新选择！`)
+                    return
+                }
+            }
             new Promise((resolve, reject) => {
 				let flag = true
 				for (let i = 0; i < this.$refs['ruleForm'].length; i++) {
