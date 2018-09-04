@@ -117,21 +117,21 @@
 											item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Loaded') 
 											|| item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Signed')
 										" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
-										<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
+										<!-- <el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button> -->
 									</span>
 									<!-- 已接单 -->
 									<span v-else-if="item.status == 'Ordered'">
-										<el-button type="text" size="mini" :disabled="
+										<!-- <el-button type="text" size="mini" :disabled="
 											item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Loaded') 
 											|| item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Signed')
-										" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
-										<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
+										" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button> -->
+										<!-- <el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button> -->
 									</span>
 									<!-- 已取消 已拒绝-->
 									<span v-else>
 										<router-link tag="span" class="c6" style="margin-left:0" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
 										<!-- <el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button> -->
-										<el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
+										<!-- <el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button> -->
 									</span>
 								</div>
 							</td>

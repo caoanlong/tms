@@ -201,7 +201,7 @@
                 <el-row>
                     <el-form-item label="接单截止时间">
                         <el-date-picker 
-                            format="yyyy-MM-dd hh"
+                            format="yyyy-MM-dd HH"
                             v-model="endDate"
                             type="datetime" 
                             :clearable="false" 
@@ -361,8 +361,16 @@ export default {
             } else if (this.selectedTruck.superCargo) {
                 this.persons = [this.selectedTruck.superCargo]
             }
+            console.log(this.persons)
         },
         publish() {
+            for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
+                const element = this.bizDispatchFeeList[i]
+                if (!this.persons.map(item => item.supercargoID).includes(element.superCargo.supercargoID)) {
+                    Message.error(`第${i+1}行收款人请重新选择！`)
+                    return
+                }
+            }
             new Promise((resolve, reject) => {
 				let flag = true
 				for (let i = 0; i < this.$refs['ruleForm'].length; i++) {

@@ -48,7 +48,7 @@
                     </td>
                     <td>
                         <strong>{{item.plateNo}}</strong>
-                        <span>9.6米/高栏/22吨/3.5方</span>
+                        <span>{{(Number(item.length)/1000).toFixed(2)}}米/{{truckType[item.truckType]}}/{{(Number(item.loads)/1000).toFixed(2)}}吨/{{item.loadVolume}}方</span>
                         <el-tag size="mini" type="success">{{item.workStatus == 'Free' ? '空闲' : '业务中'}}</el-tag>
                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                             <div slot="content">
@@ -98,6 +98,7 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
+import truckType from '../../../assets/data/truckType'
 export default {
     mixins: [baseMixin],
     props: {
@@ -147,6 +148,9 @@ export default {
                 this.getList()
             }
         }
+    },
+    computed: {
+        truckType: () => truckType
     },
     methods: {
         /**
