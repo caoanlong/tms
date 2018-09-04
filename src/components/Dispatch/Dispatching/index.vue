@@ -97,30 +97,22 @@
 										承运单号&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'CarrierOrderNo' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-up" 
+												:class="{'active': find.orderBy == 'CarrierOrderNo', 'rotate': find.orderBy == 'CarrierOrderNo' && find.sortType == 'desc'}" 
 												icon-class="triangle" 
-												@click.native="sort('CarrierOrderNo', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'CarrierOrderNo' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('CarrierOrderNo', 'desc')"/>
+												@click.native="sort('CarrierOrderNo', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 									<p class="cursor">
 										委托时间&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
-												class="arrow arrow-up" 
-												:class="find.orderBy == 'CommissionDate' && find.sortType == 'asc' ? 'active' : ''" 
+												class="arrow-down" 
+												:class="{'active': find.orderBy == 'CommissionDate', 'rotate': find.orderBy == 'CommissionDate' && find.sortType == 'asc'}" 
 												icon-class="triangle" 
-												@click.native="sort('CommissionDate', 'asc')"/>
-											<svg-icon 
-												class="arrow" 
-												:class="find.orderBy == 'CommissionDate' && find.sortType == 'desc' ? 'active' : ''" 
-												icon-class="triangle" 
-												@click.native="sort('CommissionDate', 'desc')"/>
+												@click.native="sort('CommissionDate', find.sortType == 'desc' ? 'asc' : 'desc')">
+											</svg-icon>
 										</span>
 									</p>
 								</th>
@@ -818,6 +810,8 @@ export default {
 		sort(orderBy, sortType) {
 			this.find.orderBy = orderBy
 			this.find.sortType = sortType
+			console.log(this.find.orderBy)
+			console.log(this.find.sortType)
 			this.search()
 		},
 		/**
@@ -1062,15 +1056,24 @@ export default {
 					&.disabled
 						color #ddd
 						cursor not-allowed
-				.arrow
+				.arrow-up
 					position absolute
 					left 0
-					top 8px
+					top 4px
+					color #cccccc
+					transform rotate(180deg)
+					&.active
+						color #409EFF
+					&.rotate
+						transform rotate(0deg)
+				.arrow-down
+					position absolute
+					left 0
+					top 3px
 					color #cccccc
 					&.active
 						color #409EFF
-					&.arrow-up
-						top -3px
+					&.rotate
 						transform rotate(180deg)
 			td
 				padding 10px 15px

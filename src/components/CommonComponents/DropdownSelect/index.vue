@@ -65,7 +65,7 @@ export default {
 			this.selectedAddress = {}
 			this.fetchSuggestions('', (res) => {
 				if (res.length == 1) {
-					this.selectedAddress = res[0]
+					this.selectItem(res[0])
 				}
 			})
 		},
