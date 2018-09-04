@@ -75,6 +75,7 @@
 										<span v-if="feesItem.payMode=='Prepay'">预付</span>
 										<span v-else-if="feesItem.payMode=='PayOnDelivery'">到付</span>
 										<span v-else-if="feesItem.payMode=='PayOnReceipt'">回单结</span>
+										<span v-else-if="feesItem.payMode=='PayMonthly'">月结</span>
 										<span v-else>收货方付</span>
 									</td>
 									<td>
@@ -121,6 +122,7 @@
 													<el-option label="预付" value="Prepay"></el-option>
 													<el-option label="回单结" value="PayOnReceipt"></el-option>
 													<el-option label="收货方付" value="PayByConsignee"></el-option>
+													<el-option label="月结" value="PayMonthly"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-form>

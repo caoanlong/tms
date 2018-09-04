@@ -164,6 +164,7 @@
                                                 <el-option label="预付" value="Prepay"></el-option>
                                                 <el-option label="回单结" value="PayOnReceipt"></el-option>
                                                 <el-option label="收货方付" value="PayByConsignee"></el-option>
+                                                <el-option label="月结" value="PayMonthly"></el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-form>
