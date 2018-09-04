@@ -16,11 +16,18 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="委托时间从" prop="begin">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.begin">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" v-model="find.begin">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="至" prop="end">
-						<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="find.end">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							v-model="find.end">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
