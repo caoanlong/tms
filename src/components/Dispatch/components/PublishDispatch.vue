@@ -103,6 +103,7 @@
                                         </el-tooltip>
                                         &nbsp;&nbsp;&nbsp;
                                         <span class="add-btn" @click="addPerson('second')">更换</span>
+                                        <span class="add-btn" @click="delPerson('second')">删除</span>
                                     </span>
                                     <span class="add-btn" @click="addPerson('second')" v-else v-show="selectedTruck.truckID">+ 添加随行人员</span>
                                 </td>
@@ -333,6 +334,10 @@ export default {
         addPerson(type) {
             this.personType = type
             this.personDialog = true
+        },
+        delPerson() {
+            this.selectedTruck.superCargo = null
+            this.createPersons()
         },
         addFreight() {
             this.bizDispatchFeeList.push({
