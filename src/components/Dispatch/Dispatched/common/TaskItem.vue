@@ -28,7 +28,7 @@
 				</div>
 				<p><span class="sequenceTag">{{taskItem.consigneeSequence}}</span>{{taskItem.consigneeArea}} {{taskItem.consigneeLocationAddress}} {{taskItem.consigneeDetailAddress}}</p>
 				<p class="c2">{{taskItem.consigneeDate | getdatefromtimestamp('min')}}（预计到货）</p>
-				<p class="c6" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp('min')}}（实际到货）<el-tag size="mini" type="danger" v-if="isArrivedOverTime=='Y'">延迟到货</el-tag></p>
+				<p class="c6" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp('min')}}（实际到货）<el-tag size="mini" type="danger" v-if="taskItem.isArrivedOverTime=='Y'">延迟到货</el-tag></p>
 			</div>
 		</div>
 		<div class="picTit" v-if="taskItem.dispatchTaskPicList.length>0">任务照片（{{taskItem.dispatchTaskPicList.length}}）</div>

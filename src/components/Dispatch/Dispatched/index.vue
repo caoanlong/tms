@@ -170,7 +170,9 @@
 					</thead>
 					<tbody>
 						<template v-for="item in scrambleList.grabOfferOrderDetailVOList">
-							<tr><td colspan="4" class="blank"></td></tr>
+							<tr>
+								<td colspan="4" class="blank"></td>
+							</tr>
 							<tr>
 								<td class="txt-l">
 									<p>{{item.plateNo}} 
@@ -209,7 +211,10 @@
 									</p>
 									<p>{{item.mobile}}</p>
 								</td>
-								<td class="c posr"><span class="tags">定</span>{{item.amount}}元 <img class="success" src="../../../assets/imgs/successIcon.png" height="48" v-if="item.status == 'Agreed'" /></td></td>
+								<td class="c posr">
+									<span class="tags">定</span>{{item.amount}}元 
+									<img class="success" src="../../../assets/imgs/successIcon.png" height="48" v-if="item.status == 'Agreed'" />
+								</td>
 								<td><span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID)" v-if="item.status == 'Committed'">选TA承运</span></td>
 							</tr>
 							<tr>
@@ -411,7 +416,7 @@ export default {
 				dispatchOfferID
 			}).then(res => {
 				Message.success('已成功选择承运人!')
-				this.scramble()
+				this.scramble(dispatchOfferID)
 				this.getList()
 			})
 		},
