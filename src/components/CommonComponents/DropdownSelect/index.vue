@@ -63,6 +63,11 @@ export default {
 	watch: {
 		isChangeCompany() {
 			this.selectedAddress = {}
+			this.fetchSuggestions('', (res) => {
+				if (res.length == 1) {
+					this.selectedAddress = res[0]
+				}
+			})
 		},
 		selected: {
 			handler(data) {
