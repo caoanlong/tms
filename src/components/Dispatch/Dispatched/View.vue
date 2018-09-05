@@ -22,7 +22,7 @@
 					<table class="wf-table">
 						<tr>
 							<td align="center" width="100">预计</td>
-							<td>总里程 {{dispatchOrderDetail.distance}}公里 用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</td>
+							<td>总里程 {{(Number(dispatchOrderDetail.distance)/1000).toFixed(2)}}公里 用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</td>
 							<td align="center" width="100">实际</td>
 							<td>总里程 {{totalDistance?totalDistance:'0'}}公里 <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring('min')}}</span></td>
 						</tr>
@@ -242,7 +242,6 @@ export default {
 		this.getFees()
 		this.getTaskList()
 		this.getLogs()
-		
 	},
 	methods: {
 		handCloseTrail() {
@@ -259,8 +258,6 @@ export default {
 				this.dispatchOrder = res
 				this.dispatchOrderDetail = res.detail
 				this.dispatchOrderlocationList = res.locationList
-				console.log(this.dispatchOrderlocationList)
-				
 				this.createPersons()
 				this.getDistance()
 			})
@@ -282,9 +279,6 @@ export default {
 			Dispatchbill.findDispatchLogs({ dispatchOrderID }).then(res => {
 				this.dispatchLogs = res
 			})
-		},
-		back() {
-			this.$router.go(-1)
 		},
 		createPersons() {
 			if (this.dispatchOrderDetail.driverID) {
@@ -337,7 +331,7 @@ export default {
 						category: item.category,
 						superCargoID: item.superCargoID,
 						payMode: item.payMode,
-						supercargoName:item.supercargoName,
+						supercargoName: item.supercargoName,
 						amount: item.amount,
 						dispatchOrderID
 					}
@@ -353,25 +347,27 @@ export default {
 		/**
 		 * 调用高德地图接口获取距离
 		 */
-		getDistance() {
-			console.log(1)
+		async getDistance() {
 			const list = this.dispatchOrderlocationList.map(item => item.loc.longitude + ',' + item.loc.latitude)
-			const origins = list.join('|')
-			// const destination = list[list.length-1]
-			const destination = list[0]
-			axios({url: `https://restapi.amap.com/v3/distance?origins=${origins}&destination=${destination}&key=${MAPKEY}`}).then(res => {
-				const results = res.data.results
-				const arrays = [...this.dispatchOrderlocationList]
-				this.totalDistance = 0
-				arrays.forEach((item,i) => {
-					item.sequence = i+1
-					item.nodeDistance = Number((Number(results[i].distance)/1000).toFixed(2))
-					this.totalDistance += item.nodeDistance
-				})
-				this.totalDistance = Number(this.totalDistance.toFixed(2))
-				this.dispatchOrderlocationList = arrays
+			const results = [0]
+			let i = 0
+			while(i < list.length - 1) {
+				const res = await axios({url: `https://restapi.amap.com/v3/distance?origins=${list[i]}&destination=${list[i+1]}&key=${MAPKEY}`})
+				if (res.data.status == 1) results.push(res.data.results[0].distance)
+				i++
+			}
+			const arrays = [...this.dispatchOrderlocationList]
+			this.totalDistance = 0
+			arrays.forEach((item,i) => {
+				item.sequence = i+1
+				item.nodeDistance = results[i]
+				this.totalDistance += Number(item.nodeDistance)
 			})
+			this.dispatchOrderlocationList = arrays
 		},
+		back() {
+			this.$router.go(-1)
+		}
 	}
 }
 
