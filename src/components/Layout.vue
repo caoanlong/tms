@@ -249,26 +249,26 @@
 	<el-dialog title="账号设置" :visible.sync="accountInfoDialog" custom-class="accountInfoDialog" top="10vh" :close-on-press-escape="false" :close-on-click-modal="false">
 		<el-tabs tab-position="left" style="height:300px" v-model="activeName" @tab-click="handleTabClick">
 			<el-tab-pane label="个人资料" name="tab1">
-				<el-form label-width="80px" size="small" :model="MemDetail">
+				<el-form label-width="80px" size="small" :model="memDetail">
 					<el-row :gutter="20">
 						<el-col :span="6">
 							<div class="userFace">
-								<ImageUpload :files="[MemDetail.headPic]" @imgUrlBack="handleAvatarSuccess1" :fixed="true" :limitNum="1"></ImageUpload>
+								<ImageUpload :files="[memDetail.headPic]" @imgUrlBack="handleAvatarSuccess1" :fixed="true" :limitNum="1"></ImageUpload>
 							</div>
 						</el-col>
 						<el-col :span="18">
 							<el-form-item label="我的姓名">
-								<el-input placeholder="请输入" v-model="MemDetail.realName"></el-input>
+								<el-input placeholder="请输入" v-model="memDetail.realName"></el-input>
 							</el-form-item>
 							<el-form-item label="手机号码">
-								<el-input placeholder="请输入手机号码" v-model="MemDetail.mobile" disabled></el-input>
+								<el-input placeholder="请输入手机号码" v-model="memDetail.mobile" disabled></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
 						<div class="otherInfo">
-							<p>企业名称：{{MemDetail.companyName}}</p>
-							<p>企业角色：{{MemDetail.roleName}}</p>
+							<p>企业名称：{{memDetail.companyName}}</p>
+							<p>企业角色：{{memDetail.roleName}}</p>
 						</div>
 					</el-row>
 					<el-row>
@@ -336,7 +336,7 @@ export default {
 			selectedArea: [],
 			companyDetail:{},
 			activeName: 'tab1',
-			MemDetail:{},
+			memDetail:{},
 			memPwd:{
 				oldPassword:'',
 				newPassword:'',
@@ -431,14 +431,13 @@ export default {
 		},
 		getMemInfo(){
 			Member.detail().then(res =>{
-				this.MemDetail = res.data.data
-				
+				this.memDetail = res.data.data
 			})
 		},
 		saveMemInfo(){
 			Member.modify({
-				headPic: this.MemDetail.headPic,
-				realName: this.MemDetail.realName
+				headPic: this.memDetail.headPic,
+				realName: this.memDetail.realName
 			}).then(res =>{
 				Message.success('保存成功！')
 				this.accountInfoDialog = false
@@ -477,7 +476,7 @@ export default {
 			this.companyDetail.logoUrl = res.length == 0 ? '' : res[0]
 		},
         handleAvatarSuccess1(res) {
-			this.MemDetail.headPic = res.length == 0 ? '': res[0]
+			this.memDetail.headPic = res.length == 0 ? '': res[0]
 		},
 		handleTabClick(tab, event){
 			this.memPwd.oldPassword=''
