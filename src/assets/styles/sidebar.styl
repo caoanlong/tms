@@ -9,7 +9,7 @@ $color-5 = #409eff
         min-height 100%
 
     .sidebar-container
-        width 180px!important
+        width 180px
         height 100%
         position fixed
         top 50px
@@ -36,7 +36,8 @@ $color-5 = #409eff
 
 #app .el-menu--collapse .el-menu .el-submenu
 .el-submenu .el-menu-item
-    min-width 180px!important
+    min-width 50px!important
+
 
 #app .sidebar-container .el-menu .el-menu .el-menu-item:hover
 #app .sidebar-container .el-menu .el-menu .el-menu-item:focus
@@ -46,3 +47,15 @@ $color-5 = #409eff
 #app .sidebar-container .el-menu .el-menu .el-menu-item.is-active
     color $color-4
     background $color-5!important
+.hideSidebar
+    .header
+        padding-left 54px
+    .sidebar-container
+        width 50px!important
+    .labelTit
+    .el-icon-arrow-right
+        display none
+    .app-wrapper
+    .breadcrumb-container
+        left 50px!important
+    

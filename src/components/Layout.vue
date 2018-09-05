@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div :class="{hideSidebar: !sidebar.opened}">
 	<div class="header">
 		<div class="top-bar">
 			<navbar @listenToChild = "showDialog"></navbar>
@@ -497,15 +497,7 @@ export default {
 	padding 20px
 	overflow hidden
 	overflow-y auto
-.header
-	position fixed
-	top 0
-	left 0
-	right 0
-	height 84px
-	z-index 1001
-	padding-left 180px
-	background #424242
+
 .right-container
 	.breadcrumb-container
 		position fixed
@@ -513,7 +505,7 @@ export default {
 		z-index 100
 		left 180px
 		right 0
-		padding 0 20px
+		padding 0 20px 0 50px
 		background-color #ffffff
 		border-bottom 1px solid #dddddd
 .fullBg

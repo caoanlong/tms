@@ -100,8 +100,8 @@
 									<el-tag size="mini" type="success" v-else>已完成</el-tag>
 								</div>
 								<div class="handler">
-									<span class="c1" @click="scramble(item.dispatchOrderID)" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
-									<span class="c1" @click="scramble(item.dispatchOrderID)" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
+									<span class="c1" @click="scramble(item.dispatchOrderID,item.type)" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
+									<span class="c1" @click="scramble(item.dispatchOrderID,item.type)" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
 									<el-button 
 										v-if="item.status == 'Ordered' || item.status == 'Finished'"
 										type="text" 
@@ -160,19 +160,19 @@
 			</div>
 			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
-		<el-dialog title="报价详情" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
+		<el-dialog :title="(curScrambleType=='Grab')?'抢单详情':'报价详情'" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
 			<p class="c1">货物： {{scrambleList.cargoName}}</p>
 			<p class="c1">货量： {{scrambleList.cargoWeight}}吨 / {{scrambleList.cargoVolume}}方 / {{scrambleList.cargoNum}}</p>
-			<p class="c1">{{scrambleList.load}} 装 {{scrambleList.unLoad}} 卸  预计里程 {{scrambleList.mileages}} 公里</p>
+			<p class="c1">{{scrambleList.load}} 装 {{scrambleList.unLoad}} 卸  预计里程 {{(Number(scrambleList.mileages)/1000).toFixed(2)}}公里</p>
 			<div class="tableBox">
 				<table class="customerTable">
-					<caption>抢单人数（{{scrambleList.grabOfferNum}}）</caption>
+					<caption>{{(curScrambleType=='Grab')?'抢单人数':'报价人数'}}（{{scrambleList.grabOfferNum}}）</caption>
 					<thead>
 						<tr>
 							<th>车辆</th>
-							<th>司机</th>
-							<th>运费</th>
-							<th>操作</th>
+							<th width="160">司机</th>
+							<th width="160">运费</th>
+							<th width="160">操作</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -229,8 +229,8 @@
 								</td>
 								<td>
 									<span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID,item.dispatchOrderID)" v-if="item.status == 'Committed'">选TA承运</span>
-									<p v-if="item.status == 'Agreed'">调度员的名字(没返回)</p>
-									<p v-if="item.status == 'Agreed'">调度时间(没返回)</p>
+									<p v-if="item.status == 'Agreed'">调度员：{{item.confirmer}}</p>
+									<p v-if="item.status == 'Agreed'">{{item.confirmTime  | getdatefromtimestamp}}</p>
 								</td>
 							</tr>
 							<tr>
@@ -271,6 +271,7 @@ import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from './common/UploadPhoto'
 import {closeConfirm, cancelConfirm } from '../../../common/utils'
+import expireWarnJson from "../../../assets/data/expireWarnJson";
 export default {
 	mixins: [baseMixin],
 	components: { TrailMap,UploadPhoto },
@@ -297,29 +298,7 @@ export default {
 			currentDispatchOrderID: '',
 			truckExp:[],
 			driverExp:[],
-			expireWarnJson:{
-				DriverLicExpiresTime:"行驶证到期",
-				RoadTransportLicAnnualPeriod:"道路运输证到期 ",
-				GpsValidEndDate:"GPS到期 ",
-				SaliInsuranceExpires:"交强险到期 ",
-				BizInsuranceExpires:"商业险到期 ",
-				CarrierRiskInsuranceExpires:"承运险到期 ",
-				CargoInsuranceExpireDate:"货运险到期 ",
-				TankQCExpires:"罐体监测到期 ",
-				SafetyValvesQCExpires:"罐体安全阀监测到期 ",
-				PressureGaugeQCExpires:"罐体压力表监测到期 ",
-				NextRankEvaluteTime:"技术等级下次评定到期",
-				SecondSecurityDepositDate:"二次安全保证金到期 ",
-				NextSecondLevel:"二级维护下次维护",
-				ManagementAgreementExpireDate:"管理协议到期 ",
-				SafetyLiabilityLetterExpireDate:"安全责任书到期",
-				IdCardExpirationTime:"身份证到期 ",
-				DriverLicenseEndTime:"驾驶证到期 ",
-				QualificationExpirationDate:"危货从业资格证到期 ",
-				IntegrityExamineEndTime:"诚信考核证到期 ",
-				LaborContractEndTime:"聘用合同到期 ",
-				EscortLicenseExpireDate:"押运证到期"
-			}
+			curScrambleType:''
 		}
 	},
 	directives: {
@@ -349,6 +328,9 @@ export default {
 	},
 	destroyed() {
 		this.timer = null
+	},
+	computed: {
+		expireWarnJson: () => expireWarnJson
 	},
 	methods:{
 		search(val) {
@@ -431,8 +413,9 @@ export default {
 				this.total = res.total
 			})
 		},
-		scramble(dispatchOrderID) {
+		scramble(dispatchOrderID,type) {
 			this.scrambleDialog = true
+			this.curScrambleType= type
 			Dispatchbill.findgGrabOfferOrderList({
 				dispatchOrderID
 			}).then(res => {
