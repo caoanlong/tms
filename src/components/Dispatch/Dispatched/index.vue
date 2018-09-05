@@ -92,12 +92,14 @@
 										<el-tag size="mini" type="info" v-else-if="item.type=='Grab'">抢单中</el-tag>
 										<el-tag size="mini" type="info" v-else>报价中</el-tag>
 									</span>
-									<el-tag size="mini" v-else-if="item.status == 'Ordered'">已接单</el-tag>
-									<el-tag size="mini" type="info" v-else-if="item.status == 'Canceled'">已取消</el-tag>
-									<el-tag size="mini" type="info" v-else-if="item.status == 'Rejected'">已拒绝</el-tag>
-									<el-tag size="mini" type="info" v-else-if="item.status == 'Closed'">已关闭</el-tag>
-									<el-tag size="mini" type="info" v-else-if="item.status == 'Overdue'">超时取消</el-tag>
-									<el-tag size="mini" type="success" v-else>已完成</el-tag>
+									<span v-else>
+										<el-tag size="mini" v-if="item.status == 'Ordered'">已接单</el-tag>
+										<el-tag size="mini" type="info" v-else-if="item.status == 'Canceled'">已取消</el-tag>
+										<el-tag size="mini" type="info" v-else-if="item.status == 'Rejected'">已拒绝</el-tag>
+										<el-tag size="mini" type="info" v-else-if="item.status == 'Closed'">已关闭</el-tag>
+										<el-tag size="mini" type="info" v-else-if="item.status == 'Overdue'">超时取消</el-tag>
+										<el-tag size="mini" type="success" v-else>已完成</el-tag>
+									</span>
 								</div>
 								<div class="handler">
 									<span class="c1" @click="scramble(item.dispatchOrderID,item.type)" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
@@ -194,19 +196,7 @@
 										</el-tooltip>
 									</p>
 									<p>
-										{{Number(item.length/1000).toFixed(1)}} 米 /
-										<span v-if="item.truckType == 'TankTruck'">罐式货车</span>
-										<span v-else-if="item.truckType == 'VanTruck'">厢式货车</span>
-										<span v-else-if="item.truckType == 'BarrackTruck'">仓栅货车</span>
-										<span v-else-if="item.truckType == 'TailgateTruck'">栏板货车</span>
-										<span v-else-if="item.truckType == 'DumpTruck'">自卸货车</span>
-										<span v-else-if="item.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
-										<span v-else-if="item.truckType == 'TankTrailer'">罐式挂车</span>
-										<span v-else-if="item.truckType == 'VanTrailer'">厢式挂车</span>
-										<span v-else-if="item.truckType == 'BarrackTrailer'">仓栅挂车</span>
-										<span v-else-if="item.truckType == 'TailgateTrailer'">栏板挂车</span>
-										<span v-else-if="item.truckType == 'ContainerTrailer'">集装箱挂车</span>
-										/ 22 吨 / 3.5 方
+										{{Number(item.length/1000).toFixed(1)}} 米 / {{truckType[item.truckType]}} / 22 吨 / 3.5 方
 									</p>
 								</td>
 								<td class="txt-l">
@@ -271,7 +261,8 @@ import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from './common/UploadPhoto'
 import {closeConfirm, cancelConfirm } from '../../../common/utils'
-import expireWarnJson from "../../../assets/data/expireWarnJson";
+import truckType from "../../../assets/data/truckType"
+import expireWarnJson from "../../../assets/data/expireWarnJson"
 export default {
 	mixins: [baseMixin],
 	components: { TrailMap,UploadPhoto },
@@ -330,6 +321,7 @@ export default {
 		this.timer = null
 	},
 	computed: {
+		truckType: () => truckType,
 		expireWarnJson: () => expireWarnJson
 	},
 	methods:{
