@@ -120,13 +120,13 @@
 										<!-- <el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button> -->
 									</span>
 									<!-- 已接单 -->
-									<span v-else-if="item.status == 'Ordered'">
-										<!-- <el-button type="text" size="mini" :disabled="
+									<!-- <span v-else-if="item.status == 'Ordered'">
+										<el-button type="text" size="mini" :disabled="
 											item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Loaded') 
 											|| item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Signed')
-										" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button> -->
-										<!-- <el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button> -->
-									</span>
+										" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
+										<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
+									</span> -->
 									<!-- 已取消 已拒绝-->
 									<span v-else>
 										<router-link tag="span" class="c6" style="margin-left:0" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
@@ -186,7 +186,7 @@
 										<el-tag size="mini" v-if="item.gps">GPS</el-tag>
 										<el-tooltip placement="right" effect="light">
 											<div slot="content">
-												<el-tag size="mini" type="danger">GPS到期</el-tag>
+												<el-tag size="mini" type="danger">后台没返回</el-tag>
 											</div>
 											<el-tag size="mini" type="danger">到期</el-tag>
 										</el-tooltip>
@@ -211,7 +211,7 @@
 									<p>{{item.name}}
 										<el-tooltip placement="right" effect="light">
 											<div slot="content">
-												<el-tag size="mini" type="danger">身份证到期</el-tag>
+												<el-tag size="mini" type="danger">后台没返回</el-tag>
 											</div>
 											<el-tag size="mini" type="danger">到期</el-tag>
 										</el-tooltip>
@@ -220,12 +220,13 @@
 								</td>
 								<td class="c posr">
 									<span class="tags">定</span>{{item.amount}}元 
-									<img class="success" src="../../../assets/imgs/successIcon.png" height="48" v-if="item.status == 'Agreed'" />
+									<img class="success" src="../../../assets/imgs/qdcg.png" height="48" v-if="item.status == 'Agreed'&&item.type=='Grab'" />
+									<img class="success" src="../../../assets/imgs/bjcg.png" height="48" v-if="item.status == 'Agreed'&&item.type=='Offer'" />
 								</td>
 								<td>
 									<span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID,item.dispatchOrderID)" v-if="item.status == 'Committed'">选TA承运</span>
-									<p v-if="item.status == 'Agreed'"></p>
-									<p v-if="item.status == 'Agreed'"></p>
+									<p v-if="item.status == 'Agreed'">调度员的名字(没返回)</p>
+									<p v-if="item.status == 'Agreed'">调度时间(没返回)</p>
 								</td>
 							</tr>
 							<tr>
