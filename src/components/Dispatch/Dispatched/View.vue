@@ -159,34 +159,13 @@
 					<p>运输车辆人员</p>
 					<div class="truckInfo c2">
 						<p v-if="dispatchOrderDetail.plateNo">
-							<label>车牌号</label>{{dispatchOrderDetail.plateNo}} 
-							{{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/
-							<span v-if="dispatchOrderDetail.truckType == 'TankTruck'">罐式货车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'VanTruck'">厢式货车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'BarrackTruck'">仓栅货车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'TailgateTruck'">栏板货车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'DumpTruck'">自卸货车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'TankTrailer'">罐式挂车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'VanTrailer'">厢式挂车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'BarrackTrailer'">仓栅挂车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'TailgateTrailer'">栏板挂车</span>
-							<span v-else-if="dispatchOrderDetail.truckType == 'ContainerTrailer'">集装箱挂车</span>
+							<label>车牌号</label>
+							{{dispatchOrderDetail.plateNo}} 
+							{{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{truckType[dispatchOrderDetail.truckType]}}
 						</p>
 						<p v-if="dispatchOrderDetail.trailerPlateNo">
 							<label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} 
-							{{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/
-							<span v-if="dispatchOrderDetail.trailerTruckType == 'TankTruck'">罐式货车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'VanTruck'">厢式货车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'BarrackTruck'">仓栅货车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'TailgateTruck'">栏板货车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'DumpTruck'">自卸货车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'TankTrailer'">罐式挂车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'VanTrailer'">厢式挂车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'BarrackTrailer'">仓栅挂车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'TailgateTrailer'">栏板挂车</span>
-							<span v-else-if="dispatchOrderDetail.trailerTruckType == 'ContainerTrailer'">集装箱挂车</span>
+							{{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{truckType[dispatchOrderDetail.trailerTruckType]}}
 						</p>
 						<p v-if="dispatchOrderDetail.driverName">
 							<label>司机</label>{{dispatchOrderDetail.driverName}} 
@@ -236,6 +215,7 @@ import TaskItem from './common/TaskItem'
 import TrailMap from '../components/TrailMap'
 import axios from 'axios'
 import { MAPKEY } from '../../../common/const'
+import truckType from '../../../assets/data/truckType'
 export default {
 	data() {
 		return {
@@ -252,6 +232,9 @@ export default {
 			trailDialog: false,
 			currentDispatchOrderID: ''
 		}
+	},
+	computed: {
+		truckType: () => truckType
 	},
 	components:{ TaskItem, TrailMap },
 	created() {
