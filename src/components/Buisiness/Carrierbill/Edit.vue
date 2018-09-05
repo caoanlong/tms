@@ -333,6 +333,8 @@ export default {
 			selectedConsignee: null,
 			selectedShipperAddress: null,
 			selectedConsigneeAddress: null,
+			flagShipperCompanyName: '',
+			flagConsigneeCompanyName: '',
 			rules: {
 				shipperNo: [ {required: true, message: '请输入发货单号'} ],
 				commissionDate: [ {required: true, message: '请选择委托时间'} ],
@@ -398,6 +400,8 @@ export default {
 					locationAddress:res.consigneeLocationAddress,
 					detailAddress:res.consigneeDetailAddress
 				}
+				this.carrierbillInfo.flagShipperCompanyName = res.shipperCompanyName
+				this.carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
 			})
 			
 		},
@@ -434,14 +438,18 @@ export default {
 			})
 		},
 		getShipperCompany(queryString, cb) {
-			this.carrierbillInfo.shipperID = ''
+			if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
+				this.carrierbillInfo.shipperID = ''
+			}
 			Customer.find({
 				customerType: 'Shipper',
 				keyword: queryString
 			}).then(res => {cb(res.records) })
 		},
 		getConsigneeCompany(queryString, cb) {
-			this.carrierbillInfo.consigneeID = ''
+			if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
+				this.carrierbillInfo.consigneeID = ''
+			}
 			Customer.find({
 				customerType: 'Consignee',
 				keyword: queryString
@@ -476,23 +484,23 @@ export default {
 		},
 		handSelectShipperCompany(data) {
 			this.isChangeShipper = !this.isChangeShipper
-			this.currentCompany = data
 			this.selectedShipper = data
 			this.carrierbillInfo.shipperCompanyName = ' '
 			this.carrierbillInfo.shipperID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.shipperCompanyName = data.companyName
+				this.carrierbillInfo.flagShipperCompanyName = data.companyName
 				this.getShipperAddress('', false)
 			})
 		},
 		handSelectConsigneeCompany(data) {
 			this.isChangeConsignee = !this.isChangeConsignee
-			this.currentCompany = data
 			this.selectedConsignee = data
 			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.consigneeCompanyName = data.companyName
+				this.carrierbillInfo.flagConsigneeCompanyName = data.companyName
 				this.getConsigneeAddress('', false)
 			})
 		},
