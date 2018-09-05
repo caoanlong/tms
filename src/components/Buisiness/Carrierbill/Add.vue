@@ -331,6 +331,8 @@ export default {
 			selectedConsignee: null,
 			selectedShipperAddress: null,
 			selectedConsigneeAddress: null,
+			flagShipperCompanyName: '',
+			flagConsigneeCompanyName: '',
 			rules: {
 				shipperNo: [ {required: true, message: '请输入发货单号'} ],
 				commissionDate: [ {required: true, message: '请选择委托时间'} ],
@@ -397,14 +399,18 @@ export default {
 			})
 		},
 		getShipperCompany(queryString, cb) {
-			this.carrierbillInfo.shipperID = ''
+			if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
+				this.carrierbillInfo.shipperID = ''
+			}
 			Customer.find({
 				customerType: 'Shipper',
 				keyword: queryString
 			}).then(res => {cb(res.records) })
 		},
 		getConsigneeCompany(queryString, cb) {
-			this.carrierbillInfo.consigneeID = ''
+			if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
+				this.carrierbillInfo.consigneeID = ''
+			}
 			Customer.find({
 				customerType: 'Consignee',
 				keyword: queryString
@@ -444,6 +450,7 @@ export default {
 			this.carrierbillInfo.shipperID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.shipperCompanyName = data.companyName
+				this.carrierbillInfo.flagShipperCompanyName = data.companyName
 				this.getShipperAddress('', false)
 			})
 		},
@@ -454,6 +461,7 @@ export default {
 			this.carrierbillInfo.consigneeID = data.customerID
 			this.$nextTick(() => {
 				this.carrierbillInfo.consigneeCompanyName = data.companyName
+				this.carrierbillInfo.flagConsigneeCompanyName = data.companyName
 				this.getConsigneeAddress('', false)
 			})
 		},
