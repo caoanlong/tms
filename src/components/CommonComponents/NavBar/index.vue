@@ -62,7 +62,7 @@ export default {
 	height 50px
 	line-height 50px
 	border-radius 0px !important
-	background #424242
+	background #2f3a5b
 	.right-menu
 		float right
 		height 100%

@@ -3,7 +3,7 @@
         title="车辆人员" 
         :visible="isVisible" 
         :show-close="false" 
-        :close-on-click-modal="false">
+        :close-on-click-modal="false" width="80%">
         <el-form :inline="true" size="mini">
             <el-form-item label="关键字">
                 <el-input placeholder="编号/姓名/车牌号/车长/车型" v-model="find.keyword"></el-input>
@@ -50,6 +50,7 @@
                         <strong>{{item.plateNo}}</strong>
                         <span>{{(Number(item.length)/1000).toFixed(2)}}米/{{truckType[item.truckType]}}/{{(Number(item.loads)/1000).toFixed(2)}}吨/{{item.loadVolume}}方</span>
                         <el-tag size="mini" type="success">{{item.workStatus == 'Free' ? '空闲' : '业务中'}}</el-tag>
+                        <el-tag size="mini" v-if="item.gps && item.gps == 1">GPS</el-tag>
                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                             <div slot="content">
                                 <el-tag 
@@ -214,4 +215,5 @@ export default {
     .add-btn,.del-btn
         color #409EFF
         cursor pointer
+
 </style>
