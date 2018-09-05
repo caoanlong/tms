@@ -186,9 +186,11 @@
 										<el-tag size="mini" v-if="item.gps">GPS</el-tag>
 										<el-tooltip placement="right" effect="light">
 											<div slot="content">
-												<el-tag size="mini" type="danger">后台没返回</el-tag>
+												<el-tag size="mini" type="danger" v-for="(truckItem,index) in item.truckExpiredCertificate.split(',')" :key="index">{{
+													expireWarnJson[truckItem]
+												}}</el-tag>
 											</div>
-											<el-tag size="mini" type="danger">到期</el-tag>
+											<el-tag size="mini" type="danger" v-if="item.truckExpiredCertificate.length>0">到期</el-tag>
 										</el-tooltip>
 									</p>
 									<p>
@@ -211,9 +213,11 @@
 									<p>{{item.name}}
 										<el-tooltip placement="right" effect="light">
 											<div slot="content">
-												<el-tag size="mini" type="danger">后台没返回</el-tag>
+												<el-tag size="mini" type="danger" v-for="(driverItem,index) in item.driverExpiredCertificate.split(',')" :key="index">{{
+													expireWarnJson[driverItem]
+												}}</el-tag>
 											</div>
-											<el-tag size="mini" type="danger">到期</el-tag>
+											<el-tag size="mini" type="danger" v-if="item.driverExpiredCertificate.length>0">到期</el-tag>
 										</el-tooltip>
 									</p>
 									<p>{{item.mobile}}</p>
@@ -290,7 +294,32 @@ export default {
 			currentConsigneeArea: '',
 			isPhotoVisible: false,
 			scrambleList:[],
-			currentDispatchOrderID: ''
+			currentDispatchOrderID: '',
+			truckExp:[],
+			driverExp:[],
+			expireWarnJson:{
+				DriverLicExpiresTime:"行驶证到期",
+				RoadTransportLicAnnualPeriod:"道路运输证到期 ",
+				GpsValidEndDate:"GPS到期 ",
+				SaliInsuranceExpires:"交强险到期 ",
+				BizInsuranceExpires:"商业险到期 ",
+				CarrierRiskInsuranceExpires:"承运险到期 ",
+				CargoInsuranceExpireDate:"货运险到期 ",
+				TankQCExpires:"罐体监测到期 ",
+				SafetyValvesQCExpires:"罐体安全阀监测到期 ",
+				PressureGaugeQCExpires:"罐体压力表监测到期 ",
+				NextRankEvaluteTime:"技术等级下次评定到期",
+				SecondSecurityDepositDate:"二次安全保证金到期 ",
+				NextSecondLevel:"二级维护下次维护",
+				ManagementAgreementExpireDate:"管理协议到期 ",
+				SafetyLiabilityLetterExpireDate:"安全责任书到期",
+				IdCardExpirationTime:"身份证到期 ",
+				DriverLicenseEndTime:"驾驶证到期 ",
+				QualificationExpirationDate:"危货从业资格证到期 ",
+				IntegrityExamineEndTime:"诚信考核证到期 ",
+				LaborContractEndTime:"聘用合同到期 ",
+				EscortLicenseExpireDate:"押运证到期"
+			}
 		}
 	},
 	directives: {
@@ -462,8 +491,7 @@ export default {
 					})
 				})
 			})
-		},
-
+		}
 	}
 }
 </script>
