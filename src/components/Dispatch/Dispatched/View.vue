@@ -32,7 +32,7 @@
 						<span class="c1" v-if="dispatchOrderDetail.loadVolumeSum"><span class="num-label">体</span> {{dispatchOrderDetail.loadVolumeSum}} 方</span>
 						<span class="c1" v-if="dispatchOrderDetail.loadNumSum"><span class="num-label">数</span> {{dispatchOrderDetail.loadNumSum}}</span>
 					</p>
-					<p style="border-bottom:1px solid #ddd">
+					<p style="border-bottom:1px solid #ddd" v-if="!hideAmount">
 						<strong>运费</strong>
 						<span class="fr c1 carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 
 							<svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon>
@@ -230,7 +230,8 @@ export default {
 			dispatchOrderlocationList:[],
 			totalDistance:'',
 			trailDialog: false,
-			currentDispatchOrderID: ''
+			currentDispatchOrderID: '',
+			hideAmount:false
 		}
 	},
 	computed: {
@@ -243,6 +244,7 @@ export default {
 		this.getTaskList()
 		this.getLogs()
 	},
+	
 	methods: {
 		handCloseTrail() {
 			this.trailDialog = false
@@ -253,6 +255,8 @@ export default {
 			this.trailDialog = true
 		},
 		getDetail() {
+			this.hideAmount = this.$route.query.isHideAmount
+			console.log(this.hideAmount)
 			const dispatchOrderID = this.$route.query.dispatchOrderID
 			Dispatchbill.findById({ dispatchOrderID }).then(res => {
 				this.dispatchOrder = res
