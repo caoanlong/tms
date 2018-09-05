@@ -38,6 +38,7 @@
                                         <strong>{{selectedTruck.plateNo}}</strong>
                                         <span>{{(Number(selectedTruck.length)/1000).toFixed(2)}}米/{{truckType[selectedTruck.truckType]}}/{{(Number(selectedTruck.loads)/1000).toFixed(2)}}吨/{{selectedTruck.loadVolume}}方</span>
                                         <el-tag size="mini" type="success">{{selectedTruck.workStatus == 'Free' ? '空闲' : '业务中'}}</el-tag>
+                                        <el-tag size="mini" v-if="selectedTruck.gps && selectedTruck.gps == 1">GPS</el-tag>
                                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                                             <div slot="content">
                                                 <el-tag 

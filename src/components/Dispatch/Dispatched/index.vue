@@ -186,7 +186,7 @@
 								<td class="txt-l">
 									<p>{{item.plateNo}} 
 										<el-tag size="mini" v-if="item.gps">GPS</el-tag>
-										<el-tooltip placement="right" effect="light">
+										<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 											<div slot="content">
 												<el-tag size="mini" type="danger" v-for="(truckItem,index) in item.truckExpiredCertificate.split(',')" :key="index">{{
 													expireWarnJson[truckItem]
@@ -201,7 +201,7 @@
 								</td>
 								<td class="txt-l">
 									<p>{{item.name}}
-										<el-tooltip placement="right" effect="light">
+										<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 											<div slot="content">
 												<el-tag size="mini" type="danger" v-for="(driverItem,index) in item.driverExpiredCertificate.split(',')" :key="index">{{
 													expireWarnJson[driverItem]

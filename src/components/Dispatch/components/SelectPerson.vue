@@ -3,7 +3,7 @@
         :title="type == 'primary' ? '驾驶员列表' : '押运员列表'" 
         :visible="isVisible" 
         :show-close="false" 
-        :close-on-click-modal="false">
+        :close-on-click-modal="false" width="80%">
         <el-form :inline="true" size="mini">
             <el-form-item :label="type == 'primary' ? '驾驶员' : '押运员'">
                 <el-input placeholder="姓名/手机号" v-model="find.keyword"></el-input>

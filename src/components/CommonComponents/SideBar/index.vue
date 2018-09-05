@@ -2,7 +2,7 @@
 	<div class="lside">
 		<el-menu 
 			mode="vertical"  :style="{'height':fullHeight+'px'}" class="sidenav"
-			background-color="#4f4f4f" 
+			background-color="#3a466d" 
 			text-color="#fff" 
 			active-text-color="#fff" 
 			@select="selectIndex" 
