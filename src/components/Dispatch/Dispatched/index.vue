@@ -100,8 +100,8 @@
 									<el-tag size="mini" type="success" v-else>已完成</el-tag>
 								</div>
 								<div class="handler">
-									<span class="c1" @click="scramble(item.dispatchOrderID)" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
-									<span class="c1" @click="scramble(item.dispatchOrderID)" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
+									<span class="c1" @click="scramble(item.dispatchOrderID,item.type)" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
+									<span class="c1" @click="scramble(item.dispatchOrderID,item.type)" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
 									<el-button 
 										v-if="item.status == 'Ordered' || item.status == 'Finished'"
 										type="text" 
@@ -160,19 +160,19 @@
 			</div>
 			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
-		<el-dialog title="报价详情" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
+		<el-dialog :title="(curScrambleType=='Grab')?'抢单详情':'报价详情'" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
 			<p class="c1">货物： {{scrambleList.cargoName}}</p>
 			<p class="c1">货量： {{scrambleList.cargoWeight}}吨 / {{scrambleList.cargoVolume}}方 / {{scrambleList.cargoNum}}</p>
-			<p class="c1">{{scrambleList.load}} 装 {{scrambleList.unLoad}} 卸  预计里程 {{scrambleList.mileages}} 公里</p>
+			<p class="c1">{{scrambleList.load}} 装 {{scrambleList.unLoad}} 卸  预计里程 {{(Number(scrambleList.mileages)/1000).toFixed(2)}}公里</p>
 			<div class="tableBox">
 				<table class="customerTable">
-					<caption>抢单人数（{{scrambleList.grabOfferNum}}）</caption>
+					<caption>{{(curScrambleType=='Grab')?'抢单人数':'报价人数'}}（{{scrambleList.grabOfferNum}}）</caption>
 					<thead>
 						<tr>
 							<th>车辆</th>
-							<th>司机</th>
-							<th>运费</th>
-							<th>操作</th>
+							<th width="160">司机</th>
+							<th width="160">运费</th>
+							<th width="160">操作</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -186,9 +186,11 @@
 										<el-tag size="mini" v-if="item.gps">GPS</el-tag>
 										<el-tooltip placement="right" effect="light">
 											<div slot="content">
-												<el-tag size="mini" type="danger">后台没返回</el-tag>
+												<el-tag size="mini" type="danger" v-for="(truckItem,index) in item.truckExpiredCertificate.split(',')" :key="index">{{
+													expireWarnJson[truckItem]
+												}}</el-tag>
 											</div>
-											<el-tag size="mini" type="danger">到期</el-tag>
+											<el-tag size="mini" type="danger" v-if="item.truckExpiredCertificate.length>0">到期</el-tag>
 										</el-tooltip>
 									</p>
 									<p>
@@ -211,9 +213,11 @@
 									<p>{{item.name}}
 										<el-tooltip placement="right" effect="light">
 											<div slot="content">
-												<el-tag size="mini" type="danger">后台没返回</el-tag>
+												<el-tag size="mini" type="danger" v-for="(driverItem,index) in item.driverExpiredCertificate.split(',')" :key="index">{{
+													expireWarnJson[driverItem]
+												}}</el-tag>
 											</div>
-											<el-tag size="mini" type="danger">到期</el-tag>
+											<el-tag size="mini" type="danger" v-if="item.driverExpiredCertificate.length>0">到期</el-tag>
 										</el-tooltip>
 									</p>
 									<p>{{item.mobile}}</p>
@@ -225,8 +229,8 @@
 								</td>
 								<td>
 									<span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID,item.dispatchOrderID)" v-if="item.status == 'Committed'">选TA承运</span>
-									<p v-if="item.status == 'Agreed'">调度员的名字(没返回)</p>
-									<p v-if="item.status == 'Agreed'">调度时间(没返回)</p>
+									<p v-if="item.status == 'Agreed'">调度员：{{item.confirmer}}</p>
+									<p v-if="item.status == 'Agreed'">{{item.confirmTime  | getdatefromtimestamp}}</p>
 								</td>
 							</tr>
 							<tr>
@@ -267,6 +271,7 @@ import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from './common/UploadPhoto'
 import {closeConfirm, cancelConfirm } from '../../../common/utils'
+import expireWarnJson from "../../../assets/data/expireWarnJson";
 export default {
 	mixins: [baseMixin],
 	components: { TrailMap,UploadPhoto },
@@ -290,7 +295,10 @@ export default {
 			currentConsigneeArea: '',
 			isPhotoVisible: false,
 			scrambleList:[],
-			currentDispatchOrderID: ''
+			currentDispatchOrderID: '',
+			truckExp:[],
+			driverExp:[],
+			curScrambleType:''
 		}
 	},
 	directives: {
@@ -320,6 +328,9 @@ export default {
 	},
 	destroyed() {
 		this.timer = null
+	},
+	computed: {
+		expireWarnJson: () => expireWarnJson
 	},
 	methods:{
 		search(val) {
@@ -402,8 +413,9 @@ export default {
 				this.total = res.total
 			})
 		},
-		scramble(dispatchOrderID) {
+		scramble(dispatchOrderID,type) {
 			this.scrambleDialog = true
+			this.curScrambleType= type
 			Dispatchbill.findgGrabOfferOrderList({
 				dispatchOrderID
 			}).then(res => {
@@ -462,8 +474,7 @@ export default {
 					})
 				})
 			})
-		},
-
+		}
 	}
 }
 </script>

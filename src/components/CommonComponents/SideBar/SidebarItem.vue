@@ -12,7 +12,7 @@
 			<el-submenu v-else :index="item.target" :key="item.target">
 				<template slot="title">
 					<svg-icon v-if="item.icon" :icon-class="item.icon"></svg-icon>
-					<span slot="title">{{item.name}}</span>
+					<span slot="title" class="labelTit">{{item.name}}</span>
 				</template>
 				<template v-for="child in item.children" v-if="child.isShow == 'Y'">
 					<el-menu-item 
