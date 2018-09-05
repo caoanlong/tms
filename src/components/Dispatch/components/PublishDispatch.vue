@@ -36,7 +36,7 @@
                                 <td align="center">
                                     <span v-if="selectedTruck.truckID">
                                         <strong>{{selectedTruck.plateNo}}</strong>
-                                        <span>9.6米/高栏/22吨/3.5方</span>
+                                        <span>{{(Number(selectedTruck.length)/1000).toFixed(2)}}米/{{truckType[selectedTruck.truckType]}}/{{(Number(selectedTruck.loads)/1000).toFixed(2)}}吨/{{selectedTruck.loadVolume}}方</span>
                                         <el-tag size="mini" type="success">{{selectedTruck.workStatus == 'Free' ? '空闲' : '业务中'}}</el-tag>
                                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                                             <div slot="content">
@@ -228,6 +228,8 @@ import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { arrayUnique } from '../../../common/utils'
+import truckType from '../../../assets/data/truckType'
+import expireWarnJson from '../../../assets/data/expireWarnJson'
 export default {
     components: { SelectTruck, SelectPerson },
     props: {
@@ -270,31 +272,7 @@ export default {
                 amount: ''  // 金额
             }],
             endDate: '',
-            persons: [],
-            expireWarnJson:{
-                DriverLicExpiresTime: "行驶证到期",
-                RoadTransportLicAnnualPeriod: "道路运输证到期 ",
-                GpsValidEndDate: "GPS到期 ",
-                SaliInsuranceExpires: "交强险到期 ",
-                BizInsuranceExpires: "商业险到期 ",
-                CarrierRiskInsuranceExpires: "承运险到期 ",
-                CargoInsuranceExpireDate: "货运险到期 ",
-                TankQCExpires: "罐体监测到期 ",
-                SafetyValvesQCExpires: "罐体安全阀监测到期 ",
-                PressureGaugeQCExpires: "罐体压力表监测到期 ",
-                secondaMaintainTime: "二级维护下次维护日期到期 ",
-                NextSecondLevel:"二级维护下次维护",
-                NextRankEvaluteTime: "技术等级下次评定到期",
-                SecondSecurityDepositDate: "二次安全保证金到期 ",
-                ManagementAgreementExpireDate: "管理协议到期 ",
-                SafetyLiabilityLetterExpireDate: "安全责任书到期",
-                IdCardExpirationTime: "身份证到期 ",
-                DriverLicenseEndTime: "驾驶证到期 ",
-                QualificationExpirationDate: "危货从业资格证到期 ",
-                IntegrityExamineEndTime: "诚信考核证到期 ",
-                LaborContractEndTime: "聘用合同到期 ",
-                EscortLicenseExpireDate: "押运证到期"
-            }
+            persons: []
         }
     },
     computed: {
@@ -304,7 +282,9 @@ export default {
 				return prev + curr
 			}, 0).toFixed(2)
 			return Number(val)
-        }
+        },
+        truckType: () => truckType,
+        expireWarnJson: () => expireWarnJson
     },
     methods: {
         handSelectTruck(data) {
