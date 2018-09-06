@@ -239,7 +239,7 @@
 									<p>{{item.mobile}}</p>
 								</td>
 								<td class="c posr">
-									<span class="tags">定</span>{{item.amount}}元 
+									<span class="tags">{{item.type=='Offer'?'报':'定'}}</span>{{item.amount}}元 
 									<img class="success" src="../../../assets/imgs/qdcg.png" height="48" v-if="item.status == 'Agreed'&&item.type=='Grab'" />
 									<img class="success" src="../../../assets/imgs/bjcg.png" height="48" v-if="item.status == 'Agreed'&&item.type=='Offer'" />
 								</td>
@@ -382,7 +382,6 @@ export default {
 		},
 		// 查看照片弹窗回调
 		viewPhotos(dispatchTaskID,shipperArea,consigneeArea) {
-			console.log(dispatchTaskID,shipperArea,consigneeArea)
 			this.currentDispatchTaskID = dispatchTaskID
 			this.currentShipperArea = shipperArea
 			this.currentConsigneeArea = consigneeArea
