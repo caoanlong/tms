@@ -17,6 +17,6 @@
 	.copyright
 		line-height 20px
 		padding 10px 0
-		color #868c9e
+		color #fff
 		// background #2c3141
 </style>

@@ -426,7 +426,7 @@ export default {
 		position relative
 		height 100%
 		min-height 768px
-		background-color #424242
+		background #5974c8
 		.login-box
 			position absolute
 			top 0
@@ -440,7 +440,7 @@ export default {
 				color #fff
 			.form
 				padding 0 15px 30px 15px
-				background-color #fff
+				background #fff
 				border-radius 8px
 				box-shadow 0 10px 30px rgba(0, 0, 0, .2)
 				.tabs
@@ -454,7 +454,7 @@ export default {
 						top 0
 						width 1px
 						height 50px
-						background-color #e4e7ed
+						background #e4e7ed
 					.tab-item
 						float left
 						width 50%

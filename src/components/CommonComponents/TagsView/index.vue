@@ -143,7 +143,7 @@ export default {
 
 <style lang="stylus" scoped>
 .tags-view-container
-	background #2f3a5b
+	background #5974c8
 	.tags-view-wrapper
 		height 34px
 		.tags-view-item

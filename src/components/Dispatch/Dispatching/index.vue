@@ -467,8 +467,7 @@
 				</el-card>
 			</el-col>
 		</el-row> -->
-		<el-row style="margin-top:20px" :gutter="20">
-			<el-card class="table-container">
+			<el-card class="table-container" style="margin-top:20px">
 				<div class="table-tit">已选择的承运单</div>
 				<div class="table-box">
 					<table class="table-main" style="padding-right: 399px">
@@ -602,9 +601,7 @@
 					<span class="num-label"><span>体</span>{{totalVolume}}</span>
 				</div>
 			</el-card>
-		</el-row>
-		<el-row style="margin-top:20px" :gutter="20">
-			<el-card class="table-container">
+			<el-card class="table-container" style="margin-top:20px">
 				<div class="table-tit">运输线路</div>
 				<div class="table-box">
 					<table class="table-main" style="padding-right: 79px">
@@ -655,7 +652,6 @@
 					<span class="num-tit">预计里程{{(totalDistance/1000).toFixed(2)}}公里</span>
 				</div>
 			</el-card>
-		</el-row>
 		<el-row style="margin-top:20px">
 			<el-col :span="24" class="text-center">
 				<el-button type="primary" @click="publish('dispatch')">发布派车单</el-button>
