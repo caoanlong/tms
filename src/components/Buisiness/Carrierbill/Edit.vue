@@ -52,7 +52,8 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货地址">
+								<el-form-item label="发货地址" prop="shipperName">
+									<input v-model="carrierbillInfo.shipperName" hidden="true"/>
 									<dropdown-select 
 										addressType="发货单位"
 										:selected="selectedShipperAddress" 
@@ -72,6 +73,7 @@
 										v-model="carrierbillInfo.shipperDate" 
 										value-format="timestamp"
 										default-time="00:00:00"
+										@change = "handSelectDate"
 										:picker-options="{ disabledDate: (curDate) => curDate > carrierbillInfo.consigneeDate?carrierbillInfo.consigneeDate:''}" 
 										>
 									</el-date-picker>
@@ -95,7 +97,8 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="收货地址">
+								<el-form-item label="收货地址" prop="consigneeName">
+									<input v-model="carrierbillInfo.consigneeName" hidden="true"/>
 									<dropdown-select 
 										addressType="收货单位" 
 										:selected="selectedConsigneeAddress" 
@@ -115,6 +118,7 @@
 										v-model="carrierbillInfo.consigneeDate" 
 										value-format="timestamp"
 										default-time="00:00:00"
+										@change = "handSelectDate"
 										:picker-options="{ disabledDate: (curDate) => curDate < carrierbillInfo.shipperDate?carrierbillInfo.shipperDate:''}" 
 										>
 									</el-date-picker>
@@ -284,6 +288,20 @@ import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
+		const checkShipperDateTime = (rule, value, callback) => {
+			if (this.carrierbillInfo.consigneeDate&& (value >= this.carrierbillInfo.consigneeDate)) {
+				callback(new Error('发货时间不能等于或晚于到货时间'))
+			} else {
+				callback()
+			}
+		}
+		const checkConsigneeDateTime = (rule, value, callback) => {
+			if (this.carrierbillInfo.shipperDate&& (value <= this.carrierbillInfo.shipperDate)) {
+				callback(new Error('到货时间不能等于或早于发货时间'))
+			} else {
+				callback()
+			}
+		}
 		return {
 			currentCompany: {},
 			addressDialog: false,
@@ -347,19 +365,11 @@ export default {
 				consignorName: [ {required: true, message: '请输入托运人'} ],
 				carrierrName: [ {required: true, message: '请输入承运人'} ],
 				shipperID: [ {required: true, message: '请选择发货单位'} ],
-				shipperName: [ { required: true, message: '请输入发货人'} ],
-				shipperPhone: [ { required: true, validator: checkTel} ],
-				shipperDate: [ {required: true, message: '请选择发货时间', trigger: 'change'} ],
-				shipperAreaID: [ {required: true, message: '请选择发货地'} ],
-				shipperLocationAddress: [ {required: true, message: '请选择定位地址'} ],
-				// shipperDetailAddress: [ { required: true, message: '请输入发货详细地址'} ],
+				shipperName: [ { required: true, message: '请选择发货地址', trigger: 'change'} ],
+				shipperDate: [ {required: true, message: '请选择发货时间'},{validator: checkShipperDateTime}],
 				consigneeID: [ {required: true, message: '请选择收货单位'} ],
-				consigneeName: [ { required: true, message: '请输入收货人'} ],
-				consigneePhone: [ { required: true, validator: checkTel} ],
-				consigneeDate: [ {required: true, message: '请选择收货时间', trigger: 'change'} ],
-				consigneeAreaID: [ {required: true, message: '请选择收货地'} ],
-				consigneeLocationAddress: [ {required: true, message: '请选择定位地址'} ],
-				// consigneeDetailAddress: [ {required: true, message: '请输入收货详细地址'} ],
+				consigneeName: [ { required: true, message: '请选择收货地址', trigger: 'change'} ],
+				consigneeDate: [ {required: true, message: '请选择收货时间'},{validator: checkConsigneeDateTime} ],
 				transportType: [ {required: true, message: '请选择运输方式'} ],
 				freight: [ {required: true, message: '请输入运费金额'} ]
 			}
@@ -410,6 +420,10 @@ export default {
 				this.carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
 			})
 			
+		},
+		handSelectDate(){
+			this.$refs['ruleForm'].validateField('shipperDate')
+			this.$refs['ruleForm'].validateField('consigneeDate')
 		},
 		sum(o) {
 			let sum = 0
@@ -520,6 +534,7 @@ export default {
 			this.carrierbillInfo.shipperLocationAddress = data.locationAddress
 			this.carrierbillInfo.shipperLocationLng = data.locationLng
 			this.carrierbillInfo.shipperLocationLat = data.locationLat
+			this.$refs['ruleForm'].validateField('shipperName')
 		},
 		handSelectConsigneeAddress(data) {
 			this.carrierbillInfo.consigneeAreaID = data.areaID
@@ -531,6 +546,7 @@ export default {
 			this.carrierbillInfo.consigneeLocationAddress = data.locationAddress
 			this.carrierbillInfo.consigneeLocationLng = data.locationLng
 			this.carrierbillInfo.consigneeLocationLat = data.locationLat
+			this.$refs['ruleForm'].validateField('consigneeName')
 		},
 		save() {
 			new Promise((resolve, reject) => {

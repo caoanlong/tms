@@ -72,7 +72,7 @@
 										v-model="carrierbillInfo.shipperDate" 
 										value-format="timestamp"
 										default-time="00:00:00"
-										
+										@change = "handSelectDate"
 										:picker-options="{ disabledDate: (curDate) => curDate > carrierbillInfo.consigneeDate?carrierbillInfo.consigneeDate:''}" 
 										>
 									</el-date-picker>
@@ -116,6 +116,7 @@
 										v-model="carrierbillInfo.consigneeDate" 
 										value-format="timestamp"
 										default-time="00:00:00"
+										@change = "handSelectDate"
 										:picker-options="{ disabledDate: (curDate) => curDate < carrierbillInfo.shipperDate?carrierbillInfo.shipperDate:''}" 
 										>
 									</el-date-picker>
@@ -387,6 +388,10 @@ export default {
 				sum += Number(this.carrierbillInfo.carrierCargo[i][o])
 			}
 			return sum.toFixed(2)
+		},
+		handSelectDate(){
+			this.$refs['ruleForm'].validateField('shipperDate')
+			this.$refs['ruleForm'].validateField('consigneeDate')
 		},
 		getUnits() {
 			CargoUnit.find({
