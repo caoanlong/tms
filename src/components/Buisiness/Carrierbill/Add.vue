@@ -53,6 +53,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="发货地址" prop="shipperName">
+									<input v-model="carrierbillInfo.shipperName" hidden="true"/>
 									<dropdown-select 
 										addressType="发货单位"
 										:isChangeCompany="isChangeShipper" 
@@ -96,6 +97,7 @@
 							</el-row>
 							<el-row class="block-content">
 								<el-form-item label="收货地址" prop="consigneeName">
+									<input v-model="carrierbillInfo.consigneeName" hidden="true"/>
 									<dropdown-select 
 										addressType="收货单位"
 										:isChangeCompany="isChangeConsignee" 
@@ -283,14 +285,18 @@ import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
-		var checkShipperDateTime = (rule, value, callback) => {
+		const checkShipperDateTime = (rule, value, callback) => {
 			if (this.carrierbillInfo.consigneeDate&& (value >= this.carrierbillInfo.consigneeDate)) {
 				callback(new Error('发货时间不能等于或晚于到货时间'))
+			} else {
+				callback()
 			}
 		}
-		var checkConsigneeDateTime = (rule, value, callback) => {
+		const checkConsigneeDateTime = (rule, value, callback) => {
 			if (this.carrierbillInfo.shipperDate&& (value <= this.carrierbillInfo.shipperDate)) {
 				callback(new Error('到货时间不能等于或早于发货时间'))
+			} else {
+				callback()
 			}
 		}
 		return {
@@ -356,21 +362,11 @@ export default {
 				consignorName: [ {required: true, message: '请输入托运人'} ],
 				carrierrName: [ {required: true, message: '请输入承运人'} ],
 				shipperID: [ {required: true, message: '请选择发货单位'} ],
-				// shipperAddressID:[ {required: true, message: '请选择发货地址'} ],
-				// consigneeAddressID:[ {required: true, message: '请选择收货地址'} ],
-				shipperName: [ { required: true, message: '请选择发货地址'} ],
-				// shipperPhone: [ { required: true, validator: checkTel} ],
-				shipperDate: [ {required: true, message: '请选择发货时间'},{validator: checkShipperDateTime,  trigger: 'blur'}],
-				// shipperAreaID: [ {required: true, message: '请选择发货地'} ],
-				// shipperLocationAddress: [ {required: true, message: '请选择定位地址'} ],
-				// shipperDetailAddress: [ { required: true, message: '请输入发货详细地址'} ],
+				shipperName: [ { required: true, message: '请选择发货地址', trigger: 'change'} ],
+				shipperDate: [ {required: true, message: '请选择发货时间'},{validator: checkShipperDateTime}],
 				consigneeID: [ {required: true, message: '请选择收货单位'} ],
-				consigneeName: [ { required: true, message: '请选择收货地址'} ],
-				// consigneePhone: [ { required: true, validator: checkTel} ],
-				consigneeDate: [ {required: true, message: '请选择收货时间'},{validator: checkConsigneeDateTime,  trigger: 'blur'} ],
-				// consigneeAreaID: [ {required: true, message: '请选择收货地'} ],
-				// consigneeLocationAddress: [ {required: true, message: '请选择定位地址'} ],
-				// consigneeDetailAddress: [ {required: true, message: '请输入收货详细地址'} ],
+				consigneeName: [ { required: true, message: '请选择收货地址', trigger: 'change'} ],
+				consigneeDate: [ {required: true, message: '请选择收货时间'},{validator: checkConsigneeDateTime} ],
 				transportType: [ {required: true, message: '请选择运输方式'} ],
 				freight: [ {required: true, message: '请输入运费金额'} ]
 			}
@@ -494,6 +490,7 @@ export default {
 			this.carrierbillInfo.shipperLocationAddress = data.locationAddress
 			this.carrierbillInfo.shipperLocationLng = data.locationLng
 			this.carrierbillInfo.shipperLocationLat = data.locationLat
+			this.$refs['ruleForm'].validateField('shipperName')
 		},
 		handSelectConsigneeAddress(data) {
 			this.carrierbillInfo.consigneeAreaID = data.areaID
@@ -505,6 +502,7 @@ export default {
 			this.carrierbillInfo.consigneeLocationAddress = data.locationAddress
 			this.carrierbillInfo.consigneeLocationLng = data.locationLng
 			this.carrierbillInfo.consigneeLocationLat = data.locationLat
+			this.$refs['ruleForm'].validateField('consigneeName')
 		},
 		save() {
 			new Promise((resolve, reject) => {
