@@ -150,8 +150,14 @@
 										<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
 									</span> -->
 									<!-- 已取消 已拒绝-->
-									<span v-else>
-										<router-link tag="span" class="c6" style="margin-left:0" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
+									<span v-else v-show="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue'">
+										<router-link 
+											tag="span" 
+											class="c6" 
+											style="margin-left:0" 
+											:to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">
+											重新调度
+										</router-link>
 										<!-- <el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button> -->
 										<!-- <el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button> -->
 									</span>
@@ -283,6 +289,7 @@ import UploadPhoto from './common/UploadPhoto'
 import {closeConfirm, cancelConfirm } from '../../../common/utils'
 import truckType from "../../../assets/data/truckType"
 import expireWarnJson from "../../../assets/data/expireWarnJson"
+import dispatchOrderStatus from "../../../assets/data/dispatchOrderStatus"
 export default {
 	mixins: [baseMixin],
 	components: { TrailMap,UploadPhoto },
@@ -342,7 +349,8 @@ export default {
 	},
 	computed: {
 		truckType: () => truckType,
-		expireWarnJson: () => expireWarnJson
+		expireWarnJson: () => expireWarnJson,
+		dispatchOrderStatus: () => dispatchOrderStatus
 	},
 	methods:{
 		search(val) {

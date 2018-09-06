@@ -85,7 +85,11 @@ export default {
                 this.distance = (result.routes[0].distance/1000).toFixed(2)
                 this.time = (result.routes[0].time/3600).toFixed(2)
                 this.speed = (this.distance/this.time).toFixed(2)
-                this.map.add(this.createMarker(imgPath))
+                const markList = this.createMarker(imgPath)
+                markList.forEach(item => {
+                    console.log(item)
+                    this.map.add(item)
+                })
             })
         },
         /**
@@ -94,8 +98,9 @@ export default {
         createMarker(positions) {
             this.infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(10, -30)})
             const list = []
+            let item = null
             for (let i = 0; i < positions.length; i++) {
-                const item = new AMap.Marker({
+                item = new AMap.Marker({
                     position: [positions[i].lng, positions[i].lat],
                     icon: new AMap.Icon({
                         size: new AMap.Size(50, 50),  //图标大小
@@ -103,8 +108,7 @@ export default {
                         imageSize: new AMap.Size(50, 50)
                     })
                 })
-                imgs = positions[i].maxURL
-                item.content = `<div class="info-window-img" id="infoWindow"><img id="photoInfoWin" src="${this.imgUrl}${imgs}"/></div>`
+                item.content = `<div class="info-window-img" id="infoWindow"><img id="photoInfoWin" src="${this.imgUrl}${positions[i].maxURL}"/></div>`
                 item.on('click', this.showPhoto)
                 list.push(item)
             }

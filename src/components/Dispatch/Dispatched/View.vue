@@ -5,14 +5,12 @@
 			<el-row :gutter="40">
 				<el-col :span="17" style="border-right:1px solid #ddd">
 					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span>
-						<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
-						<el-tag size="mini" type="info" v-if="dispatchOrderDetail.status == 'Committed'">未接单</el-tag>
-						<el-tag size="mini" v-else-if="dispatchOrderDetail.status == 'Ordered'">已接单</el-tag>
-						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Canceled'">已取消</el-tag>
-						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Rejected'">已拒绝</el-tag>
-						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Closed'">已关闭</el-tag>
-						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Overdue'">超时取消</el-tag>
-						<el-tag size="mini" type="success" v-else>已完成</el-tag>
+						<el-tag size="mini" type="warning">{{dispatchOrderDetail.type == 'Offer' ? '报价' : '抢单'}}</el-tag>
+						<el-tag 
+							size="mini" 
+							:type="dispatchOrderDetail.status == 'Finished' ? 'success' : 'info'">
+							{{dispatchOrderStatus[dispatchOrderDetail.status]}}
+						</el-tag>
 						<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
 					</p>
 					<p>行驶数据</p>
@@ -217,6 +215,7 @@ import TrailMap from '../components/TrailMap'
 import axios from 'axios'
 import { MAPKEY } from '../../../common/const'
 import truckType from '../../../assets/data/truckType'
+import dispatchOrderStatus from "../../../assets/data/dispatchOrderStatus"
 export default {
 	data() {
 		return {
@@ -236,7 +235,8 @@ export default {
 		}
 	},
 	computed: {
-		truckType: () => truckType
+		truckType: () => truckType,
+		dispatchOrderStatus: () => dispatchOrderStatus
 	},
 	components:{ TaskItem, TrailMap },
 	created() {
