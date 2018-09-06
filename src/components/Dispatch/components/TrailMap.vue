@@ -37,17 +37,7 @@ export default {
         }
     },
     created() {
-        const odiv = document.createElement('div')
-        odiv.id = 'mapMask'
-        odiv.style.position = 'absolute'
-        odiv.style.left = '0'
-        odiv.style.top = '0'
-        odiv.style.right = '0'
-        odiv.style.bottom = '0'
-        odiv.style.backgroundColor = '#000000'
-        odiv.style.opacity = '0.5'
-        odiv.style.zIndex = '9999'
-        document.body.appendChild(odiv)
+        this.createMapMask()
     },
     mounted() {
         this.getTrack(this.tabPosition)
@@ -55,7 +45,7 @@ export default {
     destroyed() {
         this.map.destroy()
         this.driving = null
-        document.body.removeChild(document.getElementById('mapMask'))
+        this.destroyMapMask()
     },
     methods: {
         handTabChange(type) {
@@ -108,12 +98,29 @@ export default {
             }
             return list
         },
+        createMapMask() {
+            const odiv = document.createElement('div')
+            odiv.id = 'mapMask'
+            odiv.style.position = 'absolute'
+            odiv.style.left = '0'
+            odiv.style.top = '0'
+            odiv.style.right = '0'
+            odiv.style.bottom = '0'
+            odiv.style.backgroundColor = '#000000'
+            odiv.style.opacity = '0.5'
+            odiv.style.zIndex = '9999'
+            document.body.appendChild(odiv)
+        },
+        destroyMapMask() {
+            const mapMask = document.getElementById('mapMask')
+            if (mapMask) document.body.removeChild(mapMask)
+        },
         showPhoto(e) {
             this.infoWindow.setContent(e.target.content)
             this.infoWindow.open(this.map, e.target.getPosition())
         },
         close() {
-            document.body.removeChild(document.getElementById('mapMask'))
+            this.destroyMapMask()
             this.$emit('cancel')
         }
     }
