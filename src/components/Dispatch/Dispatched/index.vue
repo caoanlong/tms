@@ -412,7 +412,7 @@ export default {
 				list.forEach(item =>{
 					const location = item.latitude + ',' +  item.longitude  
 					const loadLocation = item.loadLongitude  + ',' + item.loadLatitude
-					this.getDistance(loadLocation,location)
+					this.getDistance(loadLocation, location)
 				})
 			})
 		},
