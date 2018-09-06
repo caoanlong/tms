@@ -197,7 +197,7 @@
 										</el-tooltip>
 									</p>
 									<p>
-										{{Number(item.length/1000).toFixed(1)}} 米 / {{truckType[item.truckType]}} / 22 吨 / 3.5 方
+										{{Number(item.length/1000).toFixed(1)}} 米 / {{truckType[item.truckType]}} {{item.loads?'/ '+Number(item.loads/1000).toFixed(2)+'吨':''}}{{item.loadVolume?'/ '+item.loadVolume+'方':''}} 
 									</p>
 								</td>
 								<td class="txt-l">
