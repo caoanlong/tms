@@ -11,6 +11,7 @@
 						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Canceled'">已取消</el-tag>
 						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Rejected'">已拒绝</el-tag>
 						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Closed'">已关闭</el-tag>
+						<el-tag size="mini" type="info" v-else-if="dispatchOrderDetail.status == 'Overdue'">超时取消</el-tag>
 						<el-tag size="mini" type="success" v-else>已完成</el-tag>
 						<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
 					</p>

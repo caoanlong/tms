@@ -328,11 +328,7 @@ export default {
 		search(val) {
 			this.pageIndex = PAGEINDEX
 			this.pageSize = PAGESIZE
-			if(val==0){
-				this.getList()
-			}else{
-				this.getHistoryList()
-			}
+			this.getList()
 		},
 		resetSearch(){
 			this.find.keyword=''
@@ -346,20 +342,12 @@ export default {
 		},
 		reset(val) {
 			this.resetSearch()
-			if(val==0){
-				this.getList()
-			}else{
-				this.getHistoryList()
-			}
+			this.getList()
 		},
 		tabClick(val){
 			this.isCur = val
 			this.resetSearch()
-			if(val==0){
-				this.getList()
-			}else{
-				this.getHistoryList()
-			}
+			this.getList()
 		},
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })
@@ -375,7 +363,14 @@ export default {
 		handUploadPhoto(bool) {
 			this.isPhotoVisible = false
 		},
-		getList() {
+		getList(){
+			if(this.isCur==0){
+				this.getDispatchedList()
+			}else{
+				this.getHistoryList()
+			}
+		},
+		getDispatchedList() {
 			Dispatchbill.findDispatchedList({
 				current: this.pageIndex,
 				size: this.pageSize,
