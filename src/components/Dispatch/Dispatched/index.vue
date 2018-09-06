@@ -83,8 +83,27 @@
 									<el-tag type="info" size="mini" v-else>报</el-tag>
 									<div class="quoteInfo">
 										<span v-if="item.type=='Assign'">{{item.plateNo}}</span>
-										<div class="quoteList" v-autoscroll v-else>
-											<div class="quoteListItem" v-for="(quoteItem,i) in item.dispatchOfferVOList" :key="i">{{quoteItem.plateNo}}<b class="c1">{{quoteItem.amount}}元</b><sup class="forcefontsize8" v-if="i==0">new</sup></div>
+										<div v-else>
+											<div class="quoteList" v-autoscroll v-if="item.status == 'Committed'">
+												<div 
+													class="quoteListItem" 
+													v-for="(quoteItem,i) in item.dispatchOfferVOList" 
+													:key="i">
+													{{quoteItem.plateNo}}
+													<b class="c1">{{quoteItem.amount}}元</b>
+													<sup class="forcefontsize8" v-if="i==0">new</sup>
+												</div>
+											</div>
+											<div class="quoteList" v-else>
+												<div 
+													class="quoteListItem" 
+													v-for="(quoteItem,i) in item.dispatchOfferVOList" 
+													:key="i">
+													{{quoteItem.plateNo}}
+													<b class="c1">{{quoteItem.amount}}元</b>
+													<sup class="forcefontsize8" v-if="i==0">new</sup>
+												</div>
+											</div>
 										</div>
 									</div>
 									<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
@@ -295,7 +314,7 @@ export default {
 	},
 	directives: {
 		autoscroll: {
-			bind: el => {
+			bind: (el) => {
 				let index = 1
 				const num = $(el).children().length
 				if(num<2) return
@@ -365,6 +384,7 @@ export default {
 			this.isPhotoVisible = false
 		},
 		getList(){
+			this.dispatchBillList = []
 			if(this.isCur==0){
 				this.getDispatchedList()
 			}else{
