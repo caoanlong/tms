@@ -5,7 +5,7 @@
 			<el-row :gutter="40">
 				<el-col :span="17" style="border-right:1px solid #ddd">
 					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span>
-						<el-tag size="mini" type="warning">{{dispatchOrderDetail.type == 'Offer' ? '报价' : '抢单'}}</el-tag>
+						<el-tag size="mini" type="warning">{{DISPATCHORDERTYPE[dispatchOrderDetail.type]}}</el-tag>
 						<el-tag 
 							size="mini" 
 							:type="dispatchOrderDetail.status == 'Finished' ? 'success' : 'info'">
@@ -46,7 +46,10 @@
 									<th width="110">收款人</th>
 									<th width="110">支付方式</th>
 									<th width="130">金额</th>
-									<th width="180" v-if="(dispatchOrderDetail.status !='Canceled') && (dispatchOrderDetail.status !='Rejected')">
+									<th width="180" 
+										v-if="(dispatchOrderDetail.status !='Canceled') 
+										&& (dispatchOrderDetail.status !='Rejected') 
+										&& (dispatchOrderDetail.status !='Committed')">
 										<el-button size="mini" type="primary" icon="el-icon-plus" @click="addFreight">添加</el-button>
 										<el-button size="mini" type="success" icon="el-icon-check" @click="saveFreight" v-if="bizDispatchFeeList.length">保存</el-button>
 									</th>
@@ -213,7 +216,7 @@ import Dispatchbill from '../../../api/Dispatchbill'
 import TaskItem from './common/TaskItem'
 import TrailMap from '../components/TrailMap'
 import axios from 'axios'
-import { MAPKEY, DISPATCHORDERSTATUS, TRUCKTYPE } from '../../../common/const'
+import { MAPKEY, DISPATCHORDERSTATUS, TRUCKTYPE, DISPATCHORDERTYPE } from '../../../common/const'
 export default {
 	data() {
 		return {
@@ -234,7 +237,8 @@ export default {
 	},
 	computed: {
 		TRUCKTYPE: () => TRUCKTYPE,
-		DISPATCHORDERSTATUS: () => DISPATCHORDERSTATUS
+		DISPATCHORDERSTATUS: () => DISPATCHORDERSTATUS,
+		DISPATCHORDERTYPE: () => DISPATCHORDERTYPE
 	},
 	components:{ TaskItem, TrailMap },
 	created() {
