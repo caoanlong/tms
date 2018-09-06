@@ -206,7 +206,8 @@
                             v-model="endDate"
                             type="datetime" 
                             :clearable="false" 
-                            value-format="timestamp">
+                            value-format="timestamp"
+							:picker-options="{ disabledDate: (curDate) =>  new Date() > curDate}" >
                         </el-date-picker>
                     </el-form-item>
                 </el-row>
