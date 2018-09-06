@@ -11,25 +11,15 @@
 						<el-input placeholder="收发单位" v-model="find.shipperConsignee"></el-input>
 					</el-form-item>
 					<el-form-item label="调度状态">
-						<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
 						<el-select placeholder="全部" v-model="find.status" style="width:120px">
 							<el-option value="" label="全部">全部</el-option>
-							<el-option value="Committed" label="未接单">未接单</el-option>
-							<el-option value="Ordered" label="已接单">已接单</el-option>
-							<el-option value="Canceled" label="已取消">已取消</el-option>
-							<el-option value="Rejected" label="已拒绝">已拒绝</el-option>
-							<!-- <el-option value="Closed" label="已关闭">已关闭</el-option> -->
-							<el-option value="Overdue" label="超时取消">超时取消</el-option>
-							<el-option value="Finished" label="已完成">已完成</el-option>
+							<el-option :value="item" :label="DISPATCHORDERSTATUS[item]" v-for="item in DISPATCHORDERSTATUS" :key="item"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度类型">
-						<!-- Assign("指派"),Grab("抢单"),Offer("报价") -->
 						<el-select placeholder="全部" v-model="find.type" style="width:120px">
 							<el-option value="" label="全部">全部</el-option>
-							<el-option value="Assign" label="指派">指派</el-option>
-							<el-option value="Grab" label="抢单">抢单</el-option>
-							<el-option value="Offer" label="报价">报价</el-option>
+							<el-option :value="item" :label="DISPATCHORDERTYPE[item]" v-for="item in DISPATCHORDERTYPE" :key="item"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度时间从">
@@ -77,10 +67,7 @@
 							<td colspan="10" class="txt-l">
 								<div class="dispatchbillTit">
 									<span class="num" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
-									<!-- Assign("指派"),Grab("抢单"),Offer("报价") -->
-									<el-tag type="info" size="mini" v-if="item.type=='Assign'">派</el-tag>
-									<el-tag type="info" size="mini" v-else-if="item.type=='Grab'">抢</el-tag>
-									<el-tag type="info" size="mini" v-else>报</el-tag>
+									<el-tag type="info" size="mini" >{{DISPATCHORDERTYPESIMPLE[item.type]}}</el-tag>
 									<div class="quoteInfo">
 										<span v-if="item.type=='Assign'">{{item.plateNo}}</span>
 										<div v-else>
@@ -106,19 +93,16 @@
 											</div>
 										</div>
 									</div>
-									<!-- Committed("未接单"),Ordered("已接单"),Canceled("已取消"),Rejected("已拒绝"),Closed("已关闭"),Finished("已完成") -->
 									<span v-if="item.status == 'Committed'">
-										<el-tag size="mini" type="info" v-if="item.type=='Assign'">接单中</el-tag>
-										<el-tag size="mini" type="info" v-else-if="item.type=='Grab'">抢单中</el-tag>
-										<el-tag size="mini" type="info" v-else>报价中</el-tag>
+										<el-tag size="mini" type="info">{{DISPATCHORDERTYPEEX[item.type]}}</el-tag>
 									</span>
 									<span v-else>
-										<el-tag size="mini" v-if="item.status == 'Ordered'">已接单</el-tag>
-										<el-tag size="mini" type="info" v-else-if="item.status == 'Canceled'">已取消</el-tag>
-										<el-tag size="mini" type="info" v-else-if="item.status == 'Rejected'">已拒绝</el-tag>
-										<el-tag size="mini" type="info" v-else-if="item.status == 'Closed'">已关闭</el-tag>
-										<el-tag size="mini" type="info" v-else-if="item.status == 'Overdue'">超时取消</el-tag>
-										<el-tag size="mini" type="success" v-else>已完成</el-tag>
+										<el-tag 
+											size="mini" 
+											:type="item.status == 'Finished' ? 'success' 
+											: (item.status == 'Ordered' ? '' : 'info')">
+											{{DISPATCHORDERSTATUS[item.status]}}
+										</el-tag>
 									</span>
 								</div>
 								<div class="handler">
@@ -150,8 +134,14 @@
 										<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
 									</span> -->
 									<!-- 已取消 已拒绝-->
-									<span v-else>
-										<router-link tag="span" class="c6" style="margin-left:0" :to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">重新调度</router-link>
+									<span v-else v-show="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue'">
+										<router-link 
+											tag="span" 
+											class="c6" 
+											style="margin-left:0" 
+											:to="{name: 'redispatching', query: {dispatchOrderID: item.dispatchOrderID}}">
+											重新调度
+										</router-link>
 										<!-- <el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button> -->
 										<!-- <el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button> -->
 									</span>
@@ -209,14 +199,14 @@
 										<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 											<div slot="content">
 												<el-tag size="mini" type="danger" v-for="(truckItem,index) in item.truckExpiredCertificate.split(',')" :key="index">{{
-													expireWarnJson[truckItem]
+													EXPIREWARN[truckItem]
 												}}</el-tag>
 											</div>
 											<el-tag size="mini" type="danger" v-if="item.truckExpiredCertificate.length>0">到期</el-tag>
 										</el-tooltip>
 									</p>
 									<p>
-										{{Number(item.length/1000).toFixed(1)}} 米 / {{truckType[item.truckType]}} {{item.loads?'/ '+Number(item.loads/1000).toFixed(2)+'吨':''}}{{item.loadVolume?'/ '+item.loadVolume+'方':''}} 
+										{{Number(item.length/1000).toFixed(1)}} 米 / {{TRUCKTYPE[item.truckType]}} {{item.loads?'/ '+Number(item.loads/1000).toFixed(2)+'吨':''}}{{item.loadVolume?'/ '+item.loadVolume+'方':''}} 
 									</p>
 								</td>
 								<td class="txt-l">
@@ -224,7 +214,7 @@
 										<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 											<div slot="content">
 												<el-tag size="mini" type="danger" v-for="(driverItem,index) in item.driverExpiredCertificate.split(',')" :key="index">{{
-													expireWarnJson[driverItem]
+													EXPIREWARN[driverItem]
 												}}</el-tag>
 											</div>
 											<el-tag size="mini" type="danger" v-if="item.driverExpiredCertificate.length>0">到期</el-tag>
@@ -275,14 +265,23 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import axios from 'axios'
-import { MAPKEY,PAGEINDEX, PAGESIZE, TOTAL } from '../../../common/const'
+import { 
+	MAPKEY, 
+	PAGEINDEX, 
+	PAGESIZE, 
+	TOTAL,
+	DISPATCHORDERTYPE,
+	DISPATCHORDERTYPESIMPLE,
+	DISPATCHORDERTYPEEX,
+	DISPATCHORDERSTATUS,
+	TRUCKTYPE,
+	EXPIREWARN
+} from '../../../common/const'
 import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from './common/UploadPhoto'
 import {closeConfirm, cancelConfirm } from '../../../common/utils'
-import truckType from "../../../assets/data/truckType"
-import expireWarnJson from "../../../assets/data/expireWarnJson"
 export default {
 	mixins: [baseMixin],
 	components: { TrailMap,UploadPhoto },
@@ -342,8 +341,12 @@ export default {
 		this.timer = null
 	},
 	computed: {
-		truckType: () => truckType,
-		expireWarnJson: () => expireWarnJson
+		TRUCKTYPE: () => TRUCKTYPE,
+		EXPIREWARN: () => EXPIREWARN,
+		DISPATCHORDERSTATUS: () => DISPATCHORDERSTATUS,
+		DISPATCHORDERTYPE: () => DISPATCHORDERTYPE,
+		DISPATCHORDERTYPESIMPLE: () => DISPATCHORDERTYPESIMPLE,
+		DISPATCHORDERTYPEEX: () => DISPATCHORDERTYPEEX
 	},
 	methods:{
 		search(val) {

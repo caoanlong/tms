@@ -68,7 +68,7 @@
                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                             <div slot="content">
                                 <el-tag size="mini" type="danger" v-for="(item,index) in item.expiredCertificate.split(',')" :key="index">
-                                    {{ expireWarnJson[item] }}
+                                    {{ EXPIREWARN[item] }}
                                 </el-tag>
                             </div>
                             <el-tag size="mini" type="danger" v-if="item.expiredCertificate">到期</el-tag>
@@ -90,10 +90,10 @@
     </el-dialog>
 </template>
 <script>
-import { baseMixin } from '../../../common/mixin'
-import Dispatchbill from '../../../api/Dispatchbill'
 import { Message } from 'element-ui'
-import expireWarnJson from '../../../assets/data/expireWarnJson'
+import { baseMixin } from '../../../common/mixin'
+import { EXPIREWARN } from '../../../common/const'
+import Dispatchbill from '../../../api/Dispatchbill'
 export default {
     mixins: [baseMixin],
     props: {
@@ -116,7 +116,7 @@ export default {
         }
     },
     computed: {
-        expireWarnJson: () => expireWarnJson
+        EXPIREWARN: () => EXPIREWARN
     },
     watch: {
         isVisible(newVal) {

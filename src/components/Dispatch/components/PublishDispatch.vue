@@ -36,7 +36,7 @@
                                 <td align="center">
                                     <span v-if="selectedTruck.truckID">
                                         <strong>{{selectedTruck.plateNo}}</strong>
-                                        <span>{{(Number(selectedTruck.length)/1000).toFixed(2)}}米/{{truckType[selectedTruck.truckType]}}/{{(Number(selectedTruck.loads)/1000).toFixed(2)}}吨/{{selectedTruck.loadVolume}}方</span>
+                                        <span>{{(Number(selectedTruck.length)/1000).toFixed(2)}}米/{{TRUCKTYPE[selectedTruck.truckType]}}/{{(Number(selectedTruck.loads)/1000).toFixed(2)}}吨/{{selectedTruck.loadVolume}}方</span>
                                         <el-tag size="mini" type="success">{{selectedTruck.workStatus == 'Free' ? '空闲' : '业务中'}}</el-tag>
                                         <el-tag size="mini" v-if="selectedTruck.gps && selectedTruck.gps == 1">GPS</el-tag>
                                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
@@ -47,7 +47,7 @@
                                                     v-for="(x, index) in selectedTruck.expiredCertificate.split(',')" 
                                                     :key="index" 
                                                     v-if="selectedTruck.expiredCertificate">
-                                                    {{ expireWarnJson[x] }}
+                                                    {{ EXPIREWARN[x] }}
                                                 </el-tag>
                                             </div>
                                             <el-tag size="mini" type="danger" v-if="selectedTruck.expiredCertificate">到期</el-tag>
@@ -72,7 +72,7 @@
                                                     v-for="(x, index) in selectedTruck.primaryDriver ? selectedTruck.primaryDriver.expiredCertificate.split(',') : []" 
                                                     :key="index" 
                                                     v-if="selectedTruck.primaryDriver.expiredCertificate">
-                                                    {{ expireWarnJson[x] }}
+                                                    {{ EXPIREWARN[x] }}
                                                 </el-tag>
                                             </div>
                                             <el-tag size="mini" type="danger" v-if="selectedTruck.primaryDriver && selectedTruck.primaryDriver.expiredCertificate">到期</el-tag>
@@ -97,7 +97,7 @@
                                                     v-for="(x, index) in selectedTruck.superCargo ? selectedTruck.superCargo.expiredCertificate.split(',') : []" 
                                                     :key="index" 
                                                     v-if="selectedTruck.superCargo.expiredCertificate">
-                                                    {{ expireWarnJson[x] }}
+                                                    {{ EXPIREWARN[x] }}
                                                 </el-tag>
                                             </div>
                                             <el-tag size="mini" type="danger" v-if="selectedTruck.superCargo && selectedTruck.superCargo.expiredCertificate">到期</el-tag>
@@ -230,8 +230,7 @@ import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { arrayUnique } from '../../../common/utils'
-import truckType from '../../../assets/data/truckType'
-import expireWarnJson from '../../../assets/data/expireWarnJson'
+import { EXPIREWARN, TRUCKTYPE } from '../../../common/const'
 export default {
     components: { SelectTruck, SelectPerson },
     props: {
@@ -285,8 +284,8 @@ export default {
 			}, 0).toFixed(2)
 			return Number(val)
         },
-        truckType: () => truckType,
-        expireWarnJson: () => expireWarnJson
+        TRUCKTYPE: () => TRUCKTYPE,
+        EXPIREWARN: () => EXPIREWARN
     },
     methods: {
         handSelectTruck(data) {

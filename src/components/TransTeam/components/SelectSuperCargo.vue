@@ -21,7 +21,7 @@
                     <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                         <div slot="content">
                             <el-tag size="mini" type="danger" v-for="(item,index) in scope.row.expiredCertificate" :key="index">{{
-                                expireWarnJson[item]
+                                EXPIREWARN[item]
                             }}</el-tag>
                         </div>
                         <el-tag size="mini" type="danger" v-if="scope.row.expiredCertificate.length>0">到期</el-tag>
@@ -41,7 +41,7 @@
 import { Message } from 'element-ui'
 import Truck from '../../../api/Truck'
 import Page from '../../CommonComponents/Page'
-import expireWarnJson from '../../../assets/data/expireWarnJson'
+import { EXPIREWARN } from '../../../common/const'
 export default {
     props: {
         dialogVisible: {
@@ -63,7 +63,7 @@ export default {
         }
     },
     computed: {
-        expireWarnJson: () => expireWarnJson
+        EXPIREWARN: () => EXPIREWARN
     },
     watch: {
         dialogVisible(newVal) {
