@@ -191,12 +191,22 @@ class Dispatchbill extends Base {
 	 * 发布派车单
 	 * @param {*} data 
 	 */
-	add(data) {
-		return requestByJson({
-			url: this.baseUrl + '/add',
-			method: 'post',
-			data
-		})
+	add(data, isClick) {
+        if (!this.isClick) {
+			return
+		} else {
+			if (isClick) {
+				this.isClick = false
+				setTimeout(() => {
+					this.isClick = true
+				}, this.delay)
+			}
+			return requestByJson({
+				url: this.baseUrl + '/add',
+				method: 'post',
+				data
+			})
+		}
 	}
 	// 车辆轨迹
 	track(params) {

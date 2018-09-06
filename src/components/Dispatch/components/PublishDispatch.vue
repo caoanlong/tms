@@ -343,7 +343,6 @@ export default {
             } else if (this.selectedTruck.superCargo) {
                 this.persons = [this.selectedTruck.superCargo]
             }
-            console.log(this.persons)
         },
         publish() {
             for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
@@ -396,7 +395,7 @@ export default {
                     bizDispatchNodeList: this.transLines,
                     endDate: this.endDate,
                     distance: this.totalDistance
-                }).then(res => {
+                }, true).then(res => {
                     Message.success(res.data.msg)
                     this.$emit('cancel', true)
                 })

@@ -18,7 +18,8 @@
 							<el-option value="Ordered" label="已接单">已接单</el-option>
 							<el-option value="Canceled" label="已取消">已取消</el-option>
 							<el-option value="Rejected" label="已拒绝">已拒绝</el-option>
-							<el-option value="Closed" label="已关闭">已关闭</el-option>
+							<!-- <el-option value="Closed" label="已关闭">已关闭</el-option> -->
+							<el-option value="Overdue" label="超时取消">超时取消</el-option>
 							<el-option value="Finished" label="已完成">已完成</el-option>
 						</el-select>
 					</el-form-item>
@@ -411,7 +412,6 @@ export default {
 				list.forEach(item =>{
 					const location = item.latitude + ',' +  item.longitude  
 					const loadLocation = item.loadLongitude  + ',' + item.loadLatitude
-					console.log(location,loadLocation)
 					this.getDistance(loadLocation,location)
 				})
 			})
@@ -454,7 +454,6 @@ export default {
 		getDistance(loadLocation,location) {
 			axios({url: `https://restapi.amap.com/v3/distance?origins=${loadLocation}&destination=${location}&key=${MAPKEY}`}).then(res => {
 				const results = res.data.results
-				console.log(results[0].distance)
 				this.scrambleList.grabOfferOrderDetailVOList= this.scrambleList.grabOfferOrderDetailVOList.map(item =>{
 					return Object.assign(item, {
 						"distance": Number((Number(results[0].distance)/1000).toFixed(2))

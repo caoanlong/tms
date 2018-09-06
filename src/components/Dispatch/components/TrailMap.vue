@@ -48,11 +48,17 @@ export default {
         this.destroyMapMask()
     },
     methods: {
+        /**
+         * Tab切换
+         */
         handTabChange(type) {
             this.map.destroy()
             this.driving = null
             this.getTrack(type)
         },
+        /**
+         * 获取跟踪线路
+         */
         getTrack(type) {
             Dispatchbill.track({
                 dispatchOrderID: this.dispatchOrderID,
@@ -66,6 +72,9 @@ export default {
                 this.createMap(path, this.dispatchTaskPicList)
             })
         },
+        /**
+         * 创建地图
+         */
         createMap(path, imgPath) {
             this.map = new AMap.Map('amapWrapper')
             this.driving = new AMap.TruckDriving({
@@ -79,6 +88,9 @@ export default {
                 this.map.add(this.createMarker(imgPath))
             })
         },
+        /**
+         * 创建标记点
+         */
         createMarker(positions) {
             this.infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(10, -30)})
             const list = []
@@ -98,6 +110,9 @@ export default {
             }
             return list
         },
+        /**
+         * 创建地图弹窗遮罩
+         */
         createMapMask() {
             const odiv = document.createElement('div')
             odiv.id = 'mapMask'
@@ -111,14 +126,23 @@ export default {
             odiv.style.zIndex = '9999'
             document.body.appendChild(odiv)
         },
+        /**
+         * 销毁地图弹窗遮罩
+         */
         destroyMapMask() {
             const mapMask = document.getElementById('mapMask')
             if (mapMask) document.body.removeChild(mapMask)
         },
+        /**
+         * 显示地图中照片
+         */
         showPhoto(e) {
             this.infoWindow.setContent(e.target.content)
             this.infoWindow.open(this.map, e.target.getPosition())
         },
+        /**
+         * 关闭弹窗
+         */
         close() {
             this.destroyMapMask()
             this.$emit('cancel')

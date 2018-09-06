@@ -153,7 +153,7 @@ export default {
                     payMode: this.grabOrder.payMode,
                     endDate: this.grabOrder.endDate,
                     distance: this.totalDistance
-                }).then(res => {
+                }, true).then(res => {
                     Message.success(res.data.msg)
                     this.$emit('cancel', true)
                 })

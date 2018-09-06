@@ -251,3 +251,22 @@ export function arrayUnique(arr, attr) {
         return item
     }, [])
 }
+
+// 函数节流
+export function throttle(fun, delay) {
+    let last, deferTimer
+    return args => {
+        let _args = arguments
+        let now = +new Date()
+        if (last && now < last + delay) {
+            clearTimeout(deferTimer)
+            deferTimer = setTimeout(() => {
+                last = now
+                fun.apply(this, _args)
+            }, delay)
+        } else {
+            last = now
+            fun.apply(this, _args)
+        }
+    }
+}

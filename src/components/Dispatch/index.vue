@@ -1,13 +1,13 @@
-<template>
-	<div>
-		<router-view :key="Date.now()"></router-view>
-	</div>
-</template>
 <script type="text/javascript">
 	export default {
-		
+		render: function(createElement) {
+			return createElement('div', [
+				createElement('router-view', {
+					attrs: {
+						key: Date.now()
+					}
+				})
+			])
+		}
 	}
 </script>
-<style lang="stylus" scoped>
-	
-</style>

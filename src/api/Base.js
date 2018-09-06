@@ -7,6 +7,8 @@ class Base {
         this._del = "/delete"
         this.baseUrl = baseUrl
         this.request = request
+        this.isClick = true
+        this.delay = 1000
     }
     initURI(data) {
         data.find && (this._find = data.find)
@@ -35,26 +37,56 @@ class Base {
             })
         })
     }
-    add(data) {
-        return this.request({
-            url: this.baseUrl + this._add,
-            method: 'post',
-            data
-        })
+    add(data, isClick) {
+        if (!this.isClick) {
+			return
+		} else {
+			if (isClick) {
+				this.isClick = false
+				setTimeout(() => {
+					this.isClick = true
+				}, this.delay)
+			}
+			return this.request({
+                url: this.baseUrl + this._add,
+                method: 'post',
+                data
+            })
+		}
     }
-    update(data) {
-        return this.request({
-            url: this.baseUrl + this._update,
-            method: 'post',
-            data
-        })
+    update(data, isClick) {
+        if (!this.isClick) {
+			return
+		} else {
+			if (isClick) {
+				this.isClick = false
+				setTimeout(() => {
+					this.isClick = true
+				}, this.delay)
+			}
+			return this.request({
+                url: this.baseUrl + this._update,
+                method: 'post',
+                data
+            })
+		}
     }
-    del(data) {
-        return this.request({
-            url: this.baseUrl + this._del,
-            method: 'post',
-            data
-        })
+    del(data, isClick) {
+        if (!this.isClick) {
+			return
+		} else {
+			if (isClick) {
+				this.isClick = false
+				setTimeout(() => {
+					this.isClick = true
+				}, this.delay)
+			}
+			return this.request({
+                url: this.baseUrl + this._del,
+                method: 'post',
+                data
+            })
+		}
     }
 }
 
