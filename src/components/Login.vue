@@ -1,5 +1,5 @@
 <template>
-	<div class="login-container">
+	<div class="login-container" :class="{'minH': loginOrRegister == 'login'}">
 		<div class="login-box">
 			<h1 class="login-title">微服TMS</h1>
 			<div class="form">
@@ -7,7 +7,7 @@
 					<div 
 						v-show="loginOrRegister != 'findpassword'"
 						class="tab-item" 
-						:class="{'active': loginOrRegister == 'login'}" 
+						:class="{'active minH': loginOrRegister == 'login'}" 
 						@click="handleTabClick('login')">登录</div>
 					<div class="spit-line" v-show="loginOrRegister != 'findpassword'"></div>
 					<div 
@@ -427,14 +427,14 @@ export default {
 		height 100%
 		min-height 768px
 		background #5974c8
+		&.minH
+			min-height 500px
 		.login-box
 			position absolute
 			top 0
-			left 0
-			bottom 0
-			right 0
-			margin auto
+			left 50%
 			width 480px
+			margin-left -240px
 			.login-title
 				text-align center
 				color #fff
