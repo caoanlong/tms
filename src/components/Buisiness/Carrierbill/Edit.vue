@@ -70,7 +70,10 @@
 										style="width:100%" 
 										placeholder="选择发货时间" 
 										v-model="carrierbillInfo.shipperDate" 
-										value-format="timestamp">
+										value-format="timestamp"
+										default-time="00:00:00"
+										:picker-options="{ disabledDate: (curDate) => curDate > carrierbillInfo.consigneeDate?carrierbillInfo.consigneeDate:''}" 
+										>
 									</el-date-picker>
 								</el-form-item>
 							</el-row>
@@ -110,7 +113,10 @@
 										style="width:100%" 
 										placeholder="选择到货时间" 
 										v-model="carrierbillInfo.consigneeDate" 
-										value-format="timestamp">
+										value-format="timestamp"
+										default-time="00:00:00"
+										:picker-options="{ disabledDate: (curDate) => curDate < carrierbillInfo.shipperDate?carrierbillInfo.shipperDate:''}" 
+										>
 									</el-date-picker>
 								</el-form-item>
 							</el-row>
