@@ -9,7 +9,7 @@
 						<el-tag 
 							size="mini" 
 							:type="dispatchOrderDetail.status == 'Finished' ? 'success' : 'info'">
-							{{dispatchOrderStatus[dispatchOrderDetail.status]}}
+							{{DISPATCHORDERSTATUS[dispatchOrderDetail.status]}}
 						</el-tag>
 						<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
 					</p>
@@ -160,11 +160,11 @@
 						<p v-if="dispatchOrderDetail.plateNo">
 							<label>车牌号</label>
 							{{dispatchOrderDetail.plateNo}} 
-							{{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{truckType[dispatchOrderDetail.truckType]}}
+							{{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{TRUCKTYPE[dispatchOrderDetail.truckType]}}
 						</p>
 						<p v-if="dispatchOrderDetail.trailerPlateNo">
 							<label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} 
-							{{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{truckType[dispatchOrderDetail.trailerTruckType]}}
+							{{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{TRUCKTYPE[dispatchOrderDetail.trailerTruckType]}}
 						</p>
 						<p v-if="dispatchOrderDetail.driverName">
 							<label>司机</label>{{dispatchOrderDetail.driverName}} 
@@ -213,9 +213,7 @@ import Dispatchbill from '../../../api/Dispatchbill'
 import TaskItem from './common/TaskItem'
 import TrailMap from '../components/TrailMap'
 import axios from 'axios'
-import { MAPKEY } from '../../../common/const'
-import truckType from '../../../assets/data/truckType'
-import dispatchOrderStatus from "../../../assets/data/dispatchOrderStatus"
+import { MAPKEY, DISPATCHORDERSTATUS, TRUCKTYPE } from '../../../common/const'
 export default {
 	data() {
 		return {
@@ -235,8 +233,8 @@ export default {
 		}
 	},
 	computed: {
-		truckType: () => truckType,
-		dispatchOrderStatus: () => dispatchOrderStatus
+		TRUCKTYPE: () => TRUCKTYPE,
+		DISPATCHORDERSTATUS: () => DISPATCHORDERSTATUS
 	},
 	components:{ TaskItem, TrailMap },
 	created() {

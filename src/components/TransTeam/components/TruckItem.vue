@@ -26,7 +26,7 @@
 					<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 						<div slot="content">
 							<el-tag size="mini" type="danger" v-for="(item,index) in truckExp" :key="index">{{
-								expireWarnJson[item]
+								EXPIREWARN[item]
 							}}</el-tag>
 						</div>
 						<el-tag size="mini" type="danger" v-if="truck.expiredCertificate.length>0">到期</el-tag>
@@ -52,7 +52,7 @@
 				<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 					<div slot="content">
 						<el-tag size="mini" type="danger" v-for="(item,index) in primaryDriverExp" :key="index">{{
-							expireWarnJson[item]
+							EXPIREWARN[item]
 						}}</el-tag>
 					</div>
 					<el-tag size="mini" type="danger" v-if="truck.primaryDriver.expiredCertificate.length>0">到期</el-tag>
@@ -70,7 +70,7 @@
 				<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 					<div slot="content">
 						<el-tag size="mini" type="danger" v-for="(item,index) in secondaryDriverExp" :key="index">{{
-							expireWarnJson[item]
+							EXPIREWARN[item]
 						}}</el-tag>
 					</div>
 					<el-tag size="mini" type="danger" v-if="truck.secondaryDriver.expiredCertificate.length>0">到期</el-tag>
@@ -104,7 +104,6 @@ import { defaultImg } from '../../../assets/icons/icons'
 import { resizeImg, deleteConfirm } from '../../../common/utils'
 import SelectSuperCargo from './SelectSuperCargo'
 import Truck from '../../../api/Truck'
-import expireWarnJson from '../../../assets/data/expireWarnJson'
 export default {
 	props: {
 		isRefresh: Number,
@@ -127,7 +126,7 @@ export default {
 	computed: {
 		defaultImg: () => defaultImg,
 		resizeImg: () => resizeImg,
-		expireWarnJson: () => expireWarnJson
+		EXPIREWARN: () => EXPIREWARN
 	},
 	components: { SelectSuperCargo },
 	created() {

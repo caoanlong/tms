@@ -48,7 +48,7 @@
                     </td>
                     <td>
                         <strong>{{item.plateNo}}</strong>
-                        <span>{{(Number(item.length)/1000).toFixed(2)}}米/{{truckType[item.truckType]}}/{{(Number(item.loads)/1000).toFixed(2)}}吨/{{item.loadVolume}}方</span>
+                        <span>{{(Number(item.length)/1000).toFixed(2)}}米/{{TRUCKTYPE[item.truckType]}}/{{(Number(item.loads)/1000).toFixed(2)}}吨/{{item.loadVolume}}方</span>
                         <el-tag size="mini" type="success">{{item.workStatus == 'Free' ? '空闲' : '业务中'}}</el-tag>
                         <el-tag size="mini" v-if="item.gps && item.gps == 1">GPS</el-tag>
                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
@@ -59,7 +59,7 @@
                                     v-for="(x, index) in item.expiredCertificateList" 
                                     :key="index" 
                                     v-if="item.expiredCertificate">
-                                    {{ expireWarnJson[x] }}
+                                    {{ EXPIREWARN[x] }}
                                 </el-tag>
                             </div>
                             <el-tag size="mini" type="danger" v-if="item.expiredCertificate">到期</el-tag>
@@ -79,7 +79,7 @@
                                     v-for="(x, index) in item.primaryDriverExpiredCertificateList" 
                                     :key="index" 
                                     v-if="item.primaryDriver.expiredCertificate">
-                                    {{ expireWarnJson[x] }}
+                                    {{ EXPIREWARN[x] }}
                                 </el-tag>
                             </div>
                             <el-tag size="mini" type="danger" v-if="item.primaryDriver && item.primaryDriver.expiredCertificate">到期</el-tag>
@@ -98,9 +98,8 @@
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
+import { EXPIREWARN, TRUCKTYPE } from '../../../common/const'
 import Dispatchbill from '../../../api/Dispatchbill'
-import truckType from '../../../assets/data/truckType'
-import expireWarnJson from '../../../assets/data/expireWarnJson'
 export default {
     mixins: [baseMixin],
     props: {
@@ -129,8 +128,8 @@ export default {
         }
     },
     computed: {
-        truckType: () => truckType,
-        expireWarnJson: () => expireWarnJson
+        TRUCKTYPE: () => TRUCKTYPE,
+        EXPIREWARN: () => EXPIREWARN
     },
     methods: {
         /**
