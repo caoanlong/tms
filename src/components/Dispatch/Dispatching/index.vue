@@ -1000,6 +1000,7 @@ export default {
 				cursor not-allowed
 		td
 			padding 0px 15px
+			height 61px
 	.table-box
 		width 100%
 		overflow hidden
