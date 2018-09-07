@@ -104,6 +104,7 @@ import { defaultImg } from '../../../assets/icons/icons'
 import { resizeImg, deleteConfirm } from '../../../common/utils'
 import SelectSuperCargo from './SelectSuperCargo'
 import Truck from '../../../api/Truck'
+ import { EXPIREWARN } from '../../../common/const'
 export default {
 	props: {
 		isRefresh: Number,
