@@ -263,9 +263,7 @@ export default {
 				this.dispatchOrder = res
 				this.dispatchOrderDetail = res.detail
 				this.dispatchOrderlocationList = res.locationList
-				this.createPersons()
-				
-				
+				if (this.persons.length == 0) this.createPersons()
 				this.getDistance()
 			})
 		},
