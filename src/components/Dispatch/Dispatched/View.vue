@@ -31,14 +31,14 @@
 						<span class="c1" v-if="dispatchOrderDetail.loadVolumeSum"><span class="num-label">体</span> {{dispatchOrderDetail.loadVolumeSum}} 方</span>
 						<span class="c1" v-if="dispatchOrderDetail.loadNumSum"><span class="num-label">数</span> {{dispatchOrderDetail.loadNumSum}}</span>
 					</p>
-					<p style="border-bottom:1px solid #ddd" v-if="!hideAmount">
+					<p style="border-bottom:1px solid #e2ecf6" v-if="!hideAmount">
 						<strong>运费</strong>
 						<span class="fr c1 carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 
 							<svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon>
 						</span>
 					</p>
 					<div class="tableBox">
-						<table class="wf-table" v-show="ShowCarriageDetail" style="min-width:750px">
+						<table class="wf-table" v-show="ShowCarriageDetail" style="min-width:750px;margin-top:-1px">
 							<thead>
 								<tr>
 									<th width="110">费用科目</th>
@@ -47,9 +47,7 @@
 									<th width="110">支付方式</th>
 									<th width="130">金额</th>
 									<th width="180" 
-										v-if="(dispatchOrderDetail.status !='Canceled') 
-										&& (dispatchOrderDetail.status !='Rejected') 
-										&& (dispatchOrderDetail.status !='Committed')">
+										v-if="(dispatchOrderDetail.status =='Ordered') || (dispatchOrderDetail.status =='Finished') ">
 										<el-button size="mini" type="primary" icon="el-icon-plus" @click="addFreight">添加</el-button>
 										<el-button size="mini" type="success" icon="el-icon-check" @click="saveFreight" v-if="bizDispatchFeeList.length">保存</el-button>
 									</th>
@@ -74,7 +72,7 @@
 									<td>
 										{{feesItem.amount}}元
 									</td>
-									<td v-if="(dispatchOrderDetail.status !='Canceled') && (dispatchOrderDetail.status !='Rejected')"></td>
+									<td v-if="(dispatchOrderDetail.status =='Ordered') || (dispatchOrderDetail.status =='Finished') "></td>
 								</tr>
 								<tr v-for="(item, index) in bizDispatchFeeList" :key="index">
 									<td>

@@ -14,7 +14,9 @@
 				</div>
 				<p><span class="sequenceTag">{{taskItem.shipperSequence}}</span>{{taskItem.shipperArea}} {{taskItem.shipperLocationAddress}} {{taskItem.shipperDetailAddress}}</p>
 				<p class="c2">{{taskItem.shipperDate | getdatefromtimestamp('min')}}（预计装车）</p>
-				<p class="c6" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp('min')}}（实际装车）<el-tag size="mini" type="danger" v-if="taskItem.isLoadedOverTime=='Y'">延迟装车</el-tag></p>
+				<p class="c6" v-if="taskItem.shipperActualDate">{{taskItem.shipperActualDate | getdatefromtimestamp('min')}}（实际装车）
+					<el-tag size="mini" type="danger" v-if="taskItem.isLoadedOverTime=='Y'">延迟装车</el-tag>
+				</p>
 			</div>
 			<div class="arrow"><svg-icon icon-class="arrowBig"></svg-icon></div>
 			<div class="to">
