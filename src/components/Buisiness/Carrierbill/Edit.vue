@@ -343,7 +343,7 @@ export default {
 					customizedNo: '',
 					cargoNameID: '',
 					cargoName: '',
-					dispatchType:'',
+					dispatchType:'Weight',
 					cargoWeight:'',
 					cargoVolume: '',
 					cargoNum: '',
@@ -579,6 +579,7 @@ export default {
 			})
 		},
 		addItem() {
+			const dispatchType = this.carrierbillInfo.carrierCargo[0] ? this.carrierbillInfo.carrierCargo[0].dispatchType : 'Weight'
 			this.carrierbillInfo.carrierCargo.push({
 				customizedNo: '',
 				cargoNameID: '',
@@ -586,7 +587,8 @@ export default {
 				cargoNum: '',
 				cargoUnitName: '',
 				cargoWeight: '',
-				cargoVolume: ''
+				cargoVolume: '',
+				dispatchType
 			})
 		},
 		removeItem(index) {
