@@ -353,13 +353,12 @@ export default {
 		/**
 		 * 调用高德地图接口获取距离
 		 */
-		async getDistance() {	
-			const list = this.dispatchOrderlocationList.map(item => item.loc.longitude + ',' + item.loc.latitude)	
-			console.log(list)
-					
+		async getDistance() {
+			const list = this.dispatchOrderlocationList.map(item => item.loc.longitude + ',' + item.loc.latitude)
 			const results = [0]
 			let i = 0
 			while(i < list.length - 1) {
+				
 				const res = await axios({url: `https://restapi.amap.com/v3/distance?origins=${list[i]}&destination=${list[i+1]}&key=${MAPKEY}`})
 				if (res.data.status == 1) results.push(res.data.results[0].distance)
 				i++
@@ -372,8 +371,6 @@ export default {
 				this.totalDistance += Number(item.nodeDistance)
 			})
 			this.dispatchOrderlocationList = arrays
-			console.log(this.dispatchOrderlocationList);
-			
 		},
 		back() {
 			this.$router.go(-1)
