@@ -7,7 +7,6 @@
             :show-close="false" 
             :close-on-press-escape="false" 
             :close-on-click-modal="false">
-            <el-form size="small">
                 <div class="num-info">
                     <span class="num-tit">配载总量</span>
                     <span class="num-label"><span>数</span>{{totalNum}}</span>
@@ -200,24 +199,31 @@
                     <span class="num-tit">总运费：{{totalFreight}}元</span>
                 </div>
                 <el-row>
-                    <el-form-item label="接单截止时间">
-                        <el-date-picker 
-                            format="yyyy-MM-dd HH"
-                            v-model="endDate"
-                            type="datetime" 
-                            :clearable="false" 
-                            value-format="timestamp"
-							:picker-options="{ disabledDate: (curDate) =>  new Date() > curDate}" >
-                        </el-date-picker>
-                    </el-form-item>
+                    <el-form size="small" :model="normal" ref="ruleForm">
+                        <el-form-item label="接单截止时间" prop="endDate" :rules="[{
+                            validator: (rule, value, callback) => {
+                                if (value && value < new Date().getTime()) {
+                                    callback('时间不能早于当前时间')
+                                } else {
+                                    callback()
+                                }
+                            }
+                        }]">
+                            <el-date-picker 
+                                format="yyyy-MM-dd HH"
+                                v-model="normal.endDate" 
+                                type="datetime" 
+                                :clearable="false" 
+                                value-format="timestamp" 
+                                :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 > curDate }">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-form>
                 </el-row>
-                <el-row style="margin-top:20px">
-                    <el-form-item label-width="0" class="text-center">
-                        <el-button @click="close">取消</el-button>
-                        <el-button type="primary" @click="publish">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
-                    </el-form-item>
+                <el-row style="margin-top:20px" class="text-center">
+                    <el-button @click="close">取消</el-button>
+                    <el-button type="primary" @click="publish">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
                 </el-row>
-            </el-form>
         </el-dialog>
         <select-truck :isVisible="truckDialog" @control="handSelectTruck"></select-truck>
         <select-person :isVisible="personDialog" :truck="selectedTruck" :type="personType" @control="handSelectPerson"></select-person>
@@ -272,7 +278,9 @@ export default {
                 payMode: 'Prepay',  // 支付方式
                 amount: ''  // 金额
             }],
-            endDate: '',
+            normal: {
+                endDate: ''
+            },
             persons: []
         }
     },
@@ -393,7 +401,7 @@ export default {
                     dispatchTaskCargoList,
                     dispatchTaskList,
                     bizDispatchNodeList: this.transLines,
-                    endDate: this.endDate,
+                    endDate: this.normal.endDate,
                     distance: this.totalDistance
                 }, true).then(res => {
                     Message.success(res.data.msg)

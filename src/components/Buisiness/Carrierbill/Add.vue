@@ -46,7 +46,7 @@
 										value-key="companyName" 
 										v-model="carrierbillInfo.shipperCompanyName"
 										:fetch-suggestions="getShipperCompany"
-										placeholder="请输入..."
+										placeholder="请输入..." 
 										@select="handSelectShipperCompany">
 										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectShipper"></i>
 									</el-autocomplete>
@@ -343,7 +343,7 @@ export default {
 					customizedNo: '',
 					cargoNameID: '',
 					cargoName: '',
-					dispatchType:'',
+					dispatchType:'Weight',
 					cargoWeight:'',
 					cargoVolume: '',
 					cargoNum: '',
@@ -550,6 +550,7 @@ export default {
 			})
 		},
 		addItem() {
+			const dispatchType = this.carrierbillInfo.carrierCargo[0] ? this.carrierbillInfo.carrierCargo[0].dispatchType : 'Weight'
 			this.carrierbillInfo.carrierCargo.push({
 				customizedNo: '',
 				cargoNameID: '',
@@ -557,7 +558,8 @@ export default {
 				cargoNum: '',
 				cargoUnitName: '',
 				cargoWeight: '',
-				cargoVolume: ''
+				cargoVolume: '',
+				dispatchType
 			})
 		},
 		removeItem(index) {

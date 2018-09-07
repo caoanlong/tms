@@ -60,7 +60,7 @@
                     <el-radio label="PayMonthly" value="PayMonthly">月结</el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="接单截止时间">
+            <el-form-item label="接单截止时间" prop="endDate">
                 <el-date-picker 
                     format="yyyy-MM-dd HH"
                     v-model="grabOrder.endDate"
@@ -122,7 +122,14 @@ export default {
                 requiredTruckLength: [{ validator: checkFloat2 }],
                 type: [{ required: true , message: '请选择报价类型' }],
                 freight: [{ required: true , message: '请输入一口价' }],
-                payMode: [{ required: true , message: '请选择运费支付方式' }]
+                payMode: [{ required: true , message: '请选择运费支付方式' }],
+                endDate: [{ validator: (rule, value, callback) => {
+                    if (value && value < new Date().getTime()) {
+                        callback('时间不能早于当前时间')
+                    } else {
+                        callback()
+                    }
+                } }]
             }
         }
     },
