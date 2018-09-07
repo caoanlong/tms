@@ -46,7 +46,7 @@
 										value-key="companyName" 
 										v-model="carrierbillInfo.shipperCompanyName"
 										:fetch-suggestions="getShipperCompany"
-										placeholder="请输入..."
+										placeholder="请输入..." 
 										@select="handSelectShipperCompany">
 									</el-autocomplete>
 								</el-form-item>
