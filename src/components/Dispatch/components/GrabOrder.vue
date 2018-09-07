@@ -124,7 +124,7 @@ export default {
                 freight: [{ required: true , message: '请输入一口价' }],
                 payMode: [{ required: true , message: '请选择运费支付方式' }],
                 endDate: [{ validator: (rule, value, callback) => {
-                    if (value < new Date().getTime()) {
+                    if (value && value < new Date().getTime()) {
                         callback('时间不能早于当前时间')
                     } else {
                         callback()

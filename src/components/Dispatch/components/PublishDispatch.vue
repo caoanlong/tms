@@ -202,7 +202,7 @@
                     <el-form size="small" :model="normal" ref="ruleForm">
                         <el-form-item label="接单截止时间" prop="endDate" :rules="[{
                             validator: (rule, value, callback) => {
-                                if (value < new Date().getTime()) {
+                                if (value && value < new Date().getTime()) {
                                     callback('时间不能早于当前时间')
                                 } else {
                                     callback()
