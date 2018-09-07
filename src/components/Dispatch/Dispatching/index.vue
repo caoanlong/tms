@@ -89,7 +89,7 @@
 			<div class="table-container">
 				<div class="table-tit">待调度的承运单</div>
 				<div class="table-box">
-					<table class="table-main" style="padding-left:50px">
+					<table class="table-main" style="padding-left:58px">
 						<thead>
 							<tr>
 								<th>
@@ -254,7 +254,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="table-box-cong" style="top:40px;left:0px;width:60px">
+				<div class="table-box-cong" style="top:40px;left:0px;bottom:0;width:60px">
 					<table>
 						<thead>
 							<tr style="height:61px"><th>选择</th></tr>
@@ -1040,7 +1040,8 @@ export default {
 					&.rotate
 						transform rotate(180deg)
 			td
-				padding 10px 15px
+				height 61px
+				padding 0 15px
 	table
 		font-size 12px
 		background-color #dcdfe6
@@ -1056,7 +1057,6 @@ export default {
 		th
 			background #f2f2f2
 			color #666
-			padding 10px 15px
 			white-space  nowrap
 			height 61px
 		td

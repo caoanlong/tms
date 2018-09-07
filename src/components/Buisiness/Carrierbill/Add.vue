@@ -48,6 +48,7 @@
 										:fetch-suggestions="getShipperCompany"
 										placeholder="请输入..."
 										@select="handSelectShipperCompany">
+										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectShipper"></i>
 									</el-autocomplete>
 								</el-form-item>
 							</el-row>
@@ -92,6 +93,7 @@
 										:fetch-suggestions="getConsigneeCompany"
 										placeholder="请输入内容"
 										@select="handSelectConsigneeCompany">
+										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectConsignee"></i>
 									</el-autocomplete>
 								</el-form-item>
 							</el-row>
@@ -287,15 +289,15 @@ import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		const checkShipperDateTime = (rule, value, callback) => {
-			if (this.carrierbillInfo.consigneeDate&& (value >= this.carrierbillInfo.consigneeDate)) {
-				callback(new Error('发货时间不能等于或晚于到货时间'))
+			if (this.carrierbillInfo.consigneeDate&& (value > this.carrierbillInfo.consigneeDate)) {
+				callback(new Error('发货时间不能晚于到货时间'))
 			} else {
 				callback()
 			}
 		}
 		const checkConsigneeDateTime = (rule, value, callback) => {
-			if (this.carrierbillInfo.shipperDate&& (value <= this.carrierbillInfo.shipperDate)) {
-				callback(new Error('到货时间不能等于或早于发货时间'))
+			if (this.carrierbillInfo.shipperDate&& (value < this.carrierbillInfo.shipperDate)) {
+				callback(new Error('到货时间不能早于发货时间'))
 			} else {
 				callback()
 			}
@@ -508,6 +510,14 @@ export default {
 			this.carrierbillInfo.consigneeLocationLng = data.locationLng
 			this.carrierbillInfo.consigneeLocationLat = data.locationLat
 			this.$refs['ruleForm'].validateField('consigneeName')
+		},
+		clearSelectShipper(){
+			this.carrierbillInfo.shipperCompanyName = ' '
+			this.carrierbillInfo.shipperID = ''
+		},
+		clearSelectConsignee(){
+			this.carrierbillInfo.consigneeCompanyName = ' '
+			this.carrierbillInfo.consigneeID =''
 		},
 		save() {
 			new Promise((resolve, reject) => {

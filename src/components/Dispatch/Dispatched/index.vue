@@ -154,7 +154,7 @@
 								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
 								<el-tag size="mini" type="success" v-else-if="taskItem.status == 'Signed'">已签收</el-tag>
 								<el-tag size="mini" type="info" v-else>已作废</el-tag></td>
-							<td class="txt-l">{{taskItem.cargoName}}</td>
+							<td class="txt-l"><span class="text-overflow" style="width:270px">{{taskItem.cargoName}}</span></td>
 							<td class="text-center" v-if="taskItem.cargoWeight || taskItem.cargoVolume || taskItem.cargoVolume">
 								{{taskItem.cargoWeight ? taskItem.cargoWeight + '吨' : ''}}
 								{{taskItem.cargoVolume ? (taskItem.cargoWeight ? '/' : '') + taskItem.cargoVolume + '方' : ''}}

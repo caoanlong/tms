@@ -57,12 +57,7 @@
 								<tr v-for="feesItem in dispatchOrderFees" :key="feesItem.dispatchFeeID">
 									<td>
 										<!-- 费用科目:Freight-运费   RoadBridge-路桥费  Transit-中转费  Fine-罚款  Detour-绕路费  Other-其他 -->
-										<span v-if="feesItem.item=='Freight'">运费</span>
-										<span v-else-if="feesItem.item=='RoadBridge'">路桥费</span>
-										<span v-else-if="feesItem.item=='Transit'">中转费</span>
-										<span v-else-if="feesItem.item=='Fine'">罚款</span>
-										<span v-else-if="feesItem.item=='Detour'">绕路费</span>
-										<span v-else>其他</span>
+										<span>{{FREIGHTTYPE[feesItem.item]}}</span>
 									</td>
 									<td>
 										<span>{{feesItem.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
@@ -72,11 +67,7 @@
 									</td>
 									<td>
 										<!-- 支付方式: Prepay-预付  PayOnDelivery-到付  PayOnReceipt-回单结  PayByConsignee-收货方付 -->
-										<span v-if="feesItem.payMode=='Prepay'">预付</span>
-										<span v-else-if="feesItem.payMode=='PayOnDelivery'">到付</span>
-										<span v-else-if="feesItem.payMode=='PayOnReceipt'">回单结</span>
-										<span v-else-if="feesItem.payMode=='PayMonthly'">月结</span>
-										<span v-else>收货方付</span>
+										<span>{{PAYMETHODS[feesItem.payMode]}}</span>
 									</td>
 									<td>
 										{{feesItem.amount}}元
@@ -214,7 +205,14 @@ import Dispatchbill from '../../../api/Dispatchbill'
 import TaskItem from './common/TaskItem'
 import TrailMap from '../components/TrailMap'
 import axios from 'axios'
-import { MAPKEY, DISPATCHORDERSTATUS, TRUCKTYPE, DISPATCHORDERTYPE } from '../../../common/const'
+import { 
+	MAPKEY, 
+	DISPATCHORDERSTATUS, 
+	TRUCKTYPE, 
+	DISPATCHORDERTYPE,
+	FREIGHTTYPE,
+	PAYMETHODS
+} from '../../../common/const'
 export default {
 	data() {
 		return {
@@ -236,7 +234,9 @@ export default {
 	computed: {
 		TRUCKTYPE: () => TRUCKTYPE,
 		DISPATCHORDERSTATUS: () => DISPATCHORDERSTATUS,
-		DISPATCHORDERTYPE: () => DISPATCHORDERTYPE
+		DISPATCHORDERTYPE: () => DISPATCHORDERTYPE,
+		FREIGHTTYPE: () => FREIGHTTYPE,
+		PAYMETHODS: () => PAYMETHODS
 	},
 	components:{ TaskItem, TrailMap },
 	created() {
@@ -257,14 +257,13 @@ export default {
 		},
 		getDetail() {
 			this.hideAmount = this.$route.query.isHideAmount
+			console.log(this.hideAmount)
 			const dispatchOrderID = this.$route.query.dispatchOrderID
 			Dispatchbill.findById({ dispatchOrderID }).then(res => {
 				this.dispatchOrder = res
 				this.dispatchOrderDetail = res.detail
 				this.dispatchOrderlocationList = res.locationList
-				this.createPersons()
-				
-				
+				if (this.persons.length == 0) this.createPersons()
 				this.getDistance()
 			})
 		},
@@ -354,6 +353,7 @@ export default {
 		 * 调用高德地图接口获取距离
 		 */
 		async getDistance() {
+			
 			const list = this.dispatchOrderlocationList.map(item => item.loc.longitude + ',' + item.loc.latitude)
 			const results = [0]
 			let i = 0
