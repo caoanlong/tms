@@ -80,3 +80,26 @@ export const EXPIREWARN = {
     LaborContractEndTime: "聘用合同到期 ",
     EscortLicenseExpireDate: "押运证到期"
 }
+
+/**
+ * 费用类型
+ */
+export const FREIGHTTYPE = {
+    Freight: '运费',
+    RoadBridge: '路桥费',
+    Transit: '中转费',
+    Fine: '罚款',
+    Detour: '绕路费',
+    Other: '其他'
+}
+
+/**
+ * 支付方式
+ */
+export const PAYMETHODS = {
+    Prepay: '预付',
+    PayOnDelivery: '到付',
+    PayOnReceipt: '回单结',
+    PayMonthly: '月结',
+    PayByConsignee: '收货方付'
+}
