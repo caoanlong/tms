@@ -281,7 +281,7 @@ import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from './common/UploadPhoto'
-import {closeConfirm, cancelConfirm } from '../../../common/utils'
+import {closeConfirm, dispatchCancel } from '../../../common/utils'
 export default {
 	mixins: [baseMixin],
 	components: { TrailMap,UploadPhoto },
@@ -465,13 +465,14 @@ export default {
 			})
 		},
 		cancelDispatchOrder(id) {
-			cancelConfirm(id, dispatchOrderID => {
+			dispatchCancel(id, dispatchOrderID => {
 				Dispatchbill.cancel({ dispatchOrderID }).then(res =>{
 					Message.success('已成功取消调度单!')
 					this.getList()
 				})
 			})
 		},
+		
 		/**
 		 * 调用高德地图接口获取距离
 		 */
