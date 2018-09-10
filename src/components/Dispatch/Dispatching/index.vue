@@ -498,9 +498,9 @@
 								</td>
 								<td align="center">{{item.cargoName}}</td>
 								<td align="center">
-									<span v-if="item.dispatchType == 'Quantity'">按数量配载</span>
-									<span v-else-if="item.dispatchType == 'Volumn'">按体积配载</span>
-									<span v-else-if="item.dispatchType == 'Weight'">按重量配载</span>
+									<span v-if="item.dispatchType == 'Quantity'">按数量</span>
+									<span v-else-if="item.dispatchType == 'Volumn'">按体积</span>
+									<span v-else-if="item.dispatchType == 'Weight'">按重量</span>
 								</td>
 							</tr>
 						</tbody>

@@ -14,16 +14,15 @@
 						<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
 					</p>
 					<p>行驶数据</p>
-					<div class="lineInfo" @click="trail(dispatchOrderDetail.dispatchOrderID)">
-						<span class="fl c1" v-if="dispatchOrderlocationList.length>0"><i class="el-icon-location"></i> {{dispatchOrderlocationList[dispatchOrderlocationList.length -1].posAddress}}</span>
+					<div class="lineInfo text-center" @click="trail(dispatchOrderDetail.dispatchOrderID)" v-if="dispatchOrderlocationList.length>0">
+						<span class="fl c1" v-if="dispatchOrderlocationList.length>0"><i class="el-icon-location"></i>当前位于 {{dispatchOrderlocationList[dispatchOrderlocationList.length -1].posAddress}}</span>
+						<span class="c2 ">点击查看轨迹</span>
 						<span class="fr c2" v-if="dispatchOrderlocationList.length>0">{{dispatchOrderlocationList[dispatchOrderlocationList.length -1].createTime | getdatefromtimestamp }}</span>
 					</div>
 					<table class="wf-table">
 						<tr>
-							<td align="center" width="100">预计</td>
-							<td>总里程 {{(Number(dispatchOrderDetail.distance)/1000).toFixed(2)}}公里 用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</td>
-							<td align="center" width="100">实际</td>
-							<td>总里程 {{totalDistance?totalDistance:'0'}}公里 <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring('min')}}</span></td>
+							<td class="text-l" width="50%">预计：<span v-if="dispatchOrderDetail.distance">总里程 {{(Number(dispatchOrderDetail.distance)/1000).toFixed(2)}}公里</span> <span v-if="dispatchOrderDetail.estimatedTime">用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</span></td>
+							<td class="text-l" width="50%">实际：<span v-if="totalDistance">总里程 {{totalDistance?totalDistance:'0'}}公里</span> <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring('min')}}</span></td>
 						</tr>
 					</table>
 					<p>总货量：
@@ -147,11 +146,10 @@
 					<TaskItem v-for="(item,index) in dispatchTask" :taskItem="item" :index="index" :key="item.carrierOrderID"></TaskItem>
 				</el-col>
 				<el-col :span="7">
-					<p>运输车辆人员</p>
+					<p>运输车辆&人员</p>
 					<div class="truckInfo c2">
 						<p v-if="dispatchOrderDetail.plateNo">
-							<label>车牌号</label>
-							{{dispatchOrderDetail.plateNo}} 
+							<label>车辆</label>{{dispatchOrderDetail.plateNo}} 
 							{{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{TRUCKTYPE[dispatchOrderDetail.truckType]}}
 						</p>
 						<p v-if="dispatchOrderDetail.trailerPlateNo">
@@ -396,6 +394,7 @@ export default {
 		line-height 20px
 		margin-bottom 10px
 		background url("../../../assets/imgs/mapBg.jpg") no-repeat left center
+		cursor pointer
 	.carriage
 		cursor pointer
 		user-select none

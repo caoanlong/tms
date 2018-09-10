@@ -459,7 +459,7 @@ let routerMap = [{
                 children: [{
                         path: '/usermanage',
                         name: 'usermanage',
-                        meta: { title: '账号管理' },
+                        meta: { title: '用户管理' },
                         component: () =>
                             import ('../components/System/Usermanage/index')
                     },
