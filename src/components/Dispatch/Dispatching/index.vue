@@ -567,7 +567,10 @@
 									</el-form>
 								</td>
 								<td align="center">
-									<p style="position:relative;top:8px"><span class="surplus">余</span>{{item.remainingCargoVolume ? item.remainingCargoVolume + '方' : '0方'}}</p>
+									<p style="position:relative;top:8px">
+										<span class="surplus">余</span>
+										{{item.remainingCargoVolume ? item.remainingCargoVolume + '方' : '0方'}}
+									</p>
 									<el-form :model="item" ref="ruleForm">
 										<el-form-item prop="cargoVolumeNew" :rules="[{
 											validator: (rule, value, callback) => {
@@ -774,8 +777,6 @@ export default {
 		sort(orderBy, sortType) {
 			this.find.orderBy = orderBy
 			this.find.sortType = sortType
-			console.log(this.find.orderBy)
-			console.log(this.find.sortType)
 			this.search()
 		},
 		/**
@@ -786,6 +787,9 @@ export default {
 			if (index > -1) {
 				this.selectedList.splice(index, 1)
 			} else {
+				item.cargoNumNew = item.remainingCargoNum
+				item.cargoWeightNew = item.remainingCargoWeight
+				item.cargoVolumeNew = item.remainingCargoVolume
 				this.selectedList.push(item)
 			}
 			this.selectedListNoRepeat = arrayUnique(this.selectedList, 'carrierOrderID')
