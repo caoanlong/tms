@@ -199,7 +199,7 @@
                     <span class="num-tit">总运费：{{totalFreight}}元</span>
                 </div>
                 <el-row>
-                    <el-form size="small" :model="normal" ref="ruleForm">
+                    <el-form size="small" :model="normal" ref="ruleForm2">
                         <el-form-item label="接单截止时间" prop="endDate" :rules="[{
                             validator: (rule, value, callback) => {
                                 if (value && value < new Date().getTime()) {
@@ -361,13 +361,16 @@ export default {
                 }
             }
             new Promise((resolve, reject) => {
-				let flag = true
+                let flag = true
 				for (let i = 0; i < this.$refs['ruleForm'].length; i++) {
 					const item = this.$refs['ruleForm'][i]
 					item.validate(valid => {
 						if (!valid) flag = false
 					})
                 }
+                this.$refs['ruleForm2'].validate(valid => {
+                    if (!valid) flag = false
+                })
 				flag ? resolve() : reject()
 			}).then(() => {
                 const dispatchTaskCargoList = this.dispatchTaskCargoList.map(item => {
