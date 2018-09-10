@@ -23,8 +23,8 @@
 				<div class="hasPic">
 					<img :src="taskItem.consigneeLogoUrl ? resizeImg(taskItem.consigneeLogoUrl, '_100x100.') : defaultImg" class="pic"/>
 					<p>{{taskItem.consigneeCompanyName}}
-						<el-tag size="mini" v-if="taskItem.status=='Signed'" type="success">已卸货</el-tag>
-						<el-tag size="mini" v-else type="info">未卸货</el-tag>
+						<el-tag size="mini" v-if="taskItem.status=='Signed'" type="success">已到达</el-tag>
+						<el-tag size="mini" v-else type="info">未到达</el-tag>
 					</p>
 					<p>{{taskItem.consigneeName}}{{taskItem.consigneePhone?('/'+taskItem.consigneePhone):''}}</p>
 				</div>
@@ -129,10 +129,12 @@ export default {
 					border-radius 9px
 					margin-right 10px
 		.arrow
-			flex 0 0 60px
+			flex 0 0 100px
 			position relative
 			font-size 40px
 			color #409EFF
+			border-left 1px solid #e2ecf6
+			border-right 1px solid #e2ecf6
 			.svg-icon
 				position absolute
 				top 50%
