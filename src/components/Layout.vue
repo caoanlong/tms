@@ -254,6 +254,7 @@
 						<el-col :span="6">
 							<div class="userFace">
 								<ImageUpload :files="[memDetail.headPic]" @imgUrlBack="handleAvatarSuccess1" :fixed="true" :limitNum="1"></ImageUpload>
+								<p style="color:#999">100px*100px</p>
 							</div>
 						</el-col>
 						<el-col :span="18">

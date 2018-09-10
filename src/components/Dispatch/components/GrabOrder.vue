@@ -36,7 +36,14 @@
 						</el-col>
                         <el-col :span="12">
                             <el-form-item label-width="70px" label="车长" prop="requiredTruckLength">
-                                <el-input placeholder="请输入车长" v-model="grabOrder.requiredTruckLength"><template slot="append">米</template></el-input>
+                                <el-autocomplete
+                                    class="inline-input"
+                                    v-model="grabOrder.requiredTruckLength"
+                                    :fetch-suggestions="getTruckLengths"
+                                    placeholder="请输入内容"
+                                    @select="handleSelectTruckLength">
+                                    <template slot="append">米</template>    
+                                </el-autocomplete>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -83,6 +90,7 @@ import { Message } from 'element-ui'
 import { checkFloat2,checkInt } from '../../../common/valid'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { arrayUnique } from '../../../common/utils'
+import { TRUCKLENGTH } from '../../../common/const'
 export default {
     props: {
         totalNum: {
@@ -135,6 +143,12 @@ export default {
         }
     },
     methods: {
+        getTruckLengths(queryString, cb) {
+            cb(TRUCKLENGTH)
+        },
+        handleSelectTruckLength(data) {
+            this.grabOrder.requiredTruckLength = String(data.value)
+        },
         publish() {
             this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return

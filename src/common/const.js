@@ -103,3 +103,30 @@ export const PAYMETHODS = {
     PayMonthly: '月结',
     PayByConsignee: '收货方付'
 }
+
+/**
+ * 车长
+ */
+export const TRUCKLENGTH = [
+    { value: 4.2 },
+    { value: 4.5 },
+    { value: 5 },
+    { value: 6.2 },
+    { value: 6.8 },
+    { value: 7.2 },
+    { value: 7.7 },
+    { value: 7.8 },
+    { value: 8.2 },
+    { value: 8.6 },
+    { value: 9.6 },
+    { value: 11.7 },
+    { value: 12.5 },
+    { value: 13 },
+    { value: 13.5 },
+    { value: 14 },
+    { value: 15 },
+    { value: 16 },
+    { value: 17 },
+    { value: 17.5 },
+    { value: 1 },
+]
