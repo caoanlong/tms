@@ -407,21 +407,21 @@ let routerMap = [{
                     {
                         path: '/cargo',
                         name: 'cargo',
-                        meta: { title: '常用货物' },
+                        meta: { title: '货物' },
                         component: () =>
                             import ('../components/Basedata/Cargo/index'),
                     },
                     {
                         path: '/addcargo',
                         name: 'addcargo',
-                        meta: { title: '添加常用货物' },
+                        meta: { title: '添加货物' },
                         component: () =>
                             import ('../components/Basedata/Cargo/Add'),
                     },
                     {
                         path: '/editcargo',
                         name: 'editcargo',
-                        meta: { title: '编辑常用货物' },
+                        meta: { title: '编辑货物' },
                         component: () =>
                             import ('../components/Basedata/Cargo/Edit'),
                     }

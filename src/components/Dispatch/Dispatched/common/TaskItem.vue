@@ -80,7 +80,9 @@ export default {
 .taskItem
 	width 100%
 	border 1px solid #e2ecf6
-	margin-top 10px
+	margin-bottom 10px
+	&:last-child
+		margin-bottom 0
 	.title
 		padding 10px 15px
 		border-bottom 1px solid #e2ecf6

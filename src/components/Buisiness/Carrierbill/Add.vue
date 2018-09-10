@@ -550,7 +550,8 @@ export default {
 			})
 		},
 		addItem() {
-			const dispatchType = this.carrierbillInfo.carrierCargo[0] ? this.carrierbillInfo.carrierCargo[0].dispatchType : 'Weight'
+			let cargo = this.carrierbillInfo.carrierCargo
+			const dispatchType =cargo[cargo.length-1] ?cargo[cargo.length-1].dispatchType : 'Weight'
 			this.carrierbillInfo.carrierCargo.push({
 				customizedNo: '',
 				cargoNameID: '',
