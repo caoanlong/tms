@@ -44,8 +44,8 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.cargoNameID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.cargoNameID}" >删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.cargoID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.cargoID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -115,7 +115,7 @@ export default {
 			this.getList() 
 		},
 		selectionChange(data) {
-			this.selectedList = data.map(item => item.cargoNameID)
+			this.selectedList = data.map(item => item.cargoID)
 		},
 		getList() {
 			CargoGeneralName.find({
@@ -133,7 +133,8 @@ export default {
 		},
 		handleCommand(e) {
 			if (e.type == 'edit') {
-				this.$router.push({ name: 'editcargo' , query: {  cargoNameID: e.id } })
+				console.log(e)
+				this.$router.push({ name: 'editcargo' , query: {  cargoID: e.id } })
 			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}

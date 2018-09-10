@@ -176,7 +176,7 @@ export default {
 			})
 		},
 		getInfo() {
-			const cargoNameID = this.$route.query.cargoNameID
+			const cargoNameID = this.$route.query.cargoID
 			CargoGeneralName.findById({ cargoNameID }).then(res => {
 				this.cargo = res
 				if (res.moistureProof == 'Y') this.requires.push('moistureProof')
