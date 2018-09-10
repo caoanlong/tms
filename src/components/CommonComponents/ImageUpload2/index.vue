@@ -194,7 +194,7 @@ export default {
 					<div style="height:36px;line-height:36px;padding: 0 16px;">
 						<span>${this.objs[index].createName}</span>
 						<span style="color:#999">（${this.objs[index].createMobile}）</span>
-						<span style="color:#999">${getdatefromtimestamp(this.objs[index].createTime)}</span>
+						
 					</div>
 					<img style="width: 100%;vertical-align:top" src=${this.imgUrl + url} />
 					<div style="height:60px;background:rgba(0,0,0,.5);position:absolute;left:0;right:0;bottom:0;color:#fff;font-size:12px">
@@ -209,7 +209,7 @@ export default {
 							</div>
 						</div>
 						<div style="padding: 0 10px">
-							<img src="${positionImg}" style="vertical-align:middle;height:16px;${this.objs[index].detailAddress?'display:inline-block':'display:none'}" /> ${this.objs[index].detailAddress ? this.objs[index].detailAddress : ''}
+							<img src="${positionImg}" style="vertical-align:middle;height:16px;${this.objs[index].detailAddress?'display:inline-block':'display:none'}" /> ${this.objs[index].detailAddress ? this.objs[index].detailAddress : ''} <span style="color:#999;margin-left:10px">${getdatefromtimestamp(this.objs[index].createTime)}</span>
 						</div>
 					</div>
 				</div>

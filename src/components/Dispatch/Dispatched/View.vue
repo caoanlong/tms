@@ -1,43 +1,40 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card dispatchbillDetail">
-			<div slot="header" class="clearfix">调度详情</div>
+			<div slot="header" class="clearfix">
+				<span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span>
+				<el-tag size="mini" type="warning">{{DISPATCHORDERTYPE[dispatchOrderDetail.type]}}</el-tag>
+				<el-tag size="mini" :type="dispatchOrderDetail.status == 'Finished' ? 'success' : 'info'">{{DISPATCHORDERSTATUS[dispatchOrderDetail.status]}}</el-tag>
+				<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
+			</div>
 			<el-row :gutter="40">
 				<el-col :span="17" style="border-right:1px solid #ddd">
-					<p><span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span>
-						<el-tag size="mini" type="warning">{{DISPATCHORDERTYPE[dispatchOrderDetail.type]}}</el-tag>
-						<el-tag 
-							size="mini" 
-							:type="dispatchOrderDetail.status == 'Finished' ? 'success' : 'info'">
-							{{DISPATCHORDERSTATUS[dispatchOrderDetail.status]}}
-						</el-tag>
-						<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
-					</p>
-					<p>行驶数据</p>
-					<div class="lineInfo text-center" @click="trail(dispatchOrderDetail.dispatchOrderID)" v-if="dispatchOrderlocationList.length>0">
-						<span class="fl c1" v-if="dispatchOrderlocationList.length>0"><i class="el-icon-location"></i>当前位于 {{dispatchOrderlocationList[dispatchOrderlocationList.length -1].posAddress}}</span>
-						<span class="c2 ">点击查看轨迹</span>
-						<span class="fr c2" v-if="dispatchOrderlocationList.length>0">{{dispatchOrderlocationList[dispatchOrderlocationList.length -1].createTime | getdatefromtimestamp }}</span>
+					<div class="borderBox">
+						<p>行驶数据</p>
+						<div class="lineInfo text-center" @click="trail(dispatchOrderDetail.dispatchOrderID)" >
+							<span class="fl c1" v-if="dispatchOrderlocationList.length>0"><i class="el-icon-location"></i>当前位于 {{dispatchOrderlocationList[dispatchOrderlocationList.length -1].posAddress}}</span>
+							<span class="c2 ">点击查看轨迹</span>
+							<span class="fr c2" v-if="dispatchOrderlocationList.length>0">{{dispatchOrderlocationList[dispatchOrderlocationList.length -1].createTime | getdatefromtimestamp }}</span>
+						</div>
+						<div class="tableBox">
+							<div class="item">预计：<span v-if="dispatchOrderDetail.distance">总里程 {{(Number(dispatchOrderDetail.distance)/1000).toFixed(2)}}公里</span> <span v-if="dispatchOrderDetail.estimatedTime">用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</span></div>
+							<div class="item">实际：<span v-if="totalDistance">总里程 {{totalDistance?totalDistance:'0'}}公里</span> <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring('min')}}</span></div>
+						</div>
+						<p>总货量：
+							<span class="c1" v-if="dispatchOrderDetail.loadWeightSum"><span class="num-label">重</span> {{dispatchOrderDetail.loadWeightSum}} 吨 </span>
+							<span class="c1" v-if="dispatchOrderDetail.loadVolumeSum"><span class="num-label">体</span> {{dispatchOrderDetail.loadVolumeSum}} 方</span>
+							<span class="c1" v-if="dispatchOrderDetail.loadNumSum"><span class="num-label">数</span> {{dispatchOrderDetail.loadNumSum}}</span>
+						</p>
 					</div>
-					<table class="wf-table">
-						<tr>
-							<td class="text-l" width="50%">预计：<span v-if="dispatchOrderDetail.distance">总里程 {{(Number(dispatchOrderDetail.distance)/1000).toFixed(2)}}公里</span> <span v-if="dispatchOrderDetail.estimatedTime">用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</span></td>
-							<td class="text-l" width="50%">实际：<span v-if="totalDistance">总里程 {{totalDistance?totalDistance:'0'}}公里</span> <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring('min')}}</span></td>
-						</tr>
-					</table>
-					<p>总货量：
-						<span class="c1" v-if="dispatchOrderDetail.loadWeightSum"><span class="num-label">重</span> {{dispatchOrderDetail.loadWeightSum}} 吨 </span>
-						<span class="c1" v-if="dispatchOrderDetail.loadVolumeSum"><span class="num-label">体</span> {{dispatchOrderDetail.loadVolumeSum}} 方</span>
-						<span class="c1" v-if="dispatchOrderDetail.loadNumSum"><span class="num-label">数</span> {{dispatchOrderDetail.loadNumSum}}</span>
-					</p>
-					<p style="border-bottom:1px solid #e2ecf6" v-if="!hideAmount">
+					
+					<p style="border-bottom:1px solid #e2ecf6;padding:10px 15px" v-if="!hideAmount">
 						<strong>运费</strong>
 						<span class="fr c1 carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 
 							<svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'unfold':''"></svg-icon>
 						</span>
 					</p>
 					<div class="tableBox">
-						<table class="wf-table" v-show="ShowCarriageDetail" style="min-width:750px;margin-top:-1px">
+						<table class="wf-table" v-show="ShowCarriageDetail" style="min-width:750px;margin-top:-1px;margin-bottom:0">
 							<thead>
 								<tr>
 									<th width="110">费用科目</th>
@@ -142,10 +139,10 @@
 							</tbody>
 						</table>
 					</div>
-					<p>运输任务（<span class="circle"></span> 色数字代表装卸执行顺序，来源线路规划排序） <span class="fr c1" v-if="dispatchOrderDetail.distance">预计总里程{{Number(dispatchOrderDetail.distance/1000).toFixed(2)}}公里</span></p>
+					<p style="padding:10px 15px">运输任务（<span class="circle"></span> 色数字代表装卸执行顺序，来源线路规划排序） <span class="fr c1" v-if="dispatchOrderDetail.distance">预计总里程{{Number(dispatchOrderDetail.distance/1000).toFixed(2)}}公里</span></p>
 					<TaskItem v-for="(item,index) in dispatchTask" :taskItem="item" :index="index" :key="item.carrierOrderID"></TaskItem>
 				</el-col>
-				<el-col :span="7">
+				<el-col :span="7" class="dispatchOrderDetailR">
 					<p>运输车辆&人员</p>
 					<div class="truckInfo c2">
 						<p v-if="dispatchOrderDetail.plateNo">
@@ -379,8 +376,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .dispatchbillDetail
-	p
-		line-height 30px
 	.truckInfo
 		padding-bottom 10px
 		label
@@ -392,7 +387,6 @@ export default {
 		height 60px
 		padding 20px
 		line-height 20px
-		margin-bottom 10px
 		background url("../../../assets/imgs/mapBg.jpg") no-repeat left center
 		cursor pointer
 	.carriage
@@ -452,4 +446,21 @@ export default {
 	font-weight 800
 	margin-right 4px
 	background-color #409EFF
+.borderBox
+	border 1px solid #e2ecf6
+	border-bottom none
+	p
+		padding 10px 15px
+		border-bottom 1px solid #e2ecf6
+	.tableBox
+		border-bottom 1px solid #e2ecf6
+		.item
+			padding 10px 15px
+			width 50%
+			float left
+			&:last-child
+				border-left 1px solid #e2ecf6
+.dispatchOrderDetailR
+	p
+		line-height 30px
 </style>

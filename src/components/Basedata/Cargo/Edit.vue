@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">编辑常用货物</div>
+			<div slot="header" class="clearfix">编辑货物</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="cargo" :rules="rules" ref="ruleForm" size="small">
