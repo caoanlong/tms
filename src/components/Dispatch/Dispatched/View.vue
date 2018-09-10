@@ -34,7 +34,7 @@
 					<p style="border-bottom:1px solid #e2ecf6" v-if="!hideAmount">
 						<strong>运费</strong>
 						<span class="fr c1 carriage" @click="carriageDetail">{{dispatchOrderDetail.sumAmount}}元 
-							<svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'':'unfold'"></svg-icon>
+							<svg-icon icon-class="arrow-down" :class="ShowCarriageDetail?'unfold':''"></svg-icon>
 						</span>
 					</p>
 					<div class="tableBox">
