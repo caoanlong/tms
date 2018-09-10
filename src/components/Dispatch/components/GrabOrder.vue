@@ -67,7 +67,7 @@
                     type="datetime" 
                     :clearable="false" 
                     value-format="timestamp"
-                    :picker-options="{ disabledDate: (curDate) =>  new Date() > curDate}" >
+                    :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 > curDate }" >
                 </el-date-picker>
             </el-form-item>
             <el-row style="margin-top:20px" class="text-center">
