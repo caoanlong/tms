@@ -24,7 +24,7 @@
                 <div class="block-content">
                     <el-row :gutter="20">
 						<el-col :span="12">
-                            <el-form-item label-width="70px" label="车型">
+                            <el-form-item label-width="70px" label="车型" prop="requiredTruckType">
                                 <el-select placeholder="请选择车型" v-model="grabOrder.requiredTruckType">
                                     <el-option label="罐式货车" value="TankTruck"></el-option>
                                     <el-option label="厢式货车" value="VanTruck"></el-option>
@@ -80,7 +80,7 @@
 
 <script>
 import { Message } from 'element-ui'
-import { checkFloat2 } from '../../../common/valid'
+import { checkFloat2,checkInt } from '../../../common/valid'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { arrayUnique } from '../../../common/utils'
 export default {
@@ -119,9 +119,10 @@ export default {
                 freight: ''
             },
             rules: {
-                requiredTruckLength: [{ validator: checkFloat2 }],
+                requiredTruckType:[{required: true , message: '请选择车型'}],
+                requiredTruckLength: [{required: true , message: '请输入车长'},{ validator: checkFloat2 }],
                 type: [{ required: true , message: '请选择报价类型' }],
-                freight: [{ required: true , message: '请输入一口价' }],
+                freight: [{ required: true , message: '请输入一口价' },{ validator: checkInt }],
                 payMode: [{ required: true , message: '请选择运费支付方式' }],
                 endDate: [{ validator: (rule, value, callback) => {
                     if (value && value < new Date().getTime()) {
