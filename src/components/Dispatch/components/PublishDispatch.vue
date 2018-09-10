@@ -9,9 +9,9 @@
             :close-on-click-modal="false">
                 <div class="num-info">
                     <span class="num-tit">配载总量</span>
-                    <span class="num-label"><span>数</span>{{totalNum}}</span>
-                    <span class="num-label"><span>重</span>{{totalWeight}}</span>
-                    <span class="num-label"><span>体</span>{{totalVolume}}</span>
+                    <span class="num-label" v-if="totalNum"><span>数</span>{{totalNum}}</span>
+                    <span class="num-label" v-if="totalWeight"><span>重</span>{{totalWeight}}</span>
+                    <span class="num-label" v-if="totalVolume"><span>体</span>{{totalVolume}}</span>
                 </div>
                 <div class="num-info">
                     <span class="num-tit">
