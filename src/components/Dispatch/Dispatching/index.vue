@@ -787,10 +787,11 @@ export default {
 			if (index > -1) {
 				this.selectedList.splice(index, 1)
 			} else {
-				item.cargoNumNew = item.remainingCargoNum
-				item.cargoWeightNew = item.remainingCargoWeight
-				item.cargoVolumeNew = item.remainingCargoVolume
-				this.selectedList.push(item)
+				const oItem = Object.assign({}, item)
+				oItem.cargoNumNew = item.remainingCargoNum
+				oItem.cargoWeightNew = item.remainingCargoWeight
+				oItem.cargoVolumeNew = item.remainingCargoVolume
+				this.selectedList.push(oItem)
 			}
 			this.selectedListNoRepeat = arrayUnique(this.selectedList, 'carrierOrderID')
 			this.transLineCreate()
