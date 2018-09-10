@@ -1,6 +1,6 @@
 <template>
     <el-dialog 
-        title="车辆人员" 
+        title="车辆&人员" 
         :visible="isVisible" 
         :show-close="false" 
         :close-on-click-modal="false" width="80%">
@@ -177,6 +177,7 @@ export default {
         close(bool) {
             if (bool) {
                 this.$emit('control', this.selected)
+                
             } else {
                 this.$emit('control')
             }
