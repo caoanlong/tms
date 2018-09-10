@@ -184,7 +184,9 @@
 													}
 												}
 											}]">
-                                            <el-input size="mini" placeholder="请输入..." v-model="item.amount"><template slot="append">元</template></el-input>
+                                            <el-input size="mini" placeholder="请输入..." v-model="item.amount">
+                                                <template slot="append">元</template>
+                                            </el-input>
                                         </el-form-item>
                                     </el-form>
                                 </td>
@@ -284,6 +286,14 @@ export default {
             persons: []
         }
     },
+    watch: {
+        dispatchTaskCargoList: {
+            handler(val) {
+                this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
+            },
+            deep: true
+        }
+    },
     computed: {
         totalFreight() {
             const values = this.bizDispatchFeeList.map(item => Number(item.amount ? item.amount : 0))
@@ -301,6 +311,8 @@ export default {
             this.selectedTruck = data ? data : {}
             if (this.selectedTruck.primaryDriver) {
                 this.selectedTruck.primaryDriver.type = 'primary'
+                this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
+                this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
             }
             this.createPersons()
         },

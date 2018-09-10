@@ -169,7 +169,13 @@
 															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
 																callback('请输入重量')
 															}else{
-																callback()
+																if (item.dispatchType=='Quantity' 
+																&& (!item.cargoWeight || item.cargoWeight == '0') 
+																&& (!item.cargoVolume|| item.cargoVolume == '0')) {
+																	callback('体积和重量必填一项')
+																} else {
+																	callback()
+																}
 															}
 														}
 													}]">
@@ -184,7 +190,13 @@
 															if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
 																callback('请输入体积')
 															}else {
-																callback()
+																if (item.dispatchType=='Quantity' 
+																&& (!item.cargoWeight || item.cargoWeight == '0') 
+																&& (!item.cargoVolume|| item.cargoVolume == '0')) {
+																	callback('体积和重量必填一项')
+																} else {
+																	callback()
+																}
 															}
 														}
 													}]">

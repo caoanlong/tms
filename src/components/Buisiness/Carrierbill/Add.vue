@@ -168,8 +168,14 @@
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
 																callback('请输入重量')
-															}else{
-																callback()
+															} else {
+																if (item.dispatchType=='Quantity' 
+																&& (!item.cargoWeight || item.cargoWeight == '0') 
+																&& (!item.cargoVolume|| item.cargoVolume == '0')) {
+																	callback('体积和重量必填一项')
+																} else {
+																	callback()
+																}
 															}
 														}
 													}]">
@@ -181,10 +187,16 @@
 											<td style="border-spacing:0">
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
+															if (item.dispatchType=='Volumn' &&(!item.cargoVolume|| item.cargoVolume == '0')) {
 																callback('请输入体积')
-															}else {
-																callback()
+															} else {
+																if (item.dispatchType=='Quantity' 
+																&& (!item.cargoWeight || item.cargoWeight == '0') 
+																&& (!item.cargoVolume|| item.cargoVolume == '0')) {
+																	callback('体积和重量必填一项')
+																} else {
+																	callback()
+																}
 															}
 														}
 													}]">
@@ -194,9 +206,9 @@
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{
 														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Quantity'&&(!item.cargoNum || item.cargoNum == '0')) {
+															if (item.dispatchType=='Quantity' && (!item.cargoNum || item.cargoNum == '0')) {
 																callback('请输入数量')
-															}else{
+															} else {
 																callback()
 															}
 														}
