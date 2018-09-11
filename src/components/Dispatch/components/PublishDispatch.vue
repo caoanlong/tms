@@ -311,8 +311,13 @@ export default {
             this.selectedTruck = data ? data : {}
             if (this.selectedTruck.primaryDriver) {
                 this.selectedTruck.primaryDriver.type = 'primary'
-                this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
-                this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
+                const list = Object.assign([], this.bizDispatchFeeList)
+                list[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
+                list[0].superCargoName = this.selectedTruck.primaryDriver.superCargoName
+                this.bizDispatchFeeList = list
+                console.log(this.bizDispatchFeeList)
+                // this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
+                // this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
             }
             this.createPersons()
         },
