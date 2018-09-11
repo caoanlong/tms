@@ -421,9 +421,20 @@ let routerMap = [{
                     {
                         path: '/editcargo',
                         name: 'editcargo',
-                        meta: { title: '编辑货物' },
+                        meta: {
+                            title: '编辑货物'
+                        },
                         component: () =>
                             import ('../components/Basedata/Cargo/Edit'),
+                    },
+                    {
+                        path: '/viewcargo',
+                        name: 'viewcargo',
+                        meta: {
+                            title: '货物详情'
+                        },
+                        component: () =>
+                            import ('../components/Basedata/Cargo/View'),
                     }
                 ]
             },
