@@ -1,24 +1,26 @@
 <template>
 	<div class="scroll-container" ref="scrollContainer" @wheel.prevent="handleScroll">
-		<i class="el-icon-arrow-left scrollBtn scrollLeft" @click="scroll('L')"></i>
-		<div class="scroll-box" id="scroll-box">
-			<div class="scroll-wrapper" id="scroll-wrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
+		<i class="el-icon-arrow-left scrollBtn scrollLeft" @click="scroll('L')" v-if="showCtrolBtn"></i>
+		<div class="scrollBox" id="scrollBox" ref="scrollBox">
+			<div class="scrollWrapper" id="scrollWrapper" ref="scrollWrapper" :style="{left: left + 'px'}">
 				<slot></slot>
 			</div>
 		</div>
-		<i class="el-icon-arrow-right scrollBtn scrollRight" @click="scroll('R')"></i>
+		<i class="el-icon-arrow-right scrollBtn scrollRight" @click="scroll('R')" v-if="showCtrolBtn"></i>
 	</div>
 </template>
 
 <script>
 const padding = 15 // tag's padding
 export default {
+	props:["showCtrolBtn"],
 	name: 'scrollPane',
 	data() {
 		return {
 			left: 0,
 		}
 	},
+
 	methods: {
 		clearPos() {
 			this.left = 0
@@ -28,7 +30,6 @@ export default {
 			const $containerWidth = $container.offsetWidth
 			const $wrapper = this.$refs.scrollWrapper
 			const $wrapperWidth = $wrapper.offsetWidth
-
 			let eventDelta = type == 'L' ? 30 : -30
 			if (eventDelta > 0) {
 				this.left = Math.min(0, this.left + eventDelta)
@@ -93,12 +94,12 @@ export default {
 	overflow hidden
 	padding 0 20px
 	width 100%
-	.scroll-box
+	.scrollBox
 		overflow hidden
 		height 34px
 		width 100%
 		position relative
-	.scroll-wrapper
+	.scrollWrapper
 		position absolute
 	.scrollBtn
 		width 15px

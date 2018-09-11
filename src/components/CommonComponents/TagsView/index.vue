@@ -1,7 +1,7 @@
 <template>
 	<div class="headtop">
 		<div class="tags-view-container">
-			<scroll-pane class='tags-view-wrapper' ref='scrollPane'>
+			<scroll-pane class='tags-view-wrapper' ref='scrollPane' :showCtrolBtn="showBtn">
 				<router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)" :to="{name: tag.name, query: tag.query}" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
 					{{tag.title}}
 					<span class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
@@ -25,7 +25,8 @@ export default {
 			visible: false,
 			top: 0,
 			left: 0,
-			selectedTag: {}
+			selectedTag: {},
+			showBtn:false
 		}
 	},
 	computed: {
@@ -47,7 +48,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.addViewTags()
+		this.addViewTags()	
 	},
 	methods: {
 		generateRoute() {
@@ -64,6 +65,8 @@ export default {
 			if (!route) {
 				return false
 			}
+			console.log(document.getElementById('scrollBox').offsetWidth,document.getElementById('scrollWrapper').offsetWidth);
+			this.showCtrolBtn()
 			this.$store.dispatch('addVisitedViews', route)
 		},
 		moveToCurrentTag() {
@@ -76,6 +79,13 @@ export default {
 					}
 				}
 			})
+		},
+		showCtrolBtn(){
+			if((document.getElementById('scrollBox').offsetWidth-40)<document.getElementById('scrollWrapper').offsetWidth){
+				this.showBtn = true
+			}else{
+				this.showBtn = false
+			}
 		},
 		closeSelectedTag(view) {
 			// 如果关闭编辑和添加页面
@@ -112,6 +122,7 @@ export default {
 					}
 				})
 			}
+			this.showCtrolBtn()
 		},
 		closeOthersTags() {
 			this.$router.push(this.selectedTag.path)
