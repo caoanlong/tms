@@ -18,3 +18,24 @@ export const getdatefromtimestamp = function (input, bool) {
 		return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second
 	}
 }
+
+
+export const trimSpace = function(array) {
+	for(let i = 0;i<array.length;i++) {
+		if(array[i] == "" || typeof(array[i]) == "undefined") {
+			array.splice(i, 1)
+			i= i-1
+		}
+	}
+	return array
+}
+
+export const trimSpaceAndJoinSlash = function(array) {
+	for(let i = 0;i<array.length;i++) {
+		if(array[i] == "" || typeof(array[i]) == "undefined") {
+			array.splice(i, 1)
+			i= i-1
+		}
+	}
+	return array.join('/')
+}

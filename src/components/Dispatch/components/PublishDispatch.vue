@@ -341,6 +341,9 @@ export default {
             this.selectedTruck.superCargo = null
             this.createPersons()
         },
+        /**
+         * 添加费用
+         */
         addFreight() {
             this.bizDispatchFeeList.push({
                 item: '',
@@ -352,9 +355,15 @@ export default {
                 amount: ''
             })
         },
+        /**
+         * 删除费用
+         */
         delFreight(i) {
             this.bizDispatchFeeList.splice(i, 1)
         },
+        /**
+         * 生成收款人列表
+         */
         createPersons() {
             if (this.selectedTruck.primaryDriver && this.selectedTruck.superCargo) {
                 this.persons = [this.selectedTruck.primaryDriver, this.selectedTruck.superCargo]
@@ -364,6 +373,9 @@ export default {
                 this.persons = [this.selectedTruck.superCargo]
             }
         },
+        /**
+         * 发布
+         */
         publish() {
             for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
                 const element = this.bizDispatchFeeList[i]
