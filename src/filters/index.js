@@ -32,7 +32,7 @@ export const trimSpace = function(array) {
 
 export const trimSpaceAndJoinSlash = function(array) {
 	for(let i = 0;i<array.length;i++) {
-		if(!array[i] || array[i] == "" || array[i] == null || typeof(array[i]) == "undefined") {
+		if(!array[i] || array[i] == "" || parseInt(array[i]) == 0 || array[i] == null || typeof(array[i]) == "undefined") {
 			array.splice(i, 1)
 			i= i-1
 		}
