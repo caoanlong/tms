@@ -72,7 +72,7 @@
 					</el-table-column>
 					<el-table-column label="待配载量">
 						<template slot-scope="scope">
-							<span>{{scope.row.remainingCargoWeight}}吨/{{scope.row.remainingCargoVolume}}方/{{scope.row.remainingCargoNum}}</span>
+							<span>{{scope.row.remainingCargoWeight?scope.row.remainingCargoWeight+'吨/':''}}{{scope.row.remainingCargoVolume?scope.row.remainingCargoVolume+'方/':''}}{{scope.row.remainingCargoNum?scope.row.remainingCargoNum:''}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
