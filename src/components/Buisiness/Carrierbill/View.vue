@@ -58,30 +58,28 @@
 								<span v-else>按重量配载</span>
 								<!-- 按数量配载 Quantity   按体积配载 Volumn   按重量配载 Weight -->
 							</td>
-							<td>{{item.cargoVolume?item.cargoVolume+'方':''}}{{(item.cargoVolume&&item.cargoWeight)?'/':''}}{{item.cargoWeight?item.cargoWeight+'吨':''}}{{(item.cargoWeight&&item.cargoNum)?'/':''}}{{item.cargoNum?item.cargoNum:''}}{{item.cargoNum?item.cargoUnitName:''}}</td>
+							<td>{{[(item.cargoVolume+'方')
+								,(item.cargoWeight+'吨')
+								,(item.cargoNum?(item.cargoNum+item.cargoUnitName):'')] | trimSpaceAndJoinSlash }}</td>
 							<td>
-								{{item.remainingCargoVolume?item.remainingCargoVolume+'方':''}}{{(item.remainingCargoVolume&&item.remainingCargoWeight)?'/':''}}
-								{{item.remainingCargoWeight?item.remainingCargoWeight+'吨':''}}{{(item.remainingCargoWeight&&item.remainingCargoNum)?'/':''}}
-								{{item.remainingCargoNum?item.remainingCargoNum:''}}{{item.remainingCargoNum?item.cargoUnitName:''}}
+								{{[(item.remainingCargoVolume?item.remainingCargoVolume+'方':'')
+								,(item.remainingCargoWeight?item.remainingCargoWeight+'吨':'')
+								,(item.remainingCargoNum?item.remainingCargoNum+item.cargoUnitName:'')] | trimSpaceAndJoinSlash}}
+
 							</td>
 						</tr>
 						<tr class="total is-center">
 							<td>合计</td>
 							<td></td>
 							<td></td>
-							<td>{{sum('cargoVolume') + ''}}方/{{sum('cargoWeight') + ''}}吨/{{ parseInt(sum('cargoNum'))}}</td>
+							<td>{{[(sum('cargoVolume') + '方')
+								,(sum('cargoWeight') + '吨')
+								,( parseInt(sum('cargoNum')))] | trimSpaceAndJoinSlash }}</td>
 							<td>
-								<span>
-									{{sum('remainingCargoVolume')?(sum('remainingCargoVolume')+'方'):''}}
-								</span>
-								<span>
-									{{(sum('remainingCargoVolume')&&sum('remainingCargoWeight'))?'/':''}}
-									{{sum('remainingCargoWeight')?sum('remainingCargoWeight')+'吨':''}}
-									{{(sum('remainingCargoWeight')&&sum('remainingCargoNum'))?'/':''}}
-								</span>	
-								<span>
-									{{sum('remainingCargoNum')?parseInt(sum('remainingCargoNum')):''}}
-								</span>
+								{{[(sum('remainingCargoVolume')+'方')
+								,(sum('remainingCargoWeight')+'吨')
+								,(parseInt(sum('remainingCargoNum')))] | trimSpaceAndJoinSlash}}
+								
 							</td>
 						</tr>
 					</table>
