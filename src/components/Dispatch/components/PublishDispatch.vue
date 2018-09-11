@@ -146,7 +146,12 @@
                                 <td align="center" style="padding:0 5px">
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
-                                            <el-select size="mini" value-key="supercargoID" v-model="item.superCargo" placeholder="请选择" @change="handSelectItem($event, index)">
+                                            <el-select 
+                                                size="mini" 
+                                                value-key="supercargoID" 
+                                                v-model="item.superCargo" 
+                                                placeholder="请选择" 
+                                                @change="handSelectItem($event, index)">
                                                 <el-option 
                                                     :label="(person.type == 'primary' ? '司机-' : '押运-') + person.realName" 
                                                     :value="person" 
@@ -309,17 +314,13 @@ export default {
         handSelectTruck(data) {
             this.truckDialog = false
             this.selectedTruck = data ? data : {}
+            this.createPersons()
             if (this.selectedTruck.primaryDriver) {
                 this.selectedTruck.primaryDriver.type = 'primary'
-                const list = Object.assign([], this.bizDispatchFeeList)
-                list[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
-                list[0].superCargoName = this.selectedTruck.primaryDriver.superCargoName
-                this.bizDispatchFeeList = list
-                console.log(this.bizDispatchFeeList)
-                // this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
-                // this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
+                this.bizDispatchFeeList[0].superCargo = this.persons.filter(item => item.supercargoID == this.selectedTruck.primaryDriver.supercargoID)[0]
+                this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
+                this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
             }
-            this.createPersons()
         },
         handSelectPerson(data, type) {
             this.personDialog = false

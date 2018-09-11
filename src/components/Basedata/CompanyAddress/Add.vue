@@ -100,6 +100,8 @@ export default {
         handSelect(data){
 			this.companyAddress.customerID = data.customerID
 			this.companyAddress.companyName = data.companyName
+			this.companyAddress.contactName = data.contactName
+			this.companyAddress.contactPhone = data.contactPhone
 		},
 		handleSelectedArea(data) {
 			if (data) {
