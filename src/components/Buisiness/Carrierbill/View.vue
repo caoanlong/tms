@@ -62,8 +62,8 @@
 								,(item.cargoWeight+'吨')
 								,(item.cargoNum?(item.cargoNum+item.cargoUnitName):'')] | trimSpaceAndJoinSlash }}</td>
 							<td>
-								{{[(item.remainingCargoVolume?item.remainingCargoVolume+'方':'')
-								,(item.remainingCargoWeight?item.remainingCargoWeight+'吨':'')
+								{{[(item.remainingCargoVolume+'方')
+								,(item.remainingCargoWeight+'吨')
 								,(item.remainingCargoNum?item.remainingCargoNum+item.cargoUnitName:'')] | trimSpaceAndJoinSlash}}
 
 							</td>

@@ -67,12 +67,12 @@
 					<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
 					<el-table-column label="原货量">
 						<template slot-scope="scope">
-							<span>{{scope.row.cargoWeightSum?scope.row.cargoWeightSum:0}}吨/{{scope.row.cargoVolumeSum?scope.row.cargoVolumeSum:0}}方/{{scope.row.cargoNumSum}}</span>
+							<span>{{[(scope.row.cargoWeightSum+'吨'),(scope.row.cargoVolumeSum+'方'),(scope.row.cargoNumSum)] | trimSpaceAndJoinSlash }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="待配载量">
 						<template slot-scope="scope">
-							<span>{{scope.row.remainingCargoWeight?scope.row.remainingCargoWeight+'吨/':''}}{{scope.row.remainingCargoVolume?scope.row.remainingCargoVolume+'方/':''}}{{scope.row.remainingCargoNum?scope.row.remainingCargoNum:''}}</span>
+							<span>{{[(scope.row.remainingCargoWeight+'吨'),(scope.row.remainingCargoVolume+'方'),(scope.row.remainingCargoNum)] | trimSpaceAndJoinSlash }}</span>
 						</template>
 					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">

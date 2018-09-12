@@ -174,7 +174,9 @@
 		</el-card>
 		<el-dialog :title="(curScrambleType=='Grab')?'抢单详情':'报价详情'" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
 			<p class="c1">货物： {{scrambleList.cargoName}}</p>
-			<p class="c1">货量： {{scrambleList.cargoWeight}}吨 / {{scrambleList.cargoVolume}}方 / {{scrambleList.cargoNum}}</p>
+			<p class="c1">货量： 
+				{{[(scrambleList.cargoWeight+'吨'),(scrambleList.cargoVolume+'方'),(scrambleList.cargoNum)] | trimSpaceAndJoinSlash}}
+			</p>
 			<p class="c1">{{scrambleList.load}} 装 {{scrambleList.unLoad}} 卸  预计里程 {{(Number(scrambleList.mileages)/1000).toFixed(2)}}公里</p>
 			<div class="tableBox">
 				<table class="customerTable">
