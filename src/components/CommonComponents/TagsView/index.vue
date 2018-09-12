@@ -89,7 +89,7 @@ export default {
 		},
 		closeSelectedTag(view) {
 			// 如果关闭编辑和添加页面
-			if ((view.name.indexOf('add') > -1) || (view.name.indexOf('edit') > -1)) {
+			if ((view.name.indexOf('add') > -1) || (view.name.indexzxOf('edit') > -1)) {
 				this.$msgbox({
 					message: '数据将清空，是否确定离开该页面？',
 					title: '温馨提示',
