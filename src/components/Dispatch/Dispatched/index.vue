@@ -134,7 +134,7 @@
 										<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
 									</span> -->
 									<!-- 已取消 已拒绝-->
-									<span v-if="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue'">
+									<span v-if="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue' || item.status == 'Ordered'">
 										<router-link 
 											tag="span" 
 											class="c6" 
