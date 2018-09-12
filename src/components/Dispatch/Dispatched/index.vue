@@ -134,7 +134,7 @@
 										<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
 									</span> -->
 									<!-- 已取消 已拒绝-->
-									<span v-if="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue' || item.status == 'Ordered'">
+									<span v-if="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue'">
 										<router-link 
 											tag="span" 
 											class="c6" 
@@ -143,6 +143,8 @@
 											重新调度
 										</router-link>
 										<!-- <el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button> -->
+									</span>
+									<span v-if="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue' || item.status == 'Ordered'">
 										<el-button 
 											v-if="item.closed != 'Y'"
 											type="text" 
