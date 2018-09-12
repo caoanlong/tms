@@ -239,7 +239,7 @@
 									<img class="success" src="../../../assets/imgs/bjcg.png" height="48" v-if="item.status == 'Agreed'&&item.type=='Offer'" />
 								</td>
 								<td>
-									<span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID,item.dispatchOrderID)" v-if="dispatchOrderStatus == 'Committed'">选TA承运</span>
+									<span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID,item.dispatchOrderID,item.type)" v-if="dispatchOrderStatus == 'Committed'">选TA承运</span>
 									<p v-if="item.status == 'Agreed'">调度员：{{item.confirmer}}</p>
 									<p v-if="item.status == 'Agreed'">{{item.confirmTime  | getdatefromtimestamp}}</p>
 								</td>
@@ -292,7 +292,7 @@ import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from './common/UploadPhoto'
-import {closeConfirm, dispatchCancel } from '../../../common/utils'
+import {closeConfirm, dispatchCancel,confirmSelect } from '../../../common/utils'
 export default {
 	mixins: [baseMixin],
 	components: { TrailMap,UploadPhoto },
@@ -458,14 +458,18 @@ export default {
 			this.currentDispatchOrderID = dispatchOrderID
 			this.trailDialog = true
 		},
-		confirmScramble(dispatchOfferID,dispatchOrderID){
-			Dispatchbill.confirmScramble({
-				dispatchOfferID
-			}).then(res => {
-				Message.success('已成功选择承运人!')
-				this.scramble(dispatchOrderID)
-				this.getList()
+		confirmScramble(dispatchOfferID,dispatchOrderID,type){
+			type = type == 'Offer' ? '报价' : '承运人'
+			confirmSelect(dispatchOrderID,type, dispatchOrderID=>{
+				Dispatchbill.confirmScramble({
+					dispatchOfferID
+				}).then(res => {
+					Message.success('已成功选择承运人!')
+					this.scramble(dispatchOrderID)
+					this.getList()
+				})
 			})
+			
 		},
 		closeDispatchOrder(id){
 			closeConfirm(id, dispatchOrderID => {

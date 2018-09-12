@@ -195,6 +195,19 @@ export function dispatchCancel(id, callback) {
     })
 }
 
+// 确认选择承运人
+export function confirmSelect(id, type, callback) {
+    vueInstance.$confirm('是否确认选择该' + type + '?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        callback && callback(id)
+    }).catch(() => {
+
+    })
+}
+
 export function resizeImg(url, size) {
     let arr = url.split('.')
     return process.env.IMG_API + arr[0] + size + arr[1]
