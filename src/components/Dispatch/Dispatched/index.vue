@@ -93,7 +93,10 @@
 											</div>
 										</div>
 									</div>
-									<span v-if="item.closed == 'N'">
+									<span v-if="item.closed == 'Y'">
+										<el-tag size="mini" type="info">已关闭</el-tag>
+									</span>
+									<span v-else>
 										<el-tag size="mini" type="info" v-if="item.status == 'Committed'">{{DISPATCHORDERTYPEEX[item.type]}}</el-tag>
 										<el-tag 
 											v-else
@@ -102,9 +105,6 @@
 											: (item.status == 'Ordered' ? '' : 'info')">
 											{{DISPATCHORDERSTATUS[item.status]}}
 										</el-tag>
-									</span>
-									<span v-else>
-										<el-tag size="mini" type="info">已关闭</el-tag>
 									</span>
 								</div>
 								<div class="handler">

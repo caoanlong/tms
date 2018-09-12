@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">添加账号</div>
+			<div slot="header" class="clearfix">添加用户</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="sysMember" :rules="rules" ref="ruleForm">

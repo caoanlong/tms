@@ -21,7 +21,7 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableList" border style="width: 100%" size="mini">
-					<el-table-column label="账号" prop="mobile"></el-table-column>
+					<el-table-column label="手机号" prop="mobile"></el-table-column>
 					<el-table-column label="姓名" prop="realName"></el-table-column>
 					<el-table-column label="角色" prop="roleNames"></el-table-column>
 					<!-- <el-table-column label="状态" align="center">
