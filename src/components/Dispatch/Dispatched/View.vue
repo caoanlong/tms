@@ -3,18 +3,36 @@
 		<el-card class="box-card dispatchbillDetail">
 			<div slot="header" class="clearfix">
 				<span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span>
-				<el-tag size="mini" type="warning">{{DISPATCHORDERTYPE[dispatchOrderDetail.type]}}</el-tag>
-				<el-tag size="mini" :type="dispatchOrderDetail.status == 'Finished' ? 'success' : 'info'">{{DISPATCHORDERSTATUS[dispatchOrderDetail.status]}}</el-tag>
-				<span class="fr c2">由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span></span>
+				<el-tag size="mini" type="warning">
+					{{DISPATCHORDERTYPE[dispatchOrderDetail.type]}}
+				</el-tag>
+				<el-tag size="mini" :type="dispatchOrderDetail.status == 'Finished' ? 'success' : 'info'">
+					{{DISPATCHORDERSTATUS[dispatchOrderDetail.status]}}
+				</el-tag>
+				<span class="fr c2">
+					由 <span class="c1">{{dispatchOrderDetail.dispatchName}}</span> 
+					创建调度单 <span class="c1">{{dispatchOrderDetail.dispatchTime | getdatefromtimestamp}}</span>
+				</span>
 			</div>
 			<el-row :gutter="40">
 				<el-col :span="17" style="border-right:1px solid #ddd">
 					<div class="borderBox">
 						<p>行驶数据</p>
 						<div class="lineInfo text-center" @click="trail(dispatchOrderDetail.dispatchOrderID)" >
-							<span class="fl c1" v-if="dispatchOrderlocationList.length>0"><i class="el-icon-location"></i>当前位于 {{dispatchOrderlocationList[dispatchOrderlocationList.length -1].posAddress}}</span>
-							<span class="c2 ">点击查看轨迹</span>
-							<span class="fr c2" v-if="dispatchOrderlocationList.length>0">{{dispatchOrderlocationList[dispatchOrderlocationList.length -1].createTime | getdatefromtimestamp }}</span>
+							<span class="fl c1" v-if="dispatchOrderlocationList.length>0">
+								<i class="el-icon-location"></i>
+								当前位于 {{dispatchOrderlocationList[dispatchOrderlocationList.length -1].posAddress}}
+							</span>
+							<span class="c2 ">
+								<span v-if="dispatchOrderDetail.status == 'Committed'">未接单，无轨迹</span>
+								<span v-else-if="dispatchOrderDetail.status == 'Canceled'">已取消，无轨迹</span>
+								<span v-else-if="dispatchOrderDetail.status == 'Rejected'">已拒绝，无轨迹</span>
+								<span v-else-if="dispatchOrderDetail.status == 'Overdue'">超时取消，无轨迹</span>
+								<span v-else>点击查看轨迹</span>
+							</span>
+							<span class="fr c2" v-if="dispatchOrderlocationList.length>0">
+								{{dispatchOrderlocationList[dispatchOrderlocationList.length -1].createTime | getdatefromtimestamp }}
+							</span>
 						</div>
 						<div class="tableBox">
 							<div class="item">预计：<span v-if="dispatchOrderDetail.distance">总里程 {{(Number(dispatchOrderDetail.distance)/1000).toFixed(2)}}公里</span> <span v-if="dispatchOrderDetail.estimatedTime">用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</span></div>
@@ -139,7 +157,11 @@
 							</tbody>
 						</table>
 					</div>
-					<p style="padding:10px 15px">运输任务（<span class="circle"></span> 色数字代表装卸执行顺序，来源线路规划排序） <span class="fr c1" v-if="dispatchOrderDetail.distance">预计总里程{{Number(dispatchOrderDetail.distance/1000).toFixed(2)}}公里</span></p>
+					<p style="padding:10px 15px">运输任务（<span class="circle"></span> 色数字代表装卸执行顺序，来源线路规划排序） 
+						<span class="fr c1" v-if="dispatchOrderDetail.distance">
+							预计总里程{{Number(dispatchOrderDetail.distance/1000).toFixed(2)}}公里
+						</span>
+					</p>
 					<TaskItem v-for="(item,index) in dispatchTask" :taskItem="item" :index="index" :key="item.carrierOrderID"></TaskItem>
 				</el-col>
 				<el-col :span="7" class="dispatchOrderDetailR">
@@ -348,12 +370,10 @@ export default {
 		 * 调用高德地图接口获取距离
 		 */
 		async getDistance() {
-			
 			const list = this.dispatchOrderlocationList.map(item => item.loc.longitude + ',' + item.loc.latitude)
 			const results = [0]
 			let i = 0
 			while(i < list.length - 1) {
-				
 				const res = await axios({url: `https://restapi.amap.com/v3/distance?origins=${list[i]}&destination=${list[i+1]}&key=${MAPKEY}`})
 				if (res.data.status == 1) results.push(res.data.results[0].distance)
 				i++

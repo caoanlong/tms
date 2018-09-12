@@ -37,11 +37,21 @@
 		<div class="picCon" v-if="taskItem.dispatchTaskPicList.length>0">
 			<ImageUpload :isShowType="true" :objs="taskItem.dispatchTaskPicList" :files="taskItem.dispatchTaskPicList.map(item => item.minURL)" :isPreview="true"/>
 		</div>
-		<div class="cargoTit">承运货物<span class="fr c1 total" @click="unfold">{{taskItem.loadWeightSum?'重量'+taskItem.loadWeightSum+'吨':''}} {{taskItem.loadVolumeSum?'体积'+taskItem.loadVolumeSum+'方':''}} {{taskItem.loadNumSum?'数量'+taskItem.loadNumSum:''}} <svg-icon icon-class="arrow-down" :class="isFold?'unfold':''"></svg-icon></span></div>
+		<div class="cargoTit">
+			承运货物
+			<span class="fr c1 total" @click="unfold">
+				{{taskItem.loadWeightSum ? '重量' + taskItem.loadWeightSum + '吨' : ''}} 
+				{{taskItem.loadVolumeSum ? '体积' + taskItem.loadVolumeSum + '方' : ''}} 
+				{{taskItem.loadNumSum ? '数量' + taskItem.loadNumSum : ''}} 
+				<svg-icon icon-class="arrow-down" :class="isFold ? 'unfold' : ''"></svg-icon>
+			</span>
+		</div>
 		<div class="cargoList" v-if="isFold ">
 			<p v-for="cargoItem in taskItem.bizDispatchTaskCargoList" :key="cargoItem.dispatchTaskID">
 				<span class="fl">{{cargoItem.cargoName}}</span>
-				<span class="fr"> {{cargoItem.cargoWeight?cargoItem.cargoWeight+'吨 /':''}} {{cargoItem.cargoVolume?cargoItem.cargoVolume+'方 /':''}} {{cargoItem.cargoNum?cargoItem.cargoNum:''}}{{(cargoItem.cargoNum&&cargoItem.cargoUnitName)?cargoItem.cargoUnitName:''}}</span>
+				<span class="fr">
+					{{[(cargoItem.cargoWeight + '吨'),(cargoItem.cargoVolume + '方'),(cargoItem.cargoNum + cargoItem.cargoUnitName)] | trimSpaceAndJoinSlash}}
+				</span>
 			</p>
 		</div>
 	</div>

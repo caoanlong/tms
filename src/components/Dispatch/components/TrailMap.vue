@@ -7,7 +7,7 @@
                 <el-radio-button label="APP"></el-radio-button>
             </el-radio-group>
         </el-row>
-        <div class="wrapper">
+        <div class="wrapper" :style="{height: (windowInnerHeight-300) + 'px'}">
             <div class="tips">累计时长：{{time}}小时&nbsp;&nbsp;&nbsp;累计里程：{{distance}}km&nbsp;&nbsp;&nbsp;平均时速：{{speed}}km</div>
             <div id="amapWrapper"></div>
         </div>
@@ -35,6 +35,9 @@ export default {
             locationList: [],
             dispatchTaskPicList: []
         }
+    },
+    computed: {
+        windowInnerHeight: () => window.innerHeight
     },
     created() {
         this.createMapMask()

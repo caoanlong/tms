@@ -477,14 +477,14 @@ let routerMap = [{
                     {
                         path: '/adduser',
                         name: 'adduser',
-                        meta: { title: '添加账号' },
+                        meta: { title: '添加用户' },
                         component: () =>
                             import ('../components/System/Usermanage/Add')
                     },
                     {
                         path: '/viewuser',
                         name: 'viewuser',
-                        meta: { title: '查看账号' },
+                        meta: { title: '查看用户' },
                         component: () =>
                             import ('../components/System/Usermanage/View')
                     },

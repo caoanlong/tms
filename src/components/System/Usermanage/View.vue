@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">查看员工</div>
+			<div slot="header" class="clearfix">查看用户</div>
 			<el-form label-width="120px">
 			<el-row>
 				<el-col :span="8">
