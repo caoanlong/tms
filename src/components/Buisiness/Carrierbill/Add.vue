@@ -74,7 +74,14 @@
 										value-format="timestamp"
 										default-time="00:00:00"
 										@change = "handSelectDate"
-										:picker-options="{ disabledDate: (curDate) => curDate > carrierbillInfo.consigneeDate?carrierbillInfo.consigneeDate:''}" 
+										:picker-options="{ 
+											disabledDate: (curDate) => {
+												if (carrierbillInfo.consigneeDate) {
+													return curDate > carrierbillInfo.consigneeDate
+												} else {
+													return false
+												}
+											}}" 
 										>
 									</el-date-picker>
 								</el-form-item>
@@ -119,7 +126,14 @@
 										value-format="timestamp"
 										default-time="00:00:00"
 										@change = "handSelectDate"
-										:picker-options="{ disabledDate: (curDate) => curDate < carrierbillInfo.shipperDate?carrierbillInfo.shipperDate:''}" 
+										:picker-options="{ 
+											disabledDate: (curDate) => {
+												if (carrierbillInfo.shipperDate) {
+													return curDate < carrierbillInfo.shipperDate - 3600000 * 24
+												} else {
+													return false
+												}
+											}}" 
 										>
 									</el-date-picker>
 								</el-form-item>

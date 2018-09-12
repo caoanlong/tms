@@ -94,7 +94,7 @@ export default {
 				cb(res)
 			})
         },
-        handSelect(data){
+        handSelect(data) {
 			this.companyAddress.customerID = data.customerID
 			this.companyAddress.companyName = data.companyName
 			this.companyAddress.contactName = data.contactName
