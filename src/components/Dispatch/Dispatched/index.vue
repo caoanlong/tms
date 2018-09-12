@@ -93,18 +93,16 @@
 											</div>
 										</div>
 									</div>
-									<span v-if="item.closed == 'Y'">
-										<el-tag size="mini" type="info">已关闭</el-tag>
-									</span>
-									<span v-else>
-										<el-tag size="mini" type="info" v-if="item.status == 'Committed'">{{DISPATCHORDERTYPEEX[item.type]}}</el-tag>
-										<el-tag 
-											v-else
-											size="mini" 
-											:type="item.status == 'Finished' ? 'success' 
-											: (item.status == 'Ordered' ? '' : 'info')">
-											{{DISPATCHORDERSTATUS[item.status]}}
-										</el-tag>
+									<el-tag size="mini" type="info" v-if="item.status == 'Committed'">{{DISPATCHORDERTYPEEX[item.type]}}</el-tag>
+									<el-tag 
+										v-else
+										size="mini" 
+										:type="item.status == 'Finished' ? 'success' 
+										: (item.status == 'Ordered' ? '' : 'info')">
+										{{DISPATCHORDERSTATUS[item.status]}}
+									</el-tag>
+									<span>
+										<el-tag size="mini" type="info" v-if="item.closed == 'Y'">已关闭</el-tag>
 									</span>
 								</div>
 								<div class="handler">
@@ -145,7 +143,14 @@
 											重新调度
 										</router-link>
 										<!-- <el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button> -->
-										<el-button type="text" size="mini"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
+										<el-button 
+											v-if="item.closed != 'Y'"
+											type="text" 
+											size="mini" 
+											@click="closeDispatchOrder(item.dispatchOrderID)" 
+											style="margin-left:20px">
+											关闭
+										</el-button>
 									</span>
 								</div>
 							</td>
