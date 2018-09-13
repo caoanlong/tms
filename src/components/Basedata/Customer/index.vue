@@ -4,8 +4,8 @@
 			<div slot="header" class="clearfix">收发货单位</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="收发货单位">
-						<el-input placeholder="名称/手机号" v-model="find.keyword"></el-input>
+					<el-form-item label="关键字">
+						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item label="类型" class="customerSelect">
 						<el-select v-model="find.customerType" placeholder="请选择">

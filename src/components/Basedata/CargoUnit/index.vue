@@ -4,8 +4,8 @@
 			<div slot="header" class="clearfix">货物单位</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="货物单位名称">
-						<el-input placeholder="请输入货物单位" v-model="find.unit"></el-input>
+					<el-form-item label="关键字">
+						<el-input placeholder="请输入关键字" v-model="find.unit"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
