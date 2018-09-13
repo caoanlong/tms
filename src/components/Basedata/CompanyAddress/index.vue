@@ -124,7 +124,7 @@ export default {
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
-				customerID: this.find.customerID
+				companyName: this.find.companyName
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total

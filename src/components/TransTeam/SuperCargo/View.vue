@@ -12,7 +12,7 @@
 									<span class="ctt">{{superCargo.realName}}</span>
 								</div>
 								<div>
-									<span class="tit">联系方式</span>
+									<span class="tit">手机号</span>
 									<span class="ctt">{{superCargo.mobile}}</span>
 								</div>
 								<div>

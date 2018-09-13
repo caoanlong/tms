@@ -70,7 +70,7 @@
 						</tr>
 						<tr class="total is-center">
 							<td>合计</td>
-							<td></td>
+							<!-- <td></td> -->
 							<td></td>
 							<td>{{[(sum('cargoVolume') + '方')
 								,(sum('cargoWeight') + '吨')
@@ -116,7 +116,8 @@
 							<td>{{transport.driverName}}</td>
 							<td>{{transport.superCargoName}}</td>
 							<td>{{transport.cargoName}}</td>
-							<td>{{transport.loadWeightSum + '吨'}}/{{transport.loadVolumeSum + '方'}}/{{transport.LoadNumSum}}</td>
+							<td>{{[(transport.loadWeightSum + '吨'),(transport.loadVolumeSum + '方'),(transport.LoadNumSum)] | trimSpaceAndJoinSlash}}
+							</td>
 							<td style="text-align: center">
 								<el-button 
 									:disabled="transport.taskPicNum == 0"
