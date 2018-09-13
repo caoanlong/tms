@@ -6,7 +6,9 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="companyAddress" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="所属企业" prop="customerID">
-							<el-autocomplete  style="width:100%"
+							<el-autocomplete 
+								style="width:100%" 
+								clearable
 								value-key="companyName" 
 								v-model="companyAddress.companyName"
 								:fetch-suggestions="getCompanys"
@@ -91,6 +93,7 @@ export default {
 	},
 	methods: {
 		getCompanys(queryString, cb) {
+			this.companyAddress.customerID = ''
 			Customer.suggest({
 				companyName: queryString
 			}).then(res => {

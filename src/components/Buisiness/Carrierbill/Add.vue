@@ -159,12 +159,23 @@
 									</tr>
 									<tbody>
 										<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
-											<td><el-form-item label-width="0"><el-input placeholder="请输入..." v-model="item.customizedNo"></el-input></el-form-item></td>
+											<td>
+												<el-form-item label-width="0">
+													<el-input placeholder="请输入..." v-model="item.customizedNo"></el-input>
+												</el-form-item>
+											</td>
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
-													<el-autocomplete style="width:120px" popper-class="auto-complete-list"
-													value-key="cargoName" v-model="item.cargoName" :fetch-suggestions="getCargos"
-													placeholder="请输入..." @select="handSelectCargo" @input="inputSelectCargo(index)">
+													<el-autocomplete 
+														clearable
+														style="width:120px" 
+														popper-class="auto-complete-list"
+														value-key="cargoName" 
+														v-model="item.cargoName" 
+														:fetch-suggestions="getCargos"
+														placeholder="请输入..." 
+														@select="handSelectCargo" 
+														@input="inputSelectCargo(index)">
 													</el-autocomplete>
 												</el-form-item>
 											</td>
