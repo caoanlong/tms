@@ -702,7 +702,7 @@
 				</el-row>
 			</el-card>
 			<div class="formHandle text-center">
-				<el-button @click="back">取消</el-button>
+				<el-button @click="back">关闭</el-button>
 				<el-button type="primary" @click="save">保存</el-button>	
 			</div>
 		</el-form>

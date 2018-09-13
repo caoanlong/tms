@@ -11,7 +11,9 @@
 						<el-input placeholder="关键字" v-model="find.address"></el-input>
 					</el-form-item>
                     <el-form-item label="所属企业">
-                        <el-autocomplete  style="width:100%"
+                        <el-autocomplete 
+							style="width:100%" 
+							clearable
                             value-key="companyName" 
                             v-model="find.companyName"
                             :fetch-suggestions="getCompanys"
@@ -99,6 +101,7 @@ export default {
 	},
 	methods: {
         getCompanys(queryString, cb) {
+			this.find.customerID = ''
 			Customer.suggest({
 				companyName: queryString
 			}).then(res => {
