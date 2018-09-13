@@ -44,6 +44,7 @@ export function searchAreaObjByKey(keys) {
 }
 
 export function areaIdToArrayId(areaId) {
+    areaId = String(areaId)
     return [(areaId.substr(0, 2) + '0000'), (areaId.substr(0, 4) + '00'), areaId]
 }
 

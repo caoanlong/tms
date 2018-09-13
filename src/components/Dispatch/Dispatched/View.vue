@@ -309,11 +309,15 @@ export default {
 					realName:this.dispatchOrderDetail.driverName
 				})
 			}
-			if (this.dispatchOrderDetail.superCargoID) {
-				this.persons.push({
-					supercargoID:this.dispatchOrderDetail.superCargoID,
-					realName:this.dispatchOrderDetail.superCargoName
-				})
+			if (this.dispatchOrderDetail.superCargoID ) {
+				if(this.dispatchOrderDetail.superCargoID == this.dispatchOrderDetail.driverID){
+					return
+				}else{
+					this.persons.push({
+						supercargoID:this.dispatchOrderDetail.superCargoID,
+						realName:this.dispatchOrderDetail.superCargoName
+					})
+				}
 			}
 		},
 		carriageDetail(){
@@ -360,7 +364,7 @@ export default {
 				})
 				Dispatchbill.feeModify({bizDispatchFeeList}).then(res=>{
 					this.bizDispatchFeeList = []
-					Message.success(res.data.msg)
+					Message.success("保存成功！")
 					this.getFees()
 					this.getDetail()
 				})

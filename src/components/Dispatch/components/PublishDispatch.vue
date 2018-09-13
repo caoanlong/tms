@@ -371,8 +371,14 @@ export default {
          * 生成收款人列表
          */
         createPersons() {
+            console.log(this.selectedTruck.primaryDriver,this.selectedTruck.superCargo);
+            
             if (this.selectedTruck.primaryDriver && this.selectedTruck.superCargo) {
-                this.persons = [this.selectedTruck.primaryDriver, this.selectedTruck.superCargo]
+                if(this.selectedTruck.primaryDriver.supercargoID==this.selectedTruck.superCargo.supercargoID){
+                     this.persons = [this.selectedTruck.primaryDriver]
+                }else{
+                    this.persons = [this.selectedTruck.primaryDriver, this.selectedTruck.superCargo]
+                }
             } else if (this.selectedTruck.primaryDriver) {
                 this.persons = [this.selectedTruck.primaryDriver]
             } else if (this.selectedTruck.superCargo) {

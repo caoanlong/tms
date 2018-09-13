@@ -129,475 +129,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block target2" style="margin-bottom:20px">
-					<span class="block-title">所属单位/车主</span>
-					<div class="block-content">
-						<el-row :gutter="20" >
-							<el-col :span="12">
-								<el-form-item label="车主/单位名称">
-									<el-input v-model="truck.carOwnerName"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="车主/单位电话">
-									<el-input v-model="truck.carOwnerMobile"></el-input>
-								</el-form-item>
-							</el-col>
-							
-						</el-row>
-						<el-row :gutter="20" >
-							<el-col :span="12">
-								<el-form-item label="车主/单位地址">
-									<el-input v-model="truck.carOwnerAddress"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="所有权类型">
-									<el-select placeholder="请选择" style="width:100%" v-model="truck.propertyType">
-										<el-option label="单位" value="单位"></el-option>
-										<el-option label="个人" value="个人"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
-				<el-row class="section-block target3" style="margin-bottom:20px">
-					<span class="block-title">行驶证</span>
-					<div class="block-content">
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="注册日期" >
-									<el-date-picker 
-										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
-										type="date"
-										placeholder="选择日期" 
-										style="width:100%" 
-										value-format="timestamp"
-										v-model="truck.driverLicRegisterTime">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="发证日期" >
-									<el-date-picker 
-										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
-										type="date"
-										placeholder="选择日期" 
-										style="width:100%" 
-										value-format="timestamp"
-										v-model="truck.driverLicIssueTime">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="有效期从">
-									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" value-format="timestamp" v-model="truck.driverLicBeginTime" style="width:100%">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="有效期至" >
-									<!-- driverLicBeginTime,driverLicExpiresTime -->
-									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" value-format="timestamp" v-model="truck.driverLicExpiresTime" style="width:100%">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="24">
-								<el-form-item label="行驶证照片">
-									<div class="uploadTruckPicItem">
-										<ImageUpload 
-											:width="80" :height="80" 
-											:files="[truck.driverLicPic]" 
-											@imgUrlBack="handleDriverLicPic">
-										</ImageUpload>
-										<p>正本</p>
-									</div>
-									<div class="uploadTruckPicItem">
-										<ImageUpload 
-											:width="80" :height="80" 
-											:files="[truck.driverLicSidePic]" 
-											@imgUrlBack="handleDriverLicSidePic">
-										</ImageUpload>
-										<p>副本</p>
-									</div>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
-				<el-row class="section-block target4" style="margin-bottom:20px">
-					<span class="block-title">道路运输许可证</span>
-					<div class="block-content">
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="许可证号">
-									<el-input v-model="truck.roadTransportNo"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="年审日期至">
-									<el-date-picker 
-										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
-										type="date"
-										placeholder="选择日期" 
-										style="width:100%" 
-										value-format="timestamp"
-										v-model="truck.roadTransportLicAnnualPeriod">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row>
-							<el-col :span="24">
-								<el-form-item label="经营范围">
-									<el-input type="textarea" resize="none" :rows="3" v-model="truck.businessScope"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="许可运输品">
-									<el-input v-model="truck.roadTransportGoods"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="许可运输品是否剧毒" label-width="150px">
-									<el-switch v-model="truck.roadTransportGoodsIsPoisonous"></el-switch>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="24">
-								<el-form-item label="道路运输许可证">
-									<div class="uploadTruckPicItem">
-										<ImageUpload 
-											:width="80" :height="80" 
-											:files="[truck.roadTransportPic]" 
-											@imgUrlBack="handleRoadTransportPic">
-										</ImageUpload>
-										<p>正本</p>
-									</div>
-									<div class="uploadTruckPicItem">
-										<ImageUpload 
-											:width="80" :height="80" 
-											:files="[truck.roadTransportSidePic]" 
-											@imgUrlBack="handleRoadTransportSidePic">
-										</ImageUpload>
-										<p>副本</p>
-									</div>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
-				<el-row class="section-block target5">
-					<span class="block-title">GPS</span>
-					<div class="block-content">
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="入网号">
-									<el-input v-model="truck.gpsNetworkNo"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="卡号">
-									<el-input v-model="truck.gpsCardNo"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="序列号">
-									<el-input v-model="truck.gpsSerialNumber"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="安装时间">
-									<el-date-picker 
-										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
-										type="date"
-										placeholder="选择日期" 
-										style="width:100%" 
-										value-format="timestamp"
-										v-model="truck.gpsSetupTime">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<!-- gpSValidBeginDate, gpSValidEndDate -->
-								<el-form-item label="有效期从">
-									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="truck.gpSValidBeginDate" style="width:100%">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="有效期至">
-									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="truck.gpSValidEndDate" style="width:100%">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="费用" prop="gpsCostAmount">
-									<el-input v-model="truck.gpsCostAmount"><template slot="append">元</template></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="类型">
-									<el-input v-model="truck.gpsType"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row >
-							<el-col :span="24">
-								<el-form-item label="照片">
-									<div class="uploadTruckPicItem">
-										<ImageUpload 
-											:width="80" :height="80" 
-											:files="[truck.gpsEquippedCertifyPic]" 
-											@imgUrlBack="handleGpsEquippedCertifyPic">
-										</ImageUpload>
-										<p>照片1</p>
-									</div>
-									<div class="uploadTruckPicItem">
-										<ImageUpload 
-											:width="80" :height="80" 
-											:files="[truck.gpsEquippedCertifyPic2]" 
-											@imgUrlBack="handleGpsEquippedCertifyPic2">
-										</ImageUpload>
-										<p>照片2</p>
-									</div>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
-			</el-card>
-			<el-card class="box-card">
-				<div slot="header" class="clearfix">
-					<span>保险信息</span>
-				</div>
-				<el-row class="section-block target6" style="margin-bottom:10px">
-					<span class="block-title">交强险</span>
-					<div class="block-content">
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="保险公司">
-									<el-input v-model="truck.saliInsuranceVendor"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="保险单号">
-									<el-input v-model="truck.saliInsuranceNo"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="保险到期日">
-									<el-date-picker 
-										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
-										type="date"
-										placeholder="选择日期" 
-										style="width:100%" 
-										value-format="timestamp"
-										v-model="truck.saliInsuranceExpires">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="保险金额" prop="saliInsuranceAmount">
-									<el-input v-model="truck.saliInsuranceAmount"><template slot="append">元</template></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="车船税金额" prop="saliInsuranceTaxAmount">
-									<el-input v-model="truck.saliInsuranceTaxAmount"><template slot="append">元</template></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row>
-							<el-col :span="24">
-								<el-form-item label="照片">
-									<div class="uploadTruckPicItem">
-										<ImageUpload 
-											:width="80" :height="80" 
-											:files="[truck.saliInsurancePic]" 
-											@imgUrlBack="handleSaliInsurancePic">
-										</ImageUpload>
-										<p>照片1</p>
-									</div>
-									<div class="uploadTruckPicItem">
-										<ImageUpload 
-											:width="80" :height="80" 
-											:files="[truck.saliInsurancePic2]" 
-											@imgUrlBack="handleSaliInsurancePic2">
-										</ImageUpload>
-										<p>照片2</p>
-									</div>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
-				<el-row :gutter="20">
-					<el-col :span="12">
-						<div class="section-block target7">
-							<span class="block-title">商业险</span>
-							<div class="block-content">
-								<el-row>
-									<el-col :span="24">
-										<el-form-item label="保险单号">
-											<el-input v-model="truck.bizInsuranceNo"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="24">
-										<el-form-item label="保险到期日">
-											<el-date-picker 
-												:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
-												type="date"
-												placeholder="选择日期" 
-												style="width:100%" 
-												value-format="timestamp"
-												v-model="truck.bizInsuranceExpires">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-									<el-col :span="24">
-										<el-form-item label="保险金额" prop="bizInsuranceAmount">
-											<el-input v-model="truck.bizInsuranceAmount"><template slot="append">元</template></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="24">
-										<el-form-item label="照片">
-											<div class="uploadTruckPicItem">
-												<ImageUpload 
-													:width="80" :height="80" 
-													:files="[truck.bizInsurancePic]" 
-													@imgUrlBack="handleBizInsurancePic">
-												</ImageUpload>
-												<p>照片1</p>
-											</div>
-											<div class="uploadTruckPicItem">
-												<ImageUpload 
-													:width="80" :height="80" 
-													:files="[truck.bizInsurancePic2]" 
-													@imgUrlBack="handleBizInsurancePic2">
-												</ImageUpload>
-												<p>照片2</p>
-											</div>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</div>
-						</div>
-					</el-col>
-					<el-col :span="12">
-						<div class="section-block target8">
-							<span class="block-title">承运险</span>
-							<div class="block-content">
-								<el-row>
-									<el-col :span="24">
-										<el-form-item label="保险单号">
-											<el-input v-model="truck.carrierRiskInsuranceNo"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="24">
-										<el-form-item label="保险到期日">
-											<el-date-picker 
-												:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
-												type="date"
-												placeholder="选择日期" 
-												style="width:100%" 
-												value-format="timestamp"
-												v-model="truck.carrierRiskInsuranceExpires">
-											</el-date-picker>
-										</el-form-item>
-									</el-col>
-									<el-col :span="24">
-										<el-form-item label="保险金额" prop="carrierRiskInsuranceAmount">
-											<el-input v-model="truck.carrierRiskInsuranceAmount"><template slot="append">元</template></el-input>
-										</el-form-item>
-									</el-col>
-								</el-row>
-								<el-row>
-									<el-col :span="24">
-										<el-form-item label="照片">
-											<div class="uploadTruckPicItem">
-												<ImageUpload 
-													:width="80" :height="80" 
-													:files="[truck.carrierRiskInsurancePic]" 
-													@imgUrlBack="handleCarrierRiskInsurancePic">
-												</ImageUpload>
-												<p>照片1</p>
-											</div>
-											<div class="uploadTruckPicItem">
-												<ImageUpload 
-													:width="80" :height="80" 
-													:files="[truck.carrierRiskInsurancePic2]" 
-													@imgUrlBack="handleCarrierRiskInsurancePic2">
-												</ImageUpload>
-												<p>照片2</p>
-											</div>
-										</el-form-item>
-									</el-col>
-								</el-row>
-							</div>
-						</div>
-					</el-col>
-				</el-row>
-				<el-row class="section-block target9" style="margin-top:20px">
-					<span class="block-title">货运险</span>
-					<div class="block-content">
-						<el-row :gutter="20">
-							<el-col :span="12">
-								<el-form-item label="保险单号">
-									<el-input v-model="truck.cargoInsuranceNo"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="保险到期日">
-									<el-date-picker 
-										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
-										type="date"
-										placeholder="选择日期" 
-										style="width:100%" 
-										value-format="timestamp"
-										v-model="truck.cargoInsuranceExpireDate">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-							<el-col :span="12">
-								<el-form-item label="保险金额" prop="cargoInsuranceAmount">
-									<el-input v-model="truck.cargoInsuranceAmount"><template slot="append">元</template></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
-				<el-row class="section-block target10" style="margin-top:20px">
-					<span class="block-title">保险备注</span>
-					<div class="block-content">
-						<el-form-item label="保险备注">
-							<el-input type="textarea" :rows="3" resize="none" v-model="truck.insuranceNote"></el-input>
-						</el-form-item>
-					</div>
-				</el-row>
-			</el-card>
-			<el-card class="box-card">
-				<div class="section-block target11">
+				<div class="section-block target2" style="margin-bottom:20px">
 					<span class="block-title">技术参数</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -788,6 +320,472 @@
 						</el-row> -->
 					</div>
 				</div>
+				<el-row class="section-block target3" style="margin-bottom:20px">
+					<span class="block-title">所属单位/车主</span>
+					<div class="block-content">
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="车主/单位名称">
+									<el-input v-model="truck.carOwnerName"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="车主/单位电话">
+									<el-input v-model="truck.carOwnerMobile"></el-input>
+								</el-form-item>
+							</el-col>
+							
+						</el-row>
+						<el-row :gutter="20" >
+							<el-col :span="12">
+								<el-form-item label="车主/单位地址">
+									<el-input v-model="truck.carOwnerAddress"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="所有权类型">
+									<el-select placeholder="请选择" style="width:100%" v-model="truck.propertyType">
+										<el-option label="单位" value="单位"></el-option>
+										<el-option label="个人" value="个人"></el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block target4" style="margin-bottom:20px">
+					<span class="block-title">行驶证</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="注册日期" >
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.driverLicRegisterTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="发证日期" >
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.driverLicIssueTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="有效期从">
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" value-format="timestamp" v-model="truck.driverLicBeginTime" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="有效期至" >
+									<!-- driverLicBeginTime,driverLicExpiresTime -->
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" value-format="timestamp" v-model="truck.driverLicExpiresTime" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="24">
+								<el-form-item label="行驶证照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.driverLicPic]" 
+											@imgUrlBack="handleDriverLicPic">
+										</ImageUpload>
+										<p>正本</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.driverLicSidePic]" 
+											@imgUrlBack="handleDriverLicSidePic">
+										</ImageUpload>
+										<p>副本</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block target5" style="margin-bottom:20px">
+					<span class="block-title">道路运输许可证</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="许可证号">
+									<el-input v-model="truck.roadTransportNo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="年审日期至">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.roadTransportLicAnnualPeriod">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								<el-form-item label="经营范围">
+									<el-input type="textarea" resize="none" :rows="3" v-model="truck.businessScope"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="许可运输品">
+									<el-input v-model="truck.roadTransportGoods"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="许可运输品是否剧毒" label-width="150px">
+									<el-switch v-model="truck.roadTransportGoodsIsPoisonous"></el-switch>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="24">
+								<el-form-item label="道路运输许可证">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.roadTransportPic]" 
+											@imgUrlBack="handleRoadTransportPic">
+										</ImageUpload>
+										<p>正本</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.roadTransportSidePic]" 
+											@imgUrlBack="handleRoadTransportSidePic">
+										</ImageUpload>
+										<p>副本</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block target6">
+					<span class="block-title">GPS</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="入网号">
+									<el-input v-model="truck.gpsNetworkNo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="卡号">
+									<el-input v-model="truck.gpsCardNo"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="序列号">
+									<el-input v-model="truck.gpsSerialNumber"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="安装时间">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() < curDate }"
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.gpsSetupTime">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<!-- gpSValidBeginDate, gpSValidEndDate -->
+								<el-form-item label="有效期从">
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() < curDate}" type="date" :clearable="false" value-format="timestamp" v-model="truck.gpSValidBeginDate" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="有效期至">
+									<el-date-picker :picker-options="{ disabledDate: (curDate) => new Date() > curDate}" type="date" :clearable="false" value-format="timestamp" v-model="truck.gpSValidEndDate" style="width:100%">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="费用" prop="gpsCostAmount">
+									<el-input v-model="truck.gpsCostAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="类型">
+									<el-input v-model="truck.gpsType"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row >
+							<el-col :span="24">
+								<el-form-item label="照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.gpsEquippedCertifyPic]" 
+											@imgUrlBack="handleGpsEquippedCertifyPic">
+										</ImageUpload>
+										<p>照片1</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.gpsEquippedCertifyPic2]" 
+											@imgUrlBack="handleGpsEquippedCertifyPic2">
+										</ImageUpload>
+										<p>照片2</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+			</el-card>
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>保险信息</span>
+				</div>
+				<el-row class="section-block target7" style="margin-bottom:10px">
+					<span class="block-title">交强险</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="保险公司">
+									<el-input v-model="truck.saliInsuranceVendor"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="保险单号">
+									<el-input v-model="truck.saliInsuranceNo"></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="保险到期日">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.saliInsuranceExpires">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="保险金额" prop="saliInsuranceAmount">
+									<el-input v-model="truck.saliInsuranceAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="车船税金额" prop="saliInsuranceTaxAmount">
+									<el-input v-model="truck.saliInsuranceTaxAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row>
+							<el-col :span="24">
+								<el-form-item label="照片">
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.saliInsurancePic]" 
+											@imgUrlBack="handleSaliInsurancePic">
+										</ImageUpload>
+										<p>照片1</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload 
+											:width="80" :height="80" 
+											:files="[truck.saliInsurancePic2]" 
+											@imgUrlBack="handleSaliInsurancePic2">
+										</ImageUpload>
+										<p>照片2</p>
+									</div>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row :gutter="20">
+					<el-col :span="12">
+						<div class="section-block target8">
+							<span class="block-title">商业险</span>
+							<div class="block-content">
+								<el-row>
+									<el-col :span="24">
+										<el-form-item label="保险单号">
+											<el-input v-model="truck.bizInsuranceNo"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="24">
+										<el-form-item label="保险到期日">
+											<el-date-picker 
+												:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
+												type="date"
+												placeholder="选择日期" 
+												style="width:100%" 
+												value-format="timestamp"
+												v-model="truck.bizInsuranceExpires">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="24">
+										<el-form-item label="保险金额" prop="bizInsuranceAmount">
+											<el-input v-model="truck.bizInsuranceAmount"><template slot="append">元</template></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="24">
+										<el-form-item label="照片">
+											<div class="uploadTruckPicItem">
+												<ImageUpload 
+													:width="80" :height="80" 
+													:files="[truck.bizInsurancePic]" 
+													@imgUrlBack="handleBizInsurancePic">
+												</ImageUpload>
+												<p>照片1</p>
+											</div>
+											<div class="uploadTruckPicItem">
+												<ImageUpload 
+													:width="80" :height="80" 
+													:files="[truck.bizInsurancePic2]" 
+													@imgUrlBack="handleBizInsurancePic2">
+												</ImageUpload>
+												<p>照片2</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
+					</el-col>
+					<el-col :span="12">
+						<div class="section-block target9">
+							<span class="block-title">承运险</span>
+							<div class="block-content">
+								<el-row>
+									<el-col :span="24">
+										<el-form-item label="保险单号">
+											<el-input v-model="truck.carrierRiskInsuranceNo"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="24">
+										<el-form-item label="保险到期日">
+											<el-date-picker 
+												:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
+												type="date"
+												placeholder="选择日期" 
+												style="width:100%" 
+												value-format="timestamp"
+												v-model="truck.carrierRiskInsuranceExpires">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="24">
+										<el-form-item label="保险金额" prop="carrierRiskInsuranceAmount">
+											<el-input v-model="truck.carrierRiskInsuranceAmount"><template slot="append">元</template></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="24">
+										<el-form-item label="照片">
+											<div class="uploadTruckPicItem">
+												<ImageUpload 
+													:width="80" :height="80" 
+													:files="[truck.carrierRiskInsurancePic]" 
+													@imgUrlBack="handleCarrierRiskInsurancePic">
+												</ImageUpload>
+												<p>照片1</p>
+											</div>
+											<div class="uploadTruckPicItem">
+												<ImageUpload 
+													:width="80" :height="80" 
+													:files="[truck.carrierRiskInsurancePic2]" 
+													@imgUrlBack="handleCarrierRiskInsurancePic2">
+												</ImageUpload>
+												<p>照片2</p>
+											</div>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</div>
+						</div>
+					</el-col>
+				</el-row>
+				<el-row class="section-block target10" style="margin-top:20px">
+					<span class="block-title">货运险</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="12">
+								<el-form-item label="保险单号">
+									<el-input v-model="truck.cargoInsuranceNo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="保险到期日">
+									<el-date-picker 
+										:picker-options="{ disabledDate: (curDate) => new Date() > curDate }"
+										type="date"
+										placeholder="选择日期" 
+										style="width:100%" 
+										value-format="timestamp"
+										v-model="truck.cargoInsuranceExpireDate">
+									</el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="12">
+								<el-form-item label="保险金额" prop="cargoInsuranceAmount">
+									<el-input v-model="truck.cargoInsuranceAmount"><template slot="append">元</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</el-row>
+				<el-row class="section-block target11" style="margin-top:20px">
+					<span class="block-title">保险备注</span>
+					<div class="block-content">
+						<el-form-item label="保险备注">
+							<el-input type="textarea" :rows="3" resize="none" v-model="truck.insuranceNote"></el-input>
+						</el-form-item>
+					</div>
+				</el-row>
 			</el-card>
 			<el-card class="box-card" style="margin-bottom:20px">
 				<div slot="header" class="clearfix">
@@ -1178,6 +1176,7 @@ export default {
 		return {
 			titleList: [
 				'基本信息',
+				'技术参数',
 				'所属单位/车主',
 				'行驶证',
 				'道路运输许可证',
@@ -1187,7 +1186,6 @@ export default {
 				'承运险',
 				'货运险',
 				'保险备注',
-				'技术参数',
 				'罐体',
 				'保证金',
 				'技术等级',

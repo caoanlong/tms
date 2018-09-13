@@ -22,7 +22,7 @@
 						</el-row>
 						<el-row :gutter="20" >
 							<el-col :span="12">
-								<el-form-item label="联系方式" prop="mobile">
+								<el-form-item label="手机号" prop="mobile">
 									<el-input v-model="superCargo.mobile"></el-input>
 								</el-form-item>
 							</el-col>

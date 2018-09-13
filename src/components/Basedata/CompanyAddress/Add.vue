@@ -53,7 +53,7 @@ import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
 import CustomerAddress from '../../../api/CustomerAddress'
 import distData from '../../../assets/data/distpicker.data'
-import { searchLocationByCity } from '../../../common/utils'
+import { searchLocationByCity, areaIdToArrayId } from '../../../common/utils'
 import Geohash from '../../../common/Geohash'
 import CrossProxy from '../../../api/CrossProxy'
 import { checkTel } from '../../../common/validator'
@@ -102,7 +102,8 @@ export default {
 			this.companyAddress.customerID = data.customerID
 			this.companyAddress.companyName = data.companyName
 			this.companyAddress.contactName = data.contactName
-			this.companyAddress.contactPhone = data.contactPhone
+			this.companyAddress.contactPhone = data.contactPhone		
+			this.selectedArea = areaIdToArrayId(data.companyAreaID)
 		},
 		clearSelect(){
 			this.companyAddress.customerID = ''

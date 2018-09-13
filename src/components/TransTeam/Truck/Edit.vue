@@ -129,7 +129,41 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block target2" style="margin-bottom:20px">
+				<div class="section-block target2" style="margin-bottom:20px">
+					<span class="block-title">技术参数</span>
+					<div class="block-content">
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label-width="80px" label="车辆长度" prop="length">
+									<el-input placeholder="长度" v-model="truck.length"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label-width="80px" label="车辆宽度" prop="width">
+									<el-input placeholder="宽度" v-model="truck.width"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label-width="80px" label="车辆高度" prop="high">
+									<el-input placeholder="高度" v-model="truck.high"><template slot="append">mm</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+						<el-row :gutter="20">
+							<el-col :span="8">
+								<el-form-item label-width="80px" label="装载重量" prop="loads">
+									<el-input placeholder="载重" v-model="truck.loads"><template slot="append">kg</template></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label-width="80px" label="装载容积" prop="loadVolume">
+									<el-input placeholder="容积" v-model="truck.loadVolume"><template slot="append">m³</template></el-input>
+								</el-form-item>
+							</el-col>
+						</el-row>
+					</div>
+				</div>
+				<el-row class="section-block target3" style="margin-bottom:20px">
 					<span class="block-title">所属单位/车主</span>
 					<div class="block-content">
 						<el-row :gutter="20" >
@@ -162,7 +196,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block target3" style="margin-bottom:20px">
+				<el-row class="section-block target4" style="margin-bottom:20px">
 					<span class="block-title">行驶证</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -230,7 +264,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block target4" style="margin-bottom:20px">
+				<el-row class="section-block target5" style="margin-bottom:20px">
 					<span class="block-title">道路运输许可证</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -295,7 +329,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block target5">
+				<el-row class="section-block target6">
 					<span class="block-title">GPS</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -385,7 +419,7 @@
 				<div slot="header" class="clearfix">
 					<span>保险信息</span>
 				</div>
-				<el-row class="section-block target6" style="margin-bottom:10px">
+				<el-row class="section-block target7" style="margin-bottom:10px">
 					<span class="block-title">交强险</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -452,7 +486,7 @@
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="12">
-						<div class="section-block target7">
+						<div class="section-block target8">
 							<span class="block-title">商业险</span>
 							<div class="block-content">
 								<el-row>
@@ -505,7 +539,7 @@
 						</div>
 					</el-col>
 					<el-col :span="12">
-						<div class="section-block target8">
+						<div class="section-block target9">
 							<span class="block-title">承运险</span>
 							<div class="block-content">
 								<el-row>
@@ -558,7 +592,7 @@
 						</div>
 					</el-col>
 				</el-row>
-				<el-row class="section-block target9" style="margin-top:20px">
+				<el-row class="section-block target10" style="margin-top:20px">
 					<span class="block-title">货运险</span>
 					<div class="block-content">
 						<el-row :gutter="20">
@@ -587,7 +621,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block target10" style="margin-top:20px">
+				<el-row class="section-block target11" style="margin-top:20px">
 					<span class="block-title">保险备注</span>
 					<div class="block-content">
 						<el-form-item label="保险备注">
@@ -596,42 +630,7 @@
 					</div>
 				</el-row>
 			</el-card>
-			<el-card class="box-card">
-				<div class="section-block target11">
-					<span class="block-title">技术参数</span>
-					<div class="block-content">
-						<el-row :gutter="20">
-							<el-col :span="8">
-								<el-form-item label-width="80px" label="车辆长度" prop="length">
-									<el-input placeholder="长度" v-model="truck.length"><template slot="append">mm</template></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label-width="80px" label="车辆宽度" prop="width">
-									<el-input placeholder="宽度" v-model="truck.width"><template slot="append">mm</template></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label-width="80px" label="车辆高度" prop="high">
-									<el-input placeholder="高度" v-model="truck.high"><template slot="append">mm</template></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="20">
-							<el-col :span="8">
-								<el-form-item label-width="80px" label="装载重量" prop="loads">
-									<el-input placeholder="载重" v-model="truck.loads"><template slot="append">kg</template></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label-width="80px" label="装载容积" prop="loadVolume">
-									<el-input placeholder="容积" v-model="truck.loadVolume"><template slot="append">m³</template></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</div>
-			</el-card>
+
 			<el-card class="box-card" style="margin-bottom:20px">
 				<div slot="header" class="clearfix">
 					<span>其他信息</span>
@@ -1022,6 +1021,7 @@ export default {
 			fromRoute:'',
 			titleList: [
 				'基本信息',
+				'技术参数',
 				'所属单位/车主',
 				'行驶证',
 				'道路运输许可证',
@@ -1031,7 +1031,6 @@ export default {
 				'承运险',
 				'货运险',
 				'保险备注',
-				'技术参数',
 				'罐体',
 				'保证金',
 				'技术等级',
