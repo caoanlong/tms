@@ -5,7 +5,15 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="企业名称">
-						<el-input placeholder="请输入..." v-model="find.shipperCompanyName"></el-input>
+						<el-autocomplete 
+							style="width:100%" 
+							clearable
+                            value-key="companyName" 
+                            v-model="find.shipperCompanyName"
+                            :fetch-suggestions="getCompanys"
+                            placeholder="请输入..."
+                            @select="handSelect">
+                        </el-autocomplete>
 					</el-form-item>
 					<el-form-item label="货物名称">
 						<el-input placeholder="请输入..." v-model="find.cargoName"></el-input>
@@ -94,6 +102,14 @@ export default {
 		this.getList()
 	},
 	methods: {
+		getCompanys(queryString, cb) {
+			Customer.suggest({
+				companyName: queryString
+			}).then(res => { cb(res) })
+        },
+        handSelect(data){
+			this.find.shipperCompanyName = data.companyName
+		},
 		reset() {
 			sessionStorage.removeItem('pageIndex')
 			sessionStorage.removeItem('pageSize')
