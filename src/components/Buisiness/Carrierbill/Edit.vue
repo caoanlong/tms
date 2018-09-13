@@ -148,7 +148,7 @@
 							<el-form label-width="0" size="small" :model="carrierbillInfo" ref="cargoRuleForm">
 								<table class="cargoList">
 									<tr>
-										<th>客户单号</th>
+										<!-- <th>客户单号</th> -->
 										<th><span>*</span>货名</th>
 										<th><span>*</span>配载方式</th>
 										<th>重量</th>
@@ -159,16 +159,16 @@
 									</tr>
 									<tbody>
 										<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
-											<td>
+											<!-- <td>
 												<el-form-item label-width="0">
 													<el-input placeholder="请输入..." v-model="item.customizedNo"></el-input>
 												</el-form-item>
-											</td>
+											</td> -->
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
 													<el-autocomplete 
 														clearable
-														style="width:120px" 
+														style="width:100%" 
 														popper-class="auto-complete-list"
 														value-key="cargoName" 
 														v-model="item.cargoName" 
@@ -181,7 +181,7 @@
 											</td>
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
-													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:120px">
+													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%">
 														<el-option label="按数量配载" value="Quantity"></el-option>
 														<el-option label="按体积配载" value="Volumn"></el-option>
 														<el-option label="按重量配载" value="Weight"></el-option>
@@ -377,7 +377,7 @@ export default {
 				consigneeDetailAddress: '',     /** String 收货人详细地址*/
 				consigneeDate: '',              /** Date 收货时间*/
 				carrierCargo: [{
-					customizedNo: '',
+					// customizedNo: '',
 					cargoNameID: '',
 					cargoName: '',
 					dispatchType:'Weight',
@@ -618,7 +618,7 @@ export default {
 		addItem() {
 			const dispatchType = this.carrierbillInfo.carrierCargo[0] ? this.carrierbillInfo.carrierCargo[0].dispatchType : 'Weight'
 			this.carrierbillInfo.carrierCargo.push({
-				customizedNo: '',
+				// customizedNo: '',
 				cargoNameID: '',
 				cargoName: '',
 				cargoNum: '',

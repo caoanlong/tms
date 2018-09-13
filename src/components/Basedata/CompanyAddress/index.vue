@@ -4,11 +4,8 @@
 			<div slot="header" class="clearfix">收发货单位地址</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="联系人">
-						<el-input placeholder="姓名/手机号" v-model="find.keyword"></el-input>
-					</el-form-item>
-					<el-form-item label="地址">
-						<el-input placeholder="关键字" v-model="find.address"></el-input>
+					<el-form-item label="关键字">
+						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
 					</el-form-item>
                     <el-form-item label="所属企业">
                         <el-autocomplete 
@@ -88,7 +85,7 @@ export default {
 	data() {
 		return {
 			dialogFormVisible: false,
-			find: { keyword: '', address: '', customerID: '', companyName: '' },
+			find: { keyword: '',customerID: '', companyName: '' },
 			unit: '',
 			customerID: this.$route.query.customerID,
 			companyName: this.$route.query.companyName
@@ -114,7 +111,6 @@ export default {
 		},
 		reset() {
 			this.find.keyword = ''
-			this.find.address = ''
 			this.find.customerID = ''
 			this.find.companyName = ''
 			this.pageIndex = 1
@@ -127,8 +123,7 @@ export default {
 			CustomerAddress.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				contactName: this.find.keyword,
-				detailAddress: this.find.address,
+				keyword: this.find.keyword,
 				customerID: this.find.customerID
 			}).then(res => {
 				this.tableData = res.records

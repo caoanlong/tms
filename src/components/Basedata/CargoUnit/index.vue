@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="请输入关键字" v-model="find.unit"></el-input>
+						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -57,7 +57,7 @@ export default {
 	data() {
 		return {
 			dialogFormVisible: false,
-			find: { unit: '' },
+			find: { keyword: '' },
 			unit: { unit: ''},
 			rules: {
 				unit: [{required: true, message: '请输入货物单位'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
@@ -69,7 +69,7 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.find.unit = ''
+			this.find.keyword = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
@@ -81,7 +81,7 @@ export default {
 			CargoUnit.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				unit:this.find.unit,
+				keyword:this.find.keyword,
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total

@@ -4,11 +4,8 @@
 			<div slot="header" class="clearfix">用户管理</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
-					<el-form-item label="姓名">
-						<el-input placeholder="请输入员工姓名" v-model="find.realName"></el-input>
-					</el-form-item>
-					<el-form-item label="手机号">
-						<el-input placeholder="请输入员工手机号" v-model="find.mobile"></el-input>
+					<el-form-item label="关键字">
+						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -62,8 +59,7 @@ export default {
 			pageSize: 10,
 			total: 0,
 			find: {
-				realName: '',
-				mobile: ''
+				keyword: ''
 			},
 			tableList: [],
 			showSelectRole: false,
@@ -90,8 +86,7 @@ export default {
 			this.getList()
 		},
 		reset() {
-			this.find.realName = ''
-			this.find.mobile = ''
+			this.find.keyword = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
@@ -100,8 +95,7 @@ export default {
 			SysMember.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				mobile: this.find.mobile,
-				realName: this.find.realName
+				keyword: this.find.keyword
 			}).then(res => {
 				this.total = res.total
 				this.tableList = res.records
