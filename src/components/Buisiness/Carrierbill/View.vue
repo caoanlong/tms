@@ -43,14 +43,14 @@
 				<div class="block-content">
 					<table class="wf-table">
 						<tr>
-							<th>客户单号</th>
+							<!-- <th>客户单号</th> -->
 							<th>货物名称</th>
 							<th>配载方式</th>
 							<th>原货量</th>
 							<th>待配载量</th>
 						</tr>
 						<tr class="is-center" v-for="item in carrierCargo" :key="item.carrierCargoID">
-							<td>{{item.customizedNo}}</td>
+							<!-- <td>{{item.customizedNo}}</td> -->
 							<td>{{item.cargoName}}</td>
 							<td>
 								<span v-if="item.dispatchType =='Quantity'">按数量配载</span>

@@ -18,6 +18,9 @@
 					<el-form-item label="货物名称">
 						<el-input placeholder="请输入..." v-model="find.cargoName"></el-input>
 					</el-form-item>
+					<!-- <el-form-item label="关键字">
+						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
+					</el-form-item> -->
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
@@ -77,7 +80,8 @@ export default {
 		return {
 			find: {
 				shipperCompanyName: '',
-				cargoName: ''
+				cargoName: '',
+				// keyword: ''
 			}
 		}
 	},

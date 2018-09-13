@@ -738,7 +738,7 @@ export default {
 			otherPic: [],
 			superCargo: {
 				realName: '',    // String	姓名
-				sex: '',    // String	性别 M-男 F-女
+				sex: 'M',    // String	性别 M-男 F-女
 				mobile: '',    // String	联系方式
 				cooperateRelation: '',    // String	合作关系
 				homeAddress: '',   // String	住址
@@ -756,7 +756,7 @@ export default {
 				supercargoType: '',    // String	从事运输岗位 Driver-驾驶员 Supercargo-押运员 SupercargoDriver-押运员、驾驶员
 				driverLicenseNum: '',    // String	驾驶证号
 				driverLicenseCode: '',    // String	驾驶证档案编号
-				quasiDrivingType: '',    // String	驾驶证准驾车型
+				quasiDrivingType: 'B1',    // String	驾驶证准驾车型
 				driverLicenseFirstTime: '',    // number	驾驶证初次领证日期
 				driverLicenseBeginTime: '',    // number	驾驶证有效期起始日期
 				driverLicenseEndTime: '',    // number	驾驶证有效期截止日期

@@ -1172,7 +1172,7 @@ import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import SelectPosition from '../components/SelectPosition'
 import DistPicker from '../../CommonComponents/DistPicker'
-import { checkPlateNo, checkInt, checkFloat2, limitLength8 } from '../../../common/validator'
+import { checkPlateNo,checkPlateNoNew, checkInt, checkFloat2, limitLength8 } from '../../../common/validator'
 export default {
 	data() {
 		return {
@@ -1331,7 +1331,7 @@ export default {
 				plateNoColor: [ { required: true , message: '请选择车牌颜色'} ],
 				trailerPlateNo: [ { required: true , message: '请输入挂车牌号码'}],
 				trailerID: [ { required: true , message: '请选择挂车牌号码'}],
-				plateNo: [ { required: true , message: '请输入车牌号码'}, { validator: checkPlateNo } ],
+				plateNo: [ { required: true , message: '请输入车牌号码'}, { validator: checkPlateNoNew } ],
 				truckType: [ { required: true , message: '请选择车牌类型'} ],
 				cooperateRelation: [ { required: true , message: '请选择车辆归属'} ],
 				length: [ { required: true , message: '请输入车长'}, { validator: checkInt } ],
