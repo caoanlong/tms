@@ -8,12 +8,12 @@
 						<el-form-item label="所属企业" prop="customerID">
 							<el-autocomplete 
 								style="width:100%"
-								clearable
 								value-key="companyName" 
 								v-model="companyAddress.companyName"
 								:fetch-suggestions="getCompanys"
 								placeholder="请输入..."
 								@select="handSelect">
+								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
 							</el-autocomplete>
 						</el-form-item>
 						<el-form-item label="联系人" prop="contactName">
@@ -93,15 +93,17 @@ export default {
 			this.companyAddress.customerID = ''
 			Customer.suggest({
 				companyName: queryString
-			}).then(res => {
-				cb(res)
-			})
+			}).then(res => { cb(res) })
         },
         handSelect(data) {
 			this.companyAddress.customerID = data.customerID
 			this.companyAddress.companyName = data.companyName
 			this.companyAddress.contactName = data.contactName
 			this.companyAddress.contactPhone = data.contactPhone
+		},
+		clearSelect(){
+			this.companyAddress.customerID = ''
+			this.companyAddress.companyName =''
 		},
 		handleSelectedArea(data) {
 			if (data) {

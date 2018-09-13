@@ -10,12 +10,12 @@
                     <el-form-item label="所属企业">
                         <el-autocomplete 
 							style="width:100%" 
-							clearable
                             value-key="companyName" 
                             v-model="find.companyName"
                             :fetch-suggestions="getCompanys"
                             placeholder="请输入..."
                             @select="handSelect">
+							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
                         </el-autocomplete>
                     </el-form-item>
 					<el-form-item>
@@ -108,6 +108,10 @@ export default {
         handSelect(data){
 			this.find.customerID = data.customerID
 			this.find.companyName = data.companyName
+		},
+		clearSelect(){
+			this.find.customerID = ''
+			this.find.companyName =''
 		},
 		reset() {
 			this.find.keyword = ''

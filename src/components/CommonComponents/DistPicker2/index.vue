@@ -106,7 +106,8 @@ export default {
 		distLetterTypes: () => distLetterTypes
 	},
     created() {
-        document.body.addEventListener('click', () => {
+        document.addEventListener('click', (e) => {
+			e.preventDefault()
             this.status = false
 		})
     },
