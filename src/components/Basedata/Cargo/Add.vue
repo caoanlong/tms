@@ -12,6 +12,7 @@
 								:fetch-suggestions="getShipperCompanys"
 								placeholder="请输入..."
 								@select="handSelectShipper">
+								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectShipper"></i>
 							</el-autocomplete>
 						</el-form-item>
 						<el-form-item label="货物名称" prop="cargoName">
@@ -185,6 +186,10 @@ export default {
 		handSelectShipper(data){
 			this.cargo.customerID = data.customerID
 			this.cargo.shipperCompanyName = data.companyName
+		},
+		clearSelectShipper(){
+			this.cargo.customerID = ''
+			this.cargo.shipperCompanyName = ''
 		},
 		getUnitList() {
 			CargoUnit.find({
