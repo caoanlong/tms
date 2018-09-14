@@ -56,7 +56,7 @@ import { searchLocationByCity } from '../../../../common/utils'
 import Geohash from '../../../../common/Geohash'
 import CrossProxy from '../../../../api/CrossProxy'
 import { checkTel } from '../../../../common/validator'
-import DistPicker from '../../../CommonComponents/DistPicker2'
+import DistPicker from '../../../CommonComponents/DistPicker'
 export default {
     props: {
         isVisible: {
@@ -120,7 +120,8 @@ export default {
 		},
 		handleSelectedArea(data) {
 			if (data) {
-				this.companyAddress.areaID = data[data.length - 1]
+                this.companyAddress.areaID = data[data.length - 1]
+                this.selectedArea = data
 				let location = null
 				if (data[2]) {
 					location = searchLocationByCity(distData[data[1]][data[2]])
@@ -130,7 +131,8 @@ export default {
 				}
 				this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
 			} else {
-				this.companyAddress.areaID = ''
+                this.companyAddress.areaID = ''
+                this.selectedArea = []
 				this.searchAreaHash = ''
 			}
         },

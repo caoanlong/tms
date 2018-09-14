@@ -45,7 +45,7 @@
 				<el-row>
 					<el-col :span="12">
 						<el-form-item label="发货地" prop="shipperAreaID">
-							<DistPicker @selectChange="handleSelectedArea" :selected="selectedArea"/>
+							<dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">

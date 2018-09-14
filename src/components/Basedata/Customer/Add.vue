@@ -50,7 +50,7 @@
 import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
 import ImageUpload from '../../CommonComponents/ImageUpload'
-import DistPicker from '../../CommonComponents/DistPicker2'
+import DistPicker from '../../CommonComponents/DistPicker'
 import { checkTel } from '../../../common/validator'
 export default {
 	data() {
@@ -81,8 +81,10 @@ export default {
 		handleSelectedArea(data) {
 			if (data) {
 				this.recdeliverycomp.companyAreaID = data[data.length - 1]
+				this.selectedArea = data
 			} else {
 				this.recdeliverycomp.companyAreaID = ''
+				this.selectedArea = []
 			}
 		},
 		add() {

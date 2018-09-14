@@ -124,7 +124,7 @@ $blue = #409eff
 $width = 400px
 .dist-select
     position absolute
-    z-index 999
+    z-index 9999
     width $width
     background-color #fff
     box-shadow 0 4px 16px 0 rgba(0,0,0,.2)

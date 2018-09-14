@@ -1,104 +1,111 @@
 <template>
-	<div class="distpicker">
-		<div class="level level1">
-			<select @change="selectChange($event, 1)">
-				<option>请选择</option>
-				<option :selected="selectedList[0] == String(key)" :value="key" v-for="(value, key) in level1" :key="key">{{value}}</option>
-			</select>
-		</div>
-		<div class="level level2">
-			<select @change="selectChange($event, 2)" v-show="JSON.stringify(level2) != '{}'">
-				<option>请选择</option>
-				<option :selected="selectedList[1] == String(key)" :value="key" v-for="(value, key) in level2" :key="key">{{value}}</option>
-			</select>
-		</div>
-		<div class="level level3">
-			<select @change="selectChange($event, 3)" v-show="JSON.stringify(level3) != '{}'">
-				<option>请选择</option>
-				<option :selected="selectedList[2] == String(key)" :value="key" v-for="(value, key) in level3" :key="key">{{value}}</option>
-			</select>
-		</div>
-	</div>
+    <div class="dist-picker">
+        <div 
+			class="dist-input" 
+			:class="valid" 
+			:style="{'height': height + 'px', 'line-height': height + 'px'}" 
+			@click.stop="clickPicker">
+            <span class="dist-placeholder" v-if="selectList.length == 0">请选择</span>
+            <span v-else>{{selectList.map(item => item.value).join(' / ')}}</span>
+            <span class="arrow" :class="status ? 'active' : ''"></span>
+        </div>
+    </div>
 </template>
-<script type="text/javascript">
-	import request from '../../../common/request'
-	import ChineseDistricts from '../../../assets/data/distpicker.data'
-	export default {
-		props: {
-			selected: {
-				type: Array,
-				default: () => []
-			}
+<script>
+import Vue from 'vue'
+import detail from './distSelect'
+import { searchAreaObjByKey } from '../../../common/utils'
+const distSelect = Vue.extend(detail)
+var instance = null
+export default {
+	props: {
+		height: {
+			type: Number,
+			default: 32
 		},
-		data() {
-			return {
-				areaPID: '',
-				level1: ChineseDistricts[100000],
-				level2: {},
-				level3: {},
-				watchOne: false,
-				selectedList: []
-			}
-		},
-		watch: {
-			selected: function (newVal) {
-				this.selectedList = newVal
-				this.level2 = ChineseDistricts[newVal[0]]
-				this.level3 = ChineseDistricts[newVal[1]]
-			}
-		},
-		created() {
-		},
-		methods: {
-			selectChange(e, x) {
-				if (x == 1) {
-					if (e.target.value == '请选择') {
-						this.selectedList = []
-						this.level2 = {}
-						this.$emit('selectChange', '')
-					} else {
-						this.selectedList[0] = e.target.value
-						this.level2 = ChineseDistricts[e.target.value]
-						this.$emit('selectChange', e.target.value)
-					}
-				} else if (x == 2) {
-					if (e.target.value == '请选择') {
-						let t = this.selectedList[0]
-						this.selectedList = [t]
-						this.level3 = {}
-						this.$emit('selectChange', t)
-					} else {
-						this.selectedList[1] = e.target.value
-						this.level3 = ChineseDistricts[e.target.value]
-						this.$emit('selectChange', e.target.value)
-					}
-				} else if (x == 3) {
-					if (e.target.value == '请选择') {
-						let t1 = this.selectedList[0]
-						let t2 = this.selectedList[1]
-						this.selectedList = [t1, t2]
-						this.$emit('selectChange', t2)
-					} else {
-						this.selectedList[2] = e.target.value
-						this.$emit('selectChange', e.target.value)
-					}
-				}
-			}
+		distList: Array,
+	},
+    data() {
+        return {
+			list: [],
+			selectList: [],
+			valid: ''
+        }
+	},
+	watch: {
+		distList: {
+			handler(newVal) {
+				this.selectList = searchAreaObjByKey(newVal)
+			},
+			deep: true
 		}
-	}
+	},
+	computed: {
+		status: () => instance ? instance.visible : false
+	},
+	created() {
+        document.addEventListener('click', (e) => {
+            this.close()
+		})
+    },
+    methods: {
+        clickPicker(e) {
+			this.open(e)
+		},
+		open(e) {
+			if (!instance) {
+				instance = new distSelect({ el: document.createElement('div') })
+				document.body.appendChild(instance.$el)
+			}
+			const pos = e.target.getBoundingClientRect()
+			instance.$el.style.left = pos.left + 'px'
+			instance.$el.style.top = pos.top + 40 + 'px'
+			instance.handSelect = this.handSelect
+			instance.selectList = this.selectList
+			instance.visible = true
+		},
+		close() {
+			if (instance) instance.visible = false
+		},
+		handSelect(data) {
+			this.$emit('hand-select', data)
+		},
+		/**
+		 * @param status(err, pass)
+		 */
+		validate(status) {
+			this.valid = status
+		}
+    }
+}
 </script>
-<style lang="stylus">
-	.distpicker
-		display flex
-		.level
-			flex 1
-			select
-				width 100%
-				height 28px
-				border 1px solid #dcdfe6
-				border-radius 4px
-				outline none
-				padding-left 5px
-			&.level2
-				margin 0 10px
+
+<style lang="stylus" scoped>
+.dist-picker
+	position relative
+	font-size 14px
+	.dist-input
+		position relative
+		padding-left 10px
+		color #666
+		border 1px solid #dcdfe6
+		border-radius 4px
+		&.pass
+			border 1px solid #67c23a
+		&.err
+			border 1px solid #f56c6c
+		.arrow
+			position absolute
+			top 11px
+			right 10px
+			display block
+			width 8px
+			height 8px
+			border-top 1px solid #bbb
+			border-left 1px solid #bbb
+			transform rotate(225deg)
+			&.active
+				transform rotate(45deg)
+		.dist-placeholder
+			color #bbb
 </style>
