@@ -1,19 +1,17 @@
 <template>
-    <div class="map-container">
-        <div class="title">轨迹</div>
-        <el-row type="flex" justify="center">
-            <el-radio-group v-model="tabPosition" style="margin-bottom: 10px;" @change="handTabChange">
+    <div class="map-container" :class="isMax?'max':''">
+        <div class="dialogTit">
+            <el-radio-group v-model="tabPosition" @change="handTabChange">
                 <el-radio-button label="GPS"></el-radio-button>
                 <el-radio-button label="APP"></el-radio-button>
             </el-radio-group>
-        </el-row>
-        <div class="wrapper" :style="{height: (windowInnerHeight-300) + 'px'}">
+            <svg-icon :icon-class="isMax?'min':'max'" @click.native="resizeDialog" class="minMax"></svg-icon>
+            <svg-icon icon-class="close" @click.native="close" class="closeBtn"></svg-icon>
+        </div>
+        <div class="wrapper" :style="isMax ? {height: (windowInnerHeight-70) + 'px'} : {height: (windowInnerHeight-300) + 'px'}">
             <div class="tips">累计时长：{{time}}小时&nbsp;&nbsp;&nbsp;累计里程：{{distance}}km&nbsp;&nbsp;&nbsp;平均时速：{{speed}}km</div>
             <div id="amapWrapper"></div>
-        </div>
-        <div class="footer text-center">
-            <el-button @click="close">关闭</el-button>
-        </div>
+        </div>   
     </div>
 </template>
 
@@ -33,7 +31,8 @@ export default {
             time: 0,
             speed: 0,
             locationList: [],
-            dispatchTaskPicList: []
+            dispatchTaskPicList: [],
+            isMax:false
         }
     },
     computed: {
@@ -152,6 +151,12 @@ export default {
         close() {
             this.destroyMapMask()
             this.$emit('cancel')
+        },
+        /*
+        *最大化窗口
+        */
+        resizeDialog(){
+            this.isMax = !this.isMax
         }
     }
 }
@@ -179,13 +184,13 @@ export default {
     border-radius 2px
     box-shadow 0 1px 3px rgba(0,0,0,.3)
     z-index 10000
-    .title
-        height 44px
-        line-height 44px
+    &.max
+        width 100%
     .wrapper
         position relative
         height 550px
         border 1px solid #ddd
+        margin-top 10px
         .tips
             position absolute
             left 0
@@ -200,7 +205,21 @@ export default {
         #amapWrapper
             width 100%
             height 100%
-    .footer
-        height 60px
-        line-height 60px
+    .dialogTit
+        height 40px
+        text-align center
+    .closeBtn
+        position absolute
+        right 10px
+        top 10px
+        cursor pointer
+        color #141414
+        font-size 12px
+    .minMax
+        position absolute
+        right 40px
+        top 10px
+        cursor pointer
+        color #141414
+        font-size 12px
 </style>

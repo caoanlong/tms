@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <style>
+      .cls-1 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="矩形_2_拷贝" data-name="矩形 2 拷贝" class="cls-1" d="M148,158v42H0V42H52V0H200V158H148ZM140,50H8V192H140M192,8H60V42h88V150h44V8Z"/>
+</svg>
