@@ -487,7 +487,7 @@
 import { Message } from 'element-ui'
 import axios from 'axios'
 import distData from '../../../assets/data/distpicker.data'
-import DistPicker from '../../CommonComponents/DistPicker2'
+import DistPicker from '../../CommonComponents/DistPicker'
 import PublishDispatch from '../components/PublishDispatch'
 import GrabOrder from '../components/GrabOrder'
 import { baseMixin } from '../../../common/mixin'
@@ -705,12 +705,22 @@ export default {
 			this.transLines = arrays
 		},
 		handleSelectedShipperArea(data) {
-			if (!data) return
-			this.find.shipperAreaID = data[data.length - 1]
+			if (data) {
+				this.find.shipperAreaID = data[data.length - 1]
+				this.selectedShipperArea = data
+			} else {
+				this.find.shipperAreaID = ''
+				this.selectedShipperArea = []
+			}
 		},
 		handleSelectedConsigneeArea(data) {
-			if (!data) return
-			this.find.consigneeAreaID = data[data.length - 1]
+			if (data) {
+				this.find.consigneeAreaID = data[data.length - 1]
+				this.selectedConsigneeArea = data
+			} else {
+				this.find.consigneeAreaID = ''
+				this.selectedConsigneeArea = []
+			}
 		},
 		getList () {
 			const params = Object.assign(this.find, {

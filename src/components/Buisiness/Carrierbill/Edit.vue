@@ -319,7 +319,6 @@ import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../..
 import { checkTel } from '../../../common/validators'
 import distData from '../../../assets/data/distpicker.data'
 import Geohash from '../../../common/Geohash'
-import DistPicker from '../../CommonComponents/DistPicker2'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'

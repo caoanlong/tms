@@ -321,7 +321,7 @@ import TagsView from './CommonComponents/TagsView'
 import Breadcrumb from './CommonComponents/Breadcrumb'
 import { mapGetters } from 'vuex'
 import ImageUpload from './CommonComponents/ImageUpload'
-import DistPicker from './CommonComponents/DistPicker2'
+import DistPicker from './CommonComponents/DistPicker'
 import CompanyInfo from '../api/CompanyInfo'
 import Member from '../api/Member'
 import { defaultImg } from '../assets/icons/icons'
@@ -469,8 +469,10 @@ export default {
         handleSelectedArea(data) {
 			if (data) {
 				this.companyDetail.areaID = data[data.length - 1]
+				this.selectedArea = data
 			} else {
 				this.companyDetail.areaID = ''
+				this.selectedArea = []
 			}
 		},
         handleAvatarSuccess(res) {
