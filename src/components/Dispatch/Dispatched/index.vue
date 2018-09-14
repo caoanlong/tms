@@ -446,7 +446,7 @@ export default {
 				const list = res.grabOfferOrderDetailVOList
 				list.forEach(item =>{
 					const location = item.longitude+ ',' +item.latitude     
-					const loadLocation = item.loadLatitude+ ',' +item.loadLongitude
+					const loadLocation = item.loadLongitude+ ',' +item.loadLatitude
 					console.log(loadLocation, location);
 					
 					this.getDistance(loadLocation, location)
