@@ -120,6 +120,7 @@ export default {
     },
     watch: {
         isVisible(newVal) {
+            this.selected = {}
             if (newVal) {
                 this.reset()
                 this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
