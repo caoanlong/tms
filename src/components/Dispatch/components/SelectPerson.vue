@@ -232,6 +232,7 @@ export default {
 		},
         close(bool) {
             if (bool) {
+                if (selected.supercargoID) return
                 this.$emit('control', this.type, this.selected)
             } else {
                 this.$emit('control', this.type)
