@@ -63,9 +63,13 @@ export default {
 			instance.handSelect = this.handSelect
 			instance.selectList = this.selectList
 			instance.visible = true
+			instance.openFlag = new Date().getTime()
 		},
 		close() {
-			if (instance) instance.visible = false
+			if (instance) {
+				instance.visible = false
+				instance.openFlag = false
+			}
 		},
 		handSelect(data) {
 			this.$emit('hand-select', data)

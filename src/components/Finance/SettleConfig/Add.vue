@@ -77,7 +77,7 @@
 				<el-row>
 					<el-col :span="12">
 						<el-form-item label="收货地" prop="consigneeAreaID">
-							<DistPicker @selectChange="handleSelectedArea1" :selected="selectedArea1"/>
+							<dist-picker :distList="selectedArea1" @hand-select="handleSelectedArea1"/>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12">
@@ -338,10 +338,22 @@ export default {
 			this.templateFreight.consigneeArea = searchAreaByKey(areaID)
 		},
 		handleSelectedArea(data) {
-			this.templateFreight.shipperAreaID = data
+			if (data) {
+				this.templateFreight.shipperAreaID = data[data.length - 1]
+				this.selectedArea = data
+			} else {
+				this.templateFreight.shipperAreaID = ''
+				this.selectedArea = []
+			}
 		},
 		handleSelectedArea1(data) {
-			this.templateFreight.consigneeAreaID = data
+			if (data) {
+				this.templateFreight.consigneeAreaID = data[data.length - 1]
+				this.selectedArea1 = data
+			} else {
+				this.templateFreight.consigneeAreaID = ''
+				this.selectedArea1 = []
+			}
 		},
 		calcInternalAmount(data) {
 			this.templateFreight.internalPrice = ((this.templateFreight.mileage || 0) * (this.templateFreight.internalUnitPrice || 0)).toFixed(2)

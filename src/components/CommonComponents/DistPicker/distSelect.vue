@@ -49,6 +49,7 @@ export default {
     data() {
         return {
             visible: false,
+            openFlag: false,
 			level: 1,
 			list: [],
             selectList: [],
@@ -56,28 +57,31 @@ export default {
         }
 	},
     watch: {
+        openFlag(val) {
+            // 显示
+            if (this.selectList.length == 0) {
+                this.list = transJsonToList(100000)
+            } else if (this.selectList.length == 1) {
+                this.level = 1
+                this.list = transJsonToList(100000)
+            } else if (this.selectList.length == 2) {
+                this.level = 2
+                this.list = transJsonToList(this.selectList[0].key)
+            } else if (this.selectList.length == 3) {
+                this.level = 3
+                this.list = transJsonToList(this.selectList[1].key)
+            }
+        },
 		visible(bool) {
-			if (bool) {
-				if (this.selectList.length == 0) {
-					this.list = transJsonToList(100000)
-				} else if (this.selectList.length == 1) {
-					this.level = 1
-					this.list = transJsonToList(100000)
-				} else if (this.selectList.length == 2) {
-					this.level = 2
-					this.list = transJsonToList(this.selectList[0].key)
-				} else if (this.selectList.length == 3) {
-					this.level = 3
-					this.list = transJsonToList(this.selectList[1].key)
-				}
-			} else {
+            // 关闭
+            if (!bool) {
                 this.level = 1
 				if (this.selectList.length > 0) {
                     this.handSelect(this.selectList.map(item => item.key))
 				} else {
                     this.handSelect(false)
 				}
-			}
+            }
 		}
 	},
     computed: {
