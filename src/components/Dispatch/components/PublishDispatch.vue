@@ -316,20 +316,23 @@ export default {
             this.selectedTruck = data ? data : {}
             this.createPersons()
             if (this.selectedTruck.primaryDriver) {
+                this.clearSelectedSuperCargo()
                 this.selectedTruck.primaryDriver.type = 'primary'
                 this.bizDispatchFeeList[0].superCargo = this.persons.filter(item => item.supercargoID == this.selectedTruck.primaryDriver.supercargoID)[0]
                 this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
                 this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
             }
         },
-        handSelectPerson(data, type) {
+        handSelectPerson(type, data) {
             this.personDialog = false
+            if (!data) return
             data.type = type
             if (type == 'primary') {
                 this.selectedTruck.primaryDriver = data
             } else {
                 this.selectedTruck.superCargo = data
             }
+            this.clearSelectedSuperCargo()
             this.createPersons()
         },
         handSelectItem(data, index) {
@@ -371,8 +374,6 @@ export default {
          * 生成收款人列表
          */
         createPersons() {
-            console.log(this.selectedTruck.primaryDriver,this.selectedTruck.superCargo);
-            
             if (this.selectedTruck.primaryDriver && this.selectedTruck.superCargo) {
                 if(this.selectedTruck.primaryDriver.supercargoID==this.selectedTruck.superCargo.supercargoID){
                      this.persons = [this.selectedTruck.primaryDriver]
@@ -384,6 +385,18 @@ export default {
             } else if (this.selectedTruck.superCargo) {
                 this.persons = [this.selectedTruck.superCargo]
             }
+        },
+        /**
+         * 清除任务运费&支付方式（已选择收款人）
+         */
+        clearSelectedSuperCargo() {
+            const bizDispatchFeeList = Array.from(this.bizDispatchFeeList)
+            for (let i = 0; i < bizDispatchFeeList.length; i++) {
+                bizDispatchFeeList[i].superCargo = ''
+                bizDispatchFeeList[i].superCargoID = ''
+                bizDispatchFeeList[i].superCargoName = ''
+            }
+            this.bizDispatchFeeList = bizDispatchFeeList
         },
         /**
          * 发布

@@ -218,9 +218,9 @@ export default {
                     return {
                         supercargoID: item.supercargoID,
                         mobile: item.mobile,
-                        headPic:item.headPic,
-                        realName:item.realName,
-                        supercargoType:item.supercargoType,
+                        headPic: item.headPic,
+                        realName: item.realName,
+                        supercargoType: item.supercargoType,
                         workStatus: item.workStatus,
                         expiredCertificate: item.expiredCertificate
                     }
@@ -231,9 +231,9 @@ export default {
 		},
         close(bool) {
             if (bool) {
-                this.$emit('control', this.selected, this.type)
+                this.$emit('control', this.type, this.selected)
             } else {
-                this.$emit('control')
+                this.$emit('control', this.type)
             }
         }
     }
