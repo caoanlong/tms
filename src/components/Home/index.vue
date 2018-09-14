@@ -1,5 +1,7 @@
 <template>
 	<div class="main-content">
+		<dist-picker/>
+		<dist-picker/>
 		<el-row :gutter="20">
 			<el-col :span="12">
 				<el-card class="box-card dashboardItem">
@@ -304,12 +306,16 @@
 	</div>
 </template>
 <script type="text/javascript">
+import DistPicker from '../CommonComponents/DistPicker3'
 import Carrierbill from "../../api/Carrierbill"
 import Dispatchbill from "../../api/Dispatchbill"
 import Truck from "../../api/Truck"
 import Staff from "../../api/Staff"
 export default {
 	name: 'home',
+	components: {
+		DistPicker
+	},
 	data() {
 		return {
 			tableData: [],

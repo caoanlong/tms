@@ -107,7 +107,6 @@ export default {
 	},
     created() {
         document.addEventListener('click', (e) => {
-			e.preventDefault()
             this.status = false
 		})
     },

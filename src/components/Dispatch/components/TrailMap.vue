@@ -90,7 +90,6 @@ export default {
                 this.speed = (this.distance/this.time).toFixed(2)
                 const markList = this.createMarker(imgPath)
                 markList.forEach(item => {
-                    console.log(item)
                     this.map.add(item)
                 })
             })
