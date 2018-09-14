@@ -445,8 +445,10 @@ export default {
 				this.scrambleList = res
 				const list = res.grabOfferOrderDetailVOList
 				list.forEach(item =>{
-					const location = item.latitude + ',' +  item.longitude  
-					const loadLocation = item.loadLongitude  + ',' + item.loadLatitude
+					const location = item.longitude+ ',' +item.latitude     
+					const loadLocation = item.loadLatitude+ ',' +item.loadLongitude
+					console.log(loadLocation, location);
+					
 					this.getDistance(loadLocation, location)
 				})
 			})
@@ -492,6 +494,7 @@ export default {
 		 * 调用高德地图接口获取距离
 		 */
 		getDistance(loadLocation,location) {
+
 			axios({url: `https://restapi.amap.com/v3/distance?origins=${loadLocation}&destination=${location}&key=${MAPKEY}`}).then(res => {
 				const results = res.data.results
 				this.scrambleList.grabOfferOrderDetailVOList= this.scrambleList.grabOfferOrderDetailVOList.map(item =>{
