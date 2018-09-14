@@ -65,7 +65,6 @@ export default {
 			if (!route) {
 				return false
 			}
-			console.log(document.getElementById('scrollBox').offsetWidth,document.getElementById('scrollWrapper').offsetWidth);
 			this.showCtrolBtn()
 			this.$store.dispatch('addVisitedViews', route)
 		},
