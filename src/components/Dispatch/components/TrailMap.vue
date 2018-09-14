@@ -86,8 +86,8 @@ export default {
                 // hideMarkers: true
             }).search(path, (status, result) => {
                 this.distance = (result.routes[0].distance/1000).toFixed(2)
-                this.time = (result.routes[0].time/3600).toFixed(2)
-                this.speed = (this.distance/this.time).toFixed(2)
+                this.time = Number((result.routes[0].time/3600).toFixed(2))
+                this.speed = this.time ? (this.distance/this.time).toFixed(2) : 0
                 const markList = this.createMarker(imgPath)
                 markList.forEach(item => {
                     this.map.add(item)
