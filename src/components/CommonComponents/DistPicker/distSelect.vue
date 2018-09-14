@@ -60,6 +60,7 @@ export default {
         openFlag(val) {
             // 显示
             if (this.selectList.length == 0) {
+                this.level = 1
                 this.list = transJsonToList(100000)
             } else if (this.selectList.length == 1) {
                 this.level = 1
