@@ -232,7 +232,10 @@ export default {
 		},
         close(bool) {
             if (bool) {
-                if (selected.supercargoID) return
+                if (!this.selected.supercargoID) {
+                    Message.error('请选择！')
+                    return
+                }
                 this.$emit('control', this.type, this.selected)
             } else {
                 this.$emit('control', this.type)

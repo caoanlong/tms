@@ -143,7 +143,7 @@
                                 <td align="center">
                                     <span style="position:relative;top:-10px">{{item.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
                                 </td>
-                                <td align="center" style="padding:0 5px">
+                                <td align="center" style="padding:0 15px">
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="superCargoID" :rules="[{ required: true , message: '请选择收款人' }]">
                                             <el-select 
@@ -151,7 +151,7 @@
                                                 value-key="supercargoID" 
                                                 v-model="item.superCargo" 
                                                 placeholder="请选择" 
-                                                @change="handSelectItem($event, index)">
+                                                @change="handSelectItem($event, index)" style="width:100%">
                                                 <el-option 
                                                     :label="(person.type == 'primary' ? '司机-' : '押运-') + person.realName" 
                                                     :value="person" 
@@ -162,10 +162,10 @@
                                         </el-form-item>
                                     </el-form>
                                 </td>
-                                <td align="center" style="padding:0 5px">
+                                <td align="center" style="padding:0 15px">
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="payMode" :rules="[{ required: true , message: '请选择支付方式' }]">
-                                            <el-select size="mini" v-model="item.payMode" placeholder="请选择">
+                                            <el-select size="mini" v-model="item.payMode" placeholder="请选择" style="width:100%">
                                                 <el-option label="到付" value="PayOnDelivery"></el-option>
                                                 <el-option label="预付" value="Prepay"></el-option>
                                                 <el-option label="回单结" value="PayOnReceipt"></el-option>
@@ -189,7 +189,7 @@
 													}
 												}
 											}]">
-                                            <el-input size="mini" placeholder="请输入..." v-model="item.amount">
+                                            <el-input size="mini" placeholder="请输入..." v-model="item.amount" style="width:100%">
                                                 <template slot="append">元</template>
                                             </el-input>
                                         </el-form-item>
