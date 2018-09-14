@@ -100,6 +100,7 @@ export default {
 			this.companyAddress.companyName = data.companyName
 			this.companyAddress.contactName = data.contactName
 			this.companyAddress.contactPhone = data.contactPhone
+			this.handleSelectedArea(areaIdToArrayId(data.companyAreaID))
 		},
 		clearSelect(){
 			this.companyAddress.customerID = ''
