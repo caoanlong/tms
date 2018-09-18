@@ -422,7 +422,7 @@ export default {
 .divided
 	// background #f7f7f7
 	padding 10px 15px 5px 30px
-	margin-top 0
+	margin 0 0 10px
 	color #C0C4CC
 	border-bottom 1px solid #f2f2f2
 	font-size 14px
