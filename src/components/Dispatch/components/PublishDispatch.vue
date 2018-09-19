@@ -111,9 +111,32 @@
                         </tbody>
                     </table>
                 </el-row>
+                <el-row style="margin-top:15px">
+                    <p class="feeTit">基础运费
+                        <span style="font-size:12px;color:#ccc;font-weight:400">（如已配置发货方的给司机的运价，系统会默认算金额）</span>
+                    </p>
+                    <div class="transFeeTips">
+                        <svg-icon icon-class="info" class="infoIcon"></svg-icon>
+                        <p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
+                    </div>
+                    <el-form ref="ruleForm" :inline="true" size="mini">
+                        <el-form-item label="基础运费">
+                            <el-input placeholder="请输入..."></el-input>
+                        </el-form-item>
+                        <el-form-item label="支付方式" :rules="[{ required: true , message: '请选择支付方式' }]">
+                            <el-select size="mini" placeholder="请选择" style="width:100%">
+                                <el-option label="到付" value="PayOnDelivery"></el-option>
+                                <el-option label="预付" value="Prepay"></el-option>
+                                <el-option label="回单结" value="PayOnReceipt"></el-option>
+                                <el-option label="收货方付" value="PayByConsignee"></el-option>
+                                <el-option label="月结" value="PayMonthly"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                </el-row>
                 <el-row>
                     <table class="dialog-table">
-                        <caption>任务运费&支付方式</caption>
+                        <caption>其他费用</caption>
                         <thead>
                             <tr>
                                 <th width="140">费用科目</th>
@@ -127,8 +150,7 @@
                         <tbody>
                             <tr v-for="(item, index) in bizDispatchFeeList" :key="index">
                                 <td align="center" style="padding:0 15px">
-                                    <span style="position:relative;top:-10px" v-if="index === 0">{{item.item == 'Freight' ? '运费' : ''}}</span>
-                                    <el-form :model="item" ref="ruleForm" v-else>
+                                    <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="item" :rules="[{ required: true , message: '请选择费用科目' }]">
                                             <el-select size="mini" v-model="item.item" placeholder="请选择">
                                                 <el-option label="路桥费" value="RoadBridge"></el-option>
@@ -141,7 +163,7 @@
                                     </el-form>
                                 </td>
                                 <td align="center">
-                                    <span style="position:relative;top:-10px">{{item.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
+                                    <span style="position:relative;top:-10px">附加运费</span>
                                 </td>
                                 <td align="center" style="padding:0 15px">
                                     <el-form :model="item" ref="ruleForm">
@@ -196,7 +218,7 @@
                                     </el-form>
                                 </td>
                                 <td align="center">
-                                    <span style="position:relative;top:-10px" class="del-btn" v-if="index !== 0" @click="delFreight(index)">删除</span>
+                                    <span style="position:relative;top:-10px" class="del-btn"  @click="delFreight(index)">删除</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -217,13 +239,24 @@
                             }
                         }]">
                             <el-date-picker 
-                                format="yyyy-MM-dd HH"
+                                format="yyyy-MM-dd"
                                 v-model="normal.endDate" 
-                                type="datetime" 
+                                type="date" 
+                                placeholder="选择日期"
                                 :clearable="false" 
                                 value-format="timestamp" 
                                 :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 > curDate }">
                             </el-date-picker>
+                            <el-time-select
+                                v-model="value1"
+                                :picker-options="{
+                                    start:'00:00',
+                                    step: '01:00',
+                                    end:'23:00'
+                                }"
+                                style="display:inline-block"
+                                placeholder="选择时间">
+                            </el-time-select>
                         </el-form-item>
                     </el-form>
                 </el-row>
@@ -276,7 +309,7 @@ export default {
             selectedTruck: {},
             personType: 'primary',
             bizDispatchFeeList: [{
-                item: 'Freight',  // 费用科目
+                item: '',  // 费用科目
                 category: 'Basic', // 费用类型
                 superCargo: '',  // 收款人
                 superCargoID: '',  // 收款人
@@ -466,8 +499,8 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .num-info
-    height 40px
-    line-height 40px
+    height 30px
+    line-height 30px
     font-size 14px
     text-align left
     .num-tit
@@ -497,6 +530,8 @@ export default {
         height 40px
         line-height 40px
         text-align left
+        font-size 14px
+        font-weight bold
         
     th
         background #f2f2f2
@@ -505,8 +540,27 @@ export default {
     td
         padding 10px 15px
         background #fff
-    .add-btn,.del-btn
+    .add-btn,
+    .del-btn
         color #409EFF
         cursor pointer
+.feeTit
+    height 40px
+    line-height 40px
+    font-size 14px
+    font-weight 700
+.transFeeTips
+	line-height 20px
+	font-size 12px
+	color #a2a2a2
+	padding-left 20px
+	position relative
+	margin-bottom 10px
+	p
+		line-height 20px
+	.infoIcon
+		position absolute
+		left 0
+		top 5px
 </style>
 

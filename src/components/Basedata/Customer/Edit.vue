@@ -20,12 +20,14 @@
 						<el-form-item label="企业名称" prop="companyName">
 							<el-input v-model="recdeliverycomp.companyName" :maxlength="100"></el-input>
 						</el-form-item>
+						<!-- Shipper=> 发货单位 ; Consignee=> 收货单位 ; ShipperConsignee=> 收发货单位 -->
 						<el-form-item label="收发类型" prop="customerType">
-							<el-select v-model="recdeliverycomp.customerType" placeholder="请选择" style="width:100%">
-								<el-option value="Shipper" label="发货单位"></el-option>
-								<el-option value="Consignee" label="收货单位"></el-option>
-								<el-option value="ShipperConsignee" label="收发货单位"></el-option>
-							</el-select>
+							<el-checkbox-group v-model="recdeliverycomp.customerType">
+								<el-checkbox label="发货单位" name="customerType"></el-checkbox>
+								<el-checkbox label="收货单位" name="customerType"></el-checkbox>
+								<el-checkbox label="收发货单位" name="customerType"></el-checkbox>
+								<el-checkbox label="委托方" name="customerType"></el-checkbox>
+							</el-checkbox-group>							
 						</el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">
 							<dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
