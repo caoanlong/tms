@@ -17,6 +17,12 @@ let routerMap = [{
         path: '',
         component: Layout,
         children: [{
+                path: '/icons',
+                name: 'icons',
+                meta: { title: '图标' },
+                component: () =>
+                    import ('../components/IconsPreview')
+            },{
                 path: '/',
                 name: 'home',
                 meta: { title: '首页' },
