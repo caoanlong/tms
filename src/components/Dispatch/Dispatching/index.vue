@@ -491,7 +491,6 @@ import DistPicker from '../../CommonComponents/DistPicker'
 import PublishDispatch from '../components/PublishDispatch'
 import GrabOrder from '../components/GrabOrder'
 import { baseMixin } from '../../../common/mixin'
-import { MAPKEY, PAGEINDEX, PAGESIZE } from '../../../common/const'
 import Carrierbill from '../../../api/Carrierbill'
 import { checkFloat2, checkInt } from '../../../common/valid'
 import { arrayUnique } from '../../../common/utils'
@@ -567,8 +566,8 @@ export default {
 			this.find.sortType = 'desc'
 			this.selectedShipperArea = []
 			this.selectedConsigneeArea = []
-			this.pageIndex = PAGEINDEX
-			this.pageSize = PAGESIZE
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
 			this.getList()
 		},
 		/**
@@ -691,7 +690,8 @@ export default {
 			const results = [0]
 			let i = 0
 			while(i < list.length - 1) {
-				const res = await axios({url: `https://restapi.amap.com/v3/distance?origins=${list[i]}&destination=${list[i+1]}&key=${MAPKEY}`})
+				const url = `https://restapi.amap.com/v3/distance?origins=${list[i]}&destination=${list[i+1]}&key=${this.MAPKEY}`
+				const res = await axios({ url })
 				if (res.data.status == 1) results.push(res.data.results[0].distance)
 				i++
 			}

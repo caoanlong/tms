@@ -98,7 +98,6 @@
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
-import { EXPIREWARN, TRUCKTYPE } from '../../../common/const'
 import Dispatchbill from '../../../api/Dispatchbill'
 export default {
     mixins: [baseMixin],
@@ -126,10 +125,6 @@ export default {
                 this.getList()
             }
         }
-    },
-    computed: {
-        TRUCKTYPE: () => TRUCKTYPE,
-        EXPIREWARN: () => EXPIREWARN
     },
     methods: {
         /**

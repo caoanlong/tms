@@ -92,7 +92,6 @@
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
-import { EXPIREWARN } from '../../../common/const'
 import Dispatchbill from '../../../api/Dispatchbill'
 export default {
     mixins: [baseMixin],
@@ -114,9 +113,6 @@ export default {
             },
             selected: {}
         }
-    },
-    computed: {
-        EXPIREWARN: () => EXPIREWARN
     },
     watch: {
         isVisible(newVal) {

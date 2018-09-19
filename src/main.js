@@ -19,6 +19,9 @@ import store from './store'
 // global filters
 import * as filters from './filters'
 
+// global consts
+import * as consts from './common/const'
+
 import globalConf from './common/globalConf'
 
 // icon
@@ -27,6 +30,10 @@ import './assets/icons'
 // register global utility filters.
 Object.keys(filters).forEach(key => {
 	Vue.filter(key, filters[key])
+})
+
+Object.keys(consts).forEach(key => {
+	Vue.prototype[key] = consts[key]
 })
 
 Vue.use(Element)

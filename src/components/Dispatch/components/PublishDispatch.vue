@@ -243,7 +243,6 @@ import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { arrayUnique } from '../../../common/utils'
-import { EXPIREWARN, TRUCKTYPE } from '../../../common/const'
 export default {
     components: { SelectTruck, SelectPerson },
     props: {
@@ -306,9 +305,7 @@ export default {
 				return prev + curr
 			}, 0).toFixed(2)
 			return Number(val)
-        },
-        TRUCKTYPE: () => TRUCKTYPE,
-        EXPIREWARN: () => EXPIREWARN
+        }
     },
     methods: {
         handSelectTruck(data) {

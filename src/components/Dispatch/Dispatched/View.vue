@@ -222,14 +222,6 @@ import Dispatchbill from '../../../api/Dispatchbill'
 import TaskItem from './common/TaskItem'
 import TrailMap from '../components/TrailMap'
 import axios from 'axios'
-import { 
-	MAPKEY, 
-	DISPATCHORDERSTATUS, 
-	TRUCKTYPE, 
-	DISPATCHORDERTYPE,
-	FREIGHTTYPE,
-	PAYMETHODS
-} from '../../../common/const'
 export default {
 	data() {
 		return {
@@ -247,13 +239,6 @@ export default {
 			currentDispatchOrderID: '',
 			hideAmount:false
 		}
-	},
-	computed: {
-		TRUCKTYPE: () => TRUCKTYPE,
-		DISPATCHORDERSTATUS: () => DISPATCHORDERSTATUS,
-		DISPATCHORDERTYPE: () => DISPATCHORDERTYPE,
-		FREIGHTTYPE: () => FREIGHTTYPE,
-		PAYMETHODS: () => PAYMETHODS
 	},
 	components:{ TaskItem, TrailMap },
 	created() {
@@ -378,7 +363,8 @@ export default {
 			const results = [0]
 			let i = 0
 			while(i < list.length - 1) {
-				const res = await axios({url: `https://restapi.amap.com/v3/distance?origins=${list[i]}&destination=${list[i+1]}&key=${MAPKEY}`})
+				const url = `https://restapi.amap.com/v3/distance?origins=${list[i]}&destination=${list[i+1]}&key=${this.MAPKEY}`
+				const res = await axios({ url })
 				if (res.data.status == 1) results.push(res.data.results[0].distance)
 				i++
 			}

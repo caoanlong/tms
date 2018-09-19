@@ -125,11 +125,9 @@
 </template>
 
 <script>
-import {
-	Message
-} from "element-ui";
-import request from "../../../common/request";
-import NotruckCargosource from "../../../api/NotruckCargosource";
+import { Message } from "element-ui"
+import request from "../../../common/request"
+import NotruckCargosource from "../../../api/NotruckCargosource"
 export default {
 	data() {
 		return {

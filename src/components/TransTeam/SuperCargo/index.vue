@@ -93,7 +93,6 @@ import request, { baseURL } from '../../../common/request'
 import FileUpload from '../../CommonComponents/FileUpload'
 import SuperCargo from '../../../api/SuperCargo'
 import Page from '../../CommonComponents/Page'
-import { EXPIREWARN } from '../../../common/const'
 export default {
 	data() {
 		return {
@@ -112,9 +111,6 @@ export default {
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=supercargo.xlsx&&Authorization=' +localStorage.getItem("token"),
 			templateTit:'supercargo.xlsx'
 		}
-	},
-	computed: {
-		EXPIREWARN: () => EXPIREWARN
 	},
 	components: { FileUpload,Page },
 	created() {

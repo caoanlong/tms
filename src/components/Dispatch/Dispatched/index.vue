@@ -276,18 +276,6 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import axios from 'axios'
-import { 
-	MAPKEY, 
-	PAGEINDEX, 
-	PAGESIZE, 
-	TOTAL,
-	DISPATCHORDERTYPE,
-	DISPATCHORDERTYPESIMPLE,
-	DISPATCHORDERTYPEEX,
-	DISPATCHORDERSTATUS,
-	TRUCKTYPE,
-	EXPIREWARN
-} from '../../../common/const'
 import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import TrailMap from '../components/TrailMap'
@@ -351,18 +339,10 @@ export default {
 	destroyed() {
 		this.timer = null
 	},
-	computed: {
-		TRUCKTYPE: () => TRUCKTYPE,
-		EXPIREWARN: () => EXPIREWARN,
-		DISPATCHORDERSTATUS: () => DISPATCHORDERSTATUS,
-		DISPATCHORDERTYPE: () => DISPATCHORDERTYPE,
-		DISPATCHORDERTYPESIMPLE: () => DISPATCHORDERTYPESIMPLE,
-		DISPATCHORDERTYPEEX: () => DISPATCHORDERTYPEEX
-	},
 	methods:{
 		search(val) {
-			this.pageIndex = PAGEINDEX
-			this.pageSize = PAGESIZE
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
 			this.getList()
 		},
 		resetSearch(){
@@ -372,8 +352,8 @@ export default {
 			this.find.type=''
 			this.find.dispatchBeginTime=''
 			this.find.dispatchEndTime=''
-			this.pageIndex = PAGEINDEX
-			this.pageSize = PAGESIZE
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
 		},
 		reset(val) {
 			this.resetSearch()
@@ -439,16 +419,12 @@ export default {
 			this.scrambleDialog = true
 			this.curScrambleType= type
 			this.dispatchOrderStatus = status
-			Dispatchbill.findgGrabOfferOrderList({
-				dispatchOrderID
-			}).then(res => {
+			Dispatchbill.findgGrabOfferOrderList({ dispatchOrderID }).then(res => {
 				this.scrambleList = res
 				const list = res.grabOfferOrderDetailVOList
 				list.forEach(item =>{
 					const location = item.longitude+ ',' +item.latitude     
 					const loadLocation = item.loadLongitude+ ',' +item.loadLatitude
-					console.log(loadLocation, location);
-					
 					this.getDistance(loadLocation, location)
 				})
 			})
@@ -463,9 +439,7 @@ export default {
 		confirmScramble(dispatchOfferID,dispatchOrderID,type){
 			type = type == 'Offer' ? '报价' : '承运人'
 			confirmSelect(dispatchOrderID,type, dispatchOrderID=>{
-				Dispatchbill.confirmScramble({
-					dispatchOfferID
-				}).then(res => {
+				Dispatchbill.confirmScramble({ dispatchOfferID }).then(res => {
 					Message.success('已成功选择承运人!')
 					this.scramble(dispatchOrderID)
 					this.getList()
@@ -494,8 +468,8 @@ export default {
 		 * 调用高德地图接口获取距离
 		 */
 		getDistance(loadLocation,location) {
-
-			axios({url: `https://restapi.amap.com/v3/distance?origins=${loadLocation}&destination=${location}&key=${MAPKEY}`}).then(res => {
+			const url = `https://restapi.amap.com/v3/distance?origins=${loadLocation}&destination=${location}&key=${this.MAPKEY}`
+			axios({ url }).then(res => {
 				const results = res.data.results
 				this.scrambleList.grabOfferOrderDetailVOList= this.scrambleList.grabOfferOrderDetailVOList.map(item =>{
 					return Object.assign(item, {

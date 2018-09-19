@@ -90,7 +90,6 @@ import { Message } from 'element-ui'
 import { checkFloat2,checkInt } from '../../../common/valid'
 import Dispatchbill from '../../../api/Dispatchbill'
 import { arrayUnique } from '../../../common/utils'
-import { TRUCKLENGTH } from '../../../common/const'
 export default {
     props: {
         totalNum: {
@@ -144,7 +143,7 @@ export default {
     },
     methods: {
         getTruckLengths(queryString, cb) {
-            cb(TRUCKLENGTH)
+            cb(this.TRUCKLENGTH)
         },
         handleSelectTruckLength(data) {
             this.grabOrder.requiredTruckLength = String(data.value)
