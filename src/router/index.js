@@ -216,6 +216,13 @@ let routerMap = [{
                         component: () =>
                             import ('../components/NoTruckCarrier/NoTruckUser/View')
                     },
+                    {
+                        path: '/notruckflow',
+                        name: 'notruckflow',
+                        meta: { title: '资金流水' },
+                        component: () =>
+                            import ('../components/NoTruckCarrier/Notruckflow')
+                    }
                 ]
             },
             {
