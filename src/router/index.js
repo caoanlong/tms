@@ -355,30 +355,6 @@ const routerMap = [{
                     import ('../components/Basedata'),
                 redirect: '/entruster',
                 children: [{
-                        path: '/entruster',
-                        name: 'entruster',
-                        meta: { title: '委托方' },
-                        component: () =>
-                            import ('../components/Basedata/Entruster'),
-                    },{
-                        path: '/addentruster',
-                        name: 'addentruster',
-                        meta: { title: '添加委托方' },
-                        component: () =>
-                            import ('../components/Basedata/Entruster/Add'),
-                    },{
-                        path: '/editentruster',
-                        name: 'editentruster',
-                        meta: { title: '编辑委托方' },
-                        component: () =>
-                            import ('../components/Basedata/Entruster/Edit'),
-                    },{
-                        path: '/viewentruster',
-                        name: 'viewentruster',
-                        meta: { title: '查看委托方' },
-                        component: () =>
-                            import ('../components/Basedata/Entruster/View'),
-                    },{
                         path: '/recdeliverycomp',
                         name: 'recdeliverycomp',
                         meta: { title: '收发货单位' },
