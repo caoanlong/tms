@@ -8,13 +8,12 @@
 				<el-tag size="mini" class="statusTag" type="info" v-else-if="carrierOrder.status=='Closed'">已关闭</el-tag>
 			</div>
 			<div class="datetime">
-				<span class="label">发货单号：</span><span>{{carrierOrder.shipperNo}}</span>
-				<span class="label">运输方式：</span><span>{{carrierOrder.transportType}}</span>
-				<span class="label">委托时间：</span>
-				<span v-if="carrierOrder.commissionDate">{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
-				<span v-else></span>
+				<span class="label">发货单号：{{carrierOrder.shipperNo}}</span>
+				<span class="label">运输方式：{{carrierOrder.transportType}}</span>
+				<span class="label" v-if="carrierOrder.commissionDate">委托时间：{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
+				<span class="label">委托方：</span>
 			</div>
-			<el-row style="margin-bottom:20px;margin-top:20px;min-width: 1050px">
+			<el-row style="min-width: 1050px" :gutter="20">
 				<el-col :span="12">
 					<div  class="section-block">
 						<span class="block-title">发货</span>
@@ -85,7 +84,7 @@
 					</table>
 				</div>
 			</el-row>
-			<el-row class="section-block" style="margin-bottom:20px;">
+			<el-row class="section-block">
 				<span class="block-title">运输进展</span>
 				<div class="block-content">
 					<table class="wf-table">
@@ -131,7 +130,7 @@
 					</table>
 				</div>
 			</el-row>
-			<el-row>
+			<el-row :gutter="20">
 				<el-col :span="12">
 					<div class="section-block">
 						<span class="block-title">运输费用</span>

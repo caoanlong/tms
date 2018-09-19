@@ -3,7 +3,7 @@
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">货物详情</div>
 			<el-row>
-				<el-col :span="14" :offset="5">
+				<el-col :span="18" :offset="3">
 					<el-form label-width="120px"  size="small">
 						<el-form-item label="发货单位">
 							<p>{{cargo.shipperCompanyName}}</p>
