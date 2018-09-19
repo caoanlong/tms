@@ -35,7 +35,7 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row>
+				<el-row :gutter="20">
 					<el-col :span="12">
 						<div class="section-block posr">
 							<span class="block-title">发货信息</span>
@@ -66,13 +66,12 @@
 							<el-row class="block-content">
 								<el-form-item label="发货时间" prop="shipperDate">
 									<el-date-picker 
-										format="yyyy-MM-dd HH:mm"
-										type="datetime" 
-										style="width:100%" 
-										placeholder="选择发货时间" 
+										format="yyyy-MM-dd"
+										type="date" 
+										style="width:50%;float:left" 
+										placeholder="选择发货日期" 
 										v-model="carrierbillInfo.shipperDate" 
 										value-format="timestamp"
-										default-time="00:00:00"
 										@change = "handSelectDate"
 										:picker-options="{ 
 											disabledDate: (curDate) => {
@@ -84,6 +83,18 @@
 											}}" 
 										>
 									</el-date-picker>
+									<div style="width:50%;padding-left:20px;display:block;float:left">
+										<el-time-select
+											v-model="value1"
+											:picker-options="{ 
+												start:'00:00',
+												step: '01:00',
+												end:'23:00'
+											}"
+											style="width:100%"
+											placeholder="选择发货时间">
+										</el-time-select>
+									</div>
 								</el-form-item>
 							</el-row>
 						</div>
@@ -118,13 +129,12 @@
 							<el-row class="block-content">
 								<el-form-item label="到货时间" prop="consigneeDate">
 									<el-date-picker 
-										format="yyyy-MM-dd HH:mm"
-										type="datetime" 
-										style="width:100%" 
+										format="yyyy-MM-dd"
+										type="date" 
+										style="width:50%;float:left" 
 										placeholder="选择到货时间" 
 										v-model="carrierbillInfo.consigneeDate" 
 										value-format="timestamp"
-										default-time="00:00:00"
 										@change = "handSelectDate"
 										:picker-options="{ 
 											disabledDate: (curDate) => {
@@ -136,6 +146,18 @@
 											}}" 
 										>
 									</el-date-picker>
+									<div style="width:50%;padding-left:20px;display:block;float:left">
+										<el-time-select
+											v-model="value1"
+											:picker-options="{
+												start:'00:00',
+												step: '01:00',
+												end:'23:00'
+											}"
+											style="width:100%"
+											placeholder="选择到货时间">
+										</el-time-select>
+									</div>
 								</el-form-item>
 							</el-row>
 						</div>
@@ -266,11 +288,15 @@
 						</div>
 					</div>
 				</el-row>
-				<el-row>
+				<el-row :gutter="20">
 					<el-col :span="12">
-						<div class="section-block">
-							<span class="block-title">运输费用</span>
+						<div class="section-block" style="min-height:120px">
+							<span class="block-title">运输费用<span class="titTips">（如已配置发货方的应收运价，系统会默认算金额）</span></span>
 							<el-row class="block-content">
+								<div class="transFeeTips">
+									<svg-icon icon-class="info" class="infoIcon"></svg-icon>
+									<p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
+								</div>
 								<el-form-item label="运费金额" prop="freight">
 									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight"></el-input>
 								</el-form-item>
@@ -278,7 +304,7 @@
 						</div>
 					</el-col>
 					<el-col :span="12">
-						<div class="section-block">
+						<div class="section-block" style="min-height:120px">
 							<span class="block-title">回单要求</span>
 							<el-row class="block-content">
 								<el-form-item label="单据">
@@ -289,6 +315,11 @@
 								</el-form-item>
 							</el-row>
 						</div>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="24">
+						<p class="feeTips c1">发货方海天贸易已配置当前线路应收运价（0.45吨/公里、1.45方/公里）</p>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -743,4 +774,27 @@ export default {
 	font-size 13.3333px
 	.placeholder
 		color #C0C4CC
+.titTips
+	font-size 12px
+	margin-left 10px
+	color #ccc
+.transFeeTips
+	line-height 20px
+	font-size 12px
+	color #a2a2a2
+	padding-left 34px
+	position relative
+	margin-bottom 10px
+	p
+		line-height 20px
+	.infoIcon
+		position absolute
+		left 16px
+		top 5px
+.feeTips
+	margin-bottom 10px
+	font-size 12px
+
+.section-block
+	margin 10px 0
 </style>
