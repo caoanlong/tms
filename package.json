@@ -1,7 +1,7 @@
 {
 	"name": "tms",
-	"version": "3.0.0",
-	"description": "A Vue.js project",
+	"version": "3.1.0",
+	"description": "A Vue.js project about TMS system",
 	"author": "Caoanlong <caoanlong@gmail.com>",
 	"private": true,
 	"scripts": {
