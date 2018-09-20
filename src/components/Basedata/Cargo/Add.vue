@@ -3,7 +3,7 @@
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">添加货物</div>
 			<el-row>
-				<el-col :span="14" :offset="5">
+				<el-col :span="18" :offset="3">
 					<el-form label-width="120px" :model="cargo" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="发货单位">
 							<el-autocomplete  style="width:100%"
@@ -30,7 +30,7 @@
 							<el-input v-model="cargo.dangerousCoodsCategory" :maxlength="100"></el-input>
 						</el-form-item>
 						<el-form-item label="包装单位" prop="cargoUnit">
-							<el-select style="width:70%" placeholder="请选择" v-model="cargo.cargoUnit">
+							<el-select style="width:80%" placeholder="请选择" v-model="cargo.cargoUnit">
 								<el-option v-for="item in units" :label="item.unit" :value="item.unit" :key="item.cargoUnitID"></el-option>
 							</el-select>
 							<el-button style="position:relative;left:10px" type="text" @click="dialogFormVisible = true">添加单位</el-button>

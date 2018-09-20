@@ -55,8 +55,9 @@
 						<table class="wf-table" v-show="ShowCarriageDetail" style="min-width:750px;margin-top:-1px;margin-bottom:0">
 							<thead>
 								<tr>
-									<th width="110">费用科目</th>
 									<th width="90">费用类型</th>
+									<th width="110">费用科目</th>
+									
 									<th width="110">收款人</th>
 									<th width="110">支付方式</th>
 									<th width="130">金额</th>
@@ -70,12 +71,13 @@
 							<tbody>
 								<tr v-for="feesItem in dispatchOrderFees" :key="feesItem.dispatchFeeID">
 									<td>
+										<span>{{feesItem.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
+									</td>
+									<td>
 										<!-- 费用科目:Freight-运费   RoadBridge-路桥费  Transit-中转费  Fine-罚款  Detour-绕路费  Other-其他 -->
 										<span>{{FREIGHTTYPE[feesItem.item]}}</span>
 									</td>
-									<td>
-										<span>{{feesItem.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
-									</td>
+									
 									<td>
 										{{feesItem.supercargoName}}
 									</td>
@@ -90,6 +92,9 @@
 								</tr>
 								<tr v-for="(item, index) in bizDispatchFeeList" :key="index">
 									<td>
+										<span style="position:relative;top:-10px">{{item.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
+									</td>
+									<td>
 										<el-form :model="item" ref="ruleForm">
 											<el-form-item prop="item" :rules="[{ required: true , message: '请选择费用科目' }]">
 												<el-select size="mini" v-model="item.item" placeholder="请选择"  style="width:100%">
@@ -101,9 +106,6 @@
 												</el-select>
 											</el-form-item>
 										</el-form>
-									</td>
-									<td>
-										<span style="position:relative;top:-10px">{{item.category == 'Basic' ? '基础运费' : '附加运费'}}</span>
 									</td>
 									<td>
 										<el-form :model="item" ref="ruleForm">

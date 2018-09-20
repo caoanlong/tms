@@ -35,6 +35,20 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="委托方" prop="shipperID">
+							<el-autocomplete
+								value-key="companyName" style="width:100%"
+								v-model="carrierbillInfo.shipperCompanyName"
+								:fetch-suggestions="getShipperCompany"
+								placeholder="请输入..." 
+								@select="handSelectShipperCompany">
+								<i class="el-icon-close el-input__icon" slot="suffix" ></i>
+							</el-autocomplete>
+						</el-form-item>
+					</el-col>
+				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="12">
 						<div class="section-block posr">
@@ -276,11 +290,12 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<td colspan="3" align="right">合计：</td>
+											<td colspan="2" align="right">合计：</td>
 											<td align="center">{{sum('cargoWeight')}}吨</td>
 											<td align="center">{{sum('cargoVolume')}}方</td>
 											<td align="center">{{ parseInt(sum('cargoNum'))}}</td>
-											<td colspan="2"></td>
+											<td></td>
+											<td></td>
 										</tr>
 									</tfoot>
 								</table>
