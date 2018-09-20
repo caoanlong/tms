@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="报文参考号：">
-						<el-input placeholder="报文参考号" v-model="findMessageReferenceNumber" @change="inputChange"></el-input>
+						<el-input placeholder="报文参考号" v-model="find.messageReferenceNumber" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary"  @click.native="search">查询</el-button>
@@ -62,72 +62,54 @@
 					</el-table-column>
 				</el-table>
 				<!--endprint-->
-				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
-import NotruckCargosource from '../../../api/NotruckCargosource'
-import UploadExcel from '../../CommonComponents/UploadExcel'
-import Page from '../../CommonComponents/Page'
+import NotruckCargoSource from '../../../api/NotruckCargoSource'
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
-			downloadLoading: false,
-			importFileUrl: baseURL + '/notruckCargosource/importExcel',
+			importFileUrl: baseURL + '/notruckUser/export/import',
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=goodssource.xlsx ',
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			pageIndex: 1,
-			pageSize: 10,
-			count: 0,
-			tableData: [],
-			findMessageReferenceNumber:''
+			find: {
+				messageReferenceNumber: ''
+			}
 		}
 	},
-	components: { Page },
 	created() {
 		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
-			this.findMessageReferenceNumber = ''
-			this.pageIndex = 1
-			this.pageSize = 10
+			this.find.messageReferenceNumber = ''
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
 			this.getList()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/notruckCargosource/export' + localStorage.getItem("token") 
-				+ '&messageReferenceNumber=' + this.findMessageReferenceNumber
+			this.exportExcelUrl = baseURL + '/notruck/cargosource/export?Authorization=' + localStorage.getItem("token") 
+				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
 		},
-		pageChange() {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.getList() 
-		},
 		getList() {
-			NotruckCargosource.find({
+			NotruckCargoSource.find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
 				messageReferenceNumber: this.findMessageReferenceNumber
 			}).then(res => {
-				this.count = res.total
+				this.total = res.total
 				this.tableData = res.list
 			})
 		},
@@ -140,26 +122,10 @@ export default {
 		view(goodsId) {
 			this.$router.push({ name: 'viewnotruckcargosource' , query: { goodsId } })
 		},
-		// 导入
+		// 导入成功
 		uploadSuccess (response) {
 			Message.success(response.message)
 			this.getList()
-		},
-		// 上传错误
-		uploadError (response) {
-			Message.error('response.message')
-		},
-		beforeFileUpload (file) {
-			const extension = file.name.split('.')[1] === 'xls'
-			const extension2 = file.name.split('.')[1] === 'xlsx'
-			const isLt2M = file.size / 1024 / 1024 < 10
-			if (!extension && !extension2) {
-				Message.error('上传模板只能是 xls、xlsx格式!')
-			}
-			if (!isLt2M) {
-				Message.error('上传模板大小不能超过 10MB!')
-			}
-			return extension || extension2 && isLt2M
 		}
 	}
 }

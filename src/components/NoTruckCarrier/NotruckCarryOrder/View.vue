@@ -167,7 +167,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import NotruckWaybill from '../../../api/NotruckWaybill'
+import NotruckCarryOrder from '../../../api/NotruckCarryOrder'
 export default {
 	data() {
 		return {
@@ -180,7 +180,7 @@ export default {
 	methods: {
 		getWaybillInfo(pageIndex) {
 			const wayId = this.$route.query.wayId
-			NotruckWaybill.findById({ wayId }).then(res => {
+			NotruckCarryOrder.findById({ wayId }).then(res => {
 				this.WaybillInfo = res
 			})
 		},

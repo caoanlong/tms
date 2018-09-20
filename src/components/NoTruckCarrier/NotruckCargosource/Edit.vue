@@ -126,7 +126,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NotruckCargosource from '../../../api/NotruckCargosource'
+import NotruckCargoSource from '../../../api/NotruckCargoSource'
 export default {
 	data() {
 		return {
@@ -192,12 +192,12 @@ export default {
 		},
 		getCargoInfo() {
 			const goodsId = this.$route.query.goodsId
-			NotruckCargosource.findById({ goodsId }).then(res => {
+			NotruckCargoSource.findById({ goodsId }).then(res => {
 				this.CargoInfo = res
 			})
 		},
 		SaveCargo() {
-			NotruckCargosource.update({
+			NotruckCargoSource.update({
 				goodsId: this.$route.query.goodsId,
 				notruckuserId:this.CargoInfo.notruckuserId,
 				messageReferenceNumber:this.CargoInfo.messageReferenceNumber,

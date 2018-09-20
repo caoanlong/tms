@@ -184,7 +184,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NotruckWaybill from '../../../api/NotruckWaybill'
+import NotruckCarryOrder from '../../../api/NotruckCarryOrder'
 export default {
 	data() {
 		return {
@@ -247,7 +247,7 @@ export default {
 	},
 	methods: {
 		save() {
-			NotruckWaybill.update({
+			NotruckCarryOrder.update({
 				wayId: this.$route.query.wayId,
 				carrier: this.WaybillInfo.carrier,
 				dteOfShipment: this.WaybillInfo.dteOfShipment,
@@ -291,7 +291,7 @@ export default {
 				networkAccessAddress: this.WaybillInfo.networkAccessAddress
 			}).then(res => {
 				Message.success(res.data.message)
-				this.$router.push({name: 'notruckwaybill'})
+				this.$router.push({name: 'notruckcarryorder'})
 			})
 		},
 		getConstant(Type) {
@@ -328,7 +328,7 @@ export default {
 		},
 		getWaybillInfo(pageIndex) {
 			const wayId = this.$route.query.wayId
-			NotruckWaybill.findById({ wayId }).then(res => {
+			NotruckCarryOrder.findById({ wayId }).then(res => {
 				this.WaybillInfo = res
 			})
 		},

@@ -127,7 +127,7 @@
 <script>
 import { Message } from "element-ui"
 import request from "../../../common/request"
-import NotruckCargosource from "../../../api/NotruckCargosource"
+import NotruckCargoSource from "../../../api/NotruckCargoSource"
 export default {
 	data() {
 		return {
@@ -194,12 +194,12 @@ export default {
 			});
 		},
 		getAPK() {
-			NotruckCargosource.findAPK().then(res => {
+			NotruckCargoSource.findAPK().then(res => {
 				this.apkInfo = res;
 			});
 		},
 		SaveCargo() {
-			NotruckCargosource.add({
+			NotruckCargoSource.add({
 				messageReferenceNumber: this.apkInfo.messageReferenceNumber,
 				senderCode: this.apkInfo.senderCode,
 				messageFunctionCode: this.apkInfo.messageFunctionCode,

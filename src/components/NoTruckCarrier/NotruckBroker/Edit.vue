@@ -1,37 +1,37 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">添加无车承运接口配置</div>
+			<div slot="header" class="clearfix">编辑资料</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px" :model="interfaceConfig" :rules="rules" ref="ruleForm">
-						<el-form-item label="企业名称" prop="companyName">
-							<el-select style="width: 100%" placeholder="请选择" @change="handSelectCompany" v-model="interfaceConfig.companyName">
+					<el-form label-width="120px">
+						<el-form-item label="企业名称">
+							<el-select style="width: 100%" placeholder="请选择" v-model="interfaceConfig.companyName">
 								<el-option v-for="company in companys" :key="company.memberId" :label="company.companyName" :value="company.memberId"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="企业接入码" prop="senderCode">
+						<el-form-item label="企业接入码">
 							<p>{{interfaceConfig.senderCode}}</p>
 						</el-form-item>
-                        <el-form-item label="Appkey" prop="appkey">
+                        <el-form-item label="Appkey">
 							<p>{{interfaceConfig.appkey}}</p>
 						</el-form-item>
-                        <el-form-item label="报文功能代码" prop="messageFunctionCode">
+                        <el-form-item label="报文功能代码">
 							<el-input v-model="interfaceConfig.messageFunctionCode"></el-input>
 						</el-form-item>
-                        <el-form-item label="报文版本号" prop="documentVersionNumber">
+                        <el-form-item label="报文版本号">
 							<el-input v-model="interfaceConfig.documentVersionNumber"></el-input>
 						</el-form-item>
-                        <el-form-item label="接收方代码" prop="recipientCode">
+                        <el-form-item label="接收方代码">
 							<el-input v-model="interfaceConfig.recipientCode"></el-input>
 						</el-form-item>
-						<el-form-item label="用户" prop="userID">
-							<el-select style="width: 100%" placeholder="请选择" v-model="interfaceConfig.userID">
+						<el-form-item label="用户">
+							<el-select style="width: 100%" placeholder="请选择" v-model="interfaceConfig.userName">
 								<el-option v-for="user in users" :key="user.User_ID" :label="user.Name" :value="user.User_ID"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click="addInterfaceConfig">立即保存</el-button>
+							<el-button type="primary" @click="updateInterfaceConfig">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-form>
@@ -43,7 +43,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NoTruckUser from '../../../api/NoTruckUser'
+import NotruckBroker from '../../../api/NotruckBroker'
 export default {
 	data() {
 		return {
@@ -61,16 +61,7 @@ export default {
 				userName: ""
 			},
 			users: [],
-			companys: [],
-			rules: {
-				companyName: [ {required: true, message: '请选择企业'} ],
-				senderCode: [ {required: true, message: '请输入企业接入码'} ],
-				appkey: [ {required: true, message: '请输入Appkey'} ],
-				messageFunctionCode: [ {required: true, message: '请输入报文功能代码'} ],
-				documentVersionNumber: [ {required: true, message: '请输入报文版本号'} ],
-				recipientCode: [ {required: true, message: '请输入接收方代码'} ],
-				userID: [ {required: true, message: '请选择用户'} ]
-			}
+			companys: []
 		}
 	},
 	created() {
@@ -78,34 +69,30 @@ export default {
 		this.getUsers()
 	},
 	methods: {
-		addInterfaceConfig() {
-			NoTruckUser.add({
+		updateInterfaceConfig() {
+			NotruckBroker.update({
+				noTruckUserID: this.interfaceConfig.noTruckUserID,
 				appkey: this.interfaceConfig.appkey,
 				documentVersionNumber: this.interfaceConfig.documentVersionNumber,
 				memberId: this.interfaceConfig.memberId,
 				messageFunctionCode: this.interfaceConfig.messageFunctionCode,
 				recipientCode: this.interfaceConfig.recipientCode,
 				senderCode: this.interfaceConfig.senderCode,
-				userID: this.interfaceConfig.userID,
+				userID: this.interfaceConfig.userID
 			}).then(res => {
 				Message.success(res.data.message)
-				this.$router.push({name: 'notruckuser'})
+				this.$router.push({name: 'notruckbroker'})
 			})
 		},
-		handSelectCompany(memberId) {
-			this.interfaceConfig.memberId = memberId
-			this.getAppKey(memberId)
-		},
-		// 获取appKey
-		getAppKey(memID) {
-			NoTruckUser.findAppKey({ memID }).then(res => {
-				this.interfaceConfig.appkey = res.appKey
-				this.interfaceConfig.senderCode = res.accessCode
+		getInterfaceConfig() {
+			const noTruckUserID = this.$route.query.noTruckUserID
+			NotruckBroker.findById({ noTruckUserID }).then(res => {
+				this.interfaceConfig = res
 			})
 		},
 		// 获取所有企业
 		getCompanys() {
-			NoTruckUser.findCompany().then(res => {
+			NotruckBroker.findCompany().then(res => {
 				this.companys = res
 			})
 		},
@@ -121,6 +108,7 @@ export default {
 			}).then(res => {
 				if (res.data.code == 0) {
 					this.users = res.data.data.rows
+					this.getInterfaceConfig()
 				} else {
 					Message.error(res.data.msg)
 				}

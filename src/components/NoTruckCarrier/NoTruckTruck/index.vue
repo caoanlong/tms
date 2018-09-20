@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="报文参考号：">
-						<el-input  placeholder="报文参考号" v-model="findMessageReferenceNumber" @change="inputChange"></el-input>
+						<el-input  placeholder="报文参考号" v-model="find.messageReferenceNumber" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="单证名称：">
-						<el-input  placeholder="单证名称" v-model="findDocumentName" @change="inputChange"></el-input>
+						<el-input  placeholder="单证名称" v-model="find.documentName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary"  @click.native="search">查询</el-button>
@@ -58,75 +58,58 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
-import NoTrucksource from '../../../api/NoTrucksource'
-import Page from '../../CommonComponents/Page'
+import NoTruckTruck from '../../../api/NoTruckTruck'
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
-			downloadLoading: false,
 			importFileUrl: baseURL + '/notruckTrucksource/importExcel',
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=trucksource.xlsx ',
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			pageIndex: 1,
-			pageSize: 10,
-			count: 0,
-			tableData: [],
-			findMessageReferenceNumber:'',
-			findDocumentName:''
+			find: {
+				messageReferenceNumber: '',
+				documentName: ''
+			}
 		}
 	},
-	components: { Page },
 	created() {
 		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
-			this.findMessageReferenceNumber = ''
-			this.findDocumentName = ''
-			this.pageIndex = 1
-			this.pageSize = 10
+			this.find.messageReferenceNumber = ''
+			this.find.documentName = ''
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
 			this.getList()
 		},
-		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/notruckTrucksource/export' + localStorage.getItem("token") 
-				+ '&messageReferenceNumber=' + this.findMessageReferenceNumber
-				+ '&documentName=' + this.findDocumentName
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/notruckTrucksource/export?Authorization=' + localStorage.getItem("token") 
+				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
+				+ '&documentName=' + this.find.documentName
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
 		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.getList() 
-		},
 		getList() {
-			NoTrucksource.find({
+			NoTruckTruck.find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
-				messageReferenceNumber: this.findMessageReferenceNumber,
-				documentName: this.findDocumentName
+				messageReferenceNumber: this.find.messageReferenceNumber,
+				documentName: this.find.documentName
 			}).then(res => {
-				this.count = res.total
+				this.total = res.total
 				this.tableData = res.list
 			})
 		},
@@ -134,31 +117,15 @@ export default {
 			this.$router.push({ name: 'addnotrucksource'})
 		},
 		edit(notrucksourceId) {
-			this.$router.push({ name: 'editnotrucksource', query: { notrucksourceId}})
+			this.$router.push({ name: 'editnotrucksource', query: { notrucksourceId }})
 		},
 		view(notrucksourceId) {
-			this.$router.push({ name: 'viewnotrucksource', query: { notrucksourceId}})
+			this.$router.push({ name: 'viewnotrucksource', query: { notrucksourceId }})
 		},
-		// 导入
+		// 导入成功
 		uploadSuccess (response) {
 			Message.success(response.message)
 			this.getList()
-		},
-		// 上传错误
-		uploadError (response) {
-			Message.error('response.message')
-		},
-		beforeFileUpload (file) {
-			const extension = file.name.split('.')[1] === 'xls'
-			const extension2 = file.name.split('.')[1] === 'xlsx'
-			const isLt2M = file.size / 1024 / 1024 < 10
-			if (!extension && !extension2) {
-				Message.error('上传模板只能是 xls、xlsx格式!')
-			}
-			if (!isLt2M) {
-				Message.error('上传模板大小不能超过 10MB!')
-			}
-			return extension || extension2 && isLt2M
 		}
 	}
 }	

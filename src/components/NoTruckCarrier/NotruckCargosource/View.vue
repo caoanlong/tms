@@ -82,7 +82,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import NotruckCargosource from '../../../api/NotruckCargosource'
+import NotruckCargoSource from '../../../api/NotruckCargoSource'
 export default {
 	data() {
 		return {
@@ -95,7 +95,7 @@ export default {
 	methods: {
 		getCargoInfo() {
 			const goodsId = this.$route.query.goodsId
-			NotruckCargosource.findById({ goodsId }).then(res => {
+			NotruckCargoSource.findById({ goodsId }).then(res => {
 				this.CargoInfo = res
 			})
 		},

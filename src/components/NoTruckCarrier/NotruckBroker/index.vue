@@ -1,11 +1,11 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">无车承运接口配置</div>
+			<div slot="header" class="clearfix">资料补充</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="appKey：">
-						<el-input placeholder="请输入..." v-model="findAppKey"></el-input>
+						<el-input placeholder="请输入..." v-model="find.appKey"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -14,7 +14,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="add()">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
@@ -33,111 +33,64 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import NoTruckUser from '../../../api/NoTruckUser'
-import Page from '../../CommonComponents/Page'
+import { baseMixin } from '../../../common/mixin'
+import NotruckBroker from '../../../api/NotruckBroker'
+import { deleteConfirm } from '../../../common/utils'
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
-			findAppKey: '',
-			pageIndex: 1,
-			pageSize: 10,
-			count: 0,
-			tableData: [],
-			selectedInterfaceConfigs: []
+			find: {
+				appKey: ''
+			}
 		}
 	},
-	components: { Page },
 	created() {
 		this.getList()
 	},
 	methods: {
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
-			this.findAppKey = ''
-			this.pageIndex = 1
-			this.pageSize = 10
+			this.find.appKey = ''
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
 			this.getList()
 		},
 		selectionChange(data) {
-			this.selectedInterfaceConfigs = data.map(item => item.userID)
-		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.getList() 
+			this.selectedList = data.map(item => item.userID)
 		},
 		getList() {
-			NoTruckUser.find({
+			NotruckBroker.find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
-				appkey: this.findAppKey
+				appkey: this.find.appKey
 			}).then(res => {
-				this.count = res.total
+				this.total = res.total
 				this.tableData = res.list
 			})
 		},
 		view(noTruckUserID) {
-			this.$router.push({name: 'viewnotruckuser', query: {noTruckUserID}})
+			this.$router.push({name: 'viewnotruckbroker', query: {noTruckUserID}})
 		},
 		edit(noTruckUserID) {
-			this.$router.push({name: 'editnotruckuser', query: {noTruckUserID}})
+			this.$router.push({name: 'editnotruckbroker', query: {noTruckUserID}})
 		},
 		add() {
-			this.$router.push({name: 'addnotruckuser'})
+			this.$router.push({name: 'addnotruckbroker'})
 		},
-		deleteConfirm(id) {
-			let ids = ''
-			if (id && typeof id == 'string') {
-				ids = id
-			} else {
-				ids = this.selectedInterfaceConfigs.join(',')
-			}
-			this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				this.delInterfaceConfig(ids)
-				this.$message({
-					type: 'success',
-					message: '删除成功!'
-				})
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消删除'
-				})
-			})
-		},
-		delInterfaceConfig(noTruckUserIDs) {
-			let data = {
-				noTruckUserIDs
-			}
-			requestJava({
-				url: '/notruckUser/del',
-				method: 'post',
-				data
-			}).then(res => {
-				if (res.data.code == 200) {
+		del(noTruckUserID) {
+			deleteConfirm(noTruckUserID, noTruckUserIDs => {
+				NotruckBroker.del({ noTruckUserIDs }).then(res => {
+					Message.success('删除成功!')
 					this.getList()
-				} else {
-					Message.error(res.data.message)
-				}
-			})
+				})
+			}, this.selectedList)
 		}
 	}
 }

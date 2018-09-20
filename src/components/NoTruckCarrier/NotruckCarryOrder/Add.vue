@@ -349,7 +349,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NotruckWaybill from '../../../api/NotruckWaybill'
+import NotruckCarryOrder from '../../../api/NotruckCarryOrder'
 export default {
 	data() {
 		return {
@@ -453,12 +453,12 @@ export default {
 			})
 		},
 		getAPK() {
-			NotruckWaybill.findAPK().then(res => {
+			NotruckCarryOrder.findAPK().then(res => {
 				this.apkInfo = res
 			})
 		},
 		save() {
-			NotruckWaybill.add({
+			NotruckCarryOrder.add({
 				messageReferenceNumber: this.apkInfo.messageReferenceNumber,
 				senderCode: this.apkInfo.senderCode,
 				messageFunctionCode: this.apkInfo.messageFunctionCode,
@@ -508,7 +508,7 @@ export default {
 				networkAccessAddress: this.WaybillInfo.networkAccessAddress
 			}).then(res => {
 				Message.success(res.data.message)
-				this.$router.push({name: 'notruckwaybill'})
+				this.$router.push({name: 'notruckcarryorder'})
 			})
 		},
 		back() {

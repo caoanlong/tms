@@ -1,7 +1,7 @@
 import Base from './Base'
 import request from '../common/request'
 
-class NotruckCargosource extends Base {
+class NotruckCargoSource extends Base {
     constructor(url, req) {
         super(url, req).initURI({
             findById: '/info',
@@ -21,4 +21,4 @@ class NotruckCargosource extends Base {
     }
 }
 
-export default new NotruckCargosource('/notruckCargosource', request())
+export default new NotruckCargoSource('/notruck/cargosource', request())

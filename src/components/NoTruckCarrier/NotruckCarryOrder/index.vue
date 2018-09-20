@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="托运单号：">
-						<el-input placeholder="托运单号" v-model="findShippingNoteNumber"></el-input>
+						<el-input placeholder="托运单号" v-model="find.shippingNoteNumber" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="承运人：">
-						<el-input placeholder="承运人" v-model="findCarrier"></el-input>
+						<el-input placeholder="承运人" v-model="find.carrier" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary"  @click="search">查询</el-button>
@@ -57,98 +57,74 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
-import NotruckWaybill from '../../../api/NotruckWaybill'
-import Page from '../../CommonComponents/Page'
+import NotruckCarryOrder from '../../../api/NotruckCarryOrder'
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
-			downloadLoading: false,
-			importFileUrl: baseURL +'/notruckWaybill/importExcel',
-			exportExcelUrl: baseURL + '/notruckWaybill/export',
+			importFileUrl: baseURL +'/notruck/carryOrder/import',
+			exportExcelUrl: '',
 			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=waybill.xlsx ',
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			pageIndex: 1,
-			pageSize: 10,
-			count: 0,
-			tableData: [],
-			refreshing: false,
-			findShippingNoteNumber:'',
-			findCarrier:''
+			find: {
+				shippingNoteNumber: '',
+				carrier: ''
+			}
 		}
 	},
-	components: { Page },
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
-			this.findShippingNoteNumber = ''
-			this.findCarrier = ''
-			this.pageIndex = 1
-			this.pageSize = 10
+			this.find.shippingNoteNumber = ''
+			this.find.carrier = ''
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
+			this.resetExportExcelUrl()
 			this.getList()
 		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/notruck/carryOrder/export?Authorization=' + localStorage.getItem("token") 
+				+ '&shippingNoteNumber=' + this.find.shippingNoteNumber
+				+ '&carrier=' + this.find.carrier
 		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.getList() 
+		inputChange() {
+			this.resetExportExcelUrl()
 		},
 		getList() {
-			NotruckWaybill.find({
+			NotruckCarryOrder.find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
-				shippingNoteNumber: this.findShippingNoteNumber,
-				carrier: this.findCarrier
+				shippingNoteNumber: this.find.shippingNoteNumber,
+				carrier: this.find.carrier
 			}).then(res => {
-				this.count = res.total
+				this.total = res.total
 				this.tableData = res.list
 			})
 		},
 		add() {
-			this.$router.push({ name: 'addnotruckwaybill'})
+			this.$router.push({ name: 'addnotruckcarryorder'})
 		},
 		edit(wayId) {
-			this.$router.push({ name: 'editnotruckwaybill', query: { wayId }})
+			this.$router.push({ name: 'editnotruckcarryorder', query: { wayId }})
 		},
 		view(wayId) {
-			this.$router.push({ name: 'viewnotruckwaybill', query: { wayId }})
+			this.$router.push({ name: 'viewnotruckcarryorder', query: { wayId }})
 		},
 		// 导入成功
 		uploadSuccess (response) {
 			Message.success(response.message)
 			this.getList()
-		},
-		// 导入失败
-		uploadError (response) {
-			Message.error(response.message)
-		},
-		beforeFileUpload (file) {
-			const extension = file.name.split('.')[1] === 'xls'
-			const extension2 = file.name.split('.')[1] === 'xlsx'
-			const isLt2M = file.size / 1024 / 1024 < 10
-			if (!extension && !extension2) {
-				Message.error('上传模板只能是 xls、xlsx格式!')
-			}
-			if (!isLt2M) {
-				Message.error('上传模板大小不能超过 10MB!')
-			}
-			return extension || extension2 && isLt2M
 		}
 	}
 }

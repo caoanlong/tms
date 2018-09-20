@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">查看无车承运接口配置</div>
+			<div slot="header" class="clearfix">查看资料</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
@@ -37,7 +37,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import NoTruckUser from '../../../api/NoTruckUser'
+import NotruckBroker from '../../../api/NotruckBroker'
 export default {
 	data() {
 		return {
@@ -50,7 +50,7 @@ export default {
 	methods: {
 		getInterfaceConfig() {
 			const noTruckUserID = this.$route.query.noTruckUserID
-			NoTruckUser.findById({ noTruckUserID }).then(res => {
+			NotruckBroker.findById({ noTruckUserID }).then(res => {
 				this.interfaceConfig = res
 			})
 		},

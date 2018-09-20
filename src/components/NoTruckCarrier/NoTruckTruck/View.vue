@@ -78,7 +78,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import NoTrucksource from '../../../api/NoTrucksource'
+import NoTruckTruck from '../../../api/NoTruckTruck'
 export default {
 	data() {
 		return {
@@ -91,7 +91,7 @@ export default {
 	methods: {
 		getTruckInfo() {
 			const notrucksourceId = this.$route.query.notrucksourceId
-			NoTrucksource.findById({ notrucksourceId }).then(res => {
+			NoTruckTruck.findById({ notrucksourceId }).then(res => {
 				this.TruckInfo = res
 			})
 		},
