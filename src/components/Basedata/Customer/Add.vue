@@ -20,13 +20,11 @@
 						<el-form-item label="企业名称" prop="companyName">
 							<el-input v-model="recdeliverycomp.companyName" :maxlength="100"></el-input>
 						</el-form-item>
-						<!-- Shipper=> 发货单位 ; Consignee=> 收货单位 ; ShipperConsignee=> 收发货单位 -->
 						<el-form-item label="收发类型" prop="customerType">
 							<el-checkbox-group v-model="recdeliverycomp.customerType">
-								<el-checkbox label="发货单位" name="customerType"></el-checkbox>
-								<el-checkbox label="收货单位" name="customerType"></el-checkbox>
-								<el-checkbox label="收发货单位" name="customerType"></el-checkbox>
-								<el-checkbox label="委托方" name="customerType"></el-checkbox>
+								<el-checkbox label="Shipper">发货单位</el-checkbox>
+								<el-checkbox label="Consignee">收货单位</el-checkbox>
+								<el-checkbox label="Delegate">委托方</el-checkbox>
 							</el-checkbox-group>							
 						</el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">
@@ -64,7 +62,7 @@ export default {
 				companyName: '',
 				contactName: '',
 				contactPhone: '',
-				customerType: ''
+				customerType: []
 			},
 			rules: {
 				companyName: [ {required: true, message: '请输入名称', trigger: 'blur'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],

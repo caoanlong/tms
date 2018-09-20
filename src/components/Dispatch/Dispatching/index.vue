@@ -908,7 +908,7 @@ export default {
 			tr
 				&:nth-child(even)
 					td
-						background #f8f8f8	
+						background #f8f8f8
 .tracto
 	padding 0 5px 0 8px
 .Load
