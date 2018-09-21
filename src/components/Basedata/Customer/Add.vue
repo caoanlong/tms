@@ -48,7 +48,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Customer from '../../../api/Customer'
+import Company from '../../../api/Company'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import DistPicker from '../../CommonComponents/DistPicker'
 import { checkTel } from '../../../common/validator'
@@ -90,7 +90,7 @@ export default {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				Customer.add(this.recdeliverycomp).then(res => {
+				Company.customer().add(this.recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
 				})

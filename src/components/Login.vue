@@ -19,7 +19,6 @@
 				</div>
 				<!-- 登录 -->
 				<el-form auto-complete="off" :model="login" :rules="loginRules" ref="loginForm" style="margin-top:20px" v-if="loginOrRegister == 'login'">
-					
 					<el-form-item prop="username">
 						<!-- 为了取消chrome自动填充密码 -->
 					<input type="password" id="disabledAutoComplete" name="disabledAutoComplete" style="display:none">
@@ -176,6 +175,7 @@ import Footer from './CommonComponents/Footer'
 import { baseURL } from "../common/request"
 import Member from '../api/Member'
 import Common from '../api/Common'
+import Company from '../api/Company'
 import dist from '../assets/data/dist.json'
 import { setCooikie, getCooikie } from '../common/utils'
 import { checkMobile } from '../common/validator'
@@ -361,7 +361,7 @@ export default {
 		handRegister() {
 			this.$refs['registerForm'].validate(valid => {
 				if (!valid) return
-				Member.register({
+				Company.apply().add({
 					mobile: this.register.mobile.trim(),
 					vcode: this.register.vcode.trim(),
 					password: this.register.password.trim(),

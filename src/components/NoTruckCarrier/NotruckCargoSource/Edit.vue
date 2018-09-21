@@ -114,7 +114,7 @@
 				<el-row gutter="20">
 					<el-col :span="24">
 						<el-form-item>
-							<el-button type="primary" @click="SaveCargo">保存</el-button>
+							<el-button type="primary" @click="save">保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-col>
@@ -126,7 +126,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NotruckCargoSource from '../../../api/NotruckCargoSource'
+import Notruck from '../../../api/Notruck'
 export default {
 	data() {
 		return {
@@ -192,12 +192,12 @@ export default {
 		},
 		getCargoInfo() {
 			const goodsId = this.$route.query.goodsId
-			NotruckCargoSource.findById({ goodsId }).then(res => {
+			Notruck.cargoSource().findById({ goodsId }).then(res => {
 				this.CargoInfo = res
 			})
 		},
-		SaveCargo() {
-			NotruckCargoSource.update({
+		save() {
+			Notruck.cargoSource().update({
 				goodsId: this.$route.query.goodsId,
 				notruckuserId:this.CargoInfo.notruckuserId,
 				messageReferenceNumber:this.CargoInfo.messageReferenceNumber,

@@ -67,7 +67,7 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
-import NoTruckTruck from '../../../api/NoTruckTruck'
+import Notruck from '../../../api/Notruck'
 export default {
 	mixins: [baseMixin],
 	data() {
@@ -103,7 +103,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			NoTruckTruck.find({
+			Notruck.truck().find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
 				messageReferenceNumber: this.find.messageReferenceNumber,
@@ -114,13 +114,13 @@ export default {
 			})
 		},
 		add() {
-			this.$router.push({ name: 'addnotrucksource'})
+			this.$router.push({ name: 'addnotrucktruck'})
 		},
 		edit(notrucksourceId) {
-			this.$router.push({ name: 'editnotrucksource', query: { notrucksourceId }})
+			this.$router.push({ name: 'editnotrucktruck', query: { notrucksourceId }})
 		},
 		view(notrucksourceId) {
-			this.$router.push({ name: 'viewnotrucksource', query: { notrucksourceId }})
+			this.$router.push({ name: 'viewnotrucktruck', query: { notrucksourceId }})
 		},
 		// 导入成功
 		uploadSuccess (response) {

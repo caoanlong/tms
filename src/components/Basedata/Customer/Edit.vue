@@ -48,7 +48,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Customer from '../../../api/Customer'
+import Company from '../../../api/Company'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import DistPicker from '../../CommonComponents/DistPicker'
 import { areaIdToArrayId } from '../../../common/utils'
@@ -94,7 +94,7 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				Customer.update(this.recdeliverycomp).then(res => {
+				Company.customer().update(this.recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
 				})
@@ -102,7 +102,7 @@ export default {
 		},
 		getInfo() {
 			const customerID = this.$route.query.customerID
-			Customer.findById({ customerID }).then(res => {
+			Company.customer().findById({ customerID }).then(res => {
 				this.recdeliverycomp = res
 				this.selectedArea = areaIdToArrayId(String(res.companyAreaID))
 			})

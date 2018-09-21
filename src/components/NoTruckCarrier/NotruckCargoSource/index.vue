@@ -71,7 +71,7 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
-import NotruckCargoSource from '../../../api/NotruckCargoSource'
+import Notruck from '../../../api/Notruck'
 export default {
 	mixins: [baseMixin],
 	data() {
@@ -104,10 +104,10 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			NotruckCargoSource.find({
+			Notruck.cargoSource().find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
-				messageReferenceNumber: this.findMessageReferenceNumber
+				messageReferenceNumber: this.find.messageReferenceNumber
 			}).then(res => {
 				this.total = res.total
 				this.tableData = res.list

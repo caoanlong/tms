@@ -2,9 +2,6 @@ import Base from './Base'
 import request from '../common/request'
 
 class Member extends Base {
-    constructor(url, req) {
-        super(url, req)
-    }
     login(data) {
         return this.request({
             url: this.baseUrl + '/login',

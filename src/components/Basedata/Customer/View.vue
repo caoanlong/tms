@@ -35,7 +35,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import dist from '../../../assets/data/dist.json'
-import Customer from '../../../api/Customer'
+import Company from '../../../api/Company'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 export default {
 	data() {
@@ -60,7 +60,7 @@ export default {
 	methods: {
 		getInfo() {
 			const customerID = this.$route.query.customerID
-			Customer.findById({ customerID }).then(res => {
+			Company.customer().findById({ customerID }).then(res => {
 				this.recdeliverycomp = res
 			})
 		},

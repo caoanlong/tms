@@ -2,9 +2,6 @@ import Base from './Base'
 import request from '../common/request'
 
 class Carrierbill extends Base {
-    constructor(url, req) {
-        super(url, req)
-    }
     /**
      * 根据承运单查询调度单列表
      * @param {carrierOrderID} params 承运单ID

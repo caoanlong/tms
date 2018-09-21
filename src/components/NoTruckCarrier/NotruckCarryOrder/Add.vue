@@ -349,7 +349,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NotruckCarryOrder from '../../../api/NotruckCarryOrder'
+import Notruck from '../../../api/Notruck'
 export default {
 	data() {
 		return {
@@ -453,12 +453,12 @@ export default {
 			})
 		},
 		getAPK() {
-			NotruckCarryOrder.findAPK().then(res => {
+			Notruck.carryOrder().findAPK().then(res => {
 				this.apkInfo = res
 			})
 		},
 		save() {
-			NotruckCarryOrder.add({
+			Notruck.carryOrder().add({
 				messageReferenceNumber: this.apkInfo.messageReferenceNumber,
 				senderCode: this.apkInfo.senderCode,
 				messageFunctionCode: this.apkInfo.messageFunctionCode,

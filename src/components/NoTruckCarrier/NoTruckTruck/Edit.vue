@@ -109,7 +109,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NoTruckTruck from '../../../api/NoTruckTruck'
+import Notruck from '../../../api/Notruck'
 export default {
 	data() {
 		return {
@@ -152,12 +152,12 @@ export default {
 		},
 		getTruckInfo() {
 			const notrucksourceId = this.$route.query.notrucksourceId
-			NoTruckTruck.findById({ notrucksourceId }).then(res => {
+			Notruck.truck().findById({ notrucksourceId }).then(res => {
 				this.TruckInfo = res
 			})
 		},
 		SaveTruck() {
-			NoTruckTruck.update({
+			Notruck.truck().update({
 				notrucksourceId: this.$route.query.notrucksourceId,
 				vehicleNumber: this.TruckInfo.vehicleNumber,
 				vehicleClassificationCode: this.TruckInfo.vehicleClassificationCode,

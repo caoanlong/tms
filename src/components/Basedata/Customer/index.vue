@@ -67,7 +67,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Customer from '../../../api/Customer'
+import Company from '../../../api/Company'
 import { baseMixin } from '../../../common/mixin'
 import { deleteConfirm } from '../../../common/utils'
 export default {
@@ -95,7 +95,7 @@ export default {
 			this.selectedList = data.map(item => item.customerID)
 		},
 		getList() {
-			Customer.find({
+			Company.customer().find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				customerType: this.find.customerType,
@@ -124,7 +124,7 @@ export default {
 		},
 		del(customerID) {
 			deleteConfirm(customerID, customerIDs => {
-				Customer.del({ customerIDs }).then(res => {
+				Company.customer().del({ customerIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

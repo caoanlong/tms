@@ -43,7 +43,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NotruckBroker from '../../../api/NotruckBroker'
+import Notruck from '../../../api/Notruck'
 export default {
 	data() {
 		return {
@@ -70,7 +70,7 @@ export default {
 	},
 	methods: {
 		updateInterfaceConfig() {
-			NotruckBroker.update({
+			Notruck.broker.update({
 				noTruckUserID: this.interfaceConfig.noTruckUserID,
 				appkey: this.interfaceConfig.appkey,
 				documentVersionNumber: this.interfaceConfig.documentVersionNumber,
@@ -86,13 +86,13 @@ export default {
 		},
 		getInterfaceConfig() {
 			const noTruckUserID = this.$route.query.noTruckUserID
-			NotruckBroker.findById({ noTruckUserID }).then(res => {
+			Notruck.broker.findById({ noTruckUserID }).then(res => {
 				this.interfaceConfig = res
 			})
 		},
 		// 获取所有企业
 		getCompanys() {
-			NotruckBroker.findCompany().then(res => {
+			Notruck.broker.findCompany().then(res => {
 				this.companys = res
 			})
 		},

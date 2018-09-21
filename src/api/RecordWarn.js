@@ -2,9 +2,7 @@ import Base from './Base'
 import request from '../common/request'
 
 class RecordWarn extends Base {
-    constructor(url, req) {
-        super(url, req)
-    }
+
     findList(params) {
         return new Promise((resolve, reject) => {
             this.request({

@@ -41,7 +41,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
-import NotruckBroker from '../../../api/NotruckBroker'
+import Notruck from '../../../api/Notruck'
 import { deleteConfirm } from '../../../common/utils'
 export default {
 	mixins: [baseMixin],
@@ -66,7 +66,7 @@ export default {
 			this.selectedList = data.map(item => item.userID)
 		},
 		getList() {
-			NotruckBroker.find({
+			Notruck.broker().find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
 				appkey: this.find.appKey
@@ -86,7 +86,7 @@ export default {
 		},
 		del(noTruckUserID) {
 			deleteConfirm(noTruckUserID, noTruckUserIDs => {
-				NotruckBroker.del({ noTruckUserIDs }).then(res => {
+				Notruck.broker().del({ noTruckUserIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

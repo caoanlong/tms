@@ -6,7 +6,6 @@ class TransportRecord extends Base {
         super(url, req).initURI({
             find: '/findList',
             findById: '/findById',
-            update: '/update',
             del: '/deleteBatch'
         })
     }

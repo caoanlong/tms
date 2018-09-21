@@ -66,7 +66,7 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
-import NotruckCarryOrder from '../../../api/NotruckCarryOrder'
+import Notruck from '../../../api/Notruck'
 export default {
 	mixins: [baseMixin],
 	data() {
@@ -102,7 +102,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			NotruckCarryOrder.find({
+			Notruck.carryOrder().find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
 				shippingNoteNumber: this.find.shippingNoteNumber,

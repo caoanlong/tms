@@ -322,7 +322,7 @@ import Breadcrumb from './CommonComponents/Breadcrumb'
 import { mapGetters } from 'vuex'
 import ImageUpload from './CommonComponents/ImageUpload'
 import DistPicker from './CommonComponents/DistPicker'
-import CompanyInfo from '../api/CompanyInfo'
+import Company from '../api/Company'
 import Member from '../api/Member'
 import { defaultImg } from '../assets/icons/icons'
 import { resizeImg,areaIdToArrayId,searchAreaByKey } from '../common/utils'
@@ -404,7 +404,7 @@ export default {
 			this.getCompanyInfo()
 		},
 		getCompanyInfo() {
-			CompanyInfo.findById({
+			Company.info().findById({
 				companyID: this.userInfo.companyID
 			}).then(res => {
 				this.companyDetail = res
@@ -419,7 +419,7 @@ export default {
 				}
 				this.$refs['distPicker'].validate('pass')
 				this.companyDetail.areaName = searchAreaByKey(this.companyDetail.areaID)
-				CompanyInfo.modify(this.companyDetail).then(res => {
+				Company.info().update(this.companyDetail).then(res => {
 					this.$store.dispatch('getUserInfo')
 					Message.success('保存成功！')
 					this.cancelEditcompanyInfo()

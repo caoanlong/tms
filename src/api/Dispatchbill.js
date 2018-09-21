@@ -3,9 +3,6 @@ import request from '../common/request'
 import requestByJson from '../common/requestByJson'
 
 class Dispatchbill extends Base {
-	constructor(url, req) {
-		super(url, req)
-	}
 	/**
 	 * 重新调度
 	 */

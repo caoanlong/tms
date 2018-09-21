@@ -37,7 +37,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import NotruckBroker from '../../../api/NotruckBroker'
+import Notruck from '../../../api/Notruck'
 export default {
 	data() {
 		return {
@@ -50,7 +50,7 @@ export default {
 	methods: {
 		getInterfaceConfig() {
 			const noTruckUserID = this.$route.query.noTruckUserID
-			NotruckBroker.findById({ noTruckUserID }).then(res => {
+			Notruck.broker.findById({ noTruckUserID }).then(res => {
 				this.interfaceConfig = res
 			})
 		},

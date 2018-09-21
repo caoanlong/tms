@@ -2,9 +2,6 @@ import Base from './Base'
 import request from '../common/request'
 
 class Finance extends Base {
-    constructor(url, req) {
-        super(url, req)
-    }
     findPayablesum(params) {
         return new Promise((resolve, reject) => {
             this.request({

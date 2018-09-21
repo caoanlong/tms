@@ -2,9 +2,6 @@ import Base from './Base'
 import request from '../common/request'
 
 class Task extends Base {
-    constructor(url, req) {
-        super(url, req)
-    }
     /**
      * 修改任务单运费
      * @param {dispatchTaskID} data 调度任务ID

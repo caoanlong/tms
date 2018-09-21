@@ -5,8 +5,7 @@ class Truck extends Base {
     constructor(url, req) {
         super(url, req).initURI({
             find: '/findList',
-            findById: '/info',
-            update: '/update'
+            findById: '/info'
         })
     }
     findByPlateNoSuggest(params) {

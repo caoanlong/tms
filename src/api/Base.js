@@ -3,7 +3,7 @@ class Base {
         this._find = "/list"
         this._findById = "/detail"
         this._add = "/add"
-        this._update = "/modify"
+        this._update = "/update"
         this._del = "/delete"
         this.baseUrl = baseUrl
         this.request = request

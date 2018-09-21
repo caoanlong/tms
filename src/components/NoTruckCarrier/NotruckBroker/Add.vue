@@ -43,7 +43,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import NotruckBroker from '../../../api/NotruckBroker'
+import Notruck from '../../../api/Notruck'
 export default {
 	data() {
 		return {
@@ -79,7 +79,7 @@ export default {
 	},
 	methods: {
 		addInterfaceConfig() {
-			NotruckBroker.add({
+			Notruck.broker().add({
 				appkey: this.interfaceConfig.appkey,
 				documentVersionNumber: this.interfaceConfig.documentVersionNumber,
 				memberId: this.interfaceConfig.memberId,
@@ -98,14 +98,14 @@ export default {
 		},
 		// 获取appKey
 		getAppKey(memID) {
-			NotruckBroker.findAppKey({ memID }).then(res => {
+			Notruck.broker().findAppKey({ memID }).then(res => {
 				this.interfaceConfig.appkey = res.appKey
 				this.interfaceConfig.senderCode = res.accessCode
 			})
 		},
 		// 获取所有企业
 		getCompanys() {
-			NotruckBroker.findCompany().then(res => {
+			Notruck.broker().findCompany().then(res => {
 				this.companys = res
 			})
 		},

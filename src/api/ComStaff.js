@@ -11,7 +11,6 @@ class ComStaff extends Base {
     constructor(url, req) {
         super(url, req).initURI({
             findById: '/info',
-            update: '/update',
         })
     }
 }

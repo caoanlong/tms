@@ -5,8 +5,7 @@ class Driver extends Base {
     constructor(url, req) {
         super(url, req).initURI({
             find: '/findList',
-            findById: '/findById',
-            update: '/update'
+            findById: '/findById'
         })
     }
     /**
