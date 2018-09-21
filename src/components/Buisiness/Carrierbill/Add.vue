@@ -102,7 +102,7 @@
 											v-model="value1"
 											:picker-options="{ 
 												start:'00:00',
-												step: '01:00',
+												step: '00:30',
 												end:'23:00'
 											}"
 											style="width:100%"
@@ -165,7 +165,7 @@
 											v-model="value1"
 											:picker-options="{
 												start:'00:00',
-												step: '01:00',
+												step: '00:30',
 												end:'23:00'
 											}"
 											style="width:100%"
