@@ -99,11 +99,11 @@
 									</el-date-picker>
 									<div style="width:50%;padding-left:20px;display:block;float:left">
 										<el-time-select
-											v-model="value1"
+											v-model="shipperTime"
 											:picker-options="{ 
 												start:'00:00',
 												step: '00:30',
-												end:'23:00'
+												end:'23:30'
 											}"
 											style="width:100%"
 											placeholder="选择发货时间">
@@ -162,11 +162,11 @@
 									</el-date-picker>
 									<div style="width:50%;padding-left:20px;display:block;float:left">
 										<el-time-select
-											v-model="value1"
+											v-model="consigneeTime"
 											:picker-options="{
 												start:'00:00',
 												step: '00:30',
-												end:'23:00'
+												end:'23:30'
 											}"
 											style="width:100%"
 											placeholder="选择到货时间">
@@ -392,6 +392,8 @@ export default {
 			placeholder1:'请选择发货地址',
 			placeholder2:'请选择收货地址',
 			units: [],
+			shipperTime:'',
+			consigneeTime:'',
 			shipperAddress:[],
 			consigneeAddress:[],
 			searchKeyWord:'',
