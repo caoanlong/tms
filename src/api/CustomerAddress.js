@@ -1,7 +1,7 @@
 import Base from './Base'
 import request from '../common/request'
 
-class Customer extends Base {
+class CustomerAddress extends Base {
     constructor(url, req) {
         super(url, req).initURI({
             find: '/findList',
@@ -10,4 +10,4 @@ class Customer extends Base {
     }
 }
 
-export default new Customer('/customer/address', request())
+export default new CustomerAddress('/customer/address', request())
