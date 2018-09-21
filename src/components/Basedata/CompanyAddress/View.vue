@@ -5,7 +5,7 @@
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" size="small">
-						<el-form-item label="所属企业">
+						<el-form-item label="所属客户">
                             <p>{{companyAddress.companyName}}</p>
 						</el-form-item>
 						<el-form-item label="联系人">

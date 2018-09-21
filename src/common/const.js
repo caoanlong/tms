@@ -130,3 +130,12 @@ export const TRUCKLENGTH = [
     { value: 17.5 },
     { value: 1 },
 ]
+
+/**
+ * 支付方式
+ */
+export const CUSTOMERTYPE = {
+  Shipper: '发货单位',
+  Consignee: '收货单位',
+  Delegate: '委托方'
+}

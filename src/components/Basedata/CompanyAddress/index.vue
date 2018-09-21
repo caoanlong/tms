@@ -7,7 +7,7 @@
 					<el-form-item label="关键字">
 						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
 					</el-form-item>
-                    <el-form-item label="所属企业">
+                    <el-form-item label="所属客户">
                         <el-autocomplete 
 							style="width:100%" 
                             value-key="companyName" 
@@ -35,7 +35,7 @@
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="所属企业" prop="companyName" align="center"></el-table-column>
+					<el-table-column label="所属客户" prop="companyName" align="center"></el-table-column>
 					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
 					<el-table-column label="电话" prop="contactPhone" align="center"></el-table-column>
 					<el-table-column label="区域" prop="contactArea" align="center"></el-table-column>
