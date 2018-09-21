@@ -132,7 +132,7 @@ export const TRUCKLENGTH = [
 ]
 
 /**
- * 支付方式
+ * 客户类型
  */
 export const CUSTOMERTYPE = {
   Shipper: '发货单位',
