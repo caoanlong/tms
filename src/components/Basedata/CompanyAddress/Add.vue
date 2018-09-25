@@ -5,7 +5,7 @@
 			<el-row style="padding-bottom: 200px">
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="companyAddress" :rules="rules" ref="ruleForm" size="small">
-						<el-form-item label="所属企业" prop="customerID">
+						<el-form-item label="所属客户" prop="customerID">
 							<el-autocomplete 
 								style="width:100%" 
 								value-key="companyName" 
@@ -86,7 +86,7 @@ export default {
 			customerID: this.$route.query.customerID,
 			companyName: this.$route.query.companyName,
 			rules: {
-				customerID: [{required: true, message: '请输入所属企业'}],
+				customerID: [{required: true, message: '请输入所属客户'}],
 				contactName: [{required: true, message: '请输入联系人'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
                 contactPhone: [{required: true, message: '请输入电话'}, {validator: checkTel}],
 				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],

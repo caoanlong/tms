@@ -5,22 +5,22 @@
 			<el-row style="padding-bottom: 200px">
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="small">
-						<el-form-item label="企业LOGO">
+						<el-form-item label="客户LOGO">
 							<div style="display:flex">
 								<div style="flex:0 0 110px">
 									<ImageUpload :files="[recdeliverycomp.logoUrl]" :fixed="true" :fixedNumber="[1,1]" @imgUrlBack="handleLogoSuccess"/>
 								</div>
 								<div style="flex:1;color:#999">
-									<p>LOGO用途：用于展示企业形象</p>
-									<p>位置：企业软件头部</p>
+									<p>LOGO用途：用于展示客户形象</p>
+									<p>位置：客户软件头部</p>
 									<p>大小：100px*100px</p>
 								</div>
 							</div>
 						</el-form-item>
-						<el-form-item label="企业名称" prop="companyName">
+						<el-form-item label="客户名称" prop="companyName">
 							<el-input v-model="recdeliverycomp.companyName" :maxlength="100"></el-input>
 						</el-form-item>
-						<el-form-item label="收发类型" prop="customerType">
+						<el-form-item label="客户类型" prop="customerType">
 							<el-checkbox-group v-model="recdeliverycomp.customerType">
 								<el-checkbox label="Shipper">发货单位</el-checkbox>
 								<el-checkbox label="Consignee">收货单位</el-checkbox>

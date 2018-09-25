@@ -102,8 +102,8 @@
 											v-model="value1"
 											:picker-options="{ 
 												start:'00:00',
-												step: '01:00',
-												end:'23:00'
+												step: '00:30',
+												end:'23:30'
 											}"
 											style="width:100%"
 											placeholder="选择发货时间">
@@ -165,8 +165,8 @@
 											v-model="value1"
 											:picker-options="{
 												start:'00:00',
-												step: '01:00',
-												end:'23:00'
+												step: '00:30',
+												end:'23:30'
 											}"
 											style="width:100%"
 											placeholder="选择到货时间">

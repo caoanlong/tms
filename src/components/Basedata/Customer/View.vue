@@ -5,13 +5,13 @@
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px"  size="small">
-						<el-form-item label="企业LOGO">
+						<el-form-item label="客户LOGO">
 							<ImageUpload :files="[recdeliverycomp.logoUrl]" :isPreview="true"/>
 						</el-form-item>
-						<el-form-item label="企业名称" prop="companyName">
+						<el-form-item label="客户名称" prop="companyName">
 							<p>{{recdeliverycomp.companyName}}</p>
 						</el-form-item>
-						<el-form-item label="收发类型" prop="customerType">
+						<el-form-item label="客户类型" prop="customerType">
 							<p>{{recdeliverycomp.customerType == 'Shipper' ? '发货单位' : '收货单位'}}（这里有BUG,需要修改）</p>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">
