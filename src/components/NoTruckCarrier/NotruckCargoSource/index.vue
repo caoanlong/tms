@@ -76,7 +76,7 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			importFileUrl: baseURL + '/notruckUser/export/import',
+			importFileUrl: baseURL + '/notruck/cargosource/import',
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=goodssource.xlsx ',
 			find: {
