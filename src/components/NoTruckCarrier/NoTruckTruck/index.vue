@@ -72,7 +72,7 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			importFileUrl: baseURL + '/notruckTrucksource/importExcel',
+			importFileUrl: baseURL + '/notruck/truck/import',
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=trucksource.xlsx ',
 			find: {
@@ -95,7 +95,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/notruckTrucksource/export?Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/notruck/truck/export?Authorization=' + localStorage.getItem("token") 
 				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
 				+ '&documentName=' + this.find.documentName
 		},
