@@ -296,3 +296,19 @@ export function throttle(fun, delay) {
         }
     }
 }
+
+//time To timestamp
+export function timeToTimestamp(str) {
+    console.log(str)
+    return
+    if(typeof str !='string') {
+        throw new Error('the value must be string!!!')
+    }
+    if (str.indexOf(':')==-1) {
+        throw new Error('the value rules is error!!!')
+    }
+    const timeArr = str.split(':')
+    const hours = +timeArr[0] * 3600000
+    const minutes = +timeArr[1] * 60000
+    return hours + minutes
+}

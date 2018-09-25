@@ -78,38 +78,44 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货时间" prop="shipperDate">
-									<el-date-picker 
-										format="yyyy-MM-dd"
-										type="date" 
-										style="width:50%;float:left" 
-										placeholder="选择发货日期" 
-										v-model="carrierbillInfo.shipperDate" 
-										value-format="timestamp"
-										@change = "handSelectDate"
-										:picker-options="{ 
-											disabledDate: (curDate) => {
-												if (carrierbillInfo.consigneeDate) {
-													return curDate > carrierbillInfo.consigneeDate
-												} else {
-													return false
-												}
-											}}" 
-										>
-									</el-date-picker>
-									<div style="width:50%;padding-left:20px;display:block;float:left">
+								<el-col :span="14">
+									<el-form-item label="发货时间" prop="shipperDate">
+										<el-date-picker 
+											format="yyyy-MM-dd"
+											type="date" 
+											style="width:100%;" 
+											placeholder="选择发货日期" 
+											v-model="carrierbillInfo.shipperDate" 
+											value-format="timestamp"
+											@change = "handSelectDate"
+											:picker-options="{ 
+												disabledDate: (curDate) => {
+													if (carrierbillInfo.consigneeDate) {
+														return curDate > carrierbillInfo.consigneeDate
+													} else {
+														return false
+													}
+												}}" 
+											>
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="10">
+									<el-form-item label-width="20px" prop="shipperTime">
 										<el-time-select
-											v-model="value1"
+											v-model="carrierbillInfo.shipperTime"
 											:picker-options="{ 
 												start:'00:00',
 												step: '00:30',
-												end:'23:30'
+												end:'23:30',
+												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
+											@change = "handSelectTime"
 											placeholder="选择发货时间">
 										</el-time-select>
-									</div>
-								</el-form-item>
+									</el-form-item>
+								</el-col>
 							</el-row>
 						</div>
 					</el-col>
@@ -141,38 +147,45 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="到货时间" prop="consigneeDate">
-									<el-date-picker 
-										format="yyyy-MM-dd"
-										type="date" 
-										style="width:50%;float:left" 
-										placeholder="选择到货时间" 
-										v-model="carrierbillInfo.consigneeDate" 
-										value-format="timestamp"
-										@change = "handSelectDate"
-										:picker-options="{ 
-											disabledDate: (curDate) => {
-												if (carrierbillInfo.shipperDate) {
-													return curDate < carrierbillInfo.shipperDate - 3600000 * 24
-												} else {
-													return false
-												}
-											}}" 
-										>
-									</el-date-picker>
-									<div style="width:50%;padding-left:20px;display:block;float:left">
+								<el-col :span="14">
+									<el-form-item label="到货时间" prop="consigneeDate">
+										<el-date-picker 
+											format="yyyy-MM-dd"
+											type="date" 
+											style="width:100%;" 
+											placeholder="选择到货时间" 
+											v-model="carrierbillInfo.consigneeDate" 
+											value-format="timestamp"
+											@change = "handSelectDate"
+											:picker-options="{ 
+												disabledDate: (curDate) => {
+													if (carrierbillInfo.shipperDate) {
+														return curDate < carrierbillInfo.shipperDate
+													} else {
+														return false
+													}
+												}}" 
+											>
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="10">
+									<el-form-item label-width="20px" prop="consigneeTime">
 										<el-time-select
-											v-model="value1"
+											v-model="carrierbillInfo.consigneeTime"
 											:picker-options="{
 												start:'00:00',
 												step: '00:30',
-												end:'23:30'
+												end:'23:30',
+												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.shipperTime
 											}"
+											value-format="timestamp"
 											style="width:100%"
+											@change = "handSelectTime"
 											placeholder="选择到货时间">
 										</el-time-select>
-									</div>
-								</el-form-item>
+									</el-form-item>
+								</el-col>
 							</el-row>
 						</div>
 					</el-col>
@@ -356,9 +369,9 @@
 import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
 import Carrierbill from '../../../api/Carrierbill'
+import Company from '../../../api/Company'
 import Customer from '../../../api/Customer'
 import CrossProxy from '../../../api/CrossProxy'
-import CustomerAddress from '../../../api/CustomerAddress'
 import CargoUnit from '../../../api/CargoUnit'
 import CargoGeneralName from '../../../api/CargoGeneralName'
 import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../../common/utils'
@@ -371,14 +384,14 @@ import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		const checkShipperDateTime = (rule, value, callback) => {
-			if (this.carrierbillInfo.consigneeDate&& (value >= this.carrierbillInfo.consigneeDate)) {
+			if (this.carrierbillInfo.consigneeDate&& (value > this.carrierbillInfo.consigneeDate)) {
 				callback(new Error('发货时间不能等于或晚于到货时间'))
 			} else {
 				callback()
 			}
 		}
 		const checkConsigneeDateTime = (rule, value, callback) => {
-			if (this.carrierbillInfo.shipperDate&& (value <= this.carrierbillInfo.shipperDate)) {
+			if (this.carrierbillInfo.shipperDate&& (value < this.carrierbillInfo.shipperDate)) {
 				callback(new Error('到货时间不能等于或早于发货时间'))
 			} else {
 				callback()

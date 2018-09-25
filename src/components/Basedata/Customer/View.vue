@@ -12,7 +12,7 @@
 							<p>{{recdeliverycomp.companyName}}</p>
 						</el-form-item>
 						<el-form-item label="客户类型" prop="customerType">
-							<p>{{recdeliverycomp.customerType == 'Shipper' ? '发货单位' : '收货单位'}}（这里有BUG,需要修改）</p>
+							<p>{{recdeliverycomp.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , ')}}</p>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">
 							<p>{{recdeliverycomp.companyArea}}</p>

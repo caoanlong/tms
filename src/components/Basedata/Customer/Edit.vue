@@ -94,6 +94,7 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
+				this.recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
 				Company.customer().update(this.recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
@@ -104,6 +105,7 @@ export default {
 			const customerID = this.$route.query.customerID
 			Company.customer().findById({ customerID }).then(res => {
 				this.recdeliverycomp = res
+				this.recdeliverycomp.customerType = res.customerType.split(',')
 				this.selectedArea = areaIdToArrayId(String(res.companyAreaID))
 			})
 		},
