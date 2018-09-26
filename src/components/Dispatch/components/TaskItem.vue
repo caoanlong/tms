@@ -57,9 +57,9 @@
 	</div>
 </template>
 <script>
-import { defaultImg } from '../../../../assets/icons/icons'
-import { resizeImg } from '../../../../common/utils'
-import ImageUpload from '../../../CommonComponents/ImageUpload2'
+import { defaultImg } from '../../../assets/icons/icons'
+import { resizeImg } from '../../../common/utils'
+import ImageUpload from '../../CommonComponents/ImageUpload2'
 export default {
 	data(){
 		return{

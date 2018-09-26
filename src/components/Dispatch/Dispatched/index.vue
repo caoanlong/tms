@@ -106,8 +106,18 @@
 									</span>
 								</div>
 								<div class="handler">
-									<span class="c1" @click="scramble(item.dispatchOrderID,item.type,item.status)" v-if="item.grabNum>0&&item.type=='Offer'">报价人数（{{item.grabNum}}）</span>
-									<span class="c1" @click="scramble(item.dispatchOrderID,item.type,item.status)" v-if="item.grabNum>0&&item.type=='Grab'">抢单人数（{{item.grabNum}}）</span>
+									<span 
+										class="c1" 
+										@click="scramble(item.dispatchOrderID, item.type,item.status)" 
+										v-if="item.grabNum>0&&item.type=='Offer'">
+										报价人数（{{item.grabNum}}）
+									</span>
+									<span 
+										class="c1" 
+										@click="scramble(item.dispatchOrderID, item.type,item.status)" 
+										v-if="item.grabNum>0&&item.type=='Grab'">
+										抢单人数（{{item.grabNum}}）
+									</span>
 									<el-button 
 										v-if="item.status == 'Ordered' || item.status == 'Finished'"
 										type="text" 
@@ -181,83 +191,6 @@
 			</div>
 			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
-		<el-dialog :title="(curScrambleType=='Grab')?'抢单详情':'报价详情'" :visible.sync="scrambleDialog" custom-class="scrambleDialog" top="5vh" :show-close="false" :close-on-press-escape="false" :close-on-click-modal="false">
-			<p class="c1">货物： {{scrambleList.cargoName}}</p>
-			<p class="c1">货量： 
-				{{[(scrambleList.cargoWeight+'吨'),(scrambleList.cargoVolume+'方'),(scrambleList.cargoNum)] | trimSpaceAndJoinSlash}}
-			</p>
-			<p class="c1">{{scrambleList.load}} 装 {{scrambleList.unLoad}} 卸  预计里程 {{(Number(scrambleList.mileages)/1000).toFixed(2)}}公里</p>
-			<div class="tableBox">
-				<table class="customerTable">
-					<caption>{{(curScrambleType=='Grab')?'抢单人数':'报价人数'}}（{{scrambleList.grabOfferNum}}）</caption>
-					<thead>
-						<tr>
-							<th>车辆</th>
-							<th width="160">司机</th>
-							<th width="160">运费</th>
-							<th width="160">操作</th>
-						</tr>
-					</thead>
-					<tbody>
-						<template v-for="item in scrambleList.grabOfferOrderDetailVOList">
-							<tr>
-								<td colspan="4" class="blank"></td>
-							</tr>
-							<tr>
-								<td class="txt-l">
-									<p>{{item.plateNo}} 
-										<el-tag size="mini" v-if="item.gps">GPS</el-tag>
-										<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
-											<div slot="content">
-												<el-tag size="mini" type="danger" v-for="(truckItem,index) in item.truckExpiredCertificate.split(',')" :key="index">{{
-													EXPIREWARN[truckItem]
-												}}</el-tag>
-											</div>
-											<el-tag size="mini" type="danger" v-if="item.truckExpiredCertificate.length>0">到期</el-tag>
-										</el-tooltip>
-									</p>
-									<p>
-										{{Number(item.length/1000).toFixed(1)}} 米 / {{TRUCKTYPE[item.truckType]}} {{item.loads?'/ '+Number(item.loads/1000).toFixed(2)+'吨':''}}{{item.loadVolume?'/ '+item.loadVolume+'方':''}} 
-									</p>
-								</td>
-								<td class="txt-l">
-									<p>{{item.name}}
-										<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
-											<div slot="content">
-												<el-tag size="mini" type="danger" v-for="(driverItem,index) in item.driverExpiredCertificate.split(',')" :key="index">{{
-													EXPIREWARN[driverItem]
-												}}</el-tag>
-											</div>
-											<el-tag size="mini" type="danger" v-if="item.driverExpiredCertificate.length>0">到期</el-tag>
-										</el-tooltip>
-									</p>
-									<p>{{item.mobile}}</p>
-								</td>
-								<td class="c posr">
-									<span class="tags">{{item.type=='Offer'?'报':'定'}}</span>{{item.amount}}元 
-									<img class="success" src="../../../assets/imgs/qdcg.png" height="48" v-if="item.status == 'Agreed'&&item.type=='Grab'" />
-									<img class="success" src="../../../assets/imgs/bjcg.png" height="48" v-if="item.status == 'Agreed'&&item.type=='Offer'" />
-								</td>
-								<td>
-									<span class="c1 selectTruck" @click="confirmScramble(item.dispatchOfferID,item.dispatchOrderID,item.type)" v-if="dispatchOrderStatus == 'Committed'">选TA承运</span>
-									<p v-if="item.status == 'Agreed'">调度员：{{item.confirmer}}</p>
-									<p v-if="item.status == 'Agreed'">{{item.confirmTime  | getdatefromtimestamp}}</p>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="4" class="c2">
-									<span class="fl"><i class="el-icon-location"></i> {{Number(item.hours).toFixed(1)}} 小时前 {{item.posAddress}}</span>
-									<span class="fr">距离装车地 {{item.distance}} 公里</span>
-								</td>
-							</tr>
-						</template>
-					</tbody>
-				</table>
-			</div>
-			<div slot="footer" class="dialog-footer text-center">
-				<el-button @click="scrambleDialog = false" size="small">关闭</el-button>
-			</div>
-		</el-dialog>
 		<trail-map 
 			v-if="trailDialog" 
 			:dispatchOrderID="currentDispatchOrderID" 
@@ -271,20 +204,27 @@
 			:shipperArea="currentShipperArea" 
 			:consigneeArea="currentConsigneeArea">
 		</UploadPhoto>
+		<scramble 
+			:isVisible="isScrambleVisible" 
+			:curScrambleType="curScrambleType" 
+			:dispatchOrderStatus="dispatchOrderStatus" 
+			:dispatchOrderID="currentDispatchOrderID" 
+			:callback="callbackScramble">
+		</scramble>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import axios from 'axios'
 import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
 import DispatchOrder from '../../../api/DispatchOrder'
 import TrailMap from '../components/TrailMap'
-import UploadPhoto from './common/UploadPhoto'
-import {closeConfirm, dispatchCancel,confirmSelect } from '../../../common/utils'
+import UploadPhoto from '../components/UploadPhoto'
+import Scramble from '../components/Scramble'
+import { closeConfirm, dispatchCancel } from '../../../common/utils'
 export default {
 	mixins: [baseMixin],
-	components: { TrailMap,UploadPhoto },
+	components: { TrailMap, UploadPhoto, Scramble },
 	data(){
 		return{
 			isCur:0,
@@ -297,19 +237,18 @@ export default {
 				dispatchEndTime:''
 			},
 			timer: null,
-			scrambleDialog: false,
 			trailDialog: false,
 			dispatchBillList: [],
 			currentDispatchTaskID: '',
 			currentShipperArea: '',
 			currentConsigneeArea: '',
 			isPhotoVisible: false,
-			scrambleList:[],
 			currentDispatchOrderID: '',
-			truckExp:[],
-			driverExp:[],
-			curScrambleType:'',
-			dispatchOrderStatus:''
+			truckExp: [],
+			driverExp: [],
+			isScrambleVisible: false,
+			curScrambleType: '',
+			dispatchOrderStatus: ''
 		}
 	},
 	directives: {
@@ -341,11 +280,6 @@ export default {
 		this.timer = null
 	},
 	methods:{
-		search(val) {
-			this.pageIndex = this.PAGEINDEX
-			this.pageSize = this.PAGESIZE
-			this.getList()
-		},
 		resetSearch(){
 			this.find.keyword=''
 			this.find.shipperConsignee=''
@@ -416,19 +350,18 @@ export default {
 				this.total = res.total
 			})
 		},
+		/**
+		 * 抢单或报价详情
+		 */
 		scramble(dispatchOrderID,type,status) {
-			this.scrambleDialog = true
-			this.curScrambleType= type
+			this.isScrambleVisible = true
+			this.curScrambleType = type
 			this.dispatchOrderStatus = status
-			Dispatchbill.findgGrabOfferOrderList({ dispatchOrderID }).then(res => {
-				this.scrambleList = res
-				const list = res.grabOfferOrderDetailVOList
-				list.forEach(item =>{
-					const location = item.longitude+ ',' +item.latitude     
-					const loadLocation = item.loadLongitude+ ',' +item.loadLatitude
-					this.getDistance(loadLocation, location)
-				})
-			})
+			this.currentDispatchOrderID = dispatchOrderID
+		},
+		callbackScramble(bool) {
+			this.isScrambleVisible = false
+			bool && this.getList()
 		},
 		handCloseTrail() {
 			this.trailDialog = false
@@ -436,17 +369,6 @@ export default {
 		trail(dispatchOrderID) {
 			this.currentDispatchOrderID = dispatchOrderID
 			this.trailDialog = true
-		},
-		confirmScramble(dispatchOfferID,dispatchOrderID,type){
-			type = type == 'Offer' ? '报价' : '承运人'
-			confirmSelect(dispatchOrderID,type, dispatchOrderID=>{
-				Dispatchbill.confirmScramble({ dispatchOfferID }).then(res => {
-					Message.success('已成功选择承运人!')
-					this.scramble(dispatchOrderID)
-					this.getList()
-				})
-			})
-			
 		},
 		/**
 		 * 关闭调度
@@ -467,21 +389,6 @@ export default {
 				DispatchOrder.cancel({ dispatchOrderID }).then(res =>{
 					Message.success('已成功取消调度单!')
 					this.getList()
-				})
-			})
-		},
-		
-		/**
-		 * 调用高德地图接口获取距离
-		 */
-		getDistance(loadLocation,location) {
-			const url = `https://restapi.amap.com/v3/distance?origins=${loadLocation}&destination=${location}&key=${this.MAPKEY}`
-			axios({ url }).then(res => {
-				const results = res.data.results
-				this.scrambleList.grabOfferOrderDetailVOList= this.scrambleList.grabOfferOrderDetailVOList.map(item =>{
-					return Object.assign(item, {
-						"distance": Number((Number(results[0].distance)/1000).toFixed(2))
-					})
 				})
 			})
 		}

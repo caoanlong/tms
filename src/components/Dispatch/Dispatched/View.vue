@@ -225,7 +225,7 @@
 import { Message } from 'element-ui'
 import Dispatchbill from '../../../api/Dispatchbill'
 import DispatchOrder from '../../../api/DispatchOrder'
-import TaskItem from './common/TaskItem'
+import TaskItem from '../components/TaskItem'
 import TrailMap from '../components/TrailMap'
 import axios from 'axios'
 export default {
