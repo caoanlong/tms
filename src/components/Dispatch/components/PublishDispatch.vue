@@ -369,6 +369,7 @@ export default {
                 this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
                 this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
                 this.baseDizDispatchFee.superCargoID = this.selectedTruck.primaryDriver.superCargoID
+                this.baseDizDispatchFee.superCargoName = this.selectedTruck.primaryDriver.realName
                 console.log(this.baseDizDispatchFee)
             }
         },
@@ -379,6 +380,7 @@ export default {
             if (type == 'primary') {
                 this.selectedTruck.primaryDriver = data
                 this.baseDizDispatchFee.superCargoID = data.superCargoID
+                this.baseDizDispatchFee.superCargoName = data.realName
                 console.log(this.baseDizDispatchFee)
             } else {
                 this.selectedTruck.superCargo = data
@@ -486,6 +488,7 @@ export default {
                     return { carrierOrderID: item.carrierOrderID }
                 })
                 const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
+                console.log(this.baseDizDispatchFee)
                 const bizDispatchFeeList = [this.baseDizDispatchFee, ...this.bizDispatchFeeList].map(item => {
                     return {
                         item: item.item,
