@@ -66,21 +66,18 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { baseMixin } from '../../../common/mixin'
 import { mapGetters } from 'vuex'
 import SysRole from '../../../api/SysRole'
 import Menu from '../../../api/Menu'
 import { deleteConfirm } from '../../../common/utils'
-import Page from '../../CommonComponents/Page'
 import AuthConfig from './components/AuthConfig'
 import MemberConfig from './components/MemberConfig'
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
 			dialogFormVisible: false,
-			tableData: [],
-			pageIndex: 1,
-			pageSize: 10,
-			total: 0,
 			find: { roleName: '' },
 			roleName: '',
 			selectedList: [],
@@ -89,7 +86,7 @@ export default {
 			showSetMember: false
 		}
 	},
-	components: { Page, AuthConfig, MemberConfig },
+	components: { AuthConfig, MemberConfig },
 	created() {
 		this.getList()
 	},
@@ -114,22 +111,8 @@ export default {
 					break
 			}
 		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList()
-		},
 		selectChange(data) {
 			this.selectedList = data.map(item => item.roleID)
-		},
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
 		},
 		reset() {
 			this.find.roleName = ''
@@ -138,7 +121,6 @@ export default {
 			this.getList()
 		},
 		getList() {
-			console.log(this.pageIndex)
 			SysRole.find({
 				current: this.pageIndex,
 				size: this.pageSize,

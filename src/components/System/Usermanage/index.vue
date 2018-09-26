@@ -17,23 +17,16 @@
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="tableList" border style="width: 100%" size="mini">
+				<el-table :data="tableData" border style="width: 100%" size="mini">
 					<el-table-column label="手机号" prop="mobile"></el-table-column>
 					<el-table-column label="姓名" prop="realName"></el-table-column>
 					<el-table-column label="角色" prop="roleNames"></el-table-column>
-					<!-- <el-table-column label="状态" align="center">
-						<template slot-scope="scope">
-							<span v-if="scope.row.status == 'Passed'">启用</span>
-							<span v-else-if="scope.row.status == 'NotPassed'">停用</span>
-						</template>
-					</el-table-column> -->
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope" v-if="!scope.row.registerMemberFlag">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item :command="{type: 'role', id: scope.row.memberID}">角色</el-dropdown-item>
-									<!-- <el-dropdown-item :command="{type: 'disable', id: scope.row.memberID}">停用</el-dropdown-item> -->
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.memberID}" >删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
@@ -48,43 +41,27 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { baseMixin } from '../../../common/mixin'
 import SysMember from '../../../api/SysMember'
 import Page from '../../CommonComponents/Page'
 import SelectRole from './components/SelectRole'
 import { deleteConfirm } from '../../../common/utils'
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
-			pageIndex: 1,
-			pageSize: 10,
-			total: 0,
 			find: {
 				keyword: ''
 			},
-			tableList: [],
 			showSelectRole: false,
 			curMemberID: ''
 		}
 	},
-	components: { Page, SelectRole },
+	components: { SelectRole },
 	created() {
 		this.getList()
 	},
 	methods: {
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
-		},
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			this.find.keyword = ''
 			this.pageIndex = 1
@@ -98,7 +75,7 @@ export default {
 				keyword: this.find.keyword
 			}).then(res => {
 				this.total = res.total
-				this.tableList = res.records
+				this.tableData = res.records
 			})
 		},
 		handleCommand(e) {
