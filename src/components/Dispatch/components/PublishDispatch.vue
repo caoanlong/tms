@@ -243,7 +243,8 @@
                 </div>
                 <el-row>
                     <el-form size="small" :model="normal" ref="ruleForm2">
-                        <el-form-item label="接单截止时间" prop="endDate" :rules="[{
+                        <el-col :span="8">
+                        <el-form-item label="接单截止时间" label-width="100px" prop="endDate" :rules="[{
                             validator: (rule, value, callback) => {
                                 if (value && value < new Date().getTime()) {
                                     callback('时间不能早于当前时间')
@@ -257,21 +258,26 @@
                                 v-model="normal.endDate" 
                                 type="date" 
                                 placeholder="选择日期"
-                                :clearable="false" 
+                                :clearable="false"
+                                style="width:100%"
                                 value-format="timestamp" 
-                                :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 > curDate }">
+                                :picker-options="{ disabledDate: (curDate) => new Date()  > curDate }">
                             </el-date-picker>
-                            <el-time-select
-                                v-model="normal.endTime"
-                                :picker-options="{
-                                    start:'00:00',
-                                    step: '01:00',
-                                    end:'23:00'
-                                }"
-                                style="display:inline-block"
-                                placeholder="选择时间">
-                            </el-time-select>
-                        </el-form-item>
+                         </el-form-item>
+                         </el-col>
+                         <el-col :span="8">
+                            <el-form-item label-width="20px">
+                                <el-time-select
+                                    v-model="normal.endTime"
+                                    :picker-options="{
+                                        start:'00:00',
+                                        step: '01:00',
+                                        end:'23:00'
+                                    }"
+                                    placeholder="选择时间">
+                                </el-time-select>
+                            </el-form-item>
+                        </el-col>
                     </el-form>
                 </el-row>
                 <el-row style="margin-top:20px" class="text-center">
@@ -456,6 +462,7 @@ export default {
          * 发布
          */
         publish() {
+           
             for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
                 const element = this.bizDispatchFeeList[i]
                 if (!this.persons.map(item => item.supercargoID).includes(element.superCargo.supercargoID)) {
@@ -500,6 +507,11 @@ export default {
                         amount: item.amount
                     }
                 })
+                if (this.normal.endTime) {
+                    this.normal.endDate = this.normal.endDate + timeToTimestamp(this.normal.endTime)
+                } else {
+                    this.normal.endDate = this.normal.endDate + 3600000*24-1000
+                }
                 DispatchOrder.addForDispatch({
                     truckID: this.selectedTruck.truckID,
                     driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
