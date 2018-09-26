@@ -37,14 +37,14 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="委托方" prop="delegateID">
+						<el-form-item label="委托方" prop="consignorID">
 							<el-autocomplete
 								value-key="companyName" style="width:100%"
-								v-model="carrierbillInfo.delegateCompanyName"
-								:fetch-suggestions="getDelegateCompany"
+								v-model="carrierbillInfo.consignorName"
+								:fetch-suggestions="getConsignorCompany"
 								placeholder="请输入..." 
-								@select="handSelectDelegateCompany">
-								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectDelegate"></i>
+								@select="handSelectConsignorCompany">
+								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectConsignor"></i>
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
@@ -90,11 +90,7 @@
 											style="width:100%"
 											:picker-options="{ 
 												disabledDate: (curDate) => {
-													if (carrierbillInfo.consigneeDate) {
-														return curDate > carrierbillInfo.consigneeDate
-													} else {
-														return false
-													}
+													return curDate < new Date() - 3600000*24
 												}}" 
 											>
 										</el-date-picker>
@@ -111,7 +107,6 @@
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
-											@change = "handSelectTime"
 											placeholder="选择发货时间">
 										</el-time-select>
 									</el-form-item>
@@ -182,7 +177,6 @@
 											}"
 											value-format="timestamp"
 											style="width:100%"
-											@change = "handSelectTime"
 											placeholder="选择到货时间">
 										</el-time-select>
 									</el-form-item>
@@ -232,7 +226,7 @@
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
 													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%">
-														<el-option label="按数量配载" value="Quantity"></el-option>
+														<!-- <el-option label="按数量配载" value="Quantity"></el-option> -->
 														<el-option label="按体积配载" value="Volumn"></el-option>
 														<el-option label="按重量配载" value="Weight"></el-option>
 													</el-select>
@@ -439,6 +433,8 @@ export default {
 				consigneeDetailAddress: '',     /** String 收货人详细地址*/
 				consigneeDate: '',              /** Date 收货时间*/
 				consigneeTime:'',
+				consignorName:'',				/**委托人单位名称*/
+				consignorID:'',					/**委托人ID*/
 				carrierCargo: [{
 					// customizedNo: '',
 					cargoNameID: '',
@@ -495,9 +491,6 @@ export default {
 			this.$refs['ruleForm'].validateField('shipperDate')
 			this.$refs['ruleForm'].validateField('consigneeDate')
 		},
-		handSelectTime(v){
-			// this.shipper.time = (timeToTimestamp(this.shipper.time))
-		},
 		getUnits() {
 			CargoUnit.find({
 				current: 1,
@@ -523,9 +516,9 @@ export default {
 				cb(result)
 			})
 		},
-		getDelegateCompany(queryString, cb) {
-			if (queryString != this.carrierbillInfo.flagDelegateCompanyName) {
-				this.carrierbillInfo.DelegateID = ''
+		getConsignorCompany(queryString, cb) {
+			if (queryString != this.carrierbillInfo.flagconsignorName) {
+				this.carrierbillInfo.consignorID = ''
 			}
 			Company.customer().suggest({
 				customerType: 'Delegate',
@@ -580,13 +573,13 @@ export default {
 		inputSelectCargo(i) {
 			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
 		},
-		handSelectDelegateCompany(data) {
-			this.selectedDelegate = data
-			this.carrierbillInfo.DelegateCompanyName = ' '
-			this.carrierbillInfo.DelegateID = data.customerID
+		handSelectConsignorCompany(data) {
+			this.selectedConsignor = data
+			this.carrierbillInfo.consignorName = ' '
+			this.carrierbillInfo.consignorID = data.customerID
 			this.$nextTick(() => {
-				this.carrierbillInfo.DelegateCompanyName = data.companyName
-				this.carrierbillInfo.flagDelegateCompanyName = data.companyName
+				this.carrierbillInfo.consignorName = data.companyName
+				this.carrierbillInfo.flagconsignorName = data.companyName
 			})
 		},
 		handSelectShipperCompany(data) {
@@ -643,12 +636,13 @@ export default {
 			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID =''
 		},
-		clearSelectDelegate(){
-			this.carrierbillInfo.delegateCompanyName = ' '
-			this.carrierbillInfo.delegateID =''
+		clearSelectConsignor(){
+			this.carrierbillInfo.consignorName = ' '
+			this.carrierbillInfo.consignorID =''
 		},
 
 		save() {
+			
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					if (!valid) {
@@ -661,7 +655,7 @@ export default {
 				})
 			}).then(() => {
 				this.$refs['cargoRuleForm'].validate(valid => {
-					if (!valid) return 
+					if (!valid) return
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
 					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
 						const cargo = carrierbill.carrierCargo[i]
@@ -671,6 +665,17 @@ export default {
 					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
+					if(carrierbill.shipperTime){
+						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
+					}else{
+						carrierbill.shipperDate = carrierbill.shipperDate + 3600000*24-1000
+						console.log(carrierbill.shipperDate)
+					}
+					if(carrierbill.consigneeTime){
+						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
+					}else{
+						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
+					}
 					Carrierbill.add(carrierbill).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'carrierbill'})

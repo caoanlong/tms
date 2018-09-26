@@ -37,14 +37,14 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="委托方" prop="shipperID">
+						<el-form-item label="委托方" prop="delegateID">
 							<el-autocomplete
 								value-key="companyName" style="width:100%"
-								v-model="carrierbillInfo.shipperCompanyName"
-								:fetch-suggestions="getShipperCompany"
+								v-model="carrierbillInfo.delegateCompanyName"
+								:fetch-suggestions="getDelegateCompany"
 								placeholder="请输入..." 
-								@select="handSelectShipperCompany">
-								<i class="el-icon-close el-input__icon" slot="suffix" ></i>
+								@select="handSelectDelegateCompany">
+								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectDelegate"></i>
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
@@ -111,7 +111,6 @@
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
-											@change = "handSelectTime"
 											placeholder="选择发货时间">
 										</el-time-select>
 									</el-form-item>
@@ -181,7 +180,6 @@
 											}"
 											value-format="timestamp"
 											style="width:100%"
-											@change = "handSelectTime"
 											placeholder="选择到货时间">
 										</el-time-select>
 									</el-form-item>
@@ -231,7 +229,7 @@
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
 													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%">
-														<el-option label="按数量配载" value="Quantity"></el-option>
+														<!-- <el-option label="按数量配载" value="Quantity"></el-option> -->
 														<el-option label="按体积配载" value="Volumn"></el-option>
 														<el-option label="按重量配载" value="Weight"></el-option>
 													</el-select>
@@ -371,6 +369,7 @@ import { mapGetters } from 'vuex'
 import Carrierbill from '../../../api/Carrierbill'
 import Company from '../../../api/Company'
 import Customer from '../../../api/Customer'
+import CustomerAddress from '../../../api/CustomerAddress'
 import CrossProxy from '../../../api/CrossProxy'
 import CargoUnit from '../../../api/CargoUnit'
 import CargoGeneralName from '../../../api/CargoGeneralName'
@@ -552,25 +551,36 @@ export default {
 				cb(result)
 			})
 		},
+		getDelegateCompany(queryString, cb) {
+			if (queryString != this.carrierbillInfo.flagDelegateCompanyName) {
+				this.carrierbillInfo.DelegateID = ''
+			}
+			Company.customer().suggest({
+				customerType: 'Delegate',
+				keyword: queryString
+			}).then(res => {
+				cb(res)
+			})
+		},
 		getShipperCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
 				this.carrierbillInfo.shipperID = ''
 			}
-			Customer.find({
+			Company.customer().suggest({
 				customerType: 'Shipper',
 				keyword: queryString
-			}).then(res => {cb(res.records) })
+			}).then(res => {cb(res) })
 		},
 		getConsigneeCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
 				this.carrierbillInfo.consigneeID = ''
 			}
-			Customer.find({
+			Company.customer().suggest({
 				customerType: 'Consignee',
 				keyword: queryString
-			}).then(res => { cb(res.records) })
+			}).then(res => { cb(res) })
 		},
-		getShipperAddress(queryString, cb){
+		getShipperAddress(queryString, cb) {
 			Customer.addressSuggest({
 				customerID: this.carrierbillInfo.shipperID,
 				keyword: queryString
@@ -596,6 +606,15 @@ export default {
 		},
 		inputSelectCargo(i) {
 			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
+		},
+		handSelectDelegateCompany(data) {
+			this.selectedDelegate = data
+			this.carrierbillInfo.DelegateCompanyName = ' '
+			this.carrierbillInfo.DelegateID = data.customerID
+			this.$nextTick(() => {
+				this.carrierbillInfo.DelegateCompanyName = data.companyName
+				this.carrierbillInfo.flagDelegateCompanyName = data.companyName
+			})
 		},
 		handSelectShipperCompany(data) {
 			this.isChangeShipper = !this.isChangeShipper
@@ -666,6 +685,16 @@ export default {
 					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
+					if(carrierbill.shipperTime){
+						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
+					}else{
+						carrierbill.shipperDate = carrierbill.shipperDate + 3600000*24 
+					}
+					if(carrierbill.consigneeTime){
+						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
+					}else{
+						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
+					}
 					Carrierbill.update(carrierbill).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'carrierbill'})
@@ -688,6 +717,13 @@ export default {
 		},
 		removeItem(index) {
 			this.carrierbillInfo.carrierCargo.splice(index, 1)
+		},
+		clearSelectDelegate(){
+			this.carrierbillInfo.delegateCompanyName = ' '
+			this.carrierbillInfo.delegateID =''
+		},
+		handSelectTime(){
+
 		},
 		/**
 		 * 添加企业地址

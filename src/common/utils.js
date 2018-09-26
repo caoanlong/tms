@@ -299,8 +299,6 @@ export function throttle(fun, delay) {
 
 //time To timestamp
 export function timeToTimestamp(str) {
-    console.log(str)
-    return
     if(typeof str !='string') {
         throw new Error('the value must be string!!!')
     }
@@ -311,4 +309,21 @@ export function timeToTimestamp(str) {
     const hours = +timeArr[0] * 3600000
     const minutes = +timeArr[1] * 60000
     return hours + minutes
+}
+
+//是否全天
+
+export function isFullDay(input) {
+    let now = new Date(Number(input))
+    let year = now.getFullYear()
+    let month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1
+    let date = now.getDate() < 10 ? '0' + now.getDate() : now.getDate()
+    let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+    let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+    let second = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds()
+    if (second == 59){
+        return year + "-" + month + "-" + date
+    }else{
+        return year + "-" + month + "-" + date + " " + hour + ":" + minute
+    }
 }

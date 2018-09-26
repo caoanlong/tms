@@ -11,7 +11,7 @@
 				<span class="label">发货单号：{{carrierOrder.shipperNo}}</span>
 				<span class="label">运输方式：{{carrierOrder.transportType}}</span>
 				<span class="label" v-if="carrierOrder.commissionDate">委托时间：{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
-				<span class="label">委托方：</span>
+				<span class="label">委托方：{{carrierOrder.consignorName}}</span>
 			</div>
 			<el-row style="min-width: 1050px" :gutter="20">
 				<el-col :span="12">
@@ -21,7 +21,7 @@
 							<div><span class="ctt">{{carrierOrder.shipperCompanyName}}</span></div>
 							<div><span class="ctt">{{carrierOrder.shipperName}}/{{carrierOrder.shipperPhone}}</span></div>
 							<div><span class="ctt">{{carrierOrder.shipperArea}} {{carrierOrder.shipperLocationAddress}} {{carrierOrder.shipperDetailAddress}}</span></div>
-							<div><span class="ctt"><span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | getdatefromtimestamp('min')}}</span></span></div>
+							<div><span class="ctt"><span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | isFullDay()}}</span></span></div>
 						</div>
 					</div>
 				</el-col>
@@ -32,7 +32,7 @@
 							<div><span class="ctt">{{carrierOrder.consigneeCompanyName}}</span></div>
 							<div><span class="ctt">{{carrierOrder.consigneeName}}/{{carrierOrder.consigneePhone}}</span></div>
 							<div><span class="ctt">{{carrierOrder.consigneeArea}} {{carrierOrder.consigneeLocationAddress}} {{carrierOrder.consigneeDetailAddress}}</span></div>
-							<div><span class="ctt"><span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | getdatefromtimestamp('min')}}</span></span></div>
+							<div><span class="ctt"><span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | isFullDay()}}</span></span></div>
 						</div>
 					</div>
 				</el-col>
