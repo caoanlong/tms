@@ -210,6 +210,9 @@
 					<p v-else class="dispatchLog c2">暂无调度日志</p>
 				</el-col>
 			</el-row>
+			<div class="wf-footer clearfix text-center">
+				<el-button @click="back">返回</el-button>
+			</div>
 		</el-card>
 		<trail-map 
 			v-if="trailDialog" 
@@ -221,6 +224,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Dispatchbill from '../../../api/Dispatchbill'
+import DispatchOrder from '../../../api/DispatchOrder'
 import TaskItem from './common/TaskItem'
 import TrailMap from '../components/TrailMap'
 import axios from 'axios'
@@ -263,7 +267,7 @@ export default {
 			this.hideAmount = this.$route.query.isHideAmount
 			console.log(this.hideAmount)
 			const dispatchOrderID = this.$route.query.dispatchOrderID
-			Dispatchbill.findById({ dispatchOrderID }).then(res => {
+			DispatchOrder.findById({ dispatchOrderID }).then(res => {
 				this.dispatchOrder = res
 				this.dispatchOrderDetail = res.detail
 				this.dispatchOrderlocationList = res.locationList
@@ -285,7 +289,7 @@ export default {
 		},
 		getLogs() {
 			const dispatchOrderID = this.$route.query.dispatchOrderID
-			Dispatchbill.findDispatchLogs({ dispatchOrderID }).then(res => {
+			DispatchOrder.logList({ dispatchOrderID }).then(res => {
 				this.dispatchLogs = res
 			})
 		},
