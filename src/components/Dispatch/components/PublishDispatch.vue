@@ -475,7 +475,7 @@ export default {
                         amount: item.amount
                     }
                 })
-                DispatchOrder.add({
+                DispatchOrder.addForDispatch({
                     truckID: this.selectedTruck.truckID,
                     driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
                     superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',

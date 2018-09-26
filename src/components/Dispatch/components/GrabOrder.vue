@@ -164,7 +164,7 @@ export default {
                     return { carrierOrderID: item.carrierOrderID }
                 })
                 const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
-                DispatchOrder.add({
+                DispatchOrder.addForOffer({
                     dispatchTaskCargoList,
                     dispatchTaskList,
                     bizDispatchNodeList: this.transLines,
