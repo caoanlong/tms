@@ -369,6 +369,7 @@ export default {
                 this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
                 this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
                 this.baseDizDispatchFee.superCargoID = this.selectedTruck.primaryDriver.superCargoID
+                console.log(this.baseDizDispatchFee)
             }
         },
         handSelectPerson(type, data) {
@@ -378,6 +379,7 @@ export default {
             if (type == 'primary') {
                 this.selectedTruck.primaryDriver = data
                 this.baseDizDispatchFee.superCargoID = data.superCargoID
+                console.log(this.baseDizDispatchFee)
             } else {
                 this.selectedTruck.superCargo = data
             }
