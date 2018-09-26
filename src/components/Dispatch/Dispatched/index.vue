@@ -448,17 +448,23 @@ export default {
 			})
 			
 		},
+		/**
+		 * 关闭调度
+		 */
 		closeDispatchOrder(id){
 			closeConfirm(id, dispatchOrderID => {
-				Dispatchbill.close({ dispatchOrderID }).then(res => {
+				DispatchOrder.close({ dispatchOrderID }).then(res => {
 					Message.success('关闭调度成功!')
 					this.getList()
 				})
 			})
 		},
+		/**
+		 * 取消调度
+		 */
 		cancelDispatchOrder(id) {
 			dispatchCancel(id, dispatchOrderID => {
-				Dispatchbill.cancel({ dispatchOrderID }).then(res =>{
+				DispatchOrder.cancel({ dispatchOrderID }).then(res =>{
 					Message.success('已成功取消调度单!')
 					this.getList()
 				})
