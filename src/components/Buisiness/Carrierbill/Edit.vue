@@ -377,17 +377,14 @@ import Carrierbill from '../../../api/Carrierbill'
 import Company from '../../../api/Company'
 import Customer from '../../../api/Customer'
 import CustomerAddress from '../../../api/CustomerAddress'
-
 import CargoUnit from '../../../api/CargoUnit'
 import CargoGeneralName from '../../../api/CargoGeneralName'
-import { searchAreaByKey, areaIdToArrayId, searchLocationByCity, timeToTimestamp, timestampToTime } from '../../../common/utils'
-
+import { timeToTimestamp, timestampToTime } from '../../../common/utils'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
-		
 		const checkShipperDateTime = (rule, value, callback) => {
 			if (this.carrierbillInfo.consigneeDate&& (value > this.carrierbillInfo.consigneeDate)) {
 				callback(new Error('发货时间不能等于或晚于到货时间'))
@@ -442,7 +439,6 @@ export default {
 				consigneeDate: '',              /** Date 收货时间*/
 				consigneeTime:'',
 				carrierCargo: [{
-					// customizedNo: '',
 					cargoNameID: '',
 					cargoName: '',
 					dispatchType:'Weight',
@@ -453,7 +449,6 @@ export default {
 				}],                    /** String货物清单（JSON串）*/
 				freight: '',                    /** BigDecimal运费*/
 				porRequire: []                /** String 回单要求*/
-				
 			},
 			selectedShipper: null,
 			selectedConsignee: null,
@@ -490,11 +485,11 @@ export default {
 		getInfo() {
 			const carrierOrderID = this.$route.query.carrierOrderID
 			Carrierbill.findById({ carrierOrderID }).then(res => {
-				this.carrierbillInfo = res
+				const carrierbillInfo = res
 				if (res.porRequire.indexOf(',') > -1) {
-					this.carrierbillInfo.porRequire = res.porRequire.split(',')
+					carrierbillInfo.porRequire = res.porRequire.split(',')
 				} else {
-					this.carrierbillInfo.porRequire = [res.porRequire]
+					carrierbillInfo.porRequire = [res.porRequire]
 				}
 				this.selectedShipper = {
 					customerAddressNum: 1
@@ -512,20 +507,20 @@ export default {
 				}
 				this.selectedConsigneeAddress = {
 					customerAddressID: res.consigneeAddressID,
-					contactName:res.consigneeName,
-					contactPhone:res.consigneePhone,
-					contactArea:res.consigneeArea,
-					locationAddress:res.consigneeLocationAddress,
-					detailAddress:res.consigneeDetailAddress
+					contactName: res.consigneeName,
+					contactPhone: res.consigneePhone,
+					contactArea: res.consigneeArea,
+					locationAddress: res.consigneeLocationAddress,
+					detailAddress: res.consigneeDetailAddress
 				}
-				this.carrierbillInfo.flagShipperCompanyName = res.shipperCompanyName
-				this.carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
-				this.carrierbillInfo.shipperTime = timestampToTime(this.carrierbillInfo.shipperDate)
-				this.carrierbillInfo.consigneeTime = timestampToTime(this.carrierbillInfo.consigneeDate)
+				carrierbillInfo.flagShipperCompanyName = res.shipperCompanyName
+				carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
+				carrierbillInfo.shipperTime = timestampToTime(res.shipperDate)
+				carrierbillInfo.consigneeTime = timestampToTime(res.consigneeDate)
+				this.carrierbillInfo = carrierbillInfo
 			})
 			
 		},
-
 		handSelectDate(){
 			this.$refs['ruleForm'].validateField('shipperDate')
 			this.$refs['ruleForm'].validateField('consigneeDate')
@@ -680,10 +675,11 @@ export default {
 		},
 		handleSelectShipperTime(value){
 			console.log(value)
-			
+			// this.carrierbillInfo.shipperTime = ''
 		},
 		handleSelectConsigneeTime(value){
 			console.log(value)
+			// this.carrierbillInfo.consigneeTime = ''
 		},
 		save() {
 			new Promise((resolve, reject) => {
@@ -728,7 +724,6 @@ export default {
 		addItem() {
 			const dispatchType = this.carrierbillInfo.carrierCargo[0] ? this.carrierbillInfo.carrierCargo[0].dispatchType : 'Weight'
 			this.carrierbillInfo.carrierCargo.push({
-				// customizedNo: '',
 				cargoNameID: '',
 				cargoName: '',
 				cargoNum: '',
