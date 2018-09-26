@@ -65,8 +65,8 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import TaskPic from '../../../../api/TaskPic'
-import ImageUpload from '../../../CommonComponents/ImageUpload2'
+import TaskPic from '../../../api/TaskPic'
+import ImageUpload from '../../CommonComponents/ImageUpload2'
 export default {
     props: {
         isVisible: {

@@ -18,28 +18,28 @@
 					ref="recTable" 
                     :data="tableData"
 					border style="width: 100%" size="mini" stripe>
-					<el-table-column label="委托方" prop="entruster" align="center"></el-table-column>
+					<el-table-column label="委托方" prop="companyName" align="center"></el-table-column>
                     <el-table-column label="对客户应收运价" align="center">
-                        <el-table-column label="吨公里价格" prop="recWeightPrice" align="center">
+                        <el-table-column label="吨公里价格" align="center">
                             <template slot-scope="scope">
-                                <span>{{scope.row.recWeightPrice}}元</span>
+                                <span>{{scope.row.receivableWeightUnitPrice}}元</span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="方公里价格" prop="recVolumnPrice" align="center">
+                        <el-table-column label="方公里价格" align="center">
                             <template slot-scope="scope">
-                                <span>{{scope.row.recVolumnPrice}}元</span>
+                                <span>{{scope.row.receivableVolumnUnitPrice}}元</span>
                             </template>
                         </el-table-column>
                     </el-table-column>
                     <el-table-column label="对司机支付运价" align="center">
-                        <el-table-column label="吨公里价格" prop="payWeightPrice" align="center">
+                        <el-table-column label="吨公里价格" align="center">
                             <template slot-scope="scope">
-                                <span>{{scope.row.payWeightPrice}}元</span>
+                                <span>{{scope.row.payableWeightUnitPrice}}元</span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="方公里价格" prop="payVolumnPrice" align="center">
+                        <el-table-column label="方公里价格" align="center">
                             <template slot-scope="scope">
-                                <span>{{scope.row.payVolumnPrice}}元</span>
+                                <span>{{scope.row.payableVolumnUnitPrice}}元</span>
                             </template>
                         </el-table-column>
                     </el-table-column>
@@ -68,6 +68,7 @@ import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import EditCustomerPrice from './components/EditCustomerPrice'
 import LinePrice from './components/LinePrice'
+import Company from '../../../api/Company'
 export default {
     mixins: [baseMixin],
     components: { EditCustomerPrice, LinePrice },
@@ -91,16 +92,24 @@ export default {
 			this.getList()
 		},
 		getList() {
-            this.tableData = [
-                {
-                    entruster: '神州贸易有限公司',
-                    recWeightPrice: '0.5',
-                    recVolumnPrice: '1.5',
-                    payWeightPrice: '0.45',
-                    payVolumnPrice: '1.35',
-                    linePrice: '5'
-                }
-            ]
+			Company.customer().find({
+				pageIndex: this.pageIndex,
+				pageSize: this.pageSize,
+				keyword: this.find.keyword
+			}).then(res => {
+				this.tableData = res.records
+				this.total = res.total
+			})
+            // this.tableData = [
+            //     {
+            //         entruster: '神州贸易有限公司',
+            //         recWeightPrice: '0.5',
+            //         recVolumnPrice: '1.5',
+            //         payWeightPrice: '0.45',
+            //         payVolumnPrice: '1.35',
+            //         linePrice: '5'
+            //     }
+            // ]
 		},
 		handleCommand(e) {
 			if (e.type == 'edit') {

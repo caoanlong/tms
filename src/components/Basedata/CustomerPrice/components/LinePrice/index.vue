@@ -117,7 +117,6 @@ export default {
     },
     methods: {
         callbackAddLine(data) {
-            console.log(data)
             this.isAddLineVisible = false
         },
         add() {

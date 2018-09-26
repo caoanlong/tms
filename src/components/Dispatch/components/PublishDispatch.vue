@@ -119,17 +119,26 @@
                         <svg-icon icon-class="info" class="infoIcon"></svg-icon>
                         <p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
                     </div>
-                    <el-form ref="ruleForm" :inline="true" size="mini">
-                        <el-form-item label="基础运费">
-                            <el-input placeholder="请输入..."></el-input>
+                    <el-form 
+                        ref="baseDizDispatchFeeRuleForm" 
+                        :model="baseDizDispatchFee" 
+                        :rules="baseDizDispatchFeeRule"
+                        :inline="true" size="mini">
+                        <el-form-item label="基础运费" prop="amount">
+                            <el-input placeholder="请输入..." v-model="baseDizDispatchFee.amount"></el-input>
                         </el-form-item>
-                        <el-form-item label="支付方式" :rules="[{ required: true , message: '请选择支付方式' }]">
-                            <el-select size="mini" placeholder="请选择" style="width:100%">
-                                <el-option label="到付" value="PayOnDelivery"></el-option>
-                                <el-option label="预付" value="Prepay"></el-option>
-                                <el-option label="回单结" value="PayOnReceipt"></el-option>
-                                <el-option label="收货方付" value="PayByConsignee"></el-option>
-                                <el-option label="月结" value="PayMonthly"></el-option>
+                        <el-form-item label="支付方式" prop="payMode">
+                            <el-select 
+                                size="mini" 
+                                placeholder="请选择" 
+                                style="width:100%" 
+                                v-model="baseDizDispatchFee.payMode">
+                                <el-option 
+                                    v-for="(label, value) in PAYMETHODS" 
+                                    :key="value" 
+                                    :label="label" 
+                                    :value="value">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-form>
@@ -153,11 +162,13 @@
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="item" :rules="[{ required: true , message: '请选择费用科目' }]">
                                             <el-select size="mini" v-model="item.item" placeholder="请选择">
-                                                <el-option label="路桥费" value="RoadBridge"></el-option>
-                                                <el-option label="中转费" value="Transit"></el-option>
-                                                <el-option label="罚款" value="Fine"></el-option>
-                                                <el-option label="绕路费" value="Detour"></el-option>
-                                                <el-option label="其他" value="Other"></el-option>
+                                                <el-option 
+                                                    v-for="(label, value) in FREIGHTTYPE" 
+                                                    :key="value" 
+                                                    :label="label" 
+                                                    :value="value" 
+                                                    v-if="label != '运费'">
+                                                </el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-form>
@@ -188,11 +199,12 @@
                                     <el-form :model="item" ref="ruleForm">
                                         <el-form-item prop="payMode" :rules="[{ required: true , message: '请选择支付方式' }]">
                                             <el-select size="mini" v-model="item.payMode" placeholder="请选择" style="width:100%">
-                                                <el-option label="到付" value="PayOnDelivery"></el-option>
-                                                <el-option label="预付" value="Prepay"></el-option>
-                                                <el-option label="回单结" value="PayOnReceipt"></el-option>
-                                                <el-option label="收货方付" value="PayByConsignee"></el-option>
-                                                <el-option label="月结" value="PayMonthly"></el-option>
+                                                <el-option 
+                                                    v-for="(label, value) in PAYMETHODS" 
+                                                    :key="value" 
+                                                    :label="label" 
+                                                    :value="value">
+                                                </el-option>
                                             </el-select>
                                         </el-form-item>
                                     </el-form>
@@ -248,7 +260,7 @@
                                 :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 > curDate }">
                             </el-date-picker>
                             <el-time-select
-                                v-model="value1"
+                                v-model="normal.endTime"
                                 :picker-options="{
                                     start:'00:00',
                                     step: '01:00',
@@ -274,7 +286,7 @@
 import { Message } from 'element-ui'
 import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
-import Dispatchbill from '../../../api/Dispatchbill'
+import DispatchOrder from '../../../api/DispatchOrder'
 import { arrayUnique } from '../../../common/utils'
 export default {
     components: { SelectTruck, SelectPerson },
@@ -308,19 +320,24 @@ export default {
             personDialog: false,
             selectedTruck: {},
             personType: 'primary',
-            bizDispatchFeeList: [{
-                item: '',  // 费用科目
+            baseDizDispatchFee: {
+                item: 'Freight',  // 费用科目
                 category: 'Basic', // 费用类型
                 superCargo: '',  // 收款人
                 superCargoID: '',  // 收款人
                 superCargoName: '',  // 收款人
                 payMode: 'Prepay',  // 支付方式
                 amount: ''  // 金额
-            }],
+            },
+            bizDispatchFeeList: [],
             normal: {
                 endDate: ''
             },
-            persons: []
+            persons: [],
+            baseDizDispatchFeeRule: {
+                amount: [{required: true, message: '请输入基础运费'}],
+                payMode: [{required: true, message: '请选择支付方式'}]
+            }
         }
     },
     watch: {
@@ -351,6 +368,9 @@ export default {
                 this.bizDispatchFeeList[0].superCargo = this.persons.filter(item => item.supercargoID == this.selectedTruck.primaryDriver.supercargoID)[0]
                 this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
                 this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
+                this.baseDizDispatchFee.superCargoID = this.selectedTruck.primaryDriver.supercargoID
+                this.baseDizDispatchFee.superCargoName = this.selectedTruck.primaryDriver.realName
+                console.log(this.baseDizDispatchFee)
             }
         },
         handSelectPerson(type, data) {
@@ -359,6 +379,9 @@ export default {
             data.type = type
             if (type == 'primary') {
                 this.selectedTruck.primaryDriver = data
+                this.baseDizDispatchFee.superCargoID = data.supercargoID
+                this.baseDizDispatchFee.superCargoName = data.realName
+                console.log(this.baseDizDispatchFee)
             } else {
                 this.selectedTruck.superCargo = data
             }
@@ -465,7 +488,8 @@ export default {
                     return { carrierOrderID: item.carrierOrderID }
                 })
                 const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
-                const bizDispatchFeeList = this.bizDispatchFeeList.map(item => {
+                console.log(this.baseDizDispatchFee)
+                const bizDispatchFeeList = [this.baseDizDispatchFee, ...this.bizDispatchFeeList].map(item => {
                     return {
                         item: item.item,
                         category: item.category,
@@ -475,7 +499,7 @@ export default {
                         amount: item.amount
                     }
                 })
-                Dispatchbill.add({
+                DispatchOrder.addForDispatch({
                     truckID: this.selectedTruck.truckID,
                     driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
                     superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',

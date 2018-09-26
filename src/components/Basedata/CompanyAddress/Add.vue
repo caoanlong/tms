@@ -112,10 +112,9 @@ export default {
 				Message.error('请选择城市！')
 				return
 			}
-			if (!queryString) return
 			AMap.plugin('AMap.Autocomplete', () => {
 				const autoComplete= new AMap.Autocomplete({ city: this.selectedCity })
-				autoComplete.search(queryString, (status, result) => {
+				autoComplete.search(queryString ? queryString : this.selectedCity, (status, result) => {
 					if (status === 'complete' && result.info === 'OK') {
 						const list = result.tips.filter(item => item.location && item.name)
 						cb(list)
@@ -154,9 +153,11 @@ export default {
 			this.isLocationVisible = true
 		},
 		callbackLocation(data) {
-			this.companyAddress.locationLng = data.location[0]
-			this.companyAddress.locationLat = data.location[1]
-			this.companyAddress.locationAddress = data.address
+			if (data) {
+				this.companyAddress.locationLng = data.location[0]
+				this.companyAddress.locationLat = data.location[1]
+				this.companyAddress.locationAddress = data.address
+			}
 			this.isLocationVisible = false
 		},
 		add() {

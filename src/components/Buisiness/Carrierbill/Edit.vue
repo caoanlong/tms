@@ -10,16 +10,17 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="运输方式" prop="transportType">
-							<el-select v-model="carrierbillInfo.transportType" placeholder="请选择" style="width:100%">
-								<el-option label="海上运输" value="海上运输"></el-option>
-								<el-option label="铁路运输" value="铁路运输"></el-option>
-								<el-option label="公路运输" value="公路运输"></el-option>
-								<el-option label="航空运输" value="航空运输"></el-option>
-								<el-option label="邮件运输" value="邮件运输"></el-option>
-								<el-option label="多式联运" value="多式联运"></el-option>
-								<el-option label="固定设施运输" value="固定设施运输"></el-option>
-								<el-option label="内河运输" value="内河运输"></el-option>
-								<el-option label="其他" value="其他"></el-option>
+
+							<el-select 
+								v-model="carrierbillInfo.transportType" 
+								placeholder="请选择" 
+								style="width:100%">
+								<el-option 
+									v-for="(label, value) in TRANSPORTTYPE" 
+									:key="value" 
+									:label="label" 
+									:value="value">
+								</el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
@@ -37,12 +38,15 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
+
 						<el-form-item label="委托方" prop="delegateID">
 							<el-autocomplete
 								value-key="companyName" style="width:100%"
+
 								v-model="carrierbillInfo.delegateCompanyName"
 								:fetch-suggestions="getDelegateCompany"
 								placeholder="请输入..." 
+
 								@select="handSelectDelegateCompany">
 								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectDelegate"></i>
 							</el-autocomplete>
@@ -111,6 +115,7 @@
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
+
 											placeholder="选择发货时间">
 										</el-time-select>
 									</el-form-item>
@@ -180,6 +185,7 @@
 											}"
 											value-format="timestamp"
 											style="width:100%"
+
 											placeholder="选择到货时间">
 										</el-time-select>
 									</el-form-item>
@@ -229,9 +235,13 @@
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
 													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%">
-														<!-- <el-option label="按数量配载" value="Quantity"></el-option> -->
-														<el-option label="按体积配载" value="Volumn"></el-option>
-														<el-option label="按重量配载" value="Weight"></el-option>
+
+														<el-option 
+															v-for="(label, value) in DISPATCHTYPE" 
+															:key="value" 
+															:label="label" 
+															:value="value">
+														</el-option>
 													</el-select>
 												</el-form-item>
 											</td>
@@ -566,20 +576,25 @@ export default {
 			if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
 				this.carrierbillInfo.shipperID = ''
 			}
+
 			Company.customer().suggest({
 				customerType: 'Shipper',
 				keyword: queryString
+
 			}).then(res => {cb(res) })
 		},
 		getConsigneeCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
 				this.carrierbillInfo.consigneeID = ''
 			}
+
 			Company.customer().suggest({
 				customerType: 'Consignee',
 				keyword: queryString
+
 			}).then(res => { cb(res) })
 		},
+
 		getShipperAddress(queryString, cb) {
 			Customer.addressSuggest({
 				customerID: this.carrierbillInfo.shipperID,

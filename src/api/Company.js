@@ -25,7 +25,7 @@ class Company extends Base {
         this._init('/apply')
         this.audit = data => {
             return this.request({
-                url: this.baseUrl + '/audit',
+                url: this.baseUrl + '/apply/audit',
                 method: 'post',
                 data
             })
