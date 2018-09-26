@@ -368,7 +368,7 @@ export default {
                 this.bizDispatchFeeList[0].superCargo = this.persons.filter(item => item.supercargoID == this.selectedTruck.primaryDriver.supercargoID)[0]
                 this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
                 this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
-                this.baseDizDispatchFee.superCargoID = this.selectedTruck.primaryDriver.superCargoID
+                this.baseDizDispatchFee.superCargoID = this.selectedTruck.primaryDriver.supercargoID
                 this.baseDizDispatchFee.superCargoName = this.selectedTruck.primaryDriver.realName
                 console.log(this.baseDizDispatchFee)
             }
@@ -379,7 +379,7 @@ export default {
             data.type = type
             if (type == 'primary') {
                 this.selectedTruck.primaryDriver = data
-                this.baseDizDispatchFee.superCargoID = data.superCargoID
+                this.baseDizDispatchFee.superCargoID = data.supercargoID
                 this.baseDizDispatchFee.superCargoName = data.realName
                 console.log(this.baseDizDispatchFee)
             } else {
