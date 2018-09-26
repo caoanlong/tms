@@ -135,7 +135,30 @@ export const TRUCKLENGTH = [
  * 客户类型
  */
 export const CUSTOMERTYPE = {
-  Shipper: '发货单位',
-  Consignee: '收货单位',
-  Delegate: '委托方'
+    Shipper: '发货单位',
+    Consignee: '收货单位',
+    Delegate: '委托方'
+}
+
+/**
+ * 配载方式
+ */
+export const DISPATCHTYPE = {
+    Volumn: '按体积配载',
+    Weight: '按重量配载'
+}
+
+/**
+ * 运输方式
+ */
+export const TRANSPORTTYPE = {
+    '海上运输': '海上运输',
+    '铁路运输': '铁路运输',
+    '公路运输': '公路运输',
+    '航空运输': '航空运输',
+    '邮件运输': '邮件运输',
+    '多式联运': '多式联运',
+    '固定设施运输': '固定设施运输',
+    '内河运输': '内河运输',
+    '其他': '其他'
 }
