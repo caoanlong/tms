@@ -278,6 +278,7 @@ import { Message } from 'element-ui'
 import axios from 'axios'
 import { baseMixin } from '../../../common/mixin'
 import Dispatchbill from '../../../api/Dispatchbill'
+import DispatchOrder from '../../../api/DispatchOrder'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from './common/UploadPhoto'
 import {closeConfirm, dispatchCancel,confirmSelect } from '../../../common/utils'
@@ -386,7 +387,7 @@ export default {
 			}
 		},
 		getDispatchedList() {
-			Dispatchbill.findDispatchedList({
+			DispatchOrder.listOfOnway({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
@@ -401,7 +402,7 @@ export default {
 			})
 		},
 		getHistoryList() {
-			Dispatchbill.findDispatchHistoryList({
+			DispatchOrder.listOfHistory({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
