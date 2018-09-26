@@ -43,13 +43,13 @@
                             </template>
                         </el-table-column>
                     </el-table-column>
-					<el-table-column label="线路定价" prop="linePrice" align="center"></el-table-column>
+					<el-table-column label="线路定价" prop="customerAddressNum" align="center"></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item :command="{type: 'edit', id: scope.row.customerID}">编辑</el-dropdown-item>
+                                    <el-dropdown-item :command="{type: 'edit', data: scope.row}">编辑</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'linePrice', data: scope.row}">线路定价</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
@@ -59,7 +59,7 @@
 				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
-        <edit-customer-price :isVisible="isEditVisible" :callback="callbackEdit"/>
+        <edit-customer-price :isVisible="isEditVisible" :callback="callbackEdit" :customerID="currentCustomerID"/>
         <line-price :isVisible="isLinePriceVisible" :callback="callbackLinePrice"/>
 	</div>
 </template>
@@ -78,7 +78,8 @@ export default {
 				keyword: ''
             },
             isEditVisible: false,
-            isLinePriceVisible: false
+			isLinePriceVisible: false,
+			currentCustomerID: ''
 		}
 	},
 	created() {
@@ -100,26 +101,18 @@ export default {
 				this.tableData = res.records
 				this.total = res.total
 			})
-            // this.tableData = [
-            //     {
-            //         entruster: '神州贸易有限公司',
-            //         recWeightPrice: '0.5',
-            //         recVolumnPrice: '1.5',
-            //         payWeightPrice: '0.45',
-            //         payVolumnPrice: '1.35',
-            //         linePrice: '5'
-            //     }
-            // ]
 		},
 		handleCommand(e) {
 			if (e.type == 'edit') {
+				this.currentCustomerID = e.data.customerID
 				this.isEditVisible = true
 			} else if (e.type == 'linePrice') {
 				this.isLinePriceVisible = true
 			}
         },
-        callbackEdit(data) {
-            this.isEditVisible = false
+        callbackEdit(bool) {
+			this.isEditVisible = false
+			bool && this.getList()
         },
         callbackLinePrice(data) {
             this.isLinePriceVisible = false

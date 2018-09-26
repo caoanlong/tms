@@ -43,7 +43,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in selectedList" :key="index">
+                        <tr v-for="(item, index) in tableData" :key="index">
                             <td>
                                 <p><span class="from">发</span>{{item.shipperCompanyName}}</p>
                                 <p><span class="to">收</span>{{item.consigneeCompanyName}}</p>
@@ -78,6 +78,7 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../../../common/mixin'
 import AddLine from '../AddLine'
+import Company from '../../../../../api/Company'
 export default {
     mixins: [baseMixin],
     components: { AddLine },
@@ -90,20 +91,7 @@ export default {
     },
     watch: {
         isVisible(bool) {
-            this.selectedList = [
-                {
-                    shipperCompanyName: '云南安化物流有限公司',
-                    consigneeCompanyName: '云南安化物流有限公司',
-                    shipperArea: '一号工厂地址',
-                    consigneeArea: '云南省昆明市官渡区浩宏物流信息中心',
-                    recDistance: '1023',
-                    recWeightPrice: '0.5',
-                    recVolumnPrice: '1.5',
-                    payDistance: '1023',
-                    payWeightPrice: '0.45',
-                    payVolumnPrice: '1.35'
-                }
-            ]
+            bool && this.getList()
         }
     },
     data() {
@@ -116,6 +104,16 @@ export default {
         }
     },
     methods: {
+        getList() {
+            Company.customerRoutePrice().find({
+                pageIndex: this.pageIndex,
+				pageSize: this.pageSize,
+				keyword: this.find.keyword
+            }).then(res => {
+                this.tableData = res.list
+                this.total = res.total
+            })
+        },
         callbackAddLine(data) {
             this.isAddLineVisible = false
         },
