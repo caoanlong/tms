@@ -260,7 +260,7 @@
                                 :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 > curDate }">
                             </el-date-picker>
                             <el-time-select
-                                v-model="value1"
+                                v-model="normal.endTime"
                                 :picker-options="{
                                     start:'00:00',
                                     step: '01:00',
