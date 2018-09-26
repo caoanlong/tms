@@ -46,7 +46,7 @@ class DispatchOrder extends Base {
      * 添加(派单)
      */
     addForDispatch(data) {
-        return this.request({
+        return requestByJson({
 			url: this.baseUrl + '/addForDispatch',
 			method: 'post',
 			data
@@ -56,7 +56,7 @@ class DispatchOrder extends Base {
      * 添加(抢单/报价)
      */
     addForOffer(data) {
-        return this.request({
+        return requestByJson({
 			url: this.baseUrl + '/addForOffer',
 			method: 'post',
 			data
