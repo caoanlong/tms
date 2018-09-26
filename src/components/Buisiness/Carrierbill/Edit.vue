@@ -10,7 +10,6 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="运输方式" prop="transportType">
-
 							<el-select 
 								v-model="carrierbillInfo.transportType" 
 								placeholder="请选择" 
@@ -39,16 +38,14 @@
 				<el-row>
 					<el-col :span="8">
 
-						<el-form-item label="委托方" prop="delegateID">
+						<el-form-item label="委托方" prop="consignorID">
 							<el-autocomplete
 								value-key="companyName" style="width:100%"
-
-								v-model="carrierbillInfo.delegateCompanyName"
-								:fetch-suggestions="getDelegateCompany"
+								v-model="carrierbillInfo.consignorName"
+								:fetch-suggestions="getConsignorCompany"
 								placeholder="请输入..." 
-
-								@select="handSelectDelegateCompany">
-								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectDelegate"></i>
+								@select="handSelectConsignorCompany">
+								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectConsignor"></i>
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
@@ -115,7 +112,7 @@
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
-
+											@change = "handleSelectShipperTime"
 											placeholder="选择发货时间">
 										</el-time-select>
 									</el-form-item>
@@ -184,8 +181,8 @@
 												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.shipperTime
 											}"
 											value-format="timestamp"
-											style="width:100%"
-
+											style = "width:100%"
+											@change = "handleSelectConsigneeTime"
 											placeholder="选择到货时间">
 										</el-time-select>
 									</el-form-item>
@@ -383,7 +380,7 @@ import CustomerAddress from '../../../api/CustomerAddress'
 import CrossProxy from '../../../api/CrossProxy'
 import CargoUnit from '../../../api/CargoUnit'
 import CargoGeneralName from '../../../api/CargoGeneralName'
-import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../../common/utils'
+import { searchAreaByKey, areaIdToArrayId, searchLocationByCity,timeToTimestamp,timestampToTime } from '../../../common/utils'
 import { checkTel } from '../../../common/validators'
 import distData from '../../../assets/data/distpicker.data'
 import Geohash from '../../../common/Geohash'
@@ -392,6 +389,7 @@ import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
+		
 		const checkShipperDateTime = (rule, value, callback) => {
 			if (this.carrierbillInfo.consigneeDate&& (value > this.carrierbillInfo.consigneeDate)) {
 				callback(new Error('发货时间不能等于或晚于到货时间'))
@@ -432,6 +430,7 @@ export default {
 				shipperName: '',                /** String 发货人名字*/
 				shipperDetailAddress: '',       /** String 发货人详细地址*/
 				shipperDate: '',                /** Date 发货人时间*/
+				shipperTime:'',
 				consigneeID: '',                /** Long 收货单位ID*/
 				consigneeCompanyName: '',       /** String 收货单位名称*/
 				consigneeAddressID: '',         /** Long 收货人地址ID*/
@@ -443,6 +442,7 @@ export default {
 				consigneeLocationAddress: '',   /** String 收货人定位地址*/
 				consigneeDetailAddress: '',     /** String 收货人详细地址*/
 				consigneeDate: '',              /** Date 收货时间*/
+				consigneeTime:'',
 				carrierCargo: [{
 					// customizedNo: '',
 					cargoNameID: '',
@@ -522,9 +522,12 @@ export default {
 				}
 				this.carrierbillInfo.flagShipperCompanyName = res.shipperCompanyName
 				this.carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
+				this.carrierbillInfo.shipperTime = timestampToTime(this.carrierbillInfo.shipperDate)
+				this.carrierbillInfo.consigneeTime = timestampToTime(this.carrierbillInfo.consigneeDate)
 			})
 			
 		},
+
 		handSelectDate(){
 			this.$refs['ruleForm'].validateField('shipperDate')
 			this.$refs['ruleForm'].validateField('consigneeDate')
@@ -561,9 +564,9 @@ export default {
 				cb(result)
 			})
 		},
-		getDelegateCompany(queryString, cb) {
-			if (queryString != this.carrierbillInfo.flagDelegateCompanyName) {
-				this.carrierbillInfo.DelegateID = ''
+		getConsignorCompany(queryString, cb) {
+			if (queryString != this.carrierbillInfo.flagConsignorName) {
+				this.carrierbillInfo.ConsignorID = ''
 			}
 			Company.customer().suggest({
 				customerType: 'Delegate',
@@ -573,7 +576,7 @@ export default {
 			})
 		},
 		getShipperCompany(queryString, cb) {
-			if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
+			if (queryString != this.carrierbillInfo.flagConsignorName) {
 				this.carrierbillInfo.shipperID = ''
 			}
 
@@ -622,13 +625,13 @@ export default {
 		inputSelectCargo(i) {
 			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
 		},
-		handSelectDelegateCompany(data) {
+		handSelectConsignorCompany(data) {
 			this.selectedDelegate = data
-			this.carrierbillInfo.DelegateCompanyName = ' '
-			this.carrierbillInfo.DelegateID = data.customerID
+			this.carrierbillInfo.consignorName = ' '
+			this.carrierbillInfo.consignorID = data.customerID
 			this.$nextTick(() => {
-				this.carrierbillInfo.DelegateCompanyName = data.companyName
-				this.carrierbillInfo.flagDelegateCompanyName = data.companyName
+				this.carrierbillInfo.consignorName = data.companyName
+				this.carrierbillInfo.flagConsignorName = data.companyName
 			})
 		},
 		handSelectShipperCompany(data) {
@@ -676,6 +679,13 @@ export default {
 			this.carrierbillInfo.consigneeLocationLng = data.locationLng
 			this.carrierbillInfo.consigneeLocationLat = data.locationLat
 			this.$refs['ruleForm'].validateField('consigneeName')
+		},
+		handleSelectShipperTime(value){
+			console.log(value)
+			
+		},
+		handleSelectConsigneeTime(value){
+			console.log(value)
 		},
 		save() {
 			new Promise((resolve, reject) => {
@@ -733,12 +743,9 @@ export default {
 		removeItem(index) {
 			this.carrierbillInfo.carrierCargo.splice(index, 1)
 		},
-		clearSelectDelegate(){
-			this.carrierbillInfo.delegateCompanyName = ' '
-			this.carrierbillInfo.delegateID =''
-		},
-		handSelectTime(){
-
+		clearSelectConsignor(){
+			this.carrierbillInfo.consignorName = ' '
+			this.carrierbillInfo.consignorID =''
 		},
 		/**
 		 * 添加企业地址

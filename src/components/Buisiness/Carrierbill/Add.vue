@@ -111,7 +111,6 @@
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
-
 											placeholder="选择发货时间">
 										</el-time-select>
 									</el-form-item>
