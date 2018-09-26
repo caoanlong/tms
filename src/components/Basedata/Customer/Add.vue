@@ -90,6 +90,8 @@ export default {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
+				
+				this.recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
 				Company.customer().add(this.recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})

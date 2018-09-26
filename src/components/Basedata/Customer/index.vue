@@ -34,9 +34,7 @@
 					<el-table-column label="地区" prop="companyArea" align="center"></el-table-column>
 					<el-table-column label="类型" prop="customerType" width="120" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.customerType == 'Shipper'">发货单位</span>
-							<span v-else-if="scope.row.customerType == 'Consignee'">收货单位</span>
-							<span v-else-if="scope.row.customerType == 'ShipperConsignee'">收发货单位</span>
+							{{scope.row.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , ')}}
 						</template>
 					</el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100" align="center"></el-table-column>
