@@ -98,7 +98,7 @@
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
-import Dispatchbill from '../../../api/Dispatchbill'
+import DispatchOrder from '../../../api/DispatchOrder'
 export default {
     mixins: [baseMixin],
     props: {
@@ -153,7 +153,7 @@ export default {
 		},
         getList() {
             this.tableData = []
-			Dispatchbill.findTrucks({
+			DispatchOrder.trucks({
 				current: this.pageIndex,
 				size: this.pageSize,
                 keyword: this.find.keyword,

@@ -92,7 +92,7 @@
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
-import Dispatchbill from '../../../api/Dispatchbill'
+import DispatchOrder from '../../../api/DispatchOrder'
 export default {
     mixins: [baseMixin],
     props: {
@@ -175,7 +175,7 @@ export default {
         },
         getDriverList() {
             this.tableData = []
-			Dispatchbill.findDrivers({
+			DispatchOrder.drivers({
 				current: this.pageIndex,
 				size: this.pageSize,
                 keyword: this.find.keyword,
@@ -189,11 +189,11 @@ export default {
                         appStatus: item.appStatus,
                         supercargoID: item.supercargoID,
                         mobile: item.mobile,
-                        headPic:item.headPic,
-                        isPrimary:item.isPrimary,
-                        isSecondary:item.isSecondary,
-                        realName:item.realName,
-                        supercargoType:item.supercargoType,
+                        headPic: item.headPic,
+                        isPrimary: item.isPrimary,
+                        isSecondary: item.isSecondary,
+                        realName: item.realName,
+                        supercargoType: item.supercargoType,
                         workStatus: item.workStatus,
                         expiredCertificate: item.expiredCertificate
                     }
@@ -204,7 +204,7 @@ export default {
         },
         getSuperCagoList() {
             this.tableData = []
-			Dispatchbill.findStaffs({
+			DispatchOrder.staffs({
 				current: this.pageIndex,
 				size: this.pageSize,
                 keyword: this.find.keyword,

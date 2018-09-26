@@ -274,7 +274,7 @@
 import { Message } from 'element-ui'
 import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
-import Dispatchbill from '../../../api/Dispatchbill'
+import DispatchOrder from '../../../api/DispatchOrder'
 import { arrayUnique } from '../../../common/utils'
 export default {
     components: { SelectTruck, SelectPerson },
@@ -475,7 +475,7 @@ export default {
                         amount: item.amount
                     }
                 })
-                Dispatchbill.add({
+                DispatchOrder.add({
                     truckID: this.selectedTruck.truckID,
                     driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
                     superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',

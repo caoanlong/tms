@@ -33,6 +33,9 @@
                                 :fetch-suggestions="getLocation"
                                 placeholder="请输入..."
                                 @select="handSelectLocation">
+								<template slot="append">
+									<div style="cursor:pointer" @click="handLocation">手动定位</div>
+								</template>
                             </el-autocomplete>
                         </el-form-item>
 						<el-form-item label="门牌信息" prop="detailAddress">
@@ -46,6 +49,12 @@
 				</el-col>
 			</el-row>
 		</el-card>
+		<select-location 
+			v-if="isLocationVisible" 
+			:location="[companyAddress.locationLng, companyAddress.locationLat]" 
+			:locAddress="companyAddress.locationAddress" 
+			:callback="callbackLocation">
+		</select-location>
 	</div>
 </template>
 <script type="text/javascript">
@@ -54,15 +63,15 @@ import Customer from '../../../api/Customer'
 import CustomerAddress from '../../../api/CustomerAddress'
 import distData from '../../../assets/data/distpicker.data'
 import { searchLocationByCity, areaIdToArrayId } from '../../../common/utils'
-import Geohash from '../../../common/Geohash'
-import CrossProxy from '../../../api/CrossProxy'
 import { checkTel } from '../../../common/validator'
 import DistPicker from '../../CommonComponents/DistPicker'
+import SelectLocation from './components/SelectLocation'
 export default {
 	data() {
 		return {
+			isLocationVisible: false,
             selectedArea: [],
-            searchAreaHash: '',
+            selectedCity: '',
 			companyAddress: {
 				customerID: '',
 				areaID: '',
@@ -84,7 +93,7 @@ export default {
 			}
 		}
 	},
-	components: { DistPicker },
+	components: { DistPicker, SelectLocation },
 	created() {
 		this.getInfo()
 	},
@@ -94,7 +103,22 @@ export default {
 			Customer.suggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
-        },
+		},
+		getLocation(queryString, cb) {
+			if (!this.selectedCity) {
+				Message.error('请选择城市！')
+				return
+			}
+			AMap.plugin('AMap.Autocomplete', () => {
+				const autoComplete= new AMap.Autocomplete({ city: this.selectedCity })
+				autoComplete.search(queryString ? queryString : this.selectedCity, (status, result) => {
+					if (status === 'complete' && result.info === 'OK') {
+						const list = result.tips.filter(item => item.location && item.name)
+						cb(list)
+                    }
+				})
+			})
+		},
         handSelect(data) {
 			this.companyAddress.customerID = data.customerID
 			this.companyAddress.companyName = data.companyName
@@ -106,51 +130,28 @@ export default {
 			this.companyAddress.customerID = ''
 			this.companyAddress.companyName =''
 		},
-		handleSelectedArea(data) {
+		handSelectedArea(data) {
 			if (data) {
 				this.companyAddress.areaID = data[data.length - 1]
 				this.selectedArea = data
-				let location = null
-				if (data[2]) {
-					location = searchLocationByCity(distData[data[1]][data[2]])
-				}
-				if (data[1] && !data[2] || !location) {
-					location = searchLocationByCity(distData[data[0]][data[1]])
-				}
-				this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
+				data[1] && (this.selectedCity = distData[data[0]][data[1]])
 			} else {
 				this.companyAddress.areaID = ''
 				this.selectedArea = []
-				this.searchAreaHash = ''
+				this.selectedCity = ''
 			}
         },
         handSelectLocation(data) {
-			this.companyAddress.locationLng = data.longitude
-			this.companyAddress.locationLat = data.latitude
-		},
-        getLocation(queryString, cb) {
-			if (!this.searchAreaHash) {
-				Message.error('请选择城市！')
-				return
-			}
-			CrossProxy.getEleLocation({
-				geohash: this.searchAreaHash,
-				keyword: queryString
-			}).then(res => { cb(res) })
+			this.companyAddress.locationLng = data.location.lng
+			this.companyAddress.locationLat = data.location.lat
+			this.companyAddress.locationAddress = data.name
 		},
 		getInfo() {
 			const customerAddressID = this.$route.query.customerAddressID
 			CustomerAddress.findById({ customerAddressID }).then(res => {
 				this.companyAddress = res
 				this.selectedArea = areaIdToArrayId(res.areaID)
-				let location = null
-				if (this.selectedArea[2]) {
-					location = searchLocationByCity(distData[this.selectedArea[1]][this.selectedArea[2]])
-				}
-				if (this.selectedArea[1] && !this.selectedArea[2] || !location) {
-					location = searchLocationByCity(distData[this.selectedArea[0]][this.selectedArea[1]])
-				}
-				this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
+				this.selectedArea[1] && (this.selectedCity = distData[this.selectedArea[0]][this.selectedArea[1]])
 			})
 		},
 		save() {

@@ -62,6 +62,7 @@ export default {
             }
             this.map.on('click', (e) => {
                 this.lnglat = [e.lnglat.lng, e.lnglat.lat]
+                console.log(this.lnglat)
                 this.map.clearMap()
                 this.map.add(this.createMarker(this.lnglat))
                 this.getAddressByLocation(this.lnglat)

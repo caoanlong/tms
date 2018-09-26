@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Dispatchbill from '../../../api/Dispatchbill'
+import DispatchOrder from '../../../api/DispatchOrder'
 export default {
     props: {
         dispatchOrderID: String
@@ -62,7 +62,7 @@ export default {
          * 获取跟踪线路
          */
         getTrack(type) {
-            Dispatchbill.track({
+            DispatchOrder.trackList({
                 dispatchOrderID: this.dispatchOrderID,
                 type
             }).then(res => {

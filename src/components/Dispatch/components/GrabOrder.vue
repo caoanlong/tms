@@ -88,7 +88,7 @@
 <script>
 import { Message } from 'element-ui'
 import { checkFloat2,checkInt } from '../../../common/valid'
-import Dispatchbill from '../../../api/Dispatchbill'
+import DispatchOrder from '../../../api/DispatchOrder'
 import { arrayUnique } from '../../../common/utils'
 export default {
     props: {
@@ -164,7 +164,7 @@ export default {
                     return { carrierOrderID: item.carrierOrderID }
                 })
                 const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
-                Dispatchbill.add({
+                DispatchOrder.add({
                     dispatchTaskCargoList,
                     dispatchTaskList,
                     bizDispatchNodeList: this.transLines,
