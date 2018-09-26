@@ -380,13 +380,8 @@ import Carrierbill from '../../../api/Carrierbill'
 import Company from '../../../api/Company'
 import Customer from '../../../api/Customer'
 import CustomerAddress from '../../../api/CustomerAddress'
-import CrossProxy from '../../../api/CrossProxy'
 import CargoUnit from '../../../api/CargoUnit'
 import CargoGeneralName from '../../../api/CargoGeneralName'
-import { searchAreaByKey, areaIdToArrayId, searchLocationByCity } from '../../../common/utils'
-import { checkTel } from '../../../common/validators'
-import distData from '../../../assets/data/distpicker.data'
-import Geohash from '../../../common/Geohash'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
@@ -700,14 +695,14 @@ export default {
 					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
-					if(carrierbill.shipperTime){
+					if (carrierbill.shipperTime) {
 						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
-					}else{
-						carrierbill.shipperDate = carrierbill.shipperDate + 3600000*24 
+					} else {
+						carrierbill.shipperDate = carrierbill.shipperDate + 3600000*24-1000
 					}
-					if(carrierbill.consigneeTime){
+					if (carrierbill.consigneeTime) {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
-					}else{
+					} else {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
 					}
 					Carrierbill.update(carrierbill).then(res => {

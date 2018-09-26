@@ -115,10 +115,12 @@
                     <p class="feeTit">基础运费
                         <span style="font-size:12px;color:#ccc;font-weight:400">（如已配置发货方的给司机的运价，系统会默认算金额）</span>
                     </p>
-                    <div class="transFeeTips">
-                        <svg-icon icon-class="info" class="infoIcon"></svg-icon>
-                        <p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
-                    </div>
+                    <el-tooltip content="点击关闭 tooltip 功能" placement="top" effect="light">
+                        <div class="transFeeTips">
+                            <svg-icon icon-class="info" class="infoIcon"></svg-icon>
+                            <p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
+                        </div>
+                    </el-tooltip>
                     <el-form 
                         ref="baseDizDispatchFeeRuleForm" 
                         :model="baseDizDispatchFee" 
@@ -359,6 +361,7 @@ export default {
     },
     methods: {
         handSelectTruck(data) {
+            console.log(data)
             this.truckDialog = false
             this.selectedTruck = data ? data : {}
             this.createPersons()
@@ -370,7 +373,6 @@ export default {
                 this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
                 this.baseDizDispatchFee.superCargoID = this.selectedTruck.primaryDriver.supercargoID
                 this.baseDizDispatchFee.superCargoName = this.selectedTruck.primaryDriver.realName
-                console.log(this.baseDizDispatchFee)
             }
         },
         handSelectPerson(type, data) {
@@ -381,7 +383,6 @@ export default {
                 this.selectedTruck.primaryDriver = data
                 this.baseDizDispatchFee.superCargoID = data.supercargoID
                 this.baseDizDispatchFee.superCargoName = data.realName
-                console.log(this.baseDizDispatchFee)
             } else {
                 this.selectedTruck.superCargo = data
             }

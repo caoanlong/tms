@@ -12,22 +12,22 @@
                         <div class="section-block" style="min-height:120px">
                             <span class="block-title">发货信息</span>
                             <el-row class="block-content">
-                                <el-form-item label="发货单位" prop="shipperID">
+                                <el-form-item label="发货单位" prop="shipperCustomerID">
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
-										v-model="line.shipperCompanyName"
+										v-model="line.shipperName"
 										:fetch-suggestions="getShipperCompany"
 										placeholder="请输入..." 
 										@select="handSelectShipperCompany">
 										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectShipper"></i>
 									</el-autocomplete>
 								</el-form-item>
-                                <el-form-item label="发货地址" prop="shipperName">
-									<input v-model="line.shipperName" hidden="true"/>
+                                <el-form-item label="发货地址" prop="shipperCustomerAddressID">
+									<input v-model="line.shipperCustomerAddressID" hidden="true"/>
 									<dropdown-select 
 										addressType="发货单位"
 										:isChangeCompany="isChangeShipper" 
-										@select="handSelectshipperAddress" 
+										@select="handSelectShipperAddress" 
 										:fetch-suggestions="getShipperAddress">
 									</dropdown-select>
 								</el-form-item>
@@ -38,18 +38,18 @@
                         <div class="section-block" style="min-height:120px">
                             <span class="block-title">发货信息</span>
                             <el-row class="block-content">
-                                <el-form-item label="收货单位" prop="consigneeID">
+                                <el-form-item label="收货单位" prop="consigneeCustomerID">
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
-										v-model="line.consigneeCompanyName"
+										v-model="line.consigneeName"
 										:fetch-suggestions="getConsigneeCompany"
 										placeholder="请输入内容"
 										@select="handSelectConsigneeCompany">
 										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectConsignee"></i>
 									</el-autocomplete>
 								</el-form-item>
-                                <el-form-item label="收货地址" prop="consigneeName">
-									<input v-model="line.consigneeName" hidden="true"/>
+                                <el-form-item label="收货地址" prop="consigneeCustomerAddressID">
+									<input v-model="line.consigneeCustomerAddressID" hidden="true"/>
 									<dropdown-select 
 										addressType="收货单位"
 										:isChangeCompany="isChangeConsignee" 
@@ -66,18 +66,18 @@
                         <div class="section-block" style="min-height:120px">
                             <span class="block-title">对客户应收运价</span>
                             <el-row class="block-content">
-                                <el-form-item label="运输距离" prop="recDistance">
-                                    <el-input v-model="line.recDistance" placeholder="请输入...">
+                                <el-form-item label="运输距离" prop="receivableDistance">
+                                    <el-input v-model="line.receivableDistance" placeholder="请输入...">
                                         <template slot="append">元</template>
                                     </el-input>
                                 </el-form-item>
-                                <el-form-item label="吨公里" prop="recWeightPrice">
-                                    <el-input v-model="line.recWeightPrice" placeholder="请输入...">
+                                <el-form-item label="吨公里" prop="receivableWeightUnitPrice">
+                                    <el-input v-model="line.receivableWeightUnitPrice" placeholder="请输入...">
                                         <template slot="append">元</template>
                                     </el-input>
                                 </el-form-item>
-                                <el-form-item label="方公里" prop="recVolumnPrice">
-                                    <el-input v-model="line.recVolumnPrice" placeholder="请输入...">
+                                <el-form-item label="方公里" prop="receivableVolumnUnitPrice">
+                                    <el-input v-model="line.receivableVolumnUnitPrice" placeholder="请输入...">
                                         <template slot="append">元</template>
                                     </el-input>
                                 </el-form-item>
@@ -88,18 +88,18 @@
                         <div class="section-block" style="min-height:120px">
                             <span class="block-title">对司机支付运价</span>
                             <el-row class="block-content">
-                                <el-form-item label="运输距离" prop="payDistance">
-                                    <el-input v-model="line.payDistance" placeholder="请输入...">
+                                <el-form-item label="运输距离" prop="payableDistance">
+                                    <el-input v-model="line.payableDistance" placeholder="请输入...">
                                         <template slot="append">元</template>
                                     </el-input>
                                 </el-form-item>
-                                <el-form-item label="吨公里" prop="payWeightPrice">
-                                    <el-input v-model="line.payWeightPrice" placeholder="请输入...">
+                                <el-form-item label="吨公里" prop="payableWeightUnitPrice">
+                                    <el-input v-model="line.payableWeightUnitPrice" placeholder="请输入...">
                                         <template slot="append">元</template>
                                     </el-input>
                                 </el-form-item>
-                                <el-form-item label="方公里" prop="payVolumnPrice">
-                                    <el-input v-model="line.payVolumnPrice" placeholder="请输入...">
+                                <el-form-item label="方公里" prop="payableVolumnUnitPrice">
+                                    <el-input v-model="line.payableVolumnUnitPrice" placeholder="请输入...">
                                         <template slot="append">元</template>
                                     </el-input>
                                 </el-form-item>
@@ -119,6 +119,7 @@
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../../../common/mixin'
+import Company from '../../../../../api/Company'
 import Customer from '../../../../../api/Customer'
 import DropdownSelect from '../../../../CommonComponents/DropdownSelect'
 import { checkFloat2 } from '../../../../../common/valid'
@@ -130,140 +131,151 @@ export default {
             type: Boolean,
             default: false
         },
-        callback: Function
-    },
-    watch: {
-        isVisible(bool) {
-            
-        }
+		callback: Function,
+		customerID: String
     },
     data() {
         return {
-            line: {
-				entruster: '神州贸易有限公司',
-                recDistance: '',
-                recWeightPrice: '',
-                recVolumnPrice: '',
-                payDistance: '',
-                payWeightPrice: '',
-                payVolumnPrice: ''
-            },
-            isChangeShipper: false,
+			isChangeShipper: false,
 			isChangeConsignee: false,
-            flagShipperCompanyName: '',
-            flagConsigneeCompanyName: '',
+			flagShipperName: '',
+			flagConsigneeName: '',
+            line: {
+				routePriceID: '',   /**线路价格ID*/
+				customerID: '',   /**委托客户ID*/
+				shipperCustomerID: '',   /**发货客户ID*/
+				shipperName: '',   /**发货客户*/
+				shipperCustomerAddressID: '',   /**发货客户地址ID*/
+				shipperAddress: '',   /**发货客户地址*/
+				consigneeCustomerID: '',   /**收货客户ID*/
+				consigneeName: '',   /**收货客户*/
+				consigneeCustomerAddressID: '',   /**收货客户地址ID*/
+				consigneeAddress: '',   /**收货客户地址*/
+				receivableDistance: '',   /**应收运输距离（单位：米）*/
+				payableDistance: '',   /**应付运输距离（单位：米）*/
+				receivableWeightUnitPrice: '',   /**应收吨单价（单位：元）*/
+				receivableVolumnUnitPrice: '',   /**应收方单价（单位：元）*/
+				payableWeightUnitPrice: '',   /**应付吨单价（单位：元）*/
+				payableVolumnUnitPrice: ''   /**应付方单价（单位：元）*/
+            },
 			rules: {
-                shipperID: [ {required: true, message: '请选择发货单位'} ],
-                shipperName: [ { required: true, message: '请选择发货地址', trigger: 'change'} ],
-                consigneeID: [ {required: true, message: '请选择收货单位'} ],
-                consigneeName: [ { required: true, message: '请选择收货地址', trigger: 'change'} ],
-				recDistance: [{required: true, message: '请输入对客户应收运价/运输距离'}, {validator: checkFloat2}],
-				recWeightPrice: [{required: true, message: '请输入对客户应收运价/吨公里'}, {validator: checkFloat2}],
-                recVolumnPrice: [{required: true, message: '请输入对客户应收运价/方公里'}, {validator: checkFloat2}],
-				payDistance: [{required: true, message: '请输入对司机支付运价/运输距离'}, {validator: checkFloat2}],
-				payWeightPrice: [{required: true, message: '请输入对司机支付运价/吨公里'}, {validator: checkFloat2}],
-				payVolumnPrice: [{required: true, message: '请输入对司机支付运价/方公里'}, {validator: checkFloat2}]
+                shipperCustomerID: [ 
+					{required: true, message: '请选择发货单位'}
+				],
+                shipperCustomerAddressID: [ 
+					{ required: true, message: '请选择发货地址', trigger: 'change'}
+				],
+                consigneeCustomerID: [ 
+					{required: true, message: '请选择收货单位'}
+				],
+                consigneeCustomerAddressID: [ 
+					{ required: true, message: '请选择收货地址', trigger: 'change'}
+				],
+				receivableDistance: [
+					{required: true, message: '请输入对客户应收运价/运输距离'}, 
+					{validator: checkFloat2}
+				],
+				receivableWeightUnitPrice: [
+					{required: true, message: '请输入对客户应收运价/吨公里'}, 
+					{validator: checkFloat2}
+				],
+                receivableVolumnUnitPrice: [
+					{required: true, message: '请输入对客户应收运价/方公里'}, 
+					{validator: checkFloat2}
+				],
+				payableDistance: [
+					{required: true, message: '请输入对司机支付运价/运输距离'}, 
+					{validator: checkFloat2}
+				],
+				payableWeightUnitPrice: [
+					{required: true, message: '请输入对司机支付运价/吨公里'}, 
+					{validator: checkFloat2}
+				],
+				payableVolumnUnitPrice: [
+					{required: true, message: '请输入对司机支付运价/方公里'}, 
+					{validator: checkFloat2}
+				]
 			}
         }
     },
     methods: {
         getShipperCompany(queryString, cb) {
-			if (queryString != this.flagShipperCompanyName) {
-				this.line.shipperID = ''
+			if (queryString != this.flagShipperName) {
+				this.line.shipperCustomerID = ''
 			}
-			Customer.find({
+			Company.customer().suggest({
 				customerType: 'Shipper',
 				keyword: queryString
-			}).then(res => {cb(res.records) })
+			}).then(res => { cb && cb(res) })
 		},
 		getConsigneeCompany(queryString, cb) {
-			if (queryString != this.flagConsigneeCompanyName) {
-				this.line.consigneeID = ''
+			if (queryString != this.flagConsigneeName) {
+				this.line.consigneeCustomerID = ''
 			}
-			Customer.find({
+			Company.customer().suggest({
 				customerType: 'Consignee',
 				keyword: queryString
-			}).then(res => { cb(res.records) })
+			}).then(res => { cb && cb(res) })
 		},
 		getShipperAddress(queryString, cb) {
 			Customer.addressSuggest({
-				customerID: this.line.shipperID,
+				customerID: this.line.shipperCustomerID,
 				keyword: queryString
-			}).then(res => {
-				cb && cb(res)
-			})
+			}).then(res => { cb && cb(res) })
 		},
 		getConsigneeAddress(queryString, cb){
 			Customer.addressSuggest({
-				customerID: this.line.consigneeID,
+				customerID: this.line.consigneeCustomerID,
 				keyword: queryString
-			}).then(res => {
-				cb && cb(res)
-			})
+			}).then(res => { cb && cb(res) })
         },
         handSelectShipperCompany(data) {
 			this.isChangeShipper = !this.isChangeShipper
-			this.selectedShipper = data
-			this.line.shipperCompanyName = ' '
-			this.line.shipperID = data.customerID
+			this.line.shipperName = ' '
+			this.line.shipperCustomerID = data.customerID
 			this.$nextTick(() => {
-				this.line.shipperCompanyName = data.companyName
-				this.flagShipperCompanyName = data.companyName
+				this.line.flagShipperName = this.line.shipperName = data.companyName
 				this.getShipperAddress('', false)
 			})
 		},
 		handSelectConsigneeCompany(data) {
 			this.isChangeConsignee = !this.isChangeConsignee
-			this.selectedConsignee = data
-			this.line.consigneeCompanyName = ' '
-			this.line.consigneeID = data.customerID
+			this.line.consigneeName = ' '
+			this.line.consigneeCustomerID = data.customerID
 			this.$nextTick(() => {
-				this.line.consigneeCompanyName = data.companyName
-				this.flagConsigneeCompanyName = data.companyName
+				this.line.flagConsigneeName = this.line.consigneeName = data.companyName
 				this.getConsigneeAddress('', false)
 			})
 		},
-		handSelectshipperAddress(data) {
-			this.line.shipperAreaID = data.areaID
-			this.line.shipperAddressID = data.customerAddressID
-			this.line.shipperName = data.contactName
-			this.line.shipperPhone = data.contactPhone
-			this.line.shipperArea = data.contactArea
-			this.line.shipperDetailAddress = data.detailAddress
-			this.line.shipperLocationAddress = data.locationAddress
-			this.line.shipperLocationLng = data.locationLng
-			this.line.shipperLocationLat = data.locationLat
-			this.$refs['ruleForm'].validateField('shipperName')
+		handSelectShipperAddress(data) {
+			this.line.shipperCustomerAddressID = data.customerAddressID
+			this.$refs['ruleForm'].validateField('shipperCustomerAddressID')
 		},
 		handSelectConsigneeAddress(data) {
-			this.line.consigneeAreaID = data.areaID
-			this.line.consigneeAddressID = data.customerAddressID
-			this.line.consigneeName = data.contactName
-			this.line.consigneePhone = data.contactPhone
-			this.line.consigneeArea = data.contactArea
-			this.line.consigneeDetailAddress = data.detailAddress
-			this.line.consigneeLocationAddress = data.locationAddress
-			this.line.consigneeLocationLng = data.locationLng
-			this.line.consigneeLocationLat = data.locationLat
-			this.$refs['ruleForm'].validateField('consigneeName')
+			this.line.consigneeCustomerAddressID = data.customerAddressID
+			this.$refs['ruleForm'].validateField('consigneeCustomerAddressID')
         },
         clearSelectShipper(){
-			this.line.shipperCompanyName = ' '
-			this.line.shipperID = ''
+			this.line.shipperName = ' '
+			this.line.shipperCustomerID = ''
 		},
 		clearSelectConsignee(){
-			this.line.consigneeCompanyName = ' '
-			this.line.consigneeID =''
+			this.line.consigneeName = ' '
+			this.line.consigneeCustomerID =''
 		},
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
-                if (!valid) return
-                this.callback('gg')
+				if (!valid) return
+				this.line.customerID = this.customerID
+				Company.customerRoutePrice().add(this.line).then(res => {
+					Message.success('保存成功！')
+					this.callback(true)
+				})
 			})
         },
         close() {
             this.$refs['ruleForm'].resetFields()
-            this.callback('gg')
+            this.callback()
         }
     }
 }

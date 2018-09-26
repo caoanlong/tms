@@ -8,11 +8,11 @@
             :close-on-click-modal="false">
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="收发货单位">
-						<el-input placeholder="名称" v-model="find.customer"></el-input>
+					<el-form-item label="客户名称">
+						<el-input placeholder="名称" v-model="find.name"></el-input>
 					</el-form-item>
-                    <el-form-item label="收发货地址">
-						<el-input placeholder="名称" v-model="find.customerAddress"></el-input>
+                    <el-form-item label="客户地址">
+						<el-input placeholder="地址" v-model="find.address"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -45,21 +45,21 @@
                     <tbody>
                         <tr v-for="(item, index) in tableData" :key="index">
                             <td>
-                                <p><span class="from">发</span>{{item.shipperCompanyName}}</p>
-                                <p><span class="to">收</span>{{item.consigneeCompanyName}}</p>
+                                <p><span class="from">发</span>{{item.shipperName}}</p>
+                                <p><span class="to">收</span>{{item.consigneeName}}</p>
                             </td>
                             <td>
-                                <p><span class="from">发</span>{{item.shipperArea}}</p>
-                                <p><span class="to">终</span>{{item.consigneeArea}}</p>
+                                <p><span class="from">发</span>{{item.shipperAddress}}</p>
+                                <p><span class="to">终</span>{{item.consigneeAddress}}</p>
                             </td>
-                            <td align="center">{{item.recDistance}}</td>
-                            <td align="center">{{item.recWeightPrice}}</td>
-                            <td align="center">{{item.recVolumnPrice}}</td>
-                            <td align="center">{{item.payDistance}}</td>
-                            <td align="center">{{item.payWeightPrice}}</td>
-                            <td align="center">{{item.payVolumnPrice}}</td>
+                            <td align="center">{{item.receivableDistance}}</td>
+                            <td align="center">{{item.receivableWeightUnitPrice}}</td>
+                            <td align="center">{{item.receivableVolumnUnitPrice}}</td>
+                            <td align="center">{{item.payableDistance}}</td>
+                            <td align="center">{{item.payableWeightUnitPrice}}</td>
+                            <td align="center">{{item.payableVolumnUnitPrice}}</td>
                             <td align="center">
-                                <el-button type="danger" size="mini" @click="del(scope.row.cargoUnitID)">删除</el-button>
+                                <el-button type="danger" size="mini" @click="del(item.routePriceID)">删除</el-button>
                             </td>
                         </tr>
                     </tbody>
@@ -70,13 +70,18 @@
                 <el-button @click="close">关闭</el-button>
             </div>
         </el-dialog>
-        <add-line :isVisible="isAddLineVisible" :callback="callbackAddLine"/>
+        <add-line 
+            :isVisible="isAddLineVisible" 
+            :callback="callbackAddLine" 
+            :customerID="customerID">
+        </add-line>
     </div>
 </template>
 
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../../../common/mixin'
+import { deleteConfirm } from '../../../../../common/utils'
 import AddLine from '../AddLine'
 import Company from '../../../../../api/Company'
 export default {
@@ -87,41 +92,66 @@ export default {
             type: Boolean,
             default: false
         },
-        callback: Function
+        callback: Function,
+        customerID: String
     },
     watch: {
         isVisible(bool) {
+            this.isChange = false
             bool && this.getList()
         }
     },
     data() {
         return {
             isAddLineVisible: false,
+            isChange: false,
             find: {
-                customer: '',
-                customerAddress: ''
-            }
+				name: '',   /**收发货单位（查询）*/
+				address: ''   /**收发货地址（查询）*/
+			}
         }
     },
     methods: {
+        reset() {
+			this.find.name = ''
+			this.find.address = ''
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
+			this.getList()
+		},
         getList() {
             Company.customerRoutePrice().find({
-                pageIndex: this.pageIndex,
-				pageSize: this.pageSize,
-				keyword: this.find.keyword
+                customerID: this.customerID,
+                current: this.pageIndex,
+				size: this.pageSize,
+				name: this.find.name,
+				address: this.find.address
             }).then(res => {
-                this.tableData = res.list
+                this.tableData = res.records
                 this.total = res.total
             })
         },
-        callbackAddLine(data) {
+        callbackAddLine(bool) {
             this.isAddLineVisible = false
+            if (bool) {
+                this.isChange = true
+				this.getList()
+            }
         },
         add() {
             this.isAddLineVisible = true
         },
+        del(routePriceID) {
+			deleteConfirm(routePriceID, routePriceID => {
+				Company.del({ routePriceID }).then(res => {
+                    Message.success('删除成功!')
+                    this.isChange = true
+					this.getList()
+				})
+			})
+		},
         close() {
-            this.callback('gg')
+            this.callback(this.isChange)
         }
     }
 }

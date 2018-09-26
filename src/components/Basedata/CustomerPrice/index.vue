@@ -43,7 +43,7 @@
                             </template>
                         </el-table-column>
                     </el-table-column>
-					<el-table-column label="线路定价" prop="customerAddressNum" align="center"></el-table-column>
+					<el-table-column label="线路定价" prop="routePriceNum" align="center"></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
@@ -59,8 +59,16 @@
 				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
-        <edit-customer-price :isVisible="isEditVisible" :callback="callbackEdit" :customerID="currentCustomerID"/>
-        <line-price :isVisible="isLinePriceVisible" :callback="callbackLinePrice"/>
+        <edit-customer-price 
+			:isVisible="isEditVisible" 
+			:callback="callbackEdit" 
+			:customerID="currentCustomerID">
+        </edit-customer-price>
+        <line-price 
+			:isVisible="isLinePriceVisible" 
+			:callback="callbackLinePrice" 
+			:customerID="currentCustomerID">
+        </line-price>
 	</div>
 </template>
 <script type="text/javascript">
@@ -94,8 +102,8 @@ export default {
 		},
 		getList() {
 			Company.customer().find({
-				pageIndex: this.pageIndex,
-				pageSize: this.pageSize,
+				current: this.pageIndex,
+				size: this.pageSize,
 				keyword: this.find.keyword
 			}).then(res => {
 				this.tableData = res.records
@@ -103,8 +111,8 @@ export default {
 			})
 		},
 		handleCommand(e) {
+			this.currentCustomerID = e.data.customerID
 			if (e.type == 'edit') {
-				this.currentCustomerID = e.data.customerID
 				this.isEditVisible = true
 			} else if (e.type == 'linePrice') {
 				this.isLinePriceVisible = true
@@ -114,8 +122,9 @@ export default {
 			this.isEditVisible = false
 			bool && this.getList()
         },
-        callbackLinePrice(data) {
-            this.isLinePriceVisible = false
+        callbackLinePrice(bool) {
+			this.isLinePriceVisible = false
+			bool && this.getList()
         }
 	}
 }

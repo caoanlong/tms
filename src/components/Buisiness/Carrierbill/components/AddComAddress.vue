@@ -33,6 +33,9 @@
                         :fetch-suggestions="getLocation"
                         placeholder="请输入..."
                         @select="handSelectLocation">
+                        <template slot="append">
+                            <div style="cursor:pointer" @click="handLocation">手动定位</div>
+                        </template>
                     </el-autocomplete>
                 </el-form-item>
                 <el-form-item label="门牌信息" prop="detailAddress">
@@ -44,6 +47,12 @@
                 <el-button type="primary" @click="add">确定</el-button>
             </div>
         </el-dialog>
+        <select-location 
+			v-if="isLocationVisible" 
+			:location="[companyAddress.locationLng, companyAddress.locationLat]" 
+			:locAddress="companyAddress.locationAddress" 
+			:callback="callbackLocation">
+		</select-location>
     </div>
 </template>
 
@@ -52,12 +61,11 @@ import { Message } from 'element-ui'
 import Customer from '../../../../api/Customer'
 import CustomerAddress from '../../../../api/CustomerAddress'
 import distData from '../../../../assets/data/distpicker.data'
-import { searchLocationByCity } from '../../../../common/utils'
-import Geohash from '../../../../common/Geohash'
-import CrossProxy from '../../../../api/CrossProxy'
 import { checkTel } from '../../../../common/validator'
 import DistPicker from '../../../CommonComponents/DistPicker'
+import SelectLocation from '../../../CommonComponents/SelectLocation'
 export default {
+    components: { DistPicker, SelectLocation },
     props: {
         isVisible: {
             type: Boolean,
@@ -68,7 +76,7 @@ export default {
     watch: {
         isVisible(bool) {
             this.selectedArea = []
-            this.searchAreaHash = ''
+            this.selectedCity = ''
             this.companyAddress.customerID = ''
             this.companyAddress.companyName = ''
             if (bool) {
@@ -79,8 +87,9 @@ export default {
     },
     data() {
         return {
+            isLocationVisible: false,
             selectedArea: [],
-            searchAreaHash: '',
+            selectedCity: '',
             companyAddress: {
 				customerID: '',
 				areaID: '',
@@ -102,53 +111,57 @@ export default {
 			}
         }
     },
-    components: { DistPicker },
-    // created() {
-    //     console.log(this.company)
-    // },
     methods: {
         getCompanys(queryString, cb) {
 			Customer.suggest({
 				companyName: queryString
-			}).then(res => {
-				cb(res)
-			})
+			}).then(res => { cd && cb(res) })
         },
+        getLocation(queryString, cb) {
+			if (!this.selectedCity) {
+				Message.error('请选择城市！')
+				return
+			}
+			AMap.plugin('AMap.Autocomplete', () => {
+				const autoComplete= new AMap.Autocomplete({ city: this.selectedCity })
+				autoComplete.search(queryString ? queryString : this.selectedCity, (status, result) => {
+					if (status === 'complete' && result.info === 'OK') {
+						const list = result.tips.filter(item => item.location && item.name)
+						cb(list)
+                    }
+				})
+			})
+		},
         handSelect(data){
 			this.companyAddress.customerID = data.customerID
 			this.companyAddress.companyName = data.companyName
 		},
 		handleSelectedArea(data) {
-			if (data) {
-                this.companyAddress.areaID = data[data.length - 1]
-                this.selectedArea = data
-				let location = null
-				if (data[2]) {
-					location = searchLocationByCity(distData[data[1]][data[2]])
-				}
-				if (data[1] && !data[2] || !location) {
-					location = searchLocationByCity(distData[data[0]][data[1]])
-				}
-				this.searchAreaHash = Geohash.encode(location.latitude, location.longitude)
+            if (data) {
+				this.companyAddress.areaID = data[data.length - 1]
+				this.selectedArea = data
+				data[1] && (this.selectedCity = distData[data[0]][data[1]])
 			} else {
-                this.companyAddress.areaID = ''
-                this.selectedArea = []
-				this.searchAreaHash = ''
+				this.companyAddress.areaID = ''
+				this.selectedArea = []
+				this.selectedCity = ''
 			}
         },
         handSelectLocation(data) {
-			this.companyAddress.locationLng = data.longitude
-			this.companyAddress.locationLat = data.latitude
-		},
-        getLocation(queryString, cb) {
-			if (!this.searchAreaHash) {
-				Message.error('请选择城市！')
-				return
+			this.companyAddress.locationLng = data.location.lng
+			this.companyAddress.locationLat = data.location.lat
+			this.companyAddress.locationAddress = data.name
+        },
+        handLocation() {
+			this.isLocationVisible = true
+        },
+        callbackLocation(data) {
+			if (data) {
+				this.companyAddress.locationLng = data.location[0]
+				this.companyAddress.locationLat = data.location[1]
+				this.companyAddress.locationAddress = data.address
 			}
-			CrossProxy.getEleLocation({
-				geohash: this.searchAreaHash,
-				keyword: queryString
-			}).then(res => { cb(res) })
+			this.isLocationVisible = false
 		},
 		add() {
 			this.$refs['ruleForm'].validate(valid => {

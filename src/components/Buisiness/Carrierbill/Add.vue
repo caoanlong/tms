@@ -10,7 +10,6 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="运输方式" prop="transportType">
-
 							<el-select 
 								v-model="carrierbillInfo.transportType" 
 								placeholder="请选择" 
@@ -38,15 +37,12 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						
 						<el-form-item label="委托方" prop="consignorID">
 							<el-autocomplete
 								value-key="companyName" style="width:100%"
-
 								v-model="carrierbillInfo.consignorName"
 								:fetch-suggestions="getConsignorCompany"
 								placeholder="请输入..." 
-
 								@select="handSelectConsignorCompany">
 								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectConsignor"></i>
 							</el-autocomplete>
@@ -111,7 +107,6 @@
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
-
 											placeholder="选择发货时间">
 										</el-time-select>
 									</el-form-item>
@@ -198,7 +193,6 @@
 							<el-form label-width="0" size="small" :model="carrierbillInfo" ref="cargoRuleForm">
 								<table class="cargoList">
 									<tr>
-										<!-- <th>客户单号</th> -->
 										<th><span>*</span>货名</th>
 										<th><span>*</span>配载方式</th>
 										<th>重量</th>
@@ -209,11 +203,6 @@
 									</tr>
 									<tbody>
 										<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
-											<!-- <td>
-												<el-form-item label-width="0">
-													<el-input placeholder="请输入..." v-model="item.customizedNo"></el-input>
-												</el-form-item>
-											</td> -->
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
 													<el-autocomplete 
@@ -375,14 +364,10 @@ import { mapGetters } from 'vuex'
 import Carrierbill from '../../../api/Carrierbill'
 import Company from '../../../api/Company'
 import Customer from '../../../api/Customer'
-import CrossProxy from '../../../api/CrossProxy'
 import CustomerAddress from '../../../api/CustomerAddress'
 import CargoUnit from '../../../api/CargoUnit'
 import CargoGeneralName from '../../../api/CargoGeneralName'
-import { searchAreaByKey, areaIdToArrayId, searchLocationByCity,timeToTimestamp } from '../../../common/utils'
-import { checkTel } from '../../../common/validators'
-import distData from '../../../assets/data/distpicker.data'
-import Geohash from '../../../common/Geohash'
+import { timeToTimestamp } from '../../../common/utils'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
@@ -445,7 +430,6 @@ export default {
 				consignorName:'',				/**委托人单位名称*/
 				consignorID:'',					/**委托人ID*/
 				carrierCargo: [{
-					// customizedNo: '',
 					cargoNameID: '',
 					cargoName: '',
 					dispatchType:'Weight',
@@ -584,13 +568,11 @@ export default {
 		inputSelectCargo(i) {
 			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
 		},
-
 		handSelectConsignorCompany(data) {
 			this.selectedConsignor = data
 			this.carrierbillInfo.consignorName = ' '
 			this.carrierbillInfo.consignorID = data.customerID
 			this.$nextTick(() => {
-
 				this.carrierbillInfo.consignorName = data.companyName
 				this.carrierbillInfo.flagconsignorName = data.companyName
 			})
@@ -649,14 +631,11 @@ export default {
 			this.carrierbillInfo.consigneeCompanyName = ' '
 			this.carrierbillInfo.consigneeID =''
 		},
-
 		clearSelectConsignor(){
 			this.carrierbillInfo.consignorName = ' '
 			this.carrierbillInfo.consignorID =''
 		},
-
 		save() {
-			
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
 					if (!valid) {
@@ -669,7 +648,6 @@ export default {
 				})
 			}).then(() => {
 				this.$refs['cargoRuleForm'].validate(valid => {
-
 					if (!valid) return
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
 					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
@@ -680,15 +658,14 @@ export default {
 					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
-					if(carrierbill.shipperTime){
+					if (carrierbill.shipperTime) {
 						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
-					}else{
+					} else {
 						carrierbill.shipperDate = carrierbill.shipperDate + 3600000*24-1000
-						console.log(carrierbill.shipperDate)
 					}
-					if(carrierbill.consigneeTime){
+					if (carrierbill.consigneeTime) {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
-					}else{
+					} else {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
 					}
 					Carrierbill.add(carrierbill).then(res => {
@@ -702,7 +679,6 @@ export default {
 			let cargo = this.carrierbillInfo.carrierCargo
 			const dispatchType =cargo[cargo.length-1] ?cargo[cargo.length-1].dispatchType : 'Weight'
 			this.carrierbillInfo.carrierCargo.push({
-				// customizedNo: '',
 				cargoNameID: '',
 				cargoName: '',
 				cargoNum: '',

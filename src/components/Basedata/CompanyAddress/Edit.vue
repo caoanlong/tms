@@ -62,10 +62,10 @@ import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
 import CustomerAddress from '../../../api/CustomerAddress'
 import distData from '../../../assets/data/distpicker.data'
-import { searchLocationByCity, areaIdToArrayId } from '../../../common/utils'
+import { areaIdToArrayId } from '../../../common/utils'
 import { checkTel } from '../../../common/validator'
 import DistPicker from '../../CommonComponents/DistPicker'
-import SelectLocation from './components/SelectLocation'
+import SelectLocation from '../../CommonComponents/SelectLocation'
 export default {
 	data() {
 		return {

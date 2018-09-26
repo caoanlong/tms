@@ -172,7 +172,6 @@ export default {
         close(bool) {
             if (bool) {
                 this.$emit('control', this.selected)
-                
             } else {
                 this.$emit('control')
             }
