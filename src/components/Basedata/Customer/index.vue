@@ -122,7 +122,7 @@ export default {
 		},
 		del(customerID) {
 			deleteConfirm(customerID, customerIDs => {
-				Company.customer().del({ customerIDs }).then(res => {
+				Company.customer().delBatch({ customerIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})
