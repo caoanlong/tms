@@ -669,7 +669,7 @@ export default {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
 					}
 					Carrierbill.add(carrierbill).then(res => {
-						Message.success(res.msg)
+						Message.success('成功！')
 						this.$router.push({name: 'carrierbill'})
 					})
 				})

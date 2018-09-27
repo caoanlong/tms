@@ -290,7 +290,7 @@ export default {
 				transportModeCode: this.WaybillInfo.transportModeCode,
 				networkAccessAddress: this.WaybillInfo.networkAccessAddress
 			}).then(res => {
-				Message.success(res.data.message)
+				Message.success('成功！')
 				this.$router.push({name: 'notruckcarryorder'})
 			})
 		},

@@ -134,7 +134,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 DriverInvitation.add({ supercargoIDs }).then(res => {
-                    Message.success(res.data.msg)
+                    Message.success('成功！')
                     this.$emit('callback', true)
                 })
             }).catch((err) => {

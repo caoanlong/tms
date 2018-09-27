@@ -66,7 +66,7 @@ export default {
                 roleIDs: this.selectedRoles.map(item => item.roleID).join(','),
                 memberID: this.memberID
             }).then(res => {
-                Message.success(res.data.msg)
+                Message.success('成功！')
                 this.$emit('selected-role', true)
             })
         },

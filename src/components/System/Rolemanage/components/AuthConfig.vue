@@ -55,7 +55,7 @@ export default {
                 roleID: this.setRoleID,
 				menuIDs: this.selectedMenuId.join(',')
             }).then(res => {
-                Message.success(res.data.msg)
+                Message.success('成功！')
                 this.$emit('selected-auth', true)
             })
         },

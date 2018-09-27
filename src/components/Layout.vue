@@ -432,7 +432,7 @@ export default {
 		},
 		getMemInfo(){
 			Member.detail().then(res =>{
-				this.memDetail = res.data.data
+				this.memDetail = res.data
 			})
 		},
 		saveMemInfo(){

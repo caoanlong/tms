@@ -41,7 +41,6 @@
 import { Message } from 'element-ui'
 import Truck from '../../../api/Truck'
 import Page from '../../CommonComponents/Page'
-import { EXPIREWARN } from '../../../common/const'
 export default {
     props: {
         dialogVisible: {
@@ -61,9 +60,6 @@ export default {
 			total: 0,
             superCargos: []
         }
-    },
-    computed: {
-        EXPIREWARN: () => EXPIREWARN
     },
     watch: {
         dialogVisible(newVal) {

@@ -94,10 +94,9 @@
 					data
 				}).then(res => {
 					if (res.data.code == 0) {
-						Message.success(res.data.msg)
+						Message.success('成功！')
 						this.isEdit = !this.isEdit
 						this.$store.dispatch('GetUserInfo')
-
 					} else {
 						Message.error(res.data.msg)
 					}

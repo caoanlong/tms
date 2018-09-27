@@ -169,7 +169,7 @@ export default {
 				notruckuserId:this.TruckInfo.notruckuserId,
 				destinationCountrySubdivisionCode: this.TruckInfo.destinationCountrySubdivisionCode
 			}).then(res => {
-				Message.success(res.data.message)
+				Message.success('成功！')
 				this.$router.push({ name: 'notrucksource' })
 			})
 		},

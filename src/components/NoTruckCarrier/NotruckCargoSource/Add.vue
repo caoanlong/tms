@@ -213,7 +213,7 @@ export default {
 				vehicleClassificationCode:this.CargoInfo.vehicleClassificationCode,
 				goodsItemGrossWeight:this.CargoInfo.goodsItemGrossWeight
 			}).then(res => {
-				Message.success(res.data.message)
+				Message.success('成功！')
 				this.$router.push({name: 'notruckcargosource'})
 			})
 		},

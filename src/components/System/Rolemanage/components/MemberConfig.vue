@@ -50,7 +50,7 @@ export default {
                 roleID: this.setRoleID,
 				memIDs: this.selectedMembers.map(item => item.memberID).join(',')
             }).then(res => {
-                Message.success(res.data.msg)
+                Message.success('成功！')
                 this.$emit('selected-mem', true)
             })
         },

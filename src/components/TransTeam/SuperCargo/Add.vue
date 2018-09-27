@@ -919,7 +919,7 @@ export default {
 						return
 					}
 					SuperCargo.add(this.superCargo).then(res => {
-						Message.success(res.data.msg)
+						Message.success('成功！')
 						this.$router.push({name: 'supercargo'})
 					})
 				}

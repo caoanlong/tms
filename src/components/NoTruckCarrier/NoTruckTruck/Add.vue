@@ -193,7 +193,7 @@ export default {
 				goodsReceiptPlace: this.TruckInfo.goodsReceiptPlace,
 				destinationCountrySubdivisionCode: this.TruckInfo.destinationCountrySubdivisionCode
 			}).then(res => {
-				Message.success(res.data.message)
+				Message.success('成功！')
 				this.$router.push({name: 'notrucksource'})
 			})
 		},

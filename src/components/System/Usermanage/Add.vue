@@ -87,7 +87,7 @@ export default {
 				if (!valid) return
 				this.sysMember.roleIDs = this.sysMember.roleIDs.join(',')
 				SysMember.add(this.sysMember).then(res => {
-					Message.success(res.data.msg)
+					Message.success('成功！')
 					this.$router.push({name: 'usermanage'})
 				}).catch(err => {
 					this.sysMember.roleIDs = this.sysMember.roleIDs.split(',')

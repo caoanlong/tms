@@ -921,7 +921,7 @@ export default {
 					})
 				} else {
 					SuperCargo.update(this.superCargo).then(res => {
-						Message.success(res.data.msg)
+						Message.success('成功！')
 						this.$router.push({name: this.fromRoute})
 					})
 				}

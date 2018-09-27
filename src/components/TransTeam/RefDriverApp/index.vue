@@ -131,7 +131,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 DriverInvitation.relieve({ driverInvitationID }).then(res => {
-					Message.success(res.data.msg)
+					Message.success('成功！')
 					this.getList()
 				})
             }).catch((err) => {

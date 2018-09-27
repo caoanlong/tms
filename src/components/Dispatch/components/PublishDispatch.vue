@@ -531,7 +531,7 @@ export default {
                     endDate: this.normal.endDate,
                     distance: this.totalDistance
                 }).then(res => {
-                    Message.success(res.data.msg)
+                    Message.success('成功！')
                     this.$emit('cancel', true)
                 })
 			}).catch(err => {})

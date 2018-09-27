@@ -1329,9 +1329,8 @@ export default {
 					truckInfo.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 					delete truckInfo.plateNo
 					delete truckInfo.truckCategory
-					// delete this.truck.trailerPlateNo
 					Truck.update(truckInfo).then(res => {
-						Message.success(res.data.msg)
+						Message.success('成功！')
 						this.$router.push({name: this.fromRoute})
 					})
 				}

@@ -143,8 +143,7 @@ export default {
 				supercargoID: this.truck.secondaryDriver.supercargoID,
 				comTruckID: this.truck.truckID
 			}).then(res => {
-				Message.success(res.data.msg)
-				console.log(res)
+				Message.success('成功！')
 				this.$emit('refresh')
 			})
 		},
@@ -166,7 +165,7 @@ export default {
 					supercargoID,
 					comTruckID: this.truck.truckID
 				}).then(res => {
-					Message.success(res.data.msg)
+					Message.success('成功！')
 					this.$emit('refresh')
 				})
 			}).catch(err => { Message.info('已取消') })
