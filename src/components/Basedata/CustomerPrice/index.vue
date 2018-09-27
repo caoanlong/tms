@@ -104,7 +104,8 @@ export default {
 			Company.customer().find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.find.keyword
+				keyword: this.find.keyword,
+				customerType:'Delegate'
 			}).then(res => {
 				this.tableData = res.records
 				this.total = res.total
