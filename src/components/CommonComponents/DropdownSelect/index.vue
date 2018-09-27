@@ -71,7 +71,7 @@ export default {
 		},
 		selected: {
 			handler(data) {
-				this.selectedAddress = data
+				this.selectedAddress = data || {}
 			},
 			deep: true
 		}

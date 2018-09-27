@@ -43,7 +43,15 @@
                             </template>
                         </el-table-column>
                     </el-table-column>
-					<el-table-column label="线路定价" prop="routePriceNum" align="center"></el-table-column>
+					<el-table-column label="线路定价" align="center">
+						<template slot-scope="scope">
+							<span 
+								:class="{'link': Number(scope.row.routePriceNum) > 0}" 
+								@click="handleCommand({type: 'linePrice', data: scope.row})">
+								{{scope.row.routePriceNum + '个定价'}}
+							</span>
+						</template>
+					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">

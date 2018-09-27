@@ -25,7 +25,8 @@
                                 <el-form-item label="发货地址" prop="shipperCustomerAddressID">
 									<input v-model="line.shipperCustomerAddressID" hidden="true"/>
 									<dropdown-select 
-										addressType="发货单位"
+										addressType="发货单位" 
+										:selected="selectedShipperAddress"
 										:isChangeCompany="isChangeShipper" 
 										@select="handSelectShipperAddress" 
 										:fetch-suggestions="getShipperAddress">
@@ -51,7 +52,8 @@
                                 <el-form-item label="收货地址" prop="consigneeCustomerAddressID">
 									<input v-model="line.consigneeCustomerAddressID" hidden="true"/>
 									<dropdown-select 
-										addressType="收货单位"
+										addressType="收货单位" 
+										:selected="selectedConsigneeAddress"
 										:isChangeCompany="isChangeConsignee" 
 										@select="handSelectConsigneeAddress" 
 										:fetch-suggestions="getConsigneeAddress">
@@ -133,13 +135,27 @@ export default {
         },
 		callback: Function,
 		customerID: String
-    },
+	},
+	watch: {
+		isVisible(bool) {
+			if (!bool) {
+				for (let attr in this.line) {
+					this.line[attr] = ''
+				}
+				this.selectedShipperAddress = null
+				this.selectedConsigneeAddress = null
+				this.$refs['ruleForm'].resetFields()
+			}
+		}
+	},
     data() {
         return {
 			isChangeShipper: false,
 			isChangeConsignee: false,
 			flagShipperName: '',
 			flagConsigneeName: '',
+			selectedShipperAddress: null,
+			selectedConsigneeAddress: null,
             line: {
 				routePriceID: '',   /**线路价格ID*/
 				customerID: '',   /**委托客户ID*/
@@ -233,6 +249,7 @@ export default {
 			this.isChangeShipper = !this.isChangeShipper
 			this.line.shipperName = ' '
 			this.line.shipperCustomerID = data.customerID
+			this.selectedShipperAddress = data
 			this.$nextTick(() => {
 				this.line.flagShipperName = this.line.shipperName = data.companyName
 				this.getShipperAddress('', false)
@@ -242,6 +259,7 @@ export default {
 			this.isChangeConsignee = !this.isChangeConsignee
 			this.line.consigneeName = ' '
 			this.line.consigneeCustomerID = data.customerID
+			this.selectedConsigneeAddress = data
 			this.$nextTick(() => {
 				this.line.flagConsigneeName = this.line.consigneeName = data.companyName
 				this.getConsigneeAddress('', false)
