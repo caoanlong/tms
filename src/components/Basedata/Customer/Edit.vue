@@ -22,8 +22,8 @@
 						</el-form-item>
 						<el-form-item label="客户类型" prop="customerType">
 							<el-checkbox-group v-model="recdeliverycomp.customerType">
-								<el-checkbox label="Shipper">发货单位</el-checkbox>
-								<el-checkbox label="Consignee">收货单位</el-checkbox>
+								<el-checkbox label="Shipper">发货方</el-checkbox>
+								<el-checkbox label="Consignee">收货方</el-checkbox>
 								<el-checkbox label="Delegate">委托方</el-checkbox>
 							</el-checkbox-group>							
 						</el-form-item>

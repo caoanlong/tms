@@ -135,8 +135,8 @@ export const TRUCKLENGTH = [
  * 客户类型
  */
 export const CUSTOMERTYPE = {
-    Shipper: '发货单位',
-    Consignee: '收货单位',
+    Shipper: '发货方',
+    Consignee: '收货方',
     Delegate: '委托方'
 }
 
