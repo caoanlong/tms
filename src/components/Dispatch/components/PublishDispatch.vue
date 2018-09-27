@@ -349,12 +349,12 @@ export default {
         }
     },
     watch: {
-        dispatchTaskCargoList: {
-            handler(val) {
-                this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
-            },
-            deep: true
-        }
+        // dispatchTaskCargoList: {
+        //     handler(val) {
+        //         this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
+        //     },
+        //     deep: true
+        // }
     },
     computed: {
         totalFreight() {
@@ -367,18 +367,19 @@ export default {
     },
     methods: {
         handSelectTruck(data) {
-            console.log(data)
             this.truckDialog = false
             this.selectedTruck = data ? data : {}
             this.createPersons()
             if (this.selectedTruck.primaryDriver) {
                 this.clearSelectedSuperCargo()
                 this.selectedTruck.primaryDriver.type = 'primary'
-                this.bizDispatchFeeList[0].superCargo = this.persons.filter(item => item.supercargoID == this.selectedTruck.primaryDriver.supercargoID)[0]
-                this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
-                this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
                 this.baseDizDispatchFee.superCargoID = this.selectedTruck.primaryDriver.supercargoID
                 this.baseDizDispatchFee.superCargoName = this.selectedTruck.primaryDriver.realName
+                if (this.bizDispatchFeeList.length > 0) {
+                    this.bizDispatchFeeList[0].superCargoID = this.selectedTruck.primaryDriver.supercargoID
+                    this.bizDispatchFeeList[0].superCargoName = this.selectedTruck.primaryDriver.realName
+                    this.bizDispatchFeeList[0].superCargo = this.persons.filter(item => item.supercargoID == this.selectedTruck.primaryDriver.supercargoID)[0]
+                }
             }
         },
         handSelectPerson(type, data) {
@@ -414,7 +415,7 @@ export default {
          * 添加费用
          */
         addFreight() {
-            this.bizDispatchFeeList.push({
+            const item = {
                 item: '',
                 category: 'Attach',
                 superCargo: '',  // 收款人
@@ -422,7 +423,12 @@ export default {
                 superCargoName: '',  // 收款人
                 payMode: '',
                 amount: ''
-            })
+            }
+            if (this.selectedTruck.primaryDriver) {
+                item.superCargoID = this.selectedTruck.primaryDriver.supercargoID
+                item.superCargoName = this.selectedTruck.primaryDriver.realName
+            }
+            this.bizDispatchFeeList.push(item)
         },
         /**
          * 删除费用
@@ -462,20 +468,24 @@ export default {
          * 发布
          */
         publish() {
-            for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
-                const element = this.bizDispatchFeeList[i]
-                if (!this.persons.map(item => item.supercargoID).includes(element.superCargo.supercargoID)) {
-                    Message.error(`第${i+1}行收款人请重新选择！`)
-                    return
+            if (this.bizDispatchFeeList.length > 0) {
+                for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
+                    const element = this.bizDispatchFeeList[i]
+                    if (!this.persons.map(item => item.supercargoID).includes(element.superCargo.supercargoID)) {
+                        Message.error(`第${i+1}行收款人请重新选择！`)
+                        return
+                    }
                 }
             }
             new Promise((resolve, reject) => {
                 let flag = true
-				for (let i = 0; i < this.$refs['ruleForm'].length; i++) {
-					const item = this.$refs['ruleForm'][i]
-					item.validate(valid => {
-						if (!valid) flag = false
-					})
+                if (this.$refs['ruleForm']) {
+                    for (let i = 0; i < this.$refs['ruleForm'].length; i++) {
+                        const item = this.$refs['ruleForm'][i]
+                        item.validate(valid => {
+                            if (!valid) flag = false
+                        })
+                    }
                 }
                 this.$refs['ruleForm2'].validate(valid => {
                     if (!valid) flag = false
@@ -495,7 +505,6 @@ export default {
                     return { carrierOrderID: item.carrierOrderID }
                 })
                 const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
-                console.log(this.baseDizDispatchFee)
                 const bizDispatchFeeList = [this.baseDizDispatchFee, ...this.bizDispatchFeeList].map(item => {
                     return {
                         item: item.item,
@@ -521,7 +530,7 @@ export default {
                     bizDispatchNodeList: this.transLines,
                     endDate: this.normal.endDate,
                     distance: this.totalDistance
-                }, true).then(res => {
+                }).then(res => {
                     Message.success(res.data.msg)
                     this.$emit('cancel', true)
                 })

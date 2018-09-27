@@ -113,13 +113,12 @@ const ajax = function (json) {
 			type: json.method || 'get',
 			dataType: 'json',
 			processData: false,
-			data: !json.contentType ? qs.stringify(data) : data,
+			data: !json.contentType ? qs.stringify(data) : JSON.stringify(data),
 			headers: {
-				'contentType': json.contentType || 'application/x-www-form-urlencoded;charset=utf-8',
+				'Content-Type': json.contentType || 'application/x-www-form-urlencoded;charset=utf-8',
 				'Authorization': localStorage.getItem('token')
 			},
-			beforeSend: (res) => {
-			},
+			beforeSend: (res) => { },
 			complete: (xhr, data) => {
 				const res = xhr.responseJSON
 				const Authorization = xhr.getResponseHeader('Authorization')
