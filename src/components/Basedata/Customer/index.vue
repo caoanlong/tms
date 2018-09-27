@@ -9,9 +9,9 @@
 					</el-form-item>
 					<el-form-item label="类型" class="customerSelect">
 						<el-select v-model="find.customerType" placeholder="请选择">
-							<el-option value="Shipper" label="发货单位"></el-option>
-							<el-option value="Consignee" label="收货单位"></el-option>
-							<el-option value="ShipperConsignee" label="收发货单位"></el-option>
+							<el-option value="Shipper" label="发货方"></el-option>
+							<el-option value="Consignee" label="收货方"></el-option>
+							<el-option value="Delegate" label="委托方"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
