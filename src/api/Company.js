@@ -23,7 +23,10 @@ class Company extends Base {
      */
     apply() {
         this._init('/apply')
-        this.audit = data => {
+        this.audit = (data) => {
+            if (!this.isClick) return Promise.reject('重复提交！')
+            this.isClick = false
+            setTimeout(() => { this.isClick = true }, this.delay)
             return this.request({
                 url: this.baseUrl + '/apply/audit',
                 method: 'post',
@@ -37,7 +40,10 @@ class Company extends Base {
      */
     customer() {
         this._init('/customer')
-        this.delBatch = data => {
+        this.delBatch = (data) => {
+            if (!this.isClick) return Promise.reject('重复提交！')
+            this.isClick = false
+            setTimeout(() => { this.isClick = true }, this.delay)
             return this.request({
                 url: this.baseUrl + '/customer/deleteBatch',
                 method: 'post',

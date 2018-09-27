@@ -45,43 +45,55 @@ class DispatchOrder extends Base {
      * 添加(派单)
      */
     addForDispatch(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
-			url: this.baseUrl + '/addForDispatch',
-			method: 'post',
+            url: this.baseUrl + '/addForDispatch',
+            method: 'post',
             data,
             contentType: 'application/json;charset=utf-8'
-		})
+        })
     }
     /**
      * 添加(抢单/报价)
      */
     addForOffer(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
-			url: this.baseUrl + '/addForOffer',
-			method: 'post',
+            url: this.baseUrl + '/addForOffer',
+            method: 'post',
             data,
             contentType: 'application/json;charset=utf-8'
-		})
+        })
     }
     /**
      * 取消
      */
     cancel(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
-			url: this.baseUrl + '/cancel',
-			method: 'post',
-			data
-		})
+            url: this.baseUrl + '/cancel',
+            method: 'post',
+            data
+        })
     }
     /**
      * 关闭
      */
     close(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
-			url: this.baseUrl + '/close',
-			method: 'post',
-			data
-		})
+            url: this.baseUrl + '/close',
+            method: 'post',
+            data
+        })
     }
     /**
      * 列表(已调度)
@@ -113,11 +125,14 @@ class DispatchOrder extends Base {
      * 重新调度
      */
     redispatch(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
-			url: this.baseUrl + '/redispatch',
-			method: 'post',
-			data
-		})
+            url: this.baseUrl + '/redispatch',
+            method: 'post',
+            data
+        })
     }
     /**
      * 抢单/报价列表
@@ -136,11 +151,14 @@ class DispatchOrder extends Base {
      * 接受抢单/报价
      */
     acceptOffer(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
-			url: this.baseUrl + '/acceptOffer',
-			method: 'post',
-			data
-		})
+            url: this.baseUrl + '/acceptOffer',
+            method: 'post',
+            data
+        })
     }
     /**
      * 日志列表

@@ -6,6 +6,9 @@ class Dispatchbill extends Base {
 	 * 重新调度
 	 */
 	reLoad(data) {
+		if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({
 			url: this.baseUrl + '/anew',
 			method: 'post',
@@ -17,6 +20,9 @@ class Dispatchbill extends Base {
 	 * @param {String} dispatchOrderID 调度单ID
 	 */
 	cancel(data) {
+		if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({
 			url: this.baseUrl + '/cancel',
 			method: 'post',
@@ -28,6 +34,9 @@ class Dispatchbill extends Base {
 	 * @param {String} dispatchOrderID 调度单ID
 	 */
 	close(data) {
+		if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({
 			url: this.baseUrl + '/close',
 			method: 'post',
@@ -169,15 +178,21 @@ class Dispatchbill extends Base {
     }
     // 调度单-抢单/报价-确认
     confirmScramble(data){
-    	return this.request({
-            url: this.baseUrl + '/offer/determine',
-            method: 'post',
-            data
-        })
+		if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+		return this.request({
+			url: this.baseUrl + '/offer/determine',
+			method: 'post',
+			data
+		})
     }
     //修改运费
 	feeModify(data){
-        return this.request({
+		if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+		return this.request({
 			url: this.baseUrl + '/fee/modify',
 			method: 'post',
 			data,
@@ -188,23 +203,16 @@ class Dispatchbill extends Base {
 	 * 发布派车单
 	 * @param {*} data 
 	 */
-	add(data, isClick) {
-        if (!this.isClick) {
-			return
-		} else {
-			if (isClick) {
-				this.isClick = false
-				setTimeout(() => {
-					this.isClick = true
-				}, this.delay)
-			}
-			return this.request({
-				url: this.baseUrl + '/add',
-				method: 'post',
-				data,
-				contentType: 'application/json;charset=utf-8'
-			})
-		}
+	add(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+		return this.request({
+			url: this.baseUrl + '/add',
+			method: 'post',
+			data,
+			contentType: 'application/json;charset=utf-8'
+		})
 	}
 	// 车辆轨迹
 	track(params) {

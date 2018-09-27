@@ -24,6 +24,9 @@ class DriverInvitation extends Base {
      * 解除
      */
     relieve(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/relieve',
             method: 'post',

@@ -47,6 +47,9 @@ class Truck extends Base {
      * @param {*} data 
      */
     addEndorsement(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/endorsement/add',
             method: 'post',
@@ -58,6 +61,9 @@ class Truck extends Base {
      * @param {*} data 
      */
     updateEndorsement(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/endorsement/update',
             method: 'post',
@@ -69,6 +75,9 @@ class Truck extends Base {
      * @param {*} data 
      */
     deleteEndorsement(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/endorsement/deleteBatch',
             method: 'post',
@@ -86,6 +95,9 @@ class Truck extends Base {
         })
     }
     changeDriver(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/changeDriver',
             method: 'post',
@@ -93,6 +105,9 @@ class Truck extends Base {
         })
     }
     primary(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/primary',
             method: 'post',
@@ -100,6 +115,9 @@ class Truck extends Base {
         })
     }
     deleteDriver(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/deleteDriver',
             method: 'post',

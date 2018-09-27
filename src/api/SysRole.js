@@ -29,6 +29,9 @@ class SysRole extends Base {
         })
     }
     addAuthority(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/addAuthority',
             method: 'post',
@@ -36,6 +39,9 @@ class SysRole extends Base {
         })
     }
     addMember(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/addMember',
             method: 'post',
