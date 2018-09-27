@@ -244,26 +244,26 @@
                 <el-row>
                     <el-form size="small" :model="normal" ref="ruleForm2">
                         <el-col :span="8">
-                        <el-form-item label="接单截止时间" label-width="100px" prop="endDate" :rules="[{
-                            validator: (rule, value, callback) => {
-                                if (value && value < new Date().getTime()) {
-                                    callback('时间不能早于当前时间')
-                                } else {
-                                    callback()
+                            <el-form-item label="接单截止时间" label-width="100px" prop="endDate" :rules="[{
+                                validator: (rule, value, callback) => {
+                                    if (value && value < new Date().getTime()) {
+                                        callback('时间不能早于当前时间')
+                                    } else {
+                                        callback()
+                                    }
                                 }
-                            }
-                        }]">
-                            <el-date-picker 
-                                format="yyyy-MM-dd"
-                                v-model="normal.endDate" 
-                                type="date" 
-                                placeholder="选择日期"
-                                :clearable="false"
-                                style="width:100%"
-                                value-format="timestamp" 
-                                :picker-options="{ disabledDate: (curDate) => new Date()  > curDate }">
-                            </el-date-picker>
-                         </el-form-item>
+                            }]">
+                                <el-date-picker 
+                                    format="yyyy-MM-dd"
+                                    v-model="normal.endDate" 
+                                    type="date" 
+                                    placeholder="选择日期"
+                                    :clearable="false"
+                                    style="width:100%"
+                                    value-format="timestamp" 
+                                    :picker-options="{ disabledDate: (curDate) => new Date()  > curDate }">
+                                </el-date-picker>
+                            </el-form-item>
                          </el-col>
                          <el-col :span="8">
                             <el-form-item label-width="20px">
@@ -295,7 +295,7 @@ import { Message } from 'element-ui'
 import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
 import DispatchOrder from '../../../api/DispatchOrder'
-import { arrayUnique } from '../../../common/utils'
+import { arrayUnique,timeToTimestamp } from '../../../common/utils'
 export default {
     components: { SelectTruck, SelectPerson },
     props: {

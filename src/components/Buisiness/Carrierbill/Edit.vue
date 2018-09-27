@@ -684,8 +684,10 @@ export default {
 				})
 			}).then(() => {
 				this.$refs['cargoRuleForm'].validate(valid => {
-					if (!valid) return 
+					if (!valid) return
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
+					console.log(carrierbill,1)
+					
 					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
 						const cargo = carrierbill.carrierCargo[i]
 						if (!cargo.cargoWeight) cargo.cargoWeight = 0
@@ -704,6 +706,9 @@ export default {
 					} else {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
 					}
+					console.log(carrierbill.shipperDate,2)
+					console.log(carrierbill.consigneeDate,3)
+					return
 					Carrierbill.update(carrierbill).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'carrierbill'})
