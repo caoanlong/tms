@@ -49,34 +49,57 @@
                     </el-row>
                 </div>
             </el-row>
-            <el-form-item label="报价类型" prop="type">
-                <el-radio-group v-model="grabOrder.type">
-                    <el-radio label="Grab" value="Grab">定价抢单</el-radio>
-                    <el-radio label="Offer" value="Offer">司机报价</el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="一口价金额" v-if="grabOrder.type == 'Grab'" prop="freight">
-                <el-input style="width:250px" placeholder="请输入..." v-model="grabOrder.freight"><template slot="append">元</template></el-input>
-            </el-form-item>
-            <el-form-item label="运费支付方式" prop="payMode">
-                <el-radio-group v-model="grabOrder.payMode">
-                    <el-radio label="PayOnDelivery" value="PayOnDelivery">到付</el-radio>
-                    <el-radio label="Prepay" value="Prepay">预付</el-radio>
-                    <el-radio label="PayOnReceipt" value="PayOnReceipt">回单结</el-radio>
-                    <el-radio label="PayByConsignee" value="PayByConsignee">收货方付</el-radio>
-                    <el-radio label="PayMonthly" value="PayMonthly">月结</el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="接单截止时间" prop="endDate">
-                <el-date-picker 
-                    format="yyyy-MM-dd HH"
-                    v-model="grabOrder.endDate"
-                    type="datetime" 
-                    :clearable="false" 
-                    value-format="timestamp"
-                    :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 > curDate }" >
-                </el-date-picker>
-            </el-form-item>
+            <el-row>
+                <el-form-item label="报价类型" prop="type">
+                    <el-radio-group v-model="grabOrder.type">
+                        <el-radio label="Grab" value="Grab">定价抢单</el-radio>
+                        <el-radio label="Offer" value="Offer">司机报价</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+            </el-row>
+            <el-row>
+                <el-form-item label="一口价金额" v-if="grabOrder.type == 'Grab'" prop="freight">
+                    <el-input style="width:250px" placeholder="请输入..." v-model="grabOrder.freight"><template slot="append">元</template></el-input>
+                </el-form-item>
+            </el-row>
+            <el-row>
+                <el-form-item label="运费支付方式" prop="payMode">
+                    <el-radio-group v-model="grabOrder.payMode">
+                        <el-radio label="PayOnDelivery" value="PayOnDelivery">到付</el-radio>
+                        <el-radio label="Prepay" value="Prepay">预付</el-radio>
+                        <el-radio label="PayOnReceipt" value="PayOnReceipt">回单结</el-radio>
+                        <el-radio label="PayByConsignee" value="PayByConsignee">收货方付</el-radio>
+                        <el-radio label="PayMonthly" value="PayMonthly">月结</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+            </el-row>
+            <el-row>
+            <el-col :span="8">
+                <el-form-item label="接单截止时间" label-width="110px" prop="endDate">
+                    <el-date-picker 
+                        format="yyyy-MM-dd"
+                        v-model="grabOrder.endDate"
+                        type="date"
+                        style="width:100%"
+                        value-format="timestamp"
+                        :picker-options="{ disabledDate: (curDate) => new Date() > curDate }" >
+                    </el-date-picker>
+                </el-form-item>
+            </el-col>
+            <el-col :span="8">
+                <el-form-item label-width="20px">
+                    <el-time-select
+                        v-model="grabOrder.endTime"
+                        :picker-options="{
+                            start:'00:00',
+                            step: '01:00',
+                            end:'23:00'
+                        }"
+                        placeholder="选择时间">
+                    </el-time-select>
+                </el-form-item>
+            </el-col>
+            </el-row>
             <el-row style="margin-top:20px" class="text-center">
                 <el-button @click="close" size="small">取消</el-button>
                 <el-button type="primary" @click="publish" size="small">保存</el-button>
@@ -89,7 +112,7 @@
 import { Message } from 'element-ui'
 import { checkFloat2,checkInt } from '../../../common/valid'
 import DispatchOrder from '../../../api/DispatchOrder'
-import { arrayUnique } from '../../../common/utils'
+import { arrayUnique,timeToTimestamp } from '../../../common/utils'
 export default {
     props: {
         totalNum: {
@@ -164,6 +187,11 @@ export default {
                     return { carrierOrderID: item.carrierOrderID }
                 })
                 const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
+                if (this.grabOrder.endTime) {
+                    this.grabOrder.endDate = this.grabOrder.endDate + timeToTimestamp(this.grabOrder.endTime)
+                } else {
+                    this.grabOrder.endDate = this.grabOrder.endDate + 3600000*24-1000
+                }
                 DispatchOrder.addForOffer({
                     dispatchTaskCargoList,
                     dispatchTaskList,

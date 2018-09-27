@@ -112,7 +112,6 @@
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
-											@change = "handleSelectShipperTime"
 											placeholder="选择发货时间">
 										</el-time-select>
 									</el-form-item>
@@ -161,7 +160,7 @@
 											:picker-options="{ 
 												disabledDate: (curDate) => {
 													if (carrierbillInfo.shipperDate) {
-														return curDate < carrierbillInfo.shipperDate
+														return curDate < carrierbillInfo.shipperDate 
 													} else {
 														return false
 													}
@@ -182,7 +181,6 @@
 											}"
 											value-format="timestamp"
 											style = "width:100%"
-											@change = "handleSelectConsigneeTime"
 											placeholder="选择到货时间">
 										</el-time-select>
 									</el-form-item>
@@ -386,15 +384,15 @@ import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
 		const checkShipperDateTime = (rule, value, callback) => {
-			if (this.carrierbillInfo.consigneeDate&& (value > this.carrierbillInfo.consigneeDate)) {
-				callback(new Error('发货时间不能等于或晚于到货时间'))
+			if (this.carrierbillInfo.consigneeDate && (value > this.carrierbillInfo.consigneeDate)) {
+				callback(new Error('发货时间不能晚于到货时间'))
 			} else {
 				callback()
 			}
 		}
 		const checkConsigneeDateTime = (rule, value, callback) => {
 			if (this.carrierbillInfo.shipperDate&& (value < this.carrierbillInfo.shipperDate)) {
-				callback(new Error('到货时间不能等于或早于发货时间'))
+				callback(new Error('到货时间不能早于发货时间'))
 			} else {
 				callback()
 			}
@@ -673,14 +671,6 @@ export default {
 			this.carrierbillInfo.consigneeLocationLat = data.locationLat
 			this.$refs['ruleForm'].validateField('consigneeName')
 		},
-		handleSelectShipperTime(value){
-			console.log(value)
-			// this.carrierbillInfo.shipperTime = ''
-		},
-		handleSelectConsigneeTime(value){
-			console.log(value)
-			// this.carrierbillInfo.consigneeTime = ''
-		},
 		save() {
 			new Promise((resolve, reject) => {
 				this.$refs['ruleForm'].validate(valid => {
@@ -694,8 +684,10 @@ export default {
 				})
 			}).then(() => {
 				this.$refs['cargoRuleForm'].validate(valid => {
-					if (!valid) return 
+					if (!valid) return
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
+					console.log(carrierbill,1)
+					
 					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
 						const cargo = carrierbill.carrierCargo[i]
 						if (!cargo.cargoWeight) cargo.cargoWeight = 0
@@ -714,6 +706,9 @@ export default {
 					} else {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
 					}
+					console.log(carrierbill.shipperDate,2)
+					console.log(carrierbill.consigneeDate,3)
+					return
 					Carrierbill.update(carrierbill).then(res => {
 						Message.success(res.data.msg)
 						this.$router.push({name: 'carrierbill'})

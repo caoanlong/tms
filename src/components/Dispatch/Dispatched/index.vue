@@ -181,9 +181,9 @@
 							<td v-else>0</td>
 							<td>{{taskItem.cargoNum}}</td>
 							<td>{{taskItem.shipperArea}}</td>
-							<td>{{taskItem.shipperDate | getdatefromtimestamp(true)}}</td>
+							<td>{{taskItem.shipperDate | isFullDay()}}</td>
 							<td>{{taskItem.consigneeArea}}</td>
-							<td>{{taskItem.consigneeDate | getdatefromtimestamp(true)}}</td>
+							<td>{{taskItem.consigneeDate | isFullDay()}}</td>
 							<td><el-button type="primary" size="mini" plain @click="viewPhotos(taskItem.dispatchTaskID,taskItem.shipperArea,taskItem.consigneeArea)">查看照片</el-button></td>
 						</tr>
 					</template>
