@@ -3,6 +3,9 @@ import request from '../common/request'
 
 class Member extends Base {
     login(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/login',
             method: 'post',
@@ -10,6 +13,9 @@ class Member extends Base {
         })
     }
     register(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/register',
             method: 'post',
@@ -17,27 +23,31 @@ class Member extends Base {
         })
     }
     pwdForget(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/passwor/forget',
             method: 'post',
             data
         })
     }
-    detail(data) {
+    detail(params) {
         return this.request({
             url: this.baseUrl + '/info/detail',
-            method: 'get',
-            data
+            params
         })
     }
-    info(data) {
+    info(params) {
         return this.request({
             url: this.baseUrl + '/info',
-            method: 'get',
-            data
+            params
         })
     }
     modify(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/info/modify',
             method: 'post',
@@ -45,6 +55,9 @@ class Member extends Base {
         })
     }
     changePwd(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/password/update',
             method: 'post',

@@ -16,6 +16,9 @@ class Task extends Base {
      * @param {superCargoMonthlyAmount} data 押运人月结金额
      */
     modifyFreight(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/modifyFreight',
             method: 'post',
@@ -24,6 +27,9 @@ class Task extends Base {
     }
 
     modifyTransportCosts(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/modifyTransportCosts',
             method: 'post',

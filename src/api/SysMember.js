@@ -10,6 +10,9 @@ class SysMember extends Base {
         })
     }
     modifyRole(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/modifyRole',
             method: 'post',

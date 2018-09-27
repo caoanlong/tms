@@ -68,6 +68,9 @@ class Carrierbill extends Base {
         })
     }
     close(data) {
+        if (!this.isClick) return
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/close',
             method: 'post',
