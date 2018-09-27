@@ -307,7 +307,7 @@ export default {
 					this.timeGo()
 					Common.getVCode(params).then(res => {
 						console.log(res.data)
-						if (baseURL.includes('develop')) Message.info(res.data.data)
+						if (baseURL.includes('develop')) Message.info(res.data)
 					})
 				})
 			} else if (this.loginOrRegister == 'findpassword') {
@@ -320,7 +320,7 @@ export default {
 					this.timeGo()
 					Common.getVCode(params).then(res => {
 						console.log(res.data)
-						if (baseURL.includes('develop')) Message.info(res.data.data)
+						if (baseURL.includes('develop')) Message.info(res.data)
 					})
 				})
 			}

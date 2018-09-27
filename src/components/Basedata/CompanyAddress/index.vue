@@ -76,7 +76,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import CargoUnit from '../../../api/CargoUnit'
-import Customer from '../../../api/Customer'
+import Company from '../../../api/Company'
 import CustomerAddress from '../../../api/CustomerAddress'
 import { baseMixin } from '../../../common/mixin'
 import { deleteConfirm } from '../../../common/utils'
@@ -99,11 +99,9 @@ export default {
 	methods: {
         getCompanys(queryString, cb) {
 			this.find.customerID = ''
-			Customer.suggest({
+			Company.customer().suggest({
 				companyName: queryString
-			}).then(res => {
-				cb(res)
-			})
+			}).then(res => { cb(res) })
         },
         handSelect(data){
 			this.find.customerID = data.customerID

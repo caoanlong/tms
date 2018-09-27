@@ -62,7 +62,6 @@ export default {
             }
             this.map.on('click', (e) => {
                 this.lnglat = [e.lnglat.lng, e.lnglat.lat]
-                console.log(this.lnglat)
                 this.map.clearMap()
                 this.map.add(this.createMarker(this.lnglat))
                 this.getAddressByLocation(this.lnglat)
@@ -82,7 +81,9 @@ export default {
                 const geocoder = new AMap.Geocoder()
                 geocoder.getAddress(position, (status, result) => {
                     if (status === 'complete' && result.info === 'OK') {
-                        this.address = result.regeocode.formattedAddress
+                        this.address = result.regeocode.formattedAddress || '未知地址'
+                    } else {
+                        this.address = '未知地址'
                     }
                 })
             })

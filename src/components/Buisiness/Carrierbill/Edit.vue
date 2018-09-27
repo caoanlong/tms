@@ -706,11 +706,8 @@ export default {
 					} else {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
 					}
-					console.log(carrierbill.shipperDate,2)
-					console.log(carrierbill.consigneeDate,3)
-					return
 					Carrierbill.update(carrierbill).then(res => {
-						Message.success(res.data.msg)
+						Message.success(res.msg)
 						this.$router.push({name: 'carrierbill'})
 					})
 				})

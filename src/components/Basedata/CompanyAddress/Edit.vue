@@ -23,7 +23,7 @@
 							<el-input v-model="companyAddress.contactPhone" placeholder="请输入..."></el-input>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="areaID">
-                            <dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
+                            <dist-picker :distList="selectedArea" @hand-select="handSelectedArea"></dist-picker>
 						</el-form-item>
 						<el-form-item label="定位地址" prop="locationAddress">
                             <el-autocomplete  style="width:100%"
@@ -124,7 +124,7 @@ export default {
 			this.companyAddress.companyName = data.companyName
 			this.companyAddress.contactName = data.contactName
 			this.companyAddress.contactPhone = data.contactPhone
-			this.handleSelectedArea(areaIdToArrayId(data.companyAreaID))
+			this.handSelectedArea(areaIdToArrayId(data.companyAreaID))
 		},
 		clearSelect(){
 			this.companyAddress.customerID = ''
@@ -146,6 +146,9 @@ export default {
 			this.companyAddress.locationLat = data.location.lat
 			this.companyAddress.locationAddress = data.name
 		},
+		handLocation() {
+			this.isLocationVisible = true
+		},
 		getInfo() {
 			const customerAddressID = this.$route.query.customerAddressID
 			CustomerAddress.findById({ customerAddressID }).then(res => {
@@ -153,6 +156,14 @@ export default {
 				this.selectedArea = areaIdToArrayId(res.areaID)
 				this.selectedArea[1] && (this.selectedCity = distData[this.selectedArea[0]][this.selectedArea[1]])
 			})
+		},
+		callbackLocation(data) {
+			if (data) {
+				this.companyAddress.locationLng = data.location[0]
+				this.companyAddress.locationLat = data.location[1]
+				this.companyAddress.locationAddress = data.address
+			}
+			this.isLocationVisible = false
 		},
 		save() {
 			this.$refs['ruleForm'].validate(valid => {

@@ -42,7 +42,7 @@
 							<el-input v-model="companyAddress.detailAddress" placeholder="如：十字路口左边22栋301室"></el-input>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click="add">立即保存</el-button>
+							<el-button type="primary" @click="save">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
 					</el-form>
@@ -161,7 +161,7 @@ export default {
 			}
 			this.isLocationVisible = false
 		},
-		add() {
+		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
 				CustomerAddress.add(this.companyAddress).then(res => {
