@@ -47,7 +47,7 @@ class Truck extends Base {
      * @param {*} data 
      */
     addEndorsement(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -61,7 +61,7 @@ class Truck extends Base {
      * @param {*} data 
      */
     updateEndorsement(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -75,7 +75,7 @@ class Truck extends Base {
      * @param {*} data 
      */
     deleteEndorsement(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -95,7 +95,7 @@ class Truck extends Base {
         })
     }
     changeDriver(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -105,7 +105,7 @@ class Truck extends Base {
         })
     }
     primary(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -115,7 +115,7 @@ class Truck extends Base {
         })
     }
     deleteDriver(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({

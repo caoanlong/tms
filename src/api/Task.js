@@ -16,7 +16,7 @@ class Task extends Base {
      * @param {superCargoMonthlyAmount} data 押运人月结金额
      */
     modifyFreight(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -27,7 +27,7 @@ class Task extends Base {
     }
 
     modifyTransportCosts(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({

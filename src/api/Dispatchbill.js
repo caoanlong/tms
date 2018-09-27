@@ -6,7 +6,7 @@ class Dispatchbill extends Base {
 	 * 重新调度
 	 */
 	reLoad(data) {
-		if (!this.isClick) return
+		if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({
@@ -20,7 +20,7 @@ class Dispatchbill extends Base {
 	 * @param {String} dispatchOrderID 调度单ID
 	 */
 	cancel(data) {
-		if (!this.isClick) return
+		if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({
@@ -34,7 +34,7 @@ class Dispatchbill extends Base {
 	 * @param {String} dispatchOrderID 调度单ID
 	 */
 	close(data) {
-		if (!this.isClick) return
+		if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({
@@ -178,7 +178,7 @@ class Dispatchbill extends Base {
     }
     // 调度单-抢单/报价-确认
     confirmScramble(data){
-		if (!this.isClick) return
+		if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({
@@ -189,7 +189,7 @@ class Dispatchbill extends Base {
     }
     //修改运费
 	feeModify(data){
-		if (!this.isClick) return
+		if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({
@@ -204,7 +204,7 @@ class Dispatchbill extends Base {
 	 * @param {*} data 
 	 */
 	add(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
 		return this.request({

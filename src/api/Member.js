@@ -3,7 +3,7 @@ import request from '../common/request'
 
 class Member extends Base {
     login(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -13,7 +13,7 @@ class Member extends Base {
         })
     }
     register(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -23,7 +23,7 @@ class Member extends Base {
         })
     }
     pwdForget(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -45,7 +45,7 @@ class Member extends Base {
         })
     }
     modify(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -55,7 +55,7 @@ class Member extends Base {
         })
     }
     changePwd(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({

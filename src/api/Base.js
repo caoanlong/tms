@@ -37,56 +37,35 @@ class Base {
             })
         })
     }
-    add(data, isClick) {
-        if (!this.isClick) {
-			return
-		} else {
-			if (isClick) {
-				this.isClick = false
-				setTimeout(() => {
-					this.isClick = true
-				}, this.delay)
-			}
-			return this.request({
-                url: this.baseUrl + this._add,
-                method: 'post',
-                data
-            })
-		}
+    add(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + this._add,
+            method: 'post',
+            data
+        })
     }
-    update(data, isClick) {
-        if (!this.isClick) {
-			return
-		} else {
-			if (isClick) {
-				this.isClick = false
-				setTimeout(() => {
-					this.isClick = true
-				}, this.delay)
-			}
-			return this.request({
-                url: this.baseUrl + this._update,
-                method: 'post',
-                data
-            })
-		}
+    update(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + this._update,
+            method: 'post',
+            data
+        })
     }
-    del(data, isClick) {
-        if (!this.isClick) {
-			return
-		} else {
-			if (isClick) {
-				this.isClick = false
-				setTimeout(() => {
-					this.isClick = true
-				}, this.delay)
-			}
-			return this.request({
-                url: this.baseUrl + this._del,
-                method: 'post',
-                data
-            })
-		}
+    del(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + this._del,
+            method: 'post',
+            data
+        })
     }
 }
 

@@ -45,7 +45,7 @@ class DispatchOrder extends Base {
      * 添加(派单)
      */
     addForDispatch(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -59,7 +59,7 @@ class DispatchOrder extends Base {
      * 添加(抢单/报价)
      */
     addForOffer(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -73,7 +73,7 @@ class DispatchOrder extends Base {
      * 取消
      */
     cancel(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -86,7 +86,7 @@ class DispatchOrder extends Base {
      * 关闭
      */
     close(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -125,7 +125,7 @@ class DispatchOrder extends Base {
      * 重新调度
      */
     redispatch(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
@@ -151,7 +151,7 @@ class DispatchOrder extends Base {
      * 接受抢单/报价
      */
     acceptOffer(data) {
-        if (!this.isClick) return
+        if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
