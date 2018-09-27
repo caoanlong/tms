@@ -8,7 +8,7 @@ class Base {
         this.baseUrl = baseUrl
         this.request = request
         this.isClick = true
-        this.delay = 1000
+        this.delay = 1500
     }
     initURI(data) {
         data.find && (this._find = data.find)
