@@ -10,4 +10,4 @@ class SuperCargo extends Base {
     }
 }
 
-export default new SuperCargo('/supercargo', request())
+export default new SuperCargo('/supercargo', request)

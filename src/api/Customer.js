@@ -15,7 +15,7 @@ class Customer extends Base {
                 url: this.baseUrl + '/suggest',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -25,10 +25,10 @@ class Customer extends Base {
                 url: this.baseUrl + '/address/suggest',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
 }
 
-export default new Customer('/customer', request())
+export default new Customer('/customer', request)

@@ -14,7 +14,7 @@ class Truck extends Base {
 				url: this.baseUrl + '/plateNo/suggest',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -24,7 +24,7 @@ class Truck extends Base {
 				url: this.baseUrl + '/trailerPlateNo/suggest',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -38,7 +38,7 @@ class Truck extends Base {
                 url: this.baseUrl + '/endorsement/findList',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -81,7 +81,7 @@ class Truck extends Base {
                 url: this.baseUrl + '/findDriverList',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -108,4 +108,4 @@ class Truck extends Base {
     }
 }
 
-export default new Truck('/truck', request())
+export default new Truck('/truck', request)

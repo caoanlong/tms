@@ -11,10 +11,10 @@ class CrossProxy {
                 url: this.baseUrl + '/ele/nearby',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
 }
 
-export default new CrossProxy('/cross/proxy', request())
+export default new CrossProxy('/cross/proxy', request)

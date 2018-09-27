@@ -13,6 +13,7 @@ export default function request (data) {
 
 	// request interceptor
 	service.interceptors.request.use(config => {
+		config.headers['Content-Type'] = 'application/json'
 		config.headers['Authorization'] = localStorage.getItem('token')
 		return config
 	}, error => {

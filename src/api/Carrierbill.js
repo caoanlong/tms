@@ -12,7 +12,7 @@ class Carrierbill extends Base {
                 url: this.baseUrl + '/findDispatchCargos',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -26,7 +26,7 @@ class Carrierbill extends Base {
                 url: this.baseUrl + '/tasks',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -43,7 +43,7 @@ class Carrierbill extends Base {
                 url: this.baseUrl + '/preDispatch',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -53,7 +53,7 @@ class Carrierbill extends Base {
                 url: this.baseUrl + '/preReDispatch',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -63,7 +63,7 @@ class Carrierbill extends Base {
                 url: this.baseUrl + '/dispatchedList',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -76,4 +76,4 @@ class Carrierbill extends Base {
     }
 }
 
-export default new Carrierbill('/biz/carrierOrder', request())
+export default new Carrierbill('/biz/carrierOrder', request)

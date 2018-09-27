@@ -50,7 +50,7 @@ class Company extends Base {
                     url: this.baseUrl + '/customer/suggest',
                     params
                 }).then(res => {
-                    resolve(res.data.data)
+                    resolve(res.data.data || res.data || res)
                 })
             })
         }
@@ -70,7 +70,7 @@ class Company extends Base {
                     url: this.baseUrl + '/customer/routePrice/listForCalc',
                     params
                 }).then(res => {
-                    resolve(res.data.data)
+                    resolve(res.data.data || res.data || res)
                 })
             })
         }
@@ -78,4 +78,4 @@ class Company extends Base {
     }
 }
 
-export default new Company('/company', request())
+export default new Company('/company', request)

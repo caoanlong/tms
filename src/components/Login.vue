@@ -338,7 +338,7 @@ export default {
 					Message.success('成功！')
 					setCooikie('loginUserName', this.login.username)
 					new Promise((resolve, reject) => {
-						this.$store.dispatch('login', res.headers['authorization'])
+						this.$store.dispatch('login', res['Authorization'])
 						resolve()
 					}).then(() => {
 						this.$router.push({name: 'home'})

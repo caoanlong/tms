@@ -10,4 +10,4 @@ class CustomerAddress extends Base {
     }
 }
 
-export default new CustomerAddress('/customer/address', request())
+export default new CustomerAddress('/customer/address', request)

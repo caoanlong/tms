@@ -15,4 +15,4 @@ class RecordWarn extends Base {
     }
 }
 
-export default new RecordWarn('/recordWarn', request())
+export default new RecordWarn('/recordWarn', request)
