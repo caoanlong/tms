@@ -1,6 +1,5 @@
 import Base from './Base'
 import request from '../common/request'
-import requestByJson from '../common/requestByJson'
 
 class Dispatchbill extends Base {
 	/**
@@ -45,7 +44,7 @@ class Dispatchbill extends Base {
 				url: this.baseUrl + '/preLoad',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -61,7 +60,7 @@ class Dispatchbill extends Base {
 				url: this.baseUrl + '/trucksAndDrivers',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -75,7 +74,7 @@ class Dispatchbill extends Base {
 				url: this.baseUrl + '/trucks',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -91,7 +90,7 @@ class Dispatchbill extends Base {
 				url: this.baseUrl + '/staffs',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -101,7 +100,7 @@ class Dispatchbill extends Base {
 				url: this.baseUrl + '/drivers',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -111,7 +110,7 @@ class Dispatchbill extends Base {
 				url: this.baseUrl + '/dispatchedList',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -121,7 +120,7 @@ class Dispatchbill extends Base {
 				url: this.baseUrl + '/dispatchHistoryList',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -132,7 +131,7 @@ class Dispatchbill extends Base {
 				url: this.baseUrl + '/fees',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
@@ -143,7 +142,7 @@ class Dispatchbill extends Base {
                 url: this.baseUrl + '/tasks',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -154,7 +153,7 @@ class Dispatchbill extends Base {
                 url: this.baseUrl + '/logs',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -164,7 +163,7 @@ class Dispatchbill extends Base {
                 url: this.baseUrl + '/grabOfferOrderList',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -178,10 +177,11 @@ class Dispatchbill extends Base {
     }
     //修改运费
 	feeModify(data){
-        return requestByJson({
+        return this.request({
 			url: this.baseUrl + '/fee/modify',
 			method: 'post',
-			data
+			data,
+			contentType: 'application/json;charset=utf-8'
 		})
     }
 	/**
@@ -198,10 +198,11 @@ class Dispatchbill extends Base {
 					this.isClick = true
 				}, this.delay)
 			}
-			return requestByJson({
+			return this.request({
 				url: this.baseUrl + '/add',
 				method: 'post',
-				data
+				data,
+				contentType: 'application/json;charset=utf-8'
 			})
 		}
 	}
@@ -212,10 +213,10 @@ class Dispatchbill extends Base {
                 url: this.baseUrl + '/track',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
 	}
 }
 
-export default new Dispatchbill('/biz/dispatchOrder', request())
+export default new Dispatchbill('/biz/dispatchOrder', request)

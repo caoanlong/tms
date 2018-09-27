@@ -16,7 +16,7 @@ class DriverInvitation extends Base {
                 url: this.baseUrl + '/findNotLinkedList',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -32,4 +32,4 @@ class DriverInvitation extends Base {
     }
 }
 
-export default new DriverInvitation('/driver/invitation', request())
+export default new DriverInvitation('/driver/invitation', request)

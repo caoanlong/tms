@@ -15,10 +15,10 @@ class Staff extends Base {
 				url: this.baseUrl + '/driver/suggest',
 				params
 			}).then(res => {
-				resolve(res.data.data)
+				resolve(res.data.data || res.data || res)
 			})
 		})
 	}
 }
 
-export default new Staff('/staff', request())
+export default new Staff('/staff', request)

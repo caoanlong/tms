@@ -53,4 +53,4 @@ class Member extends Base {
     }
 }
 
-export default new Member('/mem', request())
+export default new Member('/mem', request)

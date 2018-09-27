@@ -23,7 +23,7 @@ class Notruck extends Base {
                     url: this.baseUrl + '/broker/getAppkey',
                     params
                 }).then(res => {
-                    resolve(res.data.data)
+                    resolve(res.data.data || res.data || res)
                 })
             })
         }
@@ -33,7 +33,7 @@ class Notruck extends Base {
                     url: this.baseUrl + '/broker/getCertifyEnterprice',
                     params
                 }).then(res => {
-                    resolve(res.data.data)
+                    resolve(res.data.data || res.data || res)
                 })
             })
         }
@@ -50,7 +50,7 @@ class Notruck extends Base {
                     url: this.baseUrl + '/carryOrder/form',
                     params
                 }).then(res => {
-                    resolve(res.data.data)
+                    resolve(res.data.data || res.data || res)
                 })
             })
         }
@@ -67,7 +67,7 @@ class Notruck extends Base {
                     url: this.baseUrl + '/truck/form',
                     params
                 }).then(res => {
-                    resolve(res.data.data)
+                    resolve(res.data.data || res.data || res)
                 })
             })
         }
@@ -82,4 +82,4 @@ class Notruck extends Base {
     }
 }
 
-export default new Notruck('/notruck', request())
+export default new Notruck('/notruck', request)

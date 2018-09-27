@@ -462,7 +462,6 @@ export default {
          * 发布
          */
         publish() {
-           
             for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
                 const element = this.bizDispatchFeeList[i]
                 if (!this.persons.map(item => item.supercargoID).includes(element.superCargo.supercargoID)) {

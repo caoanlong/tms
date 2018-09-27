@@ -9,4 +9,4 @@ class CargoUnit extends Base {
     }
 }
 
-export default new CargoUnit('/cargoUnit', request())
+export default new CargoUnit('/cargoUnit', request)

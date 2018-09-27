@@ -1,6 +1,5 @@
 import Base from './Base'
 import request from '../common/request'
-import requestByJson from '../common/requestByJson'
 
 class DispatchOrder extends Base {
     /**
@@ -46,20 +45,22 @@ class DispatchOrder extends Base {
      * 添加(派单)
      */
     addForDispatch(data) {
-        return requestByJson({
+        return this.request({
 			url: this.baseUrl + '/addForDispatch',
 			method: 'post',
-			data
+            data,
+            contentType: 'application/json;charset=utf-8'
 		})
     }
     /**
      * 添加(抢单/报价)
      */
     addForOffer(data) {
-        return requestByJson({
+        return this.request({
 			url: this.baseUrl + '/addForOffer',
 			method: 'post',
-			data
+            data,
+            contentType: 'application/json;charset=utf-8'
 		})
     }
     /**
@@ -169,4 +170,4 @@ class DispatchOrder extends Base {
     }
 }
 
-export default new DispatchOrder('/dispatchOrder', request())
+export default new DispatchOrder('/dispatchOrder', request)

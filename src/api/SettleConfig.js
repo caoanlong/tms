@@ -17,4 +17,4 @@ class SettleConfig extends Base {
     }
 }
 
-export default new SettleConfig('/transportPrice', request())
+export default new SettleConfig('/transportPrice', request)

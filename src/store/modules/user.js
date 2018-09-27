@@ -2,7 +2,7 @@ import Member from '../../api/Member'
 
 const user = {
 	state: {
-		userInfo: JSON.parse(localStorage.getItem('userInfo')),
+		userInfo: localStorage.getItem('userInfo') && localStorage.getItem('userInfo') != 'undefined' ? JSON.parse(localStorage.getItem('userInfo')) : null,
 		name: localStorage.getItem('name'),
 		mobile: localStorage.getItem('mobile'),
 		companyName: localStorage.getItem('companyName'),
@@ -54,11 +54,11 @@ const user = {
 		getUserInfo({ commit }) {
 			return new Promise((resolve, reject) => {
 				Member.info().then(res => {
-					commit('SET_USERINFO', res.data.data)
-					commit('SET_NAME', res.data.data.userName)
-					commit('SET_MOBILE', res.data.data.mobile)
-					commit('SET_COMPANYNAME', res.data.data.companyName)
-					commit('SET_COMPANYID', res.data.data.companyID)
+					commit('SET_USERINFO', res.data)
+					commit('SET_NAME', res.data.userName)
+					commit('SET_MOBILE', res.data.mobile)
+					commit('SET_COMPANYNAME', res.data.companyName)
+					commit('SET_COMPANYID', res.data.companyID)
 				})
 			})
 		}

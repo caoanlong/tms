@@ -14,7 +14,7 @@ class SysRole extends Base {
                 url: this.baseUrl + '/findMenuList',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -24,7 +24,7 @@ class SysRole extends Base {
                 url: this.baseUrl + '/findMemberList',
                 params
             }).then(res => {
-                resolve(res.data.data)
+                resolve(res.data.data || res.data || res)
             })
         })
     }
@@ -44,4 +44,4 @@ class SysRole extends Base {
     }
 }
 
-export default new SysRole('/sys/role', request())
+export default new SysRole('/sys/role', request)
