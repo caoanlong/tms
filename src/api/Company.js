@@ -70,11 +70,13 @@ class Company extends Base {
         /**
          * 承运单、调度单计算应收应付专用
          */
-        this.listForCalc = params => {
+        this.listForCalc = data => {
             return new Promise((resolve, reject) => {
                 this.request({
                     url: this.baseUrl + '/customer/routePrice/listForCalc',
-                    params
+                    method: 'post',
+                    data,
+                    contentType: 'application/json;charset=utf-8'
                 }).then(res => {
                     resolve(res.data.data || res.data || res)
                 })

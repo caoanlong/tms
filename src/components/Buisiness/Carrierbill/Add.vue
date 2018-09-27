@@ -72,7 +72,7 @@
 									<dropdown-select 
 										addressType="发货单位"
 										:isChangeCompany="isChangeShipper" 
-										@select="handSelectshipperAddress" 
+										@select="handSelectShipperAddress" 
 										:fetch-suggestions="getShipperAddress">
 									</dropdown-select>
 								</el-form-item>
@@ -184,6 +184,11 @@
 								</el-col>
 							</el-row>
 						</div>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="24">
+						<p class="feeTips c1 text-center">运输距离：{{(receivableDistance/1000).toFixed(2)}}公里</p>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -314,9 +319,9 @@
 						<div class="section-block" style="min-height:120px">
 							<span class="block-title">运输费用<span class="titTips">（如已配置发货方的应收运价，系统会默认算金额）</span></span>
 							<el-row class="block-content">
-								<div class="transFeeTips">
+								<div class="transFeeTips" v-if="+receivableWeightUnitPrice || +receivableVolumnUnitPrice">
 									<svg-icon icon-class="info" class="infoIcon"></svg-icon>
-									<p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
+									<p>委托方海天贸易已配置应收运价（{{receivableWeightUnitPrice}}吨/公里，{{receivableVolumnUnitPrice}}方/公里）根据货量、运输距离计算出的参考金额 {{totalPrice()}}元</p>
 								</div>
 								<el-form-item label="运费金额" prop="freight">
 									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight"></el-input>
@@ -339,11 +344,6 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="24">
-						<p class="feeTips c1">发货方海天贸易已配置当前线路应收运价（0.45吨/公里、1.45方/公里）</p>
-					</el-col>
-				</el-row>
-				<el-row>
 					<el-form-item align="center" label-width="0">
 						<el-button type="primary" @click="save">保存</el-button>
 						<el-button @click="back">返回</el-button>
@@ -360,6 +360,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 import Carrierbill from '../../../api/Carrierbill'
 import Company from '../../../api/Company'
@@ -399,6 +400,9 @@ export default {
 			shipperAddress:[],
 			consigneeAddress:[],
 			searchKeyWord:'',
+			receivableDistance: 0,
+			receivableVolumnUnitPrice: 0,
+			receivableWeightUnitPrice: 0,
 			carrierbillInfo: {
 				shipperNo: '',                  /** String 发货单号*/
 				transportType: '公路运输',              /** String 运输方式*/
@@ -467,7 +471,7 @@ export default {
 	components: { DropdownSelect, AddComAddress},
 	computed: {
 		checkInt: () => checkInt,
-		checkFloat2: () => checkFloat2
+		checkFloat2: () => checkFloat2,
 	},
 	created() {
 		this.getUnits()
@@ -480,7 +484,25 @@ export default {
 			}
 			return sum.toFixed(2)
 		},
-		handSelectDate(){
+		totalPrice() {
+			let sum = 0
+			if (this.receivableDistance) {
+				for (let i = this.carrierbillInfo.carrierCargo.length - 1; i >= 0; i--) {
+					if (this.carrierbillInfo.carrierCargo[i].dispatchType == 'Weight') {
+						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
+							* this.receivableWeightUnitPrice 
+							* this.receivableDistance/1000
+					} else {
+						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoVolume) 
+							* this.receivableVolumnUnitPrice 
+							* this.receivableDistance/1000
+					}
+				}
+			}
+			if (sum) this.carrierbillInfo.freight = sum.toFixed(2)
+			return sum.toFixed(2)
+		},
+		handSelectDate (){
 			this.$refs['ruleForm'].validateField('shipperDate')
 			this.$refs['ruleForm'].validateField('consigneeDate')
 		},
@@ -518,10 +540,7 @@ export default {
 			Company.customer().suggest({
 				customerType: 'Delegate',
 				keyword: queryString
-			}).then(res => {
-				cb(res)
-				console.log(res)
-			})
+			}).then(res => { cb(res) })
 		},
 		getShipperCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
@@ -530,7 +549,7 @@ export default {
 			Company.customer().suggest({
 				customerType: 'Shipper',
 				keyword: queryString
-			}).then(res => {cb(res) })
+			}).then(res => { cb(res) })
 		},
 		getConsigneeCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
@@ -576,6 +595,7 @@ export default {
 				this.carrierbillInfo.consignorName = data.companyName
 				this.carrierbillInfo.flagconsignorName = data.companyName
 			})
+			this.listForCalc()
 		},
 		handSelectShipperCompany(data) {
 			this.isChangeShipper = !this.isChangeShipper
@@ -587,6 +607,7 @@ export default {
 				this.carrierbillInfo.flagShipperCompanyName = data.companyName
 				this.getShipperAddress('', false)
 			})
+			this.listForCalc()
 		},
 		handSelectConsigneeCompany(data) {
 			this.isChangeConsignee = !this.isChangeConsignee
@@ -598,8 +619,9 @@ export default {
 				this.carrierbillInfo.flagConsigneeCompanyName = data.companyName
 				this.getConsigneeAddress('', false)
 			})
+			this.listForCalc()
 		},
-		handSelectshipperAddress(data) {
+		handSelectShipperAddress(data) {
 			this.carrierbillInfo.shipperAreaID = data.areaID
 			this.carrierbillInfo.shipperAddressID = data.customerAddressID
 			this.carrierbillInfo.shipperName = data.contactName
@@ -609,6 +631,7 @@ export default {
 			this.carrierbillInfo.shipperLocationAddress = data.locationAddress
 			this.carrierbillInfo.shipperLocationLng = data.locationLng
 			this.carrierbillInfo.shipperLocationLat = data.locationLat
+			this.listForCalc()
 			this.$refs['ruleForm'].validateField('shipperName')
 		},
 		handSelectConsigneeAddress(data) {
@@ -621,6 +644,7 @@ export default {
 			this.carrierbillInfo.consigneeLocationAddress = data.locationAddress
 			this.carrierbillInfo.consigneeLocationLng = data.locationLng
 			this.carrierbillInfo.consigneeLocationLat = data.locationLat
+			this.listForCalc()
 			this.$refs['ruleForm'].validateField('consigneeName')
 		},
 		clearSelectShipper(){
@@ -634,6 +658,42 @@ export default {
 		clearSelectConsignor(){
 			this.carrierbillInfo.consignorName = ' '
 			this.carrierbillInfo.consignorID =''
+		},
+		listForCalc() {
+			const customerID = this.carrierbillInfo.consignorID   /**委托客户ID*/
+			const shipperCustomerID = this.carrierbillInfo.shipperID   /**发货客户ID*/
+			const shipperCustomerAddressID = this.carrierbillInfo.shipperAddressID  /**发货客户地址ID*/
+			const consigneeCustomerID = this.carrierbillInfo.consigneeID   /**收货客户ID*/
+			const consigneeCustomerAddressID = this.carrierbillInfo.consigneeAddressID   /**收货客户地址ID*/
+			if (!customerID 
+				|| !shipperCustomerID 
+				|| !shipperCustomerAddressID 
+				|| !consigneeCustomerID 
+				|| !consigneeCustomerAddressID) return
+			Company.customerRoutePrice().listForCalc([{
+				customerID,  
+				shipperCustomerID,  
+				shipperCustomerAddressID,
+				consigneeCustomerID,
+				consigneeCustomerAddressID
+			}]).then(res => {
+				this.receivableDistance = res[0].receivableDistance
+				this.receivableVolumnUnitPrice = res[0].receivableVolumnUnitPrice
+				this.receivableWeightUnitPrice = res[0].receivableWeightUnitPrice
+				if (!this.receivableDistance) {
+					const start = this.carrierbillInfo.shipperLocationLng + ',' + this.carrierbillInfo.shipperLocationLat
+					const end = this.carrierbillInfo.consigneeLocationLng + ',' + this.carrierbillInfo.consigneeLocationLat
+					this.getDistance(start, end)
+				}
+			})
+		},
+		/**
+		 * 调用高德地图接口获取距离
+		 */
+		async getDistance(start, end) {
+			const url = `https://restapi.amap.com/v3/distance?origins=${start}&destination=${end}&key=${this.MAPKEY}`
+			const res = await axios({ url })
+			if (res.data.status == 1) this.receivableDistance = res.data.results[0].distance
 		},
 		save() {
 			new Promise((resolve, reject) => {
@@ -829,7 +889,6 @@ export default {
 .feeTips
 	margin-bottom 10px
 	font-size 12px
-
 .section-block
 	margin 10px 0
 </style>

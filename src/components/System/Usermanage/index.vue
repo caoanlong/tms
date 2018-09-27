@@ -42,7 +42,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
-import SysMember from '../../../api/SysMember'
+import SysRoleMember from '../../../api/SysRoleMember'
 import Page from '../../CommonComponents/Page'
 import SelectRole from './components/SelectRole'
 import { deleteConfirm } from '../../../common/utils'
@@ -69,7 +69,7 @@ export default {
 			this.getList()
 		},
 		getList() {
-			SysMember.find({
+			SysRoleMember.find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword
@@ -93,7 +93,7 @@ export default {
 		},
 		del(memberID) {
 			deleteConfirm(memberID, memberID => {
-				SysMember.del({ memberID }).then(res => {
+				SysRoleMember.del({ memberID }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

@@ -35,7 +35,7 @@
 </template>
 <script>
 import { Message } from 'element-ui'
-import SysMember from '../../../../api/SysMember'
+import SysRoleMember from '../../../../api/SysRoleMember'
 export default {
     props: {
         showSelectRole: {
@@ -62,7 +62,7 @@ export default {
             this.$emit('selected-role')
         },
         submitSetRole() {
-            SysMember.modifyRole({
+            SysRoleMember.modifyRole({
                 roleIDs: this.selectedRoles.map(item => item.roleID).join(','),
                 memberID: this.memberID
             }).then(res => {
@@ -83,7 +83,7 @@ export default {
         },
         getRoleList() {
             this.roles = []
-            SysMember.roleList({
+            SysRoleMember.roleList({
                 size: 1000,
                 memberID: this.memberID
             }).then(res => {
