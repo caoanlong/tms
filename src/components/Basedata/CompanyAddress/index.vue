@@ -143,7 +143,16 @@ export default {
 		},
 		add() {
 			if (this.customerID && this.companyName) {
-				this.$router.push({ name: 'addcompanyaddress', query: { customerID: this.customerID, companyName: this.companyName } })
+				this.$router.push({ 
+					name: 'addcompanyaddress', 
+					query: { 
+						customerID: this.customerID, 
+						companyName: this.companyName,
+						contactName: this.$route.query.contactName,
+						contactPhone: this.$route.query.contactPhone,
+						companyAreaID: this.$route.query.companyAreaID
+					} 
+				})
 			} else {
 				this.$router.push({ name: 'addcompanyaddress' })
 			}

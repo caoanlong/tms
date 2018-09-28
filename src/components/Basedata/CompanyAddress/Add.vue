@@ -86,6 +86,9 @@ export default {
 			},
 			customerID: this.$route.query.customerID,
 			companyName: this.$route.query.companyName,
+			contactName: this.$route.query.contactName,
+			contactPhone: this.$route.query.contactPhone,
+			companyAreaID: this.$route.query.companyAreaID,
 			rules: {
 				customerID: [{required: true, message: '请输入所属客户'}],
 				contactName: [{required: true, message: '请输入联系人'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
@@ -100,6 +103,11 @@ export default {
 	created() {
 		if (this.customerID) this.companyAddress.customerID = this.customerID
 		if (this.companyName) this.companyAddress.companyName = this.companyName
+		if (this.contactName) this.companyAddress.contactName = this.contactName
+		if (this.contactPhone) this.companyAddress.contactPhone = this.contactPhone
+	},
+	mounted() {
+		this.companyAreaID && this.handSelectedArea(areaIdToArrayId(this.companyAreaID))
 	},
 	methods: {
 		getCompanys(queryString, cb) {

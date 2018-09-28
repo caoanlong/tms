@@ -153,8 +153,7 @@ export default {
 			const customerAddressID = this.$route.query.customerAddressID
 			CustomerAddress.findById({ customerAddressID }).then(res => {
 				this.companyAddress = res
-				this.selectedArea = areaIdToArrayId(res.areaID)
-				this.selectedArea[1] && (this.selectedCity = distData[this.selectedArea[0]][this.selectedArea[1]])
+				this.handSelectedArea(areaIdToArrayId(res.areaID))
 			})
 		},
 		callbackLocation(data) {
