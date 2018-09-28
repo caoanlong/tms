@@ -79,6 +79,8 @@ export default {
             this.selectedCity = ''
             this.companyAddress.customerID = ''
             this.companyAddress.companyName = ''
+            this.companyAddress.locationLng = 0
+            this.companyAddress.locationLat = 0
             if (bool) {
                 this.companyAddress.customerID = this.company ? this.company.customerID : ''
                 this.companyAddress.companyName = this.company ? this.company.companyName : ''

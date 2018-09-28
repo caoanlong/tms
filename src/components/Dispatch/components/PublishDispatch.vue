@@ -126,27 +126,19 @@
                                     <th>吨公里</th>
                                     <th>方公里</th>
                                 </tr>
-                                <tr>
-                                    <th>海天贸易</th>
-                                    <td>昆明五华</td>
-                                    <td>昆明呈贡</td>
-                                    <td>46公里</td>
-                                    <td>0.45元</td>
-                                    <td>0.45元</td>
-                                </tr>
-                                <tr>
-                                    <th>雪花啤酒</th>
-                                    <td>昆明五华</td>
-                                    <td>昆明呈贡</td>
-                                    <td>46公里</td>
-                                    <td>0.45元</td>
-                                    <td>0.45元</td>
+                                <tr v-for="(item, i) in transPriceTable" :key="i">
+                                    <th>{{item.consignorName}}</th>
+                                    <td>{{item.shipperAreaName}}</td>
+                                    <td>{{item.consigneeAreaName}}</td>
+                                    <td>{{(item.receivableDistance/1000).toFixed(2) || 0}}公里</td>
+                                    <td>{{item.receivableWeightUnitPrice || 0}}元</td>
+                                    <td>{{item.receivableVolumnUnitPrice || 0}}元</td>
                                 </tr>
                             </table>
                         </div>
                         <div class="transFeeTips">
                             <svg-icon icon-class="info" class="infoIcon"></svg-icon>
-                            <p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
+                            <p>委托方{{transPriceTable[0].consignorName}}已配置应收运价（{{transPriceTable[0].receivableWeightUnitPrice}}吨/公里，{{transPriceTable[0].receivableVolumnUnitPrice}}方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
                         </div>
                     </el-tooltip>
                     <el-form 
@@ -349,6 +341,7 @@ export default {
             personDialog: false,
             selectedTruck: {},
             personType: 'primary',
+            transPriceTable: [],
             baseDizDispatchFee: {
                 item: 'Freight',  // 费用科目
                 category: 'Basic', // 费用类型
@@ -377,7 +370,19 @@ export default {
     watch: {
         transLines: {
             handler(val) {
-                console.log(val)
+                this.transPriceTable = []
+                let i = 1
+                while (i < val.length) {
+                    this.transPriceTable.push({
+                        consignorName: val[i].consignorName,
+                        shipperAreaName: val[i-1].areaName,
+                        consigneeAreaName: val[i].areaName,
+                        receivableDistance: val[i].receivableDistance,
+                        receivableVolumnUnitPrice: val[i].receivableVolumnUnitPrice,
+                        receivableWeightUnitPrice: val[i].receivableWeightUnitPrice
+                    })
+                    i++
+                }
             },
             deep: true
         },
@@ -409,7 +414,7 @@ export default {
 				return prev + curr
 			}, 0).toFixed(2)
 			return Number(val) + Number(this.baseDizDispatchFee.amount)
-        }
+        },
     },
     methods: {
         handSelectTruck(data) {

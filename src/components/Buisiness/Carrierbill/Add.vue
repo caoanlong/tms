@@ -499,7 +499,11 @@ export default {
 					}
 				}
 			}
-			if (sum) this.carrierbillInfo.freight = sum.toFixed(2)
+			if (sum) {
+				this.carrierbillInfo.freight = sum.toFixed(2)
+			} else {
+				this.carrierbillInfo.freight = ''
+			}
 			return sum.toFixed(2)
 		},
 		handSelectDate (){

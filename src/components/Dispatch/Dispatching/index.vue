@@ -424,7 +424,7 @@
 								<td align="center">{{item.carrierOrderNo}}</td>
 								<td align="center" :class="item.type">{{item.type == 'Load' ? '装车' : '卸货'}}</td>
 								<td align="center">{{item.areaName + item.posAddress + item.detailAddress}}</td>
-								<td align="center">{{(Number(item.nodeDistance)/1000).toFixed(2)}}公里</td>
+								<td align="center">{{(Number(item.receivableDistance)/1000).toFixed(2)}}公里</td>
 								<td align="center">{{item.requireTime | getdatefromtimestamp('min')}}</td>
 							</tr>
 						</tbody>
@@ -657,7 +657,11 @@ export default {
 					areaID: i.shipperAreaID,
 					requireTime: i.shipperDate,
 					latitude: i.shipperLocationLat,
-					longitude: i.shipperLocationLng
+					longitude: i.shipperLocationLng,
+					consignorName: i.consignorName,
+					receivableDistance: i.receivableDistance,
+					receivableVolumnUnitPrice: i.receivableVolumnUnitPrice,
+					receivableWeightUnitPrice: i.receivableWeightUnitPrice
 				})
 				this.transLines.push({
 					type: 'Unload',
@@ -669,8 +673,36 @@ export default {
 					areaID: i.consigneeAreaID,
 					requireTime: i.consigneeDate,
 					latitude: i.consigneeLocationLat,
-					longitude: i.consigneeLocationLng
+					longitude: i.consigneeLocationLng,
+					consignorName: i.consignorName,
+					receivableDistance: i.receivableDistance,
+					receivableVolumnUnitPrice: i.receivableVolumnUnitPrice,
+					receivableWeightUnitPrice: i.receivableWeightUnitPrice
 				})
+				// this.transLines.push({
+				// 	type: 'Load',
+				// 	carrierOrderID: i.carrierOrderID,
+				// 	carrierOrderNo: i.carrierOrderNo,
+				// 	detailAddress: i.shipperDetailAddress,
+				// 	posAddress: i.shipperLocationAddress,
+				// 	areaName: i.shipperArea,
+				// 	areaID: i.shipperAreaID,
+				// 	requireTime: i.shipperDate,
+				// 	latitude: i.shipperLocationLat,
+				// 	longitude: i.shipperLocationLng
+				// })
+				// this.transLines.push({
+				// 	type: 'Unload',
+				// 	carrierOrderID: i.carrierOrderID,
+				// 	carrierOrderNo: i.carrierOrderNo,
+				// 	detailAddress: i.consigneeDetailAddress,
+				// 	posAddress: i.consigneeLocationAddress,
+				// 	areaName: i.consigneeArea,
+				// 	areaID: i.consigneeAreaID,
+				// 	requireTime: i.consigneeDate,
+				// 	latitude: i.consigneeLocationLat,
+				// 	longitude: i.consigneeLocationLng
+				// })
 			})
 			this.transLines.sort((a, b) => {
 				if (a.requireTime == b.requireTime) {
@@ -699,8 +731,8 @@ export default {
 			this.totalDistance = 0
 			arrays.forEach((item,i) => {
 				item.sequence = i+1
-				item.nodeDistance = results[i]
-				this.totalDistance += Number(item.nodeDistance)
+				item.receivableDistance = results[i]
+				this.totalDistance += Number(item.receivableDistance)
 			})
 			this.transLines = arrays
 		},

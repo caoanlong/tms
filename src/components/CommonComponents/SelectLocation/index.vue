@@ -73,8 +73,10 @@ export default {
         this.createMap()
     },
     destroyed() {
-        this.destroyMapMask()
+        this.lnglat = [0,0]
+        this.map.clearMap()
         this.map.destroy()
+        this.destroyMapMask()
     },
     methods: {
         search() {
@@ -93,6 +95,7 @@ export default {
         createMap() {
             this.map = new AMap.Map('amapLocationSelect')
             if (this.location && this.location[0] && this.location[1]) {
+                console.log(this.location)
                 this.lnglat = this.location
                 this.map.setCenter(this.location)
                 this.map.add(this.createMarker(this.location))
