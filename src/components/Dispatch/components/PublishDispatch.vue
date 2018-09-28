@@ -116,6 +116,34 @@
                         <span style="font-size:12px;color:#ccc;font-weight:400">（如已配置发货方的给司机的运价，系统会默认算金额）</span>
                     </p>
                     <el-tooltip content="点击关闭 tooltip 功能" placement="top" effect="light">
+                        <div slot="content">
+                            <table class="dialog-table">
+                                <tr>
+                                    <th>委托方</th>
+                                    <th>起点</th>
+                                    <th>终点</th>
+                                    <th>运输距离</th>
+                                    <th>吨公里</th>
+                                    <th>方公里</th>
+                                </tr>
+                                <tr>
+                                    <th>海天贸易</th>
+                                    <td>昆明五华</td>
+                                    <td>昆明呈贡</td>
+                                    <td>46公里</td>
+                                    <td>0.45元</td>
+                                    <td>0.45元</td>
+                                </tr>
+                                <tr>
+                                    <th>雪花啤酒</th>
+                                    <td>昆明五华</td>
+                                    <td>昆明呈贡</td>
+                                    <td>46公里</td>
+                                    <td>0.45元</td>
+                                    <td>0.45元</td>
+                                </tr>
+                            </table>
+                        </div>
                         <div class="transFeeTips">
                             <svg-icon icon-class="info" class="infoIcon"></svg-icon>
                             <p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
