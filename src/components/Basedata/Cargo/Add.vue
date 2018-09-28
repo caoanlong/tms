@@ -92,7 +92,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Customer from '../../../api/Customer'
+import Company from '../../../api/Company'
 import CargoUnit from '../../../api/CargoUnit'
 import CargoGeneralName from '../../../api/CargoGeneralName'
 import { checkTel } from '../../../common/validator'
@@ -178,7 +178,7 @@ export default {
 		},
 		getShipperCompanys(queryString, cb) {
 			this.cargo.customerID = ''
-			Customer.suggest({
+			Company.customer().suggest({
 				customerType: 'Shipper',
 				companyName: queryString
 			}).then(res => { cb(res) })

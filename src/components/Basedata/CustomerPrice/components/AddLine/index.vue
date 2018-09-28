@@ -260,7 +260,7 @@ export default {
 			this.isChangeShipper = !this.isChangeShipper
 			this.line.shipperName = ' '
 			this.line.shipperCustomerID = data.customerID
-			this.selectedShipperAddress = data
+			this.selectedShipperAddress = new Date()  // 触发组件watch
 			this.$nextTick(() => {
 				this.line.flagShipperName = this.line.shipperName = data.companyName
 				this.getShipperAddress('', false)
@@ -270,7 +270,7 @@ export default {
 			this.isChangeConsignee = !this.isChangeConsignee
 			this.line.consigneeName = ' '
 			this.line.consigneeCustomerID = data.customerID
-			this.selectedConsigneeAddress = data
+			this.selectedConsigneeAddress = new Date()  // 触发组件watch
 			this.$nextTick(() => {
 				this.line.flagConsigneeName = this.line.consigneeName = data.companyName
 				this.getConsigneeAddress('', false)
