@@ -46,6 +46,9 @@ export default {
     },
     destroyed() {
         this.map.destroy()
+        this.time = 0
+        this.distance = 0
+        this.speed = 0
         this.driving = null
         this.destroyMapMask()
     },
@@ -55,6 +58,9 @@ export default {
          */
         handTabChange(type) {
             this.map.destroy()
+            this.time = 0
+            this.distance = 0
+            this.speed = 0
             this.driving = null
             this.getTrack(type)
         },
