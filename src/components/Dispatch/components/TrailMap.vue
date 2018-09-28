@@ -177,8 +177,8 @@ export default {
     width 60%
     position fixed
     left 50%
-    top 50%
-    transform translate(-50%,-50%)
+    top 100px 
+    margin-left -30%   
     padding 10px
     background-color #fff
     border-radius 2px

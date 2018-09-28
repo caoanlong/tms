@@ -63,7 +63,7 @@ export default {
 				companyName: '',
 				contactName: '',
 				contactPhone: '',
-				customerType: ''
+				customerType: []
 			},
 			rules: {
 				companyName: [ {required: true, message: '请输入名称', trigger: 'blur'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],

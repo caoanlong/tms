@@ -127,7 +127,9 @@ export default {
 			}
 		},
 		viewAddress(data) {
-			this.$router.push({ name: 'companyaddress' , query: {  customerID: data.customerID, companyName: data.companyName } })
+			this.$router.push({ name: 'companyaddress' , query: {  customerID: data.customerID, companyName: data.companyName,contactName: data.contactName,
+						contactPhone: data.contactPhone,
+						companyAreaID: data.companyAreaID } })
 		},
 		del(customerID) {
 			deleteConfirm(customerID, customerIDs => {
