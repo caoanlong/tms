@@ -270,26 +270,18 @@
                     <span class="num-tit">总运费：{{totalFreight}}元</span>
                 </div>
                 <el-row>
-                    <el-form size="small" :model="normal" ref="ruleForm2">
+                    <el-form size="small" :model="normal" ref="ruleForm2" :rules="normalRule">
                         <el-col :span="8">
-                            <el-form-item label="接单截止时间" label-width="100px" prop="endDate" :rules="[{
-                                validator: (rule, value, callback) => {
-                                    if (value && value < new Date().getTime()) {
-                                        callback('时间不能早于当前时间')
-                                    } else {
-                                        callback()
-                                    }
-                                }
-                            }]">
+                            <el-form-item label="接单截止时间" label-width="110px" prop="endDate">
                                 <el-date-picker 
                                     format="yyyy-MM-dd"
                                     v-model="normal.endDate" 
                                     type="date" 
-                                    placeholder="选择日期"
-                                    :clearable="false"
+                                    placeholder="请选择日期"
                                     style="width:100%"
-                                    value-format="timestamp" 
-                                    :picker-options="{ disabledDate: (curDate) => new Date()  > curDate }">
+                                    value-format="timestamp"
+                                    @change="handSelectDate"
+                                    :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 >= curDate }">
                                 </el-date-picker>
                             </el-form-item>
                          </el-col>
@@ -300,17 +292,18 @@
                                     :picker-options="{
                                         start:'00:00',
                                         step: '01:00',
-                                        end:'23:00'
+                                        end:'23:00',
+                                        minTime:this.minDateTime
                                     }"
-                                    placeholder="选择时间">
+                                    placeholder="请选择时间">
                                 </el-time-select>
                             </el-form-item>
                         </el-col>
                     </el-form>
                 </el-row>
                 <el-row style="margin-top:20px" class="text-center">
-                    <el-button @click="close">取消</el-button>
-                    <el-button type="primary" @click="publish">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
+                    <el-button @click="close" size="small">取消</el-button>
+                    <el-button type="primary" @click="publish" size="small">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
                 </el-row>
         </el-dialog>
         <select-truck :isVisible="truckDialog" @control="handSelectTruck"></select-truck>
@@ -365,6 +358,8 @@ export default {
                 payMode: 'Prepay',  // 支付方式
                 amount: ''  // 金额
             },
+            minDateTime:'',
+            endDateTime:'',
             bizDispatchFeeList: [],
             normal: {
                 endDate: ''
@@ -372,7 +367,10 @@ export default {
             persons: [],
             baseDizDispatchFeeRule: {
                 amount: [{required: true, message: '请输入基础运费'}],
-                payMode: [{required: true, message: '请选择支付方式'}]
+                payMode: [{required: true, message: '请选择支付方式'}],
+            },
+            normalRule:{
+                endDate: [{ required: true, message: '请选择日期'}]
             }
         }
     },
@@ -383,6 +381,20 @@ export default {
         //     },
         //     deep: true
         // }
+        isVisible: function (val){
+            if(val){
+                let now = new Date()
+                let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+                let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+                if(minute > 30){
+                    this.minDateTime =  hour +1 +":"+"00"
+                }else{
+                    this.minDateTime =  hour +":"+"00"
+                }
+            } else {
+                this.minDateTime = ""
+            }
+        }
     },
     computed: {
         totalFreight() {
@@ -390,7 +402,7 @@ export default {
 			const val = values.reduce((prev, curr) => {
 				return prev + curr
 			}, 0).toFixed(2)
-			return Number(val)
+			return Number(val) + Number(this.baseDizDispatchFee.amount)
         }
     },
     methods: {
@@ -492,6 +504,9 @@ export default {
             }
             this.bizDispatchFeeList = bizDispatchFeeList
         },
+        handSelectDate(value){
+            this.endDateTime = value
+        },
         /**
          * 发布
          */
@@ -544,9 +559,9 @@ export default {
                     }
                 })
                 if (this.normal.endTime) {
-                    this.normal.endDate = this.normal.endDate + timeToTimestamp(this.normal.endTime)
+                    this.normal.endDate = this.endDateTime + timeToTimestamp(this.normal.endTime)
                 } else {
-                    this.normal.endDate = this.normal.endDate + 3600000*24-1000
+                    this.normal.endDate = this.endDateTime + 3600000*24-1000
                 }
                 DispatchOrder.addForDispatch({
                     truckID: this.selectedTruck.truckID,
