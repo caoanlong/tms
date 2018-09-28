@@ -321,7 +321,7 @@
 							<el-row class="block-content">
 								<div class="transFeeTips" v-if="+receivableWeightUnitPrice || +receivableVolumnUnitPrice">
 									<svg-icon icon-class="info" class="infoIcon"></svg-icon>
-									<p>委托方海天贸易已配置应收运价（{{receivableWeightUnitPrice}}吨/公里，{{receivableVolumnUnitPrice}}方/公里）根据货量、运输距离计算出的参考金额 {{totalPrice()}}元</p>
+									<p>委托方{{carrierbillInfo.consignorName}}已配置应收运价（{{receivableWeightUnitPrice}}元/吨公里，{{receivableVolumnUnitPrice}}元/方公里）根据货量、运输距离计算出的参考金额 {{totalPrice()}}元</p>
 								</div>
 								<el-form-item label="运费金额" prop="freight">
 									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight"></el-input>

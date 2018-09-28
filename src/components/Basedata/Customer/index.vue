@@ -112,7 +112,16 @@ export default {
 			} else if (e.type == 'edit') {
 				this.$router.push({ name: 'editrecdeliverycomp' , query: {  customerID: e.id } })
 			} else if (e.type == 'address') {
-				this.$router.push({ name: 'companyaddress' , query: {  customerID: e.data.customerID, companyName: e.data.companyName } })
+				this.$router.push({ 
+					name: 'companyaddress', 
+					query: { 
+						customerID: e.data.customerID,
+						companyName: e.data.companyName,
+						contactName: e.data.contactName,
+						contactPhone: e.data.contactPhone,
+						companyAreaID: e.data.companyAreaID
+					}
+				})
 			} else if (e.type == 'delete') {
 				this.del(e.id)
 			}
