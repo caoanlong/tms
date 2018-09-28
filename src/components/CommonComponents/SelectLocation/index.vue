@@ -9,19 +9,18 @@
             <span class="closeBtn" @click="close">
                 <svg-icon icon-class="close"></svg-icon>
             </span>
-            
         </div>
         <el-row>
-            <el-form :inline="true" :inline-message="true">
-                <el-form-item label="经度">
-                <el-input placeholder="请输入经度" size="mini"></el-input>
+            <el-form :inline="true" :model="find" :rules="rules" ref="ruleForm">
+                <el-form-item label="经度" prop="lng">
+                    <el-input placeholder="请输入经度" size="mini" v-model="find.lng"></el-input>
                 </el-form-item>
-                <el-form-item label="纬度">
-                <el-input placeholder="请输入纬度" size="mini"></el-input>
+                <el-form-item label="纬度" prop="lat">
+                    <el-input placeholder="请输入纬度" size="mini" v-model="find.lat"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" size="mini">查询</el-button>
-                    <el-button size="mini">重置</el-button>
+                    <el-button type="primary" size="mini" @click="search">查询</el-button>
+                    <el-button size="mini" @click="reset">重置</el-button>
                 </el-form-item>
             </el-form>
         </el-row>
@@ -49,8 +48,16 @@ export default {
         return {
             map: null,
             isMax:false,
+            find: {
+                lng: '',
+                lat: ''
+            },
             lnglat: [0,0],
-            address: ''
+            address: '',
+            rules: {
+                lng: [ {required: true, message: '请输入经度'} ],
+                lat: [ {required: true, message: '请输入纬度'} ]
+            }
         }
     },
     computed: {
@@ -70,6 +77,16 @@ export default {
         this.map.destroy()
     },
     methods: {
+        search() {
+            this.lnglat = [this.find.lng, this.find.lat]
+            this.map.setCenter(this.lnglat)
+            this.map.clearMap()
+            this.map.add(this.createMarker(this.lnglat))
+        },
+        reset() {
+			this.find.lng = ''
+            this.find.lat = ''
+		},
         /**
          * 创建地图
          */
@@ -82,6 +99,7 @@ export default {
             }
             this.map.on('click', (e) => {
                 this.lnglat = [e.lnglat.lng, e.lnglat.lat]
+                this.map.setCenter(this.lnglat)
                 this.map.clearMap()
                 this.map.add(this.createMarker(this.lnglat))
                 this.getAddressByLocation(this.lnglat)
