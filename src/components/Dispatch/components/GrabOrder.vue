@@ -75,14 +75,16 @@
             </el-row>
             <el-row>
             <el-col :span="8">
-                <el-form-item label="接单截止时间" label-width="110px" prop="endDate">
+                <el-form-item label="接单截止时间" label-width="110px" prop="endDate" >
                     <el-date-picker 
                         format="yyyy-MM-dd"
                         v-model="grabOrder.endDate"
                         type="date"
                         style="width:100%"
                         value-format="timestamp"
-                        :picker-options="{ disabledDate: (curDate) => new Date() > curDate }" >
+                        @change="handSelectDate"
+                        placeholder="请选择日期"
+                        :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 > curDate }" >
                     </el-date-picker>
                 </el-form-item>
             </el-col>
@@ -93,9 +95,10 @@
                         :picker-options="{
                             start:'00:00',
                             step: '01:00',
-                            end:'23:00'
+                            end:'23:00',
+                            minTime:this.minDateTime
                         }"
-                        placeholder="选择时间">
+                        placeholder="请选择时间">
                     </el-time-select>
                 </el-form-item>
             </el-col>
@@ -148,19 +151,31 @@ export default {
                 endDate: '',
                 freight: ''
             },
+            minDateTime:'',
+            endDateTime:'',
             rules: {
                 requiredTruckType:[{required: true , message: '请选择车型'}],
                 requiredTruckLength: [{required: true , message: '请输入车长'},{ validator: checkFloat2 }],
                 type: [{ required: true , message: '请选择报价类型' }],
                 freight: [{ required: true , message: '请输入一口价' },{ validator: checkInt }],
                 payMode: [{ required: true , message: '请选择运费支付方式' }],
-                endDate: [{ validator: (rule, value, callback) => {
-                    if (value && value < new Date().getTime()) {
-                        callback('时间不能早于当前时间')
-                    } else {
-                        callback()
-                    }
-                } }]
+                endDate: [{ required: true, message: '请选择截止日期'}]
+            }
+        }
+    },
+    watch: {
+        isVisible: function (val){
+            if(val){
+                let now = new Date()
+                let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+                let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+                if(minute > 30){
+                    this.minDateTime =  hour +1 +":"+"00"
+                }else{
+                    this.minDateTime =  hour +":"+"00"
+                }
+            } else {
+                this.minDateTime = ""
             }
         }
     },
@@ -170,6 +185,9 @@ export default {
         },
         handleSelectTruckLength(data) {
             this.grabOrder.requiredTruckLength = String(data.value)
+        },
+        handSelectDate(value){
+            this.endDateTime = value
         },
         publish() {
             this.$refs['ruleForm'].validate(valid => {
@@ -188,9 +206,9 @@ export default {
                 })
                 const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
                 if (this.grabOrder.endTime) {
-                    this.grabOrder.endDate = this.grabOrder.endDate + timeToTimestamp(this.grabOrder.endTime)
+                    this.grabOrder.endDate = this.endDateTime + timeToTimestamp(this.grabOrder.endTime)
                 } else {
-                    this.grabOrder.endDate = this.grabOrder.endDate + 3600000*24-1000
+                    this.grabOrder.endDate = this.endDateTime + 3600000*24-1000
                 }
                 DispatchOrder.addForOffer({
                     dispatchTaskCargoList,

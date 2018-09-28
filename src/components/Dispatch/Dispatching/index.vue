@@ -232,8 +232,8 @@
 									<p>{{item.consigneeLocationAddress + '，' + item.consigneeDetailAddress}}</p>
 								</td>
 								<td align="center">
-									<p>{{item.shipperDate | getdatefromtimestamp('min')}}</p>
-									<p>{{item.consigneeDate | getdatefromtimestamp('min')}}</p>
+									<p>{{item.shipperDate | isFullDay()}}</p>
+									<p>{{item.consigneeDate | isFullDay()}}</p>
 								</td>
 								<td align="center">{{item.cargoName}}</td>
 								<td align="center">
@@ -493,7 +493,7 @@ import GrabOrder from '../components/GrabOrder'
 import { baseMixin } from '../../../common/mixin'
 import Carrierbill from '../../../api/Carrierbill'
 import { checkFloat2, checkInt } from '../../../common/valid'
-import { arrayUnique } from '../../../common/utils'
+import { arrayUnique ,isFullDay} from '../../../common/utils'
 export default {
 	mixins: [baseMixin], 
 	data(){

@@ -125,6 +125,12 @@
 									@click="viewPhotos(transport.dispatchTaskID)">
 									查看({{transport.taskPicNum}})
 								</el-button>
+								<el-button 
+									type="primary" 
+									size="mini" 
+									@click="trail(transport.dispatchOrderID)">
+									轨迹
+								</el-button>
 							</td>
 						</tr>
 					</table>
@@ -160,6 +166,11 @@
 				<el-button @click="back">返回</el-button>
 			</div>
 		</el-card>
+		<trail-map 
+			v-if="trailDialog" 
+			:dispatchOrderID="currentDispatchOrderID" 
+			@cancel="handCloseTrail">
+		</trail-map>
 		<UploadPhoto 
 			:isPreview="true" 
 			:isVisible="isPhotoVisible" 
@@ -172,11 +183,13 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import TrailMap from '../../Dispatch/components/TrailMap'
 import Carrierbill from '../../../api/Carrierbill'
 import UploadPhoto from './components/UploadPhoto'
 export default {
 	data() {
 		return {
+			trailDialog: false,
 			mapType: {
 				'ConsigneePor': '货物托运单',
 				'ShipperPor': '货物发货单'
@@ -191,7 +204,7 @@ export default {
 			transports: []
 		}
 	},
-	components: { UploadPhoto },
+	components: { UploadPhoto,TrailMap },
 	created() {
 		this.getInfo()
 	},
@@ -233,7 +246,14 @@ export default {
 		},
 		back() {
 			this.$router.go(-1)
-		}
+		},
+		handCloseTrail() {
+			this.trailDialog = false
+		},
+		trail(dispatchOrderID) {
+			this.currentDispatchOrderID = dispatchOrderID
+			this.trailDialog = true
+		},
 	}
 }
 </script>
