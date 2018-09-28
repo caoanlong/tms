@@ -377,6 +377,12 @@ export default {
         }
     },
     watch: {
+        transLines: {
+            handler(val) {
+                console.log(val)
+            },
+            deep: true
+        },
         // dispatchTaskCargoList: {
         //     handler(val) {
         //         this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
@@ -469,7 +475,7 @@ export default {
          */
         createPersons() {
             if (this.selectedTruck.primaryDriver && this.selectedTruck.superCargo) {
-                if(this.selectedTruck.primaryDriver.supercargoID==this.selectedTruck.superCargo.supercargoID){
+                if(this.selectedTruck.primaryDriver.supercargoID == this.selectedTruck.superCargo.supercargoID){
                      this.persons = [this.selectedTruck.primaryDriver]
                 }else{
                     this.persons = [this.selectedTruck.primaryDriver, this.selectedTruck.superCargo]

@@ -52,6 +52,7 @@
 		<select-location 
 			v-if="isLocationVisible" 
 			:location="[companyAddress.locationLng, companyAddress.locationLat]" 
+			:selectedCity="selectedCity"
 			:locAddress="companyAddress.locationAddress" 
 			:callback="callbackLocation">
 		</select-location>

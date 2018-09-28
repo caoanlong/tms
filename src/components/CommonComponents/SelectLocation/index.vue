@@ -1,6 +1,5 @@
 <template>
     <div class="map-container" :class="isMax?'max':''">
-        
         <div class="dialog-tit">
             <div class="title">选择定位地址</div>
             <span class="minMax" @click="resizeDialog">
@@ -42,6 +41,7 @@ export default {
     props: {
         location: Array,
         locAddress: String,
+        selectedCity: String,
         callback: Function
     },
     data() {
@@ -96,6 +96,8 @@ export default {
                 this.lnglat = this.location
                 this.map.setCenter(this.location)
                 this.map.add(this.createMarker(this.location))
+            } else {
+                this.getLocationByArea()
             }
             this.map.on('click', (e) => {
                 this.lnglat = [e.lnglat.lng, e.lnglat.lat]
@@ -122,6 +124,24 @@ export default {
                         this.address = result.regeocode.formattedAddress || '未知地址'
                     } else {
                         this.address = '未知地址'
+                    }
+                })
+            })
+        },
+        /**
+         * 根据地址获取经纬度
+         */
+        getLocationByArea() {
+            AMap.plugin('AMap.Geocoder', () => {
+                const geocoder = new AMap.Geocoder({
+                    city: this.selectedCity
+                })
+                geocoder.getLocation(this.selectedCity, (status, result) => {
+                    if (status === 'complete' && result.info === 'OK') {
+                        const location = result.geocodes[0].location
+                        this.find.lng = location.lng
+                        this.find.lat = location.lat
+                        this.search()
                     }
                 })
             })

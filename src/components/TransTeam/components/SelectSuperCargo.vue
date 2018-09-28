@@ -76,7 +76,7 @@ export default {
                 obj.secondaryDriver = data.supercargoID
             }
             Truck.changeDriver(obj).then(res => {
-                Message.success(res.data.msg)
+                Message.success(res.msg)
                 this.control(true, data)
             })
         },

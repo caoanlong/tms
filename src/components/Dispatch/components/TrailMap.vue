@@ -66,8 +66,8 @@ export default {
                 dispatchOrderID: this.dispatchOrderID,
                 type
             }).then(res => {
-                this.locationList = res.locationList
-                this.dispatchTaskPicList = res.dispatchTaskPicList
+                this.locationList = res.locationList || []
+                this.dispatchTaskPicList = res.dispatchTaskPicList || []
                 const path = this.locationList.map(item => {
                     return { lnglat: item.loc.coordinates }
                 })

@@ -87,7 +87,7 @@ export default {
                 size: 1000,
                 memberID: this.memberID
             }).then(res => {
-                this.roles = res.data.data
+                this.roles = res.data
                 this.selectedRoles = this.roles.filter(item => item.hasRole)
                 this.$nextTick(() => {
                     this.selectedRoles.forEach(row => {
