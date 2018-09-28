@@ -262,9 +262,9 @@
                     <span class="num-tit">总运费：{{totalFreight}}元</span>
                 </div>
                 <el-row>
-                    <el-form size="small" :model="normal" ref="ruleForm2" :rules="normalRule">
+                    <el-form size="small" :model="normal" ref="ruleForm2">
                         <el-col :span="8">
-                            <el-form-item label="接单截止时间" label-width="110px" prop="endDate">
+                            <el-form-item label="接单截止时间" label-width="100px">
                                 <el-date-picker 
                                     format="yyyy-MM-dd"
                                     v-model="normal.endDate" 
@@ -280,6 +280,7 @@
                          <el-col :span="8">
                             <el-form-item label-width="20px">
                                 <el-time-select
+                                    :disabled = this.normal.endDate?false:true
                                     v-model="normal.endTime"
                                     :picker-options="{
                                         start:'00:00',
@@ -362,9 +363,6 @@ export default {
                 amount: [{required: true, message: '请输入基础运费'}],
                 payMode: [{required: true, message: '请选择支付方式'}],
             },
-            normalRule:{
-                endDate: [{ required: true, message: '请选择日期'}]
-            }
         }
     },
     watch: {
@@ -572,7 +570,11 @@ export default {
                 if (this.normal.endTime) {
                     this.normal.endDate = this.endDateTime + timeToTimestamp(this.normal.endTime)
                 } else {
-                    this.normal.endDate = this.endDateTime + 3600000*24-1000
+                    if(this.normal.endDate){
+                        this.normal.endDate = this.endDateTime + 3600000*24-1000
+                    } else {
+                        this.normal.endDate = ''
+                    }
                 }
                 DispatchOrder.addForDispatch({
                     truckID: this.selectedTruck.truckID,
@@ -582,7 +584,7 @@ export default {
                     dispatchTaskCargoList,
                     dispatchTaskList,
                     bizDispatchNodeList: this.transLines,
-                    endDate: this.normal.endDate,
+                    endDate: this.normal.endDate ? this.normal.endDate:'',
                     distance: this.totalDistance
                 }).then(res => {
                     Message.success('成功！')

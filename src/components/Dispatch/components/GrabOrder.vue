@@ -159,7 +159,6 @@ export default {
                 type: [{ required: true , message: '请选择报价类型' }],
                 freight: [{ required: true , message: '请输入一口价' },{ validator: checkInt }],
                 payMode: [{ required: true , message: '请选择运费支付方式' }],
-                endDate: [{ required: true, message: '请选择截止日期'}]
             }
         }
     },
@@ -208,7 +207,12 @@ export default {
                 if (this.grabOrder.endTime) {
                     this.grabOrder.endDate = this.endDateTime + timeToTimestamp(this.grabOrder.endTime)
                 } else {
-                    this.grabOrder.endDate = this.endDateTime + 3600000*24-1000
+                    if(this.grabOrder.endDate){
+                        this.grabOrder.endDate = this.endDateTime + 3600000*24-1000
+                    }else{
+                        this.grabOrder.endDate = ''
+                    }
+                    
                 }
                 DispatchOrder.addForOffer({
                     dispatchTaskCargoList,
@@ -222,7 +226,7 @@ export default {
                     endDate: this.grabOrder.endDate,
                     distance: this.totalDistance
                 }, true).then(res => {
-                    Message.success(res.data.msg)
+                    Message.success(res.msg)
                     this.$emit('cancel', true)
                 })
             })

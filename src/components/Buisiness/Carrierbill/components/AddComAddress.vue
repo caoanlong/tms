@@ -64,6 +64,7 @@ import distData from '../../../../assets/data/distpicker.data'
 import { checkTel } from '../../../../common/validator'
 import DistPicker from '../../../CommonComponents/DistPicker'
 import SelectLocation from '../../../CommonComponents/SelectLocation'
+import { areaIdToArrayId } from '../../../../common/utils'
 export default {
     components: { DistPicker, SelectLocation },
     props: {
@@ -74,16 +75,23 @@ export default {
         company: Object
     },
     watch: {
+        company: {
+            handler(val) {
+               console.log(val)
+            },
+            deep: true
+        },
         isVisible(bool) {
             this.selectedArea = []
             this.selectedCity = ''
             this.companyAddress.customerID = ''
             this.companyAddress.companyName = ''
-            this.companyAddress.locationLng = 0
-            this.companyAddress.locationLat = 0
             if (bool) {
                 this.companyAddress.customerID = this.company ? this.company.customerID : ''
                 this.companyAddress.companyName = this.company ? this.company.companyName : ''
+                this.companyAddress.contactName = this.company ? this.company.contactName : ''
+                this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
+                this.selectedArea = this.company ? areaIdToArrayId(String(this.company.companyAreaID)) : [] 
             }
         }
     },
