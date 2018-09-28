@@ -70,7 +70,7 @@
                             <el-row class="block-content">
                                 <el-form-item label="运输距离" prop="receivableDistance">
                                     <el-input v-model="line.receivableDistance" placeholder="请输入...">
-                                        <template slot="append">元</template>
+                                        <template slot="append">公里</template>
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item label="吨公里" prop="receivableWeightUnitPrice">
@@ -92,7 +92,7 @@
                             <el-row class="block-content">
                                 <el-form-item label="运输距离" prop="payableDistance">
                                     <el-input v-model="line.payableDistance" placeholder="请输入...">
-                                        <template slot="append">元</template>
+                                        <template slot="append">公里</template>
                                     </el-input>
                                 </el-form-item>
                                 <el-form-item label="吨公里" prop="payableWeightUnitPrice">
@@ -149,6 +149,13 @@ export default {
 		}
 	},
     data() {
+		var validateRangeOfPrice = (rule, value, callback) => {
+			if (value && (value<0 || value>9999.99) ){
+				callback(new Error('请输入0~9999.99'))
+			} else {
+				callback()
+			}
+		}
         return {
 			isChangeShipper: false,
 			isChangeConsignee: false,
@@ -193,11 +200,13 @@ export default {
 				],
 				receivableWeightUnitPrice: [
 					{required: true, message: '请输入对客户应收运价/吨公里'}, 
-					{validator: checkFloat2}
+					{validator: checkFloat2},
+					{validator: validateRangeOfPrice}
 				],
                 receivableVolumnUnitPrice: [
 					{required: true, message: '请输入对客户应收运价/方公里'}, 
-					{validator: checkFloat2}
+					{validator: checkFloat2},
+					{validator: validateRangeOfPrice}
 				],
 				payableDistance: [
 					{required: true, message: '请输入对司机支付运价/运输距离'}, 
@@ -205,11 +214,13 @@ export default {
 				],
 				payableWeightUnitPrice: [
 					{required: true, message: '请输入对司机支付运价/吨公里'}, 
-					{validator: checkFloat2}
+					{validator: checkFloat2},
+					{validator: validateRangeOfPrice}
 				],
 				payableVolumnUnitPrice: [
 					{required: true, message: '请输入对司机支付运价/方公里'}, 
-					{validator: checkFloat2}
+					{validator: checkFloat2},
+					{validator: validateRangeOfPrice}
 				]
 			}
         }
