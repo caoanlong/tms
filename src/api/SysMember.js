@@ -5,4 +5,4 @@ class SysMember extends Base {
 
 }
 
-export default new SysMember('/sys/member', request)
+export default new SysMember('/sys/mem', request)
