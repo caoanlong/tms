@@ -72,20 +72,35 @@ export default {
         }
     },
     data() {
+        const validateRangeOfPrice = (rule, value, callback) => {
+			if (value && (value<0 || value>9999.99) ){
+				callback(new Error('请输入0~9999.99'))
+			} else {
+				callback()
+			}
+		}
         return {
             price: {},
 			rules: {
 				receivableWeightUnitPrice: [
-                    {required: true, message: '请输入对客户应收运价/吨公里'}, {validator: checkFloat2}
+                    {required: true, message: '请输入对客户应收运价/吨公里'}, 
+                    {validator: checkFloat2},
+                    {validator: validateRangeOfPrice}
                 ],
                 receivableVolumnUnitPrice: [
-                    {required: true, message: '请输入对客户应收运价/方公里'}, {validator: checkFloat2}
+                    {required: true, message: '请输入对客户应收运价/方公里'}, 
+                    {validator: checkFloat2},
+                    {validator: validateRangeOfPrice}
                 ],
 				payableWeightUnitPrice: [
-                    {required: true, message: '请输入对司机支付运价/吨公里'}, {validator: checkFloat2}
+                    {required: true, message: '请输入对司机支付运价/吨公里'}, 
+                    {validator: checkFloat2},
+                    {validator: validateRangeOfPrice}
                 ],
 				payableVolumnUnitPrice: [
-                    {required: true, message: '请输入对司机支付运价/方公里'}, {validator: checkFloat2}
+                    {required: true, message: '请输入对司机支付运价/方公里'}, 
+                    {validator: checkFloat2},
+                    {validator: validateRangeOfPrice}
                 ]
 			}
         }

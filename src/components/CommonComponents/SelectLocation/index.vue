@@ -1,11 +1,31 @@
 <template>
     <div class="map-container" :class="isMax?'max':''">
+        
         <div class="dialog-tit">
             <div class="title">选择定位地址</div>
-            <svg-icon :icon-class="isMax?'min':'max'" @click.native="resizeDialog" class="minMax"></svg-icon>
-            <svg-icon icon-class="close" @click.native="close" class="closeBtn"></svg-icon>
+            <span class="minMax" @click="resizeDialog">
+                <svg-icon :icon-class="isMax?'min':'max'"></svg-icon>
+            </span>
+            <span class="closeBtn" @click="close">
+                <svg-icon icon-class="close"></svg-icon>
+            </span>
+            
         </div>
-        <div class="wrapper" :style="isMax ? {height: (windowInnerHeight-70) + 'px'} : {height: (windowInnerHeight-300) + 'px'}">
+        <el-row>
+            <el-form :inline="true" :inline-message="true">
+                <el-form-item label="经度">
+                <el-input placeholder="请输入经度" size="mini"></el-input>
+                </el-form-item>
+                <el-form-item label="纬度">
+                <el-input placeholder="请输入纬度" size="mini"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" size="mini">查询</el-button>
+                    <el-button size="mini">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </el-row>
+        <div class="wrapper" :style="isMax ? {height: (windowInnerHeight-182) + 'px'} : {height: (windowInnerHeight-382) + 'px'}">
             <div class="tips">
                 经度：{{lnglat[0]}}&nbsp;&nbsp;纬度：{{lnglat[1]}}&nbsp;&nbsp;地址：{{address}}
             </div>
@@ -132,11 +152,11 @@ export default {
 
 <style lang="stylus" scoped>
 .map-container
-    width 60%
+    width 1000px
     position fixed
     left 50%
-    top 50%
-    transform translate(-50%,-50%)
+    top 80px
+    margin-left -500px
     padding 10px
     background-color #fff
     border-radius 2px
@@ -144,11 +164,21 @@ export default {
     z-index 10000
     &.max
         width 100%
+        left 0
+        top 0
+        right 0
+        bottom 0
+        margin 0
+        .closeBtn
+        .minMax
+            top 10px
+        .closeBtn
+            right 10px
+        .minMax
+            right 51px
     .wrapper
         position relative
-        height 550px
         border 1px solid #ddd
-        margin-top 10px
         .tips
             position absolute
             left 0
@@ -171,19 +201,25 @@ export default {
     .dialog-footer
         width 100%
         text-align center
-        padding 15px 0
+        margin-top 10px
     .closeBtn
-        position absolute
-        right 10px
-        top 10px
-        cursor pointer
-        color #141414
-        font-size 12px
     .minMax
         position absolute
-        right 40px
-        top 10px
+        top -5px
         cursor pointer
-        color #141414
         font-size 12px
+        background #f80
+        color #fff
+        width 36px
+        height 36px
+        line-height 36px
+        text-align center
+        color #fff
+        border-radius 4px
+    .closeBtn
+        position absolute
+        right -5px
+    .minMax
+        right 36px
+    
 </style>

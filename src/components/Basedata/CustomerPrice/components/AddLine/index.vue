@@ -149,7 +149,7 @@ export default {
 		}
 	},
     data() {
-		var validateRangeOfPrice = (rule, value, callback) => {
+		const validateRangeOfPrice = (rule, value, callback) => {
 			if (value && (value<0 || value>9999.99) ){
 				callback(new Error('请输入0~9999.99'))
 			} else {
