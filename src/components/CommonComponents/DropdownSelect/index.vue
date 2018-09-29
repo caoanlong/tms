@@ -193,6 +193,7 @@ export default {
 					line-height 20px
 					font-size 12px
 					color #999
+					
 					.name
 						font-size 14px
 						color #000
@@ -204,4 +205,8 @@ export default {
 						.name
 							font-weight bold
 							color #409EFF
+.address
+	text-overflow ellipsis
+	overflow hidden
+	white-space nowrap
 </style>

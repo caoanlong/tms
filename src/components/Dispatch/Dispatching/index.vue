@@ -83,7 +83,7 @@
 				</el-form>
 			</div>
 			<div class="table-container">
-				<div class="table-tit">待调度的承运单</div>
+				<div class="table-tit">待调度的承运单1</div>
 				<div class="table-box">
 					<table class="table-main" style="padding-left:58px">
 						<thead>
@@ -298,8 +298,7 @@
 								</td>
 								<td align="center">{{item.cargoName}}</td>
 								<td align="center">
-									<span v-if="item.dispatchType == 'Quantity'">按数量</span>
-									<span v-else-if="item.dispatchType == 'Volumn'">按体积</span>
+									<span v-if="item.dispatchType == 'Volumn'">按体积</span>
 									<span v-else-if="item.dispatchType == 'Weight'">按重量</span>
 								</td>
 							</tr>

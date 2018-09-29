@@ -105,10 +105,12 @@
 									<el-form-item label-width="20px" prop="shipperTime">
 										<el-time-select
 											v-model="carrierbillInfo.shipperTime"
+											:disabled = carrierbillInfo.shipperDate?false:true
 											:picker-options="{ 
 												start:'00:00',
 												step: '00:30',
 												end:'23:30',
+												minTime:this.minDateTime,
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											style="width:100%"
@@ -173,6 +175,7 @@
 									<el-form-item label-width="20px" prop="consigneeTime">
 										<el-time-select
 											v-model="carrierbillInfo.consigneeTime"
+											:disabled = carrierbillInfo.consigneeDate?false:true
 											:picker-options="{
 												start:'00:00',
 												step: '00:30',
@@ -406,6 +409,7 @@ export default {
 			placeholder1:'请选择发货地址',
 			placeholder2:'请选择收货地址',
 			units: [],
+			minDateTime:'',
 			shipperAddress:[],
 			consigneeAddress:[],
 			searchKeyWord:'',
@@ -482,8 +486,10 @@ export default {
 	created() {
 		this.getInfo()
 		this.getUnits()
+		this.getMinDateTime()
 	},
 	methods: {
+		
 		getInfo() {
 			const carrierOrderID = this.$route.query.carrierOrderID
 			Carrierbill.findById({ carrierOrderID }).then(res => {
@@ -524,9 +530,25 @@ export default {
 			})
 			
 		},
-		handSelectDate(){
+		handSelectDate (){
 			this.$refs['ruleForm'].validateField('shipperDate')
 			this.$refs['ruleForm'].validateField('consigneeDate')
+			if(!this.carrierbillInfo.shipperDate){
+				this.carrierbillInfo.shipperTime=''
+			}
+			if(!this.carrierbillInfo.consigneeDate){
+				this.carrierbillInfo.consigneeTime=''
+			}
+		},
+		getMinDateTime() {
+			let now = new Date()
+			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+			if(minute > 30){
+				this.minDateTime =  hour +1 +":"+"00"
+			}else{
+				this.minDateTime =  hour +":"+"00"
+			}
 		},
 		sum(o) {
 			let sum = 0

@@ -92,6 +92,7 @@
                 <el-form-item label-width="20px">
                     <el-time-select
                         v-model="grabOrder.endTime"
+                        :disabled = this.grabOrder.endDate?false:true
                         :picker-options="{
                             start:'00:00',
                             step: '01:00',
@@ -187,6 +188,10 @@ export default {
         },
         handSelectDate(value){
             this.endDateTime = value
+            if(!value){
+                this.grabOrder.endTime = ''
+                this.endDateTime = ''
+			}
         },
         publish() {
             this.$refs['ruleForm'].validate(valid => {

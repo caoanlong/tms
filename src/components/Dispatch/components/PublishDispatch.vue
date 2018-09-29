@@ -139,8 +139,7 @@
                         <div class="transFeeTips">
                             <svg-icon icon-class="info" class="infoIcon"></svg-icon>
                             <p>
-                                根据委托方{{dispatchTaskCargoList[0] ? dispatchTaskCargoList[0].consignorName : ''}}已配置的运费单价
-                                计算基础运费 {{totalPrice()}}元
+                                根据委托方已配置的运费单价计算基础运费
                             </p>
                         </div>
                     </el-tooltip>
@@ -262,7 +261,7 @@
                     </table>
                 </el-row>
                 <div class="num-info">
-                    <span class="num-tit">总运费：{{totalFreight}}元</span>
+                    <span class="num-tit">总运费：{{totalFreight || 0}}元</span>
                 </div>
                 <el-row>
                     <el-form size="small" :model="normal" ref="ruleForm2">
@@ -529,6 +528,10 @@ export default {
         },
         handSelectDate(value){
             this.endDateTime = value
+            if(!value){
+                this.normal.endTime = ''
+                this.endDateTime = ''
+			}
         },
         /**
          * 发布
