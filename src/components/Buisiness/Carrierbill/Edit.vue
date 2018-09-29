@@ -102,17 +102,18 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="10">
-									<el-form-item label-width="20px" prop="shipperTime">
+									<el-form-item label-width="20px" prop="shipperDateTime">
 										<el-time-select
-											v-model="carrierbillInfo.shipperTime"
+											v-model="shipperDateTime"
 											:disabled = carrierbillInfo.shipperDate?false:true
 											:picker-options="{ 
 												start:'00:00',
 												step: '00:30',
 												end:'23:30',
 												minTime:this.minDateTime,
-												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
+												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':consigneeDateTime
 											}"
+											@change="handSelectShipperTime"
 											style="width:100%"
 											placeholder="选择发货时间">
 										</el-time-select>
@@ -172,16 +173,17 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="10">
-									<el-form-item label-width="20px" prop="consigneeTime">
+									<el-form-item label-width="20px" prop="consigneeDateTime">
 										<el-time-select
-											v-model="carrierbillInfo.consigneeTime"
+											v-model="consigneeDateTime"
 											:disabled = carrierbillInfo.consigneeDate?false:true
 											:picker-options="{
 												start:'00:00',
 												step: '00:30',
 												end:'23:30',
-												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.shipperTime
+												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':shipperDateTime
 											}"
+											@change="handSelectConsigneeTime"
 											value-format="timestamp"
 											style = "width:100%"
 											placeholder="选择到货时间">
@@ -238,7 +240,6 @@
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
 													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%">
-
 														<el-option 
 															v-for="(label, value) in DISPATCHTYPE" 
 															:key="value" 
@@ -416,6 +417,8 @@ export default {
 			receivableDistance: 0,
 			receivableVolumnUnitPrice: 0,
 			receivableWeightUnitPrice: 0,
+			shipperDateTime:'',
+			consigneeDateTime:'',
 			carrierbillInfo: {
 				shipperNo: '',                  /** String 发货单号*/
 				transportType: '公路运输',              /** String 运输方式*/
@@ -523,8 +526,20 @@ export default {
 				}
 				carrierbillInfo.flagShipperCompanyName = res.shipperCompanyName
 				carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
-				carrierbillInfo.shipperTime = timestampToTime(res.shipperDate)
-				carrierbillInfo.consigneeTime = timestampToTime(res.consigneeDate)
+
+				if(timestampToTime(res.shipperDate)){
+					console.log(timestampToTime(res.shipperDate))
+					carrierbillInfo.shipperTime = timestampToTime(res.shipperDate)
+				}else{
+					carrierbillInfo.shipperTime = ''
+				}
+				if(timestampToTime(res.consigneeDate)){
+					console.log(timestampToTime(res.consigneeDate))
+					carrierbillInfo.consigneeTime = timestampToTime(res.consigneeDate)
+				}else{
+					carrierbillInfo.consigneeTime = ''
+				}
+
 				this.carrierbillInfo = carrierbillInfo
 				this.listForCalc()
 			})
@@ -533,10 +548,33 @@ export default {
 		handSelectDate (){
 			this.$refs['ruleForm'].validateField('shipperDate')
 			this.$refs['ruleForm'].validateField('consigneeDate')
+			let now = new Date()
+			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+			if(this.carrierbillInfo.shipperDate < now){
+				if(minute > 30){
+					this.minDateTime =  hour +1 +":"+"00"
+				}else{
+					this.minDateTime =  hour +":"+"00"
+				}
+			}else{
+				this.minDateTime = ''
+			}
+			
 			if(!this.carrierbillInfo.shipperDate){
 				this.carrierbillInfo.shipperTime=''
 			}
 			if(!this.carrierbillInfo.consigneeDate){
+				this.carrierbillInfo.consigneeTime=''
+			}
+		},
+		handSelectShipperTime(val){
+			if(!val){
+				this.carrierbillInfo.shipperTime=''
+			}
+		},
+		handSelectConsigneeTime(val){
+			if(!val){
 				this.carrierbillInfo.consigneeTime=''
 			}
 		},
@@ -561,7 +599,9 @@ export default {
 			let sum = 0
 			if (this.receivableDistance) {
 				for (let i = this.carrierbillInfo.carrierCargo.length - 1; i >= 0; i--) {
+					console.log(this.carrierbillInfo.carrierCargo)
 					if (this.carrierbillInfo.carrierCargo[i].dispatchType == 'Weight') {
+						
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
 							* this.receivableWeightUnitPrice 
 							* this.receivableDistance/1000
@@ -800,13 +840,14 @@ export default {
 					if (carrierbill.shipperTime) {
 						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
 					} else {
-						carrierbill.shipperDate = carrierbill.shipperDate + 3600000*24-1000
+						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp('23:59:59')
 					}
 					if (carrierbill.consigneeTime) {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
 					} else {
-						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
+						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp('23:59:59')
 					}
+					
 					Carrierbill.update(carrierbill).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: 'carrierbill'})

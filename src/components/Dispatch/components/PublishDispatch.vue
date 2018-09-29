@@ -261,7 +261,7 @@
                     </table>
                 </el-row>
                 <div class="num-info">
-                    <span class="num-tit">总运费：{{totalFreight || 0}}元</span>
+                    <span class="num-tit">总运费：{{totalFreight()}}元</span>
                 </div>
                 <el-row>
                     <el-form size="small" :model="normal" ref="ruleForm2">

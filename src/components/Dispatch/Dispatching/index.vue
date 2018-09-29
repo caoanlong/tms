@@ -83,7 +83,7 @@
 				</el-form>
 			</div>
 			<div class="table-container">
-				<div class="table-tit">待调度的承运单1</div>
+				<div class="table-tit">待调度的承运单</div>
 				<div class="table-box">
 					<table class="table-main" style="padding-left:58px">
 						<thead>

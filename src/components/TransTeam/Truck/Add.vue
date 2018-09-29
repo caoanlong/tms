@@ -1328,7 +1328,7 @@ export default {
 					})
 				} else {
 					Truck.add(data).then(res => {
-						Message.success(res.data.msg)
+						Message.success(res.msg)
 						this.$router.push({name: 'truck'})
 					})
 				}

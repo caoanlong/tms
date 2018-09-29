@@ -108,6 +108,7 @@
 												minTime:this.minDateTime,
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
+											@change="handSelectShipperTime"
 											style="width:100%"
 											placeholder="选择发货时间">
 										</el-time-select>
@@ -178,6 +179,7 @@
 												end:'23:30',
 												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.shipperTime
 											}"
+											@change = "handSelectConsigneeTime"
 											value-format="timestamp"
 											style="width:100%"
 											placeholder="选择到货时间">
@@ -477,7 +479,6 @@ export default {
 	},
 	created() {
 		this.getUnits()
-		this.getMinDateTime()
 	},
 	methods: {
 		sum(o) {
@@ -486,16 +487,6 @@ export default {
 				sum += Number(this.carrierbillInfo.carrierCargo[i][o])
 			}
 			return sum.toFixed(2)
-		},
-		getMinDateTime() {
-			let now = new Date()
-			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
-			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
-			if(minute > 30){
-				this.minDateTime =  hour +1 +":"+"00"
-			}else{
-				this.minDateTime =  hour +":"+"00"
-			}
 		},
 		totalPrice() {
 			let sum = 0
@@ -518,6 +509,19 @@ export default {
 		handSelectDate (){
 			this.$refs['ruleForm'].validateField('shipperDate')
 			this.$refs['ruleForm'].validateField('consigneeDate')
+			let now = new Date()
+			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+			if(this.carrierbillInfo.shipperDate < now){
+				if(minute > 30){
+					this.minDateTime =  hour +1 +":"+"00"
+				}else{
+					this.minDateTime =  hour +":"+"00"
+				}
+			}else{
+				this.minDateTime = ''
+			}
+			
 			if(!this.carrierbillInfo.shipperDate){
 				this.carrierbillInfo.shipperTime=''
 			}
