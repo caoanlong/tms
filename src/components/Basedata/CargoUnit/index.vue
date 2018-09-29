@@ -81,7 +81,7 @@ export default {
 			CargoUnit.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword:this.find.keyword,
+				unit:this.find.keyword,
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total
