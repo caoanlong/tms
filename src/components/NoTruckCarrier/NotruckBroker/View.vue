@@ -37,7 +37,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Notruck from '../../../api/Notruck'
+import Notruck from '../../../api/Company'
 export default {
 	data() {
 		return {

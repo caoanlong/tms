@@ -2,8 +2,8 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">添加车源</div>
-			<el-form label-width="130px" model="TruckInfo" :rules="rules" ref="ruleForm">
-				<el-row gutter="20">
+			<el-form label-width="130px" :model="TruckInfo" :rules="rules" ref="ruleForm" size="small">
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="报文参考号">
 							<el-input v-model="apkInfo.messageReferenceNumber" :disabled="true"></el-input>
@@ -20,7 +20,7 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row gutter="20">
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="发送方代码">
 							<el-input v-model="apkInfo.senderCode" :disabled="true"></el-input>
@@ -37,12 +37,14 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row gutter="20">
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="报文功能代码">
 							<el-input v-model="apkInfo.messageFunctionCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="车辆牌照号" prop="vehicleNumber">
 							<el-input v-model="TruckInfo.vehicleNumber" placeholder="请输入车辆牌照号"></el-input>
@@ -56,8 +58,6 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row gutter="20">
 					<el-col :span="8">
 						<el-form-item label="车辆长度" prop="vehicleLength">
 							<el-select v-model="TruckInfo.vehicleLength" placeholder="请选择车辆长度" style="width:100%">
@@ -66,6 +66,8 @@
 							</el-select>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="核定载质量" prop="vehicleTonnage">
 							<el-input v-model="TruckInfo.vehicleTonnage" placeholder="请输入核定载质量"></el-input>
@@ -76,13 +78,13 @@
 							<el-input v-model="TruckInfo.placeOfLoading" placeholder="请输入出发地"></el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row gutter="20">
 					<el-col :span="8">
 						<el-form-item label="出发地区代码" prop="countrySubdivisionCode">
 							<el-input v-model="TruckInfo.countrySubdivisionCode" placeholder="请输入出发地区代码"></el-input>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="目的地" prop="goodsReceiptPlace">
 							<el-input v-model="TruckInfo.goodsReceiptPlace" placeholder="请输入目的地"></el-input>
@@ -109,7 +111,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import Notruck from '../../../api/Notruck'
+import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
@@ -149,8 +151,8 @@ export default {
 	},
 	created() {
 		this.getAPK()
-		this.getConstant('TruckLength')
-		this.getConstant('TruckType')
+		// this.getConstant('TruckLength')
+		// this.getConstant('TruckType')
 	},
 	methods: {
 		getConstant(Type) {
@@ -170,12 +172,12 @@ export default {
 			})
 		},
 		getAPK() {
-			Notruck.truck().findAPK().then(res => {
+			Company.info().detailOfExtend().then(res => {
 				this.apkInfo = res
 			})
 		},
 		save() {
-			Notruck.truck().add({
+			Company.notruckTruck().add({
 				messageReferenceNumber: this.apkInfo.messageReferenceNumber,
 				senderCode: this.apkInfo.senderCode,
 				notruckuserId: this.apkInfo.notruckuserId,

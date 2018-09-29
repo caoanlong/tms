@@ -15,6 +15,37 @@ class Company extends Base {
      */
     info() {
         this._init('Info')
+        /**
+         * 修改扩展信息
+         */
+        this.updateExtend = (data) => {
+          if (!this.isClick) return Promise.reject('重复提交！')
+          this.isClick = false
+          setTimeout(() => {
+            this.isClick = true
+          }, this.delay)
+          return this.request({
+            url: this.baseUrl + 'Info/updateExtend',
+            method: 'post',
+            data
+          })
+        }
+
+        /**
+         * 扩展信息详情 
+         */
+        this.detailOfExtend = (data) => {
+          if (!this.isClick) return Promise.reject('重复提交！')
+          this.isClick = false
+          setTimeout(() => {
+            this.isClick = true
+          }, this.delay)
+          return this.request({
+            url: this.baseUrl + 'Info/detailOfExtend',
+            method: 'get',
+            data
+          })
+        }
         return this
     }
 
@@ -84,6 +115,30 @@ class Company extends Base {
         }
         return this
     }
+    /**
+     * 无车承运 - 货源
+     */
+    notruckCargoSource() {
+      this._init('/notruck/cargoSource')
+      return this
+    }
+    /**
+     * 无车承运 - 车辆
+     */
+    notruckTruck() {
+      this._init('/notruck/truck')
+      return this
+    }
+    /**
+    * 无车承运 - 承运单
+    */
+    notruckCarryOrder() {
+      this._init('/notruck/carryOrder')
+      return this
+    }
+
+    
+
 }
 
 export default new Company('/company', request)

@@ -66,14 +66,14 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
-import Notruck from '../../../api/Notruck'
+import Company from '../../../api/Company'
 export default {
 	mixins: [baseMixin],
 	data() {
 		return {
 			importFileUrl: baseURL +'/notruck/carryOrder/import',
 			exportExcelUrl: '',
-			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=waybill.xlsx ',
+			templateUrl: baseURL + '/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
 			find: {
 				shippingNoteNumber: '',
 				carrier: ''
@@ -102,7 +102,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			Notruck.carryOrder().find({
+			Company.notruckCarryOrder().find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
 				shippingNoteNumber: this.find.shippingNoteNumber,

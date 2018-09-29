@@ -342,6 +342,14 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
+				<el-row>
+					<el-col :span="24">
+						<el-form-item>
+							<el-button type="primary" @click="save">保存</el-button>
+							<el-button @click.native="back">取消</el-button>
+						</el-form-item>
+					</el-col>
+				</el-row>
 			</el-form>
 		</el-card>
 	</div>
@@ -349,7 +357,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import Notruck from '../../../api/Notruck'
+import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
@@ -413,11 +421,11 @@ export default {
 	},
 	created() {
 		this.getAPK()
-		this.getConstant('CargoType')
-		this.getConstant('TruckType')
-		this.getDict('notruck_transport')	
-		this.getDict('notruck_LicensePlate')	
-		this.getDict('notruck_business')
+		// this.getConstant('CargoType')
+		// this.getConstant('TruckType')
+		// this.getDict('notruck_transport')	
+		// this.getDict('notruck_LicensePlate')	
+		// this.getDict('notruck_business')
 	},
 	methods: {
 		getConstant(Type) {
@@ -453,12 +461,12 @@ export default {
 			})
 		},
 		getAPK() {
-			Notruck.carryOrder().findAPK().then(res => {
+			Company.info().detailOfExtend().then(res => {
 				this.apkInfo = res
 			})
 		},
 		save() {
-			Notruck.carryOrder().add({
+			Company.notruckCarryOrder().add({
 				messageReferenceNumber: this.apkInfo.messageReferenceNumber,
 				senderCode: this.apkInfo.senderCode,
 				messageFunctionCode: this.apkInfo.messageFunctionCode,

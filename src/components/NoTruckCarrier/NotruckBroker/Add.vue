@@ -43,7 +43,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import Notruck from '../../../api/Notruck'
+import Notruck from '../../../api/Company'
 export default {
 	data() {
 		return {

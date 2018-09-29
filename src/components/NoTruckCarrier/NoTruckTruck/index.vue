@@ -67,14 +67,14 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
-import Notruck from '../../../api/Notruck'
+import Company from '../../../api/Company'
 export default {
 	mixins: [baseMixin],
 	data() {
 		return {
 			importFileUrl: baseURL + '/notruck/truck/import',
 			exportExcelUrl: '',
-			templateUrl: baseURL + '/notruckUser/export/excelTemplate?fileName=trucksource.xlsx ',
+			templateUrl: baseURL + '/notruck/truck/export/excelTemplate?fileName=trucksource.xlsx ',
 			find: {
 				messageReferenceNumber: '',
 				documentName: ''
@@ -103,7 +103,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			Notruck.truck().find({
+			Company.notruckTruck().find({
 				pageNum: this.pageIndex,
 				pageSize: this.pageSize,
 				messageReferenceNumber: this.find.messageReferenceNumber,

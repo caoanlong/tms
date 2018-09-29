@@ -6,15 +6,15 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
 						<el-form-item label="企业名称">
-							<el-select style="width: 100%" placeholder="请选择" v-model="interfaceConfig.companyName">
-								<el-option v-for="company in companys" :key="company.memberId" :label="company.companyName" :value="company.memberId"></el-option>
-							</el-select>
+							<p>{{interfaceConfig.companyName}}</p>
 						</el-form-item>
 						<el-form-item label="企业接入码">
 							<p>{{interfaceConfig.senderCode}}</p>
+							<el-input v-model="interfaceConfig.senderCode"></el-input>
 						</el-form-item>
                         <el-form-item label="Appkey">
 							<p>{{interfaceConfig.appkey}}</p>
+							<el-input v-model="interfaceConfig.appkey"></el-input>
 						</el-form-item>
                         <el-form-item label="报文功能代码">
 							<el-input v-model="interfaceConfig.messageFunctionCode"></el-input>
@@ -43,7 +43,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import Notruck from '../../../api/Notruck'
+import Notruck from '../../../api/Company'
 export default {
 	data() {
 		return {

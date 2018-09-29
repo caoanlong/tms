@@ -2,47 +2,49 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">添加货源</div>
-			<el-form label-width="120px" :model="CargoInfo" :rules="rules" ref="ruleForm">
-				<el-row gutter="20">
+			<el-form label-width="120px" :model="CargoInfo" :rules="rules" ref="ruleForm" size="small">
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="报文参考号">
-							<el-input v-model="apkInfo.messageReferenceNumber" :disabled="true"></el-input>
+							<el-input v-model="CargoInfo.messageReferenceNumber" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="单证名称">
-							<el-input v-model="apkInfo.documentName" :disabled="true"></el-input>
+							<el-input v-model="CargoInfo.documentName" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="报文版本号">
-							<el-input v-model="apkInfo.documentVersionNumber" :disabled="true"></el-input>
+							<el-input v-model="CargoInfo.documentVersionNumber" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row gutter="20">
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="发送方代码">
-							<el-input v-model="apkInfo.senderCode" :disabled="true"></el-input>
+							<el-input v-model="CargoInfo.senderCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="接收方代码">
-							<el-input v-model="apkInfo.recipientCode" :disabled="true"></el-input>
+							<el-input v-model="CargoInfo.recipientCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发送日期时间">
-							<el-input v-model="apkInfo.messageSendingDateTime" :disabled="true"></el-input>
+							<el-input v-model="CargoInfo.messageSendingDateTime" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row gutter="20">
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="报文功能代码">
-							<el-input v-model="apkInfo.messageFunctionCode" :disabled="true"></el-input>
+							<el-input v-model="CargoInfo.messageFunctionCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="发货人" prop="consignor">
 							<el-input v-model="CargoInfo.consignor"></el-input>
@@ -50,16 +52,16 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="出发地"  prop="placeOfLoading">
-							<el-input v-model="CargoInfo.placeOfLoading"></el-input>
+							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea"></dist-picker>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row gutter="20">
 					<el-col :span="8">
 						<el-form-item label="出发地区代码"  prop="countrySubdivisionCode">
 							<el-input v-model="CargoInfo.countrySubdivisionCode"></el-input>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="收货人"  prop="consignee">
 							<el-input v-model="CargoInfo.consignee"></el-input>
@@ -67,16 +69,16 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="目的地"  prop="goodsReceiptPlace">
-							<el-input v-model="CargoInfo.goodsReceiptPlace"></el-input>
+							<dist-picker :distList="selectedConsigneeArea" @hand-select="handleSelectedConsigneeArea"></dist-picker>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row gutter="20">
 					<el-col :span="8">
 						<el-form-item label="目的地区代码"  prop="destinationCountrySubdivisionCode">
 							<el-input v-model="CargoInfo.destinationCountrySubdivisionCode"></el-input>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="费用总金额"  prop="totalMonetaryAmount">
 							<el-input v-model="CargoInfo.totalMonetaryAmount"></el-input>
@@ -91,7 +93,7 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row gutter="20">
+				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="货物名称"  prop="descriptionOfGoods">
 							<el-input v-model="CargoInfo.descriptionOfGoods"></el-input>
@@ -111,7 +113,7 @@
 						</el-form-item>
 					</el-col>
 				</el-row>
-				<el-row gutter="20">
+				<el-row :gutter="20">
 					<el-col :span="24">
 						<el-form-item>
 							<el-button type="primary" @click="save">保存</el-button>
@@ -126,12 +128,15 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import Notruck from '../../../api/Notruck'
+import Company from '../../../api/Company'
+import DistPicker from '../../CommonComponents/DistPicker'
 export default {
 	data() {
 		return {
 			CargoType: [],
 			TruckType: [],
+			selectedShipperArea:[],
+			selectedConsigneeArea:[],
 			CargoInfo:{
 				messageReferenceNumber:'',
 				senderCode:'',
@@ -168,9 +173,10 @@ export default {
 			}
 		}
 	},
+	components: {  DistPicker },
 	created() {
-		this.getConstant('CargoType')
-		this.getConstant('TruckType')
+		// this.getConstant('CargoType')
+		// this.getConstant('TruckType')
 	},
 	methods: {
 		getConstant(Type) {
@@ -189,8 +195,12 @@ export default {
 				}
 			})
 		},
+		/**选择发货地 */
+		handleSelectedShipperArea() {},
+		/**选择收货地 */
+		handleSelectedConsigneeArea() {},
 		save() {
-			Notruck.cargoSource().add({
+			Company.notruckCargoSource().add({
 				goodsId: this.$route.query.goodsId,
 				notruckuserId:this.CargoInfo.notruckuserId,
 				messageReferenceNumber:this.CargoInfo.messageReferenceNumber,
