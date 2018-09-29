@@ -499,7 +499,7 @@ export default {
 					}
 				}
 			}
-			if (sum) this.carrierbillInfo.freight = sum.toFixed(2)
+			this.carrierbillInfo.freight = (sum ? sum.toFixed(2) : '')
 			return sum.toFixed(2)
 		},
 		handSelectDate (){
@@ -511,9 +511,7 @@ export default {
 			CargoUnit.find({
 				current: 1,
 				size: 1000
-			}).then(res => {
-				this.units = res.records
-			})
+			}).then(res => { this.units = res.records })
 		},
 		getCargos(queryString, cb) {
 			CargoGeneralName.find({
@@ -684,6 +682,9 @@ export default {
 					const start = this.carrierbillInfo.shipperLocationLng + ',' + this.carrierbillInfo.shipperLocationLat
 					const end = this.carrierbillInfo.consigneeLocationLng + ',' + this.carrierbillInfo.consigneeLocationLat
 					this.getDistance(start, end)
+				}
+				if (+this.receivableVolumnUnitPrice == 0 && +this.receivableWeightUnitPrice == 0) {
+					this.carrierbillInfo.freight = ''
 				}
 			})
 		},

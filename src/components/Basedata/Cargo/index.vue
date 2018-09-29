@@ -70,7 +70,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Customer from '../../../api/Customer'
+import Company from '../../../api/Company'
 import CargoGeneralName from '../../../api/CargoGeneralName'
 import { baseMixin } from '../../../common/mixin'
 import { deleteConfirm } from '../../../common/utils'
@@ -107,7 +107,7 @@ export default {
 	},
 	methods: {
 		getCompanys(queryString, cb) {
-			Customer.suggest({
+			Company.customer().suggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
         },

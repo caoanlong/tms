@@ -68,14 +68,17 @@ export default {
         if (this.locAddress) {
             this.address = this.locAddress
         }
+        console.log(this.location)
         this.createMapMask()
     },
     mounted() {
         this.createMap()
     },
     destroyed() {
-        this.destroyMapMask()
+        this.lnglat = [0,0]
+        this.map.clearMap()
         this.map.destroy()
+        this.destroyMapMask()
     },
     methods: {
         search() {

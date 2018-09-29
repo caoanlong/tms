@@ -424,8 +424,8 @@
 								<td align="center">{{item.carrierOrderNo}}</td>
 								<td align="center" :class="item.type">{{item.type == 'Load' ? '装车' : '卸货'}}</td>
 								<td align="center">{{item.areaName + item.posAddress + item.detailAddress}}</td>
-								<td align="center">{{(Number(item.nodeDistance)/1000).toFixed(2)}}公里</td>
-								<td align="center">{{item.requireTime | getdatefromtimestamp('min')}}</td>
+								<td align="center">{{(Number(item.receivableDistance)/1000).toFixed(2)}}公里</td>
+								<td align="center">{{item.requireTime | isFullDay()}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -699,8 +699,8 @@ export default {
 			this.totalDistance = 0
 			arrays.forEach((item,i) => {
 				item.sequence = i+1
-				item.nodeDistance = results[i]
-				this.totalDistance += Number(item.nodeDistance)
+				item.receivableDistance = results[i]
+				this.totalDistance += Number(item.receivableDistance)
 			})
 			this.transLines = arrays
 		},

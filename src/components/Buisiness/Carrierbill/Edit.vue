@@ -370,6 +370,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 import Carrierbill from '../../../api/Carrierbill'
 import Company from '../../../api/Company'
@@ -735,6 +736,9 @@ export default {
 					const start = this.carrierbillInfo.shipperLocationLng + ',' + this.carrierbillInfo.shipperLocationLat
 					const end = this.carrierbillInfo.consigneeLocationLng + ',' + this.carrierbillInfo.consigneeLocationLat
 					this.getDistance(start, end)
+				}
+				if (+this.receivableVolumnUnitPrice == 0 && +this.receivableWeightUnitPrice == 0) {
+					this.carrierbillInfo.freight = ''
 				}
 			})
 		},

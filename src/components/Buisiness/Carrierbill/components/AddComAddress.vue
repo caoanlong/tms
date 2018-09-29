@@ -77,7 +77,6 @@ export default {
     watch: {
         company: {
             handler(val) {
-               console.log(val)
             },
             deep: true
         },
@@ -86,9 +85,6 @@ export default {
             this.selectedCity = ''
             this.companyAddress.customerID = ''
             this.companyAddress.companyName = ''
-            this.companyAddress.contactName = ''
-            this.companyAddress.contactPhone = ''
-            this.companyAddress.areaID = ''
             if (bool) {
                 this.companyAddress.customerID = this.company ? this.company.customerID : ''
                 this.companyAddress.companyName = this.company ? this.company.companyName : ''
@@ -166,6 +162,8 @@ export default {
 			this.companyAddress.locationAddress = data.name
         },
         handLocation() {
+            this.companyAddress.locationLng = 0
+			this.companyAddress.locationLat = 0
 			this.isLocationVisible = true
         },
         callbackLocation(data) {

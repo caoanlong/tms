@@ -126,27 +126,22 @@
                                     <th>吨公里</th>
                                     <th>方公里</th>
                                 </tr>
-                                <tr>
-                                    <th>海天贸易</th>
-                                    <td>昆明五华</td>
-                                    <td>昆明呈贡</td>
-                                    <td>46公里</td>
-                                    <td>0.45元</td>
-                                    <td>0.45元</td>
-                                </tr>
-                                <tr>
-                                    <th>雪花啤酒</th>
-                                    <td>昆明五华</td>
-                                    <td>昆明呈贡</td>
-                                    <td>46公里</td>
-                                    <td>0.45元</td>
-                                    <td>0.45元</td>
+                                <tr v-for="(item, i) in dispatchTaskCargoList" :key="i">
+                                    <th>{{item.consignorName}}</th>
+                                    <td>{{item.shipperArea}}</td>
+                                    <td>{{item.consigneeArea}}</td>
+                                    <td>{{(item.payableDistance/1000).toFixed(2) || 0}}公里</td>
+                                    <td>{{item.payableVolumnUnitPrice || 0}}元</td>
+                                    <td>{{item.payableWeightUnitPrice || 0}}元</td>
                                 </tr>
                             </table>
                         </div>
                         <div class="transFeeTips">
                             <svg-icon icon-class="info" class="infoIcon"></svg-icon>
-                            <p>委托方海天贸易已配置应收运价（0.45吨/公里，1.45方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
+                            <p>
+                                根据委托方{{dispatchTaskCargoList[0] ? dispatchTaskCargoList[0].consignorName : ''}}已配置的运费单价
+                                计算基础运费 {{totalPrice()}}元
+                            </p>
                         </div>
                     </el-tooltip>
                     <el-form 
@@ -314,6 +309,7 @@
 
 <script>
 import { Message } from 'element-ui'
+import axios from 'axios'
 import SelectTruck from './SelectTruck'
 import SelectPerson from './SelectPerson'
 import DispatchOrder from '../../../api/DispatchOrder'
@@ -373,18 +369,19 @@ export default {
         }
     },
     watch: {
-        transLines: {
-            handler(val) {
-                console.log(val)
+        dispatchTaskCargoList: {
+            handler(list) {
+                // this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
+                for (let i = 0; i < list.length; i++) {
+                    const start = [list[i].shipperLocationLng, list[i].shipperLocationLat]
+                    const end = [list[i].consigneeLocationLng, list[i].consigneeLocationLat]
+                    if (!list[i].payableDistance || list[i].payableDistance == '0') {
+                        this.getDistance(start, end, i)
+                    }
+                }
             },
             deep: true
         },
-        // dispatchTaskCargoList: {
-        //     handler(val) {
-        //         this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
-        //     },
-        //     deep: true
-        // }
         isVisible: function (val){
             if(val){
                 let now = new Date()
@@ -410,6 +407,28 @@ export default {
         }
     },
     methods: {
+        /**
+		 * 调用高德地图接口获取距离
+		 */
+		async getDistance(start, end, i) {
+			const url = `https://restapi.amap.com/v3/distance?origins=${start}&destination=${end}&key=${this.MAPKEY}`
+			const res = await axios({ url })
+            if (res.data.status == 1) this.dispatchTaskCargoList[i].payableDistance = res.data.results[0].distance
+        },
+        totalPrice() {
+            let sum = 0
+            const list = [...this.dispatchTaskCargoList]
+            for (let i = 0; i < list.length; i++) {
+                const item = list[i]
+                if (item.dispatchType = 'Volumn') {
+                    sum += +item.payableDistance/1000 * item.payableVolumnUnitPrice
+                } else {
+                    sum += +item.payableDistance/1000 * item.payableWeightUnitPrice
+                }
+            }
+            this.baseDizDispatchFee.amount = sum.toFixed(2)
+            return sum.toFixed(2)
+        },
         handSelectTruck(data) {
             this.truckDialog = false
             this.selectedTruck = data ? data : {}
