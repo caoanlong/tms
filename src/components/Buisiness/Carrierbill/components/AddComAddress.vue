@@ -77,7 +77,6 @@ export default {
     watch: {
         company: {
             handler(val) {
-               console.log(val)
             },
             deep: true
         },
@@ -163,6 +162,8 @@ export default {
 			this.companyAddress.locationAddress = data.name
         },
         handLocation() {
+            this.companyAddress.locationLng = 0
+			this.companyAddress.locationLat = 0
 			this.isLocationVisible = true
         },
         callbackLocation(data) {

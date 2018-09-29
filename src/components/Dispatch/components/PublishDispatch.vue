@@ -126,19 +126,26 @@
                                     <th>吨公里</th>
                                     <th>方公里</th>
                                 </tr>
-                                <tr v-for="(item, i) in transPriceTable" :key="i">
+                                <!-- <tr v-for="(item, i) in transPriceTable" :key="i">
                                     <th>{{item.consignorName}}</th>
                                     <td>{{item.shipperAreaName}}</td>
                                     <td>{{item.consigneeAreaName}}</td>
                                     <td>{{(item.receivableDistance/1000).toFixed(2) || 0}}公里</td>
                                     <td>{{item.receivableWeightUnitPrice || 0}}元</td>
                                     <td>{{item.receivableVolumnUnitPrice || 0}}元</td>
-                                </tr>
+                                </tr> -->
                             </table>
                         </div>
                         <div class="transFeeTips">
                             <svg-icon icon-class="info" class="infoIcon"></svg-icon>
-                            <p>委托方{{transPriceTable[0].consignorName}}已配置应收运价（{{transPriceTable[0].receivableWeightUnitPrice}}吨/公里，{{transPriceTable[0].receivableVolumnUnitPrice}}方/公里）根据货量、运输距离计算出的参考金额 23600.00元</p>
+                            <!-- <p>
+                                委托方
+                                {{transPriceTable[0] ? transPriceTable[0].consignorName : ''}}
+                                已配置应收运价（
+                                {{transPriceTable[0] ? transPriceTable[0].receivableWeightUnitPrice : 0}}吨/公里，
+                                {{transPriceTable[0] ? transPriceTable[0].receivableVolumnUnitPrice : 0}}方/公里）
+                                根据货量、运输距离计算出的参考金额 {{totalPrice}}元
+                            </p> -->
                         </div>
                     </el-tooltip>
                     <el-form 
@@ -366,30 +373,13 @@ export default {
         }
     },
     watch: {
-        transLines: {
+        dispatchTaskCargoList: {
             handler(val) {
-                this.transPriceTable = []
-                let i = 1
-                while (i < val.length) {
-                    this.transPriceTable.push({
-                        consignorName: val[i].consignorName,
-                        shipperAreaName: val[i-1].areaName,
-                        consigneeAreaName: val[i].areaName,
-                        receivableDistance: val[i].receivableDistance,
-                        receivableVolumnUnitPrice: val[i].receivableVolumnUnitPrice,
-                        receivableWeightUnitPrice: val[i].receivableWeightUnitPrice
-                    })
-                    i++
-                }
+                console.log(val)
+                // this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
             },
             deep: true
         },
-        // dispatchTaskCargoList: {
-        //     handler(val) {
-        //         this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
-        //     },
-        //     deep: true
-        // }
         isVisible: function (val){
             if(val){
                 let now = new Date()
