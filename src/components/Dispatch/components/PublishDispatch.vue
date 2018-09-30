@@ -131,8 +131,8 @@
                                     <td>{{item.shipperArea}}</td>
                                     <td>{{item.consigneeArea}}</td>
                                     <td>{{(item.payableDistance/1000).toFixed(2) || 0}}公里</td>
-                                    <td>{{item.payableVolumnUnitPrice || 0}}元</td>
                                     <td>{{item.payableWeightUnitPrice || 0}}元</td>
+                                    <td>{{item.payableVolumnUnitPrice || 0}}元</td>
                                 </tr>
                             </table>
                         </div>
@@ -261,7 +261,7 @@
                     </table>
                 </el-row>
                 <div class="num-info">
-                    <span class="num-tit">总运费：{{totalFreight}}元</span>
+                    <span class="num-tit">总运费：{{(totalFreight).toFixed(2)}}元</span>
                 </div>
                 <el-row>
                     <el-form size="small" :model="normal" ref="ruleForm2">
@@ -391,6 +391,7 @@ export default {
                 }else{
                     this.minDateTime =  hour +":"+"00"
                 }
+                this.totalPrice()
             } else {
                 this.minDateTime = ""
             }
@@ -419,10 +420,12 @@ export default {
             const list = [...this.dispatchTaskCargoList]
             for (let i = 0; i < list.length; i++) {
                 const item = list[i]
-                if (item.dispatchType = 'Volumn') {
-                    sum += +item.payableDistance/1000 * item.payableVolumnUnitPrice
+                
+                if (item.dispatchType == 'Volumn') {
+                    sum += (+item.payableDistance/1000).toFixed(2) * item.payableVolumnUnitPrice * this.totalVolume
+                    console.log(+item.payableDistance/1000,item.payableVolumnUnitPrice,this.totalVolume)
                 } else {
-                    sum += +item.payableDistance/1000 * item.payableWeightUnitPrice
+                    sum += (+item.payableDistance/1000).toFixed(2) * item.payableWeightUnitPrice * this.totalWeight
                 }
             }
             this.baseDizDispatchFee.amount = sum.toFixed(2)

@@ -13,7 +13,8 @@
 					<el-form-item label="调度状态">
 						<el-select placeholder="全部" v-model="find.status" style="width:120px">
 							<el-option value="" label="全部">全部</el-option>
-							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS" :key="key"></el-option>
+							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS1" :key="key" v-if="isCur==0"></el-option>
+							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS2" :key="key" v-if="isCur==1"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度类型">

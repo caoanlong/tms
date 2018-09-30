@@ -26,15 +26,27 @@ export const DISPATCHORDERTYPEEX = {
  * 调度单状态
  */
 export const DISPATCHORDERSTATUS = {
-    Committed: '未接单',
-    Ordered: '已接单',
-    Canceled: '已取消',
-    Rejected: '已拒绝',
-    // Closed: '已关闭',
-    Overdue: '超时取消',
-    Finished: '已完成'
+  Committed: '未接单',
+  Ordered: '已接单',
+  Canceled: '已取消',
+  Rejected: '已拒绝',
+  Closed: '已关闭',
+  Overdue: '超时取消',
+  Finished: '已完成'
 }
 
+export const DISPATCHORDERSTATUS1 = {
+    Committed: '未接单',
+    Ordered: '已接单'
+}
+
+export const DISPATCHORDERSTATUS2 = {
+  Canceled: '已取消',
+  Rejected: '已拒绝',
+  Closed: '已关闭',
+  Overdue: '超时取消',
+  Finished: '已完成'
+}
 /**
  * 车辆类型
  */

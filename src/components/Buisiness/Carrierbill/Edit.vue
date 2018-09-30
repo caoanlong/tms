@@ -382,7 +382,7 @@ import Customer from '../../../api/Customer'
 import CustomerAddress from '../../../api/CustomerAddress'
 import CargoUnit from '../../../api/CargoUnit'
 import CargoGeneralName from '../../../api/CargoGeneralName'
-import { timeToTimestamp, timestampToTime } from '../../../common/utils'
+import { timeToTimestamp, timestampToTime,getDateTotimestamp } from '../../../common/utils'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
@@ -526,20 +526,9 @@ export default {
 				}
 				carrierbillInfo.flagShipperCompanyName = res.shipperCompanyName
 				carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
-
-				if(timestampToTime(res.shipperDate)){
-					console.log(timestampToTime(res.shipperDate))
-					carrierbillInfo.shipperTime = timestampToTime(res.shipperDate)
-				}else{
-					carrierbillInfo.shipperTime = ''
-				}
-				if(timestampToTime(res.consigneeDate)){
-					console.log(timestampToTime(res.consigneeDate))
-					carrierbillInfo.consigneeTime = timestampToTime(res.consigneeDate)
-				}else{
-					carrierbillInfo.consigneeTime = ''
-				}
-
+				
+				this.shipperDateTime = timestampToTime(res.shipperDate)
+				this.consigneeDateTime = timestampToTime(res.consigneeDate)
 				this.carrierbillInfo = carrierbillInfo
 				this.listForCalc()
 			})
@@ -799,9 +788,9 @@ export default {
 					const end = this.carrierbillInfo.consigneeLocationLng + ',' + this.carrierbillInfo.consigneeLocationLat
 					this.getDistance(start, end)
 				}
-				if (+this.receivableVolumnUnitPrice == 0 && +this.receivableWeightUnitPrice == 0) {
-					this.carrierbillInfo.freight = ''
-				}
+				// if (+this.receivableVolumnUnitPrice == 0 && +this.receivableWeightUnitPrice == 0) {
+				// 	this.carrierbillInfo.freight = ''
+				// }
 			})
 		},
 		/**
@@ -827,8 +816,6 @@ export default {
 				this.$refs['cargoRuleForm'].validate(valid => {
 					if (!valid) return
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
-					console.log(carrierbill,1)
-					
 					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
 						const cargo = carrierbill.carrierCargo[i]
 						if (!cargo.cargoWeight) cargo.cargoWeight = 0
@@ -837,17 +824,21 @@ export default {
 					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
-					if (carrierbill.shipperTime) {
-						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
-					} else {
-						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp('23:59:59')
-					}
-					if (carrierbill.consigneeTime) {
-						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
-					} else {
-						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp('23:59:59')
-					}
+					console.log(this.shipperDateTime,this.consigneeDateTime)
 					
+					
+					if (this.shipperDateTime) {
+						console.log(timeToTimestamp(this.shipperDateTime))
+						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp(this.shipperDateTime)
+					} else {
+						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp('23:59:59')
+					}
+					if (this.consigneeDateTime) {
+						console.log(timeToTimestamp(this.consigneeDateTime))
+						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + timeToTimestamp(this.consigneeDateTime)
+					} else {
+						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + timeToTimestamp('23:59:59')
+					}
 					Carrierbill.update(carrierbill).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: 'carrierbill'})

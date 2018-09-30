@@ -299,7 +299,7 @@
 								<td align="center">{{item.cargoName}}</td>
 								<td align="center">
 									<span v-if="item.dispatchType == 'Volumn'">按体积</span>
-									<span v-else-if="item.dispatchType == 'Weight'">按重量</span>
+									<span v-if="item.dispatchType == 'Weight'">按重量</span>
 								</td>
 							</tr>
 						</tbody>
