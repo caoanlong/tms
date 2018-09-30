@@ -322,10 +322,10 @@ export function isFullDay(input) {
     let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
     let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
     let second = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds()
-    if (second != '00' || minute != '30') {
-        return year + "-" + month + "-" + date
-    } else {
+    if (minute == '00' || minute == '30') {
         return year + "-" + month + "-" + date + " " + hour + ":" + minute
+    } else {
+        return year + "-" + month + "-" + date 
     }
 }
 
