@@ -370,6 +370,7 @@ export default {
     watch: {
         dispatchTaskCargoList: {
             handler(list) {
+                console.log(list)
                 // this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
                 for (let i = 0; i < list.length; i++) {
                     const start = [list[i].shipperLocationLng, list[i].shipperLocationLat]
@@ -420,12 +421,10 @@ export default {
             const list = [...this.dispatchTaskCargoList]
             for (let i = 0; i < list.length; i++) {
                 const item = list[i]
-                
                 if (item.dispatchType == 'Volumn') {
-                    sum += (+item.payableDistance/1000).toFixed(2) * item.payableVolumnUnitPrice * this.totalVolume
-                    console.log(+item.payableDistance/1000,item.payableVolumnUnitPrice,this.totalVolume)
+                    sum += (+item.payableDistance/1000).toFixed(2) * item.payableVolumnUnitPrice * item.cargoVolumeNew
                 } else {
-                    sum += (+item.payableDistance/1000).toFixed(2) * item.payableWeightUnitPrice * this.totalWeight
+                    sum += (+item.payableDistance/1000).toFixed(2) * item.payableWeightUnitPrice * item.cargoWeightNew
                 }
             }
             this.baseDizDispatchFee.amount = sum.toFixed(2)
