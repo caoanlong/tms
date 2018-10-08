@@ -108,7 +108,6 @@
 												minTime:this.minDateTime,
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
-											@change="handSelectShipperTime"
 											style="width:100%"
 											placeholder="选择发货时间">
 										</el-time-select>
@@ -179,7 +178,6 @@
 												end:'23:30',
 												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.shipperTime
 											}"
-											@change = "handSelectConsigneeTime"
 											value-format="timestamp"
 											style="width:100%"
 											placeholder="选择到货时间">
@@ -192,7 +190,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="24">
-						<p class="feeTips c1 text-center">运输距离：{{receivableDistance.toFixed(2)}}公里</p>
+						<p class="feeTips c1 text-center">运输距离：{{receivableDistance?Number(receivableDistance).toFixed(2):''}}公里</p>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -215,15 +213,16 @@
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
 													<el-autocomplete 
-														clearable
+														
 														style="width:100%" 
 														popper-class="auto-complete-list"
 														value-key="cargoName" 
 														v-model="item.cargoName" 
 														:fetch-suggestions="getCargos"
 														placeholder="请输入..." 
-														@select="handSelectCargo" 
+														@select="handSelectCargo"
 														@input="inputSelectCargo(index)">
+														<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect(index)"></i>
 													</el-autocomplete>
 												</el-form-item>
 											</td>
@@ -321,7 +320,7 @@
 				<el-row :gutter="20">
 					<el-col :span="12">
 						<div class="section-block" style="min-height:120px">
-							<span class="block-title">运输费用<span class="titTips">（如已配置发货方的应收运价，系统会默认算金额）</span></span>
+							<span class="block-title">运输费用<span class="titTips">（如已配置委托方的应收运价，系统会默认算金额）</span></span>
 							<el-row class="block-content">
 								<div class="transFeeTips" v-if="+receivableWeightUnitPrice || +receivableVolumnUnitPrice">
 									<svg-icon icon-class="info" class="infoIcon"></svg-icon>
@@ -552,7 +551,9 @@ export default {
 				cb(result)
 			})
 		},
-
+		clearSelect(index){
+			this.carrierbillInfo.carrierCargo[index].cargoName = ''
+		},
 		getConsignorCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagconsignorName) {
 				this.carrierbillInfo.consignorID = ''

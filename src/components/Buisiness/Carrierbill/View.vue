@@ -156,7 +156,7 @@
 							<div>
 								<span class="tit">单据</span>
 								<span class="ctt">
-									<span v-for="(item,index) in carrierOrder.porRequire" :key="index"> {{index != 0 ? ',' : ''}}{{mapType[item]}}</span>
+									<span v-for="(item,index) in carrierOrder.porRequire" :key="index">{{(index >1)?',':''}}{{mapType[item]}}</span>
 								</span>
 							</div>
 						</el-row>

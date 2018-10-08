@@ -113,7 +113,7 @@
                 </el-row>
                 <el-row style="margin-top:15px">
                     <p class="feeTit">基础运费
-                        <span style="font-size:12px;color:#ccc;font-weight:400">（如已配置发货方的给司机的运价，系统会默认算金额）</span>
+                        <span style="font-size:12px;color:#ccc;font-weight:400">（如已配置委托方给司机的运价，系统会默认算金额）</span>
                     </p>
                     <el-tooltip content="点击关闭 tooltip 功能" placement="top" effect="light">
                         <div slot="content">
@@ -288,7 +288,7 @@
                                         start:'00:00',
                                         step: '01:00',
                                         end:'23:00',
-                                        minTime:this.minDateTime
+                                        minTime: (normal.endDate> new Date() ) ? '' :this.minDateTime
                                     }"
                                     placeholder="请选择时间">
                                 </el-time-select>

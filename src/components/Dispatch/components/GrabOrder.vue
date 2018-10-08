@@ -97,7 +97,7 @@
                             start:'00:00',
                             step: '01:00',
                             end:'23:00',
-                            minTime:this.minDateTime
+                            minTime: (grabOrder.endDate> new Date() ) ? '' :this.minDateTime
                         }"
                         placeholder="请选择时间">
                     </el-time-select>

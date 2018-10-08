@@ -110,7 +110,7 @@
 												start:'00:00',
 												step: '00:30',
 												end:'23:30',
-												minTime:this.minDateTime,
+												minTime:(carrierbillInfo.shipperDate > new Date() ? '' : this.minDateTime),
 												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':consigneeDateTime
 											}"
 											@change="handSelectShipperTime"
@@ -196,7 +196,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="24">
-						<p class="feeTips c1 text-center">运输距离：{{(receivableDistance/1000).toFixed(2)}}公里</p>
+						<p class="feeTips c1 text-center">运输距离：{{receivableDistance.toFixed(2)}}公里</p>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -225,7 +225,6 @@
 											<td>
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
 													<el-autocomplete 
-														clearable
 														style="width:100%" 
 														popper-class="auto-complete-list"
 														value-key="cargoName" 
@@ -234,6 +233,7 @@
 														placeholder="请输入..." 
 														@select="handSelectCargo" 
 														@input="inputSelectCargo(index)">
+														<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect(index)"></i>
 													</el-autocomplete>
 												</el-form-item>
 											</td>
@@ -331,14 +331,14 @@
 				<el-row :gutter="20">
 					<el-col :span="12">
 						<div class="section-block" style="min-height:120px">
-							<span class="block-title">运输费用<span class="titTips">（如已配置发货方的应收运价，系统会默认算金额）</span></span>
+							<span class="block-title">运输费用<span class="titTips">（如已配置委托方的应收运价，系统会默认算金额）</span></span>
 							<el-row class="block-content">
 								<div class="transFeeTips" v-if="+receivableWeightUnitPrice || +receivableVolumnUnitPrice">
 									<svg-icon icon-class="info" class="infoIcon"></svg-icon>
 									<p>委托方海天贸易已配置应收运价（{{receivableWeightUnitPrice}}吨/公里，{{receivableVolumnUnitPrice}}方/公里）根据货量、运输距离计算出的参考金额 {{totalPrice()}}元</p>
 								</div>
 								<el-form-item label="运费金额" prop="freight">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight"></el-input>
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight" @change="changeFreight"></el-input>
 								</el-form-item>
 							</el-row>
 						</div>
@@ -459,6 +459,7 @@ export default {
 				freight: '',                    /** BigDecimal运费*/
 				porRequire: []                /** String 回单要求*/
 			},
+			freight:'',
 			selectedShipper: null,
 			selectedConsignee: null,
 			selectedShipperAddress: null,
@@ -534,6 +535,9 @@ export default {
 			})
 			
 		},
+		changeFreight(val){
+			this.freight = val
+		},
 		handSelectDate (){
 			this.$refs['ruleForm'].validateField('shipperDate')
 			this.$refs['ruleForm'].validateField('consigneeDate')
@@ -588,20 +592,18 @@ export default {
 			let sum = 0
 			if (this.receivableDistance) {
 				for (let i = this.carrierbillInfo.carrierCargo.length - 1; i >= 0; i--) {
-					console.log(this.carrierbillInfo.carrierCargo)
 					if (this.carrierbillInfo.carrierCargo[i].dispatchType == 'Weight') {
 						
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
 							* this.receivableWeightUnitPrice 
-							* this.receivableDistance/1000
+							* this.receivableDistance
 					} else {
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoVolume) 
 							* this.receivableVolumnUnitPrice 
-							* this.receivableDistance/1000
+							* this.receivableDistance
 					}
 				}
 			}
-			if (sum) this.carrierbillInfo.freight = sum.toFixed(2)
 			return sum.toFixed(2)
 		},
 		getUnits() {
@@ -628,6 +630,9 @@ export default {
 				}
 				cb(result)
 			})
+		},
+		clearSelect(index){
+			this.carrierbillInfo.carrierCargo[index].cargoName = ''
 		},
 		getConsignorCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagConsignorName) {
@@ -784,6 +789,7 @@ export default {
 				this.receivableVolumnUnitPrice = res[0].receivableVolumnUnitPrice
 				this.receivableWeightUnitPrice = res[0].receivableWeightUnitPrice
 				if (!this.receivableDistance) {
+					console.log(111111)
 					const start = this.carrierbillInfo.shipperLocationLng + ',' + this.carrierbillInfo.shipperLocationLat
 					const end = this.carrierbillInfo.consigneeLocationLng + ',' + this.carrierbillInfo.consigneeLocationLat
 					this.getDistance(start, end)
@@ -824,17 +830,14 @@ export default {
 					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
-					console.log(this.shipperDateTime,this.consigneeDateTime)
-					
-					
+
+					carrierbill.freight = this.freight
 					if (this.shipperDateTime) {
-						console.log(timeToTimestamp(this.shipperDateTime))
 						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp(this.shipperDateTime)
 					} else {
 						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp('23:59:59')
 					}
 					if (this.consigneeDateTime) {
-						console.log(timeToTimestamp(this.consigneeDateTime))
 						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + timeToTimestamp(this.consigneeDateTime)
 					} else {
 						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + timeToTimestamp('23:59:59')
