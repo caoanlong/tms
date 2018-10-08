@@ -6,7 +6,7 @@
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px">
 						<el-form-item label="企业名称">
-                            <p>{{interfaceConfig.companyName}}</p>
+                            <p>{{companyName}}</p>
 						</el-form-item>
 						<el-form-item label="企业接入码">
 							<el-input v-model="interfaceConfig.senderCode" v-if="isEdit"></el-input>
@@ -28,12 +28,12 @@
 							<el-input v-model="interfaceConfig.recipientCode"  v-if="isEdit"></el-input>
 							<p v-else>{{interfaceConfig.recipientCode}}</p>
 						</el-form-item>
-						<el-form-item label="用户">
+						<!-- <el-form-item label="用户">
 							<el-select style="width: 100%" placeholder="请选择" v-model="interfaceConfig.userName"  v-if="isEdit">
 								<el-option v-for="user in users" :key="user.User_ID" :label="user.Name" :value="user.User_ID"></el-option>
 							</el-select>
 							<p v-else>{{interfaceConfig.userName}}</p>
-						</el-form-item>
+						</el-form-item> -->
 						<el-form-item v-if="isEdit">
 							<el-button type="primary" @click="save">立即保存</el-button>
 							<el-button @click="back">返回</el-button>
@@ -54,17 +54,23 @@ export default {
 	data() {
 		return {
 			interfaceConfig: {},
+			companyName:'',
 			isEdit:false
 		}
 	},
 	created() {
+		this.getCompanyName()
 		this.getInterfaceConfig()
 	},
 	methods: {
+		getCompanyName(){
+			this.companyName = localStorage.getItem("companyName")
+		},
 		getInterfaceConfig() {
 			const noTruckUserID = this.$route.query.noTruckUserID
 			Notruck.broker.findById({ noTruckUserID }).then(res => {
-				this.interfaceConfig = res
+				this.interfaceConfig = res.list
+				console.log(res)
 			})
 		},
 		edit() {

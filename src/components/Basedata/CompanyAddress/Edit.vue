@@ -60,6 +60,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
+import Company from '../../../api/Company'
 import CustomerAddress from '../../../api/CustomerAddress'
 import distData from '../../../assets/data/distpicker.data'
 import { areaIdToArrayId } from '../../../common/utils'
@@ -100,7 +101,7 @@ export default {
 	methods: {
 		getCompanys(queryString, cb) {
 			this.companyAddress.customerID = ''
-			Customer.suggest({
+			Company.customer().suggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
 		},
