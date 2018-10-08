@@ -200,27 +200,6 @@ const routerMap = [{
                         meta: { title: '资料补充' },
                         component: () =>
                             import ('../components/NoTruckCarrier/NotruckBroker')
-                    },
-                    {
-                        path: '/addnotruckbroker',
-                        name: 'addnotruckbroker',
-                        meta: { title: '添加资料' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckBroker/Add')
-                    },
-                    {
-                        path: '/editnotruckbroker',
-                        name: 'editnotruckbroker',
-                        meta: { title: '编辑资料' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckBroker/Edit')
-                    },
-                    {
-                        path: '/viewnotruckbroker',
-                        name: 'viewnotruckbroker',
-                        meta: { title: '查看资料' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckBroker/View')
                     }
                 ]
             },

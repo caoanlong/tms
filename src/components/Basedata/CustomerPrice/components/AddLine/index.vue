@@ -296,7 +296,10 @@ export default {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
 				this.line.customerID = this.customerID
-				Company.customerRoutePrice().add(this.line).then(res => {
+				const line = Object.assign({}, this.line)
+				line.receivableDistance = this.line.receivableDistance
+				line.payableDistance = this.line.payableDistance
+				Company.customerRoutePrice().add(line).then(res => {
 					Message.success('保存成功！')
 					this.callback(true)
 				})

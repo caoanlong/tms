@@ -8,31 +8,35 @@
 						<el-form-item label="企业名称">
                             <p>{{companyName}}</p>
 						</el-form-item>
+						<el-form-item label="单证名称">
+							<el-input v-model="notruckInfo.documentName" v-if="isEdit"></el-input>
+							<p v-else>{{notruckInfo.documentName}}</p>
+						</el-form-item>
 						<el-form-item label="企业接入码">
-							<el-input v-model="interfaceConfig.senderCode" v-if="isEdit"></el-input>
-							<p v-else>{{interfaceConfig.senderCode}}</p>
+							<el-input v-model="notruckInfo.senderCode" v-if="isEdit"></el-input>
+							<p v-else>{{notruckInfo.senderCode}}</p>
 						</el-form-item>
                         <el-form-item label="Appkey">
-							<el-input v-model="interfaceConfig.appkey" v-if="isEdit"></el-input>
-							<p v-else>{{interfaceConfig.appkey}}</p>
+							<el-input v-model="notruckInfo.appkey" v-if="isEdit"></el-input>
+							<p v-else>{{notruckInfo.appkey}}</p>
 						</el-form-item>
                         <el-form-item label="报文功能代码">
-							<el-input v-model="interfaceConfig.messageFunctionCode" v-if="isEdit"></el-input>
-							<p v-else>{{interfaceConfig.messageFunctionCode}}</p>
+							<el-input v-model="notruckInfo.messageFunctionCode" v-if="isEdit"></el-input>
+							<p v-else>{{notruckInfo.messageFunctionCode}}</p>
 						</el-form-item>
                         <el-form-item label="报文版本号">
-							<el-input v-model="interfaceConfig.documentVersionNumber" v-if="isEdit"></el-input>
-							<p v-else>{{interfaceConfig.documentVersionNumber}}</p>
+							<el-input v-model="notruckInfo.documentVersionNumber" v-if="isEdit"></el-input>
+							<p v-else>{{notruckInfo.documentVersionNumber}}</p>
 						</el-form-item>
                         <el-form-item label="接收方代码">
-							<el-input v-model="interfaceConfig.recipientCode"  v-if="isEdit"></el-input>
-							<p v-else>{{interfaceConfig.recipientCode}}</p>
+							<el-input v-model="notruckInfo.recipientCode"  v-if="isEdit"></el-input>
+							<p v-else>{{notruckInfo.recipientCode}}</p>
 						</el-form-item>
 						<!-- <el-form-item label="用户">
-							<el-select style="width: 100%" placeholder="请选择" v-model="interfaceConfig.userName"  v-if="isEdit">
+							<el-select style="width: 100%" placeholder="请选择" v-model="notruckInfo.userName"  v-if="isEdit">
 								<el-option v-for="user in users" :key="user.User_ID" :label="user.Name" :value="user.User_ID"></el-option>
 							</el-select>
-							<p v-else>{{interfaceConfig.userName}}</p>
+							<p v-else>{{notruckInfo.userName}}</p>
 						</el-form-item> -->
 						<el-form-item v-if="isEdit">
 							<el-button type="primary" @click="save">立即保存</el-button>
@@ -53,23 +57,23 @@ import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
-			interfaceConfig: {},
+			notruckInfo: {},
 			companyName:'',
 			isEdit:false
 		}
 	},
 	created() {
 		this.getCompanyName()
-		this.getInterfaceConfig()
+		this.getNotruckInfo()
 	},
 	methods: {
 		getCompanyName(){
 			this.companyName = localStorage.getItem("companyName")
 		},
-		getInterfaceConfig() {
-			const noTruckUserID = this.$route.query.noTruckUserID
-			Notruck.broker.findById({ noTruckUserID }).then(res => {
-				this.interfaceConfig = res.list
+		getNotruckInfo() {
+			// const noTruckUserID = localStorage.getItem("companyID")
+			Company.info().detailOfExtend().then(res => {
+				this.notruckInfo = res.data
 				console.log(res)
 			})
 		},
@@ -77,6 +81,19 @@ export default {
 			this.isEdit = true
 		},
 		save() {
+			Company.info().updateExtend({
+				companyID:localStorage.getItem("companyID"),
+				senderCode:this.notruckInfo.senderCode,
+				documentName:this.notruckInfo.documentName,
+				appkey:this.notruckInfo.appkey,
+				messageFunctionCode:this.notruckInfo.messageFunctionCode,
+				documentVersionNumber:this.notruckInfo.documentVersionNumber,
+				recipientCode:this.notruckInfo.recipientCode,
+				companyName:this.companyName
+			}).then(res => {
+				Message.success('成功！')
+				this.$router.push({name: 'notruckbroker'})
+			})
 			this.isEdit = false
 		},
 		back() {

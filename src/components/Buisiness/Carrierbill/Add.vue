@@ -192,7 +192,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="24">
-						<p class="feeTips c1 text-center">运输距离：{{(receivableDistance/1000).toFixed(2)}}公里</p>
+						<p class="feeTips c1 text-center">运输距离：{{receivableDistance.toFixed(2)}}公里</p>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -495,11 +495,11 @@ export default {
 					if (this.carrierbillInfo.carrierCargo[i].dispatchType == 'Weight') {
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
 							* this.receivableWeightUnitPrice 
-							* this.receivableDistance/1000
+							* this.receivableDistance
 					} else {
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoVolume) 
 							* this.receivableVolumnUnitPrice 
-							* this.receivableDistance/1000
+							* this.receivableDistance
 					}
 				}
 			}
