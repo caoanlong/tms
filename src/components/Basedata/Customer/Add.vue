@@ -89,9 +89,16 @@ export default {
 		},
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
-				if (!valid) return
-				this.recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
-				Company.customer().add(this.recdeliverycomp).then(res => {
+				
+				if (!valid) {
+					this.recdeliverycomp.companyName = ''
+					this.recdeliverycomp.customerType = ''
+					this.recdeliverycomp.selectedArea = ''
+					return
+				}
+				const recdeliverycomp = Object.assign({}, this.recdeliverycomp)
+				recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
+				Company.customer().add(recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
 				})
