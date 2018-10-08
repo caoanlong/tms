@@ -94,8 +94,9 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				this.recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
-				Company.customer().update(this.recdeliverycomp).then(res => {
+				const recdeliverycomp = Object.assign({}, this.recdeliverycomp)
+				recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
+				Company.customer().update(recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
 				})

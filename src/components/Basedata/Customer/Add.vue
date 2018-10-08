@@ -89,13 +89,7 @@ export default {
 		},
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
-				
-				if (!valid) {
-					this.recdeliverycomp.companyName = ''
-					this.recdeliverycomp.customerType = ''
-					this.recdeliverycomp.selectedArea = ''
-					return
-				}
+				if (!valid) return
 				const recdeliverycomp = Object.assign({}, this.recdeliverycomp)
 				recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
 				Company.customer().add(recdeliverycomp).then(res => {
