@@ -833,12 +833,12 @@ export default {
 					if (this.shipperDateTime) {
 						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp(this.shipperDateTime)
 					} else {
-						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp('23:59:59')
+						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + 3600000*24-1
 					}
 					if (this.consigneeDateTime) {
 						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + timeToTimestamp(this.consigneeDateTime)
 					} else {
-						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + timeToTimestamp('23:59:59')
+						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + 3600000*24-1
 					}
 					
 					Carrierbill.update(carrierbill).then(res => {
