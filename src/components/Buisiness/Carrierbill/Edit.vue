@@ -110,8 +110,8 @@
 												start:'00:00',
 												step: '00:30',
 												end:'23:30',
-												minTime:(carrierbillInfo.shipperDate > new Date() ? '' : this.minDateTime),
-												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':consigneeDateTime
+												minTime:this.minDateTime,
+												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
 											}"
 											@change="handSelectShipperTime"
 											style="width:100%"
@@ -154,16 +154,16 @@
 									<el-form-item label="到货时间" prop="consigneeDate">
 										<el-date-picker 
 											format="yyyy-MM-dd"
-											type="date" 
-											style="width:100%;" 
-											placeholder="选择到货时间" 
+											type="date"
+											placeholder="选择到货日期" 
 											v-model="carrierbillInfo.consigneeDate" 
 											value-format="timestamp"
+											style="width:100%"
 											@change = "handSelectDate"
 											:picker-options="{ 
 												disabledDate: (curDate) => {
 													if (carrierbillInfo.shipperDate) {
-														return curDate < carrierbillInfo.shipperDate 
+														return curDate < carrierbillInfo.shipperDate
 													} else {
 														return false
 													}
@@ -173,7 +173,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="10">
-									<el-form-item label-width="20px" prop="consigneeDateTime">
+									<el-form-item label-width="20px" prop="consigneeTime">
 										<el-time-select
 											v-model="consigneeDateTime"
 											:disabled = carrierbillInfo.consigneeDate?false:true
@@ -183,9 +183,8 @@
 												end:'23:30',
 												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':shipperDateTime
 											}"
-											@change="handSelectConsigneeTime"
 											value-format="timestamp"
-											style = "width:100%"
+											style="width:100%"
 											placeholder="选择到货时间">
 										</el-time-select>
 									</el-form-item>
@@ -335,7 +334,7 @@
 							<el-row class="block-content">
 								<div class="transFeeTips" v-if="+receivableWeightUnitPrice || +receivableVolumnUnitPrice">
 									<svg-icon icon-class="info" class="infoIcon"></svg-icon>
-									<p>委托方海天贸易已配置应收运价（{{receivableWeightUnitPrice}}吨/公里，{{receivableVolumnUnitPrice}}方/公里）根据货量、运输距离计算出的参考金额 {{totalPrice()}}元</p>
+									<p>委托方{{carrierbillInfo.consignorName}}已配置应收运价（{{receivableWeightUnitPrice}}吨/公里，{{receivableVolumnUnitPrice}}方/公里）根据货量、运输距离计算出的参考金额 {{totalPrice()}}元</p>
 								</div>
 								<el-form-item label="运费金额" prop="freight">
 									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight" @change="changeFreight"></el-input>
@@ -490,7 +489,6 @@ export default {
 	created() {
 		this.getInfo()
 		this.getUnits()
-		this.getMinDateTime()
 	},
 	methods: {
 		
@@ -532,6 +530,7 @@ export default {
 				this.consigneeDateTime = timestampToTime(res.consigneeDate)
 				this.carrierbillInfo = carrierbillInfo
 				this.listForCalc()
+				this.getMinDateTime()
 			})
 			
 		},
@@ -544,7 +543,7 @@ export default {
 			let now = new Date()
 			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
 			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
-			if(this.carrierbillInfo.shipperDate < now){
+			if(new Date(this.carrierbillInfo.shipperDate).getDate() == now.getDate()){
 				if(minute > 30){
 					this.minDateTime =  hour +1 +":"+"00"
 				}else{
@@ -553,13 +552,8 @@ export default {
 			}else{
 				this.minDateTime = ''
 			}
-			
-			if(!this.carrierbillInfo.shipperDate){
-				this.carrierbillInfo.shipperTime=''
-			}
-			if(!this.carrierbillInfo.consigneeDate){
-				this.carrierbillInfo.consigneeTime=''
-			}
+			this.shipperDateTime=''
+			this.consigneeDateTime=''
 		},
 		handSelectShipperTime(val){
 			if(!val){
@@ -575,10 +569,14 @@ export default {
 			let now = new Date()
 			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
 			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
-			if(minute > 30){
-				this.minDateTime =  hour +1 +":"+"00"
+			if(new Date(this.carrierbillInfo.shipperDate).getDate() == now.getDate()){
+				if(minute > 30){
+					this.minDateTime =  hour +1 +":"+"00"
+				}else{
+					this.minDateTime =  hour +":"+"00"
+				}
 			}else{
-				this.minDateTime =  hour +":"+"00"
+				this.minDateTime = ''
 			}
 		},
 		sum(o) {
