@@ -749,12 +749,12 @@ export default {
 					if (carrierbill.shipperTime) {
 						carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
 					} else {
-						carrierbill.shipperDate = carrierbill.shipperDate + 3600000*24-1
+						carrierbill.shipperDate = carrierbill.shipperDate + 86399000
 					}
 					if (carrierbill.consigneeTime) {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
 					} else {
-						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1
+						carrierbill.consigneeDate = carrierbill.consigneeDate + 86399000
 					}
 					carrierbill.freight = this.freight?this.freight:this.carrierbillInfo.freight
 					Carrierbill.add(carrierbill).then(res => {
