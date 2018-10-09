@@ -2,8 +2,8 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">添加运单</div>
-			<el-form label-width="160px" size="mini">
-				<el-row class="section-block">
+			<el-form label-width="160px" size="small">
+				<el-row class="section-block" style="margin-bottom:20px">
 					<span class="block-title">基本信息</span>
 					<div class="block-content">
 						<el-row>
@@ -48,7 +48,7 @@
 						</el-row>
 					</div>
 				</el-row>
-				<el-row class="section-block">
+				<el-row class="section-block" style="margin-bottom:20px">
 					<span class="block-title">发货方</span>
 					<div class="block-content">
 						<el-row>
@@ -96,41 +96,41 @@
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="报文参考号">
-							<el-input v-model="apkInfo.messageReferenceNumber" :disabled="true"></el-input>
+							<el-input v-model="WaybillInfo.messageReferenceNumber" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="单证名称">
-							<el-input v-model="apkInfo.documentName" :disabled="true"></el-input>
+							<el-input v-model="WaybillInfo.documentName" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="报文版本号">
-							<el-input v-model="apkInfo.documentVersionNumber" :disabled="true"></el-input>
+							<el-input v-model="WaybillInfo.documentVersionNumber" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="发送方代码">
-							<el-input v-model="apkInfo.senderCode" :disabled="true"></el-input>
+							<el-input v-model="WaybillInfo.senderCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="接收方代码">
-							<el-input v-model="apkInfo.recipientCode" :disabled="true"></el-input>
+							<el-input v-model="WaybillInfo.recipientCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发送时间">
-							<el-input v-model="apkInfo.messageSendingDateTime" :disabled="true"></el-input>
+							<el-input v-model="WaybillInfo.messageSendingDateTime" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="报文功能代码">
-							<el-input v-model="apkInfo.messageFunctionCode" :disabled="true"></el-input>
+							<el-input v-model="WaybillInfo.messageFunctionCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -366,7 +366,7 @@ export default {
 			notruck_transport:[],
 			notruck_LicensePlate:[],
 			notruck_business:[],
-			apkInfo:{
+			WaybillInfo:{
 				messageReferenceNumber:'',
 				senderCode:'',
 				messageFunctionCode:'',
@@ -374,9 +374,6 @@ export default {
 				recipientCode:'',
 				documentVersionNumber:'',
 				messageSendingDateTime:'',
-				notruckuserId:''
-			},
-			WaybillInfo:{
 				carrier:'',
 				dteOfShipment:'',
 				dateOfDelivery:'',
@@ -420,50 +417,30 @@ export default {
 		}
 	},
 	created() {
-		this.getAPK()
-		// this.getConstant('CargoType')
-		// this.getConstant('TruckType')
-		// this.getDict('notruck_transport')	
-		// this.getDict('notruck_LicensePlate')	
-		// this.getDict('notruck_business')
+		this.SendingDateTime()
+		this.getApkInfo()
 	},
 	methods: {
-		getConstant(Type) {
-			let params = {
-				Type
-			}
-			request({
-				url: '/base_conststand/list/type',
-				method: 'get',
-				params
-			}).then(res => {
-				if (res.data.code == 0) {
-					this[Type] = res.data.data
-				} else {
-					Message.error(res.data.msg)
-				}
-			})
-		},
-		getDict(TYPE) {
-			let params = {
-				TYPE
-			}
-			request({
-				url: '/sys_dict/list/type',
-				method: 'get',
-				params
-			}).then(res => {
-				if (res.data.code == 0) {
-					this[TYPE] = res.data.data
-				} else {
-					Message.error(res.data.msg)
-				}
-			})
-		},
-		getAPK() {
+		getApkInfo() {
 			Company.info().detailOfExtend().then(res => {
-				this.apkInfo = res
+				this.WaybillInfo.documentName = res.data.documentName
+				this.WaybillInfo.documentVersionNumber = res.data.documentVersionNumber
+				this.WaybillInfo.messageFunctionCode = res.data.messageFunctionCode
+				this.WaybillInfo.senderCode = res.data.senderCode
+				this.WaybillInfo.recipientCode = res.data.recipientCode
+				this.WaybillInfo.messageReferenceNumber = res.data.messageReferenceNumber
+				this.WaybillInfo.messageSendingDateTime = this.sendingDateTime
 			})
+		},
+		SendingDateTime(){
+			let now = new Date()
+			let year = now.getFullYear()
+			let month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1
+			let date = now.getDate() < 10 ? '0' + now.getDate() : now.getDate()
+			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+			let second = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds()
+			this.sendingDateTime =  year + '' + month + '' + date + '' + hour + '' + minute + '' + second;
 		},
 		save() {
 			Company.notruckCarryOrder().add({

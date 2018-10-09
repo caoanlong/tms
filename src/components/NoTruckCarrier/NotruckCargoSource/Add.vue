@@ -52,7 +52,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="出发地"  prop="placeOfLoading">
-							<dist-picker :distList="selectedShipperArea" @hand-select="handleSelectedShipperArea"></dist-picker>
+							<el-input v-model="CargoInfo.placeOfLoading"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -69,7 +69,7 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="目的地"  prop="goodsReceiptPlace">
-							<dist-picker :distList="selectedConsigneeArea" @hand-select="handleSelectedConsigneeArea"></dist-picker>
+							<el-input v-model="CargoInfo.goodsReceiptPlace"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
@@ -87,7 +87,11 @@
 					<el-col :span="8">
 						<el-form-item label="车辆类型"  prop="vehicleClassificationCode">
 							<el-select v-model="CargoInfo.vehicleClassificationCode" placeholder="请选择车辆类型" style="width:100%">
-								<el-option v-for="item in TruckType" :key="item.ConstStd_ID" :label="item.Value +' ' + item.Name" :value="item.Value">
+								<el-option 
+									v-for="(label, value) in TRUCKTYPE1" 
+									:key="value" 
+									:label="value +'  '+ label" 
+									:value="value">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -102,7 +106,11 @@
 					<el-col :span="8">
 						<el-form-item label="货物类型分类"  prop="cargoTypeClassificationCode">
 							<el-select v-model="CargoInfo.cargoTypeClassificationCode" placeholder="请选择货物类型" style="width:100%">
-								<el-option v-for="item in CargoType" :key="item.ConstStd_ID" :label="item.Value +' ' + item.Name" :value="item.Value">
+								<el-option 
+									v-for="(label, value) in CARGOTYPE" 
+									:key="value" 
+									:label="value + ' ' + label" 
+									:value="value">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -129,10 +137,10 @@
 import { Message } from 'element-ui'
 import request from '../../../common/request'
 import Company from '../../../api/Company'
-import DistPicker from '../../CommonComponents/DistPicker'
 export default {
 	data() {
 		return {
+			sendingDateTime:'',
 			CargoType: [],
 			TruckType: [],
 			selectedShipperArea:[],
@@ -173,27 +181,31 @@ export default {
 			}
 		}
 	},
-	components: {  DistPicker },
 	created() {
-		// this.getConstant('CargoType')
-		// this.getConstant('TruckType')
+		this.SendingDateTime()
+		this.getApkInfo()
 	},
 	methods: {
-		getConstant(Type) {
-			let params = {
-				Type
-			}
-			request({
-				url: '/base_conststand/list/type',
-				method: 'get',
-				params
-			}).then(res => {
-				if (res.data.code == 0) {
-					this[Type] = res.data.data
-				} else {
-					Message.error(res.data.msg)
-				}
+		getApkInfo() {
+			Company.info().detailOfExtend().then(res => {
+				this.CargoInfo.documentName = res.data.documentName
+				this.CargoInfo.documentVersionNumber = res.data.documentVersionNumber
+				this.CargoInfo.messageFunctionCode = res.data.messageFunctionCode
+				this.CargoInfo.senderCode = res.data.senderCode
+				this.CargoInfo.recipientCode = res.data.recipientCode
+				this.CargoInfo.messageReferenceNumber = res.data.messageReferenceNumber
+				this.CargoInfo.messageSendingDateTime = this.sendingDateTime
 			})
+		},
+		SendingDateTime(){
+			let now = new Date()
+			let year = now.getFullYear()
+			let month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1
+			let date = now.getDate() < 10 ? '0' + now.getDate() : now.getDate()
+			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+			let second = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds()
+			this.sendingDateTime =  year + '' + month + '' + date + '' + hour + '' + minute + '' + second;
 		},
 		/**选择发货地 */
 		handleSelectedShipperArea() {},
@@ -201,26 +213,23 @@ export default {
 		handleSelectedConsigneeArea() {},
 		save() {
 			Company.notruckCargoSource().add({
-				goodsId: this.$route.query.goodsId,
-				notruckuserId:this.CargoInfo.notruckuserId,
 				messageReferenceNumber:this.CargoInfo.messageReferenceNumber,
-				senderCode:this.CargoInfo.senderCode,
-				messageFunctionCode:this.CargoInfo.messageFunctionCode,
-				countrySubdivisionCode:this.CargoInfo.countrySubdivisionCode,
-				destinationCountrySubdivisionCode:this.CargoInfo.destinationCountrySubdivisionCode,
-				descriptionOfGoods:this.CargoInfo.descriptionOfGoods,
 				documentName:this.CargoInfo.documentName,
+				documentVersionNumber:this.CargoInfo.documentVersionNumber,
+				senderCode:this.CargoInfo.senderCode,
 				recipientCode:this.CargoInfo.recipientCode,
-				countrySubdivisionCode:this.CargoInfo.countrySubdivisionCode,
-				destinationCountrySubdivisionCode:this.CargoInfo.destinationCountrySubdivisionCode,
-				descriptionOfGoods:this.CargoInfo.descriptionOfGoods,
+				messageSendingDateTime:this.CargoInfo.messageSendingDateTime,
+				messageFunctionCode:this.CargoInfo.messageFunctionCode,
 				consignor:this.CargoInfo.consignor,
-				consignee:this.CargoInfo.consignee,
-				totalMonetaryAmount:this.CargoInfo.totalMonetaryAmount,
-				cargoTypeClassificationCode:this.CargoInfo.cargoTypeClassificationCode,
 				placeOfLoading:this.CargoInfo.placeOfLoading,
+				countrySubdivisionCode:this.CargoInfo.countrySubdivisionCode,
+				consignee:this.CargoInfo.consignee,
 				goodsReceiptPlace:this.CargoInfo.goodsReceiptPlace,
+				destinationCountrySubdivisionCode:this.CargoInfo.destinationCountrySubdivisionCode,
+				totalMonetaryAmount:this.CargoInfo.totalMonetaryAmount,
 				vehicleClassificationCode:this.CargoInfo.vehicleClassificationCode,
+				descriptionOfGoods:this.CargoInfo.descriptionOfGoods,
+				cargoTypeClassificationCode:this.CargoInfo.cargoTypeClassificationCode,
 				goodsItemGrossWeight:this.CargoInfo.goodsItemGrossWeight
 			}).then(res => {
 				Message.success('成功！')

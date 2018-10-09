@@ -56,8 +56,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="150">
 						<template slot-scope="scope">
-							<el-button type="default" size="mini" icon="el-icon-view" @click="view(scope.row.goodsId)">查看</el-button>
-							<el-button v-if="scope.row.hasFail==0" type="default" size="mini" icon="el-icon-edit" @click="edit(scope.row.goodsId)">编辑</el-button>
+							<el-button type="default" size="mini" icon="el-icon-view" @click="view(scope.row.cargoSourceID)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -76,9 +75,9 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			importFileUrl: baseURL + '/notruck/cargosource/import',
+			importFileUrl: baseURL + '/company/notruck/cargoSource/import',
 			exportExcelUrl: '',
-			templateUrl: baseURL + '/notruck/cargosource/export/excelTemplate?fileName=goodssource.xlsx ',
+			templateUrl: baseURL + '/company/notruck/cargoSource/export/excelTemplate?fileName=goodssource.xlsx ',
 			find: {
 				messageReferenceNumber: ''
 			}
@@ -97,7 +96,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/notruck/cargosource/export?Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/company/notruck/cargoSource/export?Authorization=' + localStorage.getItem("token") 
 				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
 		},
 		inputChange() {
@@ -116,11 +115,8 @@ export default {
 		add() {
 			this.$router.push({ name: 'addnotruckcargosource' })
 		},
-		edit(goodsId) {
-			this.$router.push({ name: 'editnotruckcargosource', query: { goodsId } })
-		},
-		view(goodsId) {
-			this.$router.push({ name: 'viewnotruckcargosource' , query: { goodsId } })
+		view(cargoSourceID) {
+			this.$router.push({ name: 'viewnotruckcargosource' , query: { cargoSourceID } })
 		},
 		// 导入成功
 		uploadSuccess (response) {

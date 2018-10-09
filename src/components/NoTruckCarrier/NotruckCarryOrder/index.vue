@@ -52,8 +52,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="150" align="center">
 						<template slot-scope="scope">
-								<el-button type="default" size="mini" icon="el-icon-view" @click="view(scope.row.wayId)">查看</el-button>
-								<el-button type="default" size="mini" icon="el-icon-edit" @click="edit(scope.row.wayId)">编辑</el-button>
+								<el-button type="default" size="mini" icon="el-icon-view" @click="view(scope.row.waybillID)">查看</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -71,9 +70,9 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			importFileUrl: baseURL +'/notruck/carryOrder/import',
+			importFileUrl: baseURL +'/company/notruck/carryOrder/import',
 			exportExcelUrl: '',
-			templateUrl: baseURL + '/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
+			templateUrl: baseURL + '/company/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
 			find: {
 				shippingNoteNumber: '',
 				carrier: ''
@@ -94,7 +93,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/notruck/carryOrder/export?Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/company/notruck/carryOrder/export?Authorization=' + localStorage.getItem("token") 
 				+ '&shippingNoteNumber=' + this.find.shippingNoteNumber
 				+ '&carrier=' + this.find.carrier
 		},
@@ -115,11 +114,8 @@ export default {
 		add() {
 			this.$router.push({ name: 'addnotruckcarryorder'})
 		},
-		edit(wayId) {
-			this.$router.push({ name: 'editnotruckcarryorder', query: { wayId }})
-		},
-		view(wayId) {
-			this.$router.push({ name: 'viewnotruckcarryorder', query: { wayId }})
+		view(waybillID) {
+			this.$router.push({ name: 'viewnotruckcarryorder', query: { waybillID }})
 		},
 		// 导入成功
 		uploadSuccess (response) {

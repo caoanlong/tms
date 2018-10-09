@@ -6,41 +6,41 @@
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="报文参考号">
-							<el-input v-model="apkInfo.messageReferenceNumber" :disabled="true"></el-input>
+							<el-input v-model="TruckInfo.messageReferenceNumber" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="单证名称">
-							<el-input v-model="apkInfo.documentName" :disabled="true"></el-input>
+							<el-input v-model="TruckInfo.documentName" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="报文版本号">
-							<el-input v-model="apkInfo.documentVersionNumber" :disabled="true"></el-input>
+							<el-input v-model="TruckInfo.documentVersionNumber" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="发送方代码">
-							<el-input v-model="apkInfo.senderCode" :disabled="true"></el-input>
+							<el-input v-model="TruckInfo.senderCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="接收方代码">
-							<el-input v-model="apkInfo.recipientCode" :disabled="true"></el-input>
+							<el-input v-model="TruckInfo.recipientCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发送日期时间">
-							<el-input v-model="apkInfo.messageSendingDateTime" :disabled="true"></el-input>
+							<el-input v-model="TruckInfo.messageSendingDateTime" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="报文功能代码">
-							<el-input v-model="apkInfo.messageFunctionCode" :disabled="true"></el-input>
+							<el-input v-model="TruckInfo.messageFunctionCode" :disabled="true"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -53,17 +53,18 @@
 					<el-col :span="8">
 						<el-form-item label="车辆类型" prop="vehicleClassificationCode">
 							<el-select v-model="TruckInfo.vehicleClassificationCode" placeholder="请选择车辆类型" style="width:100%">
-								<el-option v-for="item in TruckType" :key="item.ConstStd_ID" :label="item.Value+' '+item.Name" :value="item.Value">
+								<el-option 
+									v-for="(label, value) in TRUCKTYPE1" 
+									:key="value" 
+									:label="value +'  '+ label" 
+									:value="value">
 								</el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="车辆长度" prop="vehicleLength">
-							<el-select v-model="TruckInfo.vehicleLength" placeholder="请选择车辆长度" style="width:100%">
-								<el-option v-for="item in TruckLength" :key="item.ConstStd_ID" :label="item.Name " :value="item.Value">
-								</el-option>
-							</el-select>
+							<el-input v-model="TruckInfo.vehicleLength" placeholder="请输入车辆长度"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -115,7 +116,7 @@ import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
-			apkInfo:{
+			TruckInfo:{
 				messageReferenceNumber:'',
 				senderCode:'',
 				messageFunctionCode:'',
@@ -123,11 +124,7 @@ export default {
 				recipientCode:'',
 				documentVersionNumber:'',
 				messageSendingDateTime:'',
-				notruckuserId:''
-			},
-			TruckType: [],
-			TruckLength:[],
-			TruckInfo:{
+				notruckuserId:'',
 				vehicleNumber:'',
 				vehicleClassificationCode:'',
 				vehicleLength:'',
@@ -150,42 +147,41 @@ export default {
 		}
 	},
 	created() {
-		this.getAPK()
-		// this.getConstant('TruckLength')
-		// this.getConstant('TruckType')
+		this.SendingDateTime()
+		this.getApkInfo()
 	},
 	methods: {
-		getConstant(Type) {
-			let params = {
-				Type
-			}
-			request({
-				url: '/base_conststand/list/type',
-				method: 'get',
-				params
-			}).then(res => {
-				if (res.data.code == 0) {
-					this[Type] = res.data.data
-				} else {
-					Message.error(res.data.msg)
-				}
+		getApkInfo() {
+			Company.info().detailOfExtend().then(res => {
+				this.TruckInfo.documentName = res.data.documentName
+				this.TruckInfo.documentVersionNumber = res.data.documentVersionNumber
+				this.TruckInfo.messageFunctionCode = res.data.messageFunctionCode
+				this.TruckInfo.senderCode = res.data.senderCode
+				this.TruckInfo.recipientCode = res.data.recipientCode
+				this.TruckInfo.messageReferenceNumber = res.data.messageReferenceNumber
+				this.TruckInfo.messageSendingDateTime = this.sendingDateTime
 			})
 		},
-		getAPK() {
-			Company.info().detailOfExtend().then(res => {
-				this.apkInfo = res
-			})
+		SendingDateTime(){
+			let now = new Date()
+			let year = now.getFullYear()
+			let month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1
+			let date = now.getDate() < 10 ? '0' + now.getDate() : now.getDate()
+			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
+			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
+			let second = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds()
+			this.sendingDateTime =  year + '' + month + '' + date + '' + hour + '' + minute + '' + second;
 		},
 		save() {
 			Company.notruckTruck().add({
-				messageReferenceNumber: this.apkInfo.messageReferenceNumber,
-				senderCode: this.apkInfo.senderCode,
-				notruckuserId: this.apkInfo.notruckuserId,
-				messageFunctionCode: this.apkInfo.messageFunctionCode,
-				documentName: this.apkInfo.documentName,
-				recipientCode: this.apkInfo.recipientCode,
-				documentVersionNumber: this.apkInfo.documentVersionNumber,
-				messageSendingDateTime: this.apkInfo.messageSendingDateTime,
+				messageReferenceNumber: this.TruckInfo.messageReferenceNumber,
+				senderCode: this.TruckInfo.senderCode,
+				notruckuserId: this.TruckInfo.notruckuserId,
+				messageFunctionCode: this.TruckInfo.messageFunctionCode,
+				documentName: this.TruckInfo.documentName,
+				recipientCode: this.TruckInfo.recipientCode,
+				documentVersionNumber: this.TruckInfo.documentVersionNumber,
+				messageSendingDateTime: this.TruckInfo.messageSendingDateTime,
 				vehicleNumber: this.TruckInfo.vehicleNumber,
 				vehicleClassificationCode: this.TruckInfo.vehicleClassificationCode,
 				vehicleLength: this.TruckInfo.vehicleLength,

@@ -132,13 +132,6 @@ const routerMap = [{
                             import ('../components/NoTruckCarrier/NotruckCargoSource/View')
                     },
                     {
-                        path: '/editnotruckcargosource',
-                        name: 'editnotruckcargosource',
-                        meta: { title: '编辑货源' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckCargoSource/Edit')
-                    },
-                    {
                         path: '/notrucktruck',
                         name: 'notrucktruck',
                         meta: { title: '车源上传' },
@@ -160,13 +153,6 @@ const routerMap = [{
                             import ('../components/NoTruckCarrier/NoTruckTruck/View')
                     },
                     {
-                        path: '/editnotrucktruck',
-                        name: 'editnotrucktruck',
-                        meta: { title: '编辑车源' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NoTruckTruck/Edit')
-                    },
-                    {
                         path: '/notruckcarryorder',
                         name: 'notruckcarryorder',
                         meta: { title: '运单上传' },
@@ -186,13 +172,6 @@ const routerMap = [{
                         meta: { title: '查看运单' },
                         component: () =>
                             import ('../components/NoTruckCarrier/NotruckCarryOrder/View')
-                    },
-                    {
-                        path: '/editnotruckcarryorder',
-                        name: 'editnotruckcarryorder',
-                        meta: { title: '编辑运单' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckCarryOrder/Edit')
                     },
                     {
                         path: '/notruckbroker',
