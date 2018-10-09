@@ -297,8 +297,8 @@ export default {
 				if (!valid) return
 				this.line.customerID = this.customerID
 				const line = Object.assign({}, this.line)
-				line.receivableDistance = this.line.receivableDistance
-				line.payableDistance = this.line.payableDistance
+				line.receivableDistance = this.line.receivableDistance*1000
+				line.payableDistance = this.line.payableDistance*1000
 				Company.customerRoutePrice().add(line).then(res => {
 					Message.success('保存成功！')
 					this.callback(true)

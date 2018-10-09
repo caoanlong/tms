@@ -190,7 +190,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="24">
-						<p class="feeTips c1 text-center">运输距离：{{receivableDistance?Number(receivableDistance).toFixed(2):''}}公里</p>
+						<p class="feeTips c1 text-center">运输距离：{{receivableDistance?Number(receivableDistance/1000).toFixed(2):''}}公里</p>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -327,7 +327,7 @@
 									<p>委托方{{carrierbillInfo.consignorName}}已配置应收运价（{{receivableWeightUnitPrice}}元/吨公里，{{receivableVolumnUnitPrice}}元/方公里）根据货量、运输距离计算出的参考金额 {{totalPrice()}}元</p>
 								</div>
 								<el-form-item label="运费金额" prop="freight">
-									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight"></el-input>
+									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight"  @change="changeFreight"></el-input>
 								</el-form-item>
 							</el-row>
 						</div>
@@ -449,6 +449,7 @@ export default {
 				porRequire: []                /** String 回单要求*/
 				
 			},
+			freight:'',
 			selectedShipper: null,
 			selectedConsignee: null,
 			selectedShipperAddress: null,
@@ -494,16 +495,19 @@ export default {
 					if (this.carrierbillInfo.carrierCargo[i].dispatchType == 'Weight') {
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
 							* this.receivableWeightUnitPrice 
-							* this.receivableDistance
+							* this.receivableDistance/1000
 					} else {
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoVolume) 
 							* this.receivableVolumnUnitPrice 
-							* this.receivableDistance
+							* this.receivableDistance/1000
 					}
 				}
 			}
 			this.carrierbillInfo.freight = (sum ? sum.toFixed(2) : '')
 			return sum.toFixed(2)
+		},
+		changeFreight(val){
+			this.freight = val
 		},
 		handSelectDate (){
 			this.$refs['ruleForm'].validateField('shipperDate')
@@ -752,6 +756,7 @@ export default {
 					} else {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + 3600000*24-1000
 					}
+					carrierbill.freight = this.freight?this.freight:this.carrierbillInfo.freight
 					Carrierbill.add(carrierbill).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: 'carrierbill'})

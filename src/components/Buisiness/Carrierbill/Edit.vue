@@ -196,7 +196,7 @@
 				</el-row>
 				<el-row>
 					<el-col :span="24">
-						<p class="feeTips c1 text-center">运输距离：{{receivableDistance.toFixed(2)}}公里</p>
+						<p class="feeTips c1 text-center">运输距离：{{receivableDistance?Number(receivableDistance/1000).toFixed(2):''}}公里</p>
 					</el-col>
 				</el-row>
 				<el-row>
@@ -596,11 +596,11 @@ export default {
 						
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
 							* this.receivableWeightUnitPrice 
-							* this.receivableDistance
+							* this.receivableDistance/1000
 					} else {
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoVolume) 
 							* this.receivableVolumnUnitPrice 
-							* this.receivableDistance
+							* this.receivableDistance/1000
 					}
 				}
 			}
@@ -831,7 +831,7 @@ export default {
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
 
-					carrierbill.freight = this.freight
+					
 					if (this.shipperDateTime) {
 						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp(this.shipperDateTime)
 					} else {
@@ -842,6 +842,7 @@ export default {
 					} else {
 						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + timeToTimestamp('23:59:59')
 					}
+					
 					Carrierbill.update(carrierbill).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: 'carrierbill'})

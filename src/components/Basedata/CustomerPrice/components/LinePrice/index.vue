@@ -52,10 +52,10 @@
                                 <p><span class="from">发</span>{{item.shipperAddress}}</p>
                                 <p><span class="to">终</span>{{item.consigneeAddress}}</p>
                             </td>
-                            <td align="center">{{item.receivableDistance}}</td>
+                            <td align="center">{{item.receivableDistance/1000}}</td>
                             <td align="center">{{item.receivableWeightUnitPrice}}</td>
                             <td align="center">{{item.receivableVolumnUnitPrice}}</td>
-                            <td align="center">{{item.payableDistance}}</td>
+                            <td align="center">{{item.payableDistance/1000}}</td>
                             <td align="center">{{item.payableWeightUnitPrice}}</td>
                             <td align="center">{{item.payableVolumnUnitPrice}}</td>
                             <td align="center">
