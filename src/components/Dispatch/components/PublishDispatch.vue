@@ -261,7 +261,7 @@
                     </table>
                 </el-row>
                 <div class="num-info">
-                    <span class="num-tit">总运费：{{(totalFreight).toFixed(2)}}元</span>
+                    <span class="num-tit">总运费：{{totalFreight?Number(totalFreight).toFixed(2):'0.00'}}元</span>
                 </div>
                 <el-row>
                     <el-form size="small" :model="normal" ref="ruleForm2">
@@ -427,8 +427,8 @@ export default {
                     sum += (+item.payableDistance/1000).toFixed(2) * item.payableWeightUnitPrice * item.cargoWeightNew
                 }
             }
-            this.baseDizDispatchFee.amount = sum.toFixed(2)
-            return sum.toFixed(2)
+            this.baseDizDispatchFee.amount = sum?Number(sum).toFixed(2):0
+            return sum?Number(sum).toFixed(2):0
         },
         handSelectTruck(data) {
             this.truckDialog = false
