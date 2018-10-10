@@ -186,9 +186,9 @@ export const checkPlateNoNew = (rule, value, callback) => {
 
 // 验证车牌号
 export const yyyymmddhhmmss = (rule, value, callback) => {
-	const re = /^[1970-2100][01-12][01-31][00-23][00-59]{2}$/
+	const re = /((19|20)[0-9]{2})(0?[1-9]|1[012])(0?[1-9]|[12][0-9]|3[01])([01]?[0-9]|2[0-3])[0-5][0-9][0-5][0-9]$/
 	if (!re.test(value) && value) {
-		callback(new Error('请输入时间格式 yyyymmddhhmmss'))
+		callback(new Error('正确时间格式为：yyyymmddhhmmss,例：20181010180818'))
 	} else {
 		callback()
 	}

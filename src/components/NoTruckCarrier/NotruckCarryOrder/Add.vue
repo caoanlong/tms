@@ -82,9 +82,15 @@
 					<el-col :span="8">
 						<el-form-item label="业务类型代码" prop="serviceTypeCode">
 							<el-select v-model="WaybillInfo.serviceTypeCode" placeholder="请选择业务类型" style="width:100%">
-								<el-option v-for="item in notruck_business" :key="item.ConstStd_ID" :label="item.NAME" :value="item.VALUE"></el-option>
+								<el-option 
+									v-for="(label, value) in SERVICETYPECODE" 
+									:key="value" 
+									:label="value + ' ' + label" 
+									:value="value">
+								</el-option>
 							</el-select>
 						</el-form-item>
+						
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="实际发运日期时间" prop="dateActualShipment">
@@ -173,7 +179,11 @@
 					<el-col :span="8">
 						<el-form-item label="牌照类型代码" prop="licensePlateCode">
 							<el-select v-model="WaybillInfo.licensePlateCode" placeholder="请选择牌照类型代码" style="width:100%">
-								<el-option v-for="item in notruck_LicensePlate" :key="item.Dict_ID" :label="item.NAME" :value="item.VALUE">
+								<el-option 
+									v-for="(label, value) in TRUCKPLATENUMTYPE" 
+									:key="value" 
+									:label="value + ' ' + label" 
+									:value="value">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -247,7 +257,11 @@
 					<el-col :span="8">
 						<el-form-item label="货物类型分类" prop="codeGoods">
 							<el-select v-model="WaybillInfo.codeGoods" placeholder="请选择货物类型" style="width:100%">
-								<el-option v-for="item in CargoType" :key="item.ConstStd_ID" :label="item.Value +' '+ item.Name" :value="item.Value">
+								<el-option 
+									v-for="(label, value) in CARGOTYPE" 
+									:key="value" 
+									:label="value + ' ' + label" 
+									:value="value">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -260,19 +274,23 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="体积">
+						<el-form-item label="体积" prop="volume">
 							<el-input v-model="WaybillInfo.volume" placeholder="请输入体积"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="总件数">
+						<el-form-item label="总件数" prop="total">
 							<el-input v-model="WaybillInfo.total" placeholder="请输入总件数"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="运输方式代码" prop="transportModeCode">
 							<el-select v-model="WaybillInfo.transportModeCode" placeholder="请选择运输方式" style="width:100%">
-								<el-option v-for="item in notruck_transport" :key="item.Dict_ID" :label="item.NAME" :value="item.VALUE">
+								<el-option 
+									v-for="(label, value) in TRANSPORTTYPE" 
+									:key="value" 
+									:label="value + ' ' + label" 
+									:value="value">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -369,12 +387,12 @@ export default {
 				consignee:[ {required: true, message: '请输入收货人'} ],
 				receivingPlace:[ {required: true, message: '请输入收货地点'} ],
 				codeConsigneeDivisions:[ {required: true, message: '请输入国家行政区划代码'} ],
-				transportationCost:[ {required: true, message: '请输入运输成本'} ],
-				totalAmountMoney:[ {required: true, message: '请输入货币总金额'} ],
+				transportationCost:[ {required: true, message: '请输入运输成本'}, { validator: checkFloat2 }  ],
+				totalAmountMoney:[ {required: true, message: '请输入货币总金额'}, { validator: checkFloat2 }  ],
 				licensePlateCode:[ {required: true, message: '请选择牌照类型代码'} ],
 				vehicleLicenseNumber:[ {required: true, message: '请输入车辆牌照号'} ],
 				vehicleClassificationCode:[ {required: true, message: '请选择车辆分类代码'} ],
-				vehicleLoadingQuality:[ {required: true, message: '请输入车辆载质量'} ],
+				vehicleLoadingQuality:[ {required: true, message: '请输入车辆载质量'}, { validator: checkFloat2 }  ],
 				roadTransportNo:[ {required: true, message: '请输入道路运输证号'} ],
 				thePersonal:[ {required: true, message: '请输入所有人'} ],
 				carLicenseNumber:[ {required: true, message: '请输入许可证编号'} ],
@@ -382,7 +400,9 @@ export default {
 				certificateQualification:[ {required: true, message: '请输入从业资格证号'} ],
 				nameGoods:[ {required: true, message: '请输入货物名称'} ],
 				codeGoods:[ {required: true, message: '请选择货物类型分类'} ],
-				goodsGross:[ {required: true, message: '请输入货物项毛重'} ],
+				total:[ {required: true, message: '请输入总件数'},{ validator: checkInt }],
+				volume:[ {required: true, message: '请输入体积'},{ validator: checkInt }],
+				goodsGross:[ {required: true, message: '请输入货物项毛重'}, { validator: checkInt }  ],
 				transportModeCode:[ {required: true, message: '请选择运输方式代码'} ]
 			}
 		}
@@ -414,59 +434,69 @@ export default {
 			this.sendingDateTime =  year + '' + month + '' + date + '' + hour + '' + minute + '' + second;
 		},
 		save() {
-			Company.notruckCarryOrder().add({
-				companyID:localStorage.getItem("companyID"),
-				messageReferenceNumber: this.WaybillInfo.messageReferenceNumber,
-				senderCode: this.WaybillInfo.senderCode,
-				messageFunctionCode: this.WaybillInfo.messageFunctionCode,
-				documentName: this.WaybillInfo.documentName,
-				recipientCode: this.WaybillInfo.recipientCode,
-				documentVersionNumber: this.WaybillInfo.documentVersionNumber,
-				messageSendingDateTime: this.WaybillInfo.messageSendingDateTime,
-				notruckuserId: this.WaybillInfo.notruckuserId,
-				carrier: this.WaybillInfo.carrier,
-				dteOfShipment: this.WaybillInfo.dteOfShipment,
-				dateOfDelivery: this.WaybillInfo.dateOfDelivery,
-				name: this.WaybillInfo.name,
-				consignee: this.WaybillInfo.consignee,
-				codeConsigneeDivisions: this.WaybillInfo.codeConsigneeDivisions,
-				priceRemarks: this.WaybillInfo.priceRemarks,
-				vehicleClassificationCode: this.WaybillInfo.vehicleClassificationCode,
-				trailerLicenseNumber: this.WaybillInfo.trailerLicenseNumber,
-				name: this.WaybillInfo.name,
-				nameGoods: this.WaybillInfo.nameGoods,
-				volume: this.WaybillInfo.volume,
-				originalAddNumber: this.WaybillInfo.originalAddNumber,
-				name: this.WaybillInfo.name,
-				serviceTypeCode: this.WaybillInfo.serviceTypeCode,
-				name: this.WaybillInfo.name,
-				nameConsignorDivisions: this.WaybillInfo.nameConsignorDivisions,
-				receivingPlace: this.WaybillInfo.receivingPlace,
-				transportationCost: this.WaybillInfo.transportationCost,
-				licensePlateCode: this.WaybillInfo.licensePlateCode,
-				vehicleLoadingQuality: this.WaybillInfo.vehicleLoadingQuality,
-				thePersonal: this.WaybillInfo.thePersonal,
-				certificateQualification: this.WaybillInfo.certificateQualification,
-				codeGoods: this.WaybillInfo.codeGoods,
-				total: this.WaybillInfo.total,
-				shippingNoteNumber: this.WaybillInfo.shippingNoteNumber,
-				waybillLicenseNumber: this.WaybillInfo.waybillLicenseNumber,
-				dateActualShipment: this.WaybillInfo.dateActualShipment,
-				personalNumber: this.WaybillInfo.personalNumber,
-				codeConsignorDivisions: this.WaybillInfo.codeConsignorDivisions,
-				nameConsigneeDivisions: this.WaybillInfo.nameConsigneeDivisions,
-				totalAmountMoney: this.WaybillInfo.totalAmountMoney,
-				vehicleLicenseNumber: this.WaybillInfo.vehicleLicenseNumber,
-				roadTransportNo: this.WaybillInfo.roadTransportNo,
-				carLicenseNumber: this.WaybillInfo.carLicenseNumber,
-				phone: this.WaybillInfo.phone,
-				goodsGross: this.WaybillInfo.goodsGross,
-				transportModeCode: this.WaybillInfo.transportModeCode,
-				networkAccessAddress: this.WaybillInfo.networkAccessAddress
-			}).then(res => {
-				Message.success('成功！')
-				this.$router.push({name: 'notruckcarryorder'})
+			this.$refs['ruleForm'].validate(valid => {
+				if (!valid) {
+					this.$nextTick(() => {
+						Message.error($('.el-form-item__error:first').text())
+						return
+					})
+				} else {
+					Company.notruckCarryOrder().add({
+						companyID:localStorage.getItem("companyID"),
+						messageReferenceNumber: this.WaybillInfo.messageReferenceNumber,
+						senderCode: this.WaybillInfo.senderCode,
+						messageFunctionCode: this.WaybillInfo.messageFunctionCode,
+						documentName: this.WaybillInfo.documentName,
+						recipientCode: this.WaybillInfo.recipientCode,
+						documentVersionNumber: this.WaybillInfo.documentVersionNumber,
+						messageSendingDateTime: this.WaybillInfo.messageSendingDateTime,
+						notruckuserId: this.WaybillInfo.notruckuserId,
+						carrier: this.WaybillInfo.carrier,
+						dteOfShipment: this.WaybillInfo.dteOfShipment,
+						dateOfDelivery: this.WaybillInfo.dateOfDelivery,
+						name: this.WaybillInfo.name,
+						consignee: this.WaybillInfo.consignee,
+						codeConsigneeDivisions: this.WaybillInfo.codeConsigneeDivisions,
+						priceRemarks: this.WaybillInfo.priceRemarks,
+						vehicleClassificationCode: this.WaybillInfo.vehicleClassificationCode,
+						trailerLicenseNumber: this.WaybillInfo.trailerLicenseNumber,
+						name: this.WaybillInfo.name,
+						nameGoods: this.WaybillInfo.nameGoods,
+						volume: this.WaybillInfo.volume,
+						originalAddNumber: this.WaybillInfo.originalAddNumber,
+						name: this.WaybillInfo.name,
+						serviceTypeCode: this.WaybillInfo.serviceTypeCode,
+						name: this.WaybillInfo.name,
+						nameConsignorDivisions: this.WaybillInfo.nameConsignorDivisions,
+						receivingPlace: this.WaybillInfo.receivingPlace,
+						transportationCost: this.WaybillInfo.transportationCost,
+						licensePlateCode: this.WaybillInfo.licensePlateCode,
+						vehicleLoadingQuality: this.WaybillInfo.vehicleLoadingQuality,
+						thePersonal: this.WaybillInfo.thePersonal,
+						certificateQualification: this.WaybillInfo.certificateQualification,
+						codeGoods: this.WaybillInfo.codeGoods,
+						total: this.WaybillInfo.total,
+						shippingNoteNumber: this.WaybillInfo.shippingNoteNumber,
+						waybillLicenseNumber: this.WaybillInfo.waybillLicenseNumber,
+						dateActualShipment: this.WaybillInfo.dateActualShipment,
+						personalNumber: this.WaybillInfo.personalNumber,
+						codeConsignorDivisions: this.WaybillInfo.codeConsignorDivisions,
+						nameConsigneeDivisions: this.WaybillInfo.nameConsigneeDivisions,
+						totalAmountMoney: this.WaybillInfo.totalAmountMoney,
+						vehicleLicenseNumber: this.WaybillInfo.vehicleLicenseNumber,
+						roadTransportNo: this.WaybillInfo.roadTransportNo,
+						carLicenseNumber: this.WaybillInfo.carLicenseNumber,
+						phone: this.WaybillInfo.phone,
+						goodsGross: this.WaybillInfo.goodsGross,
+						transportModeCode: this.WaybillInfo.transportModeCode,
+						networkAccessAddress: this.WaybillInfo.networkAccessAddress
+					}).then(res => {
+						Message.success('成功！')
+						this.$router.push({name: 'notruckcarryorder'})
+					})
+				}
 			})
+			
 		},
 		back() {
 			this.$router.go(-1)
