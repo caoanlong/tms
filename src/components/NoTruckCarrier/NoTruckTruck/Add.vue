@@ -113,6 +113,7 @@
 import { Message } from 'element-ui'
 import request from '../../../common/request'
 import Company from '../../../api/Company'
+import { checkPlateNoNew, checkInt, checkFloat2 } from '../../../common/valid'
 export default {
 	data() {
 		return {
@@ -135,10 +136,10 @@ export default {
 				destinationCountrySubdivisionCode:''
 			},
 			rules: {
-				vehicleNumber: [ {required: true, message: '请输入车辆牌照号'} ],
+				vehicleNumber: [ {required: true, message: '请输入车辆牌照号'}, { validator: checkPlateNoNew } ],
 				vehicleClassificationCode: [ {required: true, message: '请选择车辆类型'} ],
-				vehicleLength: [ {required: true, message: '请输入车辆长度'} ],
-				vehicleTonnage: [ {required: true, message: '请输入核定载质量'} ],
+				vehicleLength: [ {required: true, message: '请输入车辆长度'}, { validator: checkInt } ],
+				vehicleTonnage: [ {required: true, message: '请输入核定载质量'}, { validator: checkFloat2 } ],
 				placeOfLoading: [ {required: true, message: '请输入出发地'} ],
 				countrySubdivisionCode: [ {required: true, message: '请输入出发地区代码'} ],
 				goodsReceiptPlace: [ {required: true, message: '请输入目的地'} ],
@@ -173,27 +174,37 @@ export default {
 			this.sendingDateTime =  year + '' + month + '' + date + '' + hour + '' + minute + '' + second;
 		},
 		save() {
-			Company.notruckTruck().add({
-				messageReferenceNumber: this.TruckInfo.messageReferenceNumber,
-				senderCode: this.TruckInfo.senderCode,
-				notruckuserId: this.TruckInfo.notruckuserId,
-				messageFunctionCode: this.TruckInfo.messageFunctionCode,
-				documentName: this.TruckInfo.documentName,
-				recipientCode: this.TruckInfo.recipientCode,
-				documentVersionNumber: this.TruckInfo.documentVersionNumber,
-				messageSendingDateTime: this.TruckInfo.messageSendingDateTime,
-				vehicleNumber: this.TruckInfo.vehicleNumber,
-				vehicleClassificationCode: this.TruckInfo.vehicleClassificationCode,
-				vehicleLength: this.TruckInfo.vehicleLength,
-				vehicleTonnage: this.TruckInfo.vehicleTonnage,
-				placeOfLoading: this.TruckInfo.placeOfLoading,
-				countrySubdivisionCode: this.TruckInfo.countrySubdivisionCode,
-				goodsReceiptPlace: this.TruckInfo.goodsReceiptPlace,
-				destinationCountrySubdivisionCode: this.TruckInfo.destinationCountrySubdivisionCode
-			}).then(res => {
-				Message.success('成功！')
-				this.$router.push({name: 'notrucksource'})
-			})
+			this.$refs['ruleForm'].validate(valid => {
+				if (!valid) {
+					this.$nextTick(() => {
+						Message.error($('.el-form-item__error:first').text())
+						return
+					})
+				} else {
+					Company.notruckTruck().add({
+						companyID:localStorage.getItem("companyID"),
+						messageReferenceNumber: this.TruckInfo.messageReferenceNumber,
+						senderCode: this.TruckInfo.senderCode,
+						notruckuserId: this.TruckInfo.notruckuserId,
+						messageFunctionCode: this.TruckInfo.messageFunctionCode,
+						documentName: this.TruckInfo.documentName,
+						recipientCode: this.TruckInfo.recipientCode,
+						documentVersionNumber: this.TruckInfo.documentVersionNumber,
+						messageSendingDateTime: this.TruckInfo.messageSendingDateTime,
+						vehicleNumber: this.TruckInfo.vehicleNumber,
+						vehicleClassificationCode: this.TruckInfo.vehicleClassificationCode,
+						vehicleLength: this.TruckInfo.vehicleLength,
+						vehicleTonnage: this.TruckInfo.vehicleTonnage,
+						placeOfLoading: this.TruckInfo.placeOfLoading,
+						countrySubdivisionCode: this.TruckInfo.countrySubdivisionCode,
+						goodsReceiptPlace: this.TruckInfo.goodsReceiptPlace,
+						destinationCountrySubdivisionCode: this.TruckInfo.destinationCountrySubdivisionCode
+					}).then(res => {
+						Message.success('成功！')
+						this.$router.push({name: 'notrucktruck'})
+					})
+				}
+			})		
 		},
 		back() {
 			this.$router.go(-1)

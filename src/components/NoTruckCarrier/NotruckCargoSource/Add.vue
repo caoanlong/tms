@@ -137,6 +137,7 @@
 import { Message } from 'element-ui'
 import request from '../../../common/request'
 import Company from '../../../api/Company'
+import { checkPlateNoNew, checkInt, checkFloat2 } from '../../../common/valid'
 export default {
 	data() {
 		return {
@@ -171,9 +172,9 @@ export default {
 				placeOfLoading: [ {required: true, message: '请输入出发地'} ],
 				countrySubdivisionCode: [ {required: true, message: '请输入出发地区代码'} ],
 				consignee: [ {required: true, message: '请输入收货人'} ],
-				goodsReceiptPlace: [ {required: true, message: '请输入目的地'} ],
+				goodsReceiptPlace: [ {required: true, message: '请输入目的地'}],
 				destinationCountrySubdivisionCode: [ {required: true, message: '请输入目的地区代码'} ],
-				totalMonetaryAmount: [ {required: true, message: '请输入费用总金额'} ],
+				totalMonetaryAmount: [ {required: true, message: '请输入费用总金额'}, { validator: checkFloat2 } ],
 				vehicleClassificationCode: [ {required: true, message: '请选择车辆类型'} ],
 				descriptionOfGoods: [ {required: true, message: '请输入货物名称'} ],
 				cargoTypeClassificationCode: [ {required: true, message: '请选择货物类型'} ],
@@ -212,29 +213,40 @@ export default {
 		/**选择收货地 */
 		handleSelectedConsigneeArea() {},
 		save() {
-			Company.notruckCargoSource().add({
-				messageReferenceNumber:this.CargoInfo.messageReferenceNumber,
-				documentName:this.CargoInfo.documentName,
-				documentVersionNumber:this.CargoInfo.documentVersionNumber,
-				senderCode:this.CargoInfo.senderCode,
-				recipientCode:this.CargoInfo.recipientCode,
-				messageSendingDateTime:this.CargoInfo.messageSendingDateTime,
-				messageFunctionCode:this.CargoInfo.messageFunctionCode,
-				consignor:this.CargoInfo.consignor,
-				placeOfLoading:this.CargoInfo.placeOfLoading,
-				countrySubdivisionCode:this.CargoInfo.countrySubdivisionCode,
-				consignee:this.CargoInfo.consignee,
-				goodsReceiptPlace:this.CargoInfo.goodsReceiptPlace,
-				destinationCountrySubdivisionCode:this.CargoInfo.destinationCountrySubdivisionCode,
-				totalMonetaryAmount:this.CargoInfo.totalMonetaryAmount,
-				vehicleClassificationCode:this.CargoInfo.vehicleClassificationCode,
-				descriptionOfGoods:this.CargoInfo.descriptionOfGoods,
-				cargoTypeClassificationCode:this.CargoInfo.cargoTypeClassificationCode,
-				goodsItemGrossWeight:this.CargoInfo.goodsItemGrossWeight
-			}).then(res => {
-				Message.success('成功！')
-				this.$router.push({name: 'notruckcargosource'})
+			this.$refs['ruleForm'].validate(valid => {
+				if (!valid) {
+					this.$nextTick(() => {
+						Message.error($('.el-form-item__error:first').text())
+						return
+					})
+				} else {
+					Company.notruckCargoSource().add({
+						companyID:localStorage.getItem("companyID"),
+						messageReferenceNumber:this.CargoInfo.messageReferenceNumber,
+						documentName:this.CargoInfo.documentName,
+						documentVersionNumber:this.CargoInfo.documentVersionNumber,
+						senderCode:this.CargoInfo.senderCode,
+						recipientCode:this.CargoInfo.recipientCode,
+						messageSendingDateTime:this.CargoInfo.messageSendingDateTime,
+						messageFunctionCode:this.CargoInfo.messageFunctionCode,
+						consignor:this.CargoInfo.consignor,
+						placeOfLoading:this.CargoInfo.placeOfLoading,
+						countrySubdivisionCode:this.CargoInfo.countrySubdivisionCode,
+						consignee:this.CargoInfo.consignee,
+						goodsReceiptPlace:this.CargoInfo.goodsReceiptPlace,
+						destinationCountrySubdivisionCode:this.CargoInfo.destinationCountrySubdivisionCode,
+						totalMonetaryAmount:this.CargoInfo.totalMonetaryAmount,
+						vehicleClassificationCode:this.CargoInfo.vehicleClassificationCode,
+						descriptionOfGoods:this.CargoInfo.descriptionOfGoods,
+						cargoTypeClassificationCode:this.CargoInfo.cargoTypeClassificationCode,
+						goodsItemGrossWeight:this.CargoInfo.goodsItemGrossWeight
+					}).then(res => {
+						Message.success('成功！')
+						this.$router.push({name: 'notruckcargosource'})
+					})
+				}
 			})
+			
 		},
 		back() {
 			this.$router.go(-1)

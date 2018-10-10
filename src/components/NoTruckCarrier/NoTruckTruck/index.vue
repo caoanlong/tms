@@ -44,14 +44,20 @@
 					<el-table-column label="核定载质量" prop="vehicleTonnage"></el-table-column>
 					<el-table-column label="出发地" prop="placeOfLoading"></el-table-column>
 					<el-table-column label="目的地" prop="goodsReceiptPlace"></el-table-column>
-					<el-table-column label="状态" prop="hasFail"></el-table-column>
+					<el-table-column label="状态" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.hasFail==1" style="color:#67C23A">成功</span>
+							<span v-else-if="scope.row.hasFail==-1" style="color:#E6A23C">待处理</span>
+							<span v-else style="color:#F56C6C">失败</span>
+						</template>
+					</el-table-column>
 					<el-table-column label="描述" prop="failDescription"></el-table-column>
-					<el-table-column label="创建时间" prop="createTime"  align="center" width="140">
+					<el-table-column label="创建时间" prop="createTime"  align="center"  width="140">
 						<template slot-scope="scope">
 							<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp()}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="操作" width="150" align="center">
+					<el-table-column label="操作" width="80" align="center">
 						<template slot-scope="scope">
 							<el-button type="default" size="mini" icon="el-icon-view" @click="view(scope.row.truckSourceID)">查看</el-button>
 						</template>
@@ -109,7 +115,7 @@ export default {
 				documentName: this.find.documentName
 			}).then(res => {
 				this.total = res.total
-				this.tableData = res.list
+				this.tableData = res.records
 			})
 		},
 		add() {

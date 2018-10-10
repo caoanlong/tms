@@ -2,97 +2,7 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">添加运单</div>
-			<el-form label-width="160px" size="small">
-				<el-row class="section-block" style="margin-bottom:20px">
-					<span class="block-title">基本信息</span>
-					<div class="block-content">
-						<el-row>
-							<el-col :span="8">
-								<el-form-item label="原始单号">
-									<el-input v-model="WaybillInfo.originalAddNumber"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="托运单号">
-									<el-input v-model="WaybillInfo.shippingNoteNumber"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="承运人">
-									<el-input v-model="WaybillInfo.carrier"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row>
-							<el-col :span="8">
-								<el-form-item label="统一社会信用代码">
-									<el-input v-model="WaybillInfo.uniformSocialCreditCode"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="许可证编号">
-									<el-input v-model="WaybillInfo.waybillLicenseNumber"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="托运日期时间">
-									<el-date-picker 
-										style="width:100%" 
-										type="date" 
-										placeholder="请选择" 
-										value-format="timestamp" 
-										v-model="WaybillInfo.dteOfShipment">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
-					<span class="block-title">发货方</span>
-					<div class="block-content">
-						<el-row>
-							<el-col :span="8">
-								<el-form-item label="原始单号">
-									<el-input v-model="WaybillInfo.originalAddNumber"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="托运单号">
-									<el-input v-model="WaybillInfo.shippingNoteNumber"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="承运人">
-									<el-input v-model="WaybillInfo.carrier"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row>
-							<el-col :span="8">
-								<el-form-item label="统一社会信用代码">
-									<el-input v-model="WaybillInfo.uniformSocialCreditCode"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="许可证编号">
-									<el-input v-model="WaybillInfo.waybillLicenseNumber"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="托运日期时间">
-									<el-date-picker 
-										style="width:100%" 
-										type="date" 
-										placeholder="请选择" 
-										value-format="timestamp" 
-										v-model="WaybillInfo.dteOfShipment">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
+			<el-form label-width="160px" :model="WaybillInfo" :rules="rules" ref="ruleForm" size="small">
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="报文参考号">
@@ -136,180 +46,206 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="业务类型代码">
+						<el-form-item label="原始单号" prop="originalAddNumber">
+							<el-input v-model="WaybillInfo.originalAddNumber" placeholder="请输入原始单号"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="托运单号" prop="shippingNoteNumber">
+							<el-input v-model="WaybillInfo.shippingNoteNumber" placeholder="请输入托运单号"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="承运人" prop="carrier">
+							<el-input v-model="WaybillInfo.carrier" placeholder="请输入承运人"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="统一社会信用代码" prop="uniformSocialCreditCode">
+							<el-input v-model="WaybillInfo.uniformSocialCreditCode" placeholder="请输入统一社会信用代码"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="许可证编号" prop="waybillLicenseNumber">
+							<el-input v-model="WaybillInfo.waybillLicenseNumber" placeholder="请输入许可证编号"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="托运日期时间" prop="dteOfShipment">
+							<el-input v-model="WaybillInfo.dteOfShipment" placeholder="请输入托运日期时间"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="业务类型代码" prop="serviceTypeCode">
 							<el-select v-model="WaybillInfo.serviceTypeCode" placeholder="请选择业务类型" style="width:100%">
 								<el-option v-for="item in notruck_business" :key="item.ConstStd_ID" :label="item.NAME" :value="item.VALUE"></el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="实际发运日期时间">
-							<el-date-picker 
-								style="width:100%" 
-								type="date" 
-								placeholder="请选择" 
-								value-format="timestamp" 
-								v-model="WaybillInfo.dateActualShipment">
-							</el-date-picker>
+						<el-form-item label="实际发运日期时间" prop="dateActualShipment">
+							<el-input v-model="WaybillInfo.dateActualShipment" placeholder="请输入实际发运日期时间"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="收货日期时间" prop="dateOfDelivery">
+							<el-input v-model="WaybillInfo.dateOfDelivery" placeholder="请输入收货日期时间"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
+					
 					<el-col :span="8">
-						<el-form-item label="收货日期时间">
-							<el-date-picker 
-								style="width:100%" 
-								type="date" 
-								placeholder="请选择" 
-								value-format="timestamp" 
-								v-model="WaybillInfo.dateOfDelivery">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="发货人">
-							<el-input v-model="WaybillInfo.consignor"></el-input>
+						<el-form-item label="发货人" prop="consignor">
+							<el-input v-model="WaybillInfo.consignor" placeholder="请输入发货人"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="个人证件号">
-							<el-input v-model="WaybillInfo.personalNumber"></el-input>
+							<el-input v-model="WaybillInfo.personalNumber" placeholder="请输入个人证件号"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="装货地点" prop="loadingPlace">
+							<el-input v-model="WaybillInfo.loadingPlace" placeholder="请输入装货地点"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					
+					<el-col :span="8">
+						<el-form-item label="国家行政区划名称">
+							<el-input v-model="WaybillInfo.nameConsignorDivisions" placeholder="请输入国家行政区划名称"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="国家行政区划代码" prop="codeConsignorDivisions">
+							<el-input v-model="WaybillInfo.codeConsignorDivisions" placeholder="请输入国家行政区划代码"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="装货地点">
-							<el-input v-model="WaybillInfo.loadingPlace"></el-input>
+						<el-form-item label="收货人" prop="consignee">
+							<el-input v-model="WaybillInfo.consignee" placeholder="请输入收货人"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="收货地点" prop="receivingPlace">
+							<el-input v-model="WaybillInfo.receivingPlace" placeholder="请输入收货地点"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="国家行政区划名称">
-							<el-input v-model="WaybillInfo.nameConsignorDivisions"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="国家行政区划代码">
-							<el-input v-model="WaybillInfo.codeConsignorDivisions"></el-input>
+							<el-input v-model="WaybillInfo.nameConsigneeDivisions" placeholder="请输入国家行政区划名称"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="收货人">
-							<el-input v-model="WaybillInfo.consignee"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="收货地点">
-							<el-input v-model="WaybillInfo.receivingPlace"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="国家行政区划名称">
-							<el-input v-model="WaybillInfo.nameConsigneeDivisions"></el-input>
+						<el-form-item label="国家行政区划代码" prop="codeConsigneeDivisions">
+							<el-input v-model="WaybillInfo.codeConsigneeDivisions" placeholder="请输入国家行政区划代码"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="国家行政区划代码">
-							<el-input v-model="WaybillInfo.codeConsigneeDivisions"></el-input>
+						<el-form-item label="运输成本" prop="transportationCost">
+							<el-input v-model="WaybillInfo.transportationCost" placeholder="请输入运输成本"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="运输成本">
-							<el-input v-model="WaybillInfo.transportationCost"></el-input>
+						<el-form-item label="货币总金额" prop="totalAmountMoney">
+							<el-input v-model="WaybillInfo.totalAmountMoney" placeholder="请输入货币总金额"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
-						<el-form-item label="货币总金额">
-							<el-input v-model="WaybillInfo.totalAmountMoney"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
 						<el-form-item label="价格备注">
-							<el-input v-model="WaybillInfo.priceRemarks"></el-input>
+							<el-input v-model="WaybillInfo.priceRemarks" placeholder="请输入价格备注"></el-input>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
 					<el-col :span="8">
-						<el-form-item label="牌照类型代码">
-							<el-select v-model="WaybillInfo.licensePlateCode" placeholder="请选择运输方式" style="width:100%">
+						<el-form-item label="牌照类型代码" prop="licensePlateCode">
+							<el-select v-model="WaybillInfo.licensePlateCode" placeholder="请选择牌照类型代码" style="width:100%">
 								<el-option v-for="item in notruck_LicensePlate" :key="item.Dict_ID" :label="item.NAME" :value="item.VALUE">
 								</el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="车辆牌照号">
-							<el-input v-model="WaybillInfo.vehicleLicenseNumber"></el-input>
+						<el-form-item label="车辆牌照号" prop="vehicleLicenseNumber">
+							<el-input v-model="WaybillInfo.vehicleLicenseNumber" placeholder="请输入车辆牌照号"></el-input>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
-						<el-form-item label="车辆分类代码">
+						<el-form-item label="车辆分类代码" prop="vehicleClassificationCode">
 							<el-select v-model="WaybillInfo.vehicleClassificationCode" placeholder="请选择车辆类型" style="width:100%">
 								<el-option v-for="item in TruckType" :key="item.ConstStd_ID" :label="item.Value +' '+ item.Name " :value="item.Value">
 								</el-option>
 							</el-select>
 						</el-form-item>
 					</el-col>
-					<el-col :span="8">
-						<el-form-item label="车辆载质量">
-							<el-input v-model="WaybillInfo.vehicleLoadingQuality"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="道路运输证号">
-							<el-input v-model="WaybillInfo.roadTransportNo"></el-input>
-						</el-form-item>
-					</el-col>
 				</el-row>
 				<el-row>
+					<el-col :span="8">
+						<el-form-item label="车辆载质量" prop="vehicleLoadingQuality">
+							<el-input v-model="WaybillInfo.vehicleLoadingQuality" placeholder="请输入车辆载质量"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="道路运输证号" prop="roadTransportNo">
+							<el-input v-model="WaybillInfo.roadTransportNo" placeholder="请输入道路运输证号"></el-input>
+						</el-form-item>
+					</el-col>
 					<el-col :span="8">
 						<el-form-item label="挂车牌照号">
-							<el-input v-model="WaybillInfo.trailerLicenseNumber"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="所有人">
-							<el-input v-model="WaybillInfo.thePersonal"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="许可证编号">
-							<el-input v-model="WaybillInfo.carLicenseNumber"></el-input>
+							<el-input v-model="WaybillInfo.trailerLicenseNumber" placeholder="请输入挂车牌照号"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="姓名">
-							<el-input v-model="WaybillInfo.name"></el-input>
+						<el-form-item label="所有人" prop="thePersonal">
+							<el-input v-model="WaybillInfo.thePersonal" placeholder="请输入所有人"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="从业资格证号">
-							<el-input v-model="WaybillInfo.certificateQualification"></el-input>
+						<el-form-item label="许可证编号" prop="carLicenseNumber">
+							<el-input v-model="WaybillInfo.carLicenseNumber" placeholder="请输入许可证编号"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="姓名" prop="name">
+							<el-input v-model="WaybillInfo.name" placeholder="请输入姓名"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="从业资格证号" prop="certificateQualification">
+							<el-input v-model="WaybillInfo.certificateQualification" placeholder="请输入从业资格证号"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="电话号码">
-							<el-input v-model="WaybillInfo.phone"></el-input>
+							<el-input v-model="WaybillInfo.phone" placeholder="请输入电话号码"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="货物名称">
-							<el-input v-model="WaybillInfo.nameGoods"></el-input>
+						<el-form-item label="货物名称" prop="nameGoods">
+							<el-input v-model="WaybillInfo.nameGoods" placeholder="请输入货物名称"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="货物类型分类">
+						<el-form-item label="货物类型分类" prop="codeGoods">
 							<el-select v-model="WaybillInfo.codeGoods" placeholder="请选择货物类型" style="width:100%">
 								<el-option v-for="item in CargoType" :key="item.ConstStd_ID" :label="item.Value +' '+ item.Name" :value="item.Value">
 								</el-option>
@@ -317,24 +253,24 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="货物项毛重">
-							<el-input v-model="WaybillInfo.goodsGross"></el-input>
+						<el-form-item label="货物项毛重" prop="goodsGross">
+							<el-input v-model="WaybillInfo.goodsGross" placeholder="请输入货物项毛重"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="体积">
-							<el-input v-model="WaybillInfo.volume"></el-input>
+							<el-input v-model="WaybillInfo.volume" placeholder="请输入体积"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="总件数">
-							<el-input v-model="WaybillInfo.total"></el-input>
+							<el-input v-model="WaybillInfo.total" placeholder="请输入总件数"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="运输方式代码">
+						<el-form-item label="运输方式代码" prop="transportModeCode">
 							<el-select v-model="WaybillInfo.transportModeCode" placeholder="请选择运输方式" style="width:100%">
 								<el-option v-for="item in notruck_transport" :key="item.Dict_ID" :label="item.NAME" :value="item.VALUE">
 								</el-option>
@@ -358,7 +294,10 @@
 import { Message } from 'element-ui'
 import request from '../../../common/request'
 import Company from '../../../api/Company'
+import { checkPlateNoNew, checkInt, checkFloat2 ,yyyymmddhhmmss} from '../../../common/valid'
 export default {
+
+
 	data() {
 		return {
 			TruckType: [],
@@ -413,15 +352,47 @@ export default {
 				goodsGross:'',
 				transportModeCode:'',
 				networkAccessAddress:''
+			},
+			rules: {
+				originalAddNumber:[ {required: true, message: '请输入原始单号'} ],
+				shippingNoteNumber:[ {required: true, message: '请输入托运单号'} ],
+				carrier:[ {required: true, message: '请输入承运人'} ],
+				uniformSocialCreditCode:[ {required: true, message: '请输入统一社会信用代码'} ],
+				waybillLicenseNumber:[ {required: true, message: '请输入许可证编号'} ],
+				dteOfShipment:[ {required: true, message: '请输入托运日期时间'} ,{ validator: yyyymmddhhmmss }],
+				serviceTypeCode:[ {required: true, message: '请选择业务类型代码'} ],
+				dateActualShipment:[ {required: true, message: '请输入实际发运日期时间'} ,{ validator: yyyymmddhhmmss }],
+				dateOfDelivery:[ {required: true, message: '请输入收货日期时间'} ,{ validator: yyyymmddhhmmss }],
+				consignor:[ {required: true, message: '请输入发货人'} ],
+				loadingPlace:[ {required: true, message: '请输入装货地点'} ],
+				codeConsignorDivisions:[ {required: true, message: '请输入国家行政区划代码'} ],
+				consignee:[ {required: true, message: '请输入收货人'} ],
+				receivingPlace:[ {required: true, message: '请输入收货地点'} ],
+				codeConsigneeDivisions:[ {required: true, message: '请输入国家行政区划代码'} ],
+				transportationCost:[ {required: true, message: '请输入运输成本'} ],
+				totalAmountMoney:[ {required: true, message: '请输入货币总金额'} ],
+				licensePlateCode:[ {required: true, message: '请选择牌照类型代码'} ],
+				vehicleLicenseNumber:[ {required: true, message: '请输入车辆牌照号'} ],
+				vehicleClassificationCode:[ {required: true, message: '请选择车辆分类代码'} ],
+				vehicleLoadingQuality:[ {required: true, message: '请输入车辆载质量'} ],
+				roadTransportNo:[ {required: true, message: '请输入道路运输证号'} ],
+				thePersonal:[ {required: true, message: '请输入所有人'} ],
+				carLicenseNumber:[ {required: true, message: '请输入许可证编号'} ],
+				name:[ {required: true, message: '请输入姓名'} ],
+				certificateQualification:[ {required: true, message: '请输入从业资格证号'} ],
+				nameGoods:[ {required: true, message: '请输入货物名称'} ],
+				codeGoods:[ {required: true, message: '请选择货物类型分类'} ],
+				goodsGross:[ {required: true, message: '请输入货物项毛重'} ],
+				transportModeCode:[ {required: true, message: '请选择运输方式代码'} ]
 			}
 		}
 	},
 	created() {
 		this.SendingDateTime()
-		this.getApkInfo()
+		this.getWaybillInfo()
 	},
 	methods: {
-		getApkInfo() {
+		getWaybillInfo() {
 			Company.info().detailOfExtend().then(res => {
 				this.WaybillInfo.documentName = res.data.documentName
 				this.WaybillInfo.documentVersionNumber = res.data.documentVersionNumber
@@ -444,14 +415,15 @@ export default {
 		},
 		save() {
 			Company.notruckCarryOrder().add({
-				messageReferenceNumber: this.apkInfo.messageReferenceNumber,
-				senderCode: this.apkInfo.senderCode,
-				messageFunctionCode: this.apkInfo.messageFunctionCode,
-				documentName: this.apkInfo.documentName,
-				recipientCode: this.apkInfo.recipientCode,
-				documentVersionNumber: this.apkInfo.documentVersionNumber,
-				messageSendingDateTime: this.apkInfo.messageSendingDateTime,
-				notruckuserId: this.apkInfo.notruckuserId,
+				companyID:localStorage.getItem("companyID"),
+				messageReferenceNumber: this.WaybillInfo.messageReferenceNumber,
+				senderCode: this.WaybillInfo.senderCode,
+				messageFunctionCode: this.WaybillInfo.messageFunctionCode,
+				documentName: this.WaybillInfo.documentName,
+				recipientCode: this.WaybillInfo.recipientCode,
+				documentVersionNumber: this.WaybillInfo.documentVersionNumber,
+				messageSendingDateTime: this.WaybillInfo.messageSendingDateTime,
+				notruckuserId: this.WaybillInfo.notruckuserId,
 				carrier: this.WaybillInfo.carrier,
 				dteOfShipment: this.WaybillInfo.dteOfShipment,
 				dateOfDelivery: this.WaybillInfo.dateOfDelivery,

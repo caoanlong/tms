@@ -173,3 +173,23 @@ export const limitLength100 = (rule, value, callback) => {
 		callback()
 	}
 }
+
+// 验证车牌号
+export const checkPlateNoNew = (rule, value, callback) => {
+	const re = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}([A-Z0-9]{4,5})[A-Z0-9挂学警港澳]{1}$/
+	if (!re.test(value) && value) {
+		callback(new Error('请输入正确的车牌号'))
+	} else {
+		callback()
+	}
+}
+
+// 验证车牌号
+export const yyyymmddhhmmss = (rule, value, callback) => {
+	const re = /^[1970-2100][01-12][01-31][00-23][00-59]{2}$/
+	if (!re.test(value) && value) {
+		callback(new Error('请输入时间格式 yyyymmddhhmmss'))
+	} else {
+		callback()
+	}
+}

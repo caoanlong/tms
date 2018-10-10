@@ -6,104 +6,104 @@
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="报文参考号">
-							<p>{{CargoInfo.messageReferenceNumber}}</p>
+							<p>{{cargoSourceInfo.messageReferenceNumber}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="单证名称">
-							<p>{{CargoInfo.documentName}}</p>
+							<p>{{cargoSourceInfo.documentName}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="报文版本号">
-							<p>{{CargoInfo.documentVersionNumber}}</p>
+							<p>{{cargoSourceInfo.documentVersionNumber}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="发送方代码">
-							<p>{{CargoInfo.senderCode}}</p>
+							<p>{{cargoSourceInfo.senderCode}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="接收方代码">
-							<p>{{CargoInfo.recipientCode}}</p>
+							<p>{{cargoSourceInfo.recipientCode}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="发送日期时间">
-							<p>{{CargoInfo.messageSendingDateTime}}</p>
+							<p>{{cargoSourceInfo.messageSendingDateTime}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="报文功能代码">
-							<p>{{CargoInfo.messageFunctionCode}}</p>
+							<p>{{cargoSourceInfo.messageFunctionCode}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="发货人">
-							<p>{{CargoInfo.consignor}}</p>
+							<p>{{cargoSourceInfo.consignor}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="出发地" >
-							<p>{{CargoInfo.placeOfLoading}}</p>
+							<p>{{cargoSourceInfo.placeOfLoading}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="出发地区代码" >
-							<p>{{CargoInfo.countrySubdivisionCode}}</p>
+							<p>{{cargoSourceInfo.countrySubdivisionCode}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="收货人" >
-							<p>{{CargoInfo.consignee}}</p>
+							<p>{{cargoSourceInfo.consignee}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="目的地" >
-							<p>{{CargoInfo.goodsReceiptPlace}}</p>
+							<p>{{cargoSourceInfo.goodsReceiptPlace}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="目的地区代码" >
-							<p>{{CargoInfo.destinationCountrySubdivisionCode}}</p>
+							<p>{{cargoSourceInfo.destinationCountrySubdivisionCode}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="费用总金额" >
-							<p>{{CargoInfo.totalMonetaryAmount}}</p>
+							<p>{{cargoSourceInfo.totalMonetaryAmount}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="车辆类型" >
-							<p>{{TRUCKTYPE1[CargoInfo.vehicleClassificationCode]}}</p>
+							<p>{{TRUCKTYPE1[cargoSourceInfo.vehicleClassificationCode]}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="货物名称" >
-							<p>{{CargoInfo.descriptionOfGoods}}</p>
+							<p>{{cargoSourceInfo.descriptionOfGoods}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="货物类型分类" >
-							<p>{{CARGOTYPE[CargoInfo.cargoTypeClassificationCode]}}</p>
+							<p>{{CARGOTYPE[cargoSourceInfo.cargoTypeClassificationCode]}}</p>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="货物项毛重" >
-							<p>{{CargoInfo.goodsItemGrossWeight}}</p>
+							<p>{{cargoSourceInfo.goodsItemGrossWeight}}</p>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -124,17 +124,17 @@ import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
-			CargoInfo: {}
+			cargoSourceInfo: {}
 		}
 	},
 	created() {
-		this.getNotruckInfo()
+		this.getCargoSourceInfo()
 	},
 	methods: {
-		getNotruckInfo() {
+		getCargoSourceInfo() {
 			const cargoSourceID = this.$route.query.cargoSourceID
-			Company.info().detailOfExtend({cargoSourceID}).then(res => {
-				this.CargoInfo = res.data
+			Company.notruckCargoSource().findById({cargoSourceID}).then(res => {
+				this.cargoSourceInfo = res				
 			})
 		},
 		back() {

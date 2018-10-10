@@ -38,12 +38,13 @@
 					<el-table-column label="发货人" prop="consignor"></el-table-column>
 					<el-table-column label="出发地" prop="placeOfLoading"></el-table-column>
 					<el-table-column label="费用总金额" prop="totalMonetaryAmount"></el-table-column>
-					<el-table-column label="车辆分类" prop="vehicleClassificationCode"></el-table-column>
+					<el-table-column label="车辆分类代码" prop="vehicleClassificationCode"></el-table-column>
 					<el-table-column label="货物名称" prop="descriptionOfGoods"></el-table-column>
 					<el-table-column label="货物毛重" prop="goodsItemGrossWeight"></el-table-column>
-					<el-table-column label="状态" prop="hasFail" align="center">
+					<el-table-column label="状态" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.hasFail==1" style="color:#67C23A">成功</span>
+							<span v-else-if="scope.row.hasFail==-1" style="color:#E6A23C">待处理</span>
 							<span v-else style="color:#F56C6C">失败</span>
 						</template>
 					</el-table-column>
@@ -54,7 +55,7 @@
 							<span v-if="scope.row.createTime">{{scope.row.createTime | getdatefromtimestamp()}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="操作" width="150">
+					<el-table-column label="操作" width="80" align="center">
 						<template slot-scope="scope">
 							<el-button type="default" size="mini" icon="el-icon-view" @click="view(scope.row.cargoSourceID)">查看</el-button>
 						</template>
@@ -109,7 +110,7 @@ export default {
 				messageReferenceNumber: this.find.messageReferenceNumber
 			}).then(res => {
 				this.total = res.total
-				this.tableData = res.list
+				this.tableData = res.records
 			})
 		},
 		add() {

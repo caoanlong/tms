@@ -3,84 +3,6 @@
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">查看运单</div>
 			<el-form label-width="160px" size="small">
-				<el-row class="section-block" style="margin-bottom:20px">
-					<span class="block-title">基本信息</span>
-					<div class="block-content">
-						<el-row>
-							<el-col :span="8">
-								<el-form-item label="原始单号">
-									<p>{{WaybillInfo.originalAddNumber}}</p>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="托运单号">
-									<p>{{WaybillInfo.shippingNoteNumber}}</p>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="承运人">
-									<p>{{WaybillInfo.carrier}}</p>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row>
-							<el-col :span="8">
-								<el-form-item label="统一社会信用代码">
-									<p>{{WaybillInfo.uniformSocialCreditCode}}</p>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="许可证编号">
-									<p>{{WaybillInfo.waybillLicenseNumber}}</p>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="托运日期时间">
-									<p>{{WaybillInfo.dteOfShipment}}</p>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
-				<el-row class="section-block" style="margin-bottom:20px">
-					<span class="block-title">发货方</span>
-					<div class="block-content">
-						<el-row>
-							<el-col :span="8">
-								<el-form-item label="原始单号">
-									<p>{{WaybillInfo.originalAddNumber}}</p>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="托运单号">
-									<p>{{WaybillInfo.shippingNoteNumber}}</p>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="承运人">
-									<p>{{WaybillInfo.carrier}}</p>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row>
-							<el-col :span="8">
-								<el-form-item label="统一社会信用代码">
-									<p>{{WaybillInfo.uniformSocialCreditCode}}</p>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="许可证编号">
-									<p>{{WaybillInfo.waybillLicenseNumber}}</p>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="托运日期时间">
-									<p>{{WaybillInfo.dteOfShipment}}</p>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</div>
-				</el-row>
 				<el-row>
 					<el-col :span="8">
 						<el-form-item label="报文参考号">
@@ -124,6 +46,42 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
+						<el-form-item label="原始单号">
+							<p>{{WaybillInfo.originalAddNumber}}</p>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="托运单号">
+							<p>{{WaybillInfo.shippingNoteNumber}}</p>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="承运人">
+							<p>{{WaybillInfo.carrier}}</p>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col :span="8">
+						<el-form-item label="统一社会信用代码">
+							<p>{{WaybillInfo.uniformSocialCreditCode}}</p>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="许可证编号">
+							<p>{{WaybillInfo.waybillLicenseNumber}}</p>
+						</el-form-item>
+					</el-col>
+					<el-col :span="8">
+						<el-form-item label="托运日期时间">
+							<p>{{WaybillInfo.dteOfShipment}}</p>
+						</el-form-item>
+					</el-col>
+				</el-row>
+
+				
+				<el-row>
+					<el-col :span="8">
 						<el-form-item label="业务类型代码">
 							<p>{{WaybillInfo.serviceTypeCode}}</p>
 						</el-form-item>
@@ -133,13 +91,14 @@
 							<p>{{WaybillInfo.dateActualShipment}}</p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
 						<el-form-item label="收货日期时间">
 							<p>{{WaybillInfo.dateOfDelivery}}</p>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
+					
 					<el-col :span="8">
 						<el-form-item label="发货人">
 							<p>{{WaybillInfo.consignor}}</p>
@@ -150,13 +109,14 @@
 							<p>{{WaybillInfo.personalNumber}}</p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
 						<el-form-item label="装货地点">
 							<p>{{WaybillInfo.loadingPlace}}</p>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
+					
 					<el-col :span="8">
 						<el-form-item label="国家行政区划名称">
 							<p>{{WaybillInfo.nameConsignorDivisions}}</p>
@@ -191,6 +151,8 @@
 							<p>{{WaybillInfo.codeConsigneeDivisions}}</p>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
 					<el-col :span="8">
 						<el-form-item label="运输成本">
 							<p>{{WaybillInfo.transportationCost}}</p>
@@ -201,13 +163,13 @@
 							<p>{{WaybillInfo.totalAmountMoney}}</p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
 						<el-form-item label="价格备注">
 							<p>{{WaybillInfo.priceRemarks}}</p>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
 					<el-col :span="8">
 						<el-form-item label="牌照类型代码">
 							<p>{{WaybillInfo.licensePlateCode}}</p>
@@ -218,13 +180,13 @@
 							<p>{{WaybillInfo.vehicleLicenseNumber}}</p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
 						<el-form-item label="车辆分类代码">
 							<p>{{WaybillInfo.vehicleClassificationCode}}</p>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
 					<el-col :span="8">
 						<el-form-item label="车辆载质量">
 							<p>{{WaybillInfo.vehicleLoadingQuality}}</p>
@@ -235,13 +197,13 @@
 							<p>{{WaybillInfo.roadTransportNo}}</p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
 						<el-form-item label="挂车牌照号">
 							<p>{{WaybillInfo.trailerLicenseNumber}}</p>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
 					<el-col :span="8">
 						<el-form-item label="所有人">
 							<p>{{WaybillInfo.thePersonal}}</p>
@@ -252,13 +214,13 @@
 							<p>{{WaybillInfo.carLicenseNumber}}</p>
 						</el-form-item>
 					</el-col>
-				</el-row>
-				<el-row>
 					<el-col :span="8">
 						<el-form-item label="姓名">
 							<p>{{WaybillInfo.name}}</p>
 						</el-form-item>
 					</el-col>
+				</el-row>
+				<el-row>
 					<el-col :span="8">
 						<el-form-item label="从业资格证号">
 							<p>{{WaybillInfo.certificateQualification}}</p>
@@ -307,8 +269,7 @@
 				<el-row>
 					<el-col :span="24">
 						<el-form-item>
-							<el-button type="primary" @click="save">保存</el-button>
-							<el-button @click.native="back">取消</el-button>
+							<el-button @click.native="back">返回</el-button>
 						</el-form-item>
 					</el-col>
 				</el-row>
