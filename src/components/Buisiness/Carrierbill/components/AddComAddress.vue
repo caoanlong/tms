@@ -23,7 +23,7 @@
                     <el-input v-model="companyAddress.contactPhone" placeholder="请输入..."></el-input>
                 </el-form-item>
                 <el-form-item label="所在区域" prop="areaID">
-                    <dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
+                    <dist-picker :distList="selectedArea" @hand-select="handSelectedArea"></dist-picker>
                 </el-form-item>
                 <el-form-item label="定位地址" prop="locationAddress">
                     <el-autocomplete  style="width:100%"
@@ -58,7 +58,7 @@
 
 <script>
 import { Message } from 'element-ui'
-import Customer from '../../../../api/Customer'
+import Company from '../../../../api/Company'
 import CustomerAddress from '../../../../api/CustomerAddress'
 import distData from '../../../../assets/data/distpicker.data'
 import { checkTel } from '../../../../common/validator'
@@ -75,11 +75,6 @@ export default {
         company: Object
     },
     watch: {
-        company: {
-            handler(val) {
-            },
-            deep: true
-        },
         isVisible(bool) {
             this.selectedArea = []
             this.selectedCity = ''
@@ -90,7 +85,7 @@ export default {
                 this.companyAddress.companyName = this.company ? this.company.companyName : ''
                 this.companyAddress.contactName = this.company ? this.company.contactName : ''
                 this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
-                this.selectedArea = this.company ? areaIdToArrayId(String(this.company.companyAreaID)) : [] 
+                this.company && this.handSelectedArea(areaIdToArrayId(this.company.companyAreaID))
             }
         }
     },
@@ -122,9 +117,9 @@ export default {
     },
     methods: {
         getCompanys(queryString, cb) {
-			Customer.suggest({
+			Company.customer().suggest({
 				companyName: queryString
-			}).then(res => { cd && cb(res) })
+			}).then(res => { cb && cb(res) })
         },
         getLocation(queryString, cb) {
 			if (!this.selectedCity) {
@@ -145,7 +140,7 @@ export default {
 			this.companyAddress.customerID = data.customerID
 			this.companyAddress.companyName = data.companyName
 		},
-		handleSelectedArea(data) {
+		handSelectedArea(data) {
             if (data) {
 				this.companyAddress.areaID = data[data.length - 1]
 				this.selectedArea = data

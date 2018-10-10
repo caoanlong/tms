@@ -491,7 +491,6 @@ export default {
 		this.getUnits()
 	},
 	methods: {
-		
 		getInfo() {
 			const carrierOrderID = this.$route.query.carrierOrderID
 			Carrierbill.findById({ carrierOrderID }).then(res => {
@@ -532,7 +531,6 @@ export default {
 				this.listForCalc()
 				this.getMinDateTime()
 			})
-			
 		},
 		changeFreight(val){
 			this.freight = val
@@ -591,7 +589,6 @@ export default {
 			if (this.receivableDistance) {
 				for (let i = this.carrierbillInfo.carrierCargo.length - 1; i >= 0; i--) {
 					if (this.carrierbillInfo.carrierCargo[i].dispatchType == 'Weight') {
-						
 						sum += Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
 							* this.receivableWeightUnitPrice 
 							* this.receivableDistance/1000
@@ -638,7 +635,7 @@ export default {
 			}
 			Company.customer().suggest({
 				customerType: 'Delegate',
-				keyword: queryString
+				companyName: queryString
 			}).then(res => {
 				cb(res)
 			})
@@ -647,21 +644,18 @@ export default {
 			if (queryString != this.carrierbillInfo.flagConsignorName) {
 				this.carrierbillInfo.shipperID = ''
 			}
-
 			Company.customer().suggest({
 				customerType: 'Shipper',
-				keyword: queryString
-
+				companyName: queryString
 			}).then(res => {cb(res) })
 		},
 		getConsigneeCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
 				this.carrierbillInfo.consigneeID = ''
 			}
-
 			Company.customer().suggest({
 				customerType: 'Consignee',
-				keyword: queryString
+				companyName: queryString
 
 			}).then(res => { cb(res) })
 		},

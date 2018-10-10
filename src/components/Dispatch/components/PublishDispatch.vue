@@ -428,7 +428,7 @@ export default {
                 }
             }
             this.baseDizDispatchFee.amount = sum?Number(sum).toFixed(2):0
-            return sum?Number(sum).toFixed(2):0
+            return sum ? Number(sum).toFixed(2) : 0
         },
         handSelectTruck(data) {
             this.truckDialog = false

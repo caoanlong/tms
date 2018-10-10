@@ -564,7 +564,7 @@ export default {
 			}
 			Company.customer().suggest({
 				customerType: 'Delegate',
-				keyword: queryString
+				companyName: queryString
 			}).then(res => { cb(res) })
 		},
 		getShipperCompany(queryString, cb) {
@@ -573,7 +573,7 @@ export default {
 			}
 			Company.customer().suggest({
 				customerType: 'Shipper',
-				keyword: queryString
+				companyName: queryString
 			}).then(res => { cb(res) })
 		},
 		getConsigneeCompany(queryString, cb) {
@@ -582,7 +582,7 @@ export default {
 			}
 			Company.customer().suggest({
 				customerType: 'Consignee',
-				keyword: queryString
+				companyName: queryString
 			}).then(res => { cb(res) })
 		},
 		getShipperAddress(queryString, cb) {

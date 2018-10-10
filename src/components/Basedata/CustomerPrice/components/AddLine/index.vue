@@ -2,7 +2,7 @@
     <div>
         <el-dialog 
             width="70%"
-            title="线路定价" 
+            title="添加线路" 
             :visible="isVisible" 
             :show-close="false" 
             :close-on-click-modal="false">
@@ -232,7 +232,7 @@ export default {
 			}
 			Company.customer().suggest({
 				customerType: 'Shipper',
-				keyword: queryString
+				companyName: queryString
 			}).then(res => { cb && cb(res) })
 		},
 		getConsigneeCompany(queryString, cb) {
@@ -241,7 +241,7 @@ export default {
 			}
 			Company.customer().suggest({
 				customerType: 'Consignee',
-				keyword: queryString
+				companyName: queryString
 			}).then(res => { cb && cb(res) })
 		},
 		getShipperAddress(queryString, cb) {
