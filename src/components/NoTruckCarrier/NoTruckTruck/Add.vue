@@ -121,7 +121,7 @@ export default {
 				messageReferenceNumber:'',
 				senderCode:'',
 				messageFunctionCode:'',
-				documentName:'',
+				documentName:'车源信息',
 				recipientCode:'',
 				documentVersionNumber:'',
 				messageSendingDateTime:'',

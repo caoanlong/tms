@@ -153,7 +153,7 @@ export default {
 				countrySubdivisionCode:'',
 				destinationCountrySubdivisionCode:'',
 				descriptionOfGoods:'',
-				documentName:'',
+				documentName:'货源信息',
 				recipientCode:'',
 				consignor:'',
 				notruckuserId:'',
