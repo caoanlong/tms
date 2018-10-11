@@ -189,7 +189,6 @@ export default {
 	methods: {
 		getApkInfo() {
 			Company.info().detailOfExtend().then(res => {
-				this.CargoInfo.documentName = res.data.documentName
 				this.CargoInfo.documentVersionNumber = res.data.documentVersionNumber
 				this.CargoInfo.messageFunctionCode = res.data.messageFunctionCode
 				this.CargoInfo.senderCode = res.data.senderCode
