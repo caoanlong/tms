@@ -196,7 +196,7 @@
 					<el-col :span="8">
 						<el-form-item label="车辆分类代码" prop="vehicleClassificationCode">
 							<el-select v-model="WaybillInfo.vehicleClassificationCode" placeholder="请选择车辆类型" style="width:100%">
-								<<el-option 
+								<el-option 
 									v-for="(label, value) in TRUCKTYPE1" 
 									:key="value" 
 									:label="value + ' ' + label" 
@@ -278,12 +278,12 @@
 				</el-row>
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="体积" prop="volume">
+						<el-form-item label="体积">
 							<el-input v-model="WaybillInfo.volume" placeholder="请输入体积"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="总件数" prop="total">
+						<el-form-item label="总件数">
 							<el-input v-model="WaybillInfo.total" placeholder="请输入总件数"></el-input>
 						</el-form-item>
 					</el-col>
