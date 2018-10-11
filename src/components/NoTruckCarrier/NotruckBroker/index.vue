@@ -4,13 +4,9 @@
 			<div slot="header" class="clearfix">{{isEdit?'修改资料':'查看资料'}}</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px">
+					<el-form label-width="120px" size="small">
 						<el-form-item label="企业名称">
                             <p>{{companyName}}</p>
-						</el-form-item>
-						<el-form-item label="单证名称">
-							<el-input v-model="notruckInfo.documentName" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.documentName}}</p>
 						</el-form-item>
 						<el-form-item label="企业接入码">
 							<el-input v-model="notruckInfo.senderCode" v-if="isEdit"></el-input>
