@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">{{isEdit?'修改资料':'查看资料'}}</div>
+			<div slot="header" class="clearfix">资料补充</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
 					<el-form label-width="120px" size="small">
@@ -9,37 +9,28 @@
                             <p>{{companyName}}</p>
 						</el-form-item>
 						<el-form-item label="企业接入码">
-							<el-input v-model="notruckInfo.senderCode" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.senderCode}}</p>
+							<el-input v-model="notruckInfo.senderCode"></el-input>
 						</el-form-item>
                         <el-form-item label="Appkey">
-							<el-input v-model="notruckInfo.appkey" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.appkey}}</p>
+							<el-input v-model="notruckInfo.appkey"></el-input>
 						</el-form-item>
                         <el-form-item label="报文功能代码">
-							<el-input v-model="notruckInfo.messageFunctionCode" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.messageFunctionCode}}</p>
+							<el-input v-model="notruckInfo.messageFunctionCode"></el-input>
 						</el-form-item>
                         <el-form-item label="报文版本号">
-							<el-input v-model="notruckInfo.documentVersionNumber" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.documentVersionNumber}}</p>
+							<el-input v-model="notruckInfo.documentVersionNumber"></el-input>
 						</el-form-item>
                         <el-form-item label="接收方代码">
-							<el-input v-model="notruckInfo.recipientCode"  v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.recipientCode}}</p>
+							<el-input v-model="notruckInfo.recipientCode" ></el-input>
 						</el-form-item>
 						<!-- <el-form-item label="用户">
-							<el-select style="width: 100%" placeholder="请选择" v-model="notruckInfo.userName"  v-if="isEdit">
+							<el-select style="width: 100%" placeholder="请选择" v-model="notruckInfo.userName" >
 								<el-option v-for="user in users" :key="user.User_ID" :label="user.Name" :value="user.User_ID"></el-option>
 							</el-select>
-							<p v-else>{{notruckInfo.userName}}</p>
 						</el-form-item> -->
-						<el-form-item v-if="isEdit">
+						<el-form-item>
 							<el-button type="primary" @click="save">立即保存</el-button>
 							<el-button @click="back">返回</el-button>
-						</el-form-item>
-						<el-form-item v-else>
-							<el-button type="primary" @click="edit">修改资料</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -55,7 +46,6 @@ export default {
 		return {
 			notruckInfo: {},
 			companyName:'',
-			isEdit:false
 		}
 	},
 	created() {
@@ -67,14 +57,9 @@ export default {
 			this.companyName = localStorage.getItem("companyName")
 		},
 		getNotruckInfo() {
-			// const noTruckUserID = localStorage.getItem("companyID")
 			Company.info().detailOfExtend().then(res => {
 				this.notruckInfo = res.data
-				console.log(res)
 			})
-		},
-		edit() {
-			this.isEdit = true
 		},
 		save() {
 			Company.info().updateExtend({
@@ -126,9 +111,9 @@ export default {
 		border 1px solid #fff
 		border-bottom-color #dcdfe6
 		padding 0 15px
-		height 40px
+		height 32px
 		font-family 'sans-serif'
-		line-height 40px
+		line-height 32px
 		color #999
 	.el-input__inner
 		vertical-align top
