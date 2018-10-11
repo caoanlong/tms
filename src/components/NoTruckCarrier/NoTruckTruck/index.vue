@@ -126,7 +126,11 @@ export default {
 		},
 		// 导入成功
 		uploadSuccess (response) {
-			Message.success(response.message)
+			if(response.code != 200){
+				Message.error(response.msg)
+				return
+			}
+			Message.success(response.msg)
 			this.getList()
 		}
 	}
