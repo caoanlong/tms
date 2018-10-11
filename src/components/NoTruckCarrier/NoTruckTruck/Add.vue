@@ -64,14 +64,14 @@
 					</el-col>
 					<el-col :span="8">
 						<el-form-item label="车辆长度" prop="vehicleLength">
-							<el-input v-model="TruckInfo.vehicleLength" placeholder="请输入车辆长度"></el-input>
+							<el-input v-model="TruckInfo.vehicleLength" placeholder="请输入车辆长度"><template slot="append">mm</template></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="8">
 						<el-form-item label="核定载质量" prop="vehicleTonnage">
-							<el-input v-model="TruckInfo.vehicleTonnage" placeholder="请输入核定载质量"></el-input>
+							<el-input v-model="TruckInfo.vehicleTonnage" placeholder="请输入核定载质量"><template slot="append">吨</template></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
