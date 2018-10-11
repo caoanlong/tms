@@ -327,7 +327,7 @@ export default {
 				messageReferenceNumber:'',
 				senderCode:'',
 				messageFunctionCode:'',
-				documentName:'',
+				documentName:'无车承运人电子路单',
 				recipientCode:'',
 				documentVersionNumber:'',
 				messageSendingDateTime:'',
@@ -414,7 +414,6 @@ export default {
 	methods: {
 		getWaybillInfo() {
 			Company.info().detailOfExtend().then(res => {
-				this.WaybillInfo.documentName = res.data.documentName
 				this.WaybillInfo.documentVersionNumber = res.data.documentVersionNumber
 				this.WaybillInfo.messageFunctionCode = res.data.messageFunctionCode
 				this.WaybillInfo.senderCode = res.data.senderCode

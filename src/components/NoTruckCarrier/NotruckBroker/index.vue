@@ -1,49 +1,35 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">{{isEdit?'修改资料':'查看资料'}}</div>
+			<div slot="header" class="clearfix">资料补充</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px">
+					<el-form label-width="120px" :model="notruckInfo" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="企业名称">
                             <p>{{companyName}}</p>
 						</el-form-item>
-						<el-form-item label="单证名称">
-							<el-input v-model="notruckInfo.documentName" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.documentName}}</p>
+						<el-form-item label="企业接入码" prop="senderCode">
+							<el-input v-model="notruckInfo.senderCode"></el-input>
 						</el-form-item>
-						<el-form-item label="企业接入码">
-							<el-input v-model="notruckInfo.senderCode" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.senderCode}}</p>
+                        <el-form-item label="Appkey" prop="appkey">
+							<el-input v-model="notruckInfo.appkey"></el-input>
 						</el-form-item>
-                        <el-form-item label="Appkey">
-							<el-input v-model="notruckInfo.appkey" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.appkey}}</p>
+                        <el-form-item label="报文功能代码" prop="messageFunctionCode">
+							<el-input v-model="notruckInfo.messageFunctionCode"></el-input>
 						</el-form-item>
-                        <el-form-item label="报文功能代码">
-							<el-input v-model="notruckInfo.messageFunctionCode" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.messageFunctionCode}}</p>
+                        <el-form-item label="报文版本号" prop="documentVersionNumber">
+							<el-input v-model="notruckInfo.documentVersionNumber"></el-input>
 						</el-form-item>
-                        <el-form-item label="报文版本号">
-							<el-input v-model="notruckInfo.documentVersionNumber" v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.documentVersionNumber}}</p>
-						</el-form-item>
-                        <el-form-item label="接收方代码">
-							<el-input v-model="notruckInfo.recipientCode"  v-if="isEdit"></el-input>
-							<p v-else>{{notruckInfo.recipientCode}}</p>
+                        <el-form-item label="接收方代码" prop="recipientCode">
+							<el-input v-model="notruckInfo.recipientCode" ></el-input>
 						</el-form-item>
 						<!-- <el-form-item label="用户">
-							<el-select style="width: 100%" placeholder="请选择" v-model="notruckInfo.userName"  v-if="isEdit">
+							<el-select style="width: 100%" placeholder="请选择" v-model="notruckInfo.userName" >
 								<el-option v-for="user in users" :key="user.User_ID" :label="user.Name" :value="user.User_ID"></el-option>
 							</el-select>
-							<p v-else>{{notruckInfo.userName}}</p>
 						</el-form-item> -->
-						<el-form-item v-if="isEdit">
+						<el-form-item>
 							<el-button type="primary" @click="save">立即保存</el-button>
-							<el-button @click="back">返回</el-button>
-						</el-form-item>
-						<el-form-item v-else>
-							<el-button type="primary" @click="edit">修改资料</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -57,9 +43,22 @@ import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
-			notruckInfo: {},
+			notruckInfo: {
+				senderCode:'',
+				appkey:'',
+				messageFunctionCode:'',
+				documentVersionNumber:'',
+				recipientCode:''
+			},
 			companyName:'',
-			isEdit:false
+			rules: {
+				senderCode: [ {required: true, message: '请输入企业接入码'} ],
+				appkey: [ {required: true, message: '请输入Appkey'} ],
+				messageFunctionCode: [ {required: true, message: '请输入报文功能代码'} ],
+				documentVersionNumber: [ {required: true, message: '请输入报文版本号'} ],
+				recipientCode: [ {required: true, message: '请输入接收方代码'} ],
+				
+			}
 		}
 	},
 	created() {
@@ -71,33 +70,33 @@ export default {
 			this.companyName = localStorage.getItem("companyName")
 		},
 		getNotruckInfo() {
-			// const noTruckUserID = localStorage.getItem("companyID")
 			Company.info().detailOfExtend().then(res => {
-				this.notruckInfo = res.data
-				console.log(res)
+				this.notruckInfo = res.data?res.data:{}
 			})
-		},
-		edit() {
-			this.isEdit = true
 		},
 		save() {
-			Company.info().updateExtend({
-				companyID:localStorage.getItem("companyID"),
-				senderCode:this.notruckInfo.senderCode,
-				documentName:this.notruckInfo.documentName,
-				appkey:this.notruckInfo.appkey,
-				messageFunctionCode:this.notruckInfo.messageFunctionCode,
-				documentVersionNumber:this.notruckInfo.documentVersionNumber,
-				recipientCode:this.notruckInfo.recipientCode,
-				companyName:this.companyName
-			}).then(res => {
-				Message.success('成功！')
-				this.$router.push({name: 'notruckbroker'})
+
+			this.$refs['ruleForm'].validate(valid => {
+				if (!valid) {
+					this.$nextTick(() => {
+						Message.error($('.el-form-item__error:first').text())
+						return
+					})
+				} else {
+					Company.info().updateExtend({
+						companyID:localStorage.getItem("companyID"),
+						senderCode:this.notruckInfo.senderCode,
+						documentName:this.notruckInfo.documentName,
+						appkey:this.notruckInfo.appkey,
+						messageFunctionCode:this.notruckInfo.messageFunctionCode,
+						documentVersionNumber:this.notruckInfo.documentVersionNumber,
+						recipientCode:this.notruckInfo.recipientCode,
+						companyName:this.companyName
+					}).then(res => {
+						Message.success('成功！')
+					})
+				}
 			})
-			this.isEdit = false
-		},
-		back() {
-			this.isEdit = false
 		}
 	}
 }
@@ -130,9 +129,9 @@ export default {
 		border 1px solid #fff
 		border-bottom-color #dcdfe6
 		padding 0 15px
-		height 40px
+		height 32px
 		font-family 'sans-serif'
-		line-height 40px
+		line-height 32px
 		color #999
 	.el-input__inner
 		vertical-align top
