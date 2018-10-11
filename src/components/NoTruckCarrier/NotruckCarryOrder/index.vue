@@ -77,8 +77,8 @@ export default {
 	data() {
 		return {
 			importFileUrl: baseURL +'/company/notruck/carryOrder/import',
-			exportExcelUrl: '',
-			templateUrl: baseURL + '/company/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
+			exportExcelUrl:  baseURL + '/company/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=waybill.xlsx ',
 			find: {
 				shippingNoteNumber: '',
 				carrier: ''

@@ -78,8 +78,8 @@ export default {
 	data() {
 		return {
 			importFileUrl: baseURL + '/company/notruck/truck/import',
-			exportExcelUrl: '',
-			templateUrl: baseURL + '/company/notruck/truck/export/excelTemplate?fileName=trucksource.xlsx ',
+			exportExcelUrl:baseURL + '/company/notruck/truck/export/excelTemplate?fileName=trucksource.xlsx ',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=trucksource.xlsx ',
 			find: {
 				messageReferenceNumber: '',
 				documentName: ''
