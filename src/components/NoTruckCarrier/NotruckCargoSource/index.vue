@@ -78,7 +78,7 @@ export default {
 		return {
 			importFileUrl: baseURL + '/company/notruck/cargoSource/import',
 			exportExcelUrl:baseURL + '/company/notruck/cargoSource/export/excelTemplate?fileName=goodssource.xlsx ',
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=goodssource.xlsx ',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=goodssource.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				messageReferenceNumber: ''
 			}
