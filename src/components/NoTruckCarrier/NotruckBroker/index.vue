@@ -4,23 +4,23 @@
 			<div slot="header" class="clearfix">资料补充</div>
 			<el-row>
 				<el-col :span="14" :offset="5">
-					<el-form label-width="120px" size="small">
+					<el-form label-width="120px" :model="notruckInfo" :rules="rules" ref="ruleForm" size="small">
 						<el-form-item label="企业名称">
                             <p>{{companyName}}</p>
 						</el-form-item>
-						<el-form-item label="企业接入码">
+						<el-form-item label="企业接入码" prop="senderCode">
 							<el-input v-model="notruckInfo.senderCode"></el-input>
 						</el-form-item>
-                        <el-form-item label="Appkey">
+                        <el-form-item label="Appkey" prop="appkey">
 							<el-input v-model="notruckInfo.appkey"></el-input>
 						</el-form-item>
-                        <el-form-item label="报文功能代码">
+                        <el-form-item label="报文功能代码" prop="messageFunctionCode">
 							<el-input v-model="notruckInfo.messageFunctionCode"></el-input>
 						</el-form-item>
-                        <el-form-item label="报文版本号">
+                        <el-form-item label="报文版本号" prop="documentVersionNumber">
 							<el-input v-model="notruckInfo.documentVersionNumber"></el-input>
 						</el-form-item>
-                        <el-form-item label="接收方代码">
+                        <el-form-item label="接收方代码" prop="recipientCode">
 							<el-input v-model="notruckInfo.recipientCode" ></el-input>
 						</el-form-item>
 						<!-- <el-form-item label="用户">
@@ -51,6 +51,14 @@ export default {
 				recipientCode:''
 			},
 			companyName:'',
+			rules: {
+				senderCode: [ {required: true, message: '请输入企业接入码'} ],
+				appkey: [ {required: true, message: '请输入Appkey'} ],
+				messageFunctionCode: [ {required: true, message: '请输入报文功能代码'} ],
+				documentVersionNumber: [ {required: true, message: '请输入报文版本号'} ],
+				recipientCode: [ {required: true, message: '请输入接收方代码'} ],
+				
+			}
 		}
 	},
 	created() {
@@ -67,23 +75,28 @@ export default {
 			})
 		},
 		save() {
-			Company.info().updateExtend({
-				companyID:localStorage.getItem("companyID"),
-				senderCode:this.notruckInfo.senderCode,
-				documentName:this.notruckInfo.documentName,
-				appkey:this.notruckInfo.appkey,
-				messageFunctionCode:this.notruckInfo.messageFunctionCode,
-				documentVersionNumber:this.notruckInfo.documentVersionNumber,
-				recipientCode:this.notruckInfo.recipientCode,
-				companyName:this.companyName
-			}).then(res => {
-				Message.success('成功！')
-				this.$router.push({name: 'notruckbroker'})
+
+			this.$refs['ruleForm'].validate(valid => {
+				if (!valid) {
+					this.$nextTick(() => {
+						Message.error($('.el-form-item__error:first').text())
+						return
+					})
+				} else {
+					Company.info().updateExtend({
+						companyID:localStorage.getItem("companyID"),
+						senderCode:this.notruckInfo.senderCode,
+						documentName:this.notruckInfo.documentName,
+						appkey:this.notruckInfo.appkey,
+						messageFunctionCode:this.notruckInfo.messageFunctionCode,
+						documentVersionNumber:this.notruckInfo.documentVersionNumber,
+						recipientCode:this.notruckInfo.recipientCode,
+						companyName:this.companyName
+					}).then(res => {
+						Message.success('成功！')
+					})
+				}
 			})
-			this.isEdit = false
-		},
-		back() {
-			this.isEdit = false
 		}
 	}
 }
