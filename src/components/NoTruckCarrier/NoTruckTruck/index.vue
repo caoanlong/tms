@@ -109,8 +109,8 @@ export default {
 		},
 		getList() {
 			Company.notruckTruck().find({
-				pageNum: this.pageIndex,
-				pageSize: this.pageSize,
+				current: this.pageIndex,
+				size: this.pageSize,
 				messageReferenceNumber: this.find.messageReferenceNumber,
 				documentName: this.find.documentName
 			}).then(res => {

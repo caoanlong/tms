@@ -108,8 +108,8 @@ export default {
 		},
 		getList() {
 			Company.notruckCarryOrder().find({
-				pageNum: this.pageIndex,
-				pageSize: this.pageSize,
+				current: this.pageIndex,
+				size: this.pageSize,
 				shippingNoteNumber: this.find.shippingNoteNumber,
 				carrier: this.find.carrier
 			}).then(res => {

@@ -105,8 +105,8 @@ export default {
 		},
 		getList() {
 			Company.notruckCargoSource().find({
-				pageNum: this.pageIndex,
-				pageSize: this.pageSize,
+				current: this.pageIndex,
+				size: this.pageSize,
 				messageReferenceNumber: this.find.messageReferenceNumber
 			}).then(res => {
 				this.total = res.total
