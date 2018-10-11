@@ -4,7 +4,7 @@
 			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="发货单号" prop="shipperNo">
+						<el-form-item label="发货单号">
 							<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperNo"></el-input>
 						</el-form-item>
 					</el-col>
@@ -211,9 +211,11 @@
 									<tbody>
 										<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
 											<td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoNameID'" 
+													:rules="[{ required: true, message: '请选择货物'}]">
 													<el-autocomplete 
-														
 														style="width:100%" 
 														popper-class="auto-complete-list"
 														value-key="cargoName" 
@@ -227,7 +229,10 @@
 												</el-form-item>
 											</td>
 											<td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.dispatchType'" 
+													:rules="[{ required: true, message: '请选择配载方式'}]">
 													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%">
 														<el-option 
 															v-for="(label, value) in DISPATCHTYPE" 
@@ -457,7 +462,6 @@ export default {
 			flagShipperCompanyName: '',
 			flagConsigneeCompanyName: '',
 			rules: {
-				shipperNo: [ {required: true, message: '请输入发货单号'} ],
 				commissionDate: [ {required: true, message: '请选择委托时间'} ],
 				consignorName: [ {required: true, message: '请输入托运人'} ],
 				carrierrName: [ {required: true, message: '请输入承运人'} ],
@@ -604,7 +608,7 @@ export default {
 		handSelectCargo(data) {
 			this.carrierbillInfo.carrierCargo.forEach(item => {
 				if (item.cargoName == data.cargoName) {
-					item.cargoNameID = data.cargoNameID
+					item.cargoNameID = data.cargoID
 					item.cargoUnitName = data.cargoUnit
 				}
 			})

@@ -4,7 +4,7 @@
 			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="发货单号" prop="shipperNo">
+						<el-form-item label="发货单号">
 							<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperNo"></el-input>
 						</el-form-item>
 					</el-col>
@@ -205,7 +205,6 @@
 							<el-form label-width="0" size="small" :model="carrierbillInfo" ref="cargoRuleForm">
 								<table class="cargoList">
 									<tr>
-										<!-- <th>客户单号</th> -->
 										<th><span>*</span>货名</th>
 										<th><span>*</span>配载方式</th>
 										<th>重量</th>
@@ -216,13 +215,11 @@
 									</tr>
 									<tbody>
 										<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
-											<!-- <td>
-												<el-form-item label-width="0">
-													<el-input placeholder="请输入..." v-model="item.customizedNo"></el-input>
-												</el-form-item>
-											</td> -->
 											<td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoNameID'" 
+													:rules="[{ required: true, message: '请选择货物'}]">
 													<el-autocomplete 
 														style="width:100%" 
 														popper-class="auto-complete-list"
@@ -237,8 +234,11 @@
 												</el-form-item>
 											</td>
 											<td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
-													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%">
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.dispatchType'" 
+													:rules="[{ required: true, message: '请选择配载方式'}]">
+													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%" disabled>
 														<el-option 
 															v-for="(label, value) in DISPATCHTYPE" 
 															:key="value" 
@@ -249,7 +249,10 @@
 												</el-form-item>
 											</td>
 											<td style="border-spacing:0">
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoWeight'" :rules="[{ validator: checkFloat2 },{
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoWeight'" 
+													:rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
 																callback('请输入重量')
@@ -270,7 +273,10 @@
 												</el-form-item>
 											</td>
 											<td style="border-spacing:0">
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoVolume'" 
+													:rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
 																callback('请输入体积')
@@ -289,7 +295,9 @@
 												</el-form-item>
 											</td>
 											<td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{
+												<el-form-item 
+													label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'" 
+													:rules="[{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Quantity'&&(!item.cargoNum || item.cargoNum == '0')) {
 																callback('请输入数量')
@@ -301,9 +309,18 @@
 													<el-input-number v-model="item.cargoNum" :min="0"></el-input-number>
 												</el-form-item>
 											</td>
-											<td><el-form-item label-width="0"><el-select v-model="item.cargoUnitName" placeholder="请选择">
-												<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
-											</el-select></el-form-item></td>
+											<td>
+												<el-form-item label-width="0">
+													<el-select v-model="item.cargoUnitName" placeholder="请选择" disabled>
+														<el-option 
+															v-for="(unit, index) in units" 
+															:key="index" 
+															:label="unit.unit" 
+															:value="unit.unit">
+														</el-option>
+													</el-select>
+												</el-form-item>
+											</td>
 											<td>
 												<el-form-item label-width="0">
 													<el-button type="text" icon="el-icon-plus" @click="addItem" v-if="index == 0">添加</el-button>
@@ -466,7 +483,6 @@ export default {
 			flagShipperCompanyName: '',
 			flagConsigneeCompanyName: '',
 			rules: {
-				shipperNo: [ {required: true, message: '请输入发货单号'} ],
 				commissionDate: [ {required: true, message: '请选择委托时间'} ],
 				consignorName: [ {required: true, message: '请输入托运人'} ],
 				carrierrName: [ {required: true, message: '请输入承运人'} ],
@@ -679,7 +695,7 @@ export default {
 		handSelectCargo(data) {
 			this.carrierbillInfo.carrierCargo.forEach(item => {
 				if (item.cargoName == data.cargoName) {
-					item.cargoNameID = data.cargoNameID
+					item.cargoNameID = data.cargoID
 					item.cargoUnitName = data.cargoUnit
 				}
 			})
@@ -822,7 +838,6 @@ export default {
 					}
 					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
 					carrierbill.porRequire = carrierbill.porRequire.join(',')
-
 					
 					if (this.shipperDateTime) {
 						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp(this.shipperDateTime)
@@ -834,11 +849,18 @@ export default {
 					} else {
 						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + 86399000
 					}
-					
-					Carrierbill.update(carrierbill).then(res => {
-						Message.success('成功！')
-						this.$router.push({name: 'carrierbill'})
-					})
+					if (!!this.$route.query.copy) {
+						delete carrierbill.carrierOrderID
+						Carrierbill.add(carrierbill).then(res => {
+							Message.success('成功！')
+							this.$router.push({name: 'carrierbill'})
+						})
+					} else {
+						Carrierbill.update(carrierbill).then(res => {
+							Message.success('成功！')
+							this.$router.push({name: 'carrierbill'})
+						})
+					}
 				})
 			})
 		},

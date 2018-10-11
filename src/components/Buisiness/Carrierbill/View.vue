@@ -164,6 +164,7 @@
 				</el-col>
 			</el-row>
 			<div class="wf-footer clearfix text-center">
+				<el-button type="primary" @click="copy(carrierOrder.carrierOrderID)">复制</el-button>
 				<el-button @click="back">返回</el-button>
 			</div>
 		</el-card>
@@ -245,9 +246,6 @@ export default {
 		viewdispatchbill(dispatchOrderID) {
 			this.$router.push({name: 'viewdispatchbill', query: { dispatchOrderID, type: 'view', isHideAmount: true }})
 		},
-		back() {
-			this.$router.go(-1)
-		},
 		handCloseTrail() {
 			this.trailDialog = false
 		},
@@ -255,6 +253,12 @@ export default {
 			this.currentDispatchOrderID = dispatchOrderID
 			this.trailDialog = true
 		},
+		copy(carrierOrderID) {
+			this.$router.push({name: 'editcarrierbill', query: { carrierOrderID, copy: true }})
+		},
+		back() {
+			this.$router.go(-1)
+		}
 	}
 }
 </script>

@@ -1,31 +1,3 @@
-UPDATE
-  sys_menu
-SET
-  NAME = '待调度',
-  Href = '/dispatching',
-  Target = 'dispatching'
-WHERE NAME = '调度单';
-
-INSERT INTO sys_menu
-VALUES
-	(
-		'1012632155127418991',
-		'1012632071564300288',
-		'已调度',
-		NULL,
-		'/dispatched',
-		'dispatched',
-		'',
-		'Y',
-		NULL,
-		'1007116169212780546',
-		'2018-06-29 08:49:16',
-		'1007116169212780546',
-		'2018-06-29 08:49:16',
-		'',
-		1
-  );
-
 INSERT INTO sys_menu
 VALUES
 	(
@@ -73,8 +45,8 @@ VALUES
 		'1011827161587388416',
 		'车源上传',
 		NULL,
-		'/notrucksource',
-		'notrucksource',
+		'/notrucktruck',
+		'notrucktruck',
 		'',
 		'Y',
 		NULL,
@@ -93,8 +65,8 @@ VALUES
 		'1011827161587388416',
 		'运单上传',
 		NULL,
-		'/notruckwaybill',
-		'notruckwaybill',
+		'/notruckcarryorder',
+		'notruckcarryorder',
 		'',
 		'Y',
 		NULL,
@@ -111,10 +83,10 @@ VALUES
 	(
 		'1011828317034254336',
 		'1011827161587388416',
-		'接口配置',
+		'资料补充',
 		NULL,
-		'/notruckuser',
-		'notruckuser',
+		'/notruckbroker',
+		'notruckbroker',
 		'',
 		'Y',
 		NULL,
