@@ -30,7 +30,6 @@
 						</el-form-item> -->
 						<el-form-item>
 							<el-button type="primary" @click="save">立即保存</el-button>
-							<el-button @click="back">返回</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -44,7 +43,13 @@ import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
-			notruckInfo: {},
+			notruckInfo: {
+				senderCode:'',
+				appkey:'',
+				messageFunctionCode:'',
+				documentVersionNumber:'',
+				recipientCode:''
+			},
 			companyName:'',
 		}
 	},
@@ -58,7 +63,7 @@ export default {
 		},
 		getNotruckInfo() {
 			Company.info().detailOfExtend().then(res => {
-				this.notruckInfo = res.data
+				this.notruckInfo = res.data?res.data:{}
 			})
 		},
 		save() {
