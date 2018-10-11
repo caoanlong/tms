@@ -77,8 +77,8 @@ export default {
 	data() {
 		return {
 			importFileUrl: baseURL + '/company/notruck/cargoSource/import',
-			exportExcelUrl: '',
-			templateUrl: baseURL + '/company/notruck/cargoSource/export/excelTemplate?fileName=goodssource.xlsx ',
+			exportExcelUrl:baseURL + '/company/notruck/cargoSource/export/excelTemplate?fileName=goodssource.xlsx ',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=goodssource.xlsx ',
 			find: {
 				messageReferenceNumber: ''
 			}
