@@ -45,6 +45,12 @@
 								<el-option label="其他材料" value="其他材料"></el-option>
 							</el-select>
 						</el-form-item>
+						<el-form-item label="配载方式" prop="dispatchType">
+							<el-select style="width: 100%" placeholder="请选择" v-model="cargo.dispatchType">
+								<el-option label="体积" value="Volumn"></el-option>
+								<el-option label="重量" value="Weight"></el-option>
+							</el-select>
+						</el-form-item>
 						<el-form-item label="防护要求" style="margin-bottom:0">
 							<el-checkbox-group v-model="requires" @change="handleCheckedRequireChange">
 								<el-checkbox label="moistureProof">防潮</el-checkbox>
@@ -130,6 +136,7 @@ export default {
 				dangerousCoodsCategory: [{required: true, message: '请输入危险品类别'}],
 				cargoUnit: [{required: true, message: '请选择货物单位'}],
 				packageType: [{required: true, message: '请选择包装类型'}],
+				dispatchType: [{required: true, message: '请选择配载方式'}],
 				productName: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cnCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				unCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
