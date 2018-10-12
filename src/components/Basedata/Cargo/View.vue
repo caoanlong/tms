@@ -28,6 +28,10 @@
 						<el-form-item label="包装材质" prop="packageType">
 							<p>{{cargo.packageType}}</p>
 						</el-form-item>
+						<el-form-item label="配载方式" prop="packageType">
+							<p v-if="cargo.dispatchType == 'Volumn'">体积</p>
+							<p v-else-if="cargo.dispatchType == 'Weight'">重量</p>
+						</el-form-item>
 						<el-form-item label="防护要求">
 							<p v-if="cargo.moistureProof=='Y' && cargo.waterProof=='Y' && cargo.quakeProof=='Y' && cargo.dropProof=='Y' && cargo.antimagnetic=='Y' && cargo.antiStatic=='Y' && cargo.radiationProof=='Y'">
 								<span v-if="cargo.moistureProof=='Y'">防潮</span>
