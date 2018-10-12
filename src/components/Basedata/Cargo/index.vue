@@ -29,7 +29,7 @@
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 				<el-upload 
 					class="upload-File" 
-					name="excel" 
+					name="excelFile" 
 					:action="importFileUrl" 
 					:auto-upload="true" 
 					:onError="uploadError" 
