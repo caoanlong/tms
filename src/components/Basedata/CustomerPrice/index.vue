@@ -98,6 +98,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
+import { baseURL } from '../../../common/request'
 import EditCustomerPrice from './components/EditCustomerPrice'
 import LinePrice from './components/LinePrice'
 import Company from '../../../api/Company'
@@ -106,6 +107,9 @@ export default {
     components: { EditCustomerPrice, LinePrice },
 	data() {
 		return {
+			importFileUrl: baseURL + '/company/customer/routePrice/import',
+			exportExcelUrl:baseURL + '/company/customer/routePrice/export/excelTemplate?fileName=routePrice.xlsx ',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=routePrice.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				keyword: ''
             },
@@ -122,6 +126,7 @@ export default {
 			this.find.keyword = ''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		getList() {
@@ -150,6 +155,13 @@ export default {
         callbackLinePrice(bool) {
 			this.isLinePriceVisible = false
 			bool && this.getList()
+		},
+		resetExportExcelUrl(){
+			this.exportExcelUrl = baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token") 
+				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
 		},
 		// 导入成功
 		uploadSuccess (response) {
