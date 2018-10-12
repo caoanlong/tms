@@ -178,7 +178,7 @@ export default {
 				vehicleClassificationCode: [ {required: true, message: '请选择车辆类型'} ],
 				descriptionOfGoods: [ {required: true, message: '请输入货物名称'} ],
 				cargoTypeClassificationCode: [ {required: true, message: '请选择货物类型'} ],
-				goodsItemGrossWeight: [ {required: true, message: '请输入货物项毛重'} ],
+				goodsItemGrossWeight: [ {required: true, message: '请输入货物项毛重'} ,{ validator: checkInt } ],
 			}
 		}
 	},
