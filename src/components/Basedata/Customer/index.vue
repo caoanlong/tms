@@ -87,7 +87,9 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			exportExcelUrl: baseURL + '/company/customer/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: baseURL + '/company/customer/export/excelTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
+			importFileUrl: baseURL + '/company/customer/import',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				keyword: '',
 				customerType: ''
@@ -154,6 +156,15 @@ export default {
 					this.getList()
 				})
 			}, this.selectedList)
+		},
+		// 导入成功
+		uploadSuccess (response) {
+			if(response.code != 200){
+				Message.error(response.msg)
+			} else{
+				Message.success(response.msg)
+				this.getList()
+			}
 		}
 	}
 }

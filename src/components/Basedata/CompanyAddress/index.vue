@@ -134,6 +134,7 @@ export default {
 			this.find.customerID = ''
 			this.find.companyName = ''
 			this.pageIndex = 1
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		selectionChange(data) {
@@ -182,6 +183,22 @@ export default {
 					this.getList()
 				})
 			}, this.selectedList)
+		},
+		resetExportExcelUrl(){
+			this.exportExcelUrl = baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token") 
+				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		},
+		// 导入成功
+		uploadSuccess (response) {
+			if(response.code != 200){
+				Message.error(response.msg)
+			} else{
+				Message.success(response.msg)
+				this.getList()
+			}
 		}
 	}
 }
