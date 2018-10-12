@@ -107,6 +107,7 @@ export default {
     components: { EditCustomerPrice, LinePrice },
 	data() {
 		return {
+			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			importFileUrl: baseURL + '/company/customer/routePrice/import?Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token"),
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=routePrice.xlsx&Authorization=' + localStorage.getItem("token"),

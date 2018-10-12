@@ -90,6 +90,7 @@ export default {
 	mixins: [baseMixin], 
 	data() {
 		return {
+			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			importFileUrl: baseURL + '/cargoGeneralName/import',
 			exportExcelUrl: baseURL + '/cargoGeneralName/export?Authorization=' + localStorage.getItem("token"),
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=goodssource.xlsx&Authorization=' + localStorage.getItem("token"),

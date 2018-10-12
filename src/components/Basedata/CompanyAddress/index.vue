@@ -100,6 +100,7 @@ export default {
 	data() {
 		return {
 			dialogFormVisible: false,
+			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			importFileUrl: baseURL + '/customer/address/import',
 			exportExcelUrl:baseURL + '/customer/address/export?Authorization=' + localStorage.getItem("token"),
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
