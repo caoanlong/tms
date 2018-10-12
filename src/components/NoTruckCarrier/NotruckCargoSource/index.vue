@@ -123,10 +123,10 @@ export default {
 		uploadSuccess (response) {
 			if(response.code != 200){
 				Message.error(response.msg)
-				return
+			} else{
+				Message.success(response.msg)
+				this.getList()
 			}
-			Message.success(response.msg)
-			this.getList()
 		}
 	}
 }

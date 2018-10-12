@@ -173,18 +173,22 @@
 							<label>车辆</label>{{dispatchOrderDetail.plateNo}} 
 							{{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{TRUCKTYPE[dispatchOrderDetail.truckType]}}
 						</p>
+						<p v-if="dispatchOrderDetail.roadTransportNo"><label>道路运输许可证</label>{{dispatchOrderDetail.roadTransportNo}}</p>
 						<p v-if="dispatchOrderDetail.trailerPlateNo">
 							<label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} 
 							{{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{TRUCKTYPE[dispatchOrderDetail.trailerTruckType]}}
 						</p>
+						<p v-if="dispatchOrderDetail.trailerRoadTransportNo"><label>挂车道路运输许可证</label>{{dispatchOrderDetail.trailerRoadTransportNo}}</p>
 						<p v-if="dispatchOrderDetail.driverName">
 							<label>司机</label>{{dispatchOrderDetail.driverName}} 
 							{{dispatchOrderDetail.driverMobile}}
 						</p>
+						<p v-if="dispatchOrderDetail.qualificationNum"><label>司机从业资格证</label>{{dispatchOrderDetail.qualificationNum}}</p>
 						<p v-if="dispatchOrderDetail.superCargoName">
 							<label>押运员</label>{{dispatchOrderDetail.superCargoName}} 
 							{{dispatchOrderDetail.superCargoMobile}}
 						</p>
+						<p v-if="dispatchOrderDetail.escortLicenseNum"><label>押运员从业资格证</label>{{dispatchOrderDetail.escortLicenseNum}}</p>
 					</div>
 					<p class="dispatchLogTit">调度日志</p>
 					<ul class="dispatchLog" v-if="dispatchLogs.length>0">
@@ -265,7 +269,6 @@ export default {
 		},
 		getDetail() {
 			this.hideAmount = this.$route.query.isHideAmount
-			console.log(this.hideAmount)
 			const dispatchOrderID = this.$route.query.dispatchOrderID
 			DispatchOrder.findById({ dispatchOrderID }).then(res => {
 				this.dispatchOrder = res
@@ -395,7 +398,7 @@ export default {
 	.truckInfo
 		padding-bottom 10px
 		label
-			width 60px
+			width 130px
 			text-align right
 			display inline-block
 			margin-right 10px
