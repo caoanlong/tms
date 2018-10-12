@@ -4,7 +4,7 @@
 			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="发货单号" prop="shipperNo">
+						<el-form-item label="发货单号">
 							<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperNo"></el-input>
 						</el-form-item>
 					</el-col>
@@ -201,7 +201,7 @@
 								<table class="cargoList">
 									<tr>
 										<th><span>*</span>货名</th>
-										<th><span>*</span>配载方式</th>
+										<th>配载方式</th>
 										<th>重量</th>
 										<th>体积</th>
 										<th>数量</th>
@@ -211,9 +211,11 @@
 									<tbody>
 										<tr v-for="(item, index) in carrierbillInfo.carrierCargo" :key="index">
 											<td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoName'" :rules="[{ required: true, message: '请输入货名'}]">
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoID'" 
+													:rules="[{ required: true, message: '请输入货名'}]">
 													<el-autocomplete 
-														
 														style="width:100%" 
 														popper-class="auto-complete-list"
 														value-key="cargoName" 
@@ -227,15 +229,8 @@
 												</el-form-item>
 											</td>
 											<td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.dispatchType'" :rules="[{ required: true, message: '请选择配载方式'}]">
-													<el-select v-model="item.dispatchType" placeholder="请选择配载方式" style="width:100%">
-														<el-option 
-															v-for="(label, value) in DISPATCHTYPE" 
-															:key="value" 
-															:label="label" 
-															:value="value">
-														</el-option>
-													</el-select>
+												<el-form-item label-width="0">
+													<el-input placeholder="配载方式" style="width:100%" :value="DISPATCHTYPE[item.dispatchType]" disabled></el-input>
 												</el-form-item>
 											</td>
 											<td style="border-spacing:0">
@@ -275,7 +270,9 @@
 															}
 														}
 													}]">
-													<el-input placeholder="货物体积" v-model="item.cargoVolume"><template slot="append">方</template></el-input>
+													<el-input placeholder="货物体积" v-model="item.cargoVolume">
+														<template slot="append">方</template>
+													</el-input>
 												</el-form-item>
 											</td>
 											<td>
@@ -291,9 +288,18 @@
 													<el-input-number v-model="item.cargoNum" :min="0"></el-input-number>
 												</el-form-item>
 											</td>
-											<td><el-form-item label-width="0"><el-select v-model="item.cargoUnitName" placeholder="请选择">
-												<el-option v-for="(unit, index) in units" :key="index" :label="unit.unit" :value="unit.unit"></el-option>
-											</el-select></el-form-item></td>
+											<td>
+												<el-form-item label-width="0">
+													<el-select v-model="item.cargoUnitName" placeholder="货物单位" disabled>
+														<el-option 
+															v-for="(unit, index) in units" 
+															:key="index" 
+															:label="unit.unit" 
+															:value="unit.unit">
+														</el-option>
+													</el-select>
+												</el-form-item>
+											</td>
 											<td>
 												<el-form-item label-width="0">
 													<el-button type="text" icon="el-icon-plus" @click="addItem" v-if="index == 0">添加</el-button>
@@ -437,9 +443,9 @@ export default {
 				consignorName:'',				/**委托人单位名称*/
 				consignorID:'',					/**委托人ID*/
 				carrierCargo: [{
-					cargoNameID: '',
+					cargoID: '',
 					cargoName: '',
-					dispatchType:'Weight',
+					dispatchType:'',
 					cargoWeight:'',
 					cargoVolume: '',
 					cargoNum: '',
@@ -457,7 +463,6 @@ export default {
 			flagShipperCompanyName: '',
 			flagConsigneeCompanyName: '',
 			rules: {
-				shipperNo: [ {required: true, message: '请输入发货单号'} ],
 				commissionDate: [ {required: true, message: '请选择委托时间'} ],
 				consignorName: [ {required: true, message: '请输入托运人'} ],
 				carrierrName: [ {required: true, message: '请输入承运人'} ],
@@ -604,13 +609,14 @@ export default {
 		handSelectCargo(data) {
 			this.carrierbillInfo.carrierCargo.forEach(item => {
 				if (item.cargoName == data.cargoName) {
-					item.cargoNameID = data.cargoNameID
+					item.cargoID = data.cargoID
 					item.cargoUnitName = data.cargoUnit
+					item.dispatchType = data.dispatchType
 				}
 			})
 		},
 		inputSelectCargo(i) {
-			this.carrierbillInfo.carrierCargo[i].cargoNameID = ''
+			this.carrierbillInfo.carrierCargo[i].cargoID = ''
 		},
 		handSelectConsignorCompany(data) {
 			this.selectedConsignor = data
@@ -768,7 +774,7 @@ export default {
 			let cargo = this.carrierbillInfo.carrierCargo
 			const dispatchType =cargo[cargo.length-1] ?cargo[cargo.length-1].dispatchType : 'Weight'
 			this.carrierbillInfo.carrierCargo.push({
-				cargoNameID: '',
+				cargoID: '',
 				cargoName: '',
 				cargoNum: '',
 				cargoUnitName: '',
