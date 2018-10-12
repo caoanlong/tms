@@ -55,7 +55,7 @@
 								<span v-if="item.dispatchType =='Quantity'">按数量配载</span>
 								<span v-else-if="item.dispatchType =='Volumn'">按体积配载</span>
 								<span v-else>按重量配载</span>
-								<!-- 按数量配载 Quantity   按体积配载 Volumn   按重量配载 Weight -->
+								<!-- 按数量配载 Quantity   按体积配载 Volumn   按重量配载 Weight --> 
 							</td>
 							<td>{{[(item.cargoVolume+'方')
 								,(item.cargoWeight+'吨')
@@ -69,7 +69,6 @@
 						</tr>
 						<tr class="total is-center">
 							<td>合计</td>
-							<!-- <td></td> -->
 							<td></td>
 							<td>{{[(sum('cargoVolume') + '方')
 								,(sum('cargoWeight') + '吨')
@@ -78,7 +77,6 @@
 								{{[(sum('remainingCargoVolume')+'方')
 								,(sum('remainingCargoWeight')+'吨')
 								,(parseInt(sum('remainingCargoNum')))] | trimSpaceAndJoinSlash}}
-								
 							</td>
 						</tr>
 					</table>
