@@ -125,7 +125,7 @@ export default {
 	border 1px solid #dcdfe6
 	border-radius 3px
 	background #fff
-	margin-right 10px
+	margin-left 10px
 	display inline-block
 	vertical-align top
 	&:hover

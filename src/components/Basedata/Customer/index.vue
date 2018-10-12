@@ -23,7 +23,20 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
+				<el-upload 
+					class="upload-File" 
+					name="excel" 
+					:action="importFileUrl" 
+					:auto-upload="true" 
+					:onError="uploadError" 
+					:onSuccess="uploadSuccess" 
+					:beforeUpload="beforeFileUpload" 
+					:headers="uploadHeaders" 
+					:show-file-list="false">
+					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
+				</el-upload>
 				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
+				<a :href="templateUrl" download="trucksource.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
 			<div class="table">
 				<el-table 
