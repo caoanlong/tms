@@ -16,7 +16,7 @@
 			<div class="tableControl">
 				<el-upload 
 					class="upload-File" 
-					name="excel" 
+					name="excelFile" 
 					:action="importFileUrl" 
 					:auto-upload="true" 
 					:onError="uploadError" 

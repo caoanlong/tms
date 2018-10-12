@@ -14,7 +14,7 @@
                         <el-form-item label="Appkey" prop="appkey">
 							<el-input v-model="notruckInfo.appkey"></el-input>
 						</el-form-item>
-                        <el-form-item label="报文功能代码" prop="messageFunctionCode">
+                        <!-- <el-form-item label="报文功能代码" prop="messageFunctionCode">
 							<el-input v-model="notruckInfo.messageFunctionCode"></el-input>
 						</el-form-item>
                         <el-form-item label="报文版本号" prop="documentVersionNumber">
@@ -22,7 +22,7 @@
 						</el-form-item>
                         <el-form-item label="接收方代码" prop="recipientCode">
 							<el-input v-model="notruckInfo.recipientCode" ></el-input>
-						</el-form-item>
+						</el-form-item> -->
 						<!-- <el-form-item label="用户">
 							<el-select style="width: 100%" placeholder="请选择" v-model="notruckInfo.userName" >
 								<el-option v-for="user in users" :key="user.User_ID" :label="user.Name" :value="user.User_ID"></el-option>
@@ -54,9 +54,9 @@ export default {
 			rules: {
 				senderCode: [ {required: true, message: '请输入企业接入码'} ],
 				appkey: [ {required: true, message: '请输入Appkey'} ],
-				messageFunctionCode: [ {required: true, message: '请输入报文功能代码'} ],
-				documentVersionNumber: [ {required: true, message: '请输入报文版本号'} ],
-				recipientCode: [ {required: true, message: '请输入接收方代码'} ],
+				// messageFunctionCode: [ {required: true, message: '请输入报文功能代码'} ],
+				// documentVersionNumber: [ {required: true, message: '请输入报文版本号'} ],
+				// recipientCode: [ {required: true, message: '请输入接收方代码'} ],
 				
 			}
 		}
@@ -86,11 +86,10 @@ export default {
 					Company.info().updateExtend({
 						companyID:localStorage.getItem("companyID"),
 						senderCode:this.notruckInfo.senderCode,
-						documentName:this.notruckInfo.documentName,
 						appkey:this.notruckInfo.appkey,
-						messageFunctionCode:this.notruckInfo.messageFunctionCode,
-						documentVersionNumber:this.notruckInfo.documentVersionNumber,
-						recipientCode:this.notruckInfo.recipientCode,
+						// messageFunctionCode:this.notruckInfo.messageFunctionCode,
+						// documentVersionNumber:this.notruckInfo.documentVersionNumber,
+						// recipientCode:this.notruckInfo.recipientCode,
 						companyName:this.companyName
 					}).then(res => {
 						Message.success('成功！')
