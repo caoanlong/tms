@@ -5,7 +5,7 @@
 			<el-row>
 				<el-col :span="18" :offset="3">
 					<el-form label-width="120px" :model="cargo" :rules="rules" ref="ruleForm" size="small">
-						<el-form-item label="发货单位">
+						<el-form-item label="发货单位" prop="customerID">
 							<el-autocomplete  style="width:100%"
 								value-key="companyName" 
 								v-model="cargo.shipperCompanyName"
@@ -131,6 +131,7 @@ export default {
 			},
 			isFold:false,
 			rules: {
+				customerID: [{required: true, message: '请选择发货单位'}],
 				cargoName: [{required: true, message: '请输入货物名称'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cargoType: [{required: true, message: '请选择货物类型'}],
 				dangerousCoodsCategory: [{required: true, message: '请输入危险品类别'}],
