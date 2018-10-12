@@ -16,6 +16,7 @@
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="dialogFormVisible = true">添加</el-button>
 				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
+				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="table">
 				<el-table 
@@ -51,12 +52,14 @@
 import { Message } from 'element-ui'
 import CargoUnit from '../../../api/CargoUnit'
 import { baseMixin } from '../../../common/mixin'
+import { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
 export default {
 	mixins: [baseMixin], 
 	data() {
 		return {
 			dialogFormVisible: false,
+			exportExcelUrl: baseURL + '/cargoUnit/export?Authorization=' + localStorage.getItem("token"),
 			find: { keyword: '' },
 			unit: { unit: ''},
 			rules: {
@@ -112,6 +115,26 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.download-btn
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-right 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
 .upload-File
 	display inline-block
 	margin 0 10px
