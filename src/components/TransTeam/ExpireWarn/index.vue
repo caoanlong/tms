@@ -97,13 +97,12 @@ export default {
 			findrealName: '',
 			findobjType: '',
 			findexpiredCertificate: '',
-
 			pageIndex: 1,
 			pageSize: 10,
 			total:0,
 			tableData: [],
 			selectedList: [],
-			exportExcelUrl: baseURL + '/company/exportExpire?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: baseURL + '/recordWarn/export?Authorization=' + localStorage.getItem("token"),
 			TruckOption:{
 				DriverLicExpiresTime:"行驶证",
 				RoadTransportLicAnnualPeriod:"道路运输许可证",

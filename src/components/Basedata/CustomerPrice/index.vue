@@ -107,8 +107,8 @@ export default {
     components: { EditCustomerPrice, LinePrice },
 	data() {
 		return {
-			importFileUrl: baseURL + '/company/customer/routePrice/import',
-			exportExcelUrl:baseURL + '/company/customer/routePrice/export/excelTemplate?fileName=routePrice.xlsx ',
+			importFileUrl: baseURL + '/company/customer/routePrice/import?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl:baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token"),
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=routePrice.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				keyword: ''
