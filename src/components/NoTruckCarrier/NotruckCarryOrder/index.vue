@@ -77,8 +77,8 @@ export default {
 	data() {
 		return {
 			importFileUrl: baseURL +'/company/notruck/carryOrder/import',
-			exportExcelUrl: '',
-			templateUrl: baseURL + '/company/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
+			exportExcelUrl:  baseURL + '/company/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=waybill.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				shippingNoteNumber: '',
 				carrier: ''
@@ -108,8 +108,8 @@ export default {
 		},
 		getList() {
 			Company.notruckCarryOrder().find({
-				pageNum: this.pageIndex,
-				pageSize: this.pageSize,
+				current: this.pageIndex,
+				size: this.pageSize,
 				shippingNoteNumber: this.find.shippingNoteNumber,
 				carrier: this.find.carrier
 			}).then(res => {
@@ -125,7 +125,11 @@ export default {
 		},
 		// 导入成功
 		uploadSuccess (response) {
-			Message.success(response.message)
+			if(response.code != 200){
+				Message.error(response.msg)
+				return
+			}
+			Message.success(response.msg)
 			this.getList()
 		}
 	}
