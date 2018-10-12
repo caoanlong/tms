@@ -5,7 +5,7 @@
 			<el-row>
 				<el-col :span="18" :offset="3">
 					<el-form label-width="120px" :model="cargo" :rules="rules" ref="ruleForm" size="small">
-						<el-form-item label="发货单位">
+						<el-form-item label="发货单位" prop="customerID">
 							<el-autocomplete  style="width:100%"
 								value-key="companyName" 
 								v-model="cargo.shipperCompanyName"
@@ -43,6 +43,12 @@
 								<el-option label="塑料" value="塑料"></el-option>
 								<el-option label="玻璃" value="玻璃"></el-option>
 								<el-option label="其他材料" value="其他材料"></el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="配载方式" prop="dispatchType">
+							<el-select style="width: 100%" placeholder="请选择" v-model="cargo.dispatchType">
+								<el-option label="体积" value="Volumn"></el-option>
+								<el-option label="重量" value="Weight"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="防护要求" style="margin-bottom:0">
@@ -125,11 +131,13 @@ export default {
 			},
 			isFold:false,
 			rules: {
+				customerID: [{required: true, message: '请选择发货单位'}],
 				cargoName: [{required: true, message: '请输入货物名称'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cargoType: [{required: true, message: '请选择货物类型'}],
 				dangerousCoodsCategory: [{required: true, message: '请输入危险品类别'}],
 				cargoUnit: [{required: true, message: '请选择货物单位'}],
 				packageType: [{required: true, message: '请选择包装类型'}],
+				dispatchType: [{required: true, message: '请选择配载方式'}],
 				productName: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cnCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				unCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
