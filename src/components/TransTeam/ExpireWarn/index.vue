@@ -27,6 +27,9 @@
 					</el-form-item>
 				</el-form>
 			</div>
+			<div class="tableControl">
+				<a :href="exportExcelUrl" download="exportExpire.xlsx" class="exportExcel el-icon-download">导出</a>
+			</div>
 			<div class="table">
 				<el-table 
 					ref="recTable" 
@@ -94,16 +97,12 @@ export default {
 			findrealName: '',
 			findobjType: '',
 			findexpiredCertificate: '',
-
 			pageIndex: 1,
 			pageSize: 10,
 			total:0,
 			tableData: [],
 			selectedList: [],
-			importFileUrl: baseURL + '/customer/upload',
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=shipperAndConsignor.xlsx&&Authorization=' +localStorage.getItem("token"),
-			templateTit:'shipperAndConsignor.xlsx',
+			exportExcelUrl: baseURL + '/recordWarn/export?Authorization=' + localStorage.getItem("token"),
 			TruckOption:{
 				DriverLicExpiresTime:"行驶证",
 				RoadTransportLicAnnualPeriod:"道路运输许可证",
@@ -178,6 +177,7 @@ export default {
 		}
 	},
 	methods: {
+		
 		search() {
 			this.pageIndex = 1
 			this.pageSize = 10
@@ -287,4 +287,23 @@ export default {
 .upload-File
 	display inline-block
 	margin 0 10px
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-right 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
 </style>

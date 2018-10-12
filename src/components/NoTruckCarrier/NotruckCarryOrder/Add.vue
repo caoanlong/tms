@@ -451,6 +451,7 @@ export default {
 						messageFunctionCode: this.WaybillInfo.messageFunctionCode,
 						documentName: this.WaybillInfo.documentName,
 						recipientCode: this.WaybillInfo.recipientCode,
+						uniformSocialCreditCode:this.WaybillInfo.uniformSocialCreditCode,
 						documentVersionNumber: this.WaybillInfo.documentVersionNumber,
 						messageSendingDateTime: this.WaybillInfo.messageSendingDateTime,
 						notruckuserId: this.WaybillInfo.notruckuserId,
@@ -470,6 +471,8 @@ export default {
 						name: this.WaybillInfo.name,
 						serviceTypeCode: this.WaybillInfo.serviceTypeCode,
 						name: this.WaybillInfo.name,
+						consignor:this.WaybillInfo.consignor,
+						loadingPlace:this.WaybillInfo.loadingPlace,
 						nameConsignorDivisions: this.WaybillInfo.nameConsignorDivisions,
 						receivingPlace: this.WaybillInfo.receivingPlace,
 						transportationCost: this.WaybillInfo.transportationCost,
@@ -492,7 +495,6 @@ export default {
 						phone: this.WaybillInfo.phone,
 						goodsGross: this.WaybillInfo.goodsGross,
 						transportModeCode: this.WaybillInfo.transportModeCode,
-						networkAccessAddress: this.WaybillInfo.networkAccessAddress
 					}).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: 'notruckcarryorder'})
