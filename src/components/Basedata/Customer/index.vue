@@ -87,8 +87,8 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			exportExcelUrl: baseURL + '/company/customer/export/excelTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
-			importFileUrl: baseURL + '/company/customer/import',
+			importFileUrl: baseURL + '/company/customer/import?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: baseURL + '/company/customer/export?Authorization=' + localStorage.getItem("token"),
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				keyword: '',
@@ -105,6 +105,7 @@ export default {
 			this.find.customerType = ''
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		selectionChange(data) {
@@ -156,6 +157,13 @@ export default {
 					this.getList()
 				})
 			}, this.selectedList)
+		},
+		resetExportExcelUrl(){
+			this.exportExcelUrl = baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token") 
+				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
 		},
 		// 导入成功
 		uploadSuccess (response) {

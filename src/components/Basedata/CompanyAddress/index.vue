@@ -101,7 +101,7 @@ export default {
 		return {
 			dialogFormVisible: false,
 			importFileUrl: baseURL + '/company/customer/address/import',
-			exportExcelUrl:baseURL + '/company/customer/routePrice/export/excelTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl:baseURL + '/company/customer/address/export?Authorization=' + localStorage.getItem("token"),
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: { keyword: '',customerID: '', companyName: '' },
 			unit: '',
@@ -185,8 +185,8 @@ export default {
 			}, this.selectedList)
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token") 
-				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
+			this.exportExcelUrl = baseURL + '/company/customer/address/export?Authorization=' + localStorage.getItem("token") 
+				+ '&keyword=' + this.find.keyword + '&companyName=' + this.find.companyName
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
