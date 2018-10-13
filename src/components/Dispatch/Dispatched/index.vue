@@ -5,20 +5,20 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="find.keyword"></el-input>
+						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="收发单位">
-						<el-input placeholder="收发单位" v-model="find.shipperConsignee"></el-input>
+						<el-input placeholder="收发单位" v-model="find.shipperConsignee" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="调度状态">
-						<el-select placeholder="全部" v-model="find.status" style="width:120px">
+						<el-select placeholder="全部" v-model="find.status" style="width:120px" @change="inputChange">
 							<el-option value="" label="全部">全部</el-option>
 							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS1" :key="key" v-if="isCur==0"></el-option>
 							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS2" :key="key" v-if="isCur==1"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="调度类型">
-						<el-select placeholder="全部" v-model="find.type" style="width:120px">
+						<el-select placeholder="全部" v-model="find.type" style="width:120px" @change="inputChange">
 							<el-option value="" label="全部">全部</el-option>
 							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERTYPE" :key="key"></el-option>
 						</el-select>
@@ -29,7 +29,7 @@
 							:clearable="false" 
 							value-format="timestamp" 
 							style="width:160px" 
-							v-model="find.dispatchBeginTime">
+							v-model="find.dispatchBeginTime" @change="inputChange">
 						</el-date-picker>
 						<span class="tracto">至</span>
 						<el-date-picker 
@@ -37,7 +37,7 @@
 							:clearable="false" 
 							value-format="timestamp" 
 							style="width:160px" 
-							v-model="find.dispatchEndTime">
+							v-model="find.dispatchEndTime" @change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -312,7 +312,7 @@ export default {
 			+ '&type=' + this.find.type 
 			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime 
 			+ '&dispatchEndTime=' + this.find.dispatchEndTime
-			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory/export?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory?Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&shipperConsignee=' + this.find.shipperConsignee
 			+ '&status=' + this.find.status 
