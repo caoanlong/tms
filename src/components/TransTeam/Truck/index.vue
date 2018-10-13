@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small" :model="find" :rules="rules" ref="ruleForm">
 					<el-form-item label="车辆">
-						<el-input placeholder="请输入车牌号" v-model="find.plateNo"></el-input>
+						<el-input placeholder="请输入车牌号" v-model="find.plateNo" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="司机">
-						<el-input placeholder="请输入姓名或手机号" v-model="find.keyword"></el-input>
+						<el-input placeholder="请输入姓名或手机号" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -31,7 +31,7 @@
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
 				<a :href="exportExcelUrl" download="truck.xlsx" class="exportExcel el-icon-download">导出</a>
-				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+				<a :href="templateUrl" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
 			<div class="listTable">
 			<div class="driverList">
@@ -78,12 +78,13 @@ export default {
 			},
 			importFileUrl: baseURL + '/truck/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			exportExcelUrl: baseURL + '/truck/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: '',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=truck.xlsx&&Authorization=' +localStorage.getItem("token"),
 		}
 	},
 	components: { FileUpload, Page, TruckItem },
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -99,6 +100,14 @@ export default {
 		// 上传错误
 		uploadError (response) {
 			Message.error(response.msg)
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		},
+		resetExportExcelUrl(){
+			this.exportExcelUrl = baseURL + '/truck/export?Authorization=' + localStorage.getItem("token")	
+			+ '&plateNo=' + this.find.plateNo 
+			+ '&keyword=' + this.find.keyword
 		},
 		beforeFileUpload (file) {
 			const extension = file.name.split('.')[1] === 'xls'
@@ -117,6 +126,7 @@ export default {
 			this.find.keyword = ''
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		pageChange(index) {
