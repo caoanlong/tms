@@ -46,6 +46,9 @@
 					</el-form-item>
 				</el-form>
 			</div>
+			<div class="tableControl" v-if="isCur==0">
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
+			</div>
 			<div class="tableBox">
 				<table class="customerTable">
 					<tr>
@@ -222,6 +225,7 @@ import DispatchOrder from '../../../api/DispatchOrder'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from '../components/UploadPhoto'
 import Scramble from '../components/Scramble'
+import request, { baseURL } from '../../../common/request'
 import { closeConfirm, dispatchCancel } from '../../../common/utils'
 export default {
 	mixins: [baseMixin],
@@ -249,7 +253,8 @@ export default {
 			driverExp: [],
 			isScrambleVisible: false,
 			curScrambleType: '',
-			dispatchOrderStatus: ''
+			dispatchOrderStatus: '',
+			exportExcelUrl: baseURL + '/dispatchOrder/export?Authorization=' + localStorage.getItem("token"),
 		}
 	},
 	directives: {
@@ -528,4 +533,23 @@ export default {
 		cursor pointer
 	.tracto
 		padding 0 5px 0 8px		
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-right 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
 </style>

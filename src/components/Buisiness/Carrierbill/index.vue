@@ -38,10 +38,11 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
-					<el-table-column label="Id" type="selection" align="center" width="40"></el-table-column>
+					<!-- <el-table-column label="Id" type="selection" align="center" width="40"></el-table-column> -->
 					<el-table-column label="单号" width="170"  align="center">
 						<template slot-scope="scope">
 							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
@@ -96,6 +97,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import request, { baseURL } from '../../../common/request'
 import { baseMixin } from '../../../common/mixin'
 import dist from '../../../assets/data/distpicker.data.js'
 import { deleteConfirm, closeConfirm } from '../../../common/utils'
@@ -110,7 +112,8 @@ export default {
 				status: '',
 				begin: '',
 				end: ''
-			}
+			},
+			exportExcelUrl: baseURL + '/biz/carrierOrder/export?Authorization=' + localStorage.getItem("token"),
 		}
 	},
 	created() {
@@ -224,4 +227,23 @@ export default {
 			.ViewTaskDetail
 				cursor pointer
 				display block
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-left 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
 </style>
