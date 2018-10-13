@@ -46,8 +46,8 @@
 					</el-form-item>
 				</el-form>
 			</div>
-			<div class="tableControl" v-if="isCur==0">
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
+			<div class="tableControl">
+				<a :href="isCur==0?exportExcelUrl:exportExcelUrl1" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="tableBox">
 				<table class="customerTable">
@@ -254,7 +254,8 @@ export default {
 			isScrambleVisible: false,
 			curScrambleType: '',
 			dispatchOrderStatus: '',
-			exportExcelUrl: baseURL + '/dispatchOrder/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: '',
+			exportExcelUrl1: ''
 		}
 	},
 	directives: {
@@ -280,6 +281,7 @@ export default {
 		}
 	},
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	destroyed() {
@@ -295,10 +297,31 @@ export default {
 			this.find.dispatchEndTime=''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
+			
 		},
 		reset(val) {
 			this.resetSearch()
+			this.resetExportExcelUrl()
 			this.getList()
+		},
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/dispatchOrder/export?Authorization=' + localStorage.getItem("token")	
+			+ '&keyword=' + this.find.keyword 
+			+ '&shipperConsignee=' + this.find.shipperConsignee
+			+ '&status=' + this.find.status 
+			+ '&type=' + this.find.type 
+			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime 
+			+ '&dispatchEndTime=' + this.find.dispatchEndTime
+			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory/export?Authorization=' + localStorage.getItem("token")	
+			+ '&keyword=' + this.find.keyword 
+			+ '&shipperConsignee=' + this.find.shipperConsignee
+			+ '&status=' + this.find.status 
+			+ '&type=' + this.find.type
+			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime 
+			+ '&dispatchEndTime=' + this.find.dispatchEndTime
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
 		},
 		tabClick(val){
 			this.isCur = val

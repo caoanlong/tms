@@ -117,6 +117,7 @@ export default {
 	},
 	components: { FileUpload,Page },
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -156,6 +157,7 @@ export default {
 			this.supercargoType = []
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		pageChange(index) {
