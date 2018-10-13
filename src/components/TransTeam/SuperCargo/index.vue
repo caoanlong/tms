@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="人员">
-						<el-input placeholder="姓名/手机号" v-model="find.keyword"></el-input>
+						<el-input placeholder="姓名/手机号" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="运输岗位">
 						<el-form-item>
@@ -37,7 +37,7 @@
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
-				<a :href="templateUrl" :download="templateTit" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+				<a :href="templateUrl" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 				
 			</div>
 			<div class="table">
@@ -110,13 +110,13 @@ export default {
 			tableData: [],
 			importFileUrl: baseURL + '/supercargo/upload',
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			exportExcelUrl: baseURL + '/supercargo/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=supercargo.xlsx&&Authorization=' +localStorage.getItem("token"),
-			templateTit:'supercargo.xlsx'
 		}
 	},
 	components: { FileUpload,Page },
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -156,7 +156,19 @@ export default {
 			this.supercargoType = []
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		},
+		supercargoTypeChange() {
+			this.resetExportExcelUrl()
+		},
+		resetExportExcelUrl(){
+			this.exportExcelUrl =  baseURL + '/supercargo/export?Authorization=' + localStorage.getItem("token")	
+			+ '&keyword=' + this.find.keyword 
+			+ '&supercargoType=' + this.find.supercargoType
 		},
 		pageChange(index) {
 			this.pageIndex = index

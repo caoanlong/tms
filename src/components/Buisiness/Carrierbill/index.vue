@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="承运单号/货物名称" style="width:150px" v-model="find.keyword"></el-input>
+						<el-input placeholder="承运单号/货物名称" style="width:150px" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="状态" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.status">
+						<el-select placeholder="请选择" v-model="find.status" @change="inputChange">
 							<el-option value="Committed" label="未执行">未执行</el-option>
 							<el-option value="Running" label="执行中">执行中</el-option>
 							<el-option value="Signed" label="已完成">已完成</el-option>
@@ -19,7 +19,7 @@
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
-							value-format="timestamp" v-model="find.begin">
+							value-format="timestamp" v-model="find.begin" @change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="至" prop="end">
@@ -27,7 +27,7 @@
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							v-model="find.end">
+							v-model="find.end" @change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -113,10 +113,11 @@ export default {
 				begin: '',
 				end: ''
 			},
-			exportExcelUrl: baseURL + '/biz/carrierOrder/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: '',
 		}
 	},
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -130,7 +131,18 @@ export default {
 			this.find.end = ''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
+			this.resetExportExcelUrl()
 			this.getList()
+		},
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/biz/carrierOrder/export?Authorization=' + localStorage.getItem("token")	
+			+ '&keyword=' + this.find.keyword 
+			+ '&status=' + this.find.status
+			+ '&begin=' + this.find.begin 
+			+ '&end=' + this.find.end
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
 		},
 		getList() {
 			Carrierbill.find({
