@@ -8,6 +8,19 @@ class CarryOrder extends Base {
 		this._add = `${url}/add`
 		this._update = `${url}/update`
 		this._del = `${url}/delete`
+		
+	}
+	delBatch = (data) => {
+	  if (!this.isClick) return Promise.reject('重复提交！')
+	  this.isClick = false
+	  setTimeout(() => {
+	    this.isClick = true
+	  }, this.delay)
+	  return this.request({
+	    url: this.baseUrl + '/deleteBatch',
+	    method: 'post',
+	    data
+	  })
 	}
   /**
    * 根据承运单查询运输列表(查询任务进度)
@@ -52,6 +65,20 @@ class CarryOrder extends Base {
 			})
 		})
 	}
+	close(data) {
+		if (!this.isClick) return Promise.reject('重复提交！')
+		this.isClick = false
+		setTimeout(() => {
+			this.isClick = true
+		}, this.delay)
+		return this.request({
+			url: this.baseUrl + '/close',
+			method: 'post',
+			data
+		})
+	}
+
+	
 }
 
 export default new CarryOrder('/carryOrder', request)

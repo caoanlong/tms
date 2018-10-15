@@ -1009,7 +1009,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import Truck from '../../../api/Truck'
+import Company from '../../../api/Company'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import SelectPosition from '../components/SelectPosition'
@@ -1233,7 +1233,7 @@ export default {
 	},
 	methods: {
 		getPrimaryDriver(queryString, cb) {
-			Truck.findDriverList({
+			Company.truck().driverListCanUse({
 				current: 1,
 				size: 1000,
 				type: 'driver',
@@ -1248,7 +1248,7 @@ export default {
 			})
 		},
 		getSecondaryDriver(queryString, cb) {
-			Truck.findDriverList({
+			Company.truck().driverListCanUse({
 				current: 1,
 				size: 1000,
 				type: 'driver',
@@ -1263,7 +1263,7 @@ export default {
 			})
 		},
 		getTrailers(queryString, cb) {
-			Truck.find({
+			Company.truck().listByTrail({
 				current: 1,
 				size: 1000,
 				plateNo: queryString,
@@ -1329,7 +1329,7 @@ export default {
 					truckInfo.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 					delete truckInfo.plateNo
 					delete truckInfo.truckCategory
-					Truck.update(truckInfo).then(res => {
+					Company.truck().update(truckInfo).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: this.fromRoute})
 					})
@@ -1338,7 +1338,7 @@ export default {
 		},
 		getInfo() {
 			const truckID = this.$route.query.truckID
-			Truck.findById({ truckID }).then(res => {
+			Company.truck().findById({ truckID }).then(res => {
 				this.truck = res
 				this.truck.roadTransportGoodsIsPoisonous = res.roadTransportGoodsIsPoisonous == 'Y' ? true : false
 				this.driverLicTime = [res.driverLicBeginTime, res.driverLicExpiresTime]

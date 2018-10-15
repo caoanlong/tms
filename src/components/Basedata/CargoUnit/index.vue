@@ -50,16 +50,16 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import CargoUnit from '../../../api/CargoUnit'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
+import Company from '../../../api/Company';
 export default {
 	mixins: [baseMixin], 
 	data() {
 		return {
 			dialogFormVisible: false,
-			exportExcelUrl: baseURL + '/cargoUnit/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: '',
 			find: { keyword: '' },
 			unit: { unit: ''},
 			rules: {
@@ -68,9 +68,18 @@ export default {
 		}
 	},
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
+
+		resetExportExcelUrl(){
+			this.exportExcelUrl = baseURL + '/company/cargoUnit/export?Authorization=' + localStorage.getItem("token")
+				+ '&keyword=' + this.find.keyword
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		},
 		reset() {
 			this.find.keyword = ''
 			this.pageIndex = 1
@@ -81,7 +90,7 @@ export default {
 			this.selectedList = data.map(item => item.cargoUnitID)
 		},
 		getList() {
-			CargoUnit.find({
+			Company.cargoUnit().find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				unit:this.find.keyword,
@@ -93,7 +102,7 @@ export default {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				CargoUnit.add({
+				Company.cargoUnit().add({
 					unit: this.unit.unit
 				}).then(res => {
 					this.dialogFormVisible = false
@@ -105,7 +114,7 @@ export default {
 		},
 		del(cargoUnitID) {
 			deleteConfirm(cargoUnitID, cargoUnitIDs => {
-				CargoUnit.del({ cargoUnitIDs }).then(res => {
+				Company.cargoUnit().delBatch({ cargoUnitIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

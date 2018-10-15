@@ -103,7 +103,7 @@ import { Message } from 'element-ui'
 import { defaultImg } from '../../../assets/icons/icons'
 import { resizeImg, deleteConfirm } from '../../../common/utils'
 import SelectSuperCargo from './SelectSuperCargo'
-import Truck from '../../../api/Truck'
+import Company from '../../../api/Company'
  import { EXPIREWARN } from '../../../common/const'
 export default {
 	props: {
@@ -139,7 +139,7 @@ export default {
 			this.dialogVisible = true
 		},
 		primary() {
-			Truck.primary({
+			Company.truck().setDriverAsPrimary({
 				supercargoID: this.truck.secondaryDriver.supercargoID,
 				comTruckID: this.truck.truckID
 			}).then(res => {
@@ -149,7 +149,7 @@ export default {
 		},
 		delTruck(truckID) {
 			deleteConfirm(truckID, truckIDs => {
-				Truck.del({ truckIDs }).then(res => {
+				Company.truck().delBatch({ truckIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.$emit('refresh')
 				})
@@ -161,7 +161,7 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				Truck.deleteDriver({
+				Company.truck().clearDriver({
 					supercargoID,
 					comTruckID: this.truck.truckID
 				}).then(res => {

@@ -594,7 +594,7 @@ import { Message } from 'element-ui'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import SelectPosition from '../components/SelectPosition'
-import Truck from '../../../api/Truck'
+import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
@@ -683,7 +683,7 @@ export default {
 		},
 		getInfo() {
 			const truckID = this.$route.query.truckID
-			Truck.findById({ truckID }).then(res => {
+			Company.truck().findById({ truckID }).then(res => {
 				this.truck = res
 			})
 		},

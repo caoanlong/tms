@@ -39,7 +39,7 @@
 </template>
 <script>
 import { Message } from 'element-ui'
-import Truck from '../../../api/Truck'
+import Company from '../../../api/Company'
 import Page from '../../CommonComponents/Page'
 export default {
     props: {
@@ -75,7 +75,7 @@ export default {
             } else {
                 obj.secondaryDriver = data.supercargoID
             }
-            Truck.changeDriver(obj).then(res => {
+            Company.truck().changeDriver(obj).then(res => {
                 Message.success(res.msg)
                 this.control(true, data)
             })
@@ -101,7 +101,7 @@ export default {
         },
         getList() {
             this.superCargos = []
-			Truck.findDriverList({
+			Company.truck().driverListCanUse({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword

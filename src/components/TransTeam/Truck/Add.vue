@@ -1008,7 +1008,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import request from '../../../common/request'
-import Truck from '../../../api/Truck'
+import Company from '../../../api/Company'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import SelectPosition from '../components/SelectPosition'
@@ -1223,7 +1223,7 @@ export default {
 	},
 	methods: {
 		getPrimaryDriver(queryString, cb) {
-			Truck.findDriverList({
+			Company.truck().driverListCanUse({
 				current: 1,
 				size: 1000,
 				type: 'driver',
@@ -1237,7 +1237,7 @@ export default {
 			})
 		},
 		getSecondaryDriver(queryString, cb) {
-			Truck.findDriverList({
+			Company.truck().driverListCanUse({
 				current: 1,
 				size: 1000,
 				type: 'driver',
@@ -1252,7 +1252,7 @@ export default {
 		},
 		getTrailers(queryString, cb) {
 			// this.truck.trailerID = ''
-			Truck.find({
+			Company.truck().listByTrail({
 				current: 1,
 				size: 1000,
 				plateNo: queryString,
@@ -1327,7 +1327,7 @@ export default {
 						return
 					})
 				} else {
-					Truck.add(data).then(res => {
+					Company.truck().add(data).then(res => {
 						Message.success(res.msg)
 						this.$router.push({name: 'truck'})
 					})

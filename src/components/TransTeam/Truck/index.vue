@@ -30,7 +30,7 @@
 					:show-file-list="false">
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
-				<a :href="exportExcelUrl" download="truck.xlsx" class="exportExcel el-icon-download">导出</a>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
 				<a :href="templateUrl" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
 			<div class="listTable">
@@ -54,7 +54,7 @@
 import { Message } from 'element-ui'
 import request, { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
-import Truck from '../../../api/Truck'
+import Company from '../../../api/Company'
 import Page from '../../CommonComponents/Page'
 import TruckItem from '../components/TruckItem'
 import FileUpload from '../../CommonComponents/FileUpload'
@@ -76,7 +76,7 @@ export default {
 			rules: {
 				plateNo: [ {min: 1, max: 20, message: '长度在 1 到 20 个字符'} ]
 			},
-			importFileUrl: baseURL + '/truck/upload',
+			importFileUrl: baseURL + '/company/truck/import?Authorization=' + localStorage.getItem("token"),
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=truck.xlsx&&Authorization=' +localStorage.getItem("token"),
@@ -105,7 +105,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/truck/export?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl = baseURL + '/company/truck/export?Authorization=' + localStorage.getItem("token")	
 			+ '&plateNo=' + this.find.plateNo 
 			+ '&keyword=' + this.find.keyword
 		},
@@ -156,7 +156,7 @@ export default {
 		},
 		getList() {
 			this.tableData = []
-			Truck.find({
+			Company.truck().find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
@@ -181,7 +181,7 @@ export default {
 		},
 		del(truckID) {
 			deleteConfirm(truckID, truckIDs => {
-				Truck.del({ truckIDs }).then(res => {
+				Company.truck().delBatch({ truckIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})

@@ -176,7 +176,7 @@ export default {
 		},
 		close(carrierOrderID) {
 			closeConfirm(carrierOrderID, carrierOrderIDs => {
-				Carrierbill.close({ carrierOrderIDs }).then(res => {
+				CarryOrder.close({ carrierOrderIDs }).then(res => {
 					Message({ type: 'success', message: '关闭成功!' })
 					this.getList()
 				})
@@ -184,7 +184,7 @@ export default {
 		},
 		del(carrierOrderID) {
 			deleteConfirm(carrierOrderID, carrierOrderIDs => {
-				Carrierbill.del({ carrierOrderIDs }).then(res => {
+				CarryOrder.delBatch({ carrierOrderIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})

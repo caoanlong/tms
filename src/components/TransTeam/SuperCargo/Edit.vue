@@ -714,7 +714,7 @@ import { Message } from 'element-ui'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import SelectPosition from '../components/SelectPosition'
-import SuperCargo from '../../../api/SuperCargo'
+import Company from '../../../api/Company'
 import { checkTel, checkIDCard, checkDriverLicenseNum } from '../../../common/validator'
 export default {
 	data() {
@@ -920,7 +920,7 @@ export default {
 						return
 					})
 				} else {
-					SuperCargo.update(this.superCargo).then(res => {
+					Company.transporter().update(this.superCargo).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: this.fromRoute})
 					})
@@ -929,7 +929,7 @@ export default {
 		},
 		getInfo() {
 			const supercargoID = this.$route.query.supercargoID
-			SuperCargo.findById({ supercargoID }).then(res => {
+			Company.transporter().findById({ supercargoID }).then(res => {
 				this.superCargo = res
 				this.supercargoType = res.supercargoType == 'SupercargoDriver' ? ['Driver', 'Supercargo'] : [res.supercargoType]
 				this.idCardTime = [res.idCardBeginTime, res.idCardExpirationTime]

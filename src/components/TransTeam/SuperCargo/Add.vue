@@ -714,7 +714,7 @@ import { Message } from 'element-ui'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import SelectPosition from '../components/SelectPosition'
-import SuperCargo from '../../../api/SuperCargo'
+import Company from '../../../api/Company'
 import { checkTel, checkIDCard, checkDriverLicenseNum } from '../../../common/validator'
 export default {
 	data() {
@@ -918,7 +918,7 @@ export default {
 						Message.error('必须选择从事运输岗位！')
 						return
 					}
-					SuperCargo.add(this.superCargo).then(res => {
+					Company.transporter().add(this.superCargo).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: 'supercargo'})
 					})

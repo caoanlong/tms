@@ -163,6 +163,18 @@ class Company extends Base {
 
     cargoUnit(){
         this._init('/cargoUnit')
+        this.delBatch = (data) => {
+            if (!this.isClick) return Promise.reject('重复提交！')
+            this.isClick = false
+            setTimeout(() => {
+                this.isClick = true
+            }, this.delay)
+            return this.request({
+                url: this.baseUrl + '/cargoUnit/deleteBatch',
+                method: 'post',
+                data
+            })
+        }
         return this
     }
     /**
@@ -185,12 +197,141 @@ class Company extends Base {
         this.listOfCarrierOrder = params => {
           return new Promise((resolve, reject) => {
             this.request({
-              url: this.baseUrl + '/customer/address/listOfCarrierOrder',
+                url: this.baseUrl + '/customer/address/listOfCarrierOrder',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+          })
+        }
+        return this
+    }
+
+    /**
+     * 车辆
+     */
+    truck(){
+        this._init('/truck')
+        this.delBatch = (data) => {
+          if (!this.isClick) return Promise.reject('重复提交！')
+            this.isClick = false
+          setTimeout(() => {
+                this.isClick = true
+          }, this.delay)
+          return this.request({
+                url: this.baseUrl + '/truck/deleteBatch',
+                method: 'post',
+                data
+            })
+        }
+
+        /**
+         * 根据车牌查询suggest
+         */
+        this.listByPlateNo = (params) => {
+          return new Promise((resolve, reject) => {
+            this.request({
+              url: this.baseUrl + '/truck/listByPlateNo',
               params
             }).then(res => {
               resolve(res.data.data || res.data || res)
             })
           })
+        }
+
+        /**
+         * 根据挂车牌查询suggest
+         */
+        this.listByTrail = (params) => {
+          return new Promise((resolve, reject) => {
+            this.request({
+              url: this.baseUrl + '/truck/listByTrail',
+              params
+            }).then(res => {
+              resolve(res.data.data || res.data || res)
+            })
+          })
+        }
+
+        /**
+         * 删除司机
+         */
+        this.clearDriver = (data) => {
+          if (!this.isClick) return Promise.reject('重复提交！')
+          this.isClick = false
+          setTimeout(() => {
+                this.isClick = true
+          }, this.delay)
+          return this.request({
+                url: this.baseUrl + '/truck/clearDriver',
+                method: 'post',
+                data
+          })
+        }
+        /**
+         * 修改主驾或副驾
+         */
+        this.changeDriver = (data) => {
+            if (!this.isClick) return Promise.reject('重复提交！')
+            this.isClick = false
+            setTimeout(() => {
+                this.isClick = true
+            }, this.delay)
+            return this.request({
+                url: this.baseUrl + '/truck/changeDriver',
+                method: 'post',
+                data
+            })
+        }
+
+        /**
+         * 可用司机列表
+         */
+        this.driverListCanUse = (params) => {
+            return new Promise((resolve, reject) => {
+                this.request({
+                    url: this.baseUrl + '/truck/driverListCanUse',
+                    params
+                }).then(res => {
+                    resolve(res.data.data || res.data || res)
+                })
+            })
+        }
+
+        /**
+         * 设置司机为主驾
+         */
+        this.setDriverAsPrimary = (data) => {
+            if (!this.isClick) return Promise.reject('重复提交！')
+            this.isClick = false
+            setTimeout(() => {
+                this.isClick = true
+            }, this.delay)
+            return this.request({
+                url: this.baseUrl + '/truck/setDriverAsPrimary',
+                method: 'post',
+                data
+            })
+        }
+        return this
+    }
+    
+    /**
+     * 运输人员
+     */
+    transporter(){
+        this._init('/transporter')
+        this.delBatch = (data) => {
+            if (!this.isClick) return Promise.reject('重复提交！')
+                this.isClick = false
+            setTimeout(() => {
+                this.isClick = true
+            }, this.delay)
+            return this.request({
+                url: this.baseUrl + '/transporter/deleteBatch',
+                method: 'post',
+                data
+            })
         }
         return this
     }

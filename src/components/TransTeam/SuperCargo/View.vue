@@ -352,7 +352,7 @@ import { Message } from 'element-ui'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import SelectPosition from '../components/SelectPosition'
-import SuperCargo from '../../../api/SuperCargo'
+import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
@@ -429,7 +429,7 @@ export default {
 		},
 		getInfo() {
 			const supercargoID = this.$route.query.supercargoID
-			SuperCargo.findById({ supercargoID }).then(res => {
+			Company.transporter().findById({ supercargoID }).then(res => {
 				this.superCargo = res
 				this.otherPic = res.otherPic1.split(',')
 			})

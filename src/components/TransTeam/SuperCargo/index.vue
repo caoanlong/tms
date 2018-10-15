@@ -93,7 +93,7 @@ import { Message } from 'element-ui'
 import { deleteConfirm } from '../../../common/utils'
 import request, { baseURL } from '../../../common/request'
 import FileUpload from '../../CommonComponents/FileUpload'
-import SuperCargo from '../../../api/SuperCargo'
+import Company from '../../../api/Company'
 import Page from '../../CommonComponents/Page'
 export default {
 	data() {
@@ -108,7 +108,7 @@ export default {
 			count: 0,
 			selectedList: [],
 			tableData: [],
-			importFileUrl: baseURL + '/supercargo/upload',
+			importFileUrl: baseURL + '/company/transporter/import?Authorization=' + localStorage.getItem("token"),
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=supercargo.xlsx&&Authorization=' +localStorage.getItem("token"),
@@ -166,7 +166,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl =  baseURL + '/supercargo/export?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl =  baseURL + '/company/transporter/export?Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&supercargoType=' + this.find.supercargoType
 		},
@@ -191,7 +191,7 @@ export default {
 		},
 		getList() {
 			this.tableData = []
-			SuperCargo.find({
+			Company.transporter().find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
