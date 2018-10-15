@@ -158,6 +158,14 @@ class Company extends Base {
     }
 
     /**
+     * 货物单位
+     */
+
+    cargoUnit(){
+        this._init('/cargoUnit')
+        return this
+    }
+    /**
      *  客户地址
      */
     customerAddress(){

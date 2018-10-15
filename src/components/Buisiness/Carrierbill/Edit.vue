@@ -372,12 +372,8 @@
 import { Message } from 'element-ui'
 import axios from 'axios'
 import { mapGetters } from 'vuex'
-import Carrierbill from '../../../api/Carrierbill'
+import CarryOrder from '../../../api/CarryOrder'
 import Company from '../../../api/Company'
-import Customer from '../../../api/Customer'
-import CustomerAddress from '../../../api/CustomerAddress'
-import CargoUnit from '../../../api/CargoUnit'
-import CargoGeneralName from '../../../api/CargoGeneralName'
 import { timeToTimestamp, timestampToTime,getDateTotimestamp } from '../../../common/utils'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import AddComAddress from './components/AddComAddress'
@@ -489,7 +485,7 @@ export default {
 	methods: {
 		getInfo() {
 			const carrierOrderID = this.$route.query.carrierOrderID
-			Carrierbill.findById({ carrierOrderID }).then(res => {
+			CarryOrder.findById({ carrierOrderID }).then(res => {
 				const carrierbillInfo = res
 				if (res.porRequire.indexOf(',') > -1) {
 					carrierbillInfo.porRequire = res.porRequire.split(',')
@@ -605,7 +601,7 @@ export default {
 			return sum.toFixed(2)
 		},
 		getUnits() {
-			CargoUnit.find({
+			Company.cargoUnit().find({
 				current: 1,
 				size: 1000
 			}).then(res => {
@@ -613,7 +609,7 @@ export default {
 			})
 		},
 		getCargos(queryString, cb) {
-			CargoGeneralName.find({
+			Company.cargo().find({
 				current: 1,
 				size: 1000,
 				customerID: this.carrierbillInfo.shipperID,
@@ -843,7 +839,7 @@ export default {
 							this.$router.push({name: 'carrierbill'})
 						})
 					} else {
-						Carrierbill.update(carrierbill).then(res => {
+						CarryOrder.update(carrierbill).then(res => {
 							Message.success('成功！')
 							this.$router.push({name: 'carrierbill'})
 						})

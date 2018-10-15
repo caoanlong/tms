@@ -184,7 +184,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import TrailMap from '../../Dispatch/components/TrailMap'
-import Carrierbill from '../../../api/Carrierbill'
+import CarryOrder from '../../../api/CarryOrder'
 import UploadPhoto from './components/UploadPhoto'
 export default {
 	data() {
@@ -218,7 +218,7 @@ export default {
 		},
 		getInfo() {
 			const carrierOrderID = this.$route.query.carrierOrderID
-			Carrierbill.findById({ carrierOrderID }).then(res => {
+			CarryOrder.findById({ carrierOrderID }).then(res => {
 				this.carrierOrder = res
 				this.carrierOrder.porRequire = res.porRequire.split(',')
 				this.carrierCargo = res.carrierCargo
@@ -227,7 +227,7 @@ export default {
 		},
 		// 查询运输列表
 		getTransports(carrierOrderID) {
-			Carrierbill.findTransports({ carrierOrderID }).then(res => {
+			CarryOrder.taskList({ carrierOrderID }).then(res => {
 				this.transports = res
 			})
 		},

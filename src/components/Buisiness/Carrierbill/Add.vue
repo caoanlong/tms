@@ -373,10 +373,8 @@ import axios from 'axios'
 import { mapGetters } from 'vuex'
 import Carrierbill from '../../../api/Carrierbill'
 import Company from '../../../api/Company'
-import Customer from '../../../api/Customer'
-import CustomerAddress from '../../../api/CustomerAddress'
+import CarryOrder from '../../../api/CarryOrder'
 import CargoUnit from '../../../api/CargoUnit'
-import CargoGeneralName from '../../../api/CargoGeneralName'
 import { timeToTimestamp } from '../../../common/utils'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import AddComAddress from './components/AddComAddress'
@@ -538,13 +536,13 @@ export default {
 			}
 		},
 		getUnits() {
-			CargoUnit.find({
+			Company.cargoUnit().find({
 				current: 1,
 				size: 1000
 			}).then(res => { this.units = res.records })
 		},
 		getCargos(queryString, cb) {
-			CargoGeneralName.find({
+			Company.cargo().find({
 				current: 1,
 				size: 1000,
 				customerID: this.carrierbillInfo.shipperID,
@@ -763,7 +761,7 @@ export default {
 						carrierbill.consigneeDate = carrierbill.consigneeDate + 86399000
 					}
 					carrierbill.freight = this.freight?this.freight:this.carrierbillInfo.freight
-					Carrierbill.add(carrierbill).then(res => {
+					CarryOrder.add(carrierbill).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: 'carrierbill'})
 					})

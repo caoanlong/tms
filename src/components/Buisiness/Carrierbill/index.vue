@@ -101,7 +101,7 @@ import request, { baseURL } from '../../../common/request'
 import { baseMixin } from '../../../common/mixin'
 import dist from '../../../assets/data/distpicker.data.js'
 import { deleteConfirm, closeConfirm } from '../../../common/utils'
-import Carrierbill from '../../../api/Carrierbill'
+import CarryOrder from '../../../api/CarryOrder'
 export default {
 	mixins: [baseMixin],
 	data() {
@@ -135,7 +135,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/biz/carrierOrder/export?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl = baseURL + '/carryOrder/export?Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&status=' + this.find.status
 			+ '&begin=' + this.find.begin 
@@ -145,7 +145,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			Carrierbill.find({
+			CarryOrder.find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,

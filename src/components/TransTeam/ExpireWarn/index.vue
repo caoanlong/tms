@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="到期对象">
-						<el-input placeholder="车牌号/姓名" v-model="findrealName"></el-input>
+						<el-input placeholder="车牌号/姓名" v-model="findrealName"  @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="对象类型">
-						<el-select placeholder="全部" v-model="findobjType" @change="cccc">
+						<el-select placeholder="全部" v-model="findobjType" @change="changeObjType">
 							<el-option label="全部" value=""></el-option>
 							<el-option label="司机" value="Driver"></el-option>
 							<el-option label="车辆" value="Truck"></el-option>
@@ -16,7 +16,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="到期类型" >
-						<el-select placeholder="请选择到期类型" v-model="findexpiredCertificate">
+						<el-select placeholder="请选择到期类型" v-model="findexpiredCertificate" @change="inputChange">
 							<el-option label="全部" value=""></el-option>
 							<el-option v-for="(item,index) in expOption" :label="item.value" :value="item.key" :key="index"></el-option>
 						</el-select>
@@ -102,7 +102,7 @@ export default {
 			total:0,
 			tableData: [],
 			selectedList: [],
-			exportExcelUrl: baseURL + '/recordWarn/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: '',
 			TruckOption:{
 				DriverLicExpiresTime:"行驶证",
 				RoadTransportLicAnnualPeriod:"道路运输许可证",
@@ -144,6 +144,7 @@ export default {
 		Page
 	},
 	created() {
+		this.resetExportExcelUrl()
 		this.expiredCertificateSorts = Object.keys(this.expiredCertificateSort).map(item =>{
 			return {
 				key:item,
@@ -177,7 +178,15 @@ export default {
 		}
 	},
 	methods: {
-		
+		resetExportExcelUrl() {
+			this.exportExcelUrl =baseURL + '/company/exportExpire?Authorization=' + localStorage.getItem("token")	
+			+ '&findrealName=' + this.findrealName 
+			+ '&findobjType=' + this.findobjType
+			+ '&findexpiredCertificate=' + this.findexpiredCertificate
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		},
 		search() {
 			this.pageIndex = 1
 			this.pageSize = 10
@@ -189,6 +198,7 @@ export default {
 			this.findexpiredCertificate=''
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		pageChange(index) {
@@ -268,7 +278,7 @@ export default {
 				})
 			}, this.selectedList)
 		},
-		cccc(){
+		changeObjType(){
 			if(this.findobjType =='Truck'){
 				this.expOption = this.TruckOptions
 			}else if(this.findobjType =='Driver'){
@@ -278,7 +288,7 @@ export default {
 			}else{
 				this.expOption = this.expiredCertificateSorts
 			}
-			
+			this.resetExportExcelUrl()
 		}
 	}
 }

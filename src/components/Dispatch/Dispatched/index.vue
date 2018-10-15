@@ -220,7 +220,6 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
-import Dispatchbill from '../../../api/Dispatchbill'
 import DispatchOrder from '../../../api/DispatchOrder'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from '../components/UploadPhoto'
@@ -305,7 +304,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/dispatchOrder/export?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl = baseURL + '/dispatchOrder/exportDispatched?Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&shipperConsignee=' + this.find.shipperConsignee
 			+ '&status=' + this.find.status 

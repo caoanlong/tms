@@ -490,7 +490,7 @@ import DistPicker from '../../CommonComponents/DistPicker'
 import PublishDispatch from '../components/PublishDispatch'
 import GrabOrder from '../components/GrabOrder'
 import { baseMixin } from '../../../common/mixin'
-import Carrierbill from '../../../api/Carrierbill'
+import CarryOrder from '../../../api/CarryOrder'
 import { checkFloat2, checkInt } from '../../../common/valid'
 import { arrayUnique ,isFullDay} from '../../../common/utils'
 export default {
@@ -726,7 +726,7 @@ export default {
 				current: this.pageIndex ,
 				size: this.pageSize
 			})
-			Carrierbill.findPreDispatch(params).then(res => {
+			CarryOrder.listOfCanDispatch(params).then(res => {
 				this.total = res.total
 				this.tableData = res.records
 			})
@@ -736,7 +736,7 @@ export default {
 		 */
 		getSelectedList() {
 			const dispatchOrderID = this.$route.query.dispatchOrderID
-			Carrierbill.findDispatchedList({ dispatchOrderID }).then(res => {
+			CarryOrder.listOfDispatched({ dispatchOrderID }).then(res => {
 				this.selectedList = res
 				this.selectedListNoRepeat = arrayUnique(this.selectedList, 'carrierOrderID')
 				this.transLineCreate()
