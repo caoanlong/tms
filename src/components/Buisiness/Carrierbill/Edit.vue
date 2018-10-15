@@ -521,9 +521,16 @@ export default {
 				carrierbillInfo.flagShipperCompanyName = res.shipperCompanyName
 				carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
 				
-				this.shipperDateTime = timestampToTime(res.shipperDate)
-				this.consigneeDateTime = timestampToTime(res.consigneeDate)
 				this.carrierbillInfo = carrierbillInfo
+				if (!!this.$route.query.copy) {
+					this.carrierbillInfo.shipperDate = ''
+					this.carrierbillInfo.shipperDateTime = ''
+					this.carrierbillInfo.consigneeDate = ''
+					this.carrierbillInfo.consigneeDateTime = ''
+				} else {
+					this.shipperDateTime = timestampToTime(res.shipperDate)
+					this.consigneeDateTime = timestampToTime(res.consigneeDate)
+				}
 				this.listForCalc()
 				this.getMinDateTime()
 			})
@@ -829,10 +836,18 @@ export default {
 					} else {
 						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + 86399000
 					}
-					Carrierbill.update(carrierbill).then(res => {
-						Message.success('成功！')
-						this.$router.push({name: 'carrierbill'})
-					})
+					if (!!this.$route.query.copy) {
+						delete carrierbill.carrierOrderID
+						Carrierbill.add(carrierbill).then(res => {
+							Message.success('成功！')
+							this.$router.push({name: 'carrierbill'})
+						})
+					} else {
+						Carrierbill.update(carrierbill).then(res => {
+							Message.success('成功！')
+							this.$router.push({name: 'carrierbill'})
+						})
+					}
 				})
 			})
 		},
