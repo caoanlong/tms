@@ -5,8 +5,8 @@ const prodEnv = require('./prod.env')
 module.exports = merge(prodEnv, {
     NODE_ENV: '"development"',
     ENV_CONFIG: '"dev"',
-    BASE_API: '"http://192.168.1.43:9999"', // 飞龙电脑
-    // BASE_API: '"http://192.168.1.99:9999"', // 军良电脑
+    // BASE_API: '"http://192.168.1.43:9999"', // 飞龙电脑
+    BASE_API: '"http://192.168.1.99:9999"', // 军良电脑
     // BASE_API: '"http://192.168.1.68:8080"', // 阳霞电脑
     // BASE_API: '"http://develop.we-service.cn/tms-api"', // 测试
     // BASE_NODE_API: '"http://localhost:3002/api"',   // 本机node

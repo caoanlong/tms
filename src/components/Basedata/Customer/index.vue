@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
+						<el-input placeholder="请输入关键字" v-model="find.keyword"  @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="类型" class="customerSelect">
-						<el-select v-model="find.customerType" placeholder="请选择">
+						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
 							<el-option value="Shipper" label="发货方"></el-option>
 							<el-option value="Consignee" label="收货方"></el-option>
 							<el-option value="Delegate" label="委托方"></el-option>
@@ -48,7 +48,7 @@
 					<el-table-column label="地区" prop="companyArea" align="center"></el-table-column>
 					<el-table-column label="类型" prop="customerType" width="120" align="center">
 						<template slot-scope="scope">
-							{{scope.row.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , ')}}
+							{{scope.row.customerType?scope.row.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , '):''}}
 						</template>
 					</el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100" align="center"></el-table-column>
@@ -89,7 +89,7 @@ export default {
 		return {
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			importFileUrl: baseURL + '/company/customer/import?Authorization=' + localStorage.getItem("token"),
-			exportExcelUrl: baseURL + '/company/customer/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl: '',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				keyword: '',
@@ -98,6 +98,7 @@ export default {
 		}
 	},
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -160,8 +161,9 @@ export default {
 			}, this.selectedList)
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token") 
-				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
+			this.exportExcelUrl = baseURL + '/company/customer/export?Authorization=' + localStorage.getItem("token") 
+				+ '&keyword=' + this.find.keyword
+				+ '&customerType=' + this.find.customerType
 		},
 		inputChange() {
 			this.resetExportExcelUrl()

@@ -100,7 +100,6 @@
 import { Message } from 'element-ui'
 import Company from '../../../api/Company'
 import CargoUnit from '../../../api/CargoUnit'
-import CargoGeneralName from '../../../api/CargoGeneralName'
 import { checkTel } from '../../../common/validator'
 export default {
 	data() {
@@ -178,7 +177,7 @@ export default {
 				if (!valid) return
 				const data = Object.assign({}, this.cargo)
 				if (!data.customerID) data.customerID = 1
-				CargoGeneralName.update(data).then(res => {
+				Company.cargo().update(data).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'cargo'})
 				})
@@ -186,7 +185,7 @@ export default {
 		},
 		getInfo() {
 			const cargoNameID = this.$route.query.cargoID
-			CargoGeneralName.findById({ cargoNameID }).then(res => {
+			Company.cargo().findById({ cargoNameID }).then(res => {
 				this.cargo = res
 				if (res.moistureProof == 'Y') this.requires.push('moistureProof')
 				if (res.waterProof == 'Y') this.requires.push('waterProof')

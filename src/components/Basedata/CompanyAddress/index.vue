@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
+						<el-input placeholder="请输入关键字" v-model="find.keyword"  @change="inputChange"></el-input>
 					</el-form-item>
                     <el-form-item label="所属客户">
                         <el-autocomplete 
@@ -14,7 +14,7 @@
                             v-model="find.companyName"
                             :fetch-suggestions="getCompanys"
                             placeholder="请输入..."
-                            @select="handSelect">
+                            @select="handSelect"  @change="inputChange">
 							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
                         </el-autocomplete>
                     </el-form-item>
@@ -39,8 +39,8 @@
 					:show-file-list="false">
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
-				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
-				<a :href="templateUrl" download="trucksource.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
+				<a :href="templateUrl" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
 			<div class="table">
 				<el-table 
@@ -91,7 +91,6 @@
 import { Message } from 'element-ui'
 import CargoUnit from '../../../api/CargoUnit'
 import Company from '../../../api/Company'
-import CustomerAddress from '../../../api/CustomerAddress'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
@@ -101,8 +100,8 @@ export default {
 		return {
 			dialogFormVisible: false,
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			importFileUrl: baseURL + '/customer/address/import',
-			exportExcelUrl:baseURL + '/customer/address/export?Authorization=' + localStorage.getItem("token"),
+			importFileUrl: baseURL + '/company/customer/address/import?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: { keyword: '',customerID: '', companyName: '' },
 			unit: '',
@@ -113,6 +112,7 @@ export default {
 	created() {
 		if (this.customerID) this.find.customerID = this.customerID
 		if (this.companyName) this.find.companyName = this.companyName
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -142,7 +142,7 @@ export default {
 			this.selectedList = data.map(item => item.customerAddressID)
 		},
 		getList() {
-			CustomerAddress.find({
+			Company.customerAddress().find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
@@ -179,15 +179,16 @@ export default {
 		},
 		del(customerAddressID) {
 			deleteConfirm(customerAddressID, customerAddressIDs => {
-				CustomerAddress.del({ customerAddressIDs }).then(res => {
+				Company.customerAddress().delBatch({ customerAddressIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})
 			}, this.selectedList)
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/customer/address/export?Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/company/customer/address/export?Authorization=' + localStorage.getItem("token")
 				+ '&keyword=' + this.find.keyword + '&companyName=' + this.find.companyName
+			
 		},
 		inputChange() {
 			this.resetExportExcelUrl()

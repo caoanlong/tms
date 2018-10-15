@@ -34,7 +34,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import CustomerAddress from '../../../api/CustomerAddress'
+import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
@@ -59,7 +59,7 @@ export default {
 	methods: {
 		getInfo() {
 			const customerAddressID = this.$route.query.customerAddressID
-			CustomerAddress.findById({ customerAddressID }).then(res => {
+			Company.customerAddress().findById({ customerAddressID }).then(res => {
 				this.companyAddress = res
 			})
 		},

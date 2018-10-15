@@ -657,7 +657,7 @@ export default {
 		},
 
 		getShipperAddress(queryString, cb) {
-			Customer.addressSuggest({
+			Company.customerAddress().listOfCarrierOrder({
 				customerID: this.carrierbillInfo.shipperID,
 				keyword: queryString
 			}).then(res => {
@@ -665,7 +665,7 @@ export default {
 			})
 		},
 		getConsigneeAddress(queryString, cb){
-			Customer.addressSuggest({
+			Company.customerAddress().listOfCarrierOrder({
 				customerID: this.carrierbillInfo.consigneeID,
 				keyword: queryString
 			}).then(res => {

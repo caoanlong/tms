@@ -64,7 +64,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import CargoGeneralName from '../../../api/CargoGeneralName'
+import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
@@ -77,7 +77,7 @@ export default {
 	methods: {
 		getInfo() {
 			const cargoNameID = this.$route.query.cargoID
-			CargoGeneralName.findById({ cargoNameID }).then(res => {
+			Company.cargo().findById({ cargoNameID }).then(res => {
 				this.cargo = res
 			})
 		},

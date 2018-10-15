@@ -173,7 +173,7 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				CustomerAddress.add(this.companyAddress).then(res => {
+				Company.customer().add(this.companyAddress).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'companyaddress'})
 				})

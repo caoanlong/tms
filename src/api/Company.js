@@ -137,6 +137,55 @@ class Company extends Base {
       return this
     }
 
+    /**
+     * 货物
+     */
+    cargo(){
+        this._init('/cargo')
+        this.delBatch = (data) => {
+          if (!this.isClick) return Promise.reject('重复提交！')
+          this.isClick = false
+          setTimeout(() => {
+            this.isClick = true
+          }, this.delay)
+          return this.request({
+            url: this.baseUrl + '/cargo/deleteBatch',
+            method: 'post',
+            data
+          })
+        }
+        return this
+    }
+
+    /**
+     *  客户地址
+     */
+    customerAddress(){
+        this._init('/customer/address')
+        this.delBatch = (data) => {
+          if (!this.isClick) return Promise.reject('重复提交！')
+          this.isClick = false
+          setTimeout(() => {
+            this.isClick = true
+          }, this.delay)
+          return this.request({
+            url: this.baseUrl + '/customer/address/deleteBatch',
+            method: 'post',
+            data
+          })
+        }
+        this.listOfCarrierOrder = params => {
+          return new Promise((resolve, reject) => {
+            this.request({
+              url: this.baseUrl + '/customer/address/listOfCarrierOrder',
+              params
+            }).then(res => {
+              resolve(res.data.data || res.data || res)
+            })
+          })
+        }
+        return this
+    }
     
 
 }

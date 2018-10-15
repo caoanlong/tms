@@ -100,7 +100,6 @@
 import { Message } from 'element-ui'
 import Company from '../../../api/Company'
 import CargoUnit from '../../../api/CargoUnit'
-import CargoGeneralName from '../../../api/CargoGeneralName'
 import { checkTel } from '../../../common/validator'
 export default {
 	data() {
@@ -178,7 +177,7 @@ export default {
 				if (!valid) return
 				const data = Object.assign({}, this.cargo)
 				if (!data.customerID) data.customerID = 1
-				CargoGeneralName.add(data).then(res => {
+				Company.cargo().add(data).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'cargo'})
 				})

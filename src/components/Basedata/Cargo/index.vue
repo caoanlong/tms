@@ -11,12 +11,12 @@
                             v-model="find.shipperCompanyName"
                             :fetch-suggestions="getCompanys"
                             placeholder="请输入..."
-                            @select="handSelect">
+                            @select="handSelect" @change="inputChange">
 							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
                         </el-autocomplete>
 					</el-form-item>
 					<el-form-item label="货物名称">
-						<el-input placeholder="请输入..." v-model="find.cargoName"></el-input>
+						<el-input placeholder="请输入..." v-model="find.cargoName" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -82,7 +82,6 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Company from '../../../api/Company'
-import CargoGeneralName from '../../../api/CargoGeneralName'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
@@ -91,8 +90,8 @@ export default {
 	data() {
 		return {
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			importFileUrl: baseURL + '/cargoGeneralName/import',
-			exportExcelUrl: baseURL + '/cargoGeneralName/export?Authorization=' + localStorage.getItem("token"),
+			importFileUrl: baseURL + '/company/cargo/import',
+			exportExcelUrl: '',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=goodssource.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				shipperCompanyName: '',
@@ -118,6 +117,7 @@ export default {
 		this.pageIndex = pageIndex ? Number(pageIndex) : 1
 		this.pageSize = pageSize ? Number(pageSize) : 10
 		this.find = JSON.parse(sessionStorage.getItem('find')) || { shipperCompanyName: '', cargoName: '' }
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -125,7 +125,15 @@ export default {
 			Company.customer().suggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
-        },
+		},
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL + '/company/cargo/export?Authorization=' + localStorage.getItem("token")
+				+ '&shipperCompanyName=' + this.find.shipperCompanyName
+				+ '&cargoName=' + this.find.cargoName
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		},
         handSelect(data){
 			this.find.shipperCompanyName = data.companyName
 		},
@@ -140,6 +148,7 @@ export default {
 			this.find.cargoName = ''
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		pageChange(index) {
@@ -157,7 +166,7 @@ export default {
 			this.selectedList = data.map(item => item.cargoID)
 		},
 		getList() {
-			CargoGeneralName.find({
+			Company.cargo().find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				shipperCompanyName: this.find.shipperCompanyName,
@@ -181,7 +190,7 @@ export default {
 		},
 		del(cargoNameID) {
 			deleteConfirm(cargoNameID, cargoNameIDs => {
-				CargoGeneralName.del({ cargoNameIDs }).then(res => {
+				Company.cargo().delBatch({ cargoNameIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

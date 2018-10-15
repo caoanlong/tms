@@ -59,9 +59,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import Customer from '../../../api/Customer'
 import Company from '../../../api/Company'
-import CustomerAddress from '../../../api/CustomerAddress'
 import distData from '../../../assets/data/distpicker.data'
 import { areaIdToArrayId } from '../../../common/utils'
 import { checkTel } from '../../../common/validator'
@@ -152,7 +150,7 @@ export default {
 		},
 		getInfo() {
 			const customerAddressID = this.$route.query.customerAddressID
-			CustomerAddress.findById({ customerAddressID }).then(res => {
+			Company.customerAddress().findById({ customerAddressID }).then(res => {
 				this.companyAddress = res
 				this.handSelectedArea(areaIdToArrayId(res.areaID))
 			})
@@ -168,7 +166,7 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				CustomerAddress.update(this.companyAddress).then(res => {
+				Company.customerAddress().update(this.companyAddress).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'companyaddress'})
 				})

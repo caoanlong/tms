@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="委托方">
-						<el-input placeholder="名称" v-model="find.keyword"></el-input>
+						<el-input placeholder="名称" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -109,7 +109,7 @@ export default {
 		return {
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			importFileUrl: baseURL + '/company/customer/routePrice/import?Authorization=' + localStorage.getItem("token"),
-			exportExcelUrl:baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=routePrice.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				keyword: ''
@@ -120,6 +120,7 @@ export default {
 		}
 	},
 	created() {
+		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
@@ -159,7 +160,7 @@ export default {
 		},
 		resetExportExcelUrl(){
 			this.exportExcelUrl = baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token") 
-				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
+				+ '&keyword=' + this.find.keyword
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
