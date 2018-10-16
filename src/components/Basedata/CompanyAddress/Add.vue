@@ -62,7 +62,6 @@
 import { Message } from 'element-ui'
 import Customer from '../../../api/Customer'
 import Company from '../../../api/Company'
-import CustomerAddress from '../../../api/CustomerAddress'
 import distData from '../../../assets/data/distpicker.data'
 import { areaIdToArrayId } from '../../../common/utils'
 import { checkTel } from '../../../common/validator'
@@ -173,7 +172,7 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				Company.customer().add(this.companyAddress).then(res => {
+				Company.customerAddress().add(this.companyAddress).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'companyaddress'})
 				})

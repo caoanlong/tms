@@ -245,13 +245,13 @@ export default {
 			}).then(res => { cb && cb(res) })
 		},
 		getShipperAddress(queryString, cb) {
-			Customer.addressSuggest({
+			Company.customer().address({
 				customerID: this.line.shipperCustomerID,
 				keyword: queryString
 			}).then(res => { cb && cb(res) })
 		},
 		getConsigneeAddress(queryString, cb){
-			Customer.addressSuggest({
+			Company.customer().address({
 				customerID: this.line.consigneeCustomerID,
 				keyword: queryString
 			}).then(res => { cb && cb(res) })

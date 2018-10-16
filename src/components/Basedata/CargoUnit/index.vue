@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="关键字">
-						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
+						<el-input placeholder="请输入关键字" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -72,10 +72,9 @@ export default {
 		this.getList()
 	},
 	methods: {
-
 		resetExportExcelUrl(){
 			this.exportExcelUrl = baseURL + '/company/cargoUnit/export?Authorization=' + localStorage.getItem("token")
-				+ '&keyword=' + this.find.keyword
+				+ '&unit=' + this.find.keyword
 		},
 		inputChange() {
 			this.resetExportExcelUrl()

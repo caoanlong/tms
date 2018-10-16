@@ -324,8 +324,7 @@ export default {
 		},
 		tabClick(val){
 			this.isCur = val
-			this.resetSearch()
-			this.getList()
+			this.reset()
 		},
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })

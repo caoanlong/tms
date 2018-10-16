@@ -219,7 +219,7 @@ export default {
                         realName: item.realName,
                         supercargoType: item.supercargoType,
                         workStatus: item.workStatus,
-                        expiredCertificate: item.expiredCertificate
+                        expiredCertificate: item.expiredCertificate 
                     }
                 })
                 this.total = res.total

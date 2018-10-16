@@ -91,7 +91,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="addUnit">确 定</el-button>
+				<el-button type="primary" @click="save">确 定</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -99,7 +99,6 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Company from '../../../api/Company'
-import CargoUnit from '../../../api/CargoUnit'
 import { checkTel } from '../../../common/validator'
 export default {
 	data() {
@@ -199,17 +198,15 @@ export default {
 			this.cargo.shipperCompanyName = ''
 		},
 		getUnitList() {
-			CargoUnit.find({
+			Company.cargoUnit().find({
 				current: 1,
 				size: 1000
 			}).then(res => {
 				this.units = res.records
 			})
 		},
-		addUnit(){
-			CargoUnit.add({
-				unit: this.unit
-			}).then(res => {
+		save(){
+			Company.cargo().add(this.cargo).then(res => {
 				this.dialogFormVisible = false
 				this.unit = ''
 				this.getUnitList()

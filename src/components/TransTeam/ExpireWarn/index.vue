@@ -180,9 +180,9 @@ export default {
 	methods: {
 		resetExportExcelUrl() {
 			this.exportExcelUrl =baseURL + '/company/exportExpire?Authorization=' + localStorage.getItem("token")	
-			+ '&findrealName=' + this.findrealName 
-			+ '&findobjType=' + this.findobjType
-			+ '&findexpiredCertificate=' + this.findexpiredCertificate
+			+ '&realName=' + this.findrealName 
+			+ '&objType=' + this.findobjType
+			+ '&expiredCertificate=' + this.findexpiredCertificate
 		},
 		inputChange() {
 			this.resetExportExcelUrl()

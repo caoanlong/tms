@@ -125,10 +125,12 @@ export default {
         handSelect(data){
 			this.find.customerID = data.customerID
 			this.find.companyName = data.companyName
+			this.resetExportExcelUrl()
 		},
 		clearSelect(){
 			this.find.customerID = ''
 			this.find.companyName =''
+			this.resetExportExcelUrl()
 		},
 		reset() {
 			this.find.keyword = ''

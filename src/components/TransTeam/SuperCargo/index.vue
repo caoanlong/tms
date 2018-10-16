@@ -5,15 +5,13 @@
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
 					<el-form-item label="人员">
-						<el-input placeholder="姓名/手机号" v-model="find.keyword" @change="inputChange"></el-input>
+						<el-input placeholder="姓名/手机号" v-model="keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="运输岗位">
-						<el-form-item>
-							<el-checkbox-group v-model="supercargoType" @change="supercargoTypeChange">
-								<el-checkbox label="Driver">驾驶员</el-checkbox>
-								<el-checkbox label="Supercargo">押运员</el-checkbox>
-							</el-checkbox-group>
-						</el-form-item>
+						<el-checkbox-group v-model="supercargoType" @change="supercargoTypeChange">
+							<el-checkbox label="Driver">驾驶员</el-checkbox>
+							<el-checkbox label="Supercargo">押运员</el-checkbox>
+						</el-checkbox-group>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -99,10 +97,7 @@ export default {
 	data() {
 		return {
 			supercargoType: [],
-			find: {
-				keyword: '',
-				supercargoType: ''
-			},
+			keyword: '',
 			pageIndex: 1,
 			pageSize: 10,
 			count: 0,
@@ -151,8 +146,8 @@ export default {
 			this.getList()
 		},
 		reset() {
-			this.find.keyword = ''
-			this.find.supercargoType = ''
+			this.keyword = ''
+			this.supercargoType = []
 			this.supercargoType = []
 			this.pageIndex = 1
 			this.pageSize = 10
@@ -162,13 +157,10 @@ export default {
 		inputChange() {
 			this.resetExportExcelUrl()
 		},
-		supercargoTypeChange() {
-			this.resetExportExcelUrl()
-		},
 		resetExportExcelUrl(){
 			this.exportExcelUrl =  baseURL + '/company/transporter/export?Authorization=' + localStorage.getItem("token")	
-			+ '&keyword=' + this.find.keyword 
-			+ '&supercargoType=' + this.find.supercargoType
+			+ '&keyword=' + this.keyword 
+			+ '&supercargoType=' + this.supercargoType.join(',')
 		},
 		pageChange(index) {
 			this.pageIndex = index
@@ -183,19 +175,16 @@ export default {
 			this.selectedList = data.map(item => item.supercargoID)
 		},
 		supercargoTypeChange(data) {
-			if (data.length == 2) {
-				this.find.supercargoType = 'SupercargoDriver'
-			} else {
-				this.find.supercargoType = data.join('')
-			}
+			this.supercargoType = data
+			this.resetExportExcelUrl()
 		},
 		getList() {
 			this.tableData = []
 			Company.transporter().find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.find.keyword,
-				supercargoType: this.find.supercargoType
+				keyword: this.keyword,
+				supercargoType: this.supercargoType.join(',')
 			}).then(res => {
 				const list = res.records.map(item => {
 					return {

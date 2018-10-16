@@ -834,7 +834,7 @@ export default {
 					}
 					if (!!this.$route.query.copy) {
 						delete carrierbill.carrierOrderID
-						Carrierbill.add(carrierbill).then(res => {
+						CarryOrder.add(carrierbill).then(res => {
 							Message.success('成功！')
 							this.$router.push({name: 'carrierbill'})
 						})

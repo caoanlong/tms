@@ -43,7 +43,6 @@ export const DISPATCHORDERSTATUS1 = {
 export const DISPATCHORDERSTATUS2 = {
   Canceled: '已取消',
   Rejected: '已拒绝',
-  Closed: '已关闭',
   Overdue: '超时取消',
   Finished: '已完成'
 }

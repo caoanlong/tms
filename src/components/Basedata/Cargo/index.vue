@@ -136,6 +136,7 @@ export default {
 		},
         handSelect(data){
 			this.find.shipperCompanyName = data.companyName
+			this.resetExportExcelUrl()
 		},
 		clearSelect(){
 			this.find.shipperCompanyName =''
