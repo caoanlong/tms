@@ -19,14 +19,13 @@
 										:fetch-suggestions="getShipperCompany"
 										placeholder="请输入..." 
 										@select="handSelectShipperCompany">
-										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectShipper"></i>
+										<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectShipper"></i>
 									</el-autocomplete>
 								</el-form-item>
                                 <el-form-item label="发货地址" prop="shipperCustomerAddressID">
 									<input v-model="line.shipperCustomerAddressID" hidden="true"/>
 									<dropdown-select 
 										addressType="发货单位" 
-										:selected="selectedShipperAddress"
 										:isChangeCompany="isChangeShipper" 
 										@select="handSelectShipperAddress" 
 										:fetch-suggestions="getShipperAddress">
@@ -46,14 +45,13 @@
 										:fetch-suggestions="getConsigneeCompany"
 										placeholder="请输入内容"
 										@select="handSelectConsigneeCompany">
-										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectConsignee"></i>
+										<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectConsignee"></i>
 									</el-autocomplete>
 								</el-form-item>
                                 <el-form-item label="收货地址" prop="consigneeCustomerAddressID">
 									<input v-model="line.consigneeCustomerAddressID" hidden="true"/>
 									<dropdown-select 
 										addressType="收货单位" 
-										:selected="selectedConsigneeAddress"
 										:isChangeCompany="isChangeConsignee" 
 										@select="handSelectConsigneeAddress" 
 										:fetch-suggestions="getConsigneeAddress">
@@ -245,13 +243,13 @@ export default {
 			}).then(res => { cb && cb(res) })
 		},
 		getShipperAddress(queryString, cb) {
-			Company.customer().address({
+			Company.customerAddress().listOfCarrierOrder({
 				customerID: this.line.shipperCustomerID,
 				keyword: queryString
 			}).then(res => { cb && cb(res) })
 		},
 		getConsigneeAddress(queryString, cb){
-			Company.customer().address({
+			Company.customerAddress().listOfCarrierOrder({
 				customerID: this.line.consigneeCustomerID,
 				keyword: queryString
 			}).then(res => { cb && cb(res) })
@@ -260,7 +258,6 @@ export default {
 			this.isChangeShipper = !this.isChangeShipper
 			this.line.shipperName = ' '
 			this.line.shipperCustomerID = data.customerID
-			this.selectedShipperAddress = new Date()  // 触发组件watch
 			this.$nextTick(() => {
 				this.line.flagShipperName = this.line.shipperName = data.companyName
 				this.getShipperAddress('', false)
@@ -270,7 +267,6 @@ export default {
 			this.isChangeConsignee = !this.isChangeConsignee
 			this.line.consigneeName = ' '
 			this.line.consigneeCustomerID = data.customerID
-			this.selectedConsigneeAddress = new Date()  // 触发组件watch
 			this.$nextTick(() => {
 				this.line.flagConsigneeName = this.line.consigneeName = data.companyName
 				this.getConsigneeAddress('', false)

@@ -485,7 +485,7 @@ export default {
 	methods: {
 		getInfo() {
 			const carrierOrderID = this.$route.query.carrierOrderID
-			CarryOrder.findById({ carrierOrderID }).then(res => {
+			CarryOrder.findById({ carrierOrderID, isEdit: true }).then(res => {
 				const carrierbillInfo = res
 				if (res.porRequire.indexOf(',') > -1) {
 					carrierbillInfo.porRequire = res.porRequire.split(',')
@@ -680,6 +680,7 @@ export default {
 				if (item.cargoName == data.cargoName) {
 					item.cargoID = data.cargoID
 					item.cargoUnitName = data.cargoUnit
+					item.dispatchType = data.dispatchType
 				}
 			})
 		},

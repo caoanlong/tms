@@ -48,7 +48,6 @@ export default {
 			type: String,
 			default: ''
 		},
-		selected: Object,
 		isChangeCompany: Boolean,
 		fetchSuggestions: Function
 	},
@@ -68,12 +67,6 @@ export default {
 					this.selectItem(res[0])
 				}
 			})
-		},
-		selected: {
-			handler(data) {
-				this.selectedAddress = data || {}
-			},
-			deep: true
 		}
 	},
 	created() {
