@@ -74,7 +74,7 @@
                 </el-form-item>
             </el-row>
             <el-row>
-            <el-col :span="8">
+            <el-col :span="12">
                 <el-form-item label="接单截止时间" label-width="110px" prop="endDate" >
                     <el-date-picker 
                         format="yyyy-MM-dd"
@@ -88,7 +88,7 @@
                     </el-date-picker>
                 </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
                 <el-form-item label-width="20px">
                     <el-time-select
                         v-model="grabOrder.endTime"
