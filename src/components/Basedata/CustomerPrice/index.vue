@@ -14,20 +14,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-upload 
-					class="upload-File" 
-					name="excelFile" 
-					:action="importFileUrl" 
-					:auto-upload="true" 
-					:onError="uploadError" 
-					:onSuccess="uploadSuccess" 
-					:beforeUpload="beforeFileUpload" 
-					:headers="uploadHeaders" 
-					:show-file-list="false">
-					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
-				</el-upload>
 				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
-				<a :href="templateUrl" download="trucksource.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
 			<div class="table">
 				<el-table 
@@ -107,10 +94,7 @@ export default {
     components: { EditCustomerPrice, LinePrice },
 	data() {
 		return {
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			importFileUrl: baseURL + '/company/customer/routePrice/import?Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:'',
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=routePrice.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				keyword: ''
             },
@@ -164,15 +148,6 @@ export default {
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
-		},
-		// 导入成功
-		uploadSuccess (response) {
-			if(response.code != 200){
-				Message.error(response.msg)
-			} else{
-				Message.success(response.msg)
-				this.getList()
-			}
 		}
 	}
 }
