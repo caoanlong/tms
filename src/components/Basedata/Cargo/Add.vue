@@ -207,10 +207,8 @@ export default {
 		},
 		save(){
 			Company.cargo().add(this.cargo).then(res => {
-				this.dialogFormVisible = false
-				this.unit = ''
-				this.getUnitList()
 				Message.success('保存成功！')
+				this.$router.push({name: 'cargo'})
 			})
 		},
 		fold(){

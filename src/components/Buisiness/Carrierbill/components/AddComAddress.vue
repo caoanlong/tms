@@ -59,7 +59,6 @@
 <script>
 import { Message } from 'element-ui'
 import Company from '../../../../api/Company'
-import CustomerAddress from '../../../../api/CustomerAddress'
 import distData from '../../../../assets/data/distpicker.data'
 import { checkTel } from '../../../../common/validator'
 import DistPicker from '../../../CommonComponents/DistPicker'
@@ -172,7 +171,7 @@ export default {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				CustomerAddress.add(this.companyAddress).then(res => {
+				Company.customerAddress().add(this.companyAddress).then(res => {
                     Message.success('保存成功！')
                     this.close()
 				})

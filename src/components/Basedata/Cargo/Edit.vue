@@ -222,6 +222,7 @@ export default {
 		save(){
 			Company.cargo().update(this.cargo).then(res => {
 				Message.success('保存成功！')
+				this.$router.push({name: 'cargo'})
 			})
 		},
 		fold(){

@@ -39,8 +39,8 @@
 					:show-file-list="false">
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
-				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
-				<a :href="templateUrl" download="goodssource.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+				<a :href="exportExcelUrl" download="cargo.xlsx" class="exportExcel el-icon-download">导出</a>
+				<a :href="templateUrl" download="cargo.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
 			<div class="table">
 				<el-table 
@@ -92,7 +92,7 @@ export default {
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			importFileUrl: baseURL + '/company/cargo/import',
 			exportExcelUrl: '',
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=goodssource.xlsx&Authorization=' + localStorage.getItem("token"),
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=cargo.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				shipperCompanyName: '',
 				cargoName: ''
