@@ -27,6 +27,7 @@
 									<dropdown-select 
 										addressType="发货单位" 
 										:isChangeCompany="isChangeShipper" 
+										:isClearDropDown="isClearDropDown" 
 										@select="handSelectShipperAddress" 
 										:fetch-suggestions="getShipperAddress">
 									</dropdown-select>
@@ -53,6 +54,7 @@
 									<dropdown-select 
 										addressType="收货单位" 
 										:isChangeCompany="isChangeConsignee" 
+										:isClearDropDown="isClearDropDown" 
 										@select="handSelectConsigneeAddress" 
 										:fetch-suggestions="getConsigneeAddress">
 									</dropdown-select>
@@ -143,6 +145,8 @@ export default {
 				this.selectedShipperAddress = null
 				this.selectedConsigneeAddress = null
 				this.$refs['ruleForm'].resetFields()
+			} else {
+				this.isClearDropDown = !this.isClearDropDown
 			}
 		}
 	},
@@ -155,6 +159,7 @@ export default {
 			}
 		}
         return {
+			isClearDropDown: false,
 			isChangeShipper: false,
 			isChangeConsignee: false,
 			flagShipperName: '',
