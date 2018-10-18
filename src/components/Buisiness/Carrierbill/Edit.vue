@@ -88,7 +88,7 @@
 											placeholder="选择发货日期" 
 											v-model="carrierbillInfo.shipperDate" 
 											value-format="timestamp"
-											@change = "handSelectDate"
+											@change = "handSelectShipperDate"
 											:picker-options="{ 
 												disabledDate: (curDate) => {
 													if (carrierbillInfo.consigneeDate) {
@@ -159,7 +159,7 @@
 											v-model="carrierbillInfo.consigneeDate" 
 											value-format="timestamp"
 											style="width:100%"
-											@change = "handSelectDate"
+											@change = "handSelectConsigneeDate"
 											:picker-options="{ 
 												disabledDate: (curDate) => {
 													if (carrierbillInfo.shipperDate) {
@@ -534,28 +534,20 @@ export default {
 		changeFreight(val){
 			this.freight = val
 		},
-		handSelectDate (){
+		handSelectShipperDate(){
 			this.$refs['ruleForm'].validateField('shipperDate')
-			this.$refs['ruleForm'].validateField('consigneeDate')
-			let now = new Date()
-			let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
-			let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
-			if(new Date(this.carrierbillInfo.shipperDate).getDate() == now.getDate()){
-				if(minute > 30){
-					this.minDateTime =  hour +1 +":"+"00"
-				}else{
-					this.minDateTime =  hour +":"+"00"
-				}
-			}else{
-				this.minDateTime = ''
-			}
+			this.getMinDateTime()
 			this.shipperDateTime=''
-			this.consigneeDateTime=''
 		},
 		handSelectShipperTime(val){
 			if(!val){
 				this.carrierbillInfo.shipperTime=''
 			}
+		},
+		handSelectConsigneeDate(){
+			this.$refs['ruleForm'].validateField('consigneeDate')
+			this.getMinDateTime()
+			this.consigneeDateTime=''
 		},
 		handSelectConsigneeTime(val){
 			if(!val){
