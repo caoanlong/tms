@@ -86,9 +86,6 @@ export default {
 			this.isExpand = false
 		})
 	},
-	mounted() {
-		console.log('ggggggggggggg')
-	},
 	methods: {
 		suggestions(queryString) {
 			this.fetchSuggestions(queryString, (res) => {
