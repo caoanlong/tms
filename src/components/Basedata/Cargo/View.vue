@@ -33,7 +33,13 @@
 							<p v-else-if="cargo.dispatchType == 'Weight'">重量</p>
 						</el-form-item>
 						<el-form-item label="防护要求">
-							<p v-if="cargo.moistureProof=='Y' && cargo.waterProof=='Y' && cargo.quakeProof=='Y' && cargo.dropProof=='Y' && cargo.antimagnetic=='Y' && cargo.antiStatic=='Y' && cargo.radiationProof=='Y'">
+							<p v-if="cargo.moistureProof=='Y' 
+								|| cargo.waterProof=='Y' 
+								|| cargo.quakeProof=='Y' 
+								|| cargo.dropProof=='Y' 
+								|| cargo.antimagnetic=='Y' 
+								|| cargo.antiStatic=='Y' 
+								|| cargo.radiationProof=='Y'">
 								<span v-if="cargo.moistureProof=='Y'">防潮</span>
 								<span v-if="cargo.waterProof=='Y'">防水</span>
 								<span v-if="cargo.quakeProof=='Y'">防震</span>
