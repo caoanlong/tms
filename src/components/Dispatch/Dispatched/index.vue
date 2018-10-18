@@ -335,8 +335,8 @@ export default {
 		},
 		tabClick(val){
 			this.isCur = val
-			sessionStorage.setItem('isCur', String(this.isCur))
 			this.reset()
+			sessionStorage.setItem('isCur', this.isCur)
 		},
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })

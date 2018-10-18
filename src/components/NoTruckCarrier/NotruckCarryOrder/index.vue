@@ -87,11 +87,20 @@ export default {
 		}
 	},
 	created() {
+		this.find = JSON.parse(sessionStorage.getItem('notruckCarrierOrderFind')) || {}
 		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
+			sessionStorage.setItem('notruckCarrierOrderFind', JSON.stringify(this.find))
+			this.resetExportExcelUrl()
+			this.getList()
+		},
 		reset() {
+			sessionStorage.removeItem('notruckCarrierOrderFind')
 			this.find.shippingNoteNumber = ''
 			this.find.carrier = ''
 			this.pageIndex = this.PAGEINDEX

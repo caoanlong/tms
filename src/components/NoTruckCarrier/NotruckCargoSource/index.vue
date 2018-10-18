@@ -86,11 +86,20 @@ export default {
 		}
 	},
 	created() {
+		this.find = JSON.parse(sessionStorage.getItem('notruckCargoSourceFind')) || {}
 		this.resetExportExcelUrl()
 		this.getList()
 	},
 	methods: {
+		search() {
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
+			sessionStorage.setItem('notruckCargoSourceFind', JSON.stringify(this.find))
+			this.resetExportExcelUrl()
+			this.getList()
+		},
 		reset() {
+			sessionStorage.removeItem('notruckCargoSourceFind')
 			this.find.messageReferenceNumber = ''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
