@@ -48,7 +48,9 @@ export default {
 			type: String,
 			default: ''
 		},
+		selected: Object,
 		isChangeCompany: Boolean,
+		isClearDropDown: Boolean,
 		fetchSuggestions: Function
 	},
 	data() {
@@ -67,6 +69,15 @@ export default {
 					this.selectItem(res[0])
 				}
 			})
+		},
+		isClearDropDown() {
+			this.selectedAddress = {}
+		},
+		selected: {
+			handler(data) {
+				this.selectedAddress = data || {}
+			},
+			deep: true
 		}
 	},
 	created() {
@@ -74,6 +85,9 @@ export default {
 		document.body.addEventListener('click', () => {
 			this.isExpand = false
 		})
+	},
+	mounted() {
+		console.log('ggggggggggggg')
 	},
 	methods: {
 		suggestions(queryString) {

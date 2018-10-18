@@ -91,7 +91,7 @@
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="save">确 定</el-button>
+				<el-button type="primary" @click="saveCargo">确 定</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -208,7 +208,7 @@ export default {
 				this.units = res.records
 			})
 		},
-		save() {
+		saveCargo() {
 			this.$refs['ruleForm1'].validate(valid => {
 				if (!valid) return
 				Company.cargoUnit().add({

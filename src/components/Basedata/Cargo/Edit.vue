@@ -84,14 +84,14 @@
 			</el-row>
 		</el-card>
 		<el-dialog title="添加货物单位" :visible.sync="dialogFormVisible">
-			<el-form>
+			<el-form :model="unit" :rules="rules1" ref="ruleForm1">
 				<el-form-item label="单位名称" label-width="80px">
-					<el-input placeholder="请输入货物单位" auto-complete="off" v-model="unit"></el-input>
+					<el-input placeholder="请输入货物单位" v-model="unit.unit"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="dialogFormVisible = false">取 消</el-button>
-				<el-button type="primary" @click="save">确 定</el-button>
+				<el-button type="primary" @click="saveCargo">确 定</el-button>
 			</div>
 		</el-dialog>
 	</div>
@@ -104,7 +104,7 @@ export default {
 	data() {
 		return {
 			dialogFormVisible: false,
-			unit: '',
+			unit: { unit: ''},
 			units: [],
 			requires: [],
 			checkAll: false,
@@ -139,6 +139,9 @@ export default {
 				productName: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cnCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				unCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
+			},
+			rules1: {
+				unit: [{required: true, message: '请输入货物单位'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
 			}
 		}
 	},
@@ -219,10 +222,17 @@ export default {
 				this.getInfo()
 			})
 		},
-		save(){
-			Company.cargo().update(this.cargo).then(res => {
-				Message.success('保存成功！')
-				this.$router.push({name: 'cargo'})
+		saveCargo(){
+			this.$refs['ruleForm1'].validate(valid => {
+				if (!valid) return
+				Company.cargoUnit().add({
+					unit: this.unit.unit
+				}).then(res => {
+					this.dialogFormVisible = false
+					this.unit.unit = ''
+					this.getUnitList()
+					Message.success('保存成功！')
+				})
 			})
 		},
 		fold(){
