@@ -231,7 +231,7 @@ export default {
 	components: { TrailMap, UploadPhoto, Scramble },
 	data(){
 		return{
-			isCur:0,
+			isCur: 0,
 			find:{
 				keyword:'',
 				shipperConsignee:'',
@@ -280,6 +280,8 @@ export default {
 		}
 	},
 	created() {
+		this.find = JSON.parse(sessionStorage.getItem('dispatchedFind')) || {}
+		this.find = JSON.parse(sessionStorage.getItem('isCur')) || 0
 		this.resetExportExcelUrl()
 		this.getList()
 	},
@@ -287,18 +289,27 @@ export default {
 		this.timer = null
 	},
 	methods:{
+		search() {
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
+			sessionStorage.setItem('dispatchedFind', JSON.stringify(this.find))
+			this.resetExportExcelUrl()
+			this.getList()
+		},
 		resetSearch(){
-			this.find.keyword=''
-			this.find.shipperConsignee=''
-			this.find.status=''
-			this.find.type=''
-			this.find.dispatchBeginTime=''
-			this.find.dispatchEndTime=''
+			this.find.keyword = ''
+			this.find.shipperConsignee = ''
+			this.find.status = ''
+			this.find.type = ''
+			this.find.dispatchBeginTime = ''
+			this.find.dispatchEndTime = ''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			
 		},
 		reset(val) {
+			sessionStorage.removeItem('dispatchedFind')
+			sessionStorage.removeItem('isCur')
 			this.resetSearch()
 			this.resetExportExcelUrl()
 			this.getList()
@@ -324,6 +335,7 @@ export default {
 		},
 		tabClick(val){
 			this.isCur = val
+			sessionStorage.setItem('isCur', String(this.isCur))
 			this.reset()
 		},
 		view(dispatchOrderID) {
@@ -341,7 +353,7 @@ export default {
 		},
 		getList(){
 			this.dispatchBillList = []
-			if(this.isCur==0){
+			if(this.isCur == 0){
 				this.getDispatchedList()
 			}else{
 				this.getHistoryList()

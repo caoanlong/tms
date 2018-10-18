@@ -546,12 +546,20 @@ export default {
 	},
 	components: { DistPicker, PublishDispatch, GrabOrder },
 	created() {
+		this.find = JSON.parse(sessionStorage.getItem('dispatchFind')) || {}
 		const dispatchOrderID = this.$route.query.dispatchOrderID
 		this.getList()
 		dispatchOrderID && this.getSelectedList()
 	},
 	methods:{
+		search() {
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
+			sessionStorage.setItem('dispatchFind', JSON.stringify(this.find))
+			this.getList()
+		},
 		reset() {
+			sessionStorage.removeItem('dispatchFind')
 			this.find.keyword = ''
 			this.find.shipperAreaID = ''
 			this.find.consigneeAreaID = ''
