@@ -122,6 +122,7 @@ export default {
 	},
 	methods: {
 		getCompanys(queryString, cb) {
+			this.resetExportExcelUrl()
 			Company.customer().suggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
