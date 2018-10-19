@@ -86,7 +86,7 @@ export default {
 		}
 	},
 	created() {
-		this.find = JSON.parse(sessionStorage.getItem('notruckCargoSourceFind')) || {}
+		this.find = JSON.parse(sessionStorage.getItem('notruckCargoSourceFind')) || this.find
 		this.resetExportExcelUrl()
 		this.getList()
 	},

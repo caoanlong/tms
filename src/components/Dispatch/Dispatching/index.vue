@@ -546,7 +546,7 @@ export default {
 	},
 	components: { DistPicker, PublishDispatch, GrabOrder },
 	created() {
-		this.find = JSON.parse(sessionStorage.getItem('dispatchFind')) || {}
+		this.find = JSON.parse(sessionStorage.getItem('dispatchFind')) || this.find
 		const dispatchOrderID = this.$route.query.dispatchOrderID
 		this.getList()
 		dispatchOrderID && this.getSelectedList()

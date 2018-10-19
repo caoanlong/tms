@@ -117,7 +117,7 @@ export default {
 		}
 	},
 	created() {
-		this.find = JSON.parse(sessionStorage.getItem('carrierFind')) || {}
+		this.find = JSON.parse(sessionStorage.getItem('carrierFind')) || this.find
 		this.resetExportExcelUrl()
 		this.getList()
 	},

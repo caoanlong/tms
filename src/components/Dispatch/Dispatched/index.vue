@@ -280,7 +280,7 @@ export default {
 		}
 	},
 	created() {
-		this.find = JSON.parse(sessionStorage.getItem('dispatchedFind')) || {}
+		this.find = JSON.parse(sessionStorage.getItem('dispatchedFind')) || this.find
 		this.isCur = JSON.parse(sessionStorage.getItem('isCur')) || 0
 		this.resetExportExcelUrl()
 		this.getList()
