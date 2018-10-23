@@ -397,11 +397,24 @@ export default {
 .dispatchbillDetail
 	.truckInfo
 		padding-bottom 10px
+		p
+			padding-left 45px
+			position relative
+			line-height 40px
+			&:before
+				content ""
+				width 6px
+				height 6px
+				background #ccc
+				display block
+				position absolute
+				left 30px
+				top 17px
 		label
-			width 130px
-			text-align right
+			text-align left
 			display inline-block
 			margin-right 10px
+			color #666
 	.lineInfo
 		height 60px
 		padding 20px
@@ -448,9 +461,9 @@ export default {
 				display block
 				position absolute
 				left -10px
-				top 12px
+				top 17px
 			p
-				line-height 20px
+				line-height 30px
 				color #999
 .num-label
 	margin-right 10px
