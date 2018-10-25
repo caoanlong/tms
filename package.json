@@ -1,7 +1,7 @@
 {
-	"name": "tms",
+	"name": "hx-tms",
 	"version": "3.3.0",
-	"description": "A Vue.js project about TMS system",
+	"description": "A Vue.js project about HX-TMS system",
 	"author": "Caoanlong <caoanlong@gmail.com>",
 	"private": true,
 	"scripts": {
