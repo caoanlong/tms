@@ -117,7 +117,6 @@ export default {
 		}
 	},
 	created() {
-		this.find = JSON.parse(sessionStorage.getItem('carrierFind')) || this.find
 		this.resetExportExcelUrl()
 		this.getList()
 	},
@@ -128,12 +127,10 @@ export default {
 		search() {
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
-			sessionStorage.setItem('carrierFind', JSON.stringify(this.find))
 			this.resetExportExcelUrl()
 			this.getList()
 		},
 		reset() {
-			sessionStorage.removeItem('carrierFind')
 			this.find.keyword = ''
 			this.find.status = ''
 			this.find.begin = ''

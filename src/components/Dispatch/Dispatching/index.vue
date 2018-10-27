@@ -361,7 +361,7 @@
 												}
 											}
 										}]">
-											<el-input size="mini" v-model="item.cargoWeightNew"></el-input>
+											<el-input size="mini" v-model="item.cargoWeightNew" :disabled="item.dispatchType != 'Weight'"></el-input>
 										</el-form-item>
 									</el-form>
 								</td>
@@ -385,7 +385,7 @@
 												}
 											}
 										}]">
-											<el-input size="mini" v-model="item.cargoVolumeNew"></el-input>
+											<el-input size="mini" v-model="item.cargoVolumeNew" :disabled="item.dispatchType != 'Volumn'"></el-input>
 										</el-form-item>
 									</el-form>
 								</td>
@@ -401,6 +401,10 @@
 					<span class="num-label"><span>数</span>{{totalNum}}</span>
 					<span class="num-label"><span>重</span>{{totalWeight}}</span>
 					<span class="num-label"><span>体</span>{{totalVolume}}</span>
+				</div>
+				<div class="num-info">
+					<span class="num-tit">运费上限</span>
+					<span class="num-label">￥{{freightUpLimit}}元</span>
 				</div>
 			</el-card>
 			<el-card class="table-container" style="margin-top:20px">
@@ -467,6 +471,7 @@
 			:totalDistance="totalDistance" 
 			:transLines="transLines" 
 			:dispatchTaskCargoList="selectedList" 
+			:freightUpLimit="freightUpLimit" 
 			:isVisible="dispatchDialog" 
 			@cancel="handClosePublish">
 		</publish-dispatch>
@@ -477,6 +482,7 @@
 			:totalDistance="totalDistance" 
 			:transLines="transLines" 
 			:dispatchTaskCargoList="selectedList" 
+			:freightUpLimit="freightUpLimit" 
 			:isVisible="grabDialog" 
 			@cancel="handCloseGrab">
 		</grab-order>
@@ -542,11 +548,29 @@ export default {
 				return prev + curr
 			}, 0).toFixed(2)
 			return Number(val)
+		},
+		freightUpLimit() {
+			let freight = 0
+			this.selectedList.forEach(item => {
+				if (item.dispatchType == 'Weight') {
+					if (item.payableWeightUnitPrice) {
+						freight += item.payableWeightUnitPrice * Number(item.payableDistance)/1000 * item.cargoWeightNew
+					} else {
+						freight += item.freight / item.cargoWeight * item.cargoWeightNew
+					}
+				} else {
+					if (item.payableVolumnUnitPrice) {
+						freight += item.payableVolumnUnitPrice * Number(item.payableDistance)/1000 * item.cargoVolumeNew
+					} else {
+						freight += item.freight / item.cargoVolume * item.cargoVolumeNew
+					}
+				}
+			})
+			return freight.toFixed(2)
 		}
 	},
 	components: { DistPicker, PublishDispatch, GrabOrder },
 	created() {
-		this.find = JSON.parse(sessionStorage.getItem('dispatchFind')) || this.find
 		const dispatchOrderID = this.$route.query.dispatchOrderID
 		this.getList()
 		dispatchOrderID && this.getSelectedList()
@@ -555,11 +579,9 @@ export default {
 		search() {
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
-			sessionStorage.setItem('dispatchFind', JSON.stringify(this.find))
 			this.getList()
 		},
 		reset() {
-			sessionStorage.removeItem('dispatchFind')
 			this.find.keyword = ''
 			this.find.shipperAreaID = ''
 			this.find.consigneeAreaID = ''
@@ -593,10 +615,16 @@ export default {
 			if (index > -1) {
 				this.selectedList.splice(index, 1)
 			} else {
+				// 如果添加（已选列表中不存在），根据配载类型，置灰另一类型，并置0
 				const oItem = Object.assign({}, item)
 				oItem.cargoNumNew = item.remainingCargoNum
-				oItem.cargoWeightNew = item.remainingCargoWeight
-				oItem.cargoVolumeNew = item.remainingCargoVolume
+				if (item.dispatchType == 'Weight') {
+					oItem.cargoWeightNew = item.remainingCargoWeight
+					oItem.cargoVolumeNew = 0
+				} else if (item.dispatchType == 'Volumn') {
+					oItem.cargoWeightNew = 0
+					oItem.cargoVolumeNew = item.remainingCargoVolume
+				}
 				this.selectedList.push(oItem)
 			}
 			this.selectedListNoRepeat = arrayUnique(this.selectedList, 'carrierOrderID')

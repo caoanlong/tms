@@ -57,6 +57,10 @@
                     </el-radio-group>
                 </el-form-item>
             </el-row>
+            <div class="transFeeTips">
+                <svg-icon icon-class="info" class="infoIcon"></svg-icon>
+                <p>支付运费上限金额：{{freightUpLimit}}元</p>
+            </div>
             <el-row>
                 <el-form-item label="一口价金额" v-if="grabOrder.type == 'Grab'" prop="freight">
                     <el-input style="width:250px" placeholder="请输入..." v-model="grabOrder.freight"><template slot="append">元</template></el-input>
@@ -137,6 +141,10 @@ export default {
         },
         transLines: Array,
         dispatchTaskCargoList: Array,
+        freightUpLimit: {
+            type: Number | String,
+            default: 0
+        },
         isVisible: {
             type: Boolean,
             default: false
@@ -156,10 +164,25 @@ export default {
             endDateTime:'',
             rules: {
                 requiredTruckType:[{required: true , message: '请选择车型'}],
-                requiredTruckLength: [{required: true , message: '请输入车长'},{ validator: checkFloat2 }],
+                requiredTruckLength: [
+                    { required: true , message: '请输入车长' },
+                    { validator: checkFloat2 }
+                ],
                 type: [{ required: true , message: '请选择报价类型' }],
-                freight: [{ required: true , message: '请输入一口价' },{ validator: checkInt }],
-                payMode: [{ required: true , message: '请选择运费支付方式' }],
+                freight: [
+                    { required: true , message: '请输入一口价' },
+                    { validator: checkInt },
+                    { 
+                        validator: (rule, value, callback) => {
+                            if (+value > +this.freightUpLimit) {
+                                callback('一口价不能大于运费上限！')
+                            } else {
+                                callback()
+                            }
+                        } 
+                    }
+                ],
+                payMode: [{ required: true , message: '请选择运费支付方式' }]
             }
         }
     },
@@ -267,4 +290,17 @@ export default {
             font-weight 800
             margin-right 4px
             background-color #409EFF
+.transFeeTips
+	line-height 20px
+	font-size 12px
+	color #a2a2a2
+	padding-left 20px
+	position relative
+	margin-bottom 10px
+	p
+		line-height 20px
+	.infoIcon
+		position absolute
+		left 0
+		top 5px
 </style>
