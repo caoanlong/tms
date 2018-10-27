@@ -38,7 +38,7 @@
 				<el-row>
 					<el-col :span="8">
 
-						<el-form-item label="委托方" prop="consignorID">
+						<el-form-item label="委托方" prop="consignorName">
 							<el-autocomplete
 								value-key="companyName" style="width:100%"
 								v-model="carrierbillInfo.consignorName"
@@ -173,7 +173,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="10">
-									<el-form-item label-width="20px" prop="consigneeTime">
+									<el-form-item label-width="20px" prop="consigneeDateTime">
 										<el-time-select
 											v-model="consigneeDateTime"
 											:disabled = carrierbillInfo.consigneeDate?false:true
@@ -207,10 +207,7 @@
 									<tr>
 										<th><span>*</span>货名</th>
 										<th>配载方式</th>
-										<th>重量</th>
-										<th>体积</th>
-										<th>数量</th>
-										<th>单位</th>
+										<th>货量</th>
 										<th>操作</th>
 									</tr>
 									<tbody>
@@ -219,16 +216,19 @@
 												<el-form-item 
 													label-width="0" 
 													:prop="'carrierCargo.' + index + '.cargoID'" 
-													:rules="[{ required: true, message: '请输入货名'}]">
+													:rules="[{ required: true, message: '请选择货物'}]">
 													<el-autocomplete 
 														style="width:100%" 
 														popper-class="auto-complete-list"
 														value-key="cargoName" 
 														v-model="item.cargoName" 
 														:fetch-suggestions="getCargos"
-														placeholder="请输入..." 
+														placeholder="请选择货物" 
 														@select="handSelectCargo" 
 														@input="inputSelectCargo(index)">
+                            <template slot-scope="{ item }">
+															<span class="dispatchType">（{{item.dispatchType=='Weight'?'按重量配载':'按体积配载' }}）</span>{{ item.cargoName }}
+														</template>
 														<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect(index)"></i>
 													</el-autocomplete>
 												</el-form-item>
@@ -238,12 +238,12 @@
 													<el-input placeholder="配载方式" style="width:100%" :value="DISPATCHTYPE[item.dispatchType]" disabled></el-input>
 												</el-form-item>
 											</td>
-											<td style="border-spacing:0">
+											<td style="border-spacing:0" v-if="item.dispatchType=='Weight'">
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoWeight'" :rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
 																callback('请输入重量')
-															}else{
+															} else {
 																if (item.dispatchType=='Quantity' 
 																&& (!item.cargoWeight || item.cargoWeight == '0') 
 																&& (!item.cargoVolume|| item.cargoVolume == '0')) {
@@ -259,12 +259,12 @@
 													</el-input>
 												</el-form-item>
 											</td>
-											<td style="border-spacing:0">
+											<td style="border-spacing:0" v-if="item.dispatchType=='Quantity'">
 												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Volumn'&&(!item.cargoVolume|| item.cargoVolume == '0')) {
+															if (item.dispatchType=='Volumn' &&(!item.cargoVolume|| item.cargoVolume == '0')) {
 																callback('请输入体积')
-															}else {
+															} else {
 																if (item.dispatchType=='Quantity' 
 																&& (!item.cargoWeight || item.cargoWeight == '0') 
 																&& (!item.cargoVolume|| item.cargoVolume == '0')) {
@@ -280,27 +280,7 @@
 													</el-input>
 												</el-form-item>
 											</td>
-											<td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'" :rules="[{
-														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Quantity'&&(!item.cargoNum || item.cargoNum == '0')) {
-																callback('请输入数量')
-															}else{
-																callback()
-															}
-														}
-													}]">
-													<el-input-number v-model="item.cargoNum" :min="0"></el-input-number>
-												</el-form-item>
-											</td>
-											<td><el-form-item label-width="0"><el-select v-model="item.cargoUnitName" placeholder="请选择" disabled>
-												<el-option 
-													v-for="(unit, index) in units" 
-													:key="index" 
-													:label="unit.unit" 
-													:value="unit.unit">
-												</el-option>
-											</el-select></el-form-item></td>
+											<td style="border-spacing:0" v-if="item.dispatchType==''"></td>
 											<td>
 												<el-form-item label-width="0">
 													<el-button type="text" icon="el-icon-plus" @click="addItem" v-if="index == 0">添加</el-button>
@@ -312,11 +292,12 @@
 									<tfoot>
 										<tr>
 											<td colspan="2" align="right">合计：</td>
-											<td align="center">{{sum('cargoWeight')}}吨</td>
-											<td align="center">{{sum('cargoVolume')}}方</td>
-											<td align="center">{{ parseInt(sum('cargoNum'))}}</td>
-											<td></td>
-											<td></td>
+											<td align="center" v-if="carrierbillInfo.carrierCargo[0].dispatchType=='Weight'">{{sum('cargoWeight')}}吨</td>
+											<td align="center" v-else-if="carrierbillInfo.carrierCargo[0].dispatchType=='Volumn'">
+												{{sum('cargoVolume')}}方
+											</td>
+											<td align="center" v-else></td>
+											<td align="center"></td>
 										</tr>
 									</tfoot>
 								</table>
@@ -480,7 +461,6 @@ export default {
 	},
 	created() {
 		this.getInfo()
-		this.getUnits()
 	},
 	methods: {
 		getInfo() {
@@ -592,14 +572,6 @@ export default {
 			}
 			return sum.toFixed(2)
 		},
-		getUnits() {
-			Company.cargoUnit().find({
-				current: 1,
-				size: 1000
-			}).then(res => {
-				this.units = res.records
-			})
-		},
 		getCargos(queryString, cb) {
 			Company.cargo().find({
 				current: 1,
@@ -619,6 +591,7 @@ export default {
 		},
 		clearSelect(index){
 			this.carrierbillInfo.carrierCargo[index].cargoName = ''
+			this.carrierbillInfo.carrierCargo[index].cargoID = ''
 		},
 		getConsignorCompany(queryString, cb) {
 			if (queryString != this.carrierbillInfo.flagConsignorName) {
@@ -803,6 +776,7 @@ export default {
 					resolve()
 				})
 			}).then(() => {
+        console.log(2)
 				this.$refs['cargoRuleForm'].validate(valid => {
 					if (!valid) return
 					const carrierbill = Object.assign({}, this.carrierbillInfo)
@@ -995,4 +969,9 @@ export default {
 
 .section-block
 	margin 10px 0
+.dispatchType
+	font-size 12px
+	color #bbb
+	margin-right 5px
+
 </style>
