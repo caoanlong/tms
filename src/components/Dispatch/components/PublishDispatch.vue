@@ -115,8 +115,8 @@
                     <p class="feeTit">基础运费
                         <span style="font-size:12px;color:#ccc;font-weight:400">（如已配置委托方给司机的运价，系统会默认算金额）</span>
                     </p>
-                    <el-tooltip content="点击关闭 tooltip 功能" placement="top" effect="light">
-                        <div slot="content">
+                    <!-- <el-tooltip content="点击关闭 tooltip 功能" placement="top" effect="light"> -->
+                        <!-- <div slot="content">
                             <table class="dialog-table">
                                 <tr>
                                     <th>委托方</th>
@@ -135,14 +135,12 @@
                                     <td>{{item.payableVolumnUnitPrice || 0}}元</td>
                                 </tr>
                             </table>
-                        </div>
+                        </div> -->
                         <div class="transFeeTips">
                             <svg-icon icon-class="info" class="infoIcon"></svg-icon>
-                            <p>
-                                根据委托方已配置的运费单价计算基础运费
-                            </p>
+                            <p>支付运费上限金额：{{freightUpLimit}}元</p>
                         </div>
-                    </el-tooltip>
+                    <!-- </el-tooltip> -->
                     <el-form 
                         ref="baseDizDispatchFeeRuleForm" 
                         :model="baseDizDispatchFee" 
@@ -334,6 +332,10 @@ export default {
         },
         transLines: Array,
         dispatchTaskCargoList: Array,
+        freightUpLimit: {
+            type: Number | String,
+            default: 0
+        },
         isVisible: {
             type: Boolean,
             default: false
@@ -362,15 +364,25 @@ export default {
             },
             persons: [],
             baseDizDispatchFeeRule: {
-                amount: [{required: true, message: '请输入基础运费'}],
-                payMode: [{required: true, message: '请选择支付方式'}],
+                amount: [
+                    { required: true, message: '请输入基础运费' },
+                    { 
+                        validator: (rule, value, callback) => {
+                            if (+value > +this.freightUpLimit) {
+                                callback('基础运费不能大于运费上限！')
+                            } else {
+                                callback()
+                            }
+                        } 
+                    }
+                ],
+                payMode: [{ required: true, message: '请选择支付方式' }],
             },
         }
     },
     watch: {
         dispatchTaskCargoList: {
             handler(list) {
-                console.log(list)
                 // this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
                 for (let i = 0; i < list.length; i++) {
                     const start = [list[i].shipperLocationLng, list[i].shipperLocationLat]

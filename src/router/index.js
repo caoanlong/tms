@@ -8,7 +8,8 @@ import Login from '@/components/Login'
 
 Vue.use(Router)
 
-const routerMap = [{
+const routerMap = [
+    {
         path: '/login',
         name: 'login',
         component: Login
@@ -16,457 +17,353 @@ const routerMap = [{
     {
         path: '',
         component: Layout,
-        children: [{
+        children: [
+            {
                 path: '/icons',
                 name: 'icons',
                 meta: { title: '图标' },
-                component: () =>
-                    import ('../components/IconsPreview')
+                component: () => import ('../components/IconsPreview')
             },{
                 path: '/',
                 name: 'home',
                 meta: { title: '首页' },
-                component: () =>
-                    import ('../components/Home')
+                component: () => import ('../components/Home')
+            },
+            /**
+             * 业务  buisiness
+             */
+            {
+                path: '/carrierbill',
+                name: 'carrierbill',
+                meta: { title: '承运单' },
+                component: () => import ('../components/Buisiness/Carrierbill'),
             },
             {
-                path: '/buisiness',
-                name: 'buisiness',
-                meta: { title: '业务' },
-                component: () =>
-                    import ('../components/Buisiness'),
-                redirect: '/carrierbill',
-                children: [{
-                        path: '/carrierbill',
-                        name: 'carrierbill',
-                        meta: { title: '承运单' },
-                        component: () =>
-                            import ('../components/Buisiness/Carrierbill'),
-                    },
-                    {
-                        path: '/addcarrierbill',
-                        name: 'addcarrierbill',
-                        meta: { title: '添加承运单' },
-                        component: () =>
-                            import ('../components/Buisiness/Carrierbill/Add'),
-                    },
-                    {
-                        path: '/viewcarrierbill',
-                        name: 'viewcarrierbill',
-                        meta: { title: '承运单详情' },
-                        component: () =>
-                            import ('../components/Buisiness/Carrierbill/View')
-                    },
-                    {
-                        path: '/editcarrierbill',
-                        name: 'editcarrierbill',
-                        meta: { title: '编辑承运单' },
-                        component: () =>
-                            import ('../components/Buisiness/Carrierbill/Edit')
-                    }
-                ]
+                path: '/addcarrierbill',
+                name: 'addcarrierbill',
+                meta: { title: '添加承运单' },
+                component: () => import ('../components/Buisiness/Carrierbill/Add'),
             },
             {
-                path: '/dispatch',
-                name: 'dispatch',
-                meta: { title: '调度' },
-                component: () =>
-                    import ('../components/Dispatch'),
-                redirect: '/dispatchbill',
-                children: [{
-                        path: '/dispatching',
-                        name: 'dispatching',
-                        meta: { title: '待调度' },
-                        component: () =>
-                            import ('../components/Dispatch/Dispatching'),
-                    },
-                    {
-                        path: '/dispatched',
-                        name: 'dispatched',
-                        meta: { title: '已调度' },
-                        component: () =>
-                            import ('../components/Dispatch/Dispatched'),
-                    },
-                    {
-                        path: '/redispatching',
-                        name: 'redispatching',
-                        meta: { title: '重新调度' },
-                        component: () =>
-                            import ('../components/Dispatch/Dispatching'),
-                    },
-                    {
-                        path: '/viewdispatchbill',
-                        name: 'viewdispatchbill',
-                        meta: { title: '调度单详情' },
-                        component: () =>
-                            import ('../components/Dispatch/Dispatched/View')
-                    }
-                ]
+                path: '/viewcarrierbill',
+                name: 'viewcarrierbill',
+                meta: { title: '承运单详情' },
+                component: () => import ('../components/Buisiness/Carrierbill/View')
             },
             {
-                path: '/notruckcarrier',
-                name: 'notruckcarrier',
-                meta: { title: '无车承运人' },
-                component: () =>
-                    import ('../components/NoTruckCarrier'),
-                redirect: '/notruckcargosource',
-                children: [{
-                        path: '/notruckcargosource',
-                        name: 'notruckcargosource',
-                        meta: { title: '货源上传' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckCargoSource')
-                    },
-                    {
-                        path: '/addnotruckcargosource',
-                        name: 'addnotruckcargosource',
-                        meta: { title: '添加货源' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckCargoSource/Add')
-                    },
-                    {
-                        path: '/viewnotruckcargosource',
-                        name: 'viewnotruckcargosource',
-                        meta: { title: '查看货源' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckCargoSource/View')
-                    },
-                    {
-                        path: '/notrucktruck',
-                        name: 'notrucktruck',
-                        meta: { title: '车源上传' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NoTruckTruck')
-                    },
-                    {
-                        path: '/addnotrucktruck',
-                        name: 'addnotrucktruck',
-                        meta: { title: '添加车源' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NoTruckTruck/Add')
-                    },
-                    {
-                        path: '/viewnotrucktruck',
-                        name: 'viewnotrucktruck',
-                        meta: { title: '查看车源' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NoTruckTruck/View')
-                    },
-                    {
-                        path: '/notruckcarryorder',
-                        name: 'notruckcarryorder',
-                        meta: { title: '运单上传' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckCarryOrder')
-                    },
-                    {
-                        path: '/addnotruckcarryorder',
-                        name: 'addnotruckcarryorder',
-                        meta: { title: '添加运单' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckCarryOrder/Add')
-                    },
-                    {
-                        path: '/viewnotruckcarryorder',
-                        name: 'viewnotruckcarryorder',
-                        meta: { title: '查看运单' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckCarryOrder/View')
-                    },
-                    {
-                        path: '/notruckbroker',
-                        name: 'notruckbroker',
-                        meta: { title: '资料补充' },
-                        component: () =>
-                            import ('../components/NoTruckCarrier/NotruckBroker')
-                    }
-                ]
+                path: '/editcarrierbill',
+                name: 'editcarrierbill',
+                meta: { title: '编辑承运单' },
+                component: () => import ('../components/Buisiness/Carrierbill/Edit')
+            },
+            /**
+             * 调度  dispatch
+             */
+            {
+                path: '/dispatching',
+                name: 'dispatching',
+                meta: { title: '待调度' },
+                component: () => import ('../components/Dispatch/Dispatching'),
             },
             {
-                path: '/finance',
-                name: 'finance',
-                meta: { title: '财务' },
-                component: () =>
-                    import ('../components/Finance'),
-                redirect: '/settleconfig',
-                children: [{
-                        path: '/settleconfig',
-                        name: 'settleconfig',
-                        meta: { title: '结算设置' },
-                        component: () =>
-                            import ('../components/Finance/SettleConfig/index'),
-                    },
-                    {
-                        path: '/addsettleconfig',
-                        name: 'addsettleconfig',
-                        meta: { title: '添加运费模板' },
-                        component: () =>
-                            import ('../components/Finance/SettleConfig/Add'),
-                    },
-                    {
-                        path: '/editsettleconfig',
-                        name: 'editsettleconfig',
-                        meta: { title: '编辑运费模板' },
-                        component: () =>
-                            import ('../components/Finance/SettleConfig/Edit'),
-                    },
-                    {
-                        path: '/viewsettleconfig',
-                        name: 'viewsettleconfig',
-                        meta: { title: '查看运费模板' },
-                        component: () =>
-                            import ('../components/Finance/SettleConfig/View'),
-                    }
-                ]
+                path: '/dispatched',
+                name: 'dispatched',
+                meta: { title: '已调度' },
+                component: () => import ('../components/Dispatch/Dispatched'),
             },
             {
-                path: '/transteam',
-                name: 'transteam',
-                meta: { title: '运输档案' },
-                component: () =>
-                    import ('../components/TransTeam'),
-                redirect: '/truck',
-                children: [{
-                        path: '/truck',
-                        name: 'truck',
-                        meta: { title: '车辆' },
-                        component: () =>
-                            import ('../components/TransTeam/Truck/index'),
-                    },
-                    {
-                        path: '/addtruck',
-                        name: 'addtruck',
-                        meta: { title: '添加车辆' },
-                        component: () =>
-                            import ('../components/TransTeam/Truck/Add'),
-                    },
-                    {
-                        path: '/edittruck',
-                        name: 'edittruck',
-                        meta: { title: '编辑车辆' },
-                        component: () =>
-                            import ('../components/TransTeam/Truck/Edit'),
-                    },
-                    {
-                        path: '/viewtruck',
-                        name: 'viewtruck',
-                        meta: { title: '查看车辆' },
-                        component: () =>
-                            import ('../components/TransTeam/Truck/View'),
-                    },
-                    {
-                        path: '/supercargo',
-                        name: 'supercargo',
-                        meta: { title: '运输人员' },
-                        component: () =>
-                            import ('../components/TransTeam/SuperCargo/index'),
-                    },
-                    {
-                        path: '/addsupercargo',
-                        name: 'addsupercargo',
-                        meta: { title: '添加运输人员' },
-                        component: () =>
-                            import ('../components/TransTeam/SuperCargo/Add'),
-                    },
-                    {
-                        path: '/editsupercargo',
-                        name: 'editsupercargo',
-                        meta: { title: '编辑运输人员' },
-                        component: () =>
-                            import ('../components/TransTeam/SuperCargo/Edit'),
-                    },
-                    {
-                        path: '/viewsupercargo',
-                        name: 'viewsupercargo',
-                        meta: { title: '查看运输人员' },
-                        component: () =>
-                            import ('../components/TransTeam/SuperCargo/View'),
-                    },
-                    {
-                        path: '/refdriverapp',
-                        name: 'refdriverapp',
-                        meta: { title: '关联司机APP' },
-                        component: () =>
-                            import ('../components/TransTeam/RefDriverApp/index'),
-                    },
-                    {
-                        path: '/expirewarn',
-                        name: 'expirewarn',
-                        meta: { title: '到期预警' },
-                        component: () =>
-                            import ('../components/TransTeam/ExpireWarn/index'),
-                    },
-                ]
+                path: '/redispatching',
+                name: 'redispatching',
+                meta: { title: '重新调度' },
+                component: () => import ('../components/Dispatch/Dispatching'),
             },
             {
-                path: '/basedata',
-                name: 'basedata',
-                meta: { title: '基础资料' },
-                component: () =>
-                    import ('../components/Basedata'),
-                redirect: '/entruster',
-                children: [{
-                        path: '/recdeliverycomp',
-                        name: 'recdeliverycomp',
-                        meta: { title: '客户' },
-                        component: () =>
-                            import ('../components/Basedata/Customer'),
-                    },
-                    {
-                        path: '/addrecdeliverycomp',
-                        name: 'addrecdeliverycomp',
-                        meta: { title: '添加客户' },
-                        component: () =>
-                            import ('../components/Basedata/Customer/Add'),
-                    },
-                    {
-                        path: '/editrecdeliverycomp',
-                        name: 'editrecdeliverycomp',
-                        meta: { title: '编辑客户' },
-                        component: () =>
-                            import ('../components/Basedata/Customer/Edit'),
-                    },
-                    {
-                        path: '/viewrecdeliverycomp',
-                        name: 'viewrecdeliverycomp',
-                        meta: { title: '客户详情' },
-                        component: () =>
-                            import ('../components/Basedata/Customer/View'),
-                    },
-                    {
-                        path: '/companyaddress',
-                        name: 'companyaddress',
-                        meta: { title: '客户地址' },
-                        component: () =>
-                            import ('../components/Basedata/CompanyAddress'),
-                    },
-                    {
-                        path: '/addcompanyaddress',
-                        name: 'addcompanyaddress',
-                        meta: { title: '添加客户地址' },
-                        component: () =>
-                            import ('../components/Basedata/CompanyAddress/Add'),
-                    },
-                    {
-                        path: '/editcompanyaddress',
-                        name: 'editcompanyaddress',
-                        meta: { title: '编辑客户地址' },
-                        component: () =>
-                            import ('../components/Basedata/CompanyAddress/Edit'),
-                    },
-                    {
-                        path: '/viewcompanyaddress',
-                        name: 'viewcompanyaddress',
-                        meta: { title: '查看客户地址' },
-                        component: () =>
-                            import ('../components/Basedata/CompanyAddress/View'),
-                    },
-                    {
-                        path: '/customerprice',
-                        name: 'customerprice',
-                        meta: { title: '客户定价' },
-                        component: () =>
-                            import ('../components/Basedata/CustomerPrice'),
-                    },
-                    {
-                        path: '/cargounit',
-                        name: 'cargounit',
-                        meta: { title: '货物单位' },
-                        component: () =>
-                            import ('../components/Basedata/CargoUnit/index'),
-                    },
-                    {
-                        path: '/cargo',
-                        name: 'cargo',
-                        meta: { title: '货物' },
-                        component: () =>
-                            import ('../components/Basedata/Cargo/index'),
-                    },
-                    {
-                        path: '/addcargo',
-                        name: 'addcargo',
-                        meta: { title: '添加货物' },
-                        component: () =>
-                            import ('../components/Basedata/Cargo/Add'),
-                    },
-                    {
-                        path: '/editcargo',
-                        name: 'editcargo',
-                        meta: {
-                            title: '编辑货物'
-                        },
-                        component: () =>
-                            import ('../components/Basedata/Cargo/Edit'),
-                    },
-                    {
-                        path: '/viewcargo',
-                        name: 'viewcargo',
-                        meta: {
-                            title: '货物详情'
-                        },
-                        component: () =>
-                            import ('../components/Basedata/Cargo/View'),
-                    }
-                ]
+                path: '/viewdispatchbill',
+                name: 'viewdispatchbill',
+                meta: { title: '调度单详情' },
+                component: () => import ('../components/Dispatch/Dispatched/View')
+            },
+            /**
+             * 无车承运人   notruckcarrier
+             */
+            {
+                path: '/notruckcargosource',
+                name: 'notruckcargosource',
+                meta: { title: '货源上传' },
+                component: () => import ('../components/NoTruckCarrier/NotruckCargoSource')
             },
             {
-                path: '/user',
-                name: 'user',
-                meta: { title: '个人资料' },
-                component: () =>
-                    import ('../components/User'),
-                redirect: '/userprofile',
-                children: [{
-                    path: '/userprofile',
-                    name: 'userprofile',
-                    meta: { title: '用户信息' },
-                    component: () =>
-                        import ('../components/User/UserProfile')
-                }]
+                path: '/addnotruckcargosource',
+                name: 'addnotruckcargosource',
+                meta: { title: '添加货源' },
+                component: () => import ('../components/NoTruckCarrier/NotruckCargoSource/Add')
+            },
+            {
+                path: '/viewnotruckcargosource',
+                name: 'viewnotruckcargosource',
+                meta: { title: '查看货源' },
+                component: () => import ('../components/NoTruckCarrier/NotruckCargoSource/View')
+            },
+            {
+                path: '/notrucktruck',
+                name: 'notrucktruck',
+                meta: { title: '车源上传' },
+                component: () => import ('../components/NoTruckCarrier/NoTruckTruck')
+            },
+            {
+                path: '/addnotrucktruck',
+                name: 'addnotrucktruck',
+                meta: { title: '添加车源' },
+                component: () => import ('../components/NoTruckCarrier/NoTruckTruck/Add')
+            },
+            {
+                path: '/viewnotrucktruck',
+                name: 'viewnotrucktruck',
+                meta: { title: '查看车源' },
+                component: () => import ('../components/NoTruckCarrier/NoTruckTruck/View')
+            },
+            {
+                path: '/notruckcarryorder',
+                name: 'notruckcarryorder',
+                meta: { title: '运单上传' },
+                component: () => import ('../components/NoTruckCarrier/NotruckCarryOrder')
+            },
+            {
+                path: '/addnotruckcarryorder',
+                name: 'addnotruckcarryorder',
+                meta: { title: '添加运单' },
+                component: () => import ('../components/NoTruckCarrier/NotruckCarryOrder/Add')
+            },
+            {
+                path: '/viewnotruckcarryorder',
+                name: 'viewnotruckcarryorder',
+                meta: { title: '查看运单' },
+                component: () => import ('../components/NoTruckCarrier/NotruckCarryOrder/View')
+            },
+            {
+                path: '/notruckbroker',
+                name: 'notruckbroker',
+                meta: { title: '资料补充' },
+                component: () => import ('../components/NoTruckCarrier/NotruckBroker')
+            },
+            /**
+             * 财务   finance
+             */
+            {
+                path: '/settleconfig',
+                name: 'settleconfig',
+                meta: { title: '结算设置' },
+                component: () => import ('../components/Finance/SettleConfig/index'),
+            },
+            {
+                path: '/addsettleconfig',
+                name: 'addsettleconfig',
+                meta: { title: '添加运费模板' },
+                component: () => import ('../components/Finance/SettleConfig/Add'),
+            },
+            {
+                path: '/editsettleconfig',
+                name: 'editsettleconfig',
+                meta: { title: '编辑运费模板' },
+                component: () => import ('../components/Finance/SettleConfig/Edit'),
+            },
+            {
+                path: '/viewsettleconfig',
+                name: 'viewsettleconfig',
+                meta: { title: '查看运费模板' },
+                component: () => import ('../components/Finance/SettleConfig/View'),
+            },
+            /**
+             * 运输档案  transteam
+             */
+            {
+                path: '/truck',
+                name: 'truck',
+                meta: { title: '车辆' },
+                component: () => import ('../components/TransTeam/Truck/index'),
+            },
+            {
+                path: '/addtruck',
+                name: 'addtruck',
+                meta: { title: '添加车辆' },
+                component: () => import ('../components/TransTeam/Truck/Add'),
+            },
+            {
+                path: '/edittruck',
+                name: 'edittruck',
+                meta: { title: '编辑车辆' },
+                component: () => import ('../components/TransTeam/Truck/Edit'),
+            },
+            {
+                path: '/viewtruck',
+                name: 'viewtruck',
+                meta: { title: '查看车辆' },
+                component: () => import ('../components/TransTeam/Truck/View'),
+            },
+            {
+                path: '/supercargo',
+                name: 'supercargo',
+                meta: { title: '运输人员' },
+                component: () => import ('../components/TransTeam/SuperCargo/index'),
+            },
+            {
+                path: '/addsupercargo',
+                name: 'addsupercargo',
+                meta: { title: '添加运输人员' },
+                component: () => import ('../components/TransTeam/SuperCargo/Add'),
+            },
+            {
+                path: '/editsupercargo',
+                name: 'editsupercargo',
+                meta: { title: '编辑运输人员' },
+                component: () => import ('../components/TransTeam/SuperCargo/Edit'),
+            },
+            {
+                path: '/viewsupercargo',
+                name: 'viewsupercargo',
+                meta: { title: '查看运输人员' },
+                component: () => import ('../components/TransTeam/SuperCargo/View'),
+            },
+            {
+                path: '/refdriverapp',
+                name: 'refdriverapp',
+                meta: { title: '关联司机APP' },
+                component: () => import ('../components/TransTeam/RefDriverApp/index'),
+            },
+            {
+                path: '/expirewarn',
+                name: 'expirewarn',
+                meta: { title: '到期预警' },
+                component: () => import ('../components/TransTeam/ExpireWarn/index'),
+            },
+            /**
+             * 基础资料  basedata
+             */
+            {
+                path: '/recdeliverycomp',
+                name: 'recdeliverycomp',
+                meta: { title: '客户' },
+                component: () => import ('../components/Basedata/Customer'),
+            },
+            {
+                path: '/addrecdeliverycomp',
+                name: 'addrecdeliverycomp',
+                meta: { title: '添加客户' },
+                component: () => import ('../components/Basedata/Customer/Add'),
+            },
+            {
+                path: '/editrecdeliverycomp',
+                name: 'editrecdeliverycomp',
+                meta: { title: '编辑客户' },
+                component: () => import ('../components/Basedata/Customer/Edit'),
+            },
+            {
+                path: '/viewrecdeliverycomp',
+                name: 'viewrecdeliverycomp',
+                meta: { title: '客户详情' },
+                component: () => import ('../components/Basedata/Customer/View'),
+            },
+            {
+                path: '/companyaddress',
+                name: 'companyaddress',
+                meta: { title: '客户地址' },
+                component: () => import ('../components/Basedata/CompanyAddress'),
+            },
+            {
+                path: '/addcompanyaddress',
+                name: 'addcompanyaddress',
+                meta: { title: '添加客户地址' },
+                component: () => import ('../components/Basedata/CompanyAddress/Add'),
+            },
+            {
+                path: '/editcompanyaddress',
+                name: 'editcompanyaddress',
+                meta: { title: '编辑客户地址' },
+                component: () => import ('../components/Basedata/CompanyAddress/Edit'),
+            },
+            {
+                path: '/viewcompanyaddress',
+                name: 'viewcompanyaddress',
+                meta: { title: '查看客户地址' },
+                component: () => import ('../components/Basedata/CompanyAddress/View'),
+            },
+            {
+                path: '/customerprice',
+                name: 'customerprice',
+                meta: { title: '客户定价' },
+                component: () => import ('../components/Basedata/CustomerPrice'),
+            },
+            {
+                path: '/cargounit',
+                name: 'cargounit',
+                meta: { title: '货物单位' },
+                component: () => import ('../components/Basedata/CargoUnit/index'),
+            },
+            {
+                path: '/cargo',
+                name: 'cargo',
+                meta: { title: '货物' },
+                component: () => import ('../components/Basedata/Cargo/index'),
+            },
+            {
+                path: '/addcargo',
+                name: 'addcargo',
+                meta: { title: '添加货物' },
+                component: () => import ('../components/Basedata/Cargo/Add'),
+            },
+            {
+                path: '/editcargo',
+                name: 'editcargo',
+                meta: { title: '编辑货物' },
+                component: () => import ('../components/Basedata/Cargo/Edit'),
+            },
+            {
+                path: '/viewcargo',
+                name: 'viewcargo',
+                meta: { title: '货物详情' },
+                component: () => import ('../components/Basedata/Cargo/View'),
+            },
+            /**
+             * 个人资料  user
+             */
+            {
+                path: '/userprofile',
+                name: 'userprofile',
+                meta: { title: '用户信息' },
+                component: () => import ('../components/User/UserProfile')
             },
             {
                 path: '/companyInfo',
                 name: 'companyInfo',
                 meta: { title: '修改企业资料' },
-                component: () =>
-                    import ('../components/CompanyInfo'),
+                component: () => import ('../components/CompanyInfo'),
+            },
+            /**
+             * 系统设置   system
+             */
+            {
+                path: '/usermanage',
+                name: 'usermanage',
+                meta: { title: '用户管理' },
+                component: () => import ('../components/System/Usermanage/index')
             },
             {
-                path: '/system',
-                name: '/system',
-                meta: { title: '系统设置' },
-                component: () =>
-                    import ('../components/System'),
-                redirect: '/usermanage',
-                children: [{
-                        path: '/usermanage',
-                        name: 'usermanage',
-                        meta: { title: '用户管理' },
-                        component: () =>
-                            import ('../components/System/Usermanage/index')
-                    },
-                    {
-                        path: '/adduser',
-                        name: 'adduser',
-                        meta: { title: '添加用户' },
-                        component: () =>
-                            import ('../components/System/Usermanage/Add')
-                    },
-                    {
-                        path: '/viewuser',
-                        name: 'viewuser',
-                        meta: { title: '查看用户' },
-                        component: () =>
-                            import ('../components/System/Usermanage/View')
-                    },
-                    {
-                        path: '/rolemanage',
-                        name: 'rolemanage',
-                        meta: { title: '角色管理' },
-                        component: () =>
-                            import ('../components/System/Rolemanage')
-                    }
-                ]
+                path: '/adduser',
+                name: 'adduser',
+                meta: { title: '添加用户' },
+                component: () => import ('../components/System/Usermanage/Add')
+            },
+            {
+                path: '/viewuser',
+                name: 'viewuser',
+                meta: { title: '查看用户' },
+                component: () => import ('../components/System/Usermanage/View')
+            },
+            {
+                path: '/rolemanage',
+                name: 'rolemanage',
+                meta: { title: '角色管理' },
+                component: () => import ('../components/System/Rolemanage')
             }
         ]
     }

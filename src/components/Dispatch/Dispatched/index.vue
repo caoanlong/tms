@@ -280,8 +280,6 @@ export default {
 		}
 	},
 	created() {
-		this.find = JSON.parse(sessionStorage.getItem('dispatchedFind')) || this.find
-		this.isCur = JSON.parse(sessionStorage.getItem('isCur')) || 0
 		this.resetExportExcelUrl()
 		this.getList()
 	},
@@ -292,7 +290,6 @@ export default {
 		search() {
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
-			sessionStorage.setItem('dispatchedFind', JSON.stringify(this.find))
 			this.resetExportExcelUrl()
 			this.getList()
 		},
@@ -308,8 +305,6 @@ export default {
 			
 		},
 		reset(val) {
-			sessionStorage.removeItem('dispatchedFind')
-			sessionStorage.removeItem('isCur')
 			this.resetSearch()
 			this.resetExportExcelUrl()
 			this.getList()
@@ -336,7 +331,6 @@ export default {
 		tabClick(val){
 			this.isCur = val
 			this.reset()
-			sessionStorage.setItem('isCur', this.isCur)
 		},
 		view(dispatchOrderID) {
 			this.$router.push({ name: 'viewdispatchbill' , query: { dispatchOrderID } })

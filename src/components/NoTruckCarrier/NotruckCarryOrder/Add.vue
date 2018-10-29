@@ -316,10 +316,8 @@
 import { Message } from 'element-ui'
 import request from '../../../common/request'
 import Company from '../../../api/Company'
-import { checkPlateNoNew, checkInt, checkFloat2 ,yyyymmddhhmmss} from '../../../common/valid'
+import { checkInt, checkFloat2 ,yyyymmddhhmmss} from '../../../common/valid'
 export default {
-
-
 	data() {
 		return {
 			TruckType: [],
