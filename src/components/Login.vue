@@ -174,7 +174,8 @@ import { Message } from 'element-ui'
 import Footer from './CommonComponents/Footer'
 import { baseURL } from "../common/request"
 import Member from '../api/Member'
-import Common from '../api/Common'
+import SysMember from '../api/SysMember'
+import BaseCommon from '../api/BaseCommon'
 import Company from '../api/Company'
 import dist from '../assets/data/dist.json'
 import { setCooikie, getCooikie } from '../common/utils'
@@ -305,8 +306,7 @@ export default {
 					}
 					const params = { mobile: this.register.mobile }
 					this.timeGo()
-					Common.getVCode(params).then(res => {
-						console.log(res.data)
+					BaseCommon.getSMSCode(params).then(res => {
 						if (baseURL.includes('develop')) Message.info(res.data)
 					})
 				})
@@ -318,8 +318,7 @@ export default {
 					}
 					const params = { mobile: this.findPassword.mobile, type: 'forget' }
 					this.timeGo()
-					Common.getVCode(params).then(res => {
-						console.log(res.data)
+					BaseCommon.getSMSCode(params).then(res => {
 						if (baseURL.includes('develop')) Message.info(res.data)
 					})
 				})
@@ -331,7 +330,7 @@ export default {
 		handLogin() {
 			this.$refs['loginForm'].validate(valid => {
 				if (!valid) return
-				Member.login({
+				SysMember.login({
 					username: this.login.username.trim(),
 					password: this.login.password.trim()
 				}).then(res => {
@@ -392,7 +391,7 @@ export default {
 		handFindPassword() {
 			this.$refs['findPasswordForm'].validate(valid => {
 				if (!valid) return
-				Member.pwdForget({
+				SysMember.resetPassword({
 					mobile: this.findPassword.mobile.trim(),
 					vcode: this.findPassword.vcode.trim(),
 					password: this.findPassword.password.trim(),

@@ -175,7 +175,7 @@ export default {
         },
         getDriverList() {
             this.tableData = []
-			DispatchOrder.drivers({
+			DispatchOrder.listOfCanDispatchDriver({
 				current: this.pageIndex,
 				size: this.pageSize,
                 keyword: this.find.keyword,
@@ -204,7 +204,7 @@ export default {
         },
         getSuperCagoList() {
             this.tableData = []
-			DispatchOrder.staffs({
+			DispatchOrder.listOfCanDispatchSupercargo({
 				current: this.pageIndex,
 				size: this.pageSize,
                 keyword: this.find.keyword,

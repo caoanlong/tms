@@ -121,7 +121,7 @@ export default {
 			this.getList()
 		},
 		getList() {
-			SysRole.find({
+			SysRole.menu().find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				roleName: this.find.roleName

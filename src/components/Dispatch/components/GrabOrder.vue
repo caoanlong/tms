@@ -165,7 +165,7 @@ export default {
             rules: {
                 requiredTruckType:[{required: true , message: '请选择车型'}],
                 requiredTruckLength: [
-                    { required: true , message: '请输入车长' },
+                    { required: true , message: '请输入车长' }, 
                     { validator: checkFloat2 }
                 ],
                 type: [{ required: true , message: '请选择报价类型' }],

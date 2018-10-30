@@ -19,35 +19,78 @@ class Company extends Base {
          * 修改扩展信息
          */
         this.updateExtend = (data) => {
-          if (!this.isClick) return Promise.reject('重复提交！')
-          this.isClick = false
-          setTimeout(() => {
-            this.isClick = true
-          }, this.delay)
-          return this.request({
-            url: this.baseUrl + 'Info/updateExtend',
-            method: 'post',
-            data
-          })
+			if (!this.isClick) return Promise.reject('重复提交！')
+			this.isClick = false
+			setTimeout(() => {
+				this.isClick = true
+			}, this.delay)
+			return this.request({
+				url: this.baseUrl + 'Info/updateExtend',
+				method: 'post',
+				data
+			})
         }
 
         /**
          * 扩展信息详情 
          */
         this.detailOfExtend = (data) => {
-          if (!this.isClick) return Promise.reject('重复提交！')
-          this.isClick = false
-          setTimeout(() => {
-            this.isClick = true
-          }, this.delay)
-          return this.request({
-            url: this.baseUrl + 'Info/detailOfExtend',
-            method: 'get',
-            data
-          })
+			return this.request({
+				url: this.baseUrl + 'Info/detailOfExtend',
+				method: 'get',
+				data
+			})
         }
         return this
+	}
+	/**
+     * 详情
+     */
+    detail(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+				url: this.baseUrl + '/detail',
+				params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
     }
+	/**
+	 * 修改扩展信息
+	 */
+	updateExtend(data) {
+		if (!this.isClick) return Promise.reject('重复提交！')
+		this.isClick = false
+		setTimeout(() => {
+			this.isClick = true
+		}, this.delay)
+		return this.request({
+			url: this.baseUrl + '/updateExtend',
+			method: 'post',
+			data
+		})
+	}
+	/**
+	 * 扩展信息详情 
+	 */
+	detailOfExtend(params) {
+		return this.request({
+			url: this.baseUrl + '/detailOfExtend',
+			params
+		})
+	}
+
+	/**
+	 * 车辆&司机证件到期列表
+	 * @param {*} params 
+	 */
+	expireList(params) {
+		return this.request({
+			url: this.baseUrl + '/expireList',
+			params
+		})
+	}
 
     /**
      * 公司入驻申请

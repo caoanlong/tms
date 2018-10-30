@@ -86,22 +86,18 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request, { baseURL } from '../../../common/request'
-import RecordWarn from '../../../api/RecordWarn'
-import Page from '../../CommonComponents/Page'
+import { baseURL } from '../../../common/request'
+import { baseMixin } from '../../../common/mixin'
+import Company from '../../../api/Company'
 import { deleteConfirm } from '../../../common/utils'
 export default {
+	mixins: [ baseMixin ],
 	data() {
 		return {
 			dialogFormVisible:false,
 			findrealName: '',
 			findobjType: '',
 			findexpiredCertificate: '',
-			pageIndex: 1,
-			pageSize: 10,
-			total:0,
-			tableData: [],
-			selectedList: [],
 			exportExcelUrl: '',
 			TruckOption:{
 				DriverLicExpiresTime:"行驶证",
@@ -139,9 +135,6 @@ export default {
 			ComsupercargoOptions:[],
 			expOption:[]
 		}
-	},
-	components: {
-		Page
 	},
 	created() {
 		this.resetExportExcelUrl()
@@ -187,11 +180,6 @@ export default {
 		inputChange() {
 			this.resetExportExcelUrl()
 		},
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			this.findrealName=''
 			this.findobjType=''
@@ -200,15 +188,6 @@ export default {
 			this.pageSize = 10
 			this.resetExportExcelUrl()
 			this.getList()
-		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.customerID)
@@ -240,7 +219,7 @@ export default {
 		},
 		getList() {
 			this.tableData = []
-			RecordWarn.findList({
+			Company.expireList({
 				current: this.pageIndex,
 				size: this.pageSize,
 				realName:this.findrealName,
