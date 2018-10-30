@@ -356,6 +356,21 @@ class Company extends Base {
                 data
             })
         }
+
+        /**
+         * 检查是否安装GPS
+         */
+
+        this.checkGPS = (params) => {
+          return new Promise((resolve, reject) => {
+            this.request({
+              url: this.baseUrl + '/truck/checkGPS',
+              params
+            }).then(res => {
+              resolve(res)
+            })
+          })
+        }
         return this
     }
     
