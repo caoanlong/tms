@@ -554,15 +554,21 @@ export default {
 			this.selectedList.forEach(item => {
 				if (item.dispatchType == 'Weight') {
 					if (item.payableWeightUnitPrice) {
-						freight += item.payableWeightUnitPrice * Number(item.payableDistance)/1000 * item.cargoWeightNew
+						freight += Number(item.payableWeightUnitPrice)
+								* (item.payableDistance ? Number(item.payableDistance)/1000 : 0) 
+								* (item.cargoWeightNew ? item.cargoWeightNew : 0)
 					} else {
-						freight += item.freight / item.cargoWeight * item.cargoWeightNew
+						freight += (item.freight && item.cargoWeight ? item.freight / item.cargoWeight : 0)
+								* (item.cargoWeightNew ? item.cargoWeightNew : 0)
 					}
 				} else {
 					if (item.payableVolumnUnitPrice) {
-						freight += item.payableVolumnUnitPrice * Number(item.payableDistance)/1000 * item.cargoVolumeNew
+						freight += Number(item.payableVolumnUnitPrice) 
+								* (item.payableDistance ? Number(item.payableDistance)/1000 : 0)
+								* (item.cargoVolumeNew ? item.cargoVolumeNew : 0)
 					} else {
-						freight += item.freight / item.cargoVolume * item.cargoVolumeNew
+						freight += (item.freight && item.cargoVolume ? item.freight / item.cargoVolume : 0)
+								* item.cargoVolumeNew
 					}
 				}
 			})
