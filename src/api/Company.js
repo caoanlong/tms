@@ -44,6 +44,19 @@ class Company extends Base {
         return this
 	}
 	/**
+     * 详情
+     */
+    detail(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+				url: this.baseUrl + '/detail',
+				params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
+	/**
 	 * 修改扩展信息
 	 */
 	updateExtend(data) {
@@ -64,6 +77,17 @@ class Company extends Base {
 	detailOfExtend(params) {
 		return this.request({
 			url: this.baseUrl + '/detailOfExtend',
+			params
+		})
+	}
+
+	/**
+	 * 车辆&司机证件到期列表
+	 * @param {*} params 
+	 */
+	expireList(params) {
+		return this.request({
+			url: this.baseUrl + '/expireList',
 			params
 		})
 	}

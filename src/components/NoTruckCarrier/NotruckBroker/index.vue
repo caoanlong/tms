@@ -75,7 +75,6 @@ export default {
 			})
 		},
 		save() {
-
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) {
 					this.$nextTick(() => {
@@ -83,7 +82,7 @@ export default {
 						return
 					})
 				} else {
-					Company.info().updateExtend({
+					Company.updateExtend({
 						companyID:localStorage.getItem("companyID"),
 						senderCode:this.notruckInfo.senderCode,
 						appkey:this.notruckInfo.appkey,

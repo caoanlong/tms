@@ -4,19 +4,23 @@ import request from '../common/request'
 class SysRole extends Base {
     constructor(url, req) {
         super(url, req).initURI({
-            find: '/findList',
-            findById: '/findById'
+            findById: '/findById',
+            del: '/deleteBatch'
         })
     }
-    findMenuList(params) {
-        return new Promise((resolve, reject) => {
-            this.request({
-                url: this.baseUrl + '/findMenuList',
-                params
-            }).then(res => {
-                resolve(res.data.data || res.data || res)
-            })
-        })
+    _init(url) {
+        this._find = `${url}/list`
+        this._findById = `${url}/detail`
+        this._add = `${url}/add`
+        this._update = `${url}/update`
+        this._del = `${url}/delete`
+    }
+    /**
+     * 菜单
+     */
+    menu() {
+        this._init('/menu')
+        return this
     }
     findMemberList(params) {
         return new Promise((resolve, reject) => {

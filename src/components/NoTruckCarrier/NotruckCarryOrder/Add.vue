@@ -415,7 +415,7 @@ export default {
 	},
 	methods: {
 		getWaybillInfo() {
-			Company.info().detailOfExtend().then(res => {
+			Company.detailOfExtend().then(res => {
 				this.WaybillInfo.documentVersionNumber = res.data.documentVersionNumber
 				this.WaybillInfo.messageFunctionCode = res.data.messageFunctionCode
 				this.WaybillInfo.senderCode = res.data.senderCode

@@ -324,6 +324,7 @@ import ImageUpload from './CommonComponents/ImageUpload'
 import DistPicker from './CommonComponents/DistPicker'
 import Company from '../api/Company'
 import Member from '../api/Member'
+import SysMember from '../api/SysMember'
 import { defaultImg } from '../assets/icons/icons'
 import { resizeImg,areaIdToArrayId,searchAreaByKey } from '../common/utils'
 import { checkTel,checkZipCode, checkEmail,checkFax} from '../common/validator'
@@ -404,7 +405,7 @@ export default {
 			this.getCompanyInfo()
 		},
 		getCompanyInfo() {
-			Company.info().findById({
+			Company.detail({
 				companyID: this.userInfo.companyID
 			}).then(res => {
 				this.companyDetail = res
@@ -419,7 +420,7 @@ export default {
 				}
 				this.$refs['distPicker'].validate('pass')
 				this.companyDetail.areaName = searchAreaByKey(this.companyDetail.areaID)
-				Company.info().update(this.companyDetail).then(res => {
+				Company.update(this.companyDetail).then(res => {
 					this.$store.dispatch('getUserInfo')
 					Message.success('保存成功！')
 					this.cancelEditcompanyInfo()
@@ -431,12 +432,12 @@ export default {
 			this.editCompanyInfoDialog = false
 		},
 		getMemInfo(){
-			Member.detail().then(res =>{
-				this.memDetail = res.data
+			SysMember.detail().then(res =>{
+				this.memDetail = res
 			})
 		},
 		saveMemInfo(){
-			Member.modify({
+			SysMember.update({
 				headPic: this.memDetail.headPic,
 				realName: this.memDetail.realName
 			}).then(res =>{
@@ -449,7 +450,7 @@ export default {
 			const data = this.memPwd
 			this.$refs['ruleForm'].validate(valid => {
 				if (valid) {
-					Member.changePwd(data).then(res =>{
+					SysMember.updatePassword(data).then(res =>{
 						Message.success('保存成功！')
 						this.accountInfoDialog = false
 					})
