@@ -1014,12 +1014,7 @@ export default {
 		line-height: 20px;
 	}
 
-	.infoIcon {
-		position: absolute;
-		left: 16px;
-		top: 5px;
-	}
-}
+	.infoIcon { top: 5px; } }
 
 .feeTips {
 	margin-bottom: 10px;
