@@ -332,6 +332,13 @@
 				<el-row class="section-block target6">
 					<span class="block-title">GPS</span>
 					<div class="block-content">
+                        <el-row :gutter="20">
+                            <el-col :span="24">
+								<el-form-item label="是否安装GPS">
+                                    <el-tag :type="gpsInfo.data?'success':'warning'" size="medium" :class="gpsInfo.data?'el-icon-success':'el-icon-warning'" style="vertical-align:top"> GPS{{gpsInfo.data?'已':'未'}}安装</el-tag>
+								</el-form-item>
+							</el-col>
+                        </el-row>
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="入网号">
@@ -1041,7 +1048,8 @@ export default {
 			driverLicTime: [],
 			gpsValidDate: [],
 			managementAgreementDate: [],
-			trailers: [],
+            trailers: [],
+            gpsInfo:'',
 			truck: {
 				code: '',
 				trailerPlateNo: '',
@@ -1203,7 +1211,8 @@ export default {
 		})
 	},
 	created() {
-		this.getInfo()
+        this.getInfo()
+        
 	},
 	mounted() {
 		LiftEffect({
@@ -1232,6 +1241,7 @@ export default {
 		})
 	},
 	methods: {
+        
 		getPrimaryDriver(queryString, cb) {
 			Company.truck().driverListCanUse({
 				current: 1,
@@ -1327,6 +1337,7 @@ export default {
 				} else {
 					const truckInfo = Object.assign({}, this.truck)
 					truckInfo.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
+					truckInfo.gpsFlag = this.gpsInfo.data ? 'Y' : 'N'
 					delete truckInfo.plateNo
 					delete truckInfo.truckCategory
 					Company.truck().update(truckInfo).then(res => {
@@ -1343,9 +1354,20 @@ export default {
 				this.truck.roadTransportGoodsIsPoisonous = res.roadTransportGoodsIsPoisonous == 'Y' ? true : false
 				this.driverLicTime = [res.driverLicBeginTime, res.driverLicExpiresTime]
 				this.gpsValidDate = [res.gpsValidBeginDate, res.gpsValidEndDate]
-				this.managementAgreementDate = [res.managementAgreementBeginDate, res.managementAgreementExpireDate]
-			})
-		},
+                this.managementAgreementDate = [res.managementAgreementBeginDate, res.managementAgreementExpireDate]
+                this.checkGPS(this.truck.plateNo)            
+            })
+           
+        },
+        checkGPS(plateNo){
+            Company.truck().checkGPS({
+				plateNo
+			}).then(res => {
+                this.gpsInfo = res
+			}).catch(res =>{
+                this.gpsInfo = res
+            })
+        },
 		back() {
 			this.$router.go(-1)
 		}

@@ -171,6 +171,14 @@
 				<span class="block-title">GPS</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
+                        <el-col :span="12">
+                            <div>
+								<span class="tit">是否安装GPS</span>
+								<span class="ctt">GPS{{truck.gpsFlag=='Y'?'已':'未'}}安装</span>
+							</div>
+                        </el-col>
+					</el-row>
+                    <el-row style="margin-bottom: 10px">
 						<el-col :span="12">
 							<div>
 								<span class="tit">入网号</span>
