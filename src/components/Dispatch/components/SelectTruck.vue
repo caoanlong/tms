@@ -49,8 +49,16 @@
                     <td>
                         <strong>{{item.plateNo}}</strong>
                         <span>{{(Number(item.length)/1000).toFixed(2)}}米/{{TRUCKTYPE[item.truckType]}}/{{(Number(item.loads)/1000).toFixed(2)}}吨/{{item.loadVolume}}方</span>
-                        <el-tag size="mini" type="success">{{item.workStatus == 'Free' ? '空闲' : '业务中'}}</el-tag>
-                        <el-tag size="mini" v-if="item.gps && item.gps == 1">GPS</el-tag>
+                        <el-tag 
+                            size="mini" 
+                            type="success">
+                            {{item.workStatus == 'Free' ? '空闲' : '业务中'}}
+                        </el-tag>
+                        <el-tag 
+                            size="mini" 
+                            v-if="item.gps && item.gps == 1">
+                            GPS
+                        </el-tag>
                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                             <div slot="content">
                                 <el-tag 
@@ -69,8 +77,18 @@
                         <strong>{{item.primaryDriver && item.primaryDriver.realName}}</strong>
                         <span>{{item.primaryDriver && item.primaryDriver.mobile}}</span>
                         <el-tag size="mini" type="success" v-if="item.primaryDriver">空闲</el-tag>
-                        <el-tag size="mini" type="warning" v-if="item.primaryDriver && item.primaryDriver.appStatus == 'Y'">APP</el-tag>
-                        <el-tag size="mini" type="info" v-else-if="item.primaryDriver && item.primaryDriver.appStatus == 'N'">APP</el-tag>
+                        <el-tag 
+                            size="mini" 
+                            type="warning" 
+                            v-if="item.primaryDriver && item.primaryDriver.appStatus == 'Y'">
+                            APP
+                        </el-tag>
+                        <el-tag 
+                            size="mini" 
+                            type="info" 
+                            v-else-if="item.primaryDriver && item.primaryDriver.appStatus == 'N'">
+                            APP
+                        </el-tag>
                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                             <div slot="content">
                                 <el-tag 
@@ -153,7 +171,7 @@ export default {
 		},
         getList() {
             this.tableData = []
-			DispatchOrder.trucks({
+			DispatchOrder.listOfCanDispatchTruck({
 				current: this.pageIndex,
 				size: this.pageSize,
                 keyword: this.find.keyword,

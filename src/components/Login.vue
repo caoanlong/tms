@@ -174,6 +174,7 @@ import { Message } from 'element-ui'
 import Footer from './CommonComponents/Footer'
 import { baseURL } from "../common/request"
 import Member from '../api/Member'
+import SysMember from '../api/SysMember'
 import Common from '../api/Common'
 import Company from '../api/Company'
 import dist from '../assets/data/dist.json'
@@ -331,7 +332,7 @@ export default {
 		handLogin() {
 			this.$refs['loginForm'].validate(valid => {
 				if (!valid) return
-				Member.login({
+				SysMember.login({
 					username: this.login.username.trim(),
 					password: this.login.password.trim()
 				}).then(res => {

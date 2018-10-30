@@ -5,10 +5,10 @@ class DispatchOrder extends Base {
     /**
      * 调度单-车辆列表
      */
-    trucks(params) {
+    listOfCanDispatchTruck(params) {
         return new Promise((resolve, reject) => {
 			this.request({
-				url: this.baseUrl + '/trucks',
+				url: this.baseUrl + '/listOfCanDispatchTruck',
 				params
 			}).then(res => {
 				resolve(res.data.data || res.data || res)
@@ -18,10 +18,10 @@ class DispatchOrder extends Base {
     /**
      * 调度单-司机列表
      */
-    drivers(params) {
+    listOfCanDispatchDriver(params) {
         return new Promise((resolve, reject) => {
 			this.request({
-				url: this.baseUrl + '/drivers',
+				url: this.baseUrl + '/listOfCanDispatchDriver',
 				params
 			}).then(res => {
 				resolve(res.data.data || res.data || res)
@@ -31,10 +31,10 @@ class DispatchOrder extends Base {
     /**
      * 调度单-押运员列表
      */
-    staffs(params) {
+    listOfCanDispatchSupercargo(params) {
         return new Promise((resolve, reject) => {
 			this.request({
-				url: this.baseUrl + '/staffs',
+				url: this.baseUrl + '/listOfCanDispatchSupercargo',
 				params
 			}).then(res => {
 				resolve(res.data.data || res.data || res)
