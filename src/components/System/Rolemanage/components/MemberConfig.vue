@@ -46,7 +46,7 @@ export default {
             this.$emit('selected-mem')
         },
         submitSetMember() {
-            SysRole.addMember({
+            SysRole.member().update({
                 roleID: this.setRoleID,
 				memIDs: this.selectedMembers.map(item => item.memberID).join(',')
             }).then(res => {
@@ -59,7 +59,7 @@ export default {
 		},
 		getMembers() {
             this.members = []
-            SysRole.findMemberList({ roleID: this.setRoleID}).then(res => {
+            SysRole.member().find({ roleID: this.setRoleID}).then(res => {
                 this.members = res.memList
                 this.selectedMembers = this.members.filter(item => item.checked == 'Y')
                 this.$nextTick(() => {
