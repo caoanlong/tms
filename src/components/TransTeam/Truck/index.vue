@@ -32,6 +32,7 @@
 				</el-upload>
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
 				<a :href="templateUrl" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+                <el-button type="default" size="mini" icon="el-icon-refresh" @click="checkGPS">刷新GPS状态</el-button>
 			</div>
 			<div class="listTable">
 			<div class="driverList">
@@ -164,7 +165,7 @@ export default {
 			}).then(res => {
 				this.tableData = res.records
 				this.count = res.total
-				this.isRefresh++
+                this.isRefresh++
 			})
 		},
 		handleCommand(e) {
@@ -189,7 +190,15 @@ export default {
 		},
 		refresh() {
 			this.getList()
-		}
+        },
+        checkGPS(){
+            this.plateNoList = this.tableData.map(item => item.plateNo).join(',')
+            Company.truck().checkGPS({
+				plateNos:this.plateNoList
+			}).then(res => {
+                this.getList()
+			})
+        },
 	}
 }
 </script>

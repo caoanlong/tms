@@ -332,14 +332,6 @@
 				<el-row class="section-block target6">
 					<span class="block-title">GPS</span>
 					<div class="block-content">
-                        <el-row :gutter="20">
-                            <el-col :span="24">
-								<el-form-item label="是否安装GPS">
-                                    <el-tag :type="gpsInfo.data?'success':'warning'" size="medium" :class="gpsInfo.data?'el-icon-success':'el-icon-warning'" style="vertical-align:top" v-show="isCheckGps"> GPS{{gpsInfo.data?'已':'未'}}安装</el-tag>
-                                    <el-button @click="checkGPS" style="vertical-align:top">查询GPS状态</el-button>
-								</el-form-item>
-							</el-col>
-                        </el-row>
 						<el-row :gutter="20">
 							<el-col :span="12">
 								<el-form-item label="入网号">
@@ -1048,8 +1040,6 @@ export default {
 			gpsValidDate: [],
 			managementAgreementDate: [],
             trailers: [],
-            gpsInfo:'',
-            isCheckGps:false,
 			truck: {
 				code: '',
 				trailerPlateNo: '',
@@ -1232,17 +1222,7 @@ export default {
 		})
 	},
 	methods: {
-        checkGPS(){
-            Company.truck().checkGPS({
-				plateNo: this.truck.plateNo,
-			}).then(res => {
-                this.isCheckGps = true
-                this.gpsInfo = res
-			}).catch(res =>{
-                this.isCheckGps = true
-                this.gpsInfo = res
-            })
-        },
+        
 		getPrimaryDriver(queryString, cb) {
 			Company.truck().driverListCanUse({
 				current: 1,
@@ -1340,8 +1320,8 @@ export default {
 			if (!this.truck.primaryDriverName) this.truck.primaryDriver = ''
 			if (!this.truck.secondaryDriverName) this.truck.secondaryDriver = ''
 			const data = Object.assign({}, this.truck)
-			data.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
-			data.gpsFlag = this.gpsInfo.data ? 'Y' : 'N'
+            data.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
+            
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) {
 					this.$nextTick(() => {
@@ -1355,7 +1335,8 @@ export default {
 					})
 				}
 			})
-		},
+        },
+
 		back() {
 			this.$router.go(-1)
 		}
