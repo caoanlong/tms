@@ -15,6 +15,12 @@
 		<script>
 			window.imgIndex = 0
 			window.imgs = []
+			document.onmousewheel = function (evt) {
+				var e = evt || window.event;
+				if(e.preventDefault && e.ctrlKey) e.preventDefault();
+				if(e.ctrlKey) e.returnValue = false;
+			};
+			if (window.addEventListener) window.addEventListener('DOMMouseScroll', document.onmousewheel, false);
 		</script>
 	</body>
 </html>
