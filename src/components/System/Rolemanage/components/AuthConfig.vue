@@ -51,7 +51,7 @@ export default {
             this.$emit('selected-auth')
         },
         submitSetAuth() {
-            SysRole.addAuthority({
+            SysRole.menu().update({
                 roleID: this.setRoleID,
 				menuIDs: this.selectedMenuId.join(',')
             }).then(res => {
@@ -60,7 +60,7 @@ export default {
             })
         },
 		getAllMenus() {
-            SysRole.findMenuList({ roleID: this.setRoleID }).then(res => {
+            SysRole.menu().find({ roleID: this.setRoleID }).then(res => {
                 this.menus = res.menuList
                 this.selectedMenuId = res.menuIDList
             })

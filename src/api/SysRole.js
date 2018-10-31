@@ -22,35 +22,12 @@ class SysRole extends Base {
         this._init('/menu')
         return this
     }
-    findMemberList(params) {
-        return new Promise((resolve, reject) => {
-            this.request({
-                url: this.baseUrl + '/findMemberList',
-                params
-            }).then(res => {
-                resolve(res.data.data || res.data || res)
-            })
-        })
-    }
-    addAuthority(data) {
-        if (!this.isClick) return Promise.reject('重复提交！')
-        this.isClick = false
-        setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
-            url: this.baseUrl + '/addAuthority',
-            method: 'post',
-            data
-        })
-    }
-    addMember(data) {
-        if (!this.isClick) return Promise.reject('重复提交！')
-        this.isClick = false
-        setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
-            url: this.baseUrl + '/addMember',
-            method: 'post',
-            data
-        })
+    /**
+     * 会员
+     */
+    member() {
+        this._init('/mem')
+        return this
     }
 }
 
