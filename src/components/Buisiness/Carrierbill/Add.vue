@@ -234,22 +234,33 @@
 												</el-form-item>
 											</td>
 											<td style="border-spacing:0">
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoWeight'" :rules="[{ validator: checkFloat2 },{
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoWeight'" 
+													:rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
 																callback('请输入重量')
+															} else {
+																callback()
 															}
 														}
-													}]" v-if="item.dispatchType=='Weight'">
+													}]" 
+													v-if="item.dispatchType=='Weight'">
 													<el-input placeholder="货物重量" v-model="item.cargoWeight">
 														<template slot="append">吨</template>
 													</el-input>
 												</el-form-item>
 											
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoVolume'" 
+													:rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Volumn' &&(!item.cargoVolume|| item.cargoVolume == '0')) {
 																callback('请输入体积')
+															} else {
+																callback()
 															}
 														}
 													}]" v-else-if="item.dispatchType=='Volumn'">
@@ -408,14 +419,14 @@ export default {
         carrierCargo: [
           {
             cargoID: "",
-            cargoName: "",
-            dispatchType: "",
-            cargoWeight: "",
-            cargoVolume: "",
+			cargoName: "",
+			cargoWeight: "",
+			cargoVolume: "",
+			dispatchType: ''
           }
         ] /** String货物清单（JSON串）*/,
-        freight: "" /** BigDecimal运费*/,
-        porRequire: [] /** String 回单要求*/
+        freight: "" /** BigDecimal运费 */,
+        porRequire: [] /** String 回单要求 */
       },
       freight: "",
       selectedShipper: null,
@@ -487,12 +498,12 @@ export default {
               1000;
           }
         }
-      }
-      this.carrierbillInfo.freight = sum ? sum.toFixed(2) : "";
-      return sum.toFixed(2);
+	  }
+      this.carrierbillInfo.freight = sum ? sum.toFixed(2) : ""
+      return sum.toFixed(2)
     },
     changeFreight(val) {
-      this.freight = val;
+    	this.freight = val
     },
     handSelectDate() {
       this.$refs["ruleForm"].validateField("shipperDate");
@@ -519,14 +530,10 @@ export default {
       }
     },
     getUnits() {
-      Company.cargoUnit()
-        .find({
-          current: 1,
-          size: 1000
-        })
-        .then(res => {
-          this.units = res.records;
-        });
+    	Company.cargoUnit().find({
+			current: 1,
+			size: 1000
+        }).then(res => { this.units = res.records })
     },
     getCargos(queryString, cb) {
       Company.cargo()
@@ -727,8 +734,7 @@ export default {
         !consigneeCustomerAddressID
       )
         return;
-      Company.customerRoutePrice()
-        .listForCalc([
+      Company.customerRoutePrice().listForCalc([
           {
             customerID,
             shipperCustomerID,
@@ -752,13 +758,10 @@ export default {
               this.carrierbillInfo.consigneeLocationLat;
             this.getDistance(start, end);
           }
-          if (
-            +this.receivableVolumnUnitPrice == 0 &&
-            +this.receivableWeightUnitPrice == 0
-          ) {
-            this.carrierbillInfo.freight = "";
-          }
-        });
+			if (+this.receivableVolumnUnitPrice == 0 && +this.receivableWeightUnitPrice == 0 ) {
+				this.carrierbillInfo.freight = ""
+			}
+        })
     },
     /**
      * 调用高德地图接口获取距离
@@ -771,52 +774,35 @@ export default {
       if (res.data.status == 1)
         this.receivableDistance = res.data.results[0].distance;
     },
-    save() {
-      new Promise((resolve, reject) => {
-        this.$refs["ruleForm"].validate(valid => {
-          if (!valid) {
-            this.$nextTick(() => {
-              Message.error($(".el-form-item__error:first").text());
-            });
-            return;
-          }
-          resolve();
-        });
-      }).then(() => {
-        this.$refs["cargoRuleForm"].validate(valid => {
-          if (!valid) return;
-          const carrierbill = Object.assign({}, this.carrierbillInfo);
-          for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
-            const cargo = carrierbill.carrierCargo[i];
-            if (!cargo.cargoWeight) cargo.cargoWeight = 0;
-            if (!cargo.cargoVolume) cargo.cargoVolume = 0;
-            if (!cargo.cargoNum) cargo.cargoNum = 0;
-          }
-          carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo);
-          carrierbill.porRequire = carrierbill.porRequire.join(",");
-          if (carrierbill.shipperTime) {
-            carrierbill.shipperDate =
-              carrierbill.shipperDate +
-              timeToTimestamp(carrierbill.shipperTime);
-          } else {
-            carrierbill.shipperDate = carrierbill.shipperDate + 86399000;
-          }
-          if (carrierbill.consigneeTime) {
-            carrierbill.consigneeDate =
-              carrierbill.consigneeDate +
-              timeToTimestamp(carrierbill.consigneeTime);
-          } else {
-            carrierbill.consigneeDate = carrierbill.consigneeDate + 86399000;
-          }
-          carrierbill.freight = this.freight
-            ? this.freight
-            : this.carrierbillInfo.freight;
-          CarryOrder.add(carrierbill).then(res => {
-            Message.success("成功！");
-            this.$router.push({ name: "carrierbill" });
-          });
-        });
-      });
+    async save() {
+		const valid1 = await this.$refs["ruleForm"].validate()
+		if (!valid1) return
+		const valid2 = await this.$refs["cargoRuleForm"].validate()
+		if (!valid2) return
+		const carrierbill = Object.assign({}, this.carrierbillInfo);
+		for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
+			const cargo = carrierbill.carrierCargo[i];
+			if (!cargo.cargoWeight) cargo.cargoWeight = 0;
+			if (!cargo.cargoVolume) cargo.cargoVolume = 0;
+			if (!cargo.cargoNum) cargo.cargoNum = 0;
+		}
+		carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo);
+		carrierbill.porRequire = carrierbill.porRequire.join(",");
+		if (carrierbill.shipperTime) {
+			carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
+		} else {
+			carrierbill.shipperDate = carrierbill.shipperDate + 86399000
+		}
+		if (carrierbill.consigneeTime) {
+			carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
+		} else {
+			carrierbill.consigneeDate = carrierbill.consigneeDate + 86399000
+		}
+		carrierbill.freight = this.freight ? this.freight : this.carrierbillInfo.freight
+		CarryOrder.add(carrierbill).then(res => {
+			Message.success("成功！")
+			this.$router.push({ name: "carrierbill" })
+		})
     },
     addItem() {
       let cargo = this.carrierbillInfo.carrierCargo;
