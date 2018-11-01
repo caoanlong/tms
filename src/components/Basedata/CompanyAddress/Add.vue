@@ -140,7 +140,11 @@ export default {
 		},
 		clearSelect(){
 			this.companyAddress.customerID = ''
-			this.companyAddress.companyName =''
+            this.companyAddress.companyName =''
+			this.companyAddress.contactName = ''
+            this.companyAddress.contactPhone = ''
+            this.selectedArea=[]
+            this.$refs['ruleForm'].resetFields()
 		},
 		handSelectedArea(data) {
 			if (data) {

@@ -23,7 +23,10 @@
 					<el-tag size="mini" type="info" v-else-if="truck.truckCategory == 'WholeVehicle'">整车</el-tag>
 					<el-tag size="mini" type="success" v-if="truck.workStatus == 'Free'">空闲中</el-tag>
 					<el-tag size="mini" type="success" v-else-if="truck.workStatus == 'Working'">作业中</el-tag>
-                    <el-tag size="mini" :type="truck.gpsFlag=='Y'?'success':'info'" :class="truck.gpsFlag=='Y'?'el-icon-success':'el-icon-warning'"> GPS</el-tag>
+                    <el-tooltip placement="top" effect="light">
+                        <div slot="content">{{truck.gpsFlag=='Y'?'GPS已安装':'GPS未安装'}}</div>
+                        <el-tag size="mini" :type="truck.gpsFlag=='Y'?'success':'info'" :class="truck.gpsFlag=='Y'?'el-icon-success':'el-icon-warning'"> GPS</el-tag>
+                    </el-tooltip>
 					<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 						<div slot="content">
 							<el-tag size="mini" type="danger" v-for="(item,index) in truckExp" :key="index">{{

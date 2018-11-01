@@ -54,11 +54,10 @@
                             type="success">
                             {{item.workStatus == 'Free' ? '空闲' : '业务中'}}
                         </el-tag>
-                        <el-tag 
-                            size="mini" 
-                            v-if="item.gps && item.gps == 1">
-                            GPS
-                        </el-tag>
+                        <el-tooltip placement="top" effect="light">
+                            <div slot="content">{{item.gpsFlag=='Y'?'GPS已安装':'GPS未安装'}}</div>
+                            <el-tag size="mini" :type="item.gpsFlag=='Y'?'success':'info'" :class="item.gpsFlag=='Y'?'el-icon-success':'el-icon-warning'"> GPS</el-tag>
+                        </el-tooltip>
                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                             <div slot="content">
                                 <el-tag 
