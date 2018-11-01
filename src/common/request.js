@@ -6,9 +6,9 @@ export const baseURL = process.env.BASE_API
 
 export const href = () => {
 	if (process.env.ENV_CONFIG == 'test') {
-		return '/tms/#/login' // 测试
+		return '/huaxin/tms/#/login' // 测试
 	} else if (process.env.ENV_CONFIG == 'practice') {
-		return '/tms-h5/#/login' // 演练
+		return '/huaxin/tms-h5/#/login' // 演练
 	} else {
 		return '/#/login'  // 生产
 	}
