@@ -9,10 +9,13 @@
                             <p>{{companyName}}</p>
 						</el-form-item>
 						<el-form-item label="企业接入码" prop="senderCode">
-							<el-input v-model="notruckInfo.senderCode"></el-input>
+							<el-input v-model="notruckInfo.senderCode" v-if="isEdit"></el-input>
+                            <p v-else>{{notruckInfo.senderCode}}</p>
 						</el-form-item>
                         <el-form-item label="Appkey" prop="appkey">
-							<el-input v-model="notruckInfo.appkey"></el-input>
+                           
+							<el-input v-model="notruckInfo.appkey" v-if="isEdit"></el-input>
+                            <p v-else>{{notruckInfo.appkey}}</p>
 						</el-form-item>
                         <!-- <el-form-item label="报文功能代码" prop="messageFunctionCode">
 							<el-input v-model="notruckInfo.messageFunctionCode"></el-input>
@@ -29,7 +32,8 @@
 							</el-select>
 						</el-form-item> -->
 						<el-form-item>
-							<el-button type="primary" @click="save">立即保存</el-button>
+							<el-button type="primary" @click="save" v-if="isEdit">立即保存</el-button>
+                            <el-button type="primary" @click="edit" v-else>编辑</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -43,6 +47,7 @@ import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
+            isEdit:false,
 			notruckInfo: {
 				senderCode:'',
 				appkey:'',
@@ -66,6 +71,9 @@ export default {
 		this.getNotruckInfo()
 	},
 	methods: {
+        edit(){
+            this.isEdit=true
+        },
 		getCompanyName(){
 			this.companyName = localStorage.getItem("companyName")
 		},
@@ -91,7 +99,8 @@ export default {
 						// recipientCode:this.notruckInfo.recipientCode,
 						companyName:this.companyName
 					}).then(res => {
-						Message.success('成功！')
+                        Message.success('成功！')
+                        this.isEdit = false
 					})
 				}
 			})

@@ -25,7 +25,7 @@ class Company extends Base {
 				this.isClick = true
 			}, this.delay)
 			return this.request({
-				url: this.baseUrl + 'Info/updateExtend',
+				url: this.baseUrl + '/updateExtend',
 				method: 'post',
 				data
 			})
@@ -36,7 +36,7 @@ class Company extends Base {
          */
         this.detailOfExtend = (data) => {
 			return this.request({
-				url: this.baseUrl + 'Info/detailOfExtend',
+				url: this.baseUrl + '/detailOfExtend',
 				method: 'get',
 				data
 			})

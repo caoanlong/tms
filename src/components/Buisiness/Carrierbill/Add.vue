@@ -772,9 +772,11 @@ export default {
         this.receivableDistance = res.data.results[0].distance;
     },
     save() {
+        console.log(11)
       new Promise((resolve, reject) => {
         this.$refs["ruleForm"].validate(valid => {
           if (!valid) {
+              console.log(22)
             this.$nextTick(() => {
               Message.error($(".el-form-item__error:first").text());
             });
@@ -783,9 +785,11 @@ export default {
           resolve();
         });
       }).then(() => {
+          console.log(33)
         this.$refs["cargoRuleForm"].validate(valid => {
-          if (!valid) return;
-          const carrierbill = Object.assign({}, this.carrierbillInfo);
+            console.log(valid,44)
+          if (!valid) return
+          const carrierbill = Object.assign({}, this.carrierbillInfo)
           for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
             const cargo = carrierbill.carrierCargo[i];
             if (!cargo.cargoWeight) cargo.cargoWeight = 0;
