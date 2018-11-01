@@ -334,6 +334,7 @@ export default {
 					username: this.login.username.trim(),
 					password: this.login.password.trim()
 				}).then(res => {
+					console.log(res)
 					Message.success('成功！')
 					setCooikie('loginUserName', this.login.username)
 					new Promise((resolve, reject) => {
