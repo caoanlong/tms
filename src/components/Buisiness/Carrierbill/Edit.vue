@@ -239,42 +239,36 @@
 												</el-form-item>
 											</td>
 											<td style="border-spacing:0" v-if="item.dispatchType=='Weight'">
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoWeight'" :rules="[{ validator: checkFloat2 },{
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoWeight'" 
+													:rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
 																callback('请输入重量')
 															} else {
-																if (item.dispatchType=='Quantity' 
-																&& (!item.cargoWeight || item.cargoWeight == '0') 
-																&& (!item.cargoVolume|| item.cargoVolume == '0')) {
-																	callback('体积和重量必填一项')
-																} else {
-																	callback()
-																}
+																callback()
 															}
 														}
-													}]">
+													}]" 
+													v-if="item.dispatchType=='Weight'">
 													<el-input placeholder="货物重量" v-model="item.cargoWeight">
 														<template slot="append">吨</template>
 													</el-input>
 												</el-form-item>
-											</td>
-											<td style="border-spacing:0" v-if="item.dispatchType=='Quantity'">
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoVolume'" :rules="[{ validator: checkFloat2 },{
+											
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoVolume'" 
+													:rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Volumn' &&(!item.cargoVolume|| item.cargoVolume == '0')) {
 																callback('请输入体积')
 															} else {
-																if (item.dispatchType=='Quantity' 
-																&& (!item.cargoWeight || item.cargoWeight == '0') 
-																&& (!item.cargoVolume|| item.cargoVolume == '0')) {
-																	callback('体积和重量必填一项')
-																} else {
-																	callback()
-																}
+																callback()
 															}
 														}
-													}]">
+													}]" v-else-if="item.dispatchType=='Volumn'">
 													<el-input placeholder="货物体积" v-model="item.cargoVolume">
 														<template slot="append">方</template>
 													</el-input>
@@ -764,56 +758,36 @@ export default {
 			const res = await axios({ url })
 			if (res.data.status == 1) this.receivableDistance = res.data.results[0].distance
 		},
-		save() {
-			new Promise((resolve, reject) => {
-				this.$refs['ruleForm'].validate(valid => {
-					if (!valid) {
-						this.$nextTick(() => {
-							Message.error($('.el-form-item__error:first').text())
-						})
-						return
-					}
-					resolve()
-				})
-			}).then(() => {
-        console.log(2)
-				this.$refs['cargoRuleForm'].validate(valid => {
-					if (!valid) return
-					const carrierbill = Object.assign({}, this.carrierbillInfo)
-					for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
-						const cargo = carrierbill.carrierCargo[i]
-						if (!cargo.cargoWeight) cargo.cargoWeight = 0
-						if (!cargo.cargoVolume) cargo.cargoVolume = 0
-						if (!cargo.cargoNum) cargo.cargoNum = 0
-					}
-					carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo)
-					carrierbill.porRequire = carrierbill.porRequire.join(',')
-					
-					if (this.shipperDateTime) {
-						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + timeToTimestamp(this.shipperDateTime)
-					} else {
-						carrierbill.shipperDate = getDateTotimestamp(this.carrierbillInfo.shipperDate) + 86399000
-					}
-					if (this.consigneeDateTime) {
-						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + timeToTimestamp(this.consigneeDateTime)
-					} else {
-						carrierbill.consigneeDate = getDateTotimestamp(this.carrierbillInfo.consigneeDate) + 86399000
-					}
-					if (!!this.$route.query.copy) {
-						delete carrierbill.carrierOrderID
-						CarryOrder.add(carrierbill).then(res => {
-							Message.success('成功！')
-							this.$router.push({name: 'carrierbill'})
-						})
-					} else {
-						CarryOrder.update(carrierbill).then(res => {
-							Message.success('成功！')
-							this.$router.push({name: 'carrierbill'})
-						})
-					}
-				})
-			})
-		},
+		async save() {
+            const valid1 = await this.$refs["ruleForm"].validate()
+            if (!valid1) return
+            const valid2 = await this.$refs["cargoRuleForm"].validate()
+            if (!valid2) return
+            const carrierbill = Object.assign({}, this.carrierbillInfo);
+            for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
+                const cargo = carrierbill.carrierCargo[i];
+                if (!cargo.cargoWeight) cargo.cargoWeight = 0;
+                if (!cargo.cargoVolume) cargo.cargoVolume = 0;
+                if (!cargo.cargoNum) cargo.cargoNum = 0;
+            }
+            carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo);
+            carrierbill.porRequire = carrierbill.porRequire.join(",");
+            if (carrierbill.shipperTime) {
+                carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
+            } else {
+                carrierbill.shipperDate = carrierbill.shipperDate + 86399000
+            }
+            if (carrierbill.consigneeTime) {
+                carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
+            } else {
+                carrierbill.consigneeDate = carrierbill.consigneeDate + 86399000
+            }
+            carrierbill.freight = this.freight ? this.freight : this.carrierbillInfo.freight
+            CarryOrder.update(carrierbill).then(res => {
+                Message.success("成功！")
+                this.$router.push({ name: "carrierbill" })
+            })
+        },
 		addItem() {
 			const dispatchType = this.carrierbillInfo.carrierCargo[0] ? this.carrierbillInfo.carrierCargo[0].dispatchType : 'Weight'
 			this.carrierbillInfo.carrierCargo.push({
