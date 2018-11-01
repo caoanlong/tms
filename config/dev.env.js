@@ -14,5 +14,5 @@ module.exports = merge(prodEnv, {
     // BASE_NODE_API: '"http://localhost:3002/api"',   // 本机node
     BASE_NODE_API: '"http://develop.we-service.cn/tms/nodejs/api"', // 测试node
     BASE_SYS_API: '"http://192.168.1.110:9919"', // 系统服务
-    IMG_API: '"http://develop.we-service.cn/hdd/image/"',
+    IMG_API: '"http://develop.we-service.cn/hx/image/"',
 })
