@@ -578,63 +578,41 @@ export default {
         });
     },
     getConsigneeCompany(queryString, cb) {
-      if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
-        this.carrierbillInfo.consigneeID = "";
-      }
-      Company.customer()
-        .suggest({
-          customerType: "Consignee",
-          companyName: queryString
-        })
-        .then(res => {
-          cb(res);
-        });
+		if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
+			this.carrierbillInfo.consigneeID = ""
+		}
+		Company.customer().suggest({
+			customerType: "Consignee",
+			companyName: queryString
+		}).then(res => { cb(res) })
     },
     getShipperAddress(queryString, cb) {
-      Company.customerAddress()
-        .listOfCarrierOrder({
-          customerID: this.carrierbillInfo.shipperID,
-          keyword: queryString
-        })
-        .then(res => {
-          cb && cb(res);
-        });
+		Company.customerAddress().listOfCarrierOrder({
+			customerID: this.carrierbillInfo.shipperID,
+			keyword: queryString
+		}).then(res => { cb && cb(res) })
     },
     getConsigneeAddress(queryString, cb) {
-      Company.customerAddress()
-        .listOfCarrierOrder({
-          customerID: this.carrierbillInfo.consigneeID,
-          keyword: queryString
-        })
-        .then(res => {
-          cb && cb(res);
-        });
+		Company.customerAddress().listOfCarrierOrder({
+			customerID: this.carrierbillInfo.consigneeID,
+			keyword: queryString
+		}).then(res => { cb && cb(res) })
     },
     handSelectCargo(data) {
-      if (this.carrierbillInfo.carrierCargo.length <= 1) {
-        this.carrierbillInfo.carrierCargo.forEach(item => {
-          if (item.cargoName == data.cargoName) {
-            item.cargoID = data.cargoID;
-            item.cargoUnitName = data.cargoUnit;
-            item.dispatchType = data.dispatchType;
-          }
-        });
-      } else {
-        if (
-          data.dispatchType != this.carrierbillInfo.carrierCargo[0].dispatchType
-        ) {
-          Message.error("配载方式不一样,请选择");
-          return;
-        } else {
-          this.carrierbillInfo.carrierCargo.forEach(item => {
-            if (item.cargoName == data.cargoName) {
-              item.cargoID = data.cargoID;
-              item.cargoUnitName = data.cargoUnit;
-              item.dispatchType = data.dispatchType;
-            }
-          });
-        }
-      }
+		if (this.carrierbillInfo.carrierCargo.length > 1 
+			&& data.dispatchType != this.carrierbillInfo.carrierCargo[0].dispatchType) {
+			Message.error("配载方式不一样,请选择")
+			return
+		}
+		this.carrierbillInfo.carrierCargo.forEach(item => {
+			if (item.cargoName == data.cargoName) {
+				item.cargoID = data.cargoID
+				item.cargoUnitName = data.cargoUnit
+				item.dispatchType = data.dispatchType
+				item.cargoWeight = ''
+				item.cargoVolume = ''
+			}
+		})
     },
     inputSelectCargo(i) {
       this.carrierbillInfo.carrierCargo[i].cargoID = "";

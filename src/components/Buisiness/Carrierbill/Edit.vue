@@ -635,11 +635,18 @@ export default {
 			})
 		},
 		handSelectCargo(data) {
+			if (this.carrierbillInfo.carrierCargo.length > 1 
+				&& data.dispatchType != this.carrierbillInfo.carrierCargo[0].dispatchType) {
+				Message.error("配载方式不一样,请选择")
+				return
+			}
 			this.carrierbillInfo.carrierCargo.forEach(item => {
 				if (item.cargoName == data.cargoName) {
 					item.cargoID = data.cargoID
 					item.cargoUnitName = data.cargoUnit
 					item.dispatchType = data.dispatchType
+					item.cargoWeight = ''
+					item.cargoVolume = ''
 				}
 			})
 		},

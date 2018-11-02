@@ -501,6 +501,7 @@ import { checkFloat2, checkInt } from '../../../common/valid'
 import { arrayUnique ,isFullDay} from '../../../common/utils'
 export default {
 	mixins: [baseMixin], 
+	components: { DistPicker, PublishDispatch, GrabOrder },
 	data(){
 		return {
 			dispatchDialog: false,
@@ -553,30 +554,31 @@ export default {
 		freightUpLimit() {
 			let freight = 0
 			this.selectedList.forEach(item => {
+				// 按重量配载
 				if (item.dispatchType == 'Weight') {
+					// 如果吨公里价格存在
 					if (item.payableWeightUnitPrice) {
 						freight += Number(item.payableWeightUnitPrice)
 								* (item.payableDistance ? Number(item.payableDistance)/1000 : 0) 
 								* (item.cargoWeightNew ? item.cargoWeightNew : 0)
 					} else {
-						freight += (item.freight && item.cargoWeight ? item.freight / item.cargoWeight : 0)
-								* (item.cargoWeightNew ? item.cargoWeightNew : 0)
+						freight += item.freightUnit * +item.cargoWeightNew
 					}
+				// 按体积配载
 				} else {
+					// 如果方公里价格存在
 					if (item.payableVolumnUnitPrice) {
 						freight += Number(item.payableVolumnUnitPrice) 
 								* (item.payableDistance ? Number(item.payableDistance)/1000 : 0)
 								* (item.cargoVolumeNew ? item.cargoVolumeNew : 0)
 					} else {
-						freight += (item.freight && item.cargoVolume ? item.freight / item.cargoVolume : 0)
-								* item.cargoVolumeNew
+						freight += item.freightUnit * +item.cargoVolumeNew
 					}
 				}
 			})
 			return freight.toFixed(2)
 		}
 	},
-	components: { DistPicker, PublishDispatch, GrabOrder },
 	created() {
 		const dispatchOrderID = this.$route.query.dispatchOrderID
 		this.getList()
