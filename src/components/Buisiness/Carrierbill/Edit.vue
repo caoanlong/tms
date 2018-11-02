@@ -102,7 +102,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="10">
-									<el-form-item label-width="20px" prop="shipperDateTime">
+									<el-form-item label-width="20px" prop="shipperTime">
 										<el-time-select
 											v-model="shipperDateTime"
 											:disabled = carrierbillInfo.shipperDate?false:true
@@ -111,7 +111,7 @@
 												step: '00:30',
 												end:'23:30',
 												minTime:this.minDateTime,
-												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':carrierbillInfo.consigneeTime
+												maxTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':this.consigneeDateTime
 											}"
 											@change="handSelectShipperTime"
 											style="width:100%"
@@ -173,7 +173,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="10">
-									<el-form-item label-width="20px" prop="consigneeDateTime">
+									<el-form-item label-width="20px" prop="consigneeTime">
 										<el-time-select
 											v-model="consigneeDateTime"
 											:disabled = carrierbillInfo.consigneeDate?false:true
@@ -181,8 +181,9 @@
 												start:'00:00',
 												step: '00:30',
 												end:'23:30',
-												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':shipperDateTime
+												minTime:(carrierbillInfo.consigneeDate>carrierbillInfo.shipperDate)?'':this.shipperDateTime
 											}"
+                                            @change="handSelectConsigneeTime"
 											value-format="timestamp"
 											style="width:100%"
 											placeholder="选择到货时间">
@@ -228,7 +229,7 @@
 														placeholder="请选择货物" 
 														@select="handSelectCargo" 
 														@input="inputSelectCargo(index)">
-                            <template slot-scope="{ item }">
+                                                        <template slot-scope="{ item }">
 															<span class="dispatchType">（{{item.dispatchType=='Weight'?'按重量配载':'按体积配载' }}）</span>{{ item.cargoName }}
 														</template>
 														<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect(index)"></i>
@@ -368,7 +369,7 @@ import axios from 'axios'
 import { mapGetters } from 'vuex'
 import CarryOrder from '../../../api/CarryOrder'
 import Company from '../../../api/Company'
-import { timeToTimestamp, timestampToTime,getDateTotimestamp } from '../../../common/utils'
+import { timeToTimestamp, timestampToTime,getDateTotimestamp,formattimestamp } from '../../../common/utils'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
 import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
@@ -515,13 +516,14 @@ export default {
 				this.carrierbillInfo = carrierbillInfo
 				if (!!this.$route.query.copy) {
 					this.carrierbillInfo.shipperDate = ''
-					this.carrierbillInfo.shipperDateTime = ''
+					this.carrierbillInfo.consigneeTime = ''
 					this.carrierbillInfo.consigneeDate = ''
-					this.carrierbillInfo.consigneeDateTime = ''
+					this.carrierbillInfo.consigneeTime = ''
 				} else {
 					this.shipperDateTime = timestampToTime(res.shipperDate)
 					this.consigneeDateTime = timestampToTime(res.consigneeDate)
-				}
+                }
+                console.log(timestampToTime(res.shipperDate),timestampToTime(res.consigneeDate))
 				this.listForCalc()
 				this.getMinDateTime()
 			})
@@ -536,8 +538,10 @@ export default {
 		},
 		handSelectShipperTime(val){
 			if(!val){
-				this.carrierbillInfo.shipperTime=''
-			}
+				this.shipperDateTime=''
+			}else{
+                 this.shipperDateTime=val
+            }
 		},
 		handSelectConsigneeDate(){
 			this.$refs['ruleForm'].validateField('consigneeDate')
@@ -546,8 +550,10 @@ export default {
 		},
 		handSelectConsigneeTime(val){
 			if(!val){
-				this.carrierbillInfo.consigneeTime=''
-			}
+				this.consigneeDateTime=''
+			}else{
+                this.consigneeDateTime=val
+            }
 		},
 		getMinDateTime() {
 			let now = new Date()
@@ -799,7 +805,7 @@ export default {
             if (!valid1) return
             const valid2 = await this.$refs["cargoRuleForm"].validate()
             if (!valid2) return
-            const carrierbill = Object.assign({}, this.carrierbillInfo);
+            const carrierbill = Object.assign({}, this.carrierbillInfo)
             for (let i = 0; i < carrierbill.carrierCargo.length; i++) {
                 const cargo = carrierbill.carrierCargo[i];
                 if (!cargo.cargoWeight) cargo.cargoWeight = 0;
@@ -808,15 +814,21 @@ export default {
             }
             carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo);
             carrierbill.porRequire = carrierbill.porRequire.join(",");
-            if (carrierbill.shipperTime) {
-                carrierbill.shipperDate = carrierbill.shipperDate + timeToTimestamp(carrierbill.shipperTime)
+            if (this.shipperDateTime) {
+                carrierbill.shipperDate = String(
+                    Number(formattimestamp(carrierbill.shipperDate)) + 
+                    Number(timeToTimestamp(this.shipperDateTime))
+                    )
             } else {
-                carrierbill.shipperDate = carrierbill.shipperDate + 86399000
+                carrierbill.shipperDate = String(Number(formattimestamp(carrierbill.shipperDate)) + 86399000)
             }
-            if (carrierbill.consigneeTime) {
-                carrierbill.consigneeDate = carrierbill.consigneeDate + timeToTimestamp(carrierbill.consigneeTime)
+            if (this.consigneeDateTime) {
+                carrierbill.consigneeDate = String(
+                    Number(formattimestamp(carrierbill.consigneeDate)) + 
+                    Number(timeToTimestamp(this.consigneeDateTime))
+                    )
             } else {
-                carrierbill.consigneeDate = carrierbill.consigneeDate + 86399000
+                carrierbill.consigneeDate = String(Number(formattimestamp(carrierbill.consigneeDate)) + 86399000)
             }
 			carrierbill.freight = this.freight ? this.freight : this.carrierbillInfo.freight
 			if (!!this.$route.query.copy) {

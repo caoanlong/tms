@@ -141,7 +141,7 @@
                         </div> -->
                         <div class="transFeeTips">
                             <svg-icon icon-class="info" class="infoIcon"></svg-icon>
-                            <p>支付运费上限金额：{{freightUpLimit}}元</p>
+                            <p>支付运费上限金额：{{freightUpLimit}}元 <span v-if="isExceed" class="exceedTips">基础运费已大于支付运费上限金额，如确认以金额 <b>{{baseDizDispatchFee.amount}}</b> 元发布，请忽略此信息</span></p>
                         </div>
                     <!-- </el-tooltip> -->
                     <el-form 
@@ -150,7 +150,7 @@
                         :rules="baseDizDispatchFeeRule"
                         :inline="true" size="mini">
                         <el-form-item label="基础运费" prop="amount">
-                            <el-input placeholder="请输入..." v-model="baseDizDispatchFee.amount"></el-input>
+                            <el-input placeholder="请输入..." v-model="baseDizDispatchFee.amount" @input="checkLimit"></el-input>
                         </el-form-item>
                         <el-form-item label="支付方式" prop="payMode">
                             <el-select 
@@ -303,18 +303,8 @@
                     <el-button type="primary" @click="publish" size="small">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
                 </el-row>
         </el-dialog>
-        <select-truck 
-            :loadDate="loadDate"
-            :isVisible="truckDialog" 
-            @control="handSelectTruck">
-        </select-truck>
-        <select-person 
-            :loadDate="loadDate"
-            :isVisible="personDialog" 
-            :truck="selectedTruck" 
-            :type="personType" 
-            @control="handSelectPerson">
-        </select-person>
+        <select-truck :isVisible="truckDialog" @control="handSelectTruck"></select-truck>
+        <select-person :isVisible="personDialog" :truck="selectedTruck" :type="personType" @control="handSelectPerson"></select-person>
     </div>
 </template>
 
@@ -357,10 +347,10 @@ export default {
     },
     data() {
         return {
+            isExceed:false,
             truckDialog: false,
             personDialog: false,
             selectedTruck: {},
-            loadDate: '',
             personType: 'primary',
             baseDizDispatchFee: {
                 item: 'Freight',  // 费用科目
@@ -409,12 +399,6 @@ export default {
             },
             deep: true
         },
-        transLines: {
-            handler(list) {
-                this.loadDate = list[0].requireTime
-            },
-            deep: true
-        },
         isVisible: function (val){
             if(val){
                 let now = new Date()
@@ -441,7 +425,13 @@ export default {
         }
     },
     methods: {
-
+        checkLimit(val){
+            if(Number(val)>Number(this.freightUpLimit)){
+                this.isExceed = true
+            }else{
+                this.isExceed = false
+            }
+        },
         /**
 		 * 调用高德地图接口获取距离
 		 */
@@ -595,7 +585,7 @@ export default {
                 this.$refs['ruleForm2'].validate(valid => {
                     if (!valid) flag = false
                 })
-                flag ? resolve() : reject()
+				flag ? resolve() : reject()
 			}).then(() => {
                 const dispatchTaskCargoList = this.dispatchTaskCargoList.map(item => {
                     return {
@@ -629,41 +619,21 @@ export default {
                         this.normal.endDate = ''
                     }
                 }
-                if(this.baseDizDispatchFee.amount > this.freightUpLimit){
-                    this.$confirm('基础运费已超运费限额，是否继续发布?', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                        type: 'warning'
-                    }).then(() => {
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!'
-                        });
-                    }).catch(() => {
-                        this.$message({
-                            type: 'info',
-                            message: '已取消删除'
-                        });          
-                    });
-                }
-                
+                DispatchOrder.addForDispatch({
+                    truckID: this.selectedTruck.truckID,
+                    driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
+                    superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',
+                    bizDispatchFeeList,
+                    dispatchTaskCargoList,
+                    dispatchTaskList,
+                    bizDispatchNodeList: this.transLines,
+                    endDate: this.normal.endDate ? this.normal.endDate:'',
+                    distance: this.totalDistance
+                }).then(res => {
+                    Message.success('成功！')
+                    this.$emit('cancel', true)
+                })
 			}).catch(err => {})
-        },
-        publish(){
-            DispatchOrder.addForDispatch({
-                truckID: this.selectedTruck.truckID,
-                driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
-                superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',
-                bizDispatchFeeList,
-                dispatchTaskCargoList,
-                dispatchTaskList,
-                bizDispatchNodeList: this.transLines,
-                endDate: this.normal.endDate ? this.normal.endDate:'',
-                distance: this.totalDistance
-            }).then(res => {
-                Message.success('成功！')
-                this.$emit('cancel', true)
-            })
         },
         close() {
             this.$emit('cancel')
@@ -736,5 +706,8 @@ export default {
 		position absolute
 		left 0
 		top 5px
+.exceedTips
+    color #f00
+    margin-left 10px
 </style>
 

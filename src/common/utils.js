@@ -331,12 +331,9 @@ export function isFullDay(input) {
 
 export function timestampToTime(input) {
     let now = new Date(Number(input))
-    let year = now.getFullYear()
-    let month = now.getMonth() + 1 < 10 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1
-    let date = now.getDate() < 10 ? '0' + now.getDate() : now.getDate()
     let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
     let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
-    let second = now.getSeconds() < 10 ? '0' + now.getSeconds() : now.getSeconds()
+    console.log(hour, minute)
     if (minute == '00' || minute == '30') {
         return hour + ":" + minute
     } else {
@@ -351,4 +348,10 @@ export function getDateTotimestamp(input) {
     let date = now.getDate() < 10 ? '0' + now.getDate() : now.getDate()
     let _date = new Date(year + "/" + month + "/" + date).valueOf()
     return _date
+}
+
+
+export function formattimestamp(input) {
+    console.log(String(input).substring(0, 4) + '088000000',1)
+    return String(input).substring(0, 4) + '088000000'
 }
