@@ -206,8 +206,10 @@
 								<table class="cargoList">
 									<tr>
 										<th><span>*</span>货名</th>
-										<th>配载方式</th>
-										<th>货量</th>
+										<th width="150">配载方式</th>
+										<th width="200">货量</th>
+										<th width="150">数量</th>
+										<th width="150">单位</th>
 										<th>操作</th>
 									</tr>
 									<tbody>
@@ -238,7 +240,7 @@
 													<el-input placeholder="配载方式" style="width:100%" :value="DISPATCHTYPE[item.dispatchType]" disabled></el-input>
 												</el-form-item>
 											</td>
-											<td style="border-spacing:0" v-if="item.dispatchType=='Weight'">
+											<td style="border-spacing:0">
 												<el-form-item 
 													label-width="0" 
 													:prop="'carrierCargo.' + index + '.cargoWeight'" 
@@ -274,8 +276,24 @@
 													</el-input>
 												</el-form-item>
 											</td>
-											<td style="border-spacing:0" v-if="item.dispatchType==''"></td>
+                                             <td>
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'">
+													<el-input-number v-model="item.cargoNum" :min="0" style="width:100%"></el-input-number>
+												</el-form-item>
+											</td>
 											<td>
+												<el-form-item label-width="0">
+													<el-select v-model="item.cargoUnitName" placeholder="货物单位" disabled style="width:100%">
+														<el-option 
+															v-for="(unit, index) in units" 
+															:key="index" 
+															:label="unit.unit" 
+															:value="unit.unit">
+														</el-option>
+													</el-select>
+												</el-form-item>
+											</td>
+											<td  align="center">
 												<el-form-item label-width="0">
 													<el-button type="text" icon="el-icon-plus" @click="addItem" v-if="index == 0">添加</el-button>
 													<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-else>删除</el-button>
@@ -291,7 +309,8 @@
 												{{sum('cargoVolume')}}方
 											</td>
 											<td align="center" v-else></td>
-											<td align="center"></td>
+											<td align="center">{{ parseInt(sum('cargoNum'))}}</td>
+											<td align="center" colspan="2"></td>
 										</tr>
 									</tfoot>
 								</table>
@@ -414,15 +433,17 @@ export default {
 				consigneeDetailAddress: '',     /** String 收货人详细地址*/
 				consigneeDate: '',              /** Date 收货时间*/
 				consigneeTime:'',
-				carrierCargo: [{
-					cargoID: '',
-					cargoName: '',
-					dispatchType: '',
-					cargoWeight:'',
-					cargoVolume: '',
-					cargoNum: '',
-					cargoUnitName: ''
-				}],                    /** String货物清单（JSON串）*/
+				carrierCargo: [
+                    {
+                        cargoID: "",
+                        cargoName: "",
+                        cargoWeight: "",
+                        cargoVolume: "",
+                        cargoNum: '',
+                        cargoUnitName: '',
+                        dispatchType: ''
+                    }
+                ],                    /** String货物清单（JSON串）*/
 				freight: '',                    /** BigDecimal运费*/
 				porRequire: []                /** String 回单要求*/
 			},
@@ -635,14 +656,30 @@ export default {
 			})
 		},
 		handSelectCargo(data) {
-			this.carrierbillInfo.carrierCargo.forEach(item => {
-				if (item.cargoName == data.cargoName) {
-					item.cargoID = data.cargoID
-					item.cargoUnitName = data.cargoUnit
-					item.dispatchType = data.dispatchType
-				}
-			})
-		},
+        if (this.carrierbillInfo.carrierCargo.length <= 1) {
+            this.carrierbillInfo.carrierCargo.forEach(item => {
+            if (item.cargoName == data.cargoName) {
+                item.cargoID = data.cargoID;
+                item.cargoUnitName = data.cargoUnit;
+                item.dispatchType = data.dispatchType;
+            }
+            });
+        } else {
+            if (data.dispatchType != this.carrierbillInfo.carrierCargo[0].dispatchType) 
+                {
+                    Message.error("配载方式不一样,请选择");
+                    return;
+                } else {
+                    this.carrierbillInfo.carrierCargo.forEach(item => {
+                        if (item.cargoName == data.cargoName) {
+                        item.cargoID = data.cargoID;
+                        item.cargoUnitName = data.cargoUnit;
+                        item.dispatchType = data.dispatchType;
+                        }
+                    });
+                }
+            }
+        },
 		inputSelectCargo(i) {
 			this.carrierbillInfo.carrierCargo[i].cargoID = ''
 		},
@@ -740,7 +777,6 @@ export default {
 				this.receivableVolumnUnitPrice = res[0].receivableVolumnUnitPrice
 				this.receivableWeightUnitPrice = res[0].receivableWeightUnitPrice
 				if (!this.receivableDistance) {
-					console.log(111111)
 					const start = this.carrierbillInfo.shipperLocationLng + ',' + this.carrierbillInfo.shipperLocationLat
 					const end = this.carrierbillInfo.consigneeLocationLng + ',' + this.carrierbillInfo.consigneeLocationLat
 					this.getDistance(start, end)
