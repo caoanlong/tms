@@ -44,7 +44,10 @@
 								:fetch-suggestions="getConsignorCompany"
 								placeholder="请输入..." 
 								@select="handSelectConsignorCompany">
-								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectConsignor"></i>
+								<i class="el-icon-close el-input__icon" 
+									slot="suffix"  
+									@click="clearSelectConsignor">
+								</i>
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
@@ -440,17 +443,13 @@ export default {
         consignorName: [{ required: true, message: "请选择委托方" }],
         carrierrName: [{ required: true, message: "请输入承运人" }],
         shipperID: [{ required: true, message: "请选择发货单位" }],
-        shipperName: [
-          { required: true, message: "请选择发货地址", trigger: "change" }
-        ],
+        shipperName: [{ required: true, message: "请选择发货地址", trigger: "change" }],
         shipperDate: [
           { required: true, message: "请选择发货时间" },
           { validator: checkShipperDateTime }
         ],
         consigneeID: [{ required: true, message: "请选择收货单位" }],
-        consigneeName: [
-          { required: true, message: "请选择收货地址", trigger: "change" }
-        ],
+        consigneeName: [{ required: true, message: "请选择收货地址", trigger: "change" }],
         consigneeDate: [
           { required: true, message: "请选择收货时间" },
           { validator: checkConsigneeDateTime }
@@ -479,23 +478,15 @@ export default {
     totalPrice() {
       let sum = 0;
       if (this.receivableDistance) {
-        for (
-          let i = this.carrierbillInfo.carrierCargo.length - 1;
-          i >= 0;
-          i--
-        ) {
+        for (let i = this.carrierbillInfo.carrierCargo.length - 1; i >= 0; i--) {
           if (this.carrierbillInfo.carrierCargo[i].dispatchType == "Weight") {
-            sum +=
-              (Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) *
-                this.receivableWeightUnitPrice *
-                this.receivableDistance) /
-              1000;
+            sum += (Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
+			  * this.receivableWeightUnitPrice 
+			  * this.receivableDistance) / 1000
           } else {
-            sum +=
-              (Number(this.carrierbillInfo.carrierCargo[i].cargoVolume) *
-                this.receivableVolumnUnitPrice *
-                this.receivableDistance) /
-              1000;
+            sum += (Number(this.carrierbillInfo.carrierCargo[i].cargoVolume) 
+			  * this.receivableVolumnUnitPrice 
+			  * this.receivableDistance) / 1000
           }
         }
 	  }
@@ -647,40 +638,50 @@ export default {
     },
     inputSelectCargo(i) {
       this.carrierbillInfo.carrierCargo[i].cargoID = "";
-    },
+	},
+	/**
+	 * 选择委托单位
+	 */
     handSelectConsignorCompany(data) {
-      this.selectedConsignor = data;
-      this.carrierbillInfo.consignorName = " ";
-      this.carrierbillInfo.consignorID = data.customerID;
-      this.$nextTick(() => {
-        this.carrierbillInfo.consignorName = data.companyName;
-        this.carrierbillInfo.flagconsignorName = data.companyName;
-      });
-      this.listForCalc();
-    },
+		this.selectedConsignor = data
+		this.carrierbillInfo.consignorName = " "
+		this.carrierbillInfo.consignorID = data.customerID
+		this.$nextTick(() => {
+			this.carrierbillInfo.consignorName = data.companyName
+			this.carrierbillInfo.flagconsignorName = data.companyName
+		})
+		this.listForCalc()
+		data.customerType.includes('Shipper') && this.handSelectShipperCompany(data)
+	},
+	/**
+	 * 选择发货单位
+	 */
     handSelectShipperCompany(data) {
-      this.isChangeShipper = !this.isChangeShipper;
-      this.selectedShipper = data;
-      this.carrierbillInfo.shipperCompanyName = " ";
-      this.carrierbillInfo.shipperID = data.customerID;
-      this.$nextTick(() => {
-        this.carrierbillInfo.shipperCompanyName = data.companyName;
-        this.carrierbillInfo.flagShipperCompanyName = data.companyName;
-        this.getShipperAddress("", false);
-      });
-      this.listForCalc();
-    },
+		this.isChangeShipper = !this.isChangeShipper
+		this.selectedShipper = data
+		this.carrierbillInfo.shipperCompanyName = " "
+		this.carrierbillInfo.shipperID = data.customerID
+		this.$nextTick(() => {
+			this.carrierbillInfo.shipperCompanyName = data.companyName
+			this.carrierbillInfo.flagShipperCompanyName = data.companyName
+			this.getShipperAddress("", false)
+		})
+		this.listForCalc()
+	},
+	/**
+	 * 选择收获单位
+	 */
     handSelectConsigneeCompany(data) {
-      this.isChangeConsignee = !this.isChangeConsignee;
-      this.selectedConsignee = data;
-      this.carrierbillInfo.consigneeCompanyName = " ";
-      this.carrierbillInfo.consigneeID = data.customerID;
-      this.$nextTick(() => {
-        this.carrierbillInfo.consigneeCompanyName = data.companyName;
-        this.carrierbillInfo.flagConsigneeCompanyName = data.companyName;
-        this.getConsigneeAddress("", false);
-      });
-      this.listForCalc();
+		this.isChangeConsignee = !this.isChangeConsignee
+		this.selectedConsignee = data
+		this.carrierbillInfo.consigneeCompanyName = " "
+		this.carrierbillInfo.consigneeID = data.customerID
+		this.$nextTick(() => {
+			this.carrierbillInfo.consigneeCompanyName = data.companyName
+			this.carrierbillInfo.flagConsigneeCompanyName = data.companyName
+			this.getConsigneeAddress("", false)
+		})
+		this.listForCalc()
     },
     handSelectShipperAddress(data) {
       this.carrierbillInfo.shipperAreaID = data.areaID;
@@ -717,8 +718,8 @@ export default {
       this.carrierbillInfo.consigneeID = "";
     },
     clearSelectConsignor() {
-      this.carrierbillInfo.consignorName = " ";
-      this.carrierbillInfo.consignorID = "";
+		this.carrierbillInfo.consignorName = " "
+		this.carrierbillInfo.consignorID = ""
     },
     listForCalc() {
       const customerID = this.carrierbillInfo.consignorID; /**委托客户ID*/
