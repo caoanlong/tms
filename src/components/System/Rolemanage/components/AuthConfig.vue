@@ -20,7 +20,7 @@
 
 <script>
 import { Message } from 'element-ui'
-import SysRole from '../../../../api/SysRole'
+import SysRoleMenu from '../../../../api/SysRoleMenu'
 export default {
     props: {
         showSetAuth: {
@@ -51,7 +51,7 @@ export default {
             this.$emit('selected-auth')
         },
         submitSetAuth() {
-            SysRole.menu().update({
+            SysRoleMenu.update({
                 roleID: this.setRoleID,
 				menuIDs: this.selectedMenuId.join(',')
             }).then(res => {
@@ -60,7 +60,7 @@ export default {
             })
         },
 		getAllMenus() {
-            SysRole.menu().find({ roleID: this.setRoleID }).then(res => {
+            SysRoleMenu.find({ roleID: this.setRoleID }).then(res => {
                 this.menus = res.menuList
                 this.selectedMenuId = res.menuIDList
             })

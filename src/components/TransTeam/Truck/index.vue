@@ -32,7 +32,7 @@
 				</el-upload>
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
 				<a :href="templateUrl" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
-                <el-button type="default" size="mini" icon="el-icon-refresh" @click="checkGPS">刷新GPS状态</el-button>
+                <el-button type="default" size="mini" icon="el-icon-refresh" @click="checkGPS">刷新GPS</el-button>
 			</div>
 			<div class="listTable">
 			<div class="driverList">

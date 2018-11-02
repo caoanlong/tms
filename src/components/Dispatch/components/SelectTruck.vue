@@ -27,6 +27,7 @@
             <el-form-item>
                 <el-button type="primary" @click="search">搜索</el-button>
                 <el-button @click="reset">重置</el-button>
+                <el-button type="default" size="mini" icon="el-icon-refresh" @click="checkGPS">刷新GPS</el-button>
             </el-form-item>
         </el-form>
         <table class="dialog-table">
@@ -116,19 +117,22 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import DispatchOrder from '../../../api/DispatchOrder'
+import Company from '../../../api/Company';
 export default {
     mixins: [baseMixin],
     props: {
         isVisible: {
             type: Boolean,
             default: false
-        }
+        },
+        loadDate: Number | String
     },
+
     data() {
         return {
             find: {
                 keyword: '',
-                shipperDate: new Date().getTime(),
+                shipperDate: '',
                 workStatus: 'Free',
                 appStatus: ''
             },
@@ -141,6 +145,9 @@ export default {
                 this.reset()
                 this.getList()
             }
+        },
+        loadDate(newVal) {
+            this.find.shipperDate = newVal
         }
     },
     methods: {
@@ -161,7 +168,7 @@ export default {
         },
         reset() {
             this.find.keyword = ''
-            this.find.shipperDate = new Date().getTime()
+            this.find.shipperDate = this.loadDate
             this.find.workStatus = 'Free'
             this.find.appStatus = ''
 			this.pageIndex = 1
@@ -192,6 +199,12 @@ export default {
             } else {
                 this.$emit('control')
             }
+        },
+        checkGPS() {
+            const plateNos = this.tableData.map(item => item.plateNo).join(',')
+            Company.truck().checkGPS({ plateNos }).then(res => {
+                this.getList()
+			})
         }
     }
 }

@@ -66,10 +66,9 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import { baseMixin } from '../../../common/mixin'
 import { mapGetters } from 'vuex'
+import { baseMixin } from '../../../common/mixin'
 import SysRole from '../../../api/SysRole'
-import Menu from '../../../api/Menu'
 import { deleteConfirm } from '../../../common/utils'
 import AuthConfig from './components/AuthConfig'
 import MemberConfig from './components/MemberConfig'

@@ -42,7 +42,6 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
-import SysRoleMember from '../../../api/SysRoleMember'
 import SysMember from '../../../api/SysMember'
 import Page from '../../CommonComponents/Page'
 import SelectRole from './components/SelectRole'
