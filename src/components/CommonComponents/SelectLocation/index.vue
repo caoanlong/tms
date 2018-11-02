@@ -61,6 +61,11 @@ export default {
             }
         }
     },
+    watch: {
+        selectedCity(newVal) {
+            // console.log(newVal)
+        }
+    },
     computed: {
         windowInnerHeight: () => window.innerHeight
     },
@@ -68,7 +73,6 @@ export default {
         if (this.locAddress) {
             this.address = this.locAddress
         }
-        console.log(this.location)
         this.createMapMask()
     },
     mounted() {
@@ -136,6 +140,7 @@ export default {
          * 根据地址获取经纬度
          */
         getLocationByArea() {
+            console.log(this.selectedCity)
             AMap.plugin('AMap.Geocoder', () => {
                 const geocoder = new AMap.Geocoder({
                     city: this.selectedCity

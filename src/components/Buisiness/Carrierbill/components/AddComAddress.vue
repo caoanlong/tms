@@ -50,6 +50,7 @@
         <select-location 
 			v-if="isLocationVisible" 
 			:location="[companyAddress.locationLng, companyAddress.locationLat]" 
+            :selectedCity="selectedCity" 
 			:locAddress="companyAddress.locationAddress" 
 			:callback="callbackLocation">
 		</select-location>
@@ -148,7 +149,7 @@ export default {
 				this.companyAddress.areaID = ''
 				this.selectedArea = []
 				this.selectedCity = ''
-			}
+            }
         },
         handSelectLocation(data) {
 			this.companyAddress.locationLng = data.location.lng
@@ -158,7 +159,7 @@ export default {
         handLocation() {
             this.companyAddress.locationLng = 0
 			this.companyAddress.locationLat = 0
-			this.isLocationVisible = true
+            this.isLocationVisible = true
         },
         callbackLocation(data) {
 			if (data) {
