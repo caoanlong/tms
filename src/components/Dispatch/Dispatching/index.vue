@@ -549,6 +549,7 @@ export default {
 			}, 0).toFixed(2)
 			return Number(val)
 		},
+		// 运费上限
 		freightUpLimit() {
 			let freight = 0
 			this.selectedList.forEach(item => {
