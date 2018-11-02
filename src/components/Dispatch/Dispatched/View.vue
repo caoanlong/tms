@@ -280,7 +280,7 @@ export default {
 		},
 		getFees() {
 			const dispatchOrderID = this.$route.query.dispatchOrderID
-			Dispatchbill.findFees({ dispatchOrderID }).then(res => {
+			DispatchOrder.feeList({ dispatchOrderID }).then(res => {
 				this.dispatchOrderFees = res
 			})
 		},

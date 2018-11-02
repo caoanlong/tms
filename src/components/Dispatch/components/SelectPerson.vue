@@ -100,6 +100,7 @@ export default {
             type: Boolean,
             default: false
         },
+        loadDate: Number | String,
         truck: Object,
         type: String
     },
@@ -107,7 +108,7 @@ export default {
         return {
             find: {
                 keyword: '',
-                shipperDate: new Date().getTime(),
+                shipperDate: '',
                 workStatus: 'Free',
                 appStatus: ''
             },
@@ -121,6 +122,9 @@ export default {
                 this.reset()
                 this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
             }
+        },
+        loadDate(newVal) {
+            this.find.shipperDate = newVal
         }
     },
     methods: {
@@ -158,7 +162,7 @@ export default {
         },
         reset() {
             this.find.keyword = ''
-            this.find.shipperDate = new Date().getTime()
+            this.find.shipperDate = this.loadDate
             this.find.workStatus = 'Free'
             this.find.appStatus = ''
 			this.pageIndex = 1

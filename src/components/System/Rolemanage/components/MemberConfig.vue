@@ -19,7 +19,7 @@
 </template>
 <script>
 import { Message } from 'element-ui'
-import SysRole from '../../../../api/SysRole'
+import SysRoleMem from '../../../../api/SysRoleMem'
 export default {
     props: {
         showSetMember: {
@@ -46,7 +46,7 @@ export default {
             this.$emit('selected-mem')
         },
         submitSetMember() {
-            SysRole.member().update({
+            SysRoleMem.update({
                 roleID: this.setRoleID,
 				memIDs: this.selectedMembers.map(item => item.memberID).join(',')
             }).then(res => {
@@ -59,7 +59,7 @@ export default {
 		},
 		getMembers() {
             this.members = []
-            SysRole.member().find({ roleID: this.setRoleID}).then(res => {
+            SysRoleMem.find({ roleID: this.setRoleID}).then(res => {
                 this.members = res.memList
                 this.selectedMembers = this.members.filter(item => item.checked == 'Y')
                 this.$nextTick(() => {

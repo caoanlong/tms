@@ -8,27 +8,6 @@ class SysRole extends Base {
             del: '/deleteBatch'
         })
     }
-    _init(url) {
-        this._find = `${url}/list`
-        this._findById = `${url}/detail`
-        this._add = `${url}/add`
-        this._update = `${url}/update`
-        this._del = `${url}/delete`
-    }
-    /**
-     * 菜单
-     */
-    menu() {
-        this._init('/menu')
-        return this
-    }
-    /**
-     * 会员
-     */
-    member() {
-        this._init('/mem')
-        return this
-    }
 }
 
 export default new SysRole('/sys/role', request)
