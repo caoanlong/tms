@@ -782,11 +782,19 @@ export default {
             } else {
                 carrierbill.consigneeDate = carrierbill.consigneeDate + 86399000
             }
-            carrierbill.freight = this.freight ? this.freight : this.carrierbillInfo.freight
-            CarryOrder.update(carrierbill).then(res => {
-                Message.success("成功！")
-                this.$router.push({ name: "carrierbill" })
-            })
+			carrierbill.freight = this.freight ? this.freight : this.carrierbillInfo.freight
+			if (!!this.$route.query.copy) {
+				delete carrierbill.carrierOrderID
+				CarryOrder.add(carrierbill).then(res => {
+					Message.success('成功！')
+					this.$router.push({name: 'carrierbill'})
+				})
+			} else {
+				CarryOrder.update(carrierbill).then(res => {
+					Message.success('成功！')
+					this.$router.push({name: 'carrierbill'})
+				})
+			}
         },
 		addItem() {
 			const dispatchType = this.carrierbillInfo.carrierCargo[0] ? this.carrierbillInfo.carrierCargo[0].dispatchType : 'Weight'
