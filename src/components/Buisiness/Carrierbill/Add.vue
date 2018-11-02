@@ -204,8 +204,10 @@
 								<table class="cargoList">
 									<tr>
 										<th><span>*</span>货名</th>
-										<th>配载方式</th>
-										<th>货量</th>
+										<th width="150">配载方式</th>
+										<th width="200">货量</th>
+										<th width="150">数量</th>
+										<th width="150">单位</th>
 										<th>操作</th>
 									</tr>
 									<tbody>
@@ -272,6 +274,23 @@
 													</el-input>
 												</el-form-item>
 											</td>
+                                            <td>
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'">
+													<el-input-number v-model="item.cargoNum" :min="0" style="width:100%"></el-input-number>
+												</el-form-item>
+											</td>
+											<td>
+												<el-form-item label-width="0">
+													<el-select v-model="item.cargoUnitName" placeholder="货物单位" disabled style="width:100%">
+														<el-option 
+															v-for="(unit, index) in units" 
+															:key="index" 
+															:label="unit.unit" 
+															:value="unit.unit">
+														</el-option>
+													</el-select>
+												</el-form-item>
+											</td>
 											<td  align="center">
 												<el-form-item label-width="0">
 													<el-button type="text" icon="el-icon-plus" @click="addItem" v-if="index == 0">添加</el-button>
@@ -288,7 +307,8 @@
 												{{sum('cargoVolume')}}方
 											</td>
 											<td align="center" v-else></td>
-											<td align="center"></td>
+                                            <td align="center">{{ parseInt(sum('cargoNum'))}}</td>
+											<td align="center" colspan="2"></td>
 										</tr>
 									</tfoot>
 								</table>
@@ -424,7 +444,9 @@ export default {
             cargoID: "",
 			cargoName: "",
 			cargoWeight: "",
-			cargoVolume: "",
+            cargoVolume: "",
+            cargoNum: '',
+            cargoUnitName: '',
 			dispatchType: ''
           }
         ] /** String货物清单（JSON串）*/,
@@ -555,12 +577,10 @@ export default {
       if (queryString != this.carrierbillInfo.flagconsignorName) {
         this.carrierbillInfo.consignorID = "";
       }
-      Company.customer()
-        .suggest({
+      Company.customer().suggest({
           customerType: "Delegate",
           companyName: queryString
-        })
-        .then(res => {
+        }).then(res => {
           cb(res);
         });
     },
@@ -568,12 +588,10 @@ export default {
       if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
         this.carrierbillInfo.shipperID = "";
       }
-      Company.customer()
-        .suggest({
+      Company.customer().suggest({
           customerType: "Shipper",
           companyName: queryString
-        })
-        .then(res => {
+        }).then(res => {
           cb(res);
         });
     },
@@ -581,12 +599,10 @@ export default {
       if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
         this.carrierbillInfo.consigneeID = "";
       }
-      Company.customer()
-        .suggest({
+      Company.customer().suggest({
           customerType: "Consignee",
           companyName: queryString
-        })
-        .then(res => {
+        }).then(res => {
           cb(res);
         });
     },
@@ -658,7 +674,7 @@ export default {
 	 */
     handSelectShipperCompany(data) {
 		this.isChangeShipper = !this.isChangeShipper
-		this.selectedShipper = data
+        this.selectedShipper = data
 		this.carrierbillInfo.shipperCompanyName = " "
 		this.carrierbillInfo.shipperID = data.customerID
 		this.$nextTick(() => {
@@ -806,17 +822,17 @@ export default {
 		})
     },
     addItem() {
-      let cargo = this.carrierbillInfo.carrierCargo;
-      const dispatchType = cargo[cargo.length - 1]
-        ? cargo[cargo.length - 1].dispatchType
-        : "Weight";
-      this.carrierbillInfo.carrierCargo.push({
-        cargoID: "",
-        cargoName: "",
-        cargoWeight: "",
-        cargoVolume: "",
-        dispatchType
-      });
+        let cargo = this.carrierbillInfo.carrierCargo;
+        const dispatchType = cargo[cargo.length - 1]? cargo[cargo.length - 1].dispatchType: "Weight";
+        this.carrierbillInfo.carrierCargo.push({
+            cargoID: "",
+            cargoName: "",
+            cargoWeight: "",
+            cargoVolume: "",
+            cargoNum: '',
+            cargoUnitName: '',
+            dispatchType: ''
+        });
     },
     removeItem(index) {
       this.carrierbillInfo.carrierCargo.splice(index, 1);

@@ -166,6 +166,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
+                       
                     </el-form>
                 </el-row>
                 <el-row>
@@ -369,15 +370,15 @@ export default {
             baseDizDispatchFeeRule: {
                 amount: [
                     { required: true, message: '请输入基础运费' },
-                    { 
-                        validator: (rule, value, callback) => {
-                            if (+value > +this.freightUpLimit) {
-                                callback('基础运费不能大于运费上限！')
-                            } else {
-                                callback()
-                            }
-                        } 
-                    }
+                    // { 
+                    //     validator: (rule, value, callback) => {
+                    //         if (+value > +this.freightUpLimit) {
+                    //             callback('基础运费不能大于运费上限！')
+                    //         } else {
+                    //             callback()
+                    //         }
+                    //     } 
+                    // }
                 ],
                 payMode: [{ required: true, message: '请选择支付方式' }],
             },
@@ -423,6 +424,7 @@ export default {
         }
     },
     methods: {
+
         /**
 		 * 调用高德地图接口获取距离
 		 */
@@ -576,7 +578,7 @@ export default {
                 this.$refs['ruleForm2'].validate(valid => {
                     if (!valid) flag = false
                 })
-				flag ? resolve() : reject()
+                flag ? resolve() : reject()
 			}).then(() => {
                 const dispatchTaskCargoList = this.dispatchTaskCargoList.map(item => {
                     return {
@@ -610,21 +612,41 @@ export default {
                         this.normal.endDate = ''
                     }
                 }
-                DispatchOrder.addForDispatch({
-                    truckID: this.selectedTruck.truckID,
-                    driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
-                    superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',
-                    bizDispatchFeeList,
-                    dispatchTaskCargoList,
-                    dispatchTaskList,
-                    bizDispatchNodeList: this.transLines,
-                    endDate: this.normal.endDate ? this.normal.endDate:'',
-                    distance: this.totalDistance
-                }).then(res => {
-                    Message.success('成功！')
-                    this.$emit('cancel', true)
-                })
+                if(this.baseDizDispatchFee.amount > this.freightUpLimit){
+                    this.$confirm('基础运费已超运费限额，是否继续发布?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });          
+                    });
+                }
+                
 			}).catch(err => {})
+        },
+        publish(){
+            DispatchOrder.addForDispatch({
+                truckID: this.selectedTruck.truckID,
+                driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
+                superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',
+                bizDispatchFeeList,
+                dispatchTaskCargoList,
+                dispatchTaskList,
+                bizDispatchNodeList: this.transLines,
+                endDate: this.normal.endDate ? this.normal.endDate:'',
+                distance: this.totalDistance
+            }).then(res => {
+                Message.success('成功！')
+                this.$emit('cancel', true)
+            })
         },
         close() {
             this.$emit('cancel')
