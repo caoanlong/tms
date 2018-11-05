@@ -87,6 +87,7 @@ export default {
                 this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
                 this.companyAddress.locationAddress = this.company ? this.company.locationAddress : ''
                 this.$nextTick(() => {
+                    console.log(this.company)
                     if (this.company) this.handSelectedArea(areaIdToArrayId(this.company.companyAreaID))
                 })
             }

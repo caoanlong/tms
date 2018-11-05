@@ -487,7 +487,12 @@ export default {
 					carrierbillInfo.porRequire = [res.porRequire]
 				}
 				this.selectedShipper = {
-					customerAddressNum: 1
+					customerAddressNum: 1,
+					companyAreaID: res.shipperAreaID,
+					customerID: res.shipperID,
+					companyName: res.shipperCompanyName,
+					contactName: res.shipperName,
+					contactPhone: res.shipperPhone
 				}
 				this.selectedShipperAddress = {
 					customerAddressID: res.shipperAddressID,
@@ -498,7 +503,12 @@ export default {
 					detailAddress: res.shipperDetailAddress
 				}
 				this.selectedConsignee = {
-					customerAddressNum: 1
+					customerAddressNum: 1,
+					companyAreaID: res.consigneeAreaID,
+					customerID: res.consigneeID,
+					companyName: res.consigneeCompanyName,
+					contactName: res.consigneeName,
+					contactPhone: res.consigneePhone
 				}
 				this.selectedConsigneeAddress = {
 					customerAddressID: res.consigneeAddressID,
