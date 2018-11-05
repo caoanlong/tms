@@ -56,13 +56,14 @@
 							<span class="block-title">发货信息</span>
 							<span class="addCompany" @click="addAddress('shipper')">新增企业地址</span>
 							<el-row class="block-content">
-								<el-form-item label="发货单位" prop="shipperID">
+                                <el-form-item label="发货单位" prop="shipperID">
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
 										v-model="carrierbillInfo.shipperCompanyName"
 										:fetch-suggestions="getShipperCompany"
-										placeholder="请输入..."
+										placeholder="请输入..." 
 										@select="handSelectShipperCompany">
+										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectShipper"></i>
 									</el-autocomplete>
 								</el-form-item>
 							</el-row>
@@ -127,13 +128,14 @@
 							<span class="block-title">到货信息</span>
 							<span class="addCompany" @click="addAddress('consignee')">新增企业地址</span>
 							<el-row class="block-content">
-								<el-form-item label="收货单位" prop="consigneeID">
+                                <el-form-item label="收货单位" prop="consigneeID">
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
 										v-model="carrierbillInfo.consigneeCompanyName"
 										:fetch-suggestions="getConsigneeCompany"
-										placeholder="请输入内容"
+										placeholder="请输入..."
 										@select="handSelectConsigneeCompany">
+										<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectConsignee"></i>
 									</el-autocomplete>
 								</el-form-item>
 							</el-row>
