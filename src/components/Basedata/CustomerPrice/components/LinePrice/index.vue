@@ -120,7 +120,7 @@ export default {
 			this.getList()
 		},
         getList() {
-            Company.customerRoutePrice().find({
+            Company.customerRoutePriceFind({
                 customerID: this.customerID,
                 current: this.pageIndex,
 				size: this.pageSize,
