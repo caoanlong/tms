@@ -849,6 +849,11 @@ export default {
 		 * 添加企业地址
 		 */
 		addAddress(type) {
+			if (type == "shipper") {
+				this.currentCompany = this.selectedShipper
+			} else {
+				this.currentCompany = this.selectedConsignee
+			}
 			this.addressDialog = true
 		},
 		handAddress() {

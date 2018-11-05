@@ -732,7 +732,7 @@ export default {
         !consigneeCustomerAddressID
       )
         return;
-      Company.customerRoutePrice().listForCalc([
+      Company.customerRoutePriceListForCalc([
           {
             customerID,
             shipperCustomerID,
