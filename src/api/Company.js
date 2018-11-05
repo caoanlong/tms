@@ -33,10 +33,14 @@ class Company extends Base {
 	 * @param {*} params 
 	 */
 	expireList(params) {
-		return this.request({
-			url: this.baseUrl + '/expireList',
-			params
-		})
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/expireList',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
     }
     
     /**

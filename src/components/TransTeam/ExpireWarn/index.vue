@@ -222,9 +222,9 @@ export default {
 			Company.expireList({
 				current: this.pageIndex,
 				size: this.pageSize,
-				realName:this.findrealName,
-				objType:this.findobjType,
-				expiredCertificate:this.findexpiredCertificate
+				realName: this.findrealName,
+				objType: this.findobjType,
+				expiredCertificate: this.findexpiredCertificate
 			}).then(res => {
 				this.tableData = res.records
 				this.total = res.total
