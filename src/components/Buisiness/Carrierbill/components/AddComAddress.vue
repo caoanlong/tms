@@ -85,6 +85,7 @@ export default {
                 this.companyAddress.companyName = this.company ? this.company.companyName : ''
                 this.companyAddress.contactName = this.company ? this.company.contactName : ''
                 this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
+                this.companyAddress.locationAddress = this.company ? this.company.locationAddress : ''
                 this.company && this.handSelectedArea(areaIdToArrayId(this.company.companyAreaID))
             }
         }
