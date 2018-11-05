@@ -303,8 +303,18 @@
                     <el-button type="primary" @click="publish" size="small">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
                 </el-row>
         </el-dialog>
-        <select-truck :isVisible="truckDialog" @control="handSelectTruck"></select-truck>
-        <select-person :isVisible="personDialog" :truck="selectedTruck" :type="personType" @control="handSelectPerson"></select-person>
+        <select-truck 
+            :loadDate="loadDate"
+            :isVisible="truckDialog" 
+            @control="handSelectTruck">
+        </select-truck>
+        <select-person 
+            :loadDate="loadDate"
+            :isVisible="personDialog" 
+            :truck="selectedTruck" 
+            :type="personType" 
+            @control="handSelectPerson">
+        </select-person>
     </div>
 </template>
 
@@ -352,6 +362,7 @@ export default {
             personDialog: false,
             selectedTruck: {},
             personType: 'primary',
+            loadDate: '',
             baseDizDispatchFee: {
                 item: 'Freight',  // 费用科目
                 category: 'Basic', // 费用类型
@@ -396,6 +407,12 @@ export default {
                         this.getDistance(start, end, i)
                     }
                 }
+            },
+            deep: true
+        },
+        transLines: {
+            handler(list) {
+                this.loadDate = list[0].requireTime
             },
             deep: true
         },
