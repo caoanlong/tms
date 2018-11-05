@@ -130,6 +130,16 @@ class Company extends Base {
             data
         })
     }
+    customerRoutePriceDelete(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + '/customer/routePrice/delete',
+            method: 'post',
+            data
+        })
+    }
     customerRoutePriceFind(params) {
         return new Promise((resolve, reject) => {
             this.request({

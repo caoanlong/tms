@@ -143,7 +143,7 @@ export default {
         },
         del(routePriceID) {
 			deleteConfirm(routePriceID, routePriceID => {
-				Company.del({ routePriceID }).then(res => {
+				Company.customerRoutePriceDelete({ routePriceID }).then(res => {
                     Message.success('删除成功!')
                     this.isChange = true
 					this.getList()
