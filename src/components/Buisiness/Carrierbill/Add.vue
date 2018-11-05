@@ -355,7 +355,7 @@
 		</el-card>
 		<add-com-address 
 			:isVisible="addressDialog" 
-			:company="currentCompany"
+			:company="currentCompany" 
 			@control="handAddress">
 		</add-com-address>
 	</div>
@@ -395,7 +395,7 @@ export default {
       }
     };
     return {
-      currentCompany: {},
+	  currentCompany: {},
       addressDialog: false,
       isChangeShipper: false,
       isChangeConsignee: false,
@@ -827,12 +827,12 @@ export default {
      * 添加企业地址
      */
     addAddress(type) {
-      if (type == "shipper") {
-        this.currentCompany = this.selectedShipper;
-      } else {
-        this.currentCompany = this.selectedConsignee;
-      }
-      this.addressDialog = true;
+		if (type == "shipper") {
+			this.currentCompany = this.selectedShipper
+		} else {
+			this.currentCompany = this.selectedConsignee
+		}
+		this.addressDialog = true
     },
     handAddress() {
       this.addressDialog = false;

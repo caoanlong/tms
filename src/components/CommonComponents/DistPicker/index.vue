@@ -35,6 +35,7 @@ export default {
 	watch: {
 		distList: {
 			handler(newVal) {
+				console.log(newVal)
 				this.selectList = searchAreaObjByKey(newVal)
 			},
 			deep: true

@@ -86,8 +86,15 @@ export default {
                 this.companyAddress.contactName = this.company ? this.company.contactName : ''
                 this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
                 this.companyAddress.locationAddress = this.company ? this.company.locationAddress : ''
-                this.company && this.handSelectedArea(areaIdToArrayId(this.company.companyAreaID))
             }
+        },
+        company: {
+            handler(newVal) {
+                this.$nextTick(() => {
+                    this.handSelectedArea(areaIdToArrayId(newVal.companyAreaID))
+                })
+            },
+            deep: true
         }
     },
     data() {
@@ -144,7 +151,7 @@ export default {
 		handSelectedArea(data) {
             if (data) {
 				this.companyAddress.areaID = data[data.length - 1]
-				this.selectedArea = data
+                this.selectedArea = data
 				data[1] && (this.selectedCity = distData[data[0]][data[1]])
 			} else {
 				this.companyAddress.areaID = ''
