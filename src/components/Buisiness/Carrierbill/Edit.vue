@@ -38,7 +38,7 @@
 				<el-row>
 					<el-col :span="8">
 
-						<el-form-item label="委托方" prop="consignorName">
+						<el-form-item label="委托方" prop="consignorID">
 							<el-autocomplete
 								value-key="companyName" style="width:100%"
 								v-model="carrierbillInfo.consignorName"
@@ -455,7 +455,7 @@ export default {
 			flagConsigneeCompanyName: '',
 			rules: {
 				commissionDate: [ {required: true, message: '请选择委托时间'} ],
-				consignorName: [ {required: true, message: '请输入托运人'} ],
+				consignorID: [ {required: true, message: '请输入托运人'} ],
 				carrierrName: [ {required: true, message: '请输入承运人'} ],
 				shipperID: [ {required: true, message: '请选择发货单位'} ],
 				shipperName: [ { required: true, message: '请选择发货地址', trigger: 'change'} ],
