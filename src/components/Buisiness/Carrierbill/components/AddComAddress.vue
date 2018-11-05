@@ -86,15 +86,10 @@ export default {
                 this.companyAddress.contactName = this.company ? this.company.contactName : ''
                 this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
                 this.companyAddress.locationAddress = this.company ? this.company.locationAddress : ''
-            }
-        },
-        company: {
-            handler(newVal) {
                 this.$nextTick(() => {
-                    this.handSelectedArea(areaIdToArrayId(newVal.companyAreaID))
+                    if (this.company) this.handSelectedArea(areaIdToArrayId(this.company.companyAreaID))
                 })
-            },
-            deep: true
+            }
         }
     },
     data() {
