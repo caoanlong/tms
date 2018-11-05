@@ -207,8 +207,10 @@
 								<table class="cargoList">
 									<tr>
 										<th><span>*</span>货名</th>
-										<th>配载方式</th>
-										<th>货量</th>
+										<th width="130">配载方式</th>
+										<th width="200">货量</th>
+                                        <th width="180">数量</th>
+										<th width="150">单位</th>
 										<th>操作</th>
 									</tr>
 									<tbody>
@@ -239,10 +241,8 @@
 													<el-input placeholder="配载方式" style="width:100%" :value="DISPATCHTYPE[item.dispatchType]" disabled></el-input>
 												</el-form-item>
 											</td>
-											<td style="border-spacing:0" v-if="item.dispatchType=='Weight'">
-												<el-form-item 
-													label-width="0" 
-													:prop="'carrierCargo.' + index + '.cargoWeight'" 
+											<td style="border-spacing:0">
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoWeight'" 
 													:rules="[{ validator: checkFloat2 },{
 														validator: (rule, value, callback) => {
 															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
@@ -275,8 +275,24 @@
 													</el-input>
 												</el-form-item>
 											</td>
-											<td style="border-spacing:0" v-if="item.dispatchType==''"></td>
 											<td>
+												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'">
+													<el-input-number v-model="item.cargoNum" :min="0" style="width:100%"></el-input-number>
+												</el-form-item>
+											</td>
+											<td>
+												<el-form-item label-width="0">
+													<el-select v-model="item.cargoUnitName" placeholder="货物单位" disabled>
+														<el-option 
+															v-for="(unit, index) in units" 
+															:key="index" 
+															:label="unit.unit" 
+															:value="unit.unit">
+														</el-option>
+													</el-select>
+												</el-form-item>
+											</td>
+											<td align="center">
 												<el-form-item label-width="0">
 													<el-button type="text" icon="el-icon-plus" @click="addItem" v-if="index == 0">添加</el-button>
 													<el-button type="text" icon="el-icon-delete" style="color:#F56C6C" @click="removeItem(index)" v-else>删除</el-button>
@@ -292,7 +308,8 @@
 												{{sum('cargoVolume')}}方
 											</td>
 											<td align="center" v-else></td>
-											<td align="center"></td>
+                                            <td align="center">{{ parseInt(sum('cargoNum'))}}</td>
+											<td align="center" colspan="2"></td>
 										</tr>
 									</tfoot>
 								</table>
@@ -502,7 +519,6 @@ export default {
 					this.shipperDateTime = timestampToTime(res.shipperDate)
 					this.consigneeDateTime = timestampToTime(res.consigneeDate)
                 }
-                console.log(timestampToTime(res.shipperDate),timestampToTime(res.consigneeDate))
 				this.listForCalc()
 				this.getMinDateTime()
 			})
@@ -753,7 +769,6 @@ export default {
 				this.receivableVolumnUnitPrice = res[0].receivableVolumnUnitPrice
 				this.receivableWeightUnitPrice = res[0].receivableWeightUnitPrice
 				if (!this.receivableDistance) {
-					console.log(111111)
 					const start = this.carrierbillInfo.shipperLocationLng + ',' + this.carrierbillInfo.shipperLocationLat
 					const end = this.carrierbillInfo.consigneeLocationLng + ',' + this.carrierbillInfo.consigneeLocationLat
 					this.getDistance(start, end)
@@ -786,18 +801,12 @@ export default {
             carrierbill.carrierCargo = JSON.stringify(carrierbill.carrierCargo);
             carrierbill.porRequire = carrierbill.porRequire.join(",");
             if (this.shipperDateTime) {
-                carrierbill.shipperDate = String(
-                    Number(formattimestamp(carrierbill.shipperDate)) + 
-                    Number(timeToTimestamp(this.shipperDateTime))
-                    )
+                carrierbill.shipperDate = String(Number(formattimestamp(carrierbill.shipperDate)) + Number(timeToTimestamp(this.shipperDateTime)))
             } else {
                 carrierbill.shipperDate = String(Number(formattimestamp(carrierbill.shipperDate)) + 86399000)
             }
             if (this.consigneeDateTime) {
-                carrierbill.consigneeDate = String(
-                    Number(formattimestamp(carrierbill.consigneeDate)) + 
-                    Number(timeToTimestamp(this.consigneeDateTime))
-                    )
+                carrierbill.consigneeDate = String(Number(formattimestamp(carrierbill.consigneeDate)) + Number(timeToTimestamp(this.consigneeDateTime)))
             } else {
                 carrierbill.consigneeDate = String(Number(formattimestamp(carrierbill.consigneeDate)) + 86399000)
             }
