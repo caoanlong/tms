@@ -300,7 +300,7 @@ export default {
 				const line = Object.assign({}, this.line)
 				line.receivableDistance = this.line.receivableDistance*1000
 				line.payableDistance = this.line.payableDistance*1000
-				Company.customerRoutePrice().add(line).then(res => {
+				Company.customerRoutePriceAdd(line).then(res => {
 					Message.success('保存成功！')
 					this.callback(true)
 				})
