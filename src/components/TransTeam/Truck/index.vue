@@ -157,7 +157,7 @@ export default {
 		},
 		getList() {
 			this.tableData = []
-			Company.truck().find({
+			Company.truckFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
@@ -182,7 +182,7 @@ export default {
 		},
 		del(truckID) {
 			deleteConfirm(truckID, truckIDs => {
-				Company.truck().delBatch({ truckIDs }).then(res => {
+				Company.truckDeleteBatch({ truckIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.getList()
 				})
@@ -193,7 +193,7 @@ export default {
         },
         checkGPS(){
             this.plateNoList = this.tableData.map(item => item.plateNo).join(',')
-            Company.truck().checkGPS({
+            Company.truckCheckGPS({
 				plateNos:this.plateNoList
 			}).then(res => {
                 this.getList()

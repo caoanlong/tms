@@ -89,7 +89,7 @@ export default {
 			this.selectedList = data.map(item => item.cargoUnitID)
 		},
 		getList() {
-			Company.cargoUnit().find({
+			Company.cargoUnitFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				unit:this.find.keyword,
@@ -101,7 +101,7 @@ export default {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				Company.cargoUnit().add({
+				Company.cargoUnitAdd({
 					unit: this.unit.unit
 				}).then(res => {
 					this.dialogFormVisible = false
@@ -113,7 +113,7 @@ export default {
 		},
 		del(cargoUnitID) {
 			deleteConfirm(cargoUnitID, cargoUnitIDs => {
-				Company.cargoUnit().delBatch({ cargoUnitIDs }).then(res => {
+				Company.cargoUnitDeleteBatch({ cargoUnitIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

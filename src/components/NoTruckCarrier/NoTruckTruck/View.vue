@@ -116,7 +116,7 @@ export default {
 	methods: {
 		getTruckInfo() {
 			const truckSourceID = this.$route.query.truckSourceID
-			Company.notruckTruck().findById({ truckSourceID }).then(res => {
+			Company.notruckTruckFindById({ truckSourceID }).then(res => {
 				this.TruckInfo = res
 			})
 		},

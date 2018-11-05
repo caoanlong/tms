@@ -59,7 +59,7 @@ export default {
 	methods: {
 		getInfo() {
 			const customerAddressID = this.$route.query.customerAddressID
-			Company.customerAddress().findById({ customerAddressID }).then(res => {
+			Company.customerAddressFindById({ customerAddressID }).then(res => {
 				this.companyAddress = res
 			})
 		},

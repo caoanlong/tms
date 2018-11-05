@@ -691,7 +691,7 @@ export default {
 		},
 		getInfo() {
 			const truckID = this.$route.query.truckID
-			Company.truck().findById({ truckID }).then(res => {
+			Company.truckFindById({ truckID }).then(res => {
 				this.truck = res
 			})
 		},

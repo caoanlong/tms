@@ -125,7 +125,7 @@ export default {
     },
     methods: {
         getCompanys(queryString, cb) {
-			Company.customer().suggest({
+			Company.customerSuggest({
 				companyName: queryString
 			}).then(res => { cb && cb(res) })
         },
@@ -180,7 +180,7 @@ export default {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				Company.customerAddress().add(this.companyAddress).then(res => {
+				Company.customerAddressAdd(this.companyAddress).then(res => {
                     Message.success('保存成功！')
                     this.close()
 				})

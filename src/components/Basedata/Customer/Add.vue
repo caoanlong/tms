@@ -92,7 +92,7 @@ export default {
 				if (!valid) return
 				const recdeliverycomp = Object.assign({}, this.recdeliverycomp)
 				recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
-				Company.customer().add(recdeliverycomp).then(res => {
+				Company.customerAdd(recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
 				})

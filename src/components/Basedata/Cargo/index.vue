@@ -123,7 +123,7 @@ export default {
 	methods: {
 		getCompanys(queryString, cb) {
 			this.resetExportExcelUrl()
-			Company.customer().suggest({
+			Company.customerSuggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
 		},
@@ -168,7 +168,7 @@ export default {
 			this.selectedList = data.map(item => item.cargoID)
 		},
 		getList() {
-			Company.cargo().find({
+			Company.cargoFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				shipperCompanyName: this.find.shipperCompanyName,
@@ -192,7 +192,7 @@ export default {
 		},
 		del(cargoNameID) {
 			deleteConfirm(cargoNameID, cargoNameIDs => {
-				Company.cargo().delBatch({ cargoNameIDs }).then(res => {
+				Company.cargoDeleteBatch({ cargoNameIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

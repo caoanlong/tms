@@ -920,7 +920,7 @@ export default {
 						return
 					})
 				} else {
-					Company.transporter().update(this.superCargo).then(res => {
+					Company.transporterUpdate(this.superCargo).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: this.fromRoute})
 					})
@@ -929,7 +929,7 @@ export default {
 		},
 		getInfo() {
 			const supercargoID = this.$route.query.supercargoID
-			Company.transporter().findById({ supercargoID }).then(res => {
+			Company.transporterFindById({ supercargoID }).then(res => {
 				this.superCargo = res
 				this.supercargoType = res.supercargoType == 'SupercargoDriver' ? ['Driver', 'Supercargo'] : [res.supercargoType]
 				this.idCardTime = [res.idCardBeginTime, res.idCardExpirationTime]

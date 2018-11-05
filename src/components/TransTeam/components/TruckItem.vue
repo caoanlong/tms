@@ -143,7 +143,7 @@ export default {
 			this.dialogVisible = true
 		},
 		primary() {
-			Company.truck().setDriverAsPrimary({
+			Company.truckSetDriverAsPrimary({
 				supercargoID: this.truck.secondaryDriver.supercargoID,
 				comTruckID: this.truck.truckID
 			}).then(res => {
@@ -153,7 +153,7 @@ export default {
 		},
 		delTruck(truckID) {
 			deleteConfirm(truckID, truckIDs => {
-				Company.truck().delBatch({ truckIDs }).then(res => {
+				Company.truckDeleteBatch({ truckIDs }).then(res => {
 					Message({ type: 'success', message: '删除成功!' })
 					this.$emit('refresh')
 				})
@@ -165,7 +165,7 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				Company.truck().clearDriver({
+				Company.truckClearDriver({
 					supercargoID,
 					comTruckID: this.truck.truckID
 				}).then(res => {

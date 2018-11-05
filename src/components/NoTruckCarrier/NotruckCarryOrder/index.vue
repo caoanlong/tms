@@ -117,7 +117,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			Company.notruckCarryOrder().find({
+			Company.notruckCarryOrderFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				shippingNoteNumber: this.find.shippingNoteNumber,

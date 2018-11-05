@@ -178,7 +178,7 @@ export default {
 				if (!valid) return
 				const data = Object.assign({}, this.cargo)
 				if (!data.customerID) data.customerID = 1
-				Company.cargo().add(data).then(res => {
+				Company.cargoAdd(data).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'cargo'})
 				})
@@ -186,7 +186,7 @@ export default {
 		},
 		getShipperCompanys(queryString, cb) {
 			this.cargo.customerID = ''
-			Company.customer().suggest({
+			Company.customerSuggest({
 				customerType: 'Shipper',
 				companyName: queryString
 			}).then(res => { cb(res) })
@@ -200,7 +200,7 @@ export default {
 			this.cargo.shipperCompanyName = ''
 		},
 		getUnitList() {
-			Company.cargoUnit().find({
+			Company.cargoUnitFind({
 				current: 1,
 				size: 1000
 			}).then(res => {
@@ -210,7 +210,7 @@ export default {
 		saveCargo() {
 			this.$refs['ruleForm1'].validate(valid => {
 				if (!valid) return
-				Company.cargoUnit().add({
+				Company.cargoUnitAdd({
 					unit: this.unit.unit
 				}).then(res => {
 					this.dialogFormVisible = false

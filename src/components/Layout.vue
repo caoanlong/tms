@@ -405,7 +405,7 @@ export default {
 			this.getCompanyInfo()
 		},
 		getCompanyInfo() {
-			Company.detail({
+			Company.findById({
 				companyID: this.userInfo.companyID
 			}).then(res => {
 				this.companyDetail = res

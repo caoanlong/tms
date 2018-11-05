@@ -293,7 +293,7 @@ export default {
 	methods: {
 		getWaybillInfo() {
 			const waybillID = this.$route.query.waybillID
-			Company.notruckCarryOrder().findById({ waybillID }).then(res => {
+			Company.notruckCarryOrderFindById({ waybillID }).then(res => {
 				this.WaybillInfo = res
 			})
 		},

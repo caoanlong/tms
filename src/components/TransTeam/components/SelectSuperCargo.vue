@@ -75,7 +75,7 @@ export default {
             } else {
                 obj.secondaryDriver = data.supercargoID
             }
-            Company.truck().changeDriver(obj).then(res => {
+            Company.truckChangeDriver(obj).then(res => {
                 Message.success(res.msg)
                 this.control(true, data)
             })
@@ -101,7 +101,7 @@ export default {
         },
         getList() {
             this.superCargos = []
-			Company.truck().driverListCanUse({
+			Company.truckDriverListCanUse({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword

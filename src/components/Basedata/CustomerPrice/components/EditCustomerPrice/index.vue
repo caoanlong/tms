@@ -107,14 +107,14 @@ export default {
     },
     methods: {
         getInfo() {
-            Company.customer().findById({ customerID: this.customerID }).then(res => {
+            Company.customerFindById({ customerID: this.customerID }).then(res => {
                 this.price = res
             })
         },
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return
-                Company.customer().update(this.price).then(res => {
+                Company.customerUpdate(this.price).then(res => {
                     Message.success('保存成功！')
                     this.callback(true)
 				})

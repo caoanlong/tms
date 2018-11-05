@@ -591,7 +591,7 @@ export default {
 			return sum.toFixed(2)
 		},
 		getCargos(queryString, cb) {
-			Company.cargo().find({
+			Company.cargoFind({
 				current: 1,
 				size: 1000,
 				customerID: this.carrierbillInfo.shipperID,
@@ -615,7 +615,7 @@ export default {
 			if (queryString != this.carrierbillInfo.flagConsignorName) {
 				this.carrierbillInfo.ConsignorID = ''
 			}
-			Company.customer().suggest({
+			Company.customerSuggest({
 				customerType: 'Delegate',
 				companyName: queryString
 			}).then(res => {
@@ -626,7 +626,7 @@ export default {
 			if (queryString != this.carrierbillInfo.flagConsignorName) {
 				this.carrierbillInfo.shipperID = ''
 			}
-			Company.customer().suggest({
+			Company.customerSuggest({
 				customerType: 'Shipper',
 				companyName: queryString
 			}).then(res => {cb(res) })
@@ -635,7 +635,7 @@ export default {
 			if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
 				this.carrierbillInfo.consigneeID = ''
 			}
-			Company.customer().suggest({
+			Company.customerSuggest({
 				customerType: 'Consignee',
 				companyName: queryString
 
@@ -643,7 +643,7 @@ export default {
 		},
 
 		getShipperAddress(queryString, cb) {
-			Company.customerAddress().listOfCarrierOrder({
+			Company.customerAddressListOfCarrierOrder({
 				customerID: this.carrierbillInfo.shipperID,
 				keyword: queryString
 			}).then(res => {
@@ -651,7 +651,7 @@ export default {
 			})
 		},
 		getConsigneeAddress(queryString, cb){
-			Company.customerAddress().listOfCarrierOrder({
+			Company.customerAddressListOfCarrierOrder({
 				customerID: this.carrierbillInfo.consigneeID,
 				keyword: queryString
 			}).then(res => {

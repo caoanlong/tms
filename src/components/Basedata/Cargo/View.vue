@@ -83,7 +83,7 @@ export default {
 	methods: {
 		getInfo() {
 			const cargoNameID = this.$route.query.cargoID
-			Company.cargo().findById({ cargoNameID }).then(res => {
+			Company.cargoFindById({ cargoNameID }).then(res => {
 				this.cargo = res
 			})
 		},

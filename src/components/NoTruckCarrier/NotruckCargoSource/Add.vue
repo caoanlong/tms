@@ -219,7 +219,7 @@ export default {
 						return
 					})
 				} else {
-					Company.notruckCargoSource().add({
+					Company.notruckCargoSourceAdd({
 						companyID:localStorage.getItem("companyID"),
 						messageReferenceNumber:this.CargoInfo.messageReferenceNumber,
 						documentName:this.CargoInfo.documentName,

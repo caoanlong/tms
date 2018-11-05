@@ -1224,7 +1224,7 @@ export default {
 	methods: {
         
 		getPrimaryDriver(queryString, cb) {
-			Company.truck().driverListCanUse({
+			Company.truckDriverListCanUse({
 				current: 1,
 				size: 1000,
 				type: 'driver',
@@ -1238,7 +1238,7 @@ export default {
 			})
 		},
 		getSecondaryDriver(queryString, cb) {
-			Company.truck().driverListCanUse({
+			Company.truckDriverListCanUse({
 				current: 1,
 				size: 1000,
 				type: 'driver',
@@ -1253,7 +1253,7 @@ export default {
 		},
 		getTrailers(queryString, cb) {
 			// this.truck.trailerID = ''
-			Company.truck().listByTrail({
+			Company.truckListByTrail({
 				current: 1,
 				size: 1000,
 				plateNo: queryString,
@@ -1329,7 +1329,7 @@ export default {
 						return
 					})
 				} else {
-					Company.truck().add(data).then(res => {
+					Company.truckAdd(data).then(res => {
 						Message.success(res.msg)
 						this.$router.push({name: 'truck'})
 					})

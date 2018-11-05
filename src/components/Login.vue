@@ -362,7 +362,7 @@ export default {
 		handRegister() {
 			this.$refs['registerForm'].validate(valid => {
 				if (!valid) return
-				Company.apply().add({
+				Company.applyAdd({
 					mobile: this.register.mobile.trim(),
 					vcode: this.register.vcode.trim(),
 					password: this.register.password.trim(),

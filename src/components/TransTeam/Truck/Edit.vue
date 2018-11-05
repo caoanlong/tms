@@ -1236,7 +1236,7 @@ export default {
 	methods: {
         
 		getPrimaryDriver(queryString, cb) {
-			Company.truck().driverListCanUse({
+			Company.truckDriverListCanUse({
 				current: 1,
 				size: 1000,
 				type: 'driver',
@@ -1251,7 +1251,7 @@ export default {
 			})
 		},
 		getSecondaryDriver(queryString, cb) {
-			Company.truck().driverListCanUse({
+			Company.truckDriverListCanUse({
 				current: 1,
 				size: 1000,
 				type: 'driver',
@@ -1266,7 +1266,7 @@ export default {
 			})
 		},
 		getTrailers(queryString, cb) {
-			Company.truck().listByTrail({
+			Company.truckListByTrail({
 				current: 1,
 				size: 1000,
 				plateNo: queryString,
@@ -1332,7 +1332,7 @@ export default {
                     truckInfo.roadTransportGoodsIsPoisonous = this.truck.roadTransportGoodsIsPoisonous ? 'Y' : 'N'
 					delete truckInfo.plateNo
 					delete truckInfo.truckCategory
-					Company.truck().update(truckInfo).then(res => {
+					Company.truckUpdate(truckInfo).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: this.fromRoute})
 					})
@@ -1341,7 +1341,7 @@ export default {
 		},
 		getInfo() {
 			const truckID = this.$route.query.truckID
-			Company.truck().findById({ truckID }).then(res => {
+			Company.truckFindById({ truckID }).then(res => {
 				this.truck = res
 				this.truck.roadTransportGoodsIsPoisonous = res.roadTransportGoodsIsPoisonous == 'Y' ? true : false
 				this.driverLicTime = [res.driverLicBeginTime, res.driverLicExpiresTime]

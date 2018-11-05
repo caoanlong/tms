@@ -180,7 +180,7 @@ export default {
 						return
 					})
 				} else {
-					Company.notruckTruck().add({
+					Company.notruckTruckAdd({
 						companyID:localStorage.getItem("companyID"),
 						messageReferenceNumber: this.TruckInfo.messageReferenceNumber,
 						senderCode: this.TruckInfo.senderCode,

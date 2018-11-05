@@ -118,7 +118,7 @@ export default {
 	methods: {
         getCompanys(queryString, cb) {
 			this.find.customerID = ''
-			Company.customer().suggest({
+			Company.customerSuggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
         },
@@ -144,7 +144,7 @@ export default {
 			this.selectedList = data.map(item => item.customerAddressID)
 		},
 		getList() {
-			Company.customerAddress().find({
+			Company.customerAddressFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
@@ -181,7 +181,7 @@ export default {
 		},
 		del(customerAddressID) {
 			deleteConfirm(customerAddressID, customerAddressIDs => {
-				Company.customerAddress().delBatch({ customerAddressIDs }).then(res => {
+				Company.customerAddressDeleteBatch({ customerAddressIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

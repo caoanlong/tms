@@ -918,7 +918,7 @@ export default {
 						Message.error('必须选择从事运输岗位！')
 						return
 					}
-					Company.transporter().add(this.superCargo).then(res => {
+					Company.transporterAdd(this.superCargo).then(res => {
 						Message.success('成功！')
 						this.$router.push({name: 'supercargo'})
 					})

@@ -114,7 +114,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			Company.notruckCargoSource().find({
+			Company.notruckCargoSourceFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				messageReferenceNumber: this.find.messageReferenceNumber

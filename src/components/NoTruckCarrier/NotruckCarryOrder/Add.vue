@@ -442,7 +442,7 @@ export default {
 						return
 					})
 				} else {
-					Company.notruckCarryOrder().add({
+					Company.notruckCarryOrderAdd({
 						companyID:localStorage.getItem("companyID"),
 						messageReferenceNumber: this.WaybillInfo.messageReferenceNumber,
 						senderCode: this.WaybillInfo.senderCode,

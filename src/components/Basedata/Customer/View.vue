@@ -60,7 +60,7 @@ export default {
 	methods: {
 		getInfo() {
 			const customerID = this.$route.query.customerID
-			Company.customer().findById({ customerID }).then(res => {
+			Company.customerFindById({ customerID }).then(res => {
 				this.recdeliverycomp = res
 			})
 		},

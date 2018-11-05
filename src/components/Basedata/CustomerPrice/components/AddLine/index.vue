@@ -233,7 +233,7 @@ export default {
 			if (queryString != this.flagShipperName) {
 				this.line.shipperCustomerID = ''
 			}
-			Company.customer().suggest({
+			Company.customerSuggest({
 				customerType: 'Shipper',
 				companyName: queryString
 			}).then(res => { cb && cb(res) })
@@ -242,19 +242,19 @@ export default {
 			if (queryString != this.flagConsigneeName) {
 				this.line.consigneeCustomerID = ''
 			}
-			Company.customer().suggest({
+			Company.customerSuggest({
 				customerType: 'Consignee',
 				companyName: queryString
 			}).then(res => { cb && cb(res) })
 		},
 		getShipperAddress(queryString, cb) {
-			Company.customerAddress().listOfCarrierOrder({
+			Company.customerAddressListOfCarrierOrder({
 				customerID: this.line.shipperCustomerID,
 				keyword: queryString
 			}).then(res => { cb && cb(res) })
 		},
 		getConsigneeAddress(queryString, cb){
-			Company.customerAddress().listOfCarrierOrder({
+			Company.customerAddressListOfCarrierOrder({
 				customerID: this.line.consigneeCustomerID,
 				keyword: queryString
 			}).then(res => { cb && cb(res) })

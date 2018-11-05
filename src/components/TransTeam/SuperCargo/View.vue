@@ -429,7 +429,7 @@ export default {
 		},
 		getInfo() {
 			const supercargoID = this.$route.query.supercargoID
-			Company.transporter().findById({ supercargoID }).then(res => {
+			Company.transporterFindById({ supercargoID }).then(res => {
 				this.superCargo = res
 				this.otherPic = res.otherPic1.split(',')
 			})

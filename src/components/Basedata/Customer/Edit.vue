@@ -96,7 +96,7 @@ export default {
 				if (!valid) return
 				const recdeliverycomp = Object.assign({}, this.recdeliverycomp)
 				recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
-				Company.customer().update(recdeliverycomp).then(res => {
+				Company.customerUpdate(recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
 				})
@@ -104,7 +104,7 @@ export default {
 		},
 		getInfo() {
 			const customerID = this.$route.query.customerID
-			Company.customer().findById({ customerID }).then(res => {
+			Company.customerFindById({ customerID }).then(res => {
 				this.recdeliverycomp = res
 				this.recdeliverycomp.customerType = res.customerType.split(',')
 				this.selectedArea = areaIdToArrayId(String(res.companyAreaID))

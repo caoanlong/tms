@@ -116,7 +116,7 @@ export default {
 			this.getList()
 		},
 		getList() {
-			Company.customer().find({
+			Company.customerFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,

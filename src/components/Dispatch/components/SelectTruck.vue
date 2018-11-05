@@ -202,7 +202,7 @@ export default {
         },
         checkGPS() {
             const plateNos = this.tableData.map(item => item.plateNo).join(',')
-            Company.truck().checkGPS({ plateNos }).then(res => {
+            Company.truckCheckGPS({ plateNos }).then(res => {
                 this.getList()
 			})
         }

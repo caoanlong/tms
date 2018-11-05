@@ -180,7 +180,7 @@ export default {
 		},
 		getList() {
 			this.tableData = []
-			Company.transporter().find({
+			Company.transporterFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.keyword,

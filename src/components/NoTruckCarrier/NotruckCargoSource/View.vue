@@ -133,7 +133,7 @@ export default {
 	methods: {
 		getCargoSourceInfo() {
 			const cargoSourceID = this.$route.query.cargoSourceID
-			Company.notruckCargoSource().findById({cargoSourceID}).then(res => {
+			Company.notruckCargoSourceFindById({cargoSourceID}).then(res => {
 				this.cargoSourceInfo = res				
 			})
 		},

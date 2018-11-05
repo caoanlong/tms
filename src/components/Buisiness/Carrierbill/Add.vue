@@ -543,14 +543,13 @@ export default {
       }
     },
     getUnits() {
-    	Company.cargoUnit().find({
+    	Company.cargoUnitFind({
 			current: 1,
 			size: 1000
         }).then(res => { this.units = res.records })
     },
     getCargos(queryString, cb) {
-      Company.cargo()
-        .find({
+      Company.cargoFind({
           current: 1,
           size: 1000,
           customerID: this.carrierbillInfo.shipperID,
@@ -577,8 +576,7 @@ export default {
       if (queryString != this.carrierbillInfo.flagconsignorName) {
         this.carrierbillInfo.consignorID = "";
       }
-      Company.customer()
-        .suggest({
+      Company.customerSuggest({
           customerType: "Delegate",
           companyName: queryString
         })
@@ -590,8 +588,7 @@ export default {
       if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
         this.carrierbillInfo.shipperID = "";
       }
-      Company.customer()
-        .suggest({
+      Company.customerSuggest({
           customerType: "Shipper",
           companyName: queryString
         })
@@ -603,19 +600,19 @@ export default {
 		if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
 			this.carrierbillInfo.consigneeID = ""
 		}
-		Company.customer().suggest({
+		Company.customerSuggest({
 			customerType: "Consignee",
 			companyName: queryString
 		}).then(res => { cb(res) })
     },
     getShipperAddress(queryString, cb) {
-		Company.customerAddress().listOfCarrierOrder({
+		Company.customerAddressListOfCarrierOrder({
 			customerID: this.carrierbillInfo.shipperID,
 			keyword: queryString
 		}).then(res => { cb && cb(res) })
     },
     getConsigneeAddress(queryString, cb) {
-		Company.customerAddress().listOfCarrierOrder({
+		Company.customerAddressListOfCarrierOrder({
 			customerID: this.carrierbillInfo.consigneeID,
 			keyword: queryString
 		}).then(res => { cb && cb(res) })

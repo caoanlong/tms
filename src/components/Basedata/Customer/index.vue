@@ -114,7 +114,7 @@ export default {
 			this.selectedList = data.map(item => item.customerID)
 		},
 		getList() {
-			Company.customer().find({
+			Company.customerFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				customerType: this.find.customerType,
@@ -154,7 +154,7 @@ export default {
 		},
 		del(customerID) {
 			deleteConfirm(customerID, customerIDs => {
-				Company.customer().delBatch({ customerIDs }).then(res => {
+				Company.customerDeleteBatch({ customerIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})

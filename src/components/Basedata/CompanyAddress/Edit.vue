@@ -99,7 +99,7 @@ export default {
 	methods: {
 		getCompanys(queryString, cb) {
 			this.companyAddress.customerID = ''
-			Company.customer().suggest({
+			Company.customerSuggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
 		},
@@ -154,7 +154,7 @@ export default {
 		},
 		getInfo() {
 			const customerAddressID = this.$route.query.customerAddressID
-			Company.customerAddress().findById({ customerAddressID }).then(res => {
+			Company.customerAddressFindById({ customerAddressID }).then(res => {
 				this.companyAddress = res
 				this.handSelectedArea(areaIdToArrayId(res.areaID))
 			})
@@ -170,7 +170,7 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				Company.customerAddress().update(this.companyAddress).then(res => {
+				Company.customerAddressUpdate(this.companyAddress).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'companyaddress'})
 				})

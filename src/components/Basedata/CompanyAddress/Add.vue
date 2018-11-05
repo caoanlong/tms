@@ -112,7 +112,7 @@ export default {
 	methods: {
 		getCompanys(queryString, cb) {
 			this.companyAddress.customerID = ''
-			Company.customer().suggest({
+			Company.customerSuggest({
 				companyName: queryString
 			}).then(res => { cb(res) })
 		},
@@ -176,7 +176,7 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				Company.customerAddress().add(this.companyAddress).then(res => {
+				Company.customerAddressAdd(this.companyAddress).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'companyaddress'})
 				})
