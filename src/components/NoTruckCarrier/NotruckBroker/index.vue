@@ -78,7 +78,7 @@ export default {
 			this.companyName = localStorage.getItem("companyName")
 		},
 		getNotruckInfo() {
-			Company.info().detailOfExtend().then(res => {
+			Company.infoDetailOfExtend().then(res => {
 				this.notruckInfo = res.data?res.data:{}
 			})
 		},
@@ -90,7 +90,7 @@ export default {
 						return
 					})
 				} else {
-					Company.updateExtend({
+					Company.infoUpdateExtend({
 						companyID:localStorage.getItem("companyID"),
 						senderCode:this.notruckInfo.senderCode,
 						appkey:this.notruckInfo.appkey,

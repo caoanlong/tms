@@ -11,6 +11,33 @@ class Company extends Base {
     }
 
     /**
+     * 修改扩展信息
+     */
+    infoUpdateExtend (data)  {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => {
+            this.isClick = true
+        }, this.delay)
+        return this.request({
+            url: this.baseUrl + '/info/updateExtend',
+            method: 'post',
+            data
+        })
+    }
+
+
+    /**
+     * 扩展信息详情 
+     */
+    infoDetailOfExtend (data) {
+        return this.request({
+            url: this.baseUrl + '/info/detailOfExtend',
+            method: 'get',
+            data
+        })
+    }
+    /**
      * 公司信息
      */
     info() {
