@@ -8,7 +8,7 @@
             <svg-icon :icon-class="isMax?'min':'max'" @click.native="resizeDialog" class="minMax"></svg-icon>
             <svg-icon icon-class="close" @click.native="close" class="closeBtn"></svg-icon>
         </div>
-        <div class="wrapper" :style="isMax ? {height: (windowInnerHeight-70) + 'px'} : {height: (windowInnerHeight-300) + 'px'}">
+        <div class="wrapper" :style="isMax ? {height: (windowInnerHeight-70) + 'px'} : {height: (windowInnerHeight*0.8-70) + 'px'}">
             <div class="tips">累计时长：{{time}}小时&nbsp;&nbsp;&nbsp;累计里程：{{distance}}km&nbsp;&nbsp;&nbsp;平均时速：{{speed}}km</div>
             <div id="amapWrapper"></div>
         </div>   
@@ -180,21 +180,27 @@ export default {
 
 <style lang="stylus" scoped>
 .map-container
-    width 60%
     position fixed
-    left 50%
-    top 100px 
-    margin-left -30%   
+    top 10%
+    right 20%
+    bottom 10%
+    left 20%
     padding 10px
     background-color #fff
     border-radius 2px
     box-shadow 0 1px 3px rgba(0,0,0,.3)
     z-index 10000
     &.max
-        width 100%
+        top 0
+        right 0
+        bottom 0
+        left 0
     .wrapper
-        position relative
-        height 550px
+        position absolute
+        top 50px
+        right 10px
+        bottom 10px
+        left 10px
         border 1px solid #ddd
         margin-top 10px
         .tips
