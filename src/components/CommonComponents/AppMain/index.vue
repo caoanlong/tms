@@ -1,17 +1,16 @@
 <template>
 	<section class="app-main" style="min-height: 100%">
-		<transition name="fade" mode="out-in">
-			<!-- <keep-alive> -->
-				<router-view></router-view>
-			<!-- </keep-alive> -->
-		</transition>
+		<keep-alive>      
+			<router-view v-if="$route.query && $route.query.catche"/>    
+		</keep-alive>    
+		<router-view v-if="!($route.query && $route.query.catche)"/>
 	</section>
 </template>
 
 <script>
 export default {
 	name: 'AppMain',
-	computed: {
+	computed: { 
 		cachedViews() {
 			return this.$store.state.tagsView.cachedViews
 		}

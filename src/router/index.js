@@ -21,12 +21,12 @@ const routerMap = [
             {
                 path: '/icons',
                 name: 'icons',
-                meta: { title: '图标' },
+                meta: { title: '图标', keepAlive: false, isUseCache: false },
                 component: () => import ('../components/IconsPreview')
             },{
                 path: '/',
                 name: 'home',
-                meta: { title: '首页' },
+                meta: { title: '首页', keepAlive: false, isUseCache: false },
                 component: () => import ('../components/Home')
             },
             /**
