@@ -105,7 +105,7 @@ export default {
 			this.sysMember.headPic = res[0]
 		},
 		back() {
-			this.$router.go(-1)
+			this.$router.push({name: 'usermanage'})
 		}
 	},
 	components: {
