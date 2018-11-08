@@ -2,7 +2,15 @@
 	<div class="headtop">
 		<div class="tags-view-container">
 			<scroll-pane class='tags-view-wrapper' ref='scrollPane' :showCtrolBtn="showBtn">
-				<router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)" :to="{name: tag.name, query: tag.query}" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
+				<router-link 
+					ref='tag' 
+					class="tags-view-item" 
+					:class="isActive(tag)?'active':''" 
+					v-for="tag in Array.from(visitedViews)" 
+					to=""
+					@click.native="openTag(tag)"
+					:key="tag.path" 
+					@contextmenu.prevent.native="openMenu(tag, $event)">
 					{{tag.title}}
 					<span class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
 				</router-link>
@@ -35,7 +43,7 @@ export default {
 		}
 	},
 	watch: {
-		$route() {
+		$route(route) {
 			this.addViewTags()
 			this.moveToCurrentTag()
 		},
@@ -51,10 +59,12 @@ export default {
 		this.addViewTags()	
 	},
 	methods: {
+		openTag(tag) {
+			tag.query.catche = true
+			this.$router.push({name: tag.name, query: tag.query})
+		},
 		generateRoute() {
-			if (this.$route.name) {
-				return this.$route
-			}
+			if (this.$route.name) return this.$route
 			return false
 		},
 		isActive(route) {
@@ -62,9 +72,7 @@ export default {
 		},
 		addViewTags() {
 			const route = this.generateRoute()
-			if (!route) {
-				return false
-			}
+			if (!route) return false
 			this.showCtrolBtn()
 			this.$store.dispatch('addVisitedViews', route)
 		},
