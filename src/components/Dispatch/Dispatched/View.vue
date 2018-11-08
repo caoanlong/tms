@@ -394,7 +394,7 @@ export default {
 			this.dispatchOrderlocationList = arrays
 		},
 		back() {
-			this.$router.go(-1)
+			this.$router.push({name: 'dispatched'})
 		}
 	}
 }
