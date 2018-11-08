@@ -47,7 +47,7 @@
 				<TruckItem v-for="(truck, index) in tableData" :key="index" :truck="truck" :isRefresh="isRefresh" @refresh="refresh"></TruckItem>
 			</div>
 			</div>
-			<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+			<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 		</el-card>
 	</div>
 </template>
@@ -56,10 +56,11 @@ import { Message } from 'element-ui'
 import request, { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
 import Company from '../../../api/Company'
-import Page from '../../CommonComponents/Page'
 import TruckItem from '../components/TruckItem'
 import FileUpload from '../../CommonComponents/FileUpload'
+import { baseMixin } from '../../../common/mixin';
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
 			find: {
@@ -68,11 +69,6 @@ export default {
 			},
 			startDate: '',
 			endDate: '',
-			pageIndex: 1,
-			pageSize: 10,
-			count: 0,
-			tableData: [],
-			selectedList: [],
 			isRefresh: 0,
 			rules: {
 				plateNo: [ {min: 1, max: 20, message: '长度在 1 到 20 个字符'} ]
@@ -83,10 +79,20 @@ export default {
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=truck.xlsx&&Authorization=' +localStorage.getItem("token"),
 		}
 	},
-	components: { FileUpload, Page, TruckItem },
+	components: { FileUpload, TruckItem },
 	created() {
 		this.resetExportExcelUrl()
 		this.getList()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = {
+				keyword: '',
+				plateNo: ''
+			}
+			this.resetExportExcelUrl()
+			this.getList()
+		}
 	},
 	methods: {
 		// 导入
@@ -164,7 +170,7 @@ export default {
 				plateNo: this.find.plateNo
 			}).then(res => {
 				this.tableData = res.records
-				this.count = res.total
+				this.total = res.total
                 this.isRefresh++
 			})
 		},

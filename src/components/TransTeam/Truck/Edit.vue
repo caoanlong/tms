@@ -1205,7 +1205,11 @@ export default {
 	},
 	created() {
         this.getInfo()
-        
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
 	},
 	mounted() {
 		LiftEffect({
@@ -1234,7 +1238,6 @@ export default {
 		})
 	},
 	methods: {
-        
 		getPrimaryDriver(queryString, cb) {
 			Company.truckDriverListCanUse({
 				current: 1,

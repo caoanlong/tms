@@ -106,7 +106,6 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			rangeDate: [],
 			find: {
 				keyword: '',
 				status: '',
@@ -119,6 +118,18 @@ export default {
 	created() {
 		this.resetExportExcelUrl()
 		this.getList()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = {
+				keyword: '',
+				status: '',
+				begin: '',
+				end: ''
+			}
+			this.resetExportExcelUrl()
+			this.getList()
+		}
 	},
 	methods: {
 		selectionChange(data) {

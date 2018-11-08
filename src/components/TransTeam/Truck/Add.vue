@@ -1221,8 +1221,137 @@ export default {
 			"current": "active" 		//选中的样式
 		})
 	},
-	methods: {
-        
+	activated() {
+		if(!this.$route.query.cache) {
+			this.truck = {
+				code: '',
+				trailerPlateNo: '',
+				truckCategory: '',  // String	车辆类别 WholeVehicle-整车 Tractor-牵引车 Trailer-挂车
+				plateNoColor: '',  // String	车牌颜色
+				trailerID: '',  // number	挂车ID
+				plateNo: '',  // String	车牌号码
+				truckType: '',  // String	车辆类型 ContainerTrailer-集装箱挂车 Van-厢式货车 HeavySemitrailerTractor-重型半挂牵引车 HeavyVan-重型厢式货车 HeavyContainerSemitrailer-重型集装箱半挂车
+				cooperateRelation: '',  // String	车辆归属 Self 自有 Attach 挂靠
+				primaryDriver: '',  // number	主驾司机ID
+				secondaryDriver: '',  // number	副驾司机ID
+				truckFrontPic: '',  // String	车辆照片正面
+				truckSidePic1: '',  // String	车辆照片45°角
+				truckSidePic2: '',  // String	车辆照片侧面
+				carOwnerName: '',  // String	所属单位/车主名称
+				carOwnerMobile: '',  // String	所属单位/车主电话
+				carOwnerAddress: '',  // String	所属单位/车主地址
+				propertyType: '',  // String	所属单位/车主所有权类型
+				driverLicRegisterTime: '',  // number	行驶证注册日期
+				driverLicIssueTime: '',  // number	行驶证发证日期
+				driverLicBeginTime: '',  // number	行驶证有效期起始日期
+				driverLicExpiresTime: '',  // number	行驶证有效期截止日期
+				driverLicPic: '',  // String	行驶证照片正本
+				driverLicSidePic: '',  // String	行驶证照片副本
+				roadTransportNo: '',  // String	道路运输许可证号
+				roadTransportLicAnnualPeriod: '',  // number	道路运输许可证年审日期到
+				businessScope: '',  // String	道路运输许可证经营范围
+				roadTransportGoods: '',  // String	道路运输许可证许可运输品
+				roadTransportGoodsIsPoisonous: false,  // String	道路运输许可证许可运输品是否剧毒
+				roadTransportPic: '',  // String	道路运输许可证照片正本
+				roadTransportSidePic: '',  // String	道路运输许可证照片副本
+				gpsNetworkNo: '',  // String	GPS入网号
+				gpsCardNo: '',  // String	GPS卡号
+				gpsSerialNumber: '',  // String	GPS序列号
+				gpsSetupTime: '',  // number	GPS安装时间
+				gpsValidBeginDate: '',  // number	GPS有效期起始日期
+				gpsValidEndDate: '',  // number	GPS有效期截止日期
+				gpsCostAmount: '',  // String	GPS费用
+				gpsType: '',  // String	GPS类型
+				gpsEquippedCertifyPic: '',  // String	GPS照片1
+				gpsEquippedCertifyPic2: '',  // String	GPS照片2
+				saliInsuranceVendor: '',  // String	交强险保险公司
+				saliInsuranceNo: '',  // String	交强险保险单号
+				saliInsuranceExpires: '',  // number	交强险保险到期日
+				saliInsuranceAmount: '',  // number	交强险保险金额
+				saliInsuranceTaxAmount: '',  // number	交强险车船税金额
+				saliInsurancePic: '',  // String	交强险照片1
+				saliInsurancePic2: '',  // String	交强险照片2
+				bizInsuranceNo: '',  // String	商业险保险单号
+				bizInsuranceExpires: '',  // number	商业险保险到期日
+				bizInsuranceAmount: '',  // number	商业险保险金额
+				bizInsurancePic: '',  // String	商业险照片1
+				bizInsurancePic2: '',  // String	商业险照片2
+				carrierRiskInsuranceNo: '',  // String	承运险保险单号
+				carrierRiskInsuranceExpires: '',  // number	承运险保险到期日
+				carrierRiskInsuranceAmount: '',  // number	承运险保险金额
+				carrierRiskInsurancePic: '',  // String	承运险照片1
+				carrierRiskInsurancePic2: '',  // String	承运险照片2
+				cargoInsuranceNo: '',  // String	货运险保险单号
+				cargoInsuranceExpireDate: '',  // number	货运险保险到期日
+				cargoInsuranceAmount: '',  // number	货运险保险金额
+				insuranceNote: '',  // String	保险备注
+				length: '',  // number	技术参数车厢长
+				width: '',  // number	技术参数车厢宽
+				high: '',  // number	技术参数车厢高
+				loads: '',  // number	技术参数装载量载重
+				loadVolume: '',  // number	技术参数装载量容积
+				carBodyColor: '',  // String	技术参数车身颜色
+				transportFunction: '',  // String	技术参数使用性质
+				transportCategory: '',  // String	技术参数运输类别
+				transportMedium: '',  // String	技术参数运输介质
+				engineType: '',  // String	技术参数发动机型号
+				engineNO: '',  // String	技术参数发动机号
+				emissionStandard: '',  // String	技术参数排放标准
+				accurateLoadType: '',  // String	技术参数准载类型
+				personsCapacity: '',  // String	技术参数核载人数
+				vehicleFrameNO: '',  // String	技术参数车辆识别代号/车架号
+				carBrandModel: '',  // String	技术参数厂牌型号
+				manufacturer: '',  // String	技术参数生产厂家
+				truckGabarite: '',  // number	技术参数车牌外廓尺寸
+				wheelTrack: '',  // number	技术参数车辆轮距
+				axesNumber: '',  // number	技术参数车辆轴数
+				wheelBase: '',  // number	技术参数轴距
+				totalWeight: '',  // number	技术参数总质量
+				approvedLoadCapacity: '',  // number	技术参数核定载质量
+				curbWeight: '',  // number	技术参数整备质量
+				tractiveTonnage: '',  // number	技术参数准牵引总质量
+				signalLampInfo: '',  // String	技术参数标志灯牌编号及完好情况
+				securityCardIssueDate: '',  // number	技术参数安全卡发放日期
+				productionDate: '',  // number	技术参数出厂日期
+				settleDate: '',  // number	技术参数落户日期
+				cannedType: '',  // String	罐体类型
+				tankVolume: '',  // number	罐体容积
+				tankQCExpires: '',  // number	罐体检测有效期至
+				safetyValvesQCExpires: '',  // number	罐体安全阀监测有效期至
+				pressureGaugeQCExpires: '',  // number	罐体压力表监测有效期至
+				cannedMonitorTableCertificatePic1: '',  // String	罐体照片1
+				cannedMonitorTableCertificatePic2: '',  // String	罐体照片2
+				securityDepositAmount: '',  // number	保证金金额
+				securityDepositDate: '',  // number	保证金日期
+				secondSecurityDepositAmount: '',  // number	保证金二次安全保证金金额
+				secondSecurityDepositDate: '',  // number	保证金二次安全保证金日期
+				securityDepositPayDate: '',  // number	保证金缴费日期
+				securityDepositNote: '',  // String	保证金备注
+				rank: '',  // String	技术等级等级评定
+				rankEvaluteTime: '',  // 	技术等级评级日期
+				nextRankEvaluteTime: '',  // 	技术等级下次评级日期
+				rankRemark: '',  // String	技术等级审验备注
+				technicalRankPic: '',  // String	技术等级照片正本
+				technicalRankPic2: '',  // String	技术等级照片副本
+				secondaMaintainTime: '',  // 	二级维护维护日期
+				nextSecondLevel: '',  // String	二级维护下次维护
+				managementAgreementAmount: '',  // number	管理协议金额
+				managementAgreementPayDate: '',  // number	管理协议缴费日期
+				managementAgreementBeginDate: '',  // number	管理协议有效期起始日期
+				managementAgreementExpireDate: '',  // number	管理协议有效期截止日期
+				safetyLiabilityLetterExpireDate: '',  // number	管理协议安全责任书到期日
+				managementAgreementMoneyPerMonth: '',  // number	管理协议元/轴/月
+				managementAgreementNote: '',  // String	管理协议协议备注
+				purchaseInvoicePic: '',  // String	其他资料购车发票照片
+				vehicleCertificatePic: '',  // String	其他资料整车合格证照片
+				vehicleRegistrationCertificatePic: '',  // String	其他资料机动车登记证
+				otherTruckPic1: '',  // String	其他资料照片1
+				otherTruckPic2: '',  // String	其他资料照片2
+				otherTruckPic3: ''  // String	其他资料照片3
+			}
+		}
+	},
+	methods: {   
 		getPrimaryDriver(queryString, cb) {
 			Company.truckDriverListCanUse({
 				current: 1,

@@ -47,7 +47,7 @@ import Company from '../../../api/Company'
 export default {
 	data() {
 		return {
-            isEdit:false,
+            isEdit: false,
 			notruckInfo: {
 				senderCode:'',
 				appkey:'',
@@ -55,7 +55,7 @@ export default {
 				documentVersionNumber:'',
 				recipientCode:''
 			},
-			companyName:'',
+			companyName: '',
 			rules: {
 				senderCode: [ {required: true, message: '请输入企业接入码'} ],
 				appkey: [ {required: true, message: '请输入Appkey'} ],
@@ -69,6 +69,13 @@ export default {
 	created() {
 		this.getCompanyName()
 		this.getNotruckInfo()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.isEdit = false
+			this.getCompanyName()
+			this.getNotruckInfo()
+		}
 	},
 	methods: {
         edit(){

@@ -176,9 +176,14 @@ export default {
 	created() {
 		this.getInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
+	},
 	methods: {
 		getInfo() {
-			let transporPriceID = this.$route.query.transporPriceID
+			const transporPriceID = this.$route.query.transporPriceID
 			SettleConfig.findById({ transporPriceID }).then(res => {
 				this.templateFreight = res.data.data
 			})

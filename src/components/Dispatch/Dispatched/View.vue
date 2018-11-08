@@ -257,7 +257,14 @@ export default {
 		this.getTaskList()
 		this.getLogs()
 	},
-	
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getDetail()
+			this.getFees()
+			this.getTaskList()
+			this.getLogs()
+		}
+	},
 	methods: {
 		handCloseTrail() {
 			this.trailDialog = false

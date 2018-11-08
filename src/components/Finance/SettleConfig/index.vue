@@ -128,122 +128,128 @@
 	</div>
 </template>
 <script type="text/javascript">
-	import { Message } from 'element-ui'
-	import request, { baseURL } from '../../../common/request'
-	import SettleConfig from '../../../api/SettleConfig'
-	import { deleteConfirm } from '../../../common/utils'
-	import FileUpload from '../../CommonComponents/FileUpload'
-	import Page from '../../CommonComponents/Page'
-	export default {
-		data() {
-			return {
-				findConsigneeArea: '',
-				findConsigneeCompanyName: '',
-				findShipperArea: '',
-				findShipperCompanyName: '',
-				pageIndex: 1,
-				pageSize: 10,
-				count: 0,
-				selectedList: [],
-				tableData: [],
-				importFileUrl: baseURL + '/transportPrice/upload',
-				uploadHeaders: {'Authorization': localStorage.getItem('token')},
-				templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=freight.xlsx&&Authorization=' +localStorage.getItem("token"),
-				templateTit:'freight.xlsx'
+import { Message } from 'element-ui'
+import request, { baseURL } from '../../../common/request'
+import SettleConfig from '../../../api/SettleConfig'
+import { deleteConfirm } from '../../../common/utils'
+import FileUpload from '../../CommonComponents/FileUpload'
+import Page from '../../CommonComponents/Page'
+import { baseMixin } from '../../../common/mixin';
+export default {
+	mixins: [baseMixin],
+	data() {
+		return {
+			findConsigneeArea: '',
+			findConsigneeCompanyName: '',
+			findShipperArea: '',
+			findShipperCompanyName: '',
+			importFileUrl: baseURL + '/transportPrice/upload',
+			uploadHeaders: {'Authorization': localStorage.getItem('token')},
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=freight.xlsx&&Authorization=' +localStorage.getItem("token"),
+			templateTit:'freight.xlsx'
+		}
+	},
+	components: {
+		FileUpload, Page
+	},
+	created() {
+		this.getList()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.findConsigneeArea = ''
+			this.findConsigneeCompanyName = ''
+			this.findShipperArea = ''
+			this.findShipperCompanyName = ''
+			this.getList()
+		}
+	},
+	methods: {
+		// 导入
+		uploadSuccess (response) {
+			if (response.code != 200) {
+				Message.error(response.msg)
+			} else {
+				Message.success(response.msg)
+				this.getList()
 			}
 		},
-		components: {
-			FileUpload, Page
+		// 上传错误
+		uploadError (response) {
+			Message.error(response.msg)
 		},
-		created() {
+		beforeFileUpload (file) {
+			const extension = file.name.split('.')[1] === 'xls'
+			const extension2 = file.name.split('.')[1] === 'xlsx'
+			const isLt2M = file.size / 1024 / 1024 < 10
+			if (!extension && !extension2) {
+				Message.error('上传模板只能是 xls、xlsx格式!')
+			}
+			if (!isLt2M) {
+				Message.error('上传模板大小不能超过 10MB!')
+			}
+			return extension || extension2 && isLt2M
+		},
+		search() {
+			this.pageIndex = 1
+			this.pageSize = 10
 			this.getList()
 		},
-		methods: {
-			// 导入
-			uploadSuccess (response) {
-				if (response.code != 200) {
-					Message.error(response.msg)
-				} else {
-					Message.success(response.msg)
-					this.getList()
-				}
-			},
-			// 上传错误
-			uploadError (response) {
-				Message.error(response.msg)
-			},
-			beforeFileUpload (file) {
-				const extension = file.name.split('.')[1] === 'xls'
-				const extension2 = file.name.split('.')[1] === 'xlsx'
-				const isLt2M = file.size / 1024 / 1024 < 10
-				if (!extension && !extension2) {
-					Message.error('上传模板只能是 xls、xlsx格式!')
-				}
-				if (!isLt2M) {
-					Message.error('上传模板大小不能超过 10MB!')
-				}
-				return extension || extension2 && isLt2M
-			},
-			search() {
-				this.pageIndex = 1
-				this.pageSize = 10
-				this.getList()
-			},
-			reset() {
-				this.findConsigneeArea = ''
-				this.findConsigneeCompanyName = ''
-				this.findShipperArea = ''
-				this.findShipperCompanyName = ''
-				this.pageIndex = 1
-				this.pageSize = 10
-				this.getList()
-			},
-			pageChange(index) {
-				this.pageIndex = index
-				this.getList()
-			},
-			pageSizeChange(size) {
-				this.pageSize = size
-				this.getList() 
-			},
-			selectionChange(data) {
-				this.selectedList = data.map(item => item.transporPriceID)
-			},
-			getList() {
-				SettleConfig.find({
-					current: this.pageIndex,
-					size: this.pageSize,
-					consigneeArea: this.findConsigneeArea,
-					consigneeCompanyName: this.findConsigneeCompanyName,
-					shipperArea: this.findShipperArea,
-					shipperCompanyName: this.findShipperCompanyName
-				}).then(res => {
-					this.tableData = res.records
-					this.count = res.total
-				})
-			},
-			handleCommand(e) {
-				if(e.type == 'view'){
-					this.$router.push({name: 'viewsettleconfig', query: { transporPriceID: e.id }})
-				} else if(e.type == 'edit'){
-					this.$router.push({ name: 'editsettleconfig' , query: { transporPriceID: e.id }})
-				} else if (e.type == 'delete') {
-					this.del(e.id)
-				}
-			},
-			add() {
-				this.$router.push({name: 'addsettleconfig'})
-			},
-			del(transporPriceID) {
-				deleteConfirm(transporPriceID, transporPriceIDs => {
-					SettleConfig.del({ transporPriceIDs }).then(res => {
-						Message({ type: 'success', message: '删除成功!' })
-						this.getList()
-					})
-				}, this.selectedList)
+		reset() {
+			this.findConsigneeArea = ''
+			this.findConsigneeCompanyName = ''
+			this.findShipperArea = ''
+			this.findShipperCompanyName = ''
+			this.pageIndex = 1
+			this.pageSize = 10
+			this.getList()
+		},
+		pageChange(index) {
+			this.pageIndex = index
+			this.getList()
+		},
+		pageSizeChange(size) {
+			this.pageSize = size
+			this.getList() 
+		},
+		selectionChange(data) {
+			this.selectedList = data.map(item => item.transporPriceID)
+		},
+		getList() {
+			SettleConfig.find({
+				current: this.pageIndex,
+				size: this.pageSize,
+				consigneeArea: this.findConsigneeArea,
+				consigneeCompanyName: this.findConsigneeCompanyName,
+				shipperArea: this.findShipperArea,
+				shipperCompanyName: this.findShipperCompanyName
+			}).then(res => {
+				this.tableData = res.records
+				this.count = res.total
+			})
+		},
+		handleCommand(e) {
+			if(e.type == 'view'){
+				this.$router.push({name: 'viewsettleconfig', query: { transporPriceID: e.id }})
+			} else if(e.type == 'edit'){
+				this.$router.push({ name: 'editsettleconfig' , query: { transporPriceID: e.id }})
+			} else if (e.type == 'delete') {
+				this.del(e.id)
 			}
+		},
+		add() {
+			this.$router.push({name: 'addsettleconfig'})
+		},
+		del(transporPriceID) {
+			deleteConfirm(transporPriceID, transporPriceIDs => {
+				SettleConfig.del({ transporPriceIDs }).then(res => {
+					Message({ type: 'success', message: '删除成功!' })
+					this.getList()
+				})
+			}, this.selectedList)
 		}
 	}
+}
 </script>
 <style lang="stylus" scoped>
 .upload-File

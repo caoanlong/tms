@@ -373,122 +373,173 @@ import DropdownSelect from "../../CommonComponents/DropdownSelect";
 import AddComAddress from "./components/AddComAddress";
 import { checkInt, checkFloat2 } from "../../../common/validator";
 export default {
-  data() {
-    const checkShipperDateTime = (rule, value, callback) => {
-      if (
-        this.carrierbillInfo.consigneeDate &&
-        value > this.carrierbillInfo.consigneeDate
-      ) {
-        callback(new Error("发货时间不能晚于到货时间"));
-      } else {
-        callback();
-      }
-    };
-    const checkConsigneeDateTime = (rule, value, callback) => {
-      if (
-        this.carrierbillInfo.shipperDate &&
-        value < this.carrierbillInfo.shipperDate
-      ) {
-        callback(new Error("到货时间不能早于发货时间"));
-      } else {
-        callback();
-      }
-    };
-    return {
-	  currentCompany: {},
-      addressDialog: false,
-      isChangeShipper: false,
-      isChangeConsignee: false,
-      placeholder1: "请选择发货地址",
-      placeholder2: "请选择收货地址",
-      units: [],
-      minDateTime: "",
-      shipperAddress: [],
-      consigneeAddress: [],
-      searchKeyWord: "",
-      receivableDistance: 0,
-      receivableVolumnUnitPrice: 0,
-      receivableWeightUnitPrice: 0,
-      carrierbillInfo: {
-        shipperNo: "" /** String 发货单号*/,
-        transportType: "公路运输" /** String 运输方式*/,
-        commissionDate: new Date().getTime() /** Date 委托时间*/,
-        shipperID: "" /** Long 发货单位ID*/,
-        shipperCompanyName: "" /** String 发货单位名称*/,
-        shipperAddressID: "" /** Long 发货人地址ID*/,
-        shipperPhone: "" /** String 发货人电话*/,
-        shipperAreaID: "" /** Long 发货人区域ID*/,
-        shipperLocationLng: "" /** BigDecimal 发货人地址经度*/,
-        shipperLocationLat: "" /** BigDecimal 发货人地址纬度*/,
-        shipperLocationAddress: "" /** String 发货人定位地址*/,
-        shipperName: "" /** String 发货人名字*/,
-        shipperDetailAddress: "" /** String 发货人详细地址*/,
-        shipperDate: "" /** Date 发货人时间*/,
-        shipperTime: "",
-        consigneeID: "" /** Long 收货单位ID*/,
-        consigneeCompanyName: "" /** String 收货单位名称*/,
-        consigneeAddressID: "" /** Long 收货人地址ID*/,
-        consigneeName: "" /** String 收货人名字*/,
-        consigneePhone: "" /** String 收货人电话*/,
-        consigneeAreaID: "" /** Long 收货人区域ID*/,
-        consigneeLocationLng: "" /** BigDecimal 收货人地址经度*/,
-        consigneeLocationLat: "" /** BigDecimal 收货人地址纬度*/,
-        consigneeLocationAddress: "" /** String 收货人定位地址*/,
-        consigneeDetailAddress: "" /** String 收货人详细地址*/,
-        consigneeDate: "" /** Date 收货时间*/,
-        consigneeTime: "",
-        consignorName: "" /**委托人单位名称*/,
-        consignorID: "" /**委托人ID*/,
-        carrierCargo: [
-          {
-            cargoID: '',
-            cargoName: '',
-            dispatchType: 'Weight',
-            cargoWeight:'',
-            cargoVolume: '',
-            cargoNum: '',
-            cargoUnitName: ''
-          }
-        ] /** String货物清单（JSON串）*/,
-        freight: "" /** BigDecimal运费 */,
-        porRequire: [] /** String 回单要求 */
-      },
-      freight: "",
-      selectedShipper: null,
-      selectedConsignee: null,
-      selectedShipperAddress: null,
-      selectedConsigneeAddress: null,
-      flagShipperCompanyName: "",
-      flagConsigneeCompanyName: "",
-      rules: {
-        commissionDate: [{ required: true, message: "请选择委托时间" }],
-        consignorID: [{ required: true, message: "请选择委托方" }],
-        carrierrName: [{ required: true, message: "请输入承运人" }],
-        shipperID: [{ required: true, message: "请选择发货单位" }],
-        shipperName: [{ required: true, message: "请选择发货地址", trigger: "change" }],
-        shipperDate: [
-          { required: true, message: "请选择发货时间" },
-          { validator: checkShipperDateTime }
-        ],
-        consigneeID: [{ required: true, message: "请选择收货单位" }],
-        consigneeName: [{ required: true, message: "请选择收货地址", trigger: "change" }],
-        consigneeDate: [
-          { required: true, message: "请选择收货时间" },
-          { validator: checkConsigneeDateTime }
-        ],
-        transportType: [{ required: true, message: "请选择运输方式" }],
-        freight: [{ required: true, message: "请输入运费金额" }]
-      }
-    };
-  },
-  components: { DropdownSelect, AddComAddress },
-  computed: {
-    checkInt: () => checkInt,
-    checkFloat2: () => checkFloat2
-  },
-  created() {
-    this.getUnits();
-  },
+	data() {
+		const checkShipperDateTime = (rule, value, callback) => {
+		if (
+			this.carrierbillInfo.consigneeDate &&
+			value > this.carrierbillInfo.consigneeDate
+		) {
+			callback(new Error("发货时间不能晚于到货时间"));
+		} else {
+			callback();
+		}
+		};
+		const checkConsigneeDateTime = (rule, value, callback) => {
+		if (
+			this.carrierbillInfo.shipperDate &&
+			value < this.carrierbillInfo.shipperDate
+		) {
+			callback(new Error("到货时间不能早于发货时间"));
+		} else {
+			callback();
+		}
+		};
+		return {
+			currentCompany: {},
+			addressDialog: false,
+			isChangeShipper: false,
+			isChangeConsignee: false,
+			placeholder1: "请选择发货地址",
+			placeholder2: "请选择收货地址",
+			units: [],
+			minDateTime: "",
+			shipperAddress: [],
+			consigneeAddress: [],
+			searchKeyWord: "",
+			receivableDistance: 0,
+			receivableVolumnUnitPrice: 0,
+			receivableWeightUnitPrice: 0,
+			carrierbillInfo: {
+				shipperNo: "" /** String 发货单号*/,
+				transportType: "公路运输" /** String 运输方式*/,
+				commissionDate: new Date().getTime() /** Date 委托时间*/,
+				shipperID: "" /** Long 发货单位ID*/,
+				shipperCompanyName: "" /** String 发货单位名称*/,
+				shipperAddressID: "" /** Long 发货人地址ID*/,
+				shipperPhone: "" /** String 发货人电话*/,
+				shipperAreaID: "" /** Long 发货人区域ID*/,
+				shipperLocationLng: "" /** BigDecimal 发货人地址经度*/,
+				shipperLocationLat: "" /** BigDecimal 发货人地址纬度*/,
+				shipperLocationAddress: "" /** String 发货人定位地址*/,
+				shipperName: "" /** String 发货人名字*/,
+				shipperDetailAddress: "" /** String 发货人详细地址*/,
+				shipperDate: "" /** Date 发货人时间*/,
+				shipperTime: "",
+				consigneeID: "" /** Long 收货单位ID*/,
+				consigneeCompanyName: "" /** String 收货单位名称*/,
+				consigneeAddressID: "" /** Long 收货人地址ID*/,
+				consigneeName: "" /** String 收货人名字*/,
+				consigneePhone: "" /** String 收货人电话*/,
+				consigneeAreaID: "" /** Long 收货人区域ID*/,
+				consigneeLocationLng: "" /** BigDecimal 收货人地址经度*/,
+				consigneeLocationLat: "" /** BigDecimal 收货人地址纬度*/,
+				consigneeLocationAddress: "" /** String 收货人定位地址*/,
+				consigneeDetailAddress: "" /** String 收货人详细地址*/,
+				consigneeDate: "" /** Date 收货时间*/,
+				consigneeTime: "",
+				consignorName: "" /**委托人单位名称*/,
+				consignorID: "" /**委托人ID*/,
+				carrierCargo: [
+					{
+					cargoID: '',
+					cargoName: '',
+					dispatchType: 'Weight',
+					cargoWeight:'',
+					cargoVolume: '',
+					cargoNum: '',
+					cargoUnitName: ''
+					}
+				] /** String货物清单（JSON串）*/,
+				freight: "" /** BigDecimal运费 */,
+				porRequire: [] /** String 回单要求 */
+			},
+			freight: "",
+			selectedShipper: null,
+			selectedConsignee: null,
+			selectedShipperAddress: null,
+			selectedConsigneeAddress: null,
+			flagShipperCompanyName: "",
+			flagConsigneeCompanyName: "",
+			rules: {
+				commissionDate: [{ required: true, message: "请选择委托时间" }],
+				consignorID: [{ required: true, message: "请选择委托方" }],
+				carrierrName: [{ required: true, message: "请输入承运人" }],
+				shipperID: [{ required: true, message: "请选择发货单位" }],
+				shipperName: [{ required: true, message: "请选择发货地址", trigger: "change" }],
+				shipperDate: [
+					{ required: true, message: "请选择发货时间" },
+					{ validator: checkShipperDateTime }
+				],
+				consigneeID: [{ required: true, message: "请选择收货单位" }],
+				consigneeName: [{ required: true, message: "请选择收货地址", trigger: "change" }],
+				consigneeDate: [
+					{ required: true, message: "请选择收货时间" },
+					{ validator: checkConsigneeDateTime }
+				],
+				transportType: [{ required: true, message: "请选择运输方式" }],
+				freight: [{ required: true, message: "请输入运费金额" }]
+			}
+		}
+	},
+	components: { DropdownSelect, AddComAddress },
+	computed: {
+		checkInt: () => checkInt,
+		checkFloat2: () => checkFloat2
+	},
+	created() {
+		this.getUnits()
+	},
+  	activated() {
+		if(!this.$route.query.cache) {
+			this.carrierbillInfo = {
+				shipperNo: "" /** String 发货单号*/,
+				transportType: "公路运输" /** String 运输方式*/,
+				commissionDate: new Date().getTime() /** Date 委托时间*/,
+				shipperID: "" /** Long 发货单位ID*/,
+				shipperCompanyName: "" /** String 发货单位名称*/,
+				shipperAddressID: "" /** Long 发货人地址ID*/,
+				shipperPhone: "" /** String 发货人电话*/,
+				shipperAreaID: "" /** Long 发货人区域ID*/,
+				shipperLocationLng: "" /** BigDecimal 发货人地址经度*/,
+				shipperLocationLat: "" /** BigDecimal 发货人地址纬度*/,
+				shipperLocationAddress: "" /** String 发货人定位地址*/,
+				shipperName: "" /** String 发货人名字*/,
+				shipperDetailAddress: "" /** String 发货人详细地址*/,
+				shipperDate: "" /** Date 发货人时间*/,
+				shipperTime: "",
+				consigneeID: "" /** Long 收货单位ID*/,
+				consigneeCompanyName: "" /** String 收货单位名称*/,
+				consigneeAddressID: "" /** Long 收货人地址ID*/,
+				consigneeName: "" /** String 收货人名字*/,
+				consigneePhone: "" /** String 收货人电话*/,
+				consigneeAreaID: "" /** Long 收货人区域ID*/,
+				consigneeLocationLng: "" /** BigDecimal 收货人地址经度*/,
+				consigneeLocationLat: "" /** BigDecimal 收货人地址纬度*/,
+				consigneeLocationAddress: "" /** String 收货人定位地址*/,
+				consigneeDetailAddress: "" /** String 收货人详细地址*/,
+				consigneeDate: "" /** Date 收货时间*/,
+				consigneeTime: "",
+				consignorName: "" /**委托人单位名称*/,
+				consignorID: "" /**委托人ID*/,
+				carrierCargo: [
+					{
+					cargoID: '',
+					cargoName: '',
+					dispatchType: 'Weight',
+					cargoWeight:'',
+					cargoVolume: '',
+					cargoNum: '',
+					cargoUnitName: ''
+					}
+				] /** String货物清单（JSON串）*/,
+				freight: "" /** BigDecimal运费 */,
+				porRequire: [] /** String 回单要求 */
+			}
+			this.isChangeShipper = !this.isChangeShipper
+			this.isChangeConsignee = !this.isChangeConsignee,
+			this.getUnits()
+		}
+  	},
   methods: {
     sum(o) {
         let sum = 0
@@ -606,12 +657,14 @@ export default {
 		}).then(res => { cb(res) })
     },
     getShipperAddress(queryString, cb) {
+		if (!this.carrierbillInfo.shipperID) return
 		Company.customerAddressListOfCarrierOrder({
 			customerID: this.carrierbillInfo.shipperID,
 			keyword: queryString
 		}).then(res => { cb && cb(res) })
     },
     getConsigneeAddress(queryString, cb) {
+		if (!this.carrierbillInfo.consigneeID) return
 		Company.customerAddressListOfCarrierOrder({
 			customerID: this.carrierbillInfo.consigneeID,
 			keyword: queryString

@@ -186,6 +186,33 @@ export default {
 		this.SendingDateTime()
 		this.getApkInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.CargoInfo = {
+				messageReferenceNumber:'',
+				senderCode:'',
+				messageFunctionCode:'',
+				countrySubdivisionCode:'',
+				destinationCountrySubdivisionCode:'',
+				descriptionOfGoods:'',
+				documentName:'货源信息',
+				recipientCode:'',
+				consignor:'',
+				notruckuserId:'',
+				consignee:'',
+				totalMonetaryAmount:'',
+				cargoTypeClassificationCode:'',
+				documentVersionNumber:'',
+				messageSendingDateTime:'',
+				placeOfLoading:'',
+				goodsReceiptPlace:'',
+				vehicleClassificationCode:'',
+				goodsItemGrossWeight:''
+			}
+			this.SendingDateTime()
+			this.getApkInfo()
+		}
+	},
 	methods: {
 		getApkInfo() {
 			Company.detailOfExtend().then(res => {

@@ -88,20 +88,27 @@ export default {
 		}
 	},
 	created() {
-		this.find = JSON.parse(sessionStorage.getItem('notruckTruckFind')) || this.find
 		this.resetExportExcelUrl()
 		this.getList()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = {
+				messageReferenceNumber: '',
+				documentName: ''
+			}
+			this.resetExportExcelUrl()
+			this.getList()
+		}
 	},
 	methods: {
 		search() {
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
-			sessionStorage.setItem('notruckTruckFind', JSON.stringify(this.find))
 			this.resetExportExcelUrl()
 			this.getList()
 		},
 		reset() {
-			sessionStorage.removeItem('notruckTruckFind')
 			this.find.messageReferenceNumber = ''
 			this.find.documentName = ''
 			this.pageIndex = this.PAGEINDEX
