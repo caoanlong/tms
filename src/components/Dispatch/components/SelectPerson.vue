@@ -120,7 +120,6 @@ export default {
             this.selected = {}
             if (newVal) {
                 this.reset()
-                this.type == 'primary' ? this.getDriverList() : this.getSuperCagoList()
             }
         },
         loadDate(newVal) {

@@ -143,7 +143,6 @@ export default {
         isVisible(newVal) {
             if (newVal) {
                 this.reset()
-                this.getList()
             }
         },
         loadDate(newVal) {
