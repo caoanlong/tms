@@ -99,26 +99,19 @@ export default {
 			}
 		}
 	},
-	beforeRouteLeave(to, from, next) {
-		if (to.name == 'editcargo') {
-			sessionStorage.setItem('pageIndex', this.pageIndex)
-			sessionStorage.setItem('pageSize', this.pageSize)
-			sessionStorage.setItem('find', JSON.stringify(this.find))
-		} else {
-			sessionStorage.removeItem('pageIndex')
-			sessionStorage.removeItem('pageSize')
-			sessionStorage.removeItem('find')
-		}
-		next()
-	},
 	created() {
-		const pageIndex = sessionStorage.getItem('pageIndex')
-		const pageSize = sessionStorage.getItem('pageSize')
-		this.pageIndex = pageIndex ? Number(pageIndex) : 1
-		this.pageSize = pageSize ? Number(pageSize) : 10
-		this.find = JSON.parse(sessionStorage.getItem('find')) || { shipperCompanyName: '', cargoName: '' }
 		this.resetExportExcelUrl()
 		this.getList()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = {
+				shipperCompanyName: '',
+				cargoName: ''
+			}
+			this.resetExportExcelUrl()
+			this.getList()
+		}
 	},
 	methods: {
 		getCompanys(queryString, cb) {
@@ -143,26 +136,12 @@ export default {
 			this.find.shipperCompanyName =''
 		},
 		reset() {
-			sessionStorage.removeItem('pageIndex')
-			sessionStorage.removeItem('pageSize')
-			sessionStorage.removeItem('find')
 			this.find.shipperCompanyName = ''
 			this.find.cargoName = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.resetExportExcelUrl()
 			this.getList()
-		},
-		pageChange(index) {
-			sessionStorage.removeItem('pageIndex')
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			sessionStorage.removeItem('pageSize')
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.cargoID)

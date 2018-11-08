@@ -291,6 +291,42 @@ export default {
 			}
 		}
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.selectedArea = []
+			this.selectedArea1 = []
+			this.templateFreight = {
+				consigneeArea: '',	//收货地	string	
+				consigneeAreaID: '',	//收货地id	string	
+				consigneeCompanyName: '',	//收货公司名称	string	
+				consigneeDetailAddress: '',	//收货详细地址	string	
+				consigneeID: '',	//收货单位id	number	
+				consignorID: '',	//托运人id	number	
+				consignorName: '',	//托运人名称	string	
+				externalAbschlussRate: '',	//对外月结比率	number	
+				externalCashRate: '',	//对外现付比率	number	
+				externalCodRate: '',	//对外到付比率	number	
+				externalConsigneeCodRate: '',	//对外收货方到付比率	number	
+				externalMileage: '',	//对外运距	number	
+				externalPorRate: '',	//对外回单比率	number	
+				externalPrice: '',	//对外运价	number	
+				externalUnitPrice: '',	//对外TKM	number	
+				internalAbschlussRate: '',	//对内月结比率	number	
+				internalCashRate: '',	//对内现付比率	number	
+				internalCodRate: '',	//对内到付比率	number	
+				internalConsigneeCodRate: '',	//对内收货方到付比率	number	
+				internalPorRate: '',	//对内回单比率	number	
+				internalPrice: '',	//对内运价	number	
+				internalUnitPrice: '',	//对内TKM	number	
+				mileage: '',	//对内运距	number	
+				shipperArea: '',	//发货地	string	
+				shipperAreaID: '',	//发货地id	number	
+				shipperCompanyName: '',	//发货公司名称	string	
+				shipperDetailAddress: '',	//发货详细地址	string	
+				shipperID: ''
+			}
+		}
+	},
 	methods: {
 		getConsignors(queryString, cb) {
 			let params = {

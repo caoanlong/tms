@@ -831,6 +831,11 @@ export default {
 	created() {
 		this.getInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
+	},
 	mounted() {
 		LiftEffect({
 			"control1": ".lift-nav", 	//侧栏电梯的容器

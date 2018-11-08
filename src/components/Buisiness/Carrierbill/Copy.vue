@@ -527,8 +527,10 @@ export default {
 				carrierbillInfo.flagConsigneeCompanyName = res.consigneeCompanyName
 				
 				this.carrierbillInfo = carrierbillInfo
-				this.shipperDateTime = timestampToTime(res.shipperDate)
-				this.consigneeDateTime = timestampToTime(res.consigneeDate)
+                this.carrierbillInfo.shipperDate = ''
+                this.carrierbillInfo.consigneeTime = ''
+                this.carrierbillInfo.consigneeDate = ''
+                this.carrierbillInfo.consigneeTime = ''
 				this.listForCalc()
 				this.getMinDateTime()
 			})
@@ -821,10 +823,11 @@ export default {
                 carrierbill.consigneeDate = String(Number(formattimestamp(carrierbill.consigneeDate)) + 86399000)
             }
 			carrierbill.freight = this.freight ? this.freight : this.carrierbillInfo.freight
-			CarryOrder.update(carrierbill).then(res => {
-				Message.success('成功！')
-				this.$router.push({name: 'carrierbill'})
-			})
+            delete carrierbill.carrierOrderID
+            CarryOrder.add(carrierbill).then(res => {
+                Message.success('成功！')
+                this.$router.push({name: 'carrierbill'})
+            })
         },
 		addItem() {
 			const dispatchType = this.carrierbillInfo.carrierCargo[0] ? this.carrierbillInfo.carrierCargo[0].dispatchType : 'Weight'

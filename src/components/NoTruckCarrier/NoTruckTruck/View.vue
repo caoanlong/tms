@@ -113,6 +113,11 @@ export default {
 	created() {
 		this.getTruckInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getTruckInfo()
+		}
+	},
 	methods: {
 		getTruckInfo() {
 			const truckSourceID = this.$route.query.truckSourceID

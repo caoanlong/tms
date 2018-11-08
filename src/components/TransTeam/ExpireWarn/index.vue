@@ -136,6 +136,11 @@ export default {
 			expOption:[]
 		}
 	},
+	computed:{
+		expiredCertificateSort(){
+			return Object.assign(this.TruckOption,this.DriverOption)
+		}
+	},
 	created() {
 		this.resetExportExcelUrl()
 		this.expiredCertificateSorts = Object.keys(this.expiredCertificateSort).map(item =>{
@@ -165,9 +170,38 @@ export default {
 		this.expOption = this.expiredCertificateSorts
 		this.getList()
 	},
-	computed:{
-		expiredCertificateSort(){
-			return Object.assign(this.TruckOption,this.DriverOption)
+	activated() {
+		if(!this.$route.query.cache) {
+			this.findrealName = ''
+			this.findobjType = ''
+			this.findexpiredCertificate = ''
+			this.resetExportExcelUrl()
+			this.expiredCertificateSorts = Object.keys(this.expiredCertificateSort).map(item =>{
+				return {
+					key:item,
+					value:this.expiredCertificateSort[item]
+				}
+			})
+			this.TruckOptions = Object.keys(this.TruckOption).map(item =>{
+				return {
+					key:item,
+					value:this.TruckOption[item]
+				}
+			})
+			this.DriverOptions = Object.keys(this.DriverOption).map(item =>{
+				return {
+					key:item,
+					value:this.DriverOption[item]
+				}
+			})
+			this.ComsupercargoOptions = Object.keys(this.ComsupercargoOption).map(item =>{
+				return {
+					key:item,
+					value:this.ComsupercargoOption[item]
+				}
+			})
+			this.expOption = this.expiredCertificateSorts
+			this.getList()
 		}
 	},
 	methods: {

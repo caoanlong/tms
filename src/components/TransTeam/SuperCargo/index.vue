@@ -81,7 +81,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
@@ -92,27 +92,31 @@ import { deleteConfirm } from '../../../common/utils'
 import request, { baseURL } from '../../../common/request'
 import FileUpload from '../../CommonComponents/FileUpload'
 import Company from '../../../api/Company'
-import Page from '../../CommonComponents/Page'
+import { baseMixin } from '../../../common/mixin';
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
 			supercargoType: [],
 			keyword: '',
-			pageIndex: 1,
-			pageSize: 10,
-			count: 0,
-			selectedList: [],
-			tableData: [],
 			importFileUrl: baseURL + '/company/transporter/import?Authorization=' + localStorage.getItem("token"),
 			uploadHeaders: {'Authorization': localStorage.getItem('token')},
 			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=supercargo.xlsx&&Authorization=' +localStorage.getItem("token"),
 		}
 	},
-	components: { FileUpload,Page },
+	components: { FileUpload },
 	created() {
 		this.resetExportExcelUrl()
 		this.getList()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.supercargoType = []
+			this.keyword = ''
+			this.resetExportExcelUrl()
+			this.getList()
+		}
 	},
 	methods: {
 		// 导入
@@ -140,11 +144,6 @@ export default {
 			}
 			return extension || extension2 && isLt2M
 		},
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			this.keyword = ''
 			this.supercargoType = []
@@ -161,15 +160,6 @@ export default {
 			this.exportExcelUrl =  baseURL + '/company/transporter/export?Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.keyword 
 			+ '&supercargoType=' + this.supercargoType.join(',')
-		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.supercargoID)
@@ -197,7 +187,7 @@ export default {
 					}
 				})
 				this.tableData = list
-				this.count = res.total
+				this.total = res.total
 			})
 		},
 		handleCommand(e) {

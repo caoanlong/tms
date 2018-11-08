@@ -96,6 +96,11 @@ export default {
 	created() {
 		this.getInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
+	},
 	methods: {
 		getCompanys(queryString, cb) {
 			this.companyAddress.customerID = ''

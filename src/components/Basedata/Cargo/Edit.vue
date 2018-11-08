@@ -147,6 +147,11 @@ export default {
 	created() {
 		this.getUnitList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getUnitList()
+		}
+	},
 	methods: {
 		handleCheckAllRequireChange(val) {
 			if (val) {

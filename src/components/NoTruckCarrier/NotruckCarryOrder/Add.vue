@@ -413,6 +413,60 @@ export default {
 		this.SendingDateTime()
 		this.getWaybillInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.WaybillInfo = {
+				messageReferenceNumber:'',
+				senderCode:'',
+				messageFunctionCode:'',
+				documentName:'无车承运人电子路单',
+				recipientCode:'',
+				documentVersionNumber:'',
+				messageSendingDateTime:'',
+				carrier:'',
+				dteOfShipment:'',
+				dateOfDelivery:'',
+				name:'',
+				consignee:'',
+				codeConsigneeDivisions:'',
+				priceRemarks:'',
+				vehicleClassificationCode:'',
+				trailerLicenseNumber:'',
+				name:'',
+				nameGoods:'',
+				volume:'',
+				originalAddNumber:'',
+				name:'',
+				serviceTypeCode:'',
+				name:'',
+				nameConsignorDivisions:'',
+				receivingPlace:'',
+				transportationCost:'',
+				licensePlateCode:'',
+				vehicleLoadingQuality:'',
+				thePersonal:'',
+				certificateQualification:'',
+				codeGoods:'',
+				total:'',
+				shippingNoteNumber:'',
+				waybillLicenseNumber:'',
+				dateActualShipment:'',
+				personalNumber:'',
+				codeConsignorDivisions:'',
+				nameConsigneeDivisions:'',
+				totalAmountMoney:'',
+				vehicleLicenseNumber:'',
+				roadTransportNo:'',
+				carLicenseNumber:'',
+				phone:'',
+				goodsGross:'',
+				transportModeCode:'',
+				networkAccessAddress:''
+			}
+			this.SendingDateTime()
+			this.getWaybillInfo()
+		}
+	},
 	methods: {
 		getWaybillInfo() {
 			Company.detailOfExtend().then(res => {

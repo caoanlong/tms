@@ -98,16 +98,20 @@ export default {
 				InLeave: '',
 				Remark: '',
 				sys_roles: []
-			},
-			
+			}
 		}
 	},
 	created() {
 		this.getUser()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getUser()
+		}
+	},
 	methods: {
 		getUser() {
-			let params = {
+			const params = {
 				Staff_ID: this.$route.query.Staff_ID
 			}
 			requestNode({

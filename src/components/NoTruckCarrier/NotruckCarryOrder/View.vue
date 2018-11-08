@@ -290,6 +290,11 @@ export default {
 	created() {
 		this.getWaybillInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getWaybillInfo()
+		}
+	},
 	methods: {
 		getWaybillInfo() {
 			const waybillID = this.$route.query.waybillID

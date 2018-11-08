@@ -130,6 +130,11 @@ export default {
 	created() {
 		this.getCargoSourceInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getCargoSourceInfo()
+		}
+	},
 	methods: {
 		getCargoSourceInfo() {
 			const cargoSourceID = this.$route.query.cargoSourceID

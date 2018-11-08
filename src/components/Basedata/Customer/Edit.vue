@@ -78,6 +78,11 @@ export default {
 	created() {
 		this.getInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
+	},
 	methods: {
 		handleLogoSuccess(res) {
 			this.recdeliverycomp.logoUrl = res.length == 0 ? '' : res[0]

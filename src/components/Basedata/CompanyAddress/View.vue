@@ -56,6 +56,11 @@ export default {
 	created() {
 		this.getInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
+	},
 	methods: {
 		getInfo() {
 			const customerAddressID = this.$route.query.customerAddressID

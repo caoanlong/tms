@@ -61,6 +61,12 @@ export default {
 	created() {
 		this.getList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = { keyword: '' }
+			this.getList()
+		}
+	},
 	methods: {
 		reset() {
 			this.find.keyword = ''

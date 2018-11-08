@@ -822,6 +822,69 @@ export default {
 		}
 	},
 	components: { ImageUpload, SelectPosition },
+	activated() {
+		if(!this.$route.query.cache) {
+			this.superCargo = {
+				realName: '',    // String	姓名
+				sex: 'M',    // String	性别 M-男 F-女
+				mobile: '',    // String	联系方式
+				cooperateRelation: '',    // String	合作关系
+				homeAddress: '',   // String	住址
+				laborContractEndTime: '',   // number	合同有效期
+				titleLever: '',   // String	技术登记
+				remark: '',   // String	备注
+				headPic: '',   // String	个人照片
+				idCardNum: '',    // String	身份证号
+				idCardBeginTime: '',    // number	身份证有效期起始日期
+				idCardExpirationTime: '',    // number	身份证有效期截止日期
+				idCardFrontUrl: '',    // String	身份证照片正面
+				idCardBackUrl: '',    // String	身份证照片背面
+				hygienistsCertificateOfApprovalPic1: '',    // String	卫生合格证照片正面
+				hygienistsCertificateOfApprovalPic2: '',    // String	卫生合格证照片背面
+				supercargoType: '',    // String	从事运输岗位 Driver-驾驶员 Supercargo-押运员 SupercargoDriver-押运员、驾驶员
+				driverLicenseNum: '',    // String	驾驶证号
+				driverLicenseCode: '',    // String	驾驶证档案编号
+				quasiDrivingType: 'B1',    // String	驾驶证准驾车型
+				driverLicenseFirstTime: '',    // number	驾驶证初次领证日期
+				driverLicenseBeginTime: '',    // number	驾驶证有效期起始日期
+				driverLicenseEndTime: '',    // number	驾驶证有效期截止日期
+				driverLicFrontUrl: '',    // String	驾驶证照片正本
+				driverLicCopyFrontUrl: '',    // String	驾驶证照片副本
+				qualificationNum: '',   // String	危货从业资格证证号
+				qualificationCode: '',   // String	危货从业资格证编号
+				qualificationQuasiDrivingType: '',   // String	危货从业资格证准驾车型
+				qualificationIsNewest: '',   // String	危货从业资格证是否新证
+				qualificationIssueDate: '',   // number	危货从业资格证初次领证日期
+				qualificationBeginDate: '',   // number	危货从业资格证有效期起始日期
+				qualificationExpirationDate: '',   // number	危货从业资格证有效期截止日期
+				qualificationType: '',   // String	危货从业资格证从业资格证类别
+				qualificationFirstPage: '',   // String	危货从业资格证照片1
+				qualificationSecondPage: '',   // String	危货从业资格证照片2
+				qualificationThirdPage: '',   // String	危货从业资格证照片3
+				continueEducationCertificationEndDate: '',   // number	驾驶员继续再教育合格证继续教育时间
+				continueEducationCertificationPic1: '',   // String	驾驶员继续再教育合格证照片1
+				continueEducationCertificationPic2: '',   // String	驾驶员继续再教育合格证照片2
+				integrityExamineGrade: '',   // String	诚信考核记录诚信等级
+				integrityExamineEndTime: '',   // number	诚信考核记录合格至
+				integrityExaminePic1: '',   // String	诚信考核记录照片1
+				integrityExaminePic2: '',   // String	诚信考核记录照片2
+				endorsementPic1: '',   // String	违章和记分记录照片1
+				endorsementPic2: '',   // String	违章和记分记录照片2
+				noMajorAccidentsIn3YearsPic1: '',   // String	三年无重大交通事故证明照片1
+				noMajorAccidentsIn3YearsPic2: '',   // String	三年无重大交通事故证明照片2
+				escortLicenseNum: '',   // String	押运员从业资格证证号
+				escortLicenseCode: '',   // String	押运员从业资格证编号
+				escortLicenseType: '',   // String	押运员从业资格证从业资格类别
+				escortLicenseQuasiDrivingType: '',   // String	押运员从业资格证准驾车型
+				escortLicenseFirstTime: '',   // number	押运员从业资格证初次领证日期
+				escortLicenseBeginDate: '',   // number	押运员从业资格证有效期起始日期
+				escortLicenseExpireDate: '',   // number	押运员从业资格证有效期截止日期
+				escortLicensePic1: '',   // String	押运员从业资格证照片正本
+				escortLicensePic2: '',   // String	押运员从业资格证照片副本
+				otherPic1: ''   // String	其他照片1
+			}
+		}
+	},
 	mounted() {
 		LiftEffect({
 			"control1": ".lift-nav", 	//侧栏电梯的容器

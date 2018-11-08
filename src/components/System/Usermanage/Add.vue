@@ -81,6 +81,19 @@ export default {
 	created() {
 		this.getRoles()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.sysMember = {
+				headPic: '',
+				realName: '',
+				mobile: '',
+				roleIDs: [],
+				password: '',
+				confirmPassword: ''
+			}
+			this.getRoles()
+		}
+	},
 	methods: {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {

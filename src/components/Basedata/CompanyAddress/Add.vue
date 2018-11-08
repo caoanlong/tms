@@ -106,6 +106,25 @@ export default {
 		if (this.contactName) this.companyAddress.contactName = this.contactName
 		if (this.contactPhone) this.companyAddress.contactPhone = this.contactPhone
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.companyAddress = {
+				customerID: '',
+				areaID: '',
+                contactName: '',
+				contactPhone: '',
+				detailAddress: '',
+				companyName: '',
+				locationLng: '',
+				locationLat: '',
+                locationAddress: ''
+			}
+			if (this.customerID) this.companyAddress.customerID = this.customerID
+			if (this.companyName) this.companyAddress.companyName = this.companyName
+			if (this.contactName) this.companyAddress.contactName = this.contactName
+			if (this.contactPhone) this.companyAddress.contactPhone = this.contactPhone
+		}
+	},
 	mounted() {
 		this.companyAreaID && this.handSelectedArea(areaIdToArrayId(this.companyAreaID))
 	},

@@ -1,9 +1,8 @@
 <template>
 	<section class="app-main" style="min-height: 100%">
-		<keep-alive>      
-			<router-view v-if="$route.query && $route.query.catche"/>    
-		</keep-alive>    
-		<router-view v-if="!($route.query && $route.query.catche)"/>
+		<keep-alive>
+			<router-view/>
+		</keep-alive>
 	</section>
 </template>
 

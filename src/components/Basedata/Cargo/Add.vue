@@ -147,6 +147,31 @@ export default {
 	created() {
 		this.getUnitList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.cargo = {
+				customerID: '',
+				shipperCompanyName: '',
+				cargoName: '',
+				cargoType: '',
+				dangerousCoodsCategory: '',
+				cargoUnit: '',
+				packageType: '',
+				moistureProof: 'N',
+				waterProof: 'N',
+				quakeProof: 'N',
+				dropProof: 'N',
+				antimagnetic: 'N',
+				antiStatic: 'N',
+				radiationProof: 'N',
+				productName: '',
+				cnCode: '',
+				unCode: ''
+			}
+			this.requires = []
+			this.getUnitList()
+		}
+	},
 	methods: {
 		handleCheckAllRequireChange(val) {
 			if (val) {

@@ -40,7 +40,6 @@ import ImageUpload from '../../CommonComponents/ImageUpload'
 export default {
 	data() {
 		return {
-			selectedArea: [],
 			recdeliverycomp: {
 				logoUrl: '',
 				companyAreaID: '',
@@ -56,6 +55,11 @@ export default {
 	},
 	created() {
 		this.getInfo()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
 	},
 	methods: {
 		getInfo() {

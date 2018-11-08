@@ -641,6 +641,17 @@ export default {
 		}
 		this.getInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			if (sessionStorage.getItem('visitedViews')) {
+				const views = JSON.parse(sessionStorage.getItem('visitedViews'))
+				views.forEach(item => {
+					this.$store.dispatch('addVisitedViews', item)
+				})
+			}
+			this.getInfo()
+		}
+	},
 	mounted() {
 		LiftEffect({
 			"control1": ".lift-nav", 	//侧栏电梯的容器

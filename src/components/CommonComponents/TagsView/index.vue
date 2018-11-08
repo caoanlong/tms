@@ -60,7 +60,7 @@ export default {
 	},
 	methods: {
 		openTag(tag) {
-			tag.query.catche = true
+			tag.query.cache = true
 			this.$router.push({name: tag.name, query: tag.query})
 		},
 		generateRoute() {

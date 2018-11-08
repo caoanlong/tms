@@ -208,6 +208,11 @@ export default {
 	created() {
 		this.getInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
+	},
 	methods: {
 		sum(o) {
 			let sum = 0
@@ -252,7 +257,7 @@ export default {
 			this.trailDialog = true
 		},
 		copy(carrierOrderID) {
-			this.$router.push({name: 'editcarrierbill', query: { carrierOrderID, copy: true }})
+			this.$router.push({name: 'copycarrierbill', query: { carrierOrderID }})
 		},
 		back() {
 			this.$router.go(-1)
