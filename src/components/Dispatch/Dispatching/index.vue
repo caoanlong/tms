@@ -584,12 +584,12 @@ export default {
 		this.getList()
 		dispatchOrderID && this.getSelectedList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.reset()
+		}
+	},
 	methods:{
-		search() {
-			this.pageIndex = this.PAGEINDEX
-			this.pageSize = this.PAGESIZE
-			this.getList()
-		},
 		reset() {
 			this.find.keyword = ''
 			this.find.shipperAreaID = ''

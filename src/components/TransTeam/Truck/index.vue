@@ -86,12 +86,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.find = {
-				keyword: '',
-				plateNo: ''
-			}
-			this.resetExportExcelUrl()
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

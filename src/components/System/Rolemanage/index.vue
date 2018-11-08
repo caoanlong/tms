@@ -91,8 +91,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.find = { roleName: '' }
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

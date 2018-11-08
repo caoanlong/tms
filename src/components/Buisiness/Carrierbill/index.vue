@@ -121,14 +121,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.find = {
-				keyword: '',
-				status: '',
-				begin: '',
-				end: ''
-			}
-			this.resetExportExcelUrl()
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

@@ -63,8 +63,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.find = { keyword: '' }
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

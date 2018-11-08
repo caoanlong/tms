@@ -103,12 +103,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.find = {
-				keyword: '',
-				customerType: ''
-			}
-			this.resetExportExcelUrl()
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

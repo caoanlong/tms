@@ -172,36 +172,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.findrealName = ''
-			this.findobjType = ''
-			this.findexpiredCertificate = ''
-			this.resetExportExcelUrl()
-			this.expiredCertificateSorts = Object.keys(this.expiredCertificateSort).map(item =>{
-				return {
-					key:item,
-					value:this.expiredCertificateSort[item]
-				}
-			})
-			this.TruckOptions = Object.keys(this.TruckOption).map(item =>{
-				return {
-					key:item,
-					value:this.TruckOption[item]
-				}
-			})
-			this.DriverOptions = Object.keys(this.DriverOption).map(item =>{
-				return {
-					key:item,
-					value:this.DriverOption[item]
-				}
-			})
-			this.ComsupercargoOptions = Object.keys(this.ComsupercargoOption).map(item =>{
-				return {
-					key:item,
-					value:this.ComsupercargoOption[item]
-				}
-			})
-			this.expOption = this.expiredCertificateSorts
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

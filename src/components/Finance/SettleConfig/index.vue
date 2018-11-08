@@ -122,7 +122,7 @@
 						</template>
 					</el-table-column>
 				</el-table>
-				<Page :total="count" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
@@ -133,7 +133,6 @@ import request, { baseURL } from '../../../common/request'
 import SettleConfig from '../../../api/SettleConfig'
 import { deleteConfirm } from '../../../common/utils'
 import FileUpload from '../../CommonComponents/FileUpload'
-import Page from '../../CommonComponents/Page'
 import { baseMixin } from '../../../common/mixin';
 export default {
 	mixins: [baseMixin],
@@ -149,19 +148,13 @@ export default {
 			templateTit:'freight.xlsx'
 		}
 	},
-	components: {
-		FileUpload, Page
-	},
+	components: { FileUpload },
 	created() {
 		this.getList()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.findConsigneeArea = ''
-			this.findConsigneeCompanyName = ''
-			this.findShipperArea = ''
-			this.findShipperCompanyName = ''
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {
@@ -190,11 +183,6 @@ export default {
 			}
 			return extension || extension2 && isLt2M
 		},
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
-			this.getList()
-		},
 		reset() {
 			this.findConsigneeArea = ''
 			this.findConsigneeCompanyName = ''
@@ -203,14 +191,6 @@ export default {
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
-		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.getList() 
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.transporPriceID)
@@ -225,7 +205,7 @@ export default {
 				shipperCompanyName: this.findShipperCompanyName
 			}).then(res => {
 				this.tableData = res.records
-				this.count = res.total
+				this.total = res.total
 			})
 		},
 		handleCommand(e) {

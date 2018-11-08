@@ -92,12 +92,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.find = {
-				shippingNoteNumber: '',
-				carrier: ''
-			}
-			this.resetExportExcelUrl()
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

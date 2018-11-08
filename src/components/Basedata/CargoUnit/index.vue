@@ -73,9 +73,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.find = { keyword: '' }
-			this.resetExportExcelUrl()
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

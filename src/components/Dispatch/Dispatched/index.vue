@@ -285,17 +285,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.isCur = 0
-			this.find = {
-				keyword:'',
-				shipperConsignee:'',
-				status:'',
-				type:'',
-				dispatchBeginTime:'',
-				dispatchEndTime:''
-			}
-			this.resetExportExcelUrl()
-			this.getList()
+			this.reset()
 		}
 	},
 	destroyed() {

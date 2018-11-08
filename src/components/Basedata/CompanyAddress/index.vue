@@ -117,11 +117,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.find = { keyword: '',customerID: '', companyName: '' }
-			if (this.customerID) this.find.customerID = this.customerID
-			if (this.companyName) this.find.companyName = this.companyName
-			this.resetExportExcelUrl()
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {

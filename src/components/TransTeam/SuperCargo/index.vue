@@ -112,10 +112,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.supercargoType = []
-			this.keyword = ''
-			this.resetExportExcelUrl()
-			this.getList()
+			this.reset()
 		}
 	},
 	methods: {
