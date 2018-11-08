@@ -56,6 +56,12 @@ const routerMap = [
                 meta: { title: '编辑承运单' },
                 component: () => import ('../components/Buisiness/Carrierbill/Edit')
             },
+            {
+                path: '/copycarrierbill',
+                name: 'copycarrierbill',
+                meta: { title: '复制承运单' },
+                component: () => import ('../components/Buisiness/Carrierbill/Copy')
+            },
             /**
              * 调度  dispatch
              */

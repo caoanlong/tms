@@ -257,7 +257,7 @@ export default {
 			this.trailDialog = true
 		},
 		copy(carrierOrderID) {
-			this.$router.push({name: 'editcarrierbill', query: { carrierOrderID, copy: true }})
+			this.$router.push({name: 'copycarrierbill', query: { carrierOrderID }})
 		},
 		back() {
 			this.$router.go(-1)
