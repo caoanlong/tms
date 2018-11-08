@@ -89,6 +89,12 @@ export default {
 	created() {
 		this.getList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = { roleName: '' }
+			this.getList()
+		}
+	},
 	methods: {
 		add() {
 			SysRole.add({ roleName: this.roleName }).then(res => {

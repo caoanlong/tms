@@ -101,6 +101,16 @@ export default {
 		this.resetExportExcelUrl()
 		this.getList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = {
+				keyword: '',
+				customerType: ''
+			}
+			this.resetExportExcelUrl()
+			this.getList()
+		}
+	},
 	methods: {
 		reset() {
 			this.find.keyword = ''

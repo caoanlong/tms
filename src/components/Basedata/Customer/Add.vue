@@ -74,6 +74,19 @@ export default {
 		}
 	},
 	components: { ImageUpload, DistPicker },
+	activated() {
+		if(!this.$route.query.cache) {
+			this.recdeliverycomp = {
+				logoUrl: '',
+				companyAreaID: '',
+				companyName: '',
+				contactName: '',
+				contactPhone: '',
+				customerType: []
+			}
+			this.selectedArea = []
+		}
+	},
 	methods: {
 		handleLogoSuccess(res) {
 			this.recdeliverycomp.logoUrl = res.length == 0 ? '' : res[0]

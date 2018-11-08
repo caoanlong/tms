@@ -80,6 +80,11 @@ export default {
 	created() {
 		this.getInfo()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
+	},
 	methods: {
 		getInfo() {
 			const cargoNameID = this.$route.query.cargoID

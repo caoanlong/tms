@@ -107,6 +107,13 @@ export default {
 		this.resetExportExcelUrl()
 		this.getList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = { keyword: '' }
+			this.resetExportExcelUrl()
+			this.getList()
+		}
+	},
 	methods: {
 		reset() {
 			this.find.keyword = ''

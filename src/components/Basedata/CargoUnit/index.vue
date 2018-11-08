@@ -71,6 +71,13 @@ export default {
 		this.resetExportExcelUrl()
 		this.getList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = { keyword: '' }
+			this.resetExportExcelUrl()
+			this.getList()
+		}
+	},
 	methods: {
 		resetExportExcelUrl(){
 			this.exportExcelUrl = baseURL + '/company/cargoUnit/export?Authorization=' + localStorage.getItem("token")

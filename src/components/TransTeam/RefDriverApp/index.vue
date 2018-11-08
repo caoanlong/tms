@@ -52,52 +52,41 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import DriverInvitation from '../../../api/DriverInvitation'
-import Page from '../../CommonComponents/Page'
 import { deleteConfirm } from '../../../common/utils'
 import InviteDriver from '../components/InviteDriver'
+import { baseMixin } from '../../../common/mixin';
 export default {
+	mixins: [baseMixin],
 	data() {
 		return {
 			find: {
 				keyword: '',
 				status: ''
 			},
-			pageIndex: 1,
-			pageSize: 10,
-			total: 0,
-			tableData: [],
-			selectedList: [],
 			isInviteVisible: false,
-			ExpireWarn:{
-				
-			}
+			ExpireWarn:{}
 		}
 	},
-	components: { Page, InviteDriver },
+	components: { InviteDriver },
 	created() {
 		this.getList()
 	},
-	methods: {
-		search() {
-			this.pageIndex = 1
-			this.pageSize = 10
+	activated() {
+		if(!this.$route.query.cache) {
+			this.find = {
+				keyword: '',
+				status: ''
+			}
 			this.getList()
-		},
+		}
+	},
+	methods: {
 		reset() {
 			this.find.keyword = ''
 			this.find.status = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
-		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
 		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.customerID)

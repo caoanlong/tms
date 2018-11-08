@@ -136,15 +136,6 @@ export default {
 			this.resetExportExcelUrl()
 			this.getList()
 		},
-		pageChange(index) {
-			this.pageIndex = index
-			this.getList()
-		},
-		pageSizeChange(size) {
-			this.pageSize = size
-			this.pageIndex = 1
-			this.getList() 
-		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.truckID)
 		},
