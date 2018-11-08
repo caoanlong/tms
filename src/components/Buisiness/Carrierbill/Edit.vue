@@ -864,18 +864,18 @@ export default {
 		 * 添加企业地址
 		 */
 		addAddress(type) {
-			if (type == "shipper") {
-				this.currentCompany = this.selectedShipper
-			} else {
-				this.currentCompany = this.selectedConsignee
-			}
-			this.addressDialog = true
-		},
+            if (type == "shipper") {
+                this.currentCompany = this.selectedShipper
+            } else {
+                this.currentCompany = this.selectedConsignee
+            }
+            this.addressDialog = true
+        },
 		handAddress() {
 			this.addressDialog = false
 		},
 		back() {
-			this.$router.go(-1)
+			this.$router.push({ name: 'carrierbill' })
 		}
 	}
 }

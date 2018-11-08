@@ -238,7 +238,7 @@ export default {
 			this.isFold = !this.isFold
 		},
 		back() {
-			this.$router.go(-1)
+			this.$router.push({name: 'cargo'})
 		}
 	}
 }

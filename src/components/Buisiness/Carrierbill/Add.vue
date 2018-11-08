@@ -888,7 +888,7 @@ export default {
       this.addressDialog = false;
     },
     back() {
-      this.$router.go(-1);
+        this.$router.push({ name: 'carrierbill' })
     }
   }
 };

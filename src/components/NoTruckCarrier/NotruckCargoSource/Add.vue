@@ -125,7 +125,7 @@
 					<el-col :span="24">
 						<el-form-item>
 							<el-button type="primary" @click="save">保存</el-button>
-							<el-button @click="back">取消</el-button>
+							<el-button @click="back">返回</el-button>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -275,7 +275,7 @@ export default {
 			
 		},
 		back() {
-			this.$router.go(-1)
+			this.$router.push({ name: 'notruckcargosource' })
 		}
 	}
 }
