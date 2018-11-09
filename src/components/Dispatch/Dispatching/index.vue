@@ -427,7 +427,7 @@
 								<td align="center">{{item.carrierOrderNo}}</td>
 								<td align="center" :class="item.type">{{item.type == 'Load' ? '装车' : '卸货'}}</td>
 								<td align="center">{{item.areaName + item.posAddress + item.detailAddress}}</td>
-								<td align="center">{{(Number(item.receivableDistance)/1000).toFixed(2)}}公里</td>
+								<td align="center">{{(Number(item.nodeDistance)/1000).toFixed(2)}}公里</td>
 								<td align="center">{{item.requireTime | isFullDay()}}</td>
 							</tr>
 						</tbody>
@@ -788,7 +788,7 @@ export default {
 			})
 		},
 		// 发布派车单&发布抢单
-		publish(type){
+		publish(type) {
 			if (this.selectedList.length == 0) {
 				Message.error(`请选择承运单！`)
 				return
