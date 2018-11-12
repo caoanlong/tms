@@ -100,7 +100,7 @@ const ajax = function (json) {
 			success: (res) => {
 			},
 			error: (error) => {
-				Message.error(error.responseJSON.error +':'+ error.responseJSON.status)
+				Message.error(error.statusText)
 				return reject(error)
 			}
 		})
