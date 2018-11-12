@@ -51,6 +51,9 @@
 								<el-option label="重量" value="Weight"></el-option>
 							</el-select>
 						</el-form-item>
+						<el-form-item label="货物编号" prop="cargoNo">
+							<el-input v-model="cargo.cargoNo" :maxlength="100"></el-input>
+						</el-form-item>
 						<el-form-item label="防护要求" style="margin-bottom:0">
 							<el-checkbox-group v-model="requires" @change="handleCheckedRequireChange">
 								<el-checkbox label="moistureProof">防潮</el-checkbox>
@@ -123,6 +126,7 @@ export default {
 				antimagnetic: 'N',
 				antiStatic: 'N',
 				radiationProof: 'N',
+				cargoNo: '',
 				productName: '',
 				cnCode: '',
 				unCode: ''
@@ -135,6 +139,7 @@ export default {
 				cargoUnit: [{required: true, message: '请选择货物单位'}],
 				packageType: [{required: true, message: '请选择包装类型'}],
 				dispatchType: [{required: true, message: '请选择配载方式'}],
+				cargoNo: [{required: true, message: '请输入货物编号'}],
 				productName: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cnCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				unCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
@@ -258,6 +263,5 @@ export default {
 		color #409EFF
 		font-size 10px
 		&.fold
-			transform rotate(-180deg)
-			
+			transform rotate(-180deg)		
 </style>

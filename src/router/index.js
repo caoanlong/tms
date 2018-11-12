@@ -5,6 +5,7 @@ import 'nprogress/nprogress.css' // progress bar style
 
 import Layout from '@/components/Layout'
 import Login from '@/components/Login'
+import { TabPane } from 'element-ui';
 
 Vue.use(Router)
 
@@ -14,6 +15,12 @@ const routerMap = [
         name: 'login',
         component: Login
     },
+    {
+		path: '/trackquery',
+		name: 'trackquery',
+		meta: { title: '轨迹查询' },
+		component: () => import('../components/TrackQuery')
+	},
     {
         path: '',
         component: Layout,
@@ -395,7 +402,7 @@ router.beforeEach((to, from, next) => {
         NProgress.done()
     } else {
         /* has no token*/
-        if (to.path === '/login') {
+        if (to.path === '/login' || to.path === '/trackquery') {
             next()
         } else {
             next('/login')
