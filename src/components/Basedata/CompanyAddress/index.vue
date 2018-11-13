@@ -50,6 +50,7 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="所属客户" prop="companyName" align="center"></el-table-column>
+					<el-table-column label="地址编号" prop="contactPhone" align="center"></el-table-column>
 					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
 					<el-table-column label="电话" prop="contactPhone" align="center"></el-table-column>
 					<el-table-column label="区域" prop="contactArea" align="center"></el-table-column>
@@ -58,6 +59,11 @@
 							<span>{{scope.row.locationAddress}}{{scope.row.detailAddress}}</span>
 						</template>
 					</el-table-column>
+                    <el-table-column label="围栏范围" prop="contactPhone" align="center">
+                        <template slot-scope="scope">
+							<span>{{scope.row.contactPhone}}米</span>
+						</template>
+                    </el-table-column>
 					<el-table-column label="操作" align="center" width="100">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">

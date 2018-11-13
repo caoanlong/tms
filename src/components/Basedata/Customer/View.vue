@@ -23,6 +23,20 @@
 						<el-form-item label="手机号" prop="contactPhone">
 							<p>{{recdeliverycomp.contactPhone}}</p>
 						</el-form-item>
+                        <el-form-item label="客户编号" prop="code">
+							<p>{{recdeliverycomp.code}}</p>
+						</el-form-item>
+                        <el-form-item label="监控类型">
+							<p>{{recdeliverycomp.fencingType=='Point'?'地址监控':'区域监控'}}</p>
+						</el-form-item>
+                        <div class="areaTable">
+                            <div class="tit">价格监控区域</div>
+                            <el-table :data="tableData" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
+                                <el-table-column prop="date" label="省" align="center"></el-table-column>
+                                <el-table-column prop="name" label="市" align="center"></el-table-column>
+                                <el-table-column prop="address" label="区" align="center"></el-table-column>
+                            </el-table>
+                        </div>
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
 						</el-form-item>
@@ -78,15 +92,24 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.el-form-item__content
-	p
-		margin 0
-		border-bottom 1px solid #dcdfe6
-		padding 0 15px
-		min-height 32px
-		font-family 'sans-serif'
-		line-height 32px
-		color #999
-	.el-input__inner
-		vertical-align top
+    .el-form-item__content
+        p
+            margin 0
+            border-bottom 1px solid #dcdfe6
+            padding 0 15px
+            min-height 32px
+            font-family 'sans-serif'
+            line-height 32px
+            color #999
+        .el-input__inner
+            vertical-align top
+    .areaTable
+        position relative
+        padding-left 120px
+        .tit
+            font-size 14px
+            position absolute
+            top 0
+            left 22px
+            color #606266
 </style>

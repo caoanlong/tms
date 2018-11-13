@@ -14,6 +14,9 @@
                         <el-form-item label="电话">
                             <p>{{companyAddress.contactPhone}}</p>
 						</el-form-item>
+                        <el-form-item label="地址编号">
+                            <p>{{companyAddress.contactPhone}}</p>
+						</el-form-item>
 						<el-form-item label="所在区域">
                             <p>{{companyAddress.contactArea}}</p>
 						</el-form-item>
@@ -22,6 +25,9 @@
                         </el-form-item>
 						<el-form-item label="门牌信息">
                             <p>{{companyAddress.detailAddress}}</p>
+						</el-form-item>
+                        <el-form-item label="围栏范围">
+                            <p>{{companyAddress.contactPhone}}米</p>
 						</el-form-item>
 						<el-form-item>
 							<el-button @click="back">返回</el-button>

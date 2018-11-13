@@ -2,9 +2,9 @@
 	<div class="main-content">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">编辑客户</div>
-			<el-row style="padding-bottom: 200px">
-				<el-col :span="14" :offset="5">
-					<el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="small">
+            <el-form label-width="120px" :model="recdeliverycomp" :rules="rules" ref="ruleForm" size="small">
+                <el-row>
+                    <el-col :span="14" :offset="5">
 						<el-form-item label="客户LOGO">
 							<div style="display:flex">
 								<div style="flex:0 0 110px">
@@ -36,14 +36,50 @@
 						<el-form-item label="手机号" prop="contactPhone">
 							<el-input v-model="recdeliverycomp.contactPhone"></el-input>
 						</el-form-item>
-						<el-form-item>
+                        <el-form-item label="客户编号" prop="contactPhone">
+							<el-input v-model="recdeliverycomp.code"></el-input>
+						</el-form-item>
+                        <el-form-item label="监控类型" prop="fencingType">
+                            <el-select v-model="recdeliverycomp.fencingType" placeholder="请选择">
+                                <el-option label="请选择" value=""></el-option>
+                                <el-option label="区域监控" value="Area"></el-option>
+                                <el-option label="地址监控" value="Point"></el-option>
+                            </el-select>					
+						</el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="14" :offset="5" style="padding-left:120px">
+                        <div class="addAreaTit">价格监控区域<span class="el-icon-plus fr addArea" @click="addArea"> 增加</span></div>
+                        <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
+                            <el-table-column prop="provice" label="省" align="center"></el-table-column>
+                            <el-table-column prop="city" label="市" align="center"></el-table-column>
+                            <el-table-column prop="area" label="区" align="center"></el-table-column>
+                            <el-table-column label="控制" align="center">
+                                <template slot-scope="scope">
+                                    <span @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="14" :offset="5">
+                        <el-form-item>
 							<el-button type="primary" @click="save">立即保存</el-button>
 							<el-button @click="back">取消</el-button>
 						</el-form-item>
-					</el-form>
-				</el-col>
-			</el-row>
+                    </el-col>
+                </el-row>
+            </el-form>
 		</el-card>
+        <el-dialog title="添加价格监控区域" :visible.sync="addAreaDialog" width="500px">
+            <dist-picker :distList="selectedMonitoringArea" @hand-select="handleSelectedMonitoringArea"></dist-picker>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addAreaDialog = false">取 消</el-button>
+                <el-button type="primary" @click="addMonitoringArea">确 定</el-button>
+            </span>
+        </el-dialog>
 	</div>
 </template>
 <script type="text/javascript">
@@ -51,11 +87,14 @@ import { Message } from 'element-ui'
 import Company from '../../../api/Company'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import DistPicker from '../../CommonComponents/DistPicker'
-import { areaIdToArrayId } from '../../../common/utils'
+import { areaIdToArrayId ,searchAreaByAreaID} from '../../../common/utils'
 import { checkTel } from '../../../common/validator'
 export default {
 	data() {
 		return {
+            addAreaDialog:false,
+            selectedMonitoringArea:[],
+            monitoringAreaList:[],
 			selectedArea: [],
 			recdeliverycomp: {
 				logoUrl: '',
@@ -63,9 +102,12 @@ export default {
 				companyName: '',
 				contactName: '',
 				contactPhone: '',
-				customerType: []
+                customerType: [],
+                code:'',
+                fencingType:''
 			},
 			rules: {
+                logoUrl:[ {required: true, message: '请上传客户LOGO'} ],
 				companyName: [ {required: true, message: '请输入名称', trigger: 'blur'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'} ],
 				companyAreaID: [ { required: true, message: '请选择区域', trigger: 'change' } ],
 				customerType: [ { required: true, message: '请选择类型', trigger: 'change' } ],
@@ -95,7 +137,30 @@ export default {
 				this.recdeliverycomp.companyAreaID = ''
 				this.selectedArea = []
 			}
-		},
+        },
+        handleSelectedMonitoringArea(data){
+            if (data) {
+				this.selectedMonitoringArea = data
+			} else {
+				this.selectedMonitoringArea = []
+			}
+        },
+        addArea(){
+            this.addAreaDialog = true
+            this.selectedMonitoringArea=[]
+        },
+        addMonitoringArea(){
+            this.addAreaDialog = false
+            let list={
+                provice:searchAreaByAreaID(this.selectedMonitoringArea[0]),
+                city:searchAreaByAreaID(this.selectedMonitoringArea[1]),
+                area:searchAreaByAreaID(this.selectedMonitoringArea[2])
+            }
+            this.monitoringAreaList.unshift(list)
+        },
+        del(scopeIndex){
+            this.monitoringAreaList.splice(scopeIndex, 1)
+        },
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
@@ -122,5 +187,25 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-
+.addAreaTit
+    height 33px
+    line-height 33px
+    font-size 14px
+    color #999
+    padding 0 15px
+    border 1px solid #ebeef5
+    border-bottom none
+    border-radius 4px 4px 0 0
+    .addArea
+        height 32px
+        line-height 32px
+        color #409EFF
+        cursor pointer
+.deleteBtn
+    color #F56C6C
+    height 20px
+    line-height 20px
+    cursor pointer
+    font-size 12px
+    display inline-block
 </style>

@@ -44,7 +44,8 @@
 					:data="tableData" @selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="单位名称" prop="companyName" align="center"></el-table-column>
+					<el-table-column label="客户名称" prop="companyName"></el-table-column>
+					<el-table-column label="客户编号" prop="code" align="center" width="140"></el-table-column>
 					<el-table-column label="地区" prop="companyArea" align="center"></el-table-column>
 					<el-table-column label="类型" prop="customerType" width="120" align="center">
 						<template slot-scope="scope">
@@ -53,6 +54,9 @@
 					</el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100" align="center"></el-table-column>
 					<el-table-column label="手机" prop="contactPhone" width="140" align="center"></el-table-column>
+					<el-table-column label="监控区域" prop="fencingType" width="80" align="center">
+                        <template slot-scope="scope">{{scope.row.fencingType}}</template>
+                    </el-table-column>
 					<el-table-column label="TA的地址" prop="customerAddressNum" width="140" align="center">
 						<template slot-scope="scope">
 							<span :class="{'link': Number(scope.row.customerAddressNum) > 0}" @click="viewAddress(scope.row)">{{scope.row.customerAddressNum + '个地址'}}</span>
