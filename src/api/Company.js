@@ -1,5 +1,7 @@
 import Base from './Base'
 import request from '../common/request'
+import requestByJson from '../common/requestByJson'
+
 
 class Company extends Base {
     /**
@@ -64,7 +66,7 @@ class Company extends Base {
         if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
+        return requestByJson({
             url: this.baseUrl + '/customer/add',
             method: 'post',
             data
@@ -94,7 +96,7 @@ class Company extends Base {
         if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
+        return requestByJson({
             url: this.baseUrl + '/customer/update',
             method: 'post',
             data

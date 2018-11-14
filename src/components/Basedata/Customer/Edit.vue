@@ -36,7 +36,7 @@
 						<el-form-item label="手机号" prop="contactPhone">
 							<el-input v-model="recdeliverycomp.contactPhone"></el-input>
 						</el-form-item>
-                        <el-form-item label="客户编号" prop="contactPhone">
+                        <el-form-item label="客户编号" prop="code">
 							<el-input v-model="recdeliverycomp.code"></el-input>
 						</el-form-item>
                         <el-form-item label="监控类型" prop="fencingType">
@@ -52,9 +52,21 @@
                     <el-col :span="14" :offset="5" style="padding-left:120px">
                         <div class="addAreaTit">价格监控区域<span class="el-icon-plus fr addArea" @click="addArea"> 增加</span></div>
                         <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
-                            <el-table-column prop="provice" label="省" align="center"></el-table-column>
-                            <el-table-column prop="city" label="市" align="center"></el-table-column>
-                            <el-table-column prop="area" label="区" align="center"></el-table-column>
+                            <el-table-column prop="provice" label="省" align="center">
+                                <template slot-scope="scope">
+                                    {{scope.row.provice}}
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="city" label="市" align="center">
+                                <template slot-scope="scope">
+                                   {{scope.row.city}}
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="area" label="区" align="center">
+                                <template slot-scope="scope">
+                                   {{scope.row.area}}
+                                </template>
+                            </el-table-column>
                             <el-table-column label="控制" align="center">
                                 <template slot-scope="scope">
                                     <span @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
@@ -104,7 +116,12 @@ export default {
 				contactPhone: '',
                 customerType: [],
                 code:'',
-                fencingType:''
+                fencingType:'',
+                areas:[{
+                    provice:'',
+                    city:'',
+                    area:'',
+                }]
 			},
 			rules: {
                 logoUrl:[ {required: true, message: '请上传客户LOGO'} ],
@@ -154,18 +171,35 @@ export default {
             let list={
                 provice:searchAreaByAreaID(this.selectedMonitoringArea[0]),
                 city:searchAreaByAreaID(this.selectedMonitoringArea[1]),
-                area:searchAreaByAreaID(this.selectedMonitoringArea[2])
+                area:searchAreaByAreaID(this.selectedMonitoringArea[2]),
+                areaID:this.selectedMonitoringArea[2]
             }
-            this.monitoringAreaList.unshift(list)
+            this.monitoringAreaList.push(list)
+            console.log(this.monitoringAreaList)
         },
         del(scopeIndex){
+            console.log(scopeIndex,222)
             this.monitoringAreaList.splice(scopeIndex, 1)
+            // this.recdeliverycomp.areas.splice(scopeIndex,1)
         },
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				const recdeliverycomp = Object.assign({}, this.recdeliverycomp)
-				recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
+				const recdeliverycomp = {
+                    customer:{
+                        logoUrl:this.recdeliverycomp.logoUrl,
+                        companyAreaID:this.recdeliverycomp.companyAreaID,
+                        companyName:this.recdeliverycomp.companyName,
+                        contactName:this.recdeliverycomp.contactName,
+                        contactPhone:this.recdeliverycomp.contactPhone,
+                        customerType:this.recdeliverycomp.customerType,
+                        code:this.recdeliverycomp.code,
+                        fencingType:this.recdeliverycomp.fencingType,
+                        customerID:this.$route.query.customerID
+                    },
+                    areas:this.monitoringAreaList,
+                }
+				recdeliverycomp.customer.customerType = this.recdeliverycomp.customerType.join(',')
 				Company.customerUpdate(recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
@@ -175,9 +209,15 @@ export default {
 		getInfo() {
 			const customerID = this.$route.query.customerID
 			Company.customerFindById({ customerID }).then(res => {
-				this.recdeliverycomp = res
-				this.recdeliverycomp.customerType = res.customerType.split(',')
-				this.selectedArea = areaIdToArrayId(String(res.companyAreaID))
+				this.recdeliverycomp = res.customer
+                this.recdeliverycomp.customerType = res.customer.customerType.split(',')
+                this.recdeliverycomp.areas = this.monitoringAreaList = res.areas
+                this.monitoringAreaList.forEach(function(item) {
+                    item.provice = searchAreaByAreaID(String(item.areaID).substr(0, 2) + '0000')
+                    item.city = searchAreaByAreaID(String(item.areaID).substr(0, 4) + '00')
+                    item.area = searchAreaByAreaID(String(item.areaID))
+                })
+				this.selectedArea = areaIdToArrayId(String(res.customer.companyAreaID))
 			})
 		},
 		back() {

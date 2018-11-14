@@ -12,7 +12,7 @@
 							<p>{{recdeliverycomp.companyName}}</p>
 						</el-form-item>
 						<el-form-item label="客户类型" prop="customerType">
-							<p>{{recdeliverycomp.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , ')}}</p>
+							<p>{{recdeliverycomp.customerType.map((item) => CUSTOMERTYPE[item]).join(' , ')}}</p>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">
 							<p>{{recdeliverycomp.companyArea}}</p>
@@ -31,10 +31,22 @@
 						</el-form-item>
                         <div class="areaTable">
                             <div class="tit">价格监控区域</div>
-                            <el-table :data="tableData" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
-                                <el-table-column prop="date" label="省" align="center"></el-table-column>
-                                <el-table-column prop="name" label="市" align="center"></el-table-column>
-                                <el-table-column prop="address" label="区" align="center"></el-table-column>
+                            <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
+                                <el-table-column prop="provice" label="省" align="center">
+                                    <template slot-scope="scope">
+                                        {{scope.row.provice}}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="city" label="市" align="center">
+                                    <template slot-scope="scope">
+                                    {{scope.row.city}}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="area" label="区" align="center">
+                                    <template slot-scope="scope">
+                                    {{scope.row.area}}
+                                    </template>
+                                </el-table-column>
                             </el-table>
                         </div>
 						<el-form-item>
@@ -51,17 +63,26 @@ import { Message } from 'element-ui'
 import dist from '../../../assets/data/dist.json'
 import Company from '../../../api/Company'
 import ImageUpload from '../../CommonComponents/ImageUpload'
+import { searchAreaByAreaID} from '../../../common/utils'
 export default {
 	data() {
 		return {
+            monitoringAreaList:[],
 			recdeliverycomp: {
 				logoUrl: '',
 				companyAreaID: '',
 				companyName: '',
 				contactName: '',
 				contactPhone: '',
-				customerType: ''
-			}
+                customerType: [],
+                code:'',
+                fencingType:'',
+                areas:[{
+                    provice:'',
+                    city:'',
+                    area:'',
+                }]
+			},
 		}
 	},
 	computed: {
@@ -79,7 +100,14 @@ export default {
 		getInfo() {
 			const customerID = this.$route.query.customerID
 			Company.customerFindById({ customerID }).then(res => {
-				this.recdeliverycomp = res
+                this.recdeliverycomp = res.customer
+                this.monitoringAreaList = res.areas
+                this.recdeliverycomp.customerType = res.customer.customerType.split(',')
+                this.monitoringAreaList.forEach(function(item) {
+                    item.provice = searchAreaByAreaID(String(item.areaID).substr(0, 2) + '0000')
+                    item.city = searchAreaByAreaID(String(item.areaID).substr(0, 4) + '00')
+                    item.area = searchAreaByAreaID(String(item.areaID))
+                })
 			})
 		},
 		back() {

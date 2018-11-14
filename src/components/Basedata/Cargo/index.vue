@@ -50,6 +50,7 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="企业名称" prop="shipperCompanyName" align="center"></el-table-column>
+					<el-table-column label="货物编号" prop="code" align="center"></el-table-column>
 					<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
 					<el-table-column label="品名表名称" prop="productName" align="center"></el-table-column>
 					<el-table-column label="货物类型" prop="cargoType" align="center">

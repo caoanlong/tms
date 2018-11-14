@@ -32,6 +32,9 @@
 							<p v-if="cargo.dispatchType == 'Volumn'">体积</p>
 							<p v-else-if="cargo.dispatchType == 'Weight'">重量</p>
 						</el-form-item>
+                        <el-form-item label="货物编号"  prop="productName">
+							<p>{{cargo.code}}</p>
+						</el-form-item>
 						<el-form-item label="防护要求">
 							<p v-if="cargo.moistureProof=='Y' 
 								|| cargo.waterProof=='Y' 
@@ -53,6 +56,7 @@
 						<el-form-item label="品名表名称"  prop="productName">
 							<p>{{cargo.productName}}</p>
 						</el-form-item>
+						
 						<el-form-item label="CN编码"  prop="cnCode">
 							<p>{{cargo.cnCode}}</p>
 						</el-form-item>

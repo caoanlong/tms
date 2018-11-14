@@ -104,7 +104,8 @@ export default {
 				contactPhone: '',
                 customerType: [],
                 code:'',
-                fencingType:''
+                fencingType:'',
+                areas:[]
 			},
 			rules: {
                 logoUrl:[ {required: true, message: '请上传客户LOGO'} ],
@@ -125,7 +126,10 @@ export default {
 				companyName: '',
 				contactName: '',
 				contactPhone: '',
-				customerType: []
+                customerType: [],
+                code:'',
+                fencingType:'',
+                areas:[]
 			}
 			this.selectedArea = []
 		}
@@ -152,9 +156,21 @@ export default {
         },
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
-				if (!valid) return
-				const recdeliverycomp = Object.assign({}, this.recdeliverycomp)
-				recdeliverycomp.customerType = this.recdeliverycomp.customerType.join(',')
+                if (!valid) return
+                const recdeliverycomp = {
+                    customer:{
+                        logoUrl:this.recdeliverycomp.logoUrl,
+                        companyAreaID:this.recdeliverycomp.companyAreaID,
+                        companyName:this.recdeliverycomp.companyName,
+                        contactName:this.recdeliverycomp.contactName,
+                        contactPhone:this.recdeliverycomp.contactPhone,
+                        customerType:this.recdeliverycomp.customerType,
+                        code:this.recdeliverycomp.code,
+                        fencingType:this.recdeliverycomp.fencingType
+                    },
+                    areas:this.recdeliverycomp.areas
+                }
+				recdeliverycomp.customer.customerType = this.recdeliverycomp.customerType.join(',')
 				Company.customerAdd(recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
@@ -172,10 +188,15 @@ export default {
                 city:searchAreaByAreaID(this.selectedMonitoringArea[1]),
                 area:searchAreaByAreaID(this.selectedMonitoringArea[2])
             }
-            this.monitoringAreaList.unshift(list)
+            let areaIDList = {
+                areaID:this.selectedMonitoringArea[2]
+            }
+            this.monitoringAreaList.push(list)
+            this.recdeliverycomp.areas.push(areaIDList)
         },
         del(scopeIndex){
             this.monitoringAreaList.splice(scopeIndex, 1)
+            this.recdeliverycomp.areas.splice(scopeIndex,1)
         },
 		back() {
 			this.$router.push({name: 'recdeliverycomp'})
