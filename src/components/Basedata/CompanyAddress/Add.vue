@@ -22,8 +22,8 @@
                         <el-form-item label="电话" prop="contactPhone">
 							<el-input v-model="companyAddress.contactPhone" placeholder="请输入..."></el-input>
 						</el-form-item>
-                        <el-form-item label="地址编号" prop="contactPhone">
-							<el-input v-model="companyAddress.contactPhone" placeholder="请输入地址编号"></el-input>
+                        <el-form-item label="地址编号" prop="code">
+							<el-input v-model="companyAddress.code" placeholder="请输入地址编号"></el-input>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="areaID">
 							<dist-picker :distList="selectedArea" @hand-select="handSelectedArea"></dist-picker>
@@ -44,8 +44,8 @@
 						<el-form-item label="门牌信息" prop="detailAddress">
 							<el-input v-model="companyAddress.detailAddress" placeholder="如：十字路口左边22栋301室"></el-input>
 						</el-form-item>
-                        <el-form-item label="围栏范围" prop="contactPhone">
-							<el-input v-model="companyAddress.contactPhone" placeholder="请输入围栏范围"><template slot="append">米</template></el-input>
+                        <el-form-item label="围栏范围" prop="monitorScope">
+							<el-input v-model="companyAddress.monitorScope" placeholder="请输入围栏范围"><template slot="append">米</template></el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="save">立即保存</el-button>
@@ -88,7 +88,9 @@ export default {
 				companyName: '',
 				locationLng: '',
 				locationLat: '',
-                locationAddress: ''
+                locationAddress: '',
+                monitorScope:'',
+                code:''
 			},
 			customerID: this.$route.query.customerID,
 			companyName: this.$route.query.companyName,
@@ -123,7 +125,9 @@ export default {
 				companyName: '',
 				locationLng: '',
 				locationLat: '',
-                locationAddress: ''
+                locationAddress: '',
+                monitorScope:'',
+                code:''
 			}
 			if (this.customerID) this.companyAddress.customerID = this.customerID
 			if (this.companyName) this.companyAddress.companyName = this.companyName

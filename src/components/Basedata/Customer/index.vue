@@ -54,8 +54,8 @@
 					</el-table-column>
 					<el-table-column label="联系人" prop="contactName" width="100" align="center"></el-table-column>
 					<el-table-column label="手机" prop="contactPhone" width="140" align="center"></el-table-column>
-					<el-table-column label="监控区域" prop="fencingType" width="80" align="center">
-                        <template slot-scope="scope">{{scope.row.fencingType}}</template>
+					<el-table-column label="监控区域" prop="monitorAreaCount" width="80" align="center">
+                        <template slot-scope="scope">{{scope.row.monitorAreaCount}}</template>
                     </el-table-column>
 					<el-table-column label="TA的地址" prop="customerAddressNum" width="140" align="center">
 						<template slot-scope="scope">
