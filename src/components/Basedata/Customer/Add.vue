@@ -84,7 +84,7 @@
                             </el-table-column>
                             <el-table-column label="控制" align="center">
                                 <template slot-scope="scope">
-                                    <span @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                    <span @click="delAddress(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -190,7 +190,8 @@ export default {
                 customerType: [],
                 code:'',
                 fencingType:'',
-                areas:[]
+                areas:[],
+                addressList:[]
             },
             customerAddress: {
 				areaID: '',
@@ -234,12 +235,20 @@ export default {
                 customerType: [],
                 code:'',
                 fencingType:'',
-                areas:[]
+                areas:[],
+                addressList:[]
 			}
             this.selectedArea = []
             this.selectedAddressArea = []
 		}
-	},
+    },
+    mounted(){
+        if(this.$refs['ruleForm']){
+            this.$refs['ruleForm'].resetFields()
+        }else{
+            return
+        }
+    },
 	methods: {
 		handleLogoSuccess(res) {
 			this.recdeliverycomp.logoUrl = res.length == 0 ? '' : res[0]
@@ -332,7 +341,11 @@ export default {
         },
         addAddress(){
             this.addAddressDialog = true
-            this.$refs['ruleForm1'].resetFields()
+            if(this.$refs['ruleForm1']){
+                this.$refs['ruleForm1'].resetFields()
+            }else{
+                return
+            }
             this.selectedAddressArea = []
             this.customerAddress={}
         },
@@ -365,17 +378,17 @@ export default {
                 code: this.customerAddress.code
             }
             this.addressList.push(list)
+            this.recdeliverycomp.addressList.push(list)
         },
         // 删除监控区域临时数据
-        saveCustomerAddress(){
-            this.$refs['ruleForm1'].validate(valid => {
-				if (!valid) return
-				Company.customerAddressAdd(this.customerAddress).then(res => {})
-			})
-        },
+
         del(scopeIndex){
             this.monitoringAreaList.splice(scopeIndex, 1)
             this.recdeliverycomp.areas.splice(scopeIndex,1)
+        },
+        delAddress(scopeIndex){
+            this.addressList.splice(scopeIndex, 1)
+            this.recdeliverycomp.addressList.splice(scopeIndex,1)
         },
 		back() {
 			this.$router.push({name: 'recdeliverycomp'})

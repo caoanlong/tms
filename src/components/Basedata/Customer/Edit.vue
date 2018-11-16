@@ -84,7 +84,7 @@
                             </el-table-column>
                             <el-table-column label="控制" align="center">
                                 <template slot-scope="scope">
-                                    <span @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                    <span @click="delAddress(scope.row.customerAddressID)" class="el-icon-delete deleteBtn"> 删除</span>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -166,9 +166,10 @@ import Company from '../../../api/Company'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import distData from '../../../assets/data/distpicker.data'
 import DistPicker from '../../CommonComponents/DistPicker'
-import { areaIdToArrayId ,searchAreaByAreaID} from '../../../common/utils'
+import { areaIdToArrayId ,searchAreaByAreaID,deleteConfirm} from '../../../common/utils'
 import { checkTel } from '../../../common/validator'
 import SelectLocation from '../../CommonComponents/SelectLocation'
+
 export default {
 	data() {
 		return {
@@ -326,8 +327,7 @@ export default {
         },
         // 添加监控地址
         addMonitoringAddress(){
-            this.addAddressDialog = false
-            let list = {
+            const list = {
                 areaID: this.customerAddress.areaID,
                 contactName: this.customerAddress.contactName,
 				contactPhone: this.customerAddress.contactPhone,
@@ -336,15 +336,32 @@ export default {
 				locationLat: this.customerAddress.locationLat,
                 locationAddress: this.customerAddress.locationAddress,
                 monitorScope: this.customerAddress.monitorScope,
-                code: this.customerAddress.code
+                code: this.customerAddress.code,
+                customerID:this.$route.query.customerID,
+                companyName:this.recdeliverycomp.companyName,
             }
-            this.addressList.push(list)
+            this.$refs['ruleForm1'].validate(valid => {
+				if (!valid) return
+				Company.customerAddressAdd(list).then(res => {
+					Message.success('保存成功！')
+                    this.addAddressDialog = false
+                    this.getAddressList()
+				})
+			})
         },
         del(scopeIndex){
             console.log(scopeIndex,222)
             this.monitoringAreaList.splice(scopeIndex, 1)
             // this.recdeliverycomp.areas.splice(scopeIndex,1)
         },
+        delAddress(customerAddressID) {
+			deleteConfirm(customerAddressID, customerAddressIDs => {
+				Company.customerAddressDeleteBatch({ customerAddressIDs }).then(res => {
+					Message.success('删除成功!')
+					this.getAddressList()
+				})
+			})
+		},
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
