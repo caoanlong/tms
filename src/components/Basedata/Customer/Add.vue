@@ -234,15 +234,13 @@ export default {
 				contactPhone: '',
                 customerType: [],
                 code:'',
-                fencingType:'',
-                areas:[],
-                addressList:[]
+                fencingType:''
 			}
             this.selectedArea = []
             this.selectedAddressArea = []
-		}
-    },
-    mounted(){
+            this.addressList= []
+            this.monitoringAreaList= []
+        }
         if(this.$refs['ruleForm']){
             this.$refs['ruleForm'].resetFields()
         }else{
@@ -361,7 +359,6 @@ export default {
                 areaID:this.selectedMonitoringArea[2]
             }
             this.monitoringAreaList.push(list)
-            this.recdeliverycomp.areas.push(areaIDList)
         },
         // 添加监控地址
         addMonitoringAddress(){
@@ -378,7 +375,6 @@ export default {
                 code: this.customerAddress.code
             }
             this.addressList.push(list)
-            this.recdeliverycomp.addressList.push(list)
         },
         // 删除监控区域临时数据
 

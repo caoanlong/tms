@@ -114,12 +114,11 @@ export default {
 	},
 	created() {
         this.getInfo()
-        this.getAddressList()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
             this.getInfo()
-            this.getAddressList()
+            
 		}
 	},
 	methods: {
@@ -134,6 +133,7 @@ export default {
                     item.city = searchAreaByAreaID(String(item.areaID).substr(0, 4) + '00')
                     item.area = searchAreaByAreaID(String(item.areaID))
                 })
+                this.getAddressList()
 			})
         },
         getAddressList() {
