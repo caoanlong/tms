@@ -3,7 +3,7 @@
 		<el-card class="box-card">
 			<div slot="header" class="clearfix">查看客户</div>
 			<el-row>
-				<el-col :span="14" :offset="5">
+				<el-col>
 					<el-form label-width="120px"  size="small">
 						<el-form-item label="客户LOGO">
 							<ImageUpload :files="[recdeliverycomp.logoUrl]" :isPreview="true"/>
@@ -29,8 +29,7 @@
                         <el-form-item label="监控类型">
 							<p>{{recdeliverycomp.fencingType=='Point'?'地址监控':'区域监控'}}</p>
 						</el-form-item>
-                        <div class="areaTable">
-                            <div class="tit">价格监控区域</div>
+                        <div class="areaTable table" v-if="recdeliverycomp.fencingType=='Area'">
                             <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                 <el-table-column prop="provice" label="省" align="center">
                                     <template slot-scope="scope">
@@ -49,6 +48,30 @@
                                 </el-table-column>
                             </el-table>
                         </div>
+                        <div class="areaTable table" v-else>
+                            <el-table :data="addressList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
+                                <el-table-column prop="code" label="地址编号" align="center">
+                                    
+                                </el-table-column>
+                                <el-table-column prop="contactName" label="联系人" align="center">
+                                </el-table-column>
+                                <el-table-column prop="contactPhone" label="联系电话" align="center">
+                                </el-table-column>
+                                <el-table-column label="区域" align="center">
+                                    <template slot-scope="scope">
+                                        {{scope.row.areaID | searchAreaByKey}}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="detailAddress" label="地址" align="center">
+                                    
+                                </el-table-column>
+                                <el-table-column prop="monitorScope" label="围栏范围" align="center">
+                                    <template slot-scope="scope">
+                                        {{scope.row.monitorScope?scope.row.monitorScope+'米':''}}
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
 						</el-form-item>
@@ -63,11 +86,12 @@ import { Message } from 'element-ui'
 import dist from '../../../assets/data/dist.json'
 import Company from '../../../api/Company'
 import ImageUpload from '../../CommonComponents/ImageUpload'
-import { searchAreaByAreaID} from '../../../common/utils'
+import { searchAreaByAreaID,searchAreaByKey} from '../../../common/utils'
 export default {
 	data() {
 		return {
             monitoringAreaList:[],
+            addressList:[],
 			recdeliverycomp: {
 				logoUrl: '',
 				companyAreaID: '',
@@ -89,11 +113,13 @@ export default {
 		dist: () => dist
 	},
 	created() {
-		this.getInfo()
+        this.getInfo()
+        this.getAddressList()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.getInfo()
+            this.getInfo()
+            this.getAddressList()
 		}
 	},
 	methods: {
@@ -109,7 +135,14 @@ export default {
                     item.area = searchAreaByAreaID(String(item.areaID))
                 })
 			})
-		},
+        },
+        getAddressList() {
+			Company.customerAddressFind({
+				customerID:this.$route.query.customerID
+			}).then(res => {
+				this.addressList = res.records
+			})
+        },
 		back() {
 			this.$router.push({name: 'recdeliverycomp'})
 		}
