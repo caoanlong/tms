@@ -29,7 +29,7 @@
                         <el-form-item label="监控类型">
 							<p>{{recdeliverycomp.fencingType=='Point'?'地址监控':'区域监控'}}</p>
 						</el-form-item>
-                        <div class="areaTable table" v-if="recdeliverycomp.fencingType=='Area'">
+                        <div class="areaTable table" v-show="recdeliverycomp.fencingType=='Area'">
                             <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                 <el-table-column prop="provice" label="省" align="center">
                                     <template slot-scope="scope">
@@ -48,7 +48,7 @@
                                 </el-table-column>
                             </el-table>
                         </div>
-                        <div class="areaTable table" v-else>
+                        <div class="areaTable table" v-show="recdeliverycomp.fencingType=='Point'">
                             <el-table :data="addressList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                 <el-table-column prop="code" label="地址编号" align="center">
                                     
