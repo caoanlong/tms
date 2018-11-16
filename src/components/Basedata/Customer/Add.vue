@@ -387,7 +387,6 @@ export default {
         // 删除监控区域临时数据
 
         del(scopeIndex){
-            console.log(this.monitoringAreaList)
             this.monitoringAreaList.splice(scopeIndex, 1)
         },
         delAddress(scopeIndex){

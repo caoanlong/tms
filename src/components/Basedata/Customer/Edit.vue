@@ -323,7 +323,6 @@ export default {
                 areaID:this.selectedMonitoringArea[2]
             }
             this.monitoringAreaList.push(list)
-            console.log(this.monitoringAreaList)
         },
         // 添加监控地址
         addMonitoringAddress(){
@@ -350,7 +349,6 @@ export default {
 			})
         },
         del(scopeIndex){
-            console.log(scopeIndex,222)
             this.monitoringAreaList.splice(scopeIndex, 1)
         },
         delAddress(customerAddressID) {

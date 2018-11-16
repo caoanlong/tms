@@ -135,7 +135,6 @@ export default {
 			})
         },
         getAddressList() {
-            console.log(111)
 			Company.customerAddressFind({
 				customerID:this.$route.query.customerID
 			}).then(res => {
