@@ -48,11 +48,9 @@
                                 </el-table-column>
                             </el-table>
                         </div>
-                        <div class="areaTable table" v-show="recdeliverycomp.fencingType=='Point'">
+                        <div class="areaTable table" v-if="recdeliverycomp.fencingType=='Point'">
                             <el-table :data="addressList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
-                                <el-table-column prop="code" label="地址编号" align="center">
-                                    
-                                </el-table-column>
+                                <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
                                 <el-table-column prop="contactName" label="联系人" align="center">
                                 </el-table-column>
                                 <el-table-column prop="contactPhone" label="联系电话" align="center">

@@ -122,9 +122,13 @@ export default {
 		this.getList()
 	},
 	activated() {
-		if(!this.$route.query.cache) {
-			this.reset()
-		}
+		// if(!this.$route.query.cache) {
+		// 	this.reset()
+        // }
+        if (this.customerID) this.find.customerID = this.customerID
+		if (this.companyName) this.find.companyName = this.companyName
+		this.resetExportExcelUrl()
+		this.getList()
 	},
 	methods: {
         getCompanys(queryString, cb) {

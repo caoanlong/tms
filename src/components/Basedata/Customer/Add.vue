@@ -57,7 +57,7 @@
                             <el-table-column prop="area" label="区" align="center"></el-table-column>
                             <el-table-column label="控制" align="center">
                                 <template slot-scope="scope">
-                                    <span @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                    <span v-if="monitoringAreaList.length>1" @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -84,7 +84,7 @@
                             </el-table-column>
                             <el-table-column label="控制" align="center">
                                 <template slot-scope="scope">
-                                    <span @click="delAddress(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                    <span v-if="addressList.length>1" @click="delAddress(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -110,8 +110,8 @@
         </el-dialog>
         <el-dialog title="添加监控地址" :visible.sync="addAddressDialog" width="500px">
             <el-form label-width="120px" :model="customerAddress" :rules="rules1" ref="ruleForm1" size="small">
-            <el-row>
-				<el-col>
+                <el-row>
+                    <el-col>
 						<el-form-item label="联系人" prop="contactName">
 							<el-input v-model="customerAddress.contactName" placeholder="请输入..."></el-input>
 						</el-form-item>
@@ -326,7 +326,15 @@ export default {
                     areas:this.recdeliverycomp.areas,
                     addressList:this.addressList
                 }
-				recdeliverycomp.customer.customerType = this.recdeliverycomp.customerType.join(',')
+                recdeliverycomp.customer.customerType = this.recdeliverycomp.customerType.join(',')
+                if(this.recdeliverycomp.fencingType=='Point' && this.addressList.length<1){
+                    Message.error('请添加监控地址')
+                    return
+                }
+                if(this.recdeliverycomp.fencingType=='Area' && this.monitoringAreaList.length<1){
+                    Message.error('请添加监控区域')
+                    return
+                }
 				Company.customerAdd(recdeliverycomp).then(res => {
 					Message.success('保存成功！')
 					this.$router.push({name: 'recdeliverycomp'})
@@ -380,11 +388,9 @@ export default {
 
         del(scopeIndex){
             this.monitoringAreaList.splice(scopeIndex, 1)
-            this.recdeliverycomp.areas.splice(scopeIndex,1)
         },
         delAddress(scopeIndex){
             this.addressList.splice(scopeIndex, 1)
-            this.recdeliverycomp.addressList.splice(scopeIndex,1)
         },
 		back() {
 			this.$router.push({name: 'recdeliverycomp'})
