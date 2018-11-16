@@ -57,7 +57,7 @@
                             <el-table-column prop="area" label="区" align="center"></el-table-column>
                             <el-table-column label="控制" align="center">
                                 <template slot-scope="scope">
-                                    <span @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                    <span v-if="monitoringAreaList.length>1" @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -352,7 +352,6 @@ export default {
         del(scopeIndex){
             console.log(scopeIndex,222)
             this.monitoringAreaList.splice(scopeIndex, 1)
-            // this.recdeliverycomp.areas.splice(scopeIndex,1)
         },
         delAddress(customerAddressID) {
 			deleteConfirm(customerAddressID, customerAddressIDs => {
