@@ -1,22 +1,11 @@
 <template>
     <div>
-        <el-form :inline="true" ref="ruleForm">
-            <el-form-item label="经度" prop="lng">
-                <el-input placeholder="请输入经度" size="mini" v-model="find.lng"></el-input>
-            </el-form-item>
-            <el-form-item label="纬度" prop="lat">
-                <el-input placeholder="请输入纬度" size="mini" v-model="find.lat"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" size="mini" @click="search">查询</el-button>
-                <el-button size="mini" @click="reset">重置</el-button>
-            </el-form-item>
-        </el-form>
         <div id="amapLocationSelect" :style="{'height': mapHeight + 'px'}"></div>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
     data() {
         return {
@@ -32,30 +21,32 @@ export default {
                 province: '京', // 车辆牌照省份
             }),
             mapHeight: 0,
-            find: {
-                lng: '',
-                lat: ''
-            },
             lnglat: [0,0]
         }
     },
     created() {
-        this.mapHeight = window.innerHeight - 70
+        this.mapHeight = window.innerHeight
+        this.getList()
     },
     mounted() {
         this.createMap()
     },
     methods: {
-        search() {
-            this.lnglat = [this.find.lng, this.find.lat]
-            this.map.setCenter(this.lnglat)
-            this.map.clearMap()
-            // this.map.add(this.createMarker(this.lnglat))
+        getList() {
+            const url = '/deliveryOrder/getTrack'
+            const params = {
+                Authorization: this.$route.query.Authorization,
+                osn: this.$route.query.osn,
+                companyCode: this.$route.query.companyCode
+            }
+            axios({
+                url,
+                params,
+                headers: { Authorization: this.$route.query.Authorization }
+            }).then(res => {
+                console.log(res)
+            })
         },
-        reset() {
-			this.find.lng = ''
-            this.find.lat = ''
-		},
         /**
          * 创建地图
          */
