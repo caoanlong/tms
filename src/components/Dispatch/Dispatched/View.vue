@@ -4,7 +4,7 @@
 			<div slot="header" class="clearfix">
 				<span class="c1">调度单号：{{dispatchOrderDetail.dispatchOrderNo}}</span>
 				<el-tag size="mini" type="warning">
-					{{DISPATCHORDERTYPE[dispatchOrderDetail.type]}}
+					{{DISPATCHORDERTYPESIMPLE[dispatchOrderDetail.type]}}
 				</el-tag>
 				<el-tag size="mini" :type="dispatchOrderDetail.status == 'Finished' ? 'success' : 'info'">
 					{{DISPATCHORDERSTATUS[dispatchOrderDetail.status]}}
@@ -35,8 +35,16 @@
 							</span>
 						</div>
 						<div class="tableBox">
-							<div class="item">预计：<span v-if="dispatchOrderDetail.distance">总里程 {{(Number(dispatchOrderDetail.distance)/1000).toFixed(2)}}公里</span> <span v-if="dispatchOrderDetail.estimatedTime">用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</span></div>
-							<div class="item">实际：<span v-if="totalDistance">总里程 {{totalDistance?(totalDistance/1000).toFixed(2):'0'}}公里</span> <span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring('min')}}</span></div>
+							<div class="item">
+								预计：
+								<span v-if="dispatchOrderDetail.distance">总里程 {{(Number(dispatchOrderDetail.distance)/1000).toFixed(2)}}公里</span> 
+								<span v-if="dispatchOrderDetail.estimatedTime">用时 {{dispatchOrderDetail.estimatedTime | formatDuring('min')}}</span>
+							</div>
+							<div class="item">
+								实际：
+								<span v-if="totalDistance">总里程 {{totalDistance?(totalDistance/1000).toFixed(2):'0'}}公里</span> 
+								<span v-if="dispatchOrderDetail.usedTime">已用时 {{dispatchOrderDetail.usedTime | formatDuring('min')}}</span>
+							</div>
 						</div>
 						<p>总货量：
 							<span class="c1" v-if="dispatchOrderDetail.loadWeightSum"><span class="num-label">重</span> {{dispatchOrderDetail.loadWeightSum}} 吨 </span>
