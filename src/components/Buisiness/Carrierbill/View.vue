@@ -21,7 +21,11 @@
 							<div><span class="ctt">{{carrierOrder.shipperCompanyName}}</span></div>
 							<div><span class="ctt">{{carrierOrder.shipperName}}/{{carrierOrder.shipperPhone}}</span></div>
 							<div><span class="ctt">{{carrierOrder.shipperArea}} {{carrierOrder.shipperLocationAddress}} {{carrierOrder.shipperDetailAddress}}</span></div>
-							<div><span class="ctt"><span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | isFullDay()}}</span></span></div>
+							<div>
+								<span class="ctt">
+									<span v-if="carrierOrder.shipperDate">{{carrierOrder.shipperDate | isFullDay()}}</span>
+								</span>
+							</div>
 						</div>
 					</div>
 				</el-col>
@@ -32,7 +36,11 @@
 							<div><span class="ctt">{{carrierOrder.consigneeCompanyName}}</span></div>
 							<div><span class="ctt">{{carrierOrder.consigneeName}}/{{carrierOrder.consigneePhone}}</span></div>
 							<div><span class="ctt">{{carrierOrder.consigneeArea}} {{carrierOrder.consigneeLocationAddress}} {{carrierOrder.consigneeDetailAddress}}</span></div>
-							<div><span class="ctt"><span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | isFullDay()}}</span></span></div>
+							<div>
+								<span class="ctt">
+									<span v-if="carrierOrder.consigneeDate">{{carrierOrder.consigneeDate | isFullDay()}}</span>
+								</span>
+							</div>
 						</div>
 					</div>
 				</el-col>

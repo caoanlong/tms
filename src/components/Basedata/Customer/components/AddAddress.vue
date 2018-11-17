@@ -67,9 +67,10 @@
 <script>
 import distData from '../../../../assets/data/distpicker.data'
 import DistPicker from '../../../CommonComponents/DistPicker'
+import SelectLocation from '../../../CommonComponents/SelectLocation'
 import { checkTel, checkFloat2 } from '../../../../common/valid'
 export default {
-    components: { DistPicker },
+    components: { DistPicker, SelectLocation },
     props: {
         isVisible: {
             type: Boolean,

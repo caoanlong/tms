@@ -42,7 +42,7 @@
                         <el-form-item 
                             label="监控类型" 
                             prop="fencingType" 
-                            v-if="recdeliverycomp.customerType == 'Shipper' || recdeliverycomp.customerType == 'Consignee'">
+                            v-if="recdeliverycomp.customerType.includes('Shipper') || recdeliverycomp.customerType.includes('Consignee')">
                             <el-select v-model="recdeliverycomp.fencingType" placeholder="请选择">
                                 <el-option label="区域监控" value="Area"></el-option>
                                 <el-option label="地址监控" value="Point"></el-option>
@@ -52,7 +52,7 @@
                 </el-row>
                 <el-row 
                     v-if="recdeliverycomp.fencingType == 'Area'" 
-                    v-show="recdeliverycomp.customerType == 'Shipper' || recdeliverycomp.customerType == 'Consignee'">
+                    v-show="recdeliverycomp.customerType.includes('Shipper') || recdeliverycomp.customerType.includes('Consignee')">
                     <el-col style="padding-left:120px">
                         <div class="addTit">区域监控<span class="el-icon-plus fr addTitBtn" @click="isAddAreaVisible = true"> 增加</span></div>
                         <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
@@ -69,7 +69,7 @@
                 </el-row>
                 <el-row 
                     v-if="recdeliverycomp.fencingType == 'Point'" 
-                    v-show="recdeliverycomp.customerType == 'Shipper' || recdeliverycomp.customerType == 'Consignee'">
+                    v-show="recdeliverycomp.customerType.includes('Shipper') || recdeliverycomp.customerType.includes('Consignee')">
                     <el-col style="padding-left:120px">
                         <div class="addTit">地址监控<span class="el-icon-plus fr addTitBtn" @click="isAddAddressVisible = true"> 增加</span></div>
                         <div class="table">
@@ -77,7 +77,11 @@
                                 <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
                                 <el-table-column prop="contactName" label="联系人" align="center"></el-table-column>
                                 <el-table-column prop="contactPhone" label="联系电话" align="center" width="120"></el-table-column>
-                                <el-table-column prop="areaID" label="区域" align="center"></el-table-column>
+                                <el-table-column prop="areaID" label="区域" align="center">
+                                    <template slot-scope="scope">
+                                        {{scope.row.areaID | searchAreaByKey}}
+                                    </template>
+                                </el-table-column>
                                 <el-table-column prop="detailAddress" label="地址" align="center">
                                     <template slot-scope="scope">
                                         <span>{{scope.row.locationAddress?scope.row.locationAddress:''}}{{scope.row.detailAddress?scope.row.detailAddress:''}}</span>
