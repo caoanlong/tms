@@ -25,7 +25,7 @@ export default {
         }
     },
     created() {
-        this.mapHeight = window.innerHeight
+        this.mapHeight = window.innerHeight 
         this.getList()
     },
     mounted() {

@@ -27,9 +27,13 @@
 							<p>{{recdeliverycomp.code}}</p>
 						</el-form-item>
                         <el-form-item label="监控类型">
-							<p>{{recdeliverycomp.fencingType=='Point'?'地址监控':'区域监控'}}</p>
+							<p>
+                                {{recdeliverycomp.fencingType == 'Point' 
+                                    ? '地址监控' 
+                                    : (recdeliverycomp.fencingType == 'Area' ? '区域监控' : '')}}
+                            </p>
 						</el-form-item>
-                        <div class="areaTable table" v-show="recdeliverycomp.fencingType=='Area'">
+                        <div class="areaTable table" v-show="recdeliverycomp.fencingType == 'Area'">
                             <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                 <el-table-column prop="provice" label="省" align="center">
                                     <template slot-scope="scope">
@@ -48,7 +52,7 @@
                                 </el-table-column>
                             </el-table>
                         </div>
-                        <div class="areaTable table" v-if="recdeliverycomp.fencingType=='Point'">
+                        <div class="areaTable table" v-show="recdeliverycomp.fencingType == 'Point'">
                             <el-table :data="addressList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                 <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
                                 <el-table-column prop="contactName" label="联系人" align="center">
@@ -60,9 +64,7 @@
                                         {{scope.row.areaID | searchAreaByKey}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="detailAddress" label="地址" align="center">
-                                    
-                                </el-table-column>
+                                <el-table-column prop="detailAddress" label="地址" align="center"></el-table-column>
                                 <el-table-column prop="monitorScope" label="围栏范围" align="center">
                                     <template slot-scope="scope">
                                         {{scope.row.monitorScope?scope.row.monitorScope+'米':''}}
@@ -110,13 +112,9 @@ export default {
 	computed: {
 		dist: () => dist
 	},
-	created() {
-        this.getInfo()
-	},
 	activated() {
 		if(!this.$route.query.cache) {
             this.getInfo()
-            
 		}
 	},
 	methods: {

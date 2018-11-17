@@ -486,10 +486,14 @@ export default {
 			const carrierOrderID = this.$route.query.carrierOrderID
 			CarryOrder.findById({ carrierOrderID, isEdit: true }).then(res => {
 				const carrierbillInfo = res
-				if (res.porRequire.indexOf(',') > -1) {
-					carrierbillInfo.porRequire = res.porRequire.split(',')
+				if (res.porRequire) {
+					if (res.porRequire.indexOf(',') > -1) {
+						carrierbillInfo.porRequire = res.porRequire.split(',')
+					} else {
+						carrierbillInfo.porRequire = [res.porRequire]
+					}
 				} else {
-					carrierbillInfo.porRequire = [res.porRequire]
+					carrierbillInfo.porRequire = []
 				}
 				this.selectedShipper = {
 					customerAddressNum: 1,

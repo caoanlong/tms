@@ -51,7 +51,7 @@
 								<el-option label="重量" value="Weight"></el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="货物编号" prop="code">
+						<el-form-item label="货物编号">
 							<el-input v-model="cargo.code" :maxlength="100"></el-input>
 						</el-form-item>
 						<el-form-item label="防护要求" style="margin-bottom:0">
@@ -139,7 +139,6 @@ export default {
 				cargoUnit: [{required: true, message: '请选择货物单位'}],
 				packageType: [{required: true, message: '请选择包装类型'}],
 				dispatchType: [{required: true, message: '请选择配载方式'}],
-				code: [{required: true, message: '请输入货物编号'}],
 				productName: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cnCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				unCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}]

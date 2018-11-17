@@ -14,7 +14,8 @@ export const DISPATCHORDERTYPE = {
 export const DISPATCHORDERTYPESIMPLE = {
     Assign: '派',
     Grab: '抢',
-    Offer: '报'
+    Offer: '报',
+    SelfPick: '自'
 }
 export const DISPATCHORDERTYPEEX = {
     Assign: '接单中',

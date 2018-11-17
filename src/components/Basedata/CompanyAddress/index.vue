@@ -111,22 +111,16 @@ export default {
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: { keyword: '',customerID: '', companyName: '' },
 			unit: '',
-			customerID: this.$route.query.customerID,
-			companyName: this.$route.query.companyName
+			customerID: '',
+			companyName: ''
 		}
 	},
-	created() {
-		if (this.customerID) this.find.customerID = this.customerID
-		if (this.companyName) this.find.companyName = this.companyName
-		this.resetExportExcelUrl()
-		this.getList()
-	},
 	activated() {
-		// if(!this.$route.query.cache) {
-		// 	this.reset()
-        // }
-        if (this.customerID) this.find.customerID = this.customerID
-		if (this.companyName) this.find.companyName = this.companyName
+		const customerID = this.$route.query.customerID
+		const companyName = this.$route.query.companyName
+		if (customerID) this.find.customerID = customerID
+		if (companyName) this.find.companyName = companyName
+		console.log(this.find)
 		this.resetExportExcelUrl()
 		this.getList()
 	},
@@ -159,6 +153,8 @@ export default {
 			this.selectedList = data.map(item => item.customerAddressID)
 		},
 		getList() {
+			this.tableData = []
+			this.total = 0
 			Company.customerAddressFind({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -166,7 +162,7 @@ export default {
 				companyName: this.find.companyName
 			}).then(res => {
 				this.tableData = res.records
-				this.total= res.total
+				this.total = res.total
 			})
         },
         handleCommand(e) {

@@ -225,7 +225,7 @@ export default {
 			const carrierOrderID = this.$route.query.carrierOrderID
 			CarryOrder.findById({ carrierOrderID, isEdit: false }).then(res => {
 				this.carrierOrder = res
-				this.carrierOrder.porRequire = res.porRequire.split(',')
+				this.carrierOrder.porRequire = res.porRequire ? res.porRequire.split(',') : []
 				this.carrierCargo = res.carrierCargo
 				this.getTransports(carrierOrderID)
 			})

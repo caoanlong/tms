@@ -143,8 +143,7 @@ export default {
             this.companyAddress.companyName =''
 			this.companyAddress.contactName = ''
             this.companyAddress.contactPhone = ''
-            this.selectedArea=[]
-            this.$refs['ruleForm'].resetFields()
+            this.selectedArea = []
 		},
 		handSelectedArea(data) {
 			if (data) {
