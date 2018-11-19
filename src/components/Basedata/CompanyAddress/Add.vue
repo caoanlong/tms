@@ -70,7 +70,7 @@ import Customer from '../../../api/Customer'
 import Company from '../../../api/Company'
 import distData from '../../../assets/data/distpicker.data'
 import { areaIdToArrayId } from '../../../common/utils'
-import { checkTel } from '../../../common/validator'
+import { checkTel, checkFloat2 } from '../../../common/valid'
 import DistPicker from '../../CommonComponents/DistPicker'
 import SelectLocation from '../../CommonComponents/SelectLocation'
 export default {
@@ -103,7 +103,8 @@ export default {
                 contactPhone: [{required: true, message: '请输入电话'}, {validator: checkTel}],
 				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
 				locationAddress: [{required: true, message: '请输入定位地址'}],
-				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}]
+				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
+				monitorScope: [{validator: checkFloat2}]
 			}
 		}
 	},
@@ -129,6 +130,8 @@ export default {
                 monitorScope:'',
                 code:''
 			}
+			this.selectedArea = []
+			this.selectedCity = ''
 			if (this.customerID) this.companyAddress.customerID = this.customerID
 			if (this.companyName) this.companyAddress.companyName = this.companyName
 			if (this.contactName) this.companyAddress.contactName = this.contactName

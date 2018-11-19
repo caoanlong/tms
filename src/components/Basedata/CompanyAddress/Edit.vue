@@ -45,7 +45,9 @@
 							<el-input v-model="companyAddress.detailAddress" placeholder="如：十字路口左边22栋301室"></el-input>
 						</el-form-item>
                         <el-form-item label="围栏范围" prop="monitorScope">
-							<el-input v-model="companyAddress.monitorScope" placeholder="请输入围栏范围"><template slot="append">米</template></el-input>
+							<el-input v-model="companyAddress.monitorScope" placeholder="请输入围栏范围">
+								<template slot="append">米</template>
+							</el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="save">立即保存</el-button>
@@ -68,7 +70,7 @@ import { Message } from 'element-ui'
 import Company from '../../../api/Company'
 import distData from '../../../assets/data/distpicker.data'
 import { areaIdToArrayId } from '../../../common/utils'
-import { checkTel } from '../../../common/validator'
+import { checkTel, checkFloat2 } from '../../../common/valid'
 import DistPicker from '../../CommonComponents/DistPicker'
 import SelectLocation from '../../CommonComponents/SelectLocation'
 export default {
@@ -87,8 +89,8 @@ export default {
 				locationLng: '',
 				locationLat: '',
                 locationAddress: '',
-                monitorScope:'',
-                code:''
+                monitorScope: '',
+                code: ''
 			},
 			rules: {
 				customerID: [{required: true, message: '请输入所属客户'}],
@@ -96,7 +98,8 @@ export default {
                 contactPhone: [{required: true, message: '请输入电话'}, {validator: checkTel}],
 				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
 				locationAddress: [{required: true, message: '请输入定位地址'}],
-				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}]
+				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
+				monitorScope: [{validator: checkFloat2}]
 			}
 		}
 	},

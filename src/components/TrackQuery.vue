@@ -6,6 +6,7 @@
 
 <script>
 import axios from 'axios'
+import { baseURL } from '../common/request'
 export default {
     data() {
         return {
@@ -21,7 +22,8 @@ export default {
                 province: '京', // 车辆牌照省份
             }),
             mapHeight: 0,
-            lnglat: [0,0]
+            locations: [],
+            alarmMsgs: []
         }
     },
     created() {
@@ -33,9 +35,8 @@ export default {
     },
     methods: {
         getList() {
-            const url = '/deliveryOrder/getTrack'
+            const url = baseURL + '/deliveryOrder/getTracks'
             const params = {
-                Authorization: this.$route.query.Authorization,
                 osn: this.$route.query.osn,
                 companyCode: this.$route.query.companyCode
             }
@@ -44,7 +45,26 @@ export default {
                 params,
                 headers: { Authorization: this.$route.query.Authorization }
             }).then(res => {
-                console.log(res)
+                if (res.data.code == 200) {
+                    if (res.data.data) {
+                        const locations = res.data.data.locations
+                        const alarmMsgs = res.data.data.alarmMsgs
+                        const stopOvertime = require('../assets/imgs/tcbj.png')
+                        const arrivedOffset = require('../assets/imgs/xhbj.png')
+                        this.locations = locations.map(item => {
+                            return {
+                                lnglat: [item.loc.longitude, item.loc.latitude]
+                            }
+                        })
+                        this.alarmMsgs = alarmMsgs.map(item => {
+                            return {
+                                position: { N: item.latitude, O: item.longitude, lat: item.latitude, lng: item.longitude },
+                                icon: item.type == 'StopOvertime' ? stopOvertime : arrivedOffset
+                            }
+                        })
+                        this.truckDrivingSearch()
+                    }
+                }
             })
         },
         /**
@@ -52,11 +72,9 @@ export default {
          */
         createMap() {
             this.map = new AMap.Map('amapLocationSelect')
-            const path = []
-            path.push({lnglat:[116.303843, 39.983412]})//起点
-            path.push({lnglat:[116.321354, 39.896436]})//途径
-            path.push({lnglat:[116.407012, 39.992093]})//终点
-            this.truckDriving.search(path, (status, result) => {
+        },
+        truckDrivingSearch() {
+            this.truckDriving.search(this.locations, (status, result) => {
                 if (status === 'complete') {
                     if (result.routes && result.routes.length) {
                         this.drawRoute(result.routes[0]) 
@@ -78,16 +96,8 @@ export default {
                 icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
                 map: this.map
             })
-            const positions = [
-                {
-                    position: { N: 39.896732, O: 116.27593200000001, lat: 39.896732, lng: 116.275932 },
-                    icon: require('../assets/imgs/tcbj.png')
-                },{
-                    position: { N: 39.902344, O: 116.35679600000003, lat: 39.902344, lng: 116.356796 },
-                    icon: require('../assets/imgs/xhbj.png')
-                }
-            ]
-            positions.forEach(item => {
+
+            this.alarmMsgs.forEach(item => {
                 new AMap.Marker({
                     position: item.position,
                     icon: item.icon,
@@ -98,8 +108,8 @@ export default {
                 path,
                 isOutline: true,
                 outlineColor: '#ffeeee',
-                borderWeight: 2,
-                strokeWeight: 8,
+                borderWeight: 1,
+                strokeWeight: 5,
                 strokeColor: '#0091ff',
                 lineJoin: 'round'
             })
