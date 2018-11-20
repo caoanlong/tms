@@ -11,18 +11,8 @@ export default {
     data() {
         return {
             map: null,
-            truckDriving: new AMap.TruckDriving({
-                policy: 0, // 规划策略
-                size: 1, // 车型大小
-                width: 2.5, // 宽度
-                height: 2, // 高度      
-                load: 1, // 载重
-                weight: 12, // 自重
-                axlesNum: 2, // 轴数
-                province: '京', // 车辆牌照省份
-            }),
+            truckDriving: null,
             mapHeight: 0,
-            locations: [],
             alarmMsgs: []
         }
     },
@@ -51,9 +41,12 @@ export default {
                         const alarmMsgs = res.data.data.alarmMsgs
                         const stopOvertime = require('../assets/imgs/tcbj.png')
                         const arrivedOffset = require('../assets/imgs/xhbj.png')
-                        this.locations = locations.map(item => {
+                        const path = locations.map(item => {
                             return {
-                                lnglat: [item.loc.longitude, item.loc.latitude]
+                                N: item.loc.latitude, 
+                                O: item.loc.longitude,
+                                lng: item.loc.longitude,
+                                lat: item.loc.latitude
                             }
                         })
                         this.alarmMsgs = alarmMsgs.map(item => {
@@ -62,7 +55,7 @@ export default {
                                 icon: item.type == 'StopOvertime' ? stopOvertime : arrivedOffset
                             }
                         })
-                        this.truckDrivingSearch()
+                        this.drawRoute(path)
                     }
                 }
             })
@@ -73,19 +66,7 @@ export default {
         createMap() {
             this.map = new AMap.Map('amapLocationSelect')
         },
-        truckDrivingSearch() {
-            this.truckDriving.search(this.locations, (status, result) => {
-                if (status === 'complete') {
-                    if (result.routes && result.routes.length) {
-                        this.drawRoute(result.routes[0]) 
-                    }
-                } else {
-                    console.log('获取货车规划数据失败：' + result)
-                }
-            })
-        },
-        drawRoute (route) {
-            const path = this.parseRouteToPath(route)
+        drawRoute (path) {
             const startMarker = new AMap.Marker({
                 position: path[0],
                 icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
@@ -96,7 +77,6 @@ export default {
                 icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
                 map: this.map
             })
-
             this.alarmMsgs.forEach(item => {
                 new AMap.Marker({
                     position: item.position,
@@ -115,17 +95,8 @@ export default {
             })
             routeLine.setMap(this.map)
             // 调整视野达到最佳显示区域
-            this.map.setFitView([ startMarker, endMarker, routeLine ])
-        },
-        parseRouteToPath(route) {
-            const path = []
-            for (let i = 0, l = route.steps.length; i < l; i++) {
-                const step = route.steps[i]
-                for (let j = 0, n = step.path.length; j < n; j++) {
-                    path.push(step.path[j])
-                }
-            }
-            return path
+            // this.map.setFitView([ startMarker ])
+            this.map.setCenter(path[parseInt(path.length/2)])
         }
     }
 }
