@@ -179,12 +179,12 @@
 					<div class="truckInfo c2">
 						<p v-if="dispatchOrderDetail.plateNo">
 							<label>车辆</label>{{dispatchOrderDetail.plateNo}} 
-							{{Number(dispatchOrderDetail.truckLength/1000).toFixed(1)}}米/{{TRUCKTYPE[dispatchOrderDetail.truckType]}}
+							{{dispatchOrderDetail.truckLength ? Number(dispatchOrderDetail.truckLength/1000).toFixed(1) + '米' : ''}}/{{TRUCKTYPE[dispatchOrderDetail.truckType]}}
 						</p>
 						<p v-if="dispatchOrderDetail.roadTransportNo"><label>道路运输许可证</label>{{dispatchOrderDetail.roadTransportNo}}</p>
 						<p v-if="dispatchOrderDetail.trailerPlateNo">
 							<label>挂车牌</label>{{dispatchOrderDetail.trailerPlateNo}} 
-							{{Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1)}}米/{{TRUCKTYPE[dispatchOrderDetail.trailerTruckType]}}
+							{{dispatchOrderDetail.trailerTruckLength ? Number(dispatchOrderDetail.trailerTruckLength/1000).toFixed(1) + '米' : ''}}米/{{TRUCKTYPE[dispatchOrderDetail.trailerTruckType]}}
 						</p>
 						<p v-if="dispatchOrderDetail.trailerRoadTransportNo"><label>挂车道路运输许可证</label>{{dispatchOrderDetail.trailerRoadTransportNo}}</p>
 						<p v-if="dispatchOrderDetail.driverName">
