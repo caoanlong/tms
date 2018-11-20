@@ -120,7 +120,6 @@ export default {
 		const companyName = this.$route.query.companyName
 		if (customerID) this.find.customerID = customerID
 		if (companyName) this.find.companyName = companyName
-		console.log(this.find)
 		this.resetExportExcelUrl()
 		this.getList()
 	},
@@ -154,7 +153,6 @@ export default {
 		},
 		getList() {
 			this.tableData = []
-			this.total = 0
 			Company.customerAddressFind({
 				current: this.pageIndex,
 				size: this.pageSize,
