@@ -194,11 +194,7 @@ export default {
 			}
         },
         handSelectMonitoringAddress(data) {
-            this.isAddAddressVisible = false
-            if (data) {
-                this.addressList.push(data)
-                this.addMonitoringAddress(data)
-            }
+            if (data) this.addMonitoringAddress(data)
         },
         handleSelectMonitoringArea(data) {
             this.isAddAreaVisible = false
@@ -218,7 +214,7 @@ export default {
             })
             Company.customerAddressAdd(item).then(res => {
                 Message.success('保存成功！')
-                this.addAddressDialog = false
+                this.isAddAddressVisible = false
                 this.getAddressList()
             })
         },
