@@ -309,9 +309,7 @@
 					<table>
 						<thead>
 							<tr style="height:61px">
-								<th>待配数量</th>
-								<th>待配重量</th>
-								<th>待配体积</th>
+								<th colspan="3">配载数量</th>
 								<th>操作</th>
 							</tr>
 						</thead>

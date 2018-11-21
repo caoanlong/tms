@@ -227,7 +227,7 @@
 														@select="handSelectCargo"
 														@input="inputSelectCargo(index)">
 														<template slot-scope="{ item }">
-															<span class="dispatchType">（{{item.dispatchType=='Weight'?'按重量配载':'按体积配载' }}）</span>{{ item.cargoName }}
+															{{ item.cargoName }}<span class="dispatchType">（{{item.dispatchType=='Weight'?'按重量配载':'按体积配载' }}）</span>
 														</template>
 														<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect(index)"></i>
 													</el-autocomplete>
