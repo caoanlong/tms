@@ -1,10 +1,10 @@
 <template>
     <div class="map-container" :class="isMax?'max':''">
         <div class="dialogTit">
-            <el-radio-group v-model="tabPosition" @change="handTabChange">
+            <!-- <el-radio-group v-model="tabPosition" @change="handTabChange">
                 <el-radio-button label="GPS"></el-radio-button>
                 <el-radio-button label="APP"></el-radio-button>
-            </el-radio-group>
+            </el-radio-group> -->
             <svg-icon :icon-class="isMax?'min':'max'" @click.native="resizeDialog" class="minMax"></svg-icon>
             <svg-icon icon-class="close" @click.native="close" class="closeBtn"></svg-icon>
         </div>
