@@ -16,10 +16,10 @@
 								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
 							</el-autocomplete>
 						</el-form-item>
-						<el-form-item label="联系人" prop="contactName">
+						<el-form-item label="联系人">
 							<el-input v-model="companyAddress.contactName" placeholder="请输入..."></el-input>
 						</el-form-item>
-                        <el-form-item label="电话" prop="contactPhone">
+                        <el-form-item label="电话">
 							<el-input v-model="companyAddress.contactPhone" placeholder="请输入..."></el-input>
 						</el-form-item>
                         <el-form-item label="地址编号" prop="code">
@@ -94,8 +94,6 @@ export default {
 			},
 			rules: {
 				customerID: [{required: true, message: '请输入所属客户'}],
-				contactName: [{required: true, message: '请输入联系人'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
-                contactPhone: [{required: true, message: '请输入电话'}, {validator: checkTel}],
 				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
 				locationAddress: [{required: true, message: '请输入定位地址'}],
 				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}],

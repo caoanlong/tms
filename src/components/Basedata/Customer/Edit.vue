@@ -30,10 +30,10 @@
 						<el-form-item label="所在区域" prop="companyAreaID">
 							<dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
 						</el-form-item>
-						<el-form-item label="联系人" prop="contactName">
+						<el-form-item label="联系人">
 							<el-input v-model="recdeliverycomp.contactName"></el-input>
 						</el-form-item>
-						<el-form-item label="手机号" prop="contactPhone">
+						<el-form-item label="手机号">
 							<el-input v-model="recdeliverycomp.contactPhone"></el-input>
 						</el-form-item>
                         <el-form-item label="客户编号" prop="code">
@@ -157,14 +157,6 @@ export default {
                 ],
 				companyAreaID: [ { required: true, message: '请选择区域', trigger: 'change' } ],
 				customerType: [ { required: true, message: '请选择类型', trigger: 'change' } ],
-				contactName: [ 
-                    { required: true, message: '请输入联系人' }, 
-                    { min: 1, max: 20, message: '长度在 1 到 20 个字符' } 
-                ],
-                contactPhone: [
-                    { required: true, message: '请输入手机号' },
-                    { validator: checkTel }
-                ],
                 code: [ { required: true, message: '请输入客户编号' } ],
                 fencingType: [ { required: true, message: '请选择监控类型' } ]
             }
