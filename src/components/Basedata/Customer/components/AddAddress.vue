@@ -15,10 +15,10 @@
                 size="small">
                 <el-row>
                     <el-col>
-						<el-form-item label="联系人" prop="contactName">
+						<el-form-item label="联系人">
 							<el-input v-model="customerAddress.contactName" placeholder="请输入..."></el-input>
 						</el-form-item>
-                        <el-form-item label="联系电话" prop="contactPhone">
+                        <el-form-item label="联系电话">
 							<el-input v-model="customerAddress.contactPhone" placeholder="请输入..."></el-input>
 						</el-form-item>
 						<el-form-item label="所在区域" prop="areaID">
@@ -43,7 +43,7 @@
                         <el-form-item label="围栏范围" prop="monitorScope">
 							<el-input v-model="customerAddress.monitorScope" placeholder="请输入围栏范围"><template slot="append">米</template></el-input>
 						</el-form-item>
-                        <el-form-item label="地址编号" prop="code">
+                        <el-form-item label="地址编号">
 							<el-input v-model="customerAddress.code" placeholder="请输入地址编号"></el-input>
 						</el-form-item>
 				    </el-col>
@@ -95,19 +95,13 @@ export default {
                 code: ''
             },
             rules: {
-				contactName: [
-                    {required: true, message: '请输入联系人'}, 
-                    {min: 1, max: 20, message: '长度在 1 到 20 个字符'}
-                ],
-                contactPhone: [{required: true, message: '请输入电话'}, {validator: checkTel}],
 				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
 				locationAddress: [{required: true, message: '请输入定位地址'}],
                 detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
                 monitorScope: [
                     {required: true, message: '请输入围栏范围'},
                     {validator: checkFloat2}
-                ],
-                code: [{required: true, message: '请输入地址编号'}]
+                ]
 			}
         }
     },
