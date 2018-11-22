@@ -561,6 +561,9 @@ export default {
 	activated() {
 		if(!this.$route.query.cache) {
 			this.reset()
+			const dispatchOrderID = this.$route.query.dispatchOrderID
+			this.getList()
+			dispatchOrderID && this.getSelectedList()
 		}
 	},
 	methods:{
