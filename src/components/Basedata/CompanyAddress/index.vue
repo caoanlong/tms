@@ -33,7 +33,7 @@
 					:action="importFileUrl" 
 					:auto-upload="true" 
 					:onError="uploadError" 
-					:onSuccess="uploadSuccess" 
+					:onSuccess="uploadSuccess"  
 					:beforeUpload="beforeFileUpload" 
 					:headers="uploadHeaders" 
 					:show-file-list="false">
