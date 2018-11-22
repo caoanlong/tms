@@ -1,7 +1,7 @@
 <template>
 	<div class="login-container" :class="{'minH': loginOrRegister == 'login'}">
 		<div class="login-box">
-			<h1 class="login-title">微服TMS</h1>
+			<h1 class="login-title">华新智运</h1>
 			<div class="form">
 				<div class="tabs">
 					<div 
@@ -9,12 +9,6 @@
 						class="tab-item" 
 						:class="{'active minH': loginOrRegister == 'login'}" 
 						@click="handleTabClick('login')">登录</div>
-					<div class="spit-line" v-show="loginOrRegister != 'findpassword'"></div>
-					<div 
-						v-show="loginOrRegister != 'findpassword'"
-						class="tab-item" 
-						:class="{'active': loginOrRegister == 'register'}" 
-						@click="handleTabClick('register')">注册</div>
 					<div v-show="loginOrRegister == 'findpassword'" class="tab-item findpwd active">找回密码</div>
 				</div>
 				<!-- 登录 -->
@@ -159,8 +153,9 @@
 						</el-input>
 					</el-form-item>
 					<el-row class="other">
-						<el-col :span="12" @click.native="handleTabClick('login')" class="agreement">登录</el-col>
-						<el-col :span="12" @click.native="handleTabClick('register')" class="agreement" style="text-align:right">注册</el-col>
+						<el-col :span="12" class="agreement">&nbsp;</el-col>
+						<el-col :span="12" @click.native="handleTabClick('login')" class="agreement" style="text-align:right">登录</el-col>
+						<!-- <el-col :span="12" @click.native="handleTabClick('register')" class="agreement" style="text-align:right">注册</el-col> -->
 					</el-row>
 					<el-button class="login-btn" type="primary" @click="handFindPassword">提交</el-button>
 				</el-form>
@@ -458,8 +453,6 @@ export default {
 						height 50px
 						background #e4e7ed
 					.tab-item
-						float left
-						width 50%
 						text-align center
 						cursor pointer
 						border-bottom 1px solid #e4e7ed

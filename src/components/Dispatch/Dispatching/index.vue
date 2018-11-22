@@ -270,7 +270,7 @@
 			<el-card class="table-container" style="margin-top:20px">
 				<div class="table-tit">已选择的承运单</div>
 				<div class="table-box">
-					<table class="table-main" style="padding-right: 399px">
+					<table class="table-main" style="padding-right: 299px">
 						<thead>
 							<tr>
 								<th>承运单号</th>
@@ -305,41 +305,17 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="table-box-cong" style="top:60px;right:20px;width:400px">
+				<div class="table-box-cong" style="top:60px;right:20px;width:300px">
 					<table>
 						<thead>
 							<tr style="height:61px">
-								<th colspan="3">配载数量</th>
+								<th>配载数量</th>
 								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr style="height:80px" v-for="(item, index) in selectedList" :key="index">
-								<td align="center">
-									<p style="position:relative;top:8px">
-										<span class="surplus">余</span>
-										{{item.remainingCargoNum ? (item.remainingCargoNum + item.cargoUnitName) : ('0' + item.cargoUnitName)}}
-									</p>
-									<el-form :model="item" ref="ruleForm">
-										<el-form-item prop="cargoNumNew" :rules="[{
-											validator: (rule, value, callback) => {
-												const r = /^[1-9]\d*$/
-												if (item.dispatchType == 'Quantity' && (!value || value == '0')) {
-													callback('请输入数量')
-												} else if (value > item.remainingCargoNum) {
-													callback('配载数量不能大于待配数量！')
-												} else if (value && !r.test(value)) {
-													callback('请输入正确的数字')
-												} else {
-													callback()
-												}
-											}
-										}]">
-											<el-input size="mini" v-model="item.cargoNumNew"></el-input>
-										</el-form-item>
-									</el-form>
-								</td>
-								<td align="center">
+								<td align="center" v-if="item.dispatchType == 'Weight'">
 									<p style="position:relative;top:8px">
 										<span class="surplus">余</span>
 										{{item.remainingCargoWeight ? item.remainingCargoWeight + '吨' : '0吨'}}
@@ -359,11 +335,11 @@
 												}
 											}
 										}]">
-											<el-input size="mini" v-model="item.cargoWeightNew" :disabled="item.dispatchType != 'Weight'"></el-input>
+											<el-input size="mini" v-model="item.cargoWeightNew"></el-input>
 										</el-form-item>
 									</el-form>
 								</td>
-								<td align="center">
+								<td align="center" v-else-if="item.dispatchType == 'Volumn'">
 									<p style="position:relative;top:8px">
 										<span class="surplus">余</span>
 										{{item.remainingCargoVolume ? item.remainingCargoVolume + '方' : '0方'}}
@@ -383,7 +359,7 @@
 												}
 											}
 										}]">
-											<el-input size="mini" v-model="item.cargoVolumeNew" :disabled="item.dispatchType != 'Volumn'"></el-input>
+											<el-input size="mini" v-model="item.cargoVolumeNew"></el-input>
 										</el-form-item>
 									</el-form>
 								</td>
