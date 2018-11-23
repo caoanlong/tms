@@ -119,6 +119,8 @@ export default {
                 this.companyAddress.contactName = this.company ? this.company.contactName : ''
                 this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
                 this.companyAddress.locationAddress = this.company ? this.company.locationAddress : ''
+                this.companyAddress.locationLat = this.company ? this.company.locationLat : ''
+                this.companyAddress.locationLng = this.company ? this.company.locationLng : ''
                 this.companyAddress.code = this.company ? this.company.code : ''
                 this.$nextTick(() => {
                     if (this.company) this.handSelectedArea(areaIdToArrayId(this.company.companyAreaID))
