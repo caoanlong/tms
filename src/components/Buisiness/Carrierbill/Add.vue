@@ -70,8 +70,8 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货地址" prop="shipperName">
-									<input v-model="carrierbillInfo.shipperName" hidden="true"/>
+								<el-form-item label="发货地址" prop="shipperAreaID">
+									<input v-model="carrierbillInfo.shipperAreaID" hidden="true"/>
 									<dropdown-select 
 										addressType="发货单位"
 										:isChangeCompany="isChangeShipper" 
@@ -137,8 +137,8 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="收货地址" prop="consigneeName">
-									<input v-model="carrierbillInfo.consigneeName" hidden="true"/>
+								<el-form-item label="收货地址" prop="consigneeAreaID">
+									<input v-model="carrierbillInfo.consigneeAreaID" hidden="true"/>
 									<dropdown-select 
 										addressType="收货单位"
 										:isChangeCompany="isChangeConsignee" 
@@ -465,13 +465,13 @@ export default {
 				consignorID: [{ required: true, message: "请选择委托方" }],
 				carrierrName: [{ required: true, message: "请输入承运人" }],
 				shipperID: [{ required: true, message: "请选择发货单位" }],
-				shipperName: [{ required: true, message: "请选择发货地址", trigger: "change" }],
+				shipperAreaID: [{ required: true, message: "请选择发货地址", trigger: "change" }],
 				shipperDate: [
 					{ required: true, message: "请选择发货时间" },
 					{ validator: checkShipperDateTime }
 				],
 				consigneeID: [{ required: true, message: "请选择收货单位" }],
-				consigneeName: [{ required: true, message: "请选择收货地址", trigger: "change" }],
+				consigneeAreaID: [{ required: true, message: "请选择收货地址", trigger: "change" }],
 				consigneeDate: [
 					{ required: true, message: "请选择收货时间" },
 					{ validator: checkConsigneeDateTime }
@@ -734,38 +734,38 @@ export default {
 		this.listForCalc()
     },
     handSelectShipperAddress(data) {
-      this.carrierbillInfo.shipperAreaID = data.areaID;
-      this.carrierbillInfo.shipperAddressID = data.customerAddressID;
-      this.carrierbillInfo.shipperName = data.contactName;
-      this.carrierbillInfo.shipperPhone = data.contactPhone;
-      this.carrierbillInfo.shipperArea = data.contactArea;
-      this.carrierbillInfo.shipperDetailAddress = data.detailAddress;
-      this.carrierbillInfo.shipperLocationAddress = data.locationAddress;
-      this.carrierbillInfo.shipperLocationLng = data.locationLng;
-      this.carrierbillInfo.shipperLocationLat = data.locationLat;
-      this.listForCalc();
-      this.$refs["ruleForm"].validateField("shipperName");
+		this.carrierbillInfo.shipperAreaID = data.areaID;
+		this.carrierbillInfo.shipperAddressID = data.customerAddressID;
+		this.carrierbillInfo.shipperName = data.contactName;
+		this.carrierbillInfo.shipperPhone = data.contactPhone;
+		this.carrierbillInfo.shipperArea = data.contactArea;
+		this.carrierbillInfo.shipperDetailAddress = data.detailAddress;
+		this.carrierbillInfo.shipperLocationAddress = data.locationAddress;
+		this.carrierbillInfo.shipperLocationLng = data.locationLng;
+		this.carrierbillInfo.shipperLocationLat = data.locationLat;
+		this.listForCalc();
+		this.$refs["ruleForm"].validateField("shipperAreaID");
     },
     handSelectConsigneeAddress(data) {
-      this.carrierbillInfo.consigneeAreaID = data.areaID;
-      this.carrierbillInfo.consigneeAddressID = data.customerAddressID;
-      this.carrierbillInfo.consigneeName = data.contactName;
-      this.carrierbillInfo.consigneePhone = data.contactPhone;
-      this.carrierbillInfo.consigneeArea = data.contactArea;
-      this.carrierbillInfo.consigneeDetailAddress = data.detailAddress;
-      this.carrierbillInfo.consigneeLocationAddress = data.locationAddress;
-      this.carrierbillInfo.consigneeLocationLng = data.locationLng;
-      this.carrierbillInfo.consigneeLocationLat = data.locationLat;
-      this.listForCalc();
-      this.$refs["ruleForm"].validateField("consigneeName");
+		this.carrierbillInfo.consigneeAreaID = data.areaID;
+		this.carrierbillInfo.consigneeAddressID = data.customerAddressID;
+		this.carrierbillInfo.consigneeName = data.contactName;
+		this.carrierbillInfo.consigneePhone = data.contactPhone;
+		this.carrierbillInfo.consigneeArea = data.contactArea;
+		this.carrierbillInfo.consigneeDetailAddress = data.detailAddress;
+		this.carrierbillInfo.consigneeLocationAddress = data.locationAddress;
+		this.carrierbillInfo.consigneeLocationLng = data.locationLng;
+		this.carrierbillInfo.consigneeLocationLat = data.locationLat;
+		this.listForCalc();
+		this.$refs["ruleForm"].validateField("consigneeAreaID");
     },
     clearSelectShipper() {
-      this.carrierbillInfo.shipperCompanyName = " ";
-      this.carrierbillInfo.shipperID = "";
+		this.carrierbillInfo.shipperCompanyName = " ";
+		this.carrierbillInfo.shipperID = "";
     },
     clearSelectConsignee() {
-      this.carrierbillInfo.consigneeCompanyName = " ";
-      this.carrierbillInfo.consigneeID = "";
+		this.carrierbillInfo.consigneeCompanyName = " ";
+		this.carrierbillInfo.consigneeID = "";
     },
     clearSelectConsignor() {
 		this.carrierbillInfo.consignorName = " "

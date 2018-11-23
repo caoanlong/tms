@@ -1,7 +1,7 @@
 <template>
 	<div class="select-search" @mouseleave="hide">
 		<div class="selected-address" @click.stop="expandPop">
-			<div v-if="selectedAddress.contactName">
+			<div v-if="selectedAddress.areaID">
 				<p>
 					<span class="name">{{selectedAddress.contactName}}</span>
 					<span>&nbsp;</span>
