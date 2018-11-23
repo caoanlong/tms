@@ -20,10 +20,9 @@
 						</el-form-item>
 						<el-form-item label="货物类型" prop="cargoType">
 							<el-select style="width: 100%" placeholder="请选择" v-model="cargo.cargoType">
-								<el-option label="快消品" value="FMCG"></el-option>
 								<el-option label="水泥" value="Cement"></el-option>
-								<el-option label="啤酒" value="Beer"></el-option>
-								<el-option label="危险品" value="DangerousCargo"></el-option>
+								<el-option label="熟料" value="Chamotte"></el-option>
+								<el-option label="半成品" value="SemiFinished"></el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="危险品类别" v-if="cargo.cargoType == 'DangerousCargo'" prop="dangerousCoodsCategory">
