@@ -148,7 +148,7 @@ export default {
 				})
 			})
         },
-        reset() {
+        reset(bool) {
             this.selectedCity = ''
             this.selectedAddressArea = []
             this.customerAddress = {
@@ -162,7 +162,7 @@ export default {
                 monitorScope:'',
                 code: ''
             }
-            this.$refs['ruleForm'].resetFields()
+            if (bool) this.$refs['ruleForm'].resetFields()
         },
         close(bool) {
             if (bool) {
@@ -170,11 +170,12 @@ export default {
                     if (!valid) return
                     const customerAddress = Object.assign({}, this.customerAddress)
                     this.callback(customerAddress)
+                    this.reset(true)
                 })
             } else {
                 this.callback()
+                this.reset(true)
             }
-            this.reset()
         }
     }
 }

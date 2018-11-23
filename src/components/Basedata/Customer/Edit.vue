@@ -186,7 +186,11 @@ export default {
 			}
         },
         handSelectMonitoringAddress(data) {
-            if (data) this.addMonitoringAddress(data)
+            if (data) {
+                this.addMonitoringAddress(data)
+            } else {
+                this.isAddAddressVisible = false
+            }
         },
         handleSelectMonitoringArea(data) {
             this.isAddAreaVisible = false
