@@ -412,7 +412,7 @@ export default {
         },
         transLines: {
             handler(list) {
-                this.loadDate = list[0].requireTime
+                this.loadDate = list[0] ? list[0].requireTime : ''
             },
             deep: true
         },

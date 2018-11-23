@@ -561,6 +561,9 @@ export default {
 	activated() {
 		if(!this.$route.query.cache) {
 			this.reset()
+			this.selectedList = []
+			this.selectedListNoRepeat = []
+			this.transLines = []
 			const dispatchOrderID = this.$route.query.dispatchOrderID
 			this.getList()
 			dispatchOrderID && this.getSelectedList()
