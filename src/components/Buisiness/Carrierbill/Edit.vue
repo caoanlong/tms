@@ -68,8 +68,8 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="发货地址" prop="shipperName">
-									<input v-model="carrierbillInfo.shipperName" hidden="true"/>
+								<el-form-item label="发货地址" prop="shipperAreaID">
+									<input v-model="carrierbillInfo.shipperAreaID" hidden="true"/>
 									<dropdown-select 
 										addressType="发货单位"
 										:selected="selectedShipperAddress" 
@@ -140,8 +140,8 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="收货地址" prop="consigneeName">
-									<input v-model="carrierbillInfo.consigneeName" hidden="true"/>
+								<el-form-item label="收货地址" prop="consigneeAreaID">
+									<input v-model="carrierbillInfo.consigneeAreaID" hidden="true"/>
 									<dropdown-select 
 										addressType="收货单位" 
 										:selected="selectedConsigneeAddress" 
@@ -458,10 +458,10 @@ export default {
 				consignorID: [ {required: true, message: '请输入托运人'} ],
 				carrierrName: [ {required: true, message: '请输入承运人'} ],
 				shipperID: [ {required: true, message: '请选择发货单位'} ],
-				shipperName: [ { required: true, message: '请选择发货地址', trigger: 'change'} ],
+				shipperAreaID: [ { required: true, message: '请选择发货地址', trigger: 'change'} ],
 				shipperDate: [ {required: true, message: '请选择发货时间'},{validator: checkShipperDateTime}],
 				consigneeID: [ {required: true, message: '请选择收货单位'} ],
-				consigneeName: [ { required: true, message: '请选择收货地址', trigger: 'change'} ],
+				consigneeAreaID: [ { required: true, message: '请选择收货地址', trigger: 'change'} ],
 				consigneeDate: [ {required: true, message: '请选择收货时间'},{validator: checkConsigneeDateTime} ],
 				transportType: [ {required: true, message: '请选择运输方式'} ],
 				freight: [ {required: true, message: '请输入运费金额'} ]
@@ -500,6 +500,7 @@ export default {
 					contactPhone: res.shipperPhone
 				}
 				this.selectedShipperAddress = {
+					areaID: res.shipperAreaID,
 					customerAddressID: res.shipperAddressID,
 					contactName: res.shipperName,
 					contactPhone: res.shipperPhone,
@@ -516,6 +517,7 @@ export default {
 					contactPhone: res.consigneePhone
 				}
 				this.selectedConsigneeAddress = {
+					areaID: res.consigneeAreaID,
 					customerAddressID: res.consigneeAddressID,
 					contactName: res.consigneeName,
 					contactPhone: res.consigneePhone,
