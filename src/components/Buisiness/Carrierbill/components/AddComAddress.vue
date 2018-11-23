@@ -16,10 +16,10 @@
                         @select="handSelect">
                     </el-autocomplete>
                 </el-form-item>
-                <el-form-item label="联系人" prop="contactName">
+                <el-form-item label="联系人">
                     <el-input v-model="companyAddress.contactName" placeholder="请输入..."></el-input>
                 </el-form-item>
-                <el-form-item label="电话" prop="contactPhone">
+                <el-form-item label="电话">
                     <el-input v-model="companyAddress.contactPhone" placeholder="请输入..."></el-input>
                 </el-form-item>
                 <el-form-item label="所在区域" prop="areaID">
@@ -41,6 +41,12 @@
                 <el-form-item label="门牌信息" prop="detailAddress">
                     <el-input v-model="companyAddress.detailAddress" placeholder="如：十字路口左边22栋301室"></el-input>
                 </el-form-item>
+                <el-form-item label="围栏范围" prop="monitorScope">
+                    <el-input v-model="companyAddress.monitorScope" placeholder="请输入围栏范围"><template slot="append">米</template></el-input>
+                </el-form-item>
+                <el-form-item label="地址编号">
+                    <el-input v-model="companyAddress.code" placeholder="请输入地址编号"></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="close">取消</el-button>
@@ -61,7 +67,7 @@
 import { Message } from 'element-ui'
 import Company from '../../../../api/Company'
 import distData from '../../../../assets/data/distpicker.data'
-import { checkTel } from '../../../../common/validator'
+import { checkTel, checkFloat2 } from '../../../../common/valid'
 import DistPicker from '../../../CommonComponents/DistPicker'
 import SelectLocation from '../../../CommonComponents/SelectLocation'
 import { areaIdToArrayId } from '../../../../common/utils'
@@ -73,25 +79,6 @@ export default {
             default: false
         },
         company: Object
-    },
-    watch: {
-        isVisible(bool) {
-            this.selectedArea = []
-            this.selectedCity = ''
-            this.companyAddress.customerID = ''
-            this.companyAddress.companyName = ''
-            if (bool) {
-                this.companyAddress.customerID = this.company ? this.company.customerID : ''
-                this.companyAddress.companyName = this.company ? this.company.companyName : ''
-                this.companyAddress.contactName = this.company ? this.company.contactName : ''
-                this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
-                this.companyAddress.locationAddress = this.company ? this.company.locationAddress : ''
-                this.$nextTick(() => {
-                    console.log(this.company)
-                    if (this.company) this.handSelectedArea(areaIdToArrayId(this.company.companyAreaID))
-                })
-            }
-        }
     },
     data() {
         return {
@@ -107,16 +94,36 @@ export default {
 				companyName: '',
 				locationLng: '',
 				locationLat: '',
-                locationAddress: ''
+                locationAddress: '',
+                monitorScope: '',
+                code: ''
             },
 			rules: {
 				customerID: [{required: true, message: '请输入所属企业'}],
-				contactName: [{required: true, message: '请输入联系人'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
-                contactPhone: [{required: true, message: '请输入电话'}, {validator: checkTel}],
 				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
 				locationAddress: [{required: true, message: '请输入定位地址'}],
-				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}]
+                detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
+                monitorScope: [{validator: checkFloat2}]
 			}
+        }
+    },
+    watch: {
+        isVisible(bool) {
+            this.selectedArea = []
+            this.selectedCity = ''
+            this.companyAddress.customerID = ''
+            this.companyAddress.companyName = ''
+            if (bool) {
+                this.companyAddress.customerID = this.company ? this.company.customerID : ''
+                this.companyAddress.companyName = this.company ? this.company.companyName : ''
+                this.companyAddress.contactName = this.company ? this.company.contactName : ''
+                this.companyAddress.contactPhone = this.company ? this.company.contactPhone : ''
+                this.companyAddress.locationAddress = this.company ? this.company.locationAddress : ''
+                this.companyAddress.code = this.company ? this.company.code : ''
+                this.$nextTick(() => {
+                    if (this.company) this.handSelectedArea(areaIdToArrayId(this.company.companyAreaID))
+                })
+            }
         }
     },
     methods: {

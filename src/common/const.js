@@ -246,3 +246,11 @@ export const SERVICETYPECODE = {
     '1003999': '其他'
 }
 
+/**
+ * 货物类型
+ */
+export const CARGOTYPES = {
+    "Cement": "水泥",
+    "Chamotte": "熟料",
+    "SemiFinished": "半成品"
+}

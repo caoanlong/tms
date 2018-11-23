@@ -55,10 +55,7 @@
 					<el-table-column label="品名表名称" prop="productName" align="center"></el-table-column>
 					<el-table-column label="货物类型" prop="cargoType" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.cargoType == 'FMCG'">快消品</span>
-							<span v-else-if="scope.row.cargoType == 'Cement'">水泥</span>
-							<span v-else-if="scope.row.cargoType == 'Beer'">啤酒</span>
-							<span v-else-if="scope.row.cargoType == 'DangerousCargo'">危险品</span>
+							<span>{{CARGOTYPES[scope.row.cargoType]}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="包装单位" prop="cargoUnit" align="center" width="70"></el-table-column>

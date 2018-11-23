@@ -12,12 +12,7 @@
 							<p>{{cargo.cargoName}}</p>
 						</el-form-item>
 						<el-form-item label="货物类型" prop="cargoType">
-							<p>
-								<span v-if="cargo.cargoType=='FMCG'">快消品</span>
-								<span v-if="cargo.cargoType=='Cement'">水泥</span>
-								<span v-if="cargo.cargoType=='Beer'">啤酒</span>
-								<span v-if="cargo.cargoType=='DangerousCargo'">危险品</span>
-							</p>
+							<p>{{CARGOTYPES[cargo.cargoType]}}</p>
 						</el-form-item>
 						<el-form-item label="危险品类别" v-if="cargo.cargoType == 'DangerousCargo'">
 							<p>{{cargo.dangerousCoodsCategory}}</p>
