@@ -22,6 +22,9 @@ export default {
 			this.$router.push({name: val})
 		}
 	},
+	activated() {
+		this.type = 'transportreg'
+	},
 	methods: {
 		
 	}
