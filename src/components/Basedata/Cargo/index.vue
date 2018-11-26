@@ -49,16 +49,23 @@
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="企业名称" prop="shipperCompanyName" align="center"></el-table-column>
+					<el-table-column label="所属客户" prop="shipperCompanyName" align="center"></el-table-column>
 					<el-table-column label="货物编号" prop="code" align="center"></el-table-column>
 					<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
-					<el-table-column label="品名表名称" prop="productName" align="center"></el-table-column>
 					<el-table-column label="货物类型" prop="cargoType" align="center">
 						<template slot-scope="scope">
 							<span>{{CARGOTYPES[scope.row.cargoType]}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="包装单位" prop="cargoUnit" align="center" width="70"></el-table-column>
+					<el-table-column label="单位" prop="cargoUnit" align="center" width="70"></el-table-column>
+                    <el-table-column label="重量" prop="weight" align="center"></el-table-column>
+                    <el-table-column label="体积" prop="volumn" align="center"></el-table-column>
+                    <el-table-column label="配载方式" prop="dispatchType" align="center">
+                        <template slot-scope="scope">
+							<span v-if="cargo.dispatchType == 'Weight'">按重量配载</span>
+							<span v-if="cargo.dispatchType == 'Volumn'">按体积配载</span>
+						</template>
+                    </el-table-column>
 					<el-table-column label="操作" align="center" width="100">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
