@@ -34,22 +34,7 @@ const routerMap = [
                 path: '/',
                 name: 'home',
                 meta: { title: '首页', keepAlive: false, isUseCache: false },
-                component: () => import ('../components/Home'),
-                redirect: '/transportreg',
-                children: [
-                    {
-                        path: '/transportreg',
-                        name: 'transportreg',
-                        meta: { title: '运输调控' },
-                        component: () => import('../components/Home/components/TransportReg'),
-                    },
-                    {
-                        path: '/pricereg',
-                        name: 'pricereg',
-                        meta: { title: '价格调控' },
-                        component: () => import('../components/Home/components/PriceReg'),
-                    }
-                ]
+                component: () => import ('../components/Home')
             },
             /**
              * 业务  buisiness
