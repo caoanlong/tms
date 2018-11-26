@@ -393,7 +393,7 @@ export default {
                     // }
                 ],
                 payMode: [{ required: true, message: '请选择支付方式' }],
-            },
+            }
         }
     },
     watch: {
