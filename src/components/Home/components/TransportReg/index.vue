@@ -16,7 +16,10 @@
                         <span class="status">已装车</span>
                     </div>
                     <div class="down">
-                        <div class="address">昆明大理州G25高速</div>
+                        <div class="address">
+                            <svg-icon icon-class="location"></svg-icon>
+                            <span>昆明大理州G25高速</span>
+                        </div>
                         <div class="view">查看轨迹</div>
                     </div>
                 </div>
@@ -26,7 +29,9 @@
                 :total="total">
             </el-pagination>
         </div>
-        <div class="right"></div>
+        <div class="right">
+            <div id="amapLocationSelect"></div>
+        </div>
     </div>
 </template>
 
@@ -39,8 +44,13 @@ export default {
             keywords: '',
             total: 0,
             pageIndex: 1,
-            pageSize: 6
+            pageSize: 6,
+            mapHeight: 0,
+            map: null
         }
+    },
+    mounted() {
+        this.createMap()
     },
     methods: {
         pageChange() {
@@ -48,6 +58,12 @@ export default {
         },
         pageSizeChange() {
 
+        },
+        /**
+         * 创建地图
+         */
+        createMap() {
+            this.map = new AMap.Map('amapLocationSelect')
         }
     }
 }
@@ -116,6 +132,8 @@ export default {
                         font-size 14px
                         cursor pointer
     .right
-        height 500px
-        background-color green
+        height 660px
+        border 1px solid #dddddd
+        #amapLocationSelect
+            height 100%
 </style>
