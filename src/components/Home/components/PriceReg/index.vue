@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="middle">
-            <div id="map" style="height:548px"></div>
+            <div id="map" style="height:748px"></div>
             <div class="changeData">
                 <el-radio-group v-model="dataType" size="mini">
                     <el-radio-button label="month">当月数据</el-radio-button>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="card">
-                <div class="title">异常工厂/单<span class="fr">查看更多</span></div>
+                <div class="title">异常工厂/单<span class="fr" @click="viewMore">查看更多</span></div>
                 <div class="con">
                     <div id="chart4" style="height:225px"></div>
                 </div>
@@ -247,7 +247,7 @@ export default {
                 ]
         
             })
-            mapChart.setOption({ 
+            mapChart.setOption({
                 geo: {
                     map: "云南",
                     label: {
@@ -267,8 +267,7 @@ export default {
                             areaColor: "#f8f8f8",                            
                         },
                     },
-                    zoom:1.2, 
-                    top:50                 
+                    zoom:1.2   
                 },
                 series: [
                 {
@@ -321,6 +320,9 @@ export default {
             },200)
 
             
+        },
+        viewMore(){
+            this.$router.push({ name: 'anomaly' })
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">客户地址</div>
+			<div slot="header" class="clearfix">异常报警</div>
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="关键字">
