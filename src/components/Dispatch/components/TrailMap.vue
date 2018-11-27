@@ -19,7 +19,8 @@
 import DispatchOrder from '../../../api/DispatchOrder'
 export default {
     props: {
-        dispatchOrderID: String
+        dispatchOrderID: String,
+        dispatchOrderStatus: String
     },
     data() {
         return {
@@ -88,12 +89,30 @@ export default {
             this.driving = new AMap.TruckDriving({
                 map: this.map,
                 size: 3,
-                // hideMarkers: true
+                hideMarkers: true
             }).search(path, (status, result) => {
                 this.distance = (result.routes[0].distance/1000).toFixed(2)
                 this.time = Number((result.routes[0].time/3600).toFixed(2))
                 this.speed = this.time ? (this.distance/this.time).toFixed(2) : 0
             })
+            new AMap.Marker({
+                position: path[0].lnglat,
+                icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
+                map: this.map
+            })
+            if (this.dispatchOrderStatus == 'Finished') {
+                new AMap.Marker({
+                    position: path[path.length - 1].lnglat,
+                    icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
+                    map: this.map
+                })
+            } else {
+                new AMap.Marker({
+                    position: path[path.length - 1].lnglat,
+                    icon: require('../../../assets/imgs/dtcb.png'),
+                    map: this.map
+                })
+            }
             const markList = this.createMarker(imgPath)
             markList.forEach(item => {
                 this.map.add(item)
