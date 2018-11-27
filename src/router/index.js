@@ -36,6 +36,12 @@ const routerMap = [
                 meta: { title: '首页', keepAlive: false, isUseCache: false },
                 component: () => import ('../components/Home')
             },
+            {
+                path: '/anomaly',
+                name: 'anomaly',
+                meta: { title: '异常报警', keepAlive: false, isUseCache: false },
+                component: () => import('../components/Anomaly')
+            },
             /**
              * 业务  buisiness
              */
