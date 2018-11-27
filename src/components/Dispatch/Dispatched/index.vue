@@ -126,7 +126,7 @@
 										v-if="item.status == 'Ordered' || item.status == 'Finished'"
 										type="text" 
 										size="mini" 
-										@click="trail(item.dispatchOrderID)" 
+										@click="trail(item.dispatchOrderID, item.status)" 
 										style="margin-left:20px">
 										跟踪
 									</el-button>
@@ -198,6 +198,7 @@
 		<trail-map 
 			v-if="trailDialog" 
 			:dispatchOrderID="currentDispatchOrderID" 
+			:dispatchOrderStatus="currentDispatchOrderStatus" 
 			@cancel="handCloseTrail">
 		</trail-map>
 		<UploadPhoto 
@@ -248,6 +249,7 @@ export default {
 			currentConsigneeArea: '',
 			isPhotoVisible: false,
 			currentDispatchOrderID: '',
+			currentDispatchOrderStatus: '',
 			truckExp: [],
 			driverExp: [],
 			isScrambleVisible: false,
@@ -404,8 +406,9 @@ export default {
 		handCloseTrail() {
 			this.trailDialog = false
 		},
-		trail(dispatchOrderID) {
+		trail(dispatchOrderID, status) {
 			this.currentDispatchOrderID = dispatchOrderID
+			this.currentDispatchOrderStatus = status
 			this.trailDialog = true
 		},
 		/**
