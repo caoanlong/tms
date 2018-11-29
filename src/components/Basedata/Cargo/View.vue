@@ -24,10 +24,10 @@
 							<p>{{cargo.weight}}</p>
 						</el-form-item>
 						<el-form-item label="体积" prop="packageType">
-							<p>{{cargo.volumn}}</p>
+							<p>{{cargo.volume}}</p>
 						</el-form-item>
 						<el-form-item label="配载方式" prop="packageType">
-							<p v-if="cargo.dispatchType == 'Volumn'">体积</p>
+							<p v-if="cargo.dispatchType == 'Volume'">体积</p>
 							<p v-else-if="cargo.dispatchType == 'Weight'">重量</p>
 						</el-form-item>
 						<el-form-item>

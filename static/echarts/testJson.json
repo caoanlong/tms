@@ -1,0 +1,25 @@
+{
+	"sumOfCarrierOrder":"1200",
+	"sumOfSelfPickCarrierOrder":"461",
+	"sumOfAlarm":"767",
+	"arrivedOffset":"451",
+	"stopOvertime":"254",
+	"rankList":[
+		{
+			"shipperCompanyName":"呈贡工厂",
+			"ex":133
+		},{
+			"shipperCompanyName":"红河工厂",
+			"ex":110
+		},{
+			"shipperCompanyName":"丽江工厂",
+			"ex":103
+		},{
+			"shipperCompanyName":"楚雄工厂",
+			"ex":98
+		},{
+			"shipperCompanyName":"剑川工厂",
+			"ex":58
+		}
+	]
+}
