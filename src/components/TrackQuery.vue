@@ -109,7 +109,7 @@ export default {
             })
             routeLine.setMap(this.map)
             // 调整视野达到最佳显示区域
-            // this.map.setFitView([ startMarker ])
+            // this.map.setFitView([ startMarker, endMarker, routeLine ])
             this.map.setCenter(path[parseInt(path.length/2)])
         }
     }
