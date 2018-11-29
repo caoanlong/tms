@@ -77,14 +77,14 @@ export default {
                     position: path[path.length - 1],
                     icon: require('../assets/imgs/zd.png'),
                     map: this.map,
-                    offset: new AMap.Pixel(-20, -22),
+                    offset: new AMap.Pixel(-17, -19),
                 })
             } else {
                 endMarker = new AMap.Marker({
                     position: path[path.length - 1],
                     icon: require('../assets/imgs/dtcb.png'),
                     map: this.map,
-                    offset: new AMap.Pixel(-20, -22),
+                    offset: new AMap.Pixel(-25, -27),
                 })
             }
             
@@ -93,7 +93,7 @@ export default {
                     position: item.position,
                     icon: item.icon,
                     map: this.map,
-                    offset: new AMap.Pixel(-20, -22),
+                    offset: new AMap.Pixel(-17, -19),
                     zIndex: 10
                 })
             })
