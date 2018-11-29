@@ -123,7 +123,7 @@
 							<td>{{transport.cargoName}}</td>
 							<td>{{[(transport.loadWeightSum + '吨'),(transport.loadVolumeSum + '方'),(transport.LoadNumSum)] | trimSpaceAndJoinSlash}}
 							</td>
-							<td style="text-align: center">
+							<td style="text-align: center" width="180">
 								<el-button 
 									:disabled="transport.taskPicNum == 0"
 									type="primary" 
@@ -261,8 +261,10 @@ export default {
 			this.trailDialog = false
 		},
 		trail(dispatchOrderID) {
-			this.currentDispatchOrderID = dispatchOrderID
-			this.trailDialog = true
+			// this.currentDispatchOrderID = dispatchOrderID
+			// this.trailDialog = true
+			const routeData = this.$router.resolve({name: 'trackquery', query: { dispatchOrderID }})
+			window.open(routeData.href, '_blank')
 		},
 		copy(carrierOrderID) {
 			this.$router.push({name: 'copycarrierbill', query: { carrierOrderID }})

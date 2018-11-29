@@ -278,9 +278,11 @@ export default {
 			this.trailDialog = false
 		},
 		trail(dispatchOrderID) {
-			if (this.dispatchOrderDetail.status != 'Ordered' && this.dispatchOrderDetail.status != 'Finished') return
-			this.currentDispatchOrderID = dispatchOrderID
-			this.trailDialog = true
+			// if (this.dispatchOrderDetail.status != 'Ordered' && this.dispatchOrderDetail.status != 'Finished') return
+			// this.currentDispatchOrderID = dispatchOrderID
+			// this.trailDialog = true
+			const routeData = this.$router.resolve({name: 'trackquery', query: { dispatchOrderID }})
+			window.open(routeData.href, '_blank')
 		},
 		getDetail() {
 			this.hideAmount = this.$route.query.isHideAmount
