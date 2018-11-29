@@ -50,9 +50,10 @@
                 </div>
             </div>
             <div class="card">
-                <div class="title">异常工厂/单<span class="fr" @click="viewMore">查看更多</span></div>
+                <div class="title">异常工厂/单<span class="fr" @click="viewMore" >查看更多</span></div>
                 <div class="con">
-                    <div id="chart4" style="height:225px"></div>
+                    <div id="chart4" :style="priceReg.alarmRankList.length>0?'225px':0"></div>
+                    <p class="tips" v-show="!priceReg.alarmRankList.length">暂无异常</p>
                 </div>
             </div>
         </div>
@@ -75,7 +76,7 @@ import Home from '../../../../api/Home'
 export default {
     data(){
         return {
-            markPointer:[],
+            markPoint:[],
             dataType: '0',
             fullHeight: document.documentElement.clientHeight -225,
             priceReg:{
@@ -93,6 +94,23 @@ export default {
                 shipperCompanyName:[],
                 //公司异常单
                 ex:[],
+                alarmRankList:[
+                    {
+                        shipperCompanyName:'',
+                        ex:''
+                    }
+                ],
+                rankList:[
+                    {
+                        countCarrierNum:'',
+                        countCarrierAlarmNum:'',
+                        countCustomer:'',
+                        countCustomerAlarm:'',
+                        shipperCompanyName:'',
+                        lng:'',
+                        lat:''
+                    }
+                ]
             },
             chartOption1:{
                 series : [
@@ -190,6 +208,10 @@ export default {
                                 show: true,
                                 position: 'inside',
                                 formatter: "{b} \n{d}%",
+                                // formatter:function (params) {
+                                //     console.log(params)
+                                //     return params.name+'\n'+params.value+' / '+ params.percent +'%'
+                                // },
                             },
                         },
                         labelLine: {
@@ -239,9 +261,22 @@ export default {
                         label:{
                             show:true,
                             formatter:function (params) {
-                                return params.name+'   '+params.value
+                                 return '{a|'+(params.dataIndex+1)+'}  '+params.name+'   '+params.value
                             },
-                            position:['20','3'],
+                            rich:{
+                                a: {
+                                    color: '#409EFF',
+                                    backgroundColor:'#fff',
+                                    width:14,
+                                    height:14,
+                                    lineHeight:14,
+                                    borderRadius:8,
+                                    align:'center',
+                                    verticalAlign:'top'
+                                }
+                               
+                            },
+                            position:'insideLeft',
                             color:'#f4516c',
                             textBorderColor:'#fff',
                             textBorderWidth:1
@@ -288,17 +323,16 @@ export default {
                         }
                     },
                     markPoint:{
-                        data:testJson.rankList,
+                        data:[],
                         label:{
                             show:true,
                             itemStyle:{
                                 normal:{color:'yellow'}
                             },
-                            position:'right',
                             formatter:function(params){
-                                console.log(params)
-                                // return '{a|'+ params.name+'}\n{b|'+params.data.anomalyOrder+'}\n{c|'+params.data.anomalyCustomer+'}'
+                                return '{a|'+ params.data.name+'}\n{b|'+params.data.carrier+'}\n{c|'+params.data.customer+'}'
                             },
+                            position:'right',
                             rich:{
                                 a: {
                                     color: '#409EFF'
@@ -311,7 +345,7 @@ export default {
                                 },
                             }
                         },
-                        symbolSize:5,
+                        symbolSize:10,
                         symbol:'circle',
                     }
                 }]
@@ -331,40 +365,25 @@ export default {
 	},
     methods: {
         getInfo(){
-            // Home.getPriceReg({
-			// 	type:this.dataType
-			// }).then(res => {
-            //     if(this.dataType == 0) {
-            //         this.priceReg = testJson
-            //     }else{
-            //         this.priceReg = testJson1
-            //     }
-            //     // this.priceReg = res.data
-            //     this.$nextTick(() => {
-            //         this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
-            //         this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
-            //         this.chartOption1.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfSelfPickCarrierOrder)?'特价占比\n'+(this.priceReg.sumOfSelfPickCarrierOrder/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无特价'
-            //         this.chartOption2.series[0].data[0].value= this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfAlarm
-            //         this.chartOption2.series[0].data[1].value= this.priceReg.sumOfAlarm
-            //         this.chartOption2.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfAlarm)?'异常占比\n'+(this.priceReg.sumOfAlarm/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无异常'
-            //         this.chartOption3.series[0].data[0].value= this.priceReg.stopOvertime
-            //         this.chartOption3.series[0].data[1].value= this.priceReg.arrivedOffset
-            //         this.chartOption4.yAxis[0].data = this.priceReg.alarmRankList.map(item => item.shipperCompanyName)
-            //         this.chartOption4.series[0].data = this.priceReg.alarmRankList.map(item => item.ex)
-            //         this.drawCharts()
-            //     })
-            // })
-            this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
-            this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
-            this.chartOption1.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfSelfPickCarrierOrder)?'特价占比\n'+(this.priceReg.sumOfSelfPickCarrierOrder/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无特价'
-            this.chartOption2.series[0].data[0].value= this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfAlarm
-            this.chartOption2.series[0].data[1].value= this.priceReg.sumOfAlarm
-            this.chartOption2.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfAlarm)?'异常占比\n'+(this.priceReg.sumOfAlarm/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无异常'
-            this.chartOption3.series[0].data[0].value= this.priceReg.stopOvertime
-            this.chartOption3.series[0].data[1].value= this.priceReg.arrivedOffset
-            // this.chartOption4.yAxis[0].data = this.priceReg.alarmRankList.map(item => item.shipperCompanyName)
-            // this.chartOption4.series[0].data = this.priceReg.alarmRankList.map(item => item.ex)
-            this.drawCharts()
+            Home.getPriceReg({
+				type:this.dataType
+			}).then(res => {
+                this.priceReg = res
+                this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
+                this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
+                this.chartOption1.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfSelfPickCarrierOrder)?'特价占比\n'+(this.priceReg.sumOfSelfPickCarrierOrder/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无特价'
+                this.chartOption2.series[0].data[0].value= this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfAlarm
+                this.chartOption2.series[0].data[1].value= this.priceReg.sumOfAlarm
+                this.chartOption2.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfAlarm)?'异常占比\n'+(this.priceReg.sumOfAlarm/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无异常'
+                this.chartOption3.series[0].data[0].value= this.priceReg.stopOvertime
+                this.chartOption3.series[0].data[1].value= this.priceReg.arrivedOffset
+                this.chartOption4.yAxis[0].data = this.priceReg.alarmRankList.map(item => item.shipperCompanyName).reverse()
+                this.chartOption4.series[0].data = this.priceReg.alarmRankList.map(item => item.ex).reverse()
+                this.markPoint = this.priceReg.rankList
+                this.formatMarkPoint(this.priceReg.rankList)
+                this.mapOption.series[0].markPoint.data = this.markPoint
+                this.drawCharts()
+            })
         },
         handleClick(tab, event) {
             this.getInfo()
@@ -379,8 +398,7 @@ export default {
             chart1.setOption(this.chartOption1,true)
             chart2.setOption(this.chartOption2,true)
             chart3.setOption(this.chartOption3,true)
-            chart4.setOption(this.chartOption4,true)
-            // mapChart.setOption(this.mapOption,true)
+            mapChart.setOption(this.mapOption,true)
             setTimeout(function (){
                 window.onresize = function () {
                     chart1.resize()
@@ -393,6 +411,16 @@ export default {
 
             
         },
+        formatMarkPoint(data){
+            console.log(data)
+            for(let i=0;i<data.length;i++){
+                this.markPoint[i].name = data[i].shipperCompanyName
+                this.markPoint[i].coord= [data[i].lng,data[i].lat]
+                this.markPoint[i].customer = data[i].countCustomerAlarm+'/'+data[i].countCustomer
+                this.markPoint[i].carrier = data[i].countCarrierAlarmNum+'/'+data[i].countCarrierNum
+            }
+            console.log(this.markPoint)
+        },
         viewMore(){
             this.$router.push({ name: 'anomaly' })
         }
@@ -402,7 +430,7 @@ export default {
 
 <style lang="stylus" scoped>
 .priceReg
-    padding 0 320px
+    padding 0 310px
     position relative
     .ls
         left 0
@@ -461,6 +489,15 @@ export default {
         .con
             position relative
             background #fff
+            height 225px
+            .tips
+                position absolute
+                text-align center
+                top 50%
+                left 50%
+                transform translate(-50%,-50%)
+                font-size 12px
+                color #999
             .legend
                 position absolute
                 right 10px
@@ -495,5 +532,5 @@ export default {
                     vertical-align top
                     margin-right 5px
         &~.card
-            margin-top 20px
+            margin-top 10px
 </style>

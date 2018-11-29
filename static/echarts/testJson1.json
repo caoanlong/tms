@@ -22,13 +22,39 @@
 			"ex":15
 		}
 	],
-	"rankList":[{
-		"countCarrierNum":1,
-		"countCarrierAlarmNum":1,
-		"countCustomer":1,
-		"countCustomerAlarm":1,
-		"shipperCompanyName":"丽江工厂",
-		"lng":12121.11,
-		"lat":1212.11
-	}]
+	"rankList":[
+		{
+			"countCarrierNum":323,
+			"countCarrierAlarmNum":11,
+			"countCustomer":745,
+			"countCustomerAlarm":225,
+			"shipperCompanyName":"剑川工厂",
+			"lng":99.93806,
+			"lat":26.589454
+		},{
+			"countCarrierNum":123,
+			"countCarrierAlarmNum":11,
+			"countCustomer":1445,
+			"countCustomerAlarm":425,
+			"shipperCompanyName":"丽江工厂",
+			"lng":101.366987,
+			"lat":26.719193
+		},{
+			"countCarrierNum":123,
+			"countCarrierAlarmNum":11,
+			"countCustomer":4145,
+			"countCustomerAlarm":255,
+			"shipperCompanyName":"临沧工厂",
+			"lng":99.693993,
+			"lat":23.900584
+		},{
+			"countCarrierNum":2123,
+			"countCarrierAlarmNum":1412,
+			"countCustomer":1445,
+			"countCustomerAlarm":1225,
+			"shipperCompanyName":"云龙工厂",
+			"lng":99.106157,
+			"lat":25.621965
+		}
+	]
 }
