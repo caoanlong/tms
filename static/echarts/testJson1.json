@@ -4,7 +4,7 @@
 	"sumOfAlarm":"367",
 	"arrivedOffset":"151",
 	"stopOvertime":"54",
-	"rankList":[
+	"alarmRankList":[
 		{
 			"shipperCompanyName":"呈贡工厂",
 			"ex":13
@@ -21,5 +21,14 @@
 			"shipperCompanyName":"剑川工厂",
 			"ex":15
 		}
-	]
+	],
+	"rankList":[{
+		"countCarrierNum":1,
+		"countCarrierAlarmNum":1,
+		"countCustomer":1,
+		"countCustomerAlarm":1,
+		"shipperCompanyName":"丽江工厂",
+		"lng":12121.11,
+		"lat":1212.11
+	}]
 }

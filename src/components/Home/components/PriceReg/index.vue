@@ -288,7 +288,7 @@ export default {
                         }
                     },
                     markPoint:{
-                        data:markPointJson,
+                        data:testJson.rankList,
                         label:{
                             show:true,
                             itemStyle:{
@@ -296,7 +296,8 @@ export default {
                             },
                             position:'right',
                             formatter:function(params){
-                                return '{a|'+ params.name+'}\n{b|'+params.data.anomalyOrder+'}\n{c|'+params.data.anomalyCustomer+'}'
+                                console.log(params)
+                                // return '{a|'+ params.name+'}\n{b|'+params.data.anomalyOrder+'}\n{c|'+params.data.anomalyCustomer+'}'
                             },
                             rich:{
                                 a: {
@@ -330,29 +331,40 @@ export default {
 	},
     methods: {
         getInfo(){
-            Home.getPriceReg({
-				type:this.dataType
-			}).then(res => {
-                if(this.dataType == 0) {
-                    this.priceReg = testJson
-                }else{
-                    this.priceReg = testJson1
-                }
-                // this.priceReg = res.data
-                this.$nextTick(() => {
-                    this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
-                    this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
-                    this.chartOption1.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfSelfPickCarrierOrder)?'特价占比\n'+(this.priceReg.sumOfSelfPickCarrierOrder/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无特价'
-                    this.chartOption2.series[0].data[0].value= this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfAlarm
-                    this.chartOption2.series[0].data[1].value= this.priceReg.sumOfAlarm
-                    this.chartOption2.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfAlarm)?'异常占比\n'+(this.priceReg.sumOfAlarm/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无异常'
-                    this.chartOption3.series[0].data[0].value= this.priceReg.stopOvertime
-                    this.chartOption3.series[0].data[1].value= this.priceReg.arrivedOffset
-                    this.chartOption4.yAxis[0].data = this.priceReg.rankList.map(item => item.shipperCompanyName)
-                    this.chartOption4.series[0].data = this.priceReg.rankList.map(item => item.ex)
-                    this.drawCharts()
-                })
-			})
+            // Home.getPriceReg({
+			// 	type:this.dataType
+			// }).then(res => {
+            //     if(this.dataType == 0) {
+            //         this.priceReg = testJson
+            //     }else{
+            //         this.priceReg = testJson1
+            //     }
+            //     // this.priceReg = res.data
+            //     this.$nextTick(() => {
+            //         this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
+            //         this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
+            //         this.chartOption1.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfSelfPickCarrierOrder)?'特价占比\n'+(this.priceReg.sumOfSelfPickCarrierOrder/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无特价'
+            //         this.chartOption2.series[0].data[0].value= this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfAlarm
+            //         this.chartOption2.series[0].data[1].value= this.priceReg.sumOfAlarm
+            //         this.chartOption2.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfAlarm)?'异常占比\n'+(this.priceReg.sumOfAlarm/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无异常'
+            //         this.chartOption3.series[0].data[0].value= this.priceReg.stopOvertime
+            //         this.chartOption3.series[0].data[1].value= this.priceReg.arrivedOffset
+            //         this.chartOption4.yAxis[0].data = this.priceReg.alarmRankList.map(item => item.shipperCompanyName)
+            //         this.chartOption4.series[0].data = this.priceReg.alarmRankList.map(item => item.ex)
+            //         this.drawCharts()
+            //     })
+            // })
+            this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
+            this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
+            this.chartOption1.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfSelfPickCarrierOrder)?'特价占比\n'+(this.priceReg.sumOfSelfPickCarrierOrder/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无特价'
+            this.chartOption2.series[0].data[0].value= this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfAlarm
+            this.chartOption2.series[0].data[1].value= this.priceReg.sumOfAlarm
+            this.chartOption2.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfAlarm)?'异常占比\n'+(this.priceReg.sumOfAlarm/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无异常'
+            this.chartOption3.series[0].data[0].value= this.priceReg.stopOvertime
+            this.chartOption3.series[0].data[1].value= this.priceReg.arrivedOffset
+            // this.chartOption4.yAxis[0].data = this.priceReg.alarmRankList.map(item => item.shipperCompanyName)
+            // this.chartOption4.series[0].data = this.priceReg.alarmRankList.map(item => item.ex)
+            this.drawCharts()
         },
         handleClick(tab, event) {
             this.getInfo()
@@ -368,7 +380,7 @@ export default {
             chart2.setOption(this.chartOption2,true)
             chart3.setOption(this.chartOption3,true)
             chart4.setOption(this.chartOption4,true)
-            mapChart.setOption(this.mapOption,true)
+            // mapChart.setOption(this.mapOption,true)
             setTimeout(function (){
                 window.onresize = function () {
                     chart1.resize()
