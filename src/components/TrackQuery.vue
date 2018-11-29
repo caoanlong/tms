@@ -13,7 +13,8 @@ export default {
             map: null,
             truckDriving: null,
             mapHeight: 0,
-            alarmMsgs: []
+            alarmMsgs: [],
+            locations: []
         }
     },
     created() {
@@ -21,7 +22,7 @@ export default {
         this.getList()
     },
     mounted() {
-        this.createMap()
+        this.map = new AMap.Map('amapLocationSelect')
     },
     methods: {
         getList() {
@@ -39,8 +40,8 @@ export default {
                     if (res.data.data) {
                         const locations = res.data.data.locations
                         const alarmMsgs = res.data.data.alarmMsgs
-                        const stopOvertime = require('../assets/imgs/tcbj.png')
-                        const arrivedOffset = require('../assets/imgs/xhbj.png')
+                        const stopOvertime = require('../assets/imgs/tccs.png')
+                        const arrivedOffset = require('../assets/imgs/ycxh.png')
                         const path = locations.map(item => {
                             return {
                                 N: item.loc.latitude, 
@@ -49,6 +50,9 @@ export default {
                                 lat: item.loc.latitude
                             }
                         })
+                        // this.locations = locations.map(item => {
+                        //     return { lnglat: item.loc.coordinates }
+                        // }).filter((item, i) => i % 2 != 0 && i % 3 != 0)
                         this.alarmMsgs = alarmMsgs.map(item => {
                             return {
                                 position: { N: item.latitude, O: item.longitude, lat: item.latitude, lng: item.longitude },
@@ -56,6 +60,7 @@ export default {
                             }
                         })
                         this.drawRoute(path)
+                        // this.createMap(this.locations)
                     }
                 }
             })
@@ -63,8 +68,32 @@ export default {
         /**
          * 创建地图
          */
-        createMap() {
+        createMap(path) {
+            console.log(path.length)
             this.map = new AMap.Map('amapLocationSelect')
+            this.driving = new AMap.TruckDriving({
+                map: this.map,
+                size: 3,
+                hideMarkers: true
+            }).search(path, (status, result) => {
+                const startMarker = new AMap.Marker({
+                    position: path[0].lnglat,
+                    icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
+                    map: this.map
+                })
+                const endMarker = new AMap.Marker({
+                    position: path[path.length - 1].lnglat,
+                    icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
+                    map: this.map
+                })
+                this.alarmMsgs.forEach(item => {
+                    new AMap.Marker({
+                        position: item.position,
+                        icon: item.icon,
+                        map: this.map
+                    })
+                })
+            })
         },
         drawRoute (path) {
             const startMarker = new AMap.Marker({
@@ -81,7 +110,8 @@ export default {
                 new AMap.Marker({
                     position: item.position,
                     icon: item.icon,
-                    map: this.map
+                    map: this.map,
+                    offset: new AMap.Pixel(-25, -54)
                 })
             })
             const routeLine = new AMap.Polyline({
@@ -91,7 +121,8 @@ export default {
                 borderWeight: 1,
                 strokeWeight: 5,
                 strokeColor: '#0091ff',
-                lineJoin: 'round'
+                lineJoin: 'round',
+                showDir: true
             })
             routeLine.setMap(this.map)
             // 调整视野达到最佳显示区域
