@@ -29,19 +29,23 @@ export default {
             const url = baseURL + '/deliveryOrder/getTracks'
             const params = {
                 osn: this.$route.query.osn,
-                companyCode: this.$route.query.companyCode
+                companyCode: this.$route.query.companyCode,
+                dispatchOrderID: this.$route.query.dispatchOrderID
             }
             axios({
                 url,
                 params,
-                headers: { Authorization: this.$route.query.Authorization }
+                headers: { 
+                    Authorization: this.$route.query.Authorization || localStorage.getItem('token')
+                }
             }).then(res => {
                 if (res.data.code == 200) {
                     if (res.data.data) {
                         const locations = res.data.data.locations
                         const alarmMsgs = res.data.data.alarmMsgs
-                        const stopOvertime = require('../assets/imgs/tccs.png')
-                        const arrivedOffset = require('../assets/imgs/ycxh.png')
+                        const status = res.data.data.status
+                        const stopOvertime = require('../assets/imgs/tcbj.png')
+                        const arrivedOffset = require('../assets/imgs/xhbj.png')
                         const path = locations.map(item => {
                             return {
                                 N: item.loc.latitude, 
@@ -50,68 +54,47 @@ export default {
                                 lat: item.loc.latitude
                             }
                         })
-                        // this.locations = locations.map(item => {
-                        //     return { lnglat: item.loc.coordinates }
-                        // }).filter((item, i) => i % 2 != 0 && i % 3 != 0)
                         this.alarmMsgs = alarmMsgs.map(item => {
                             return {
                                 position: { N: item.latitude, O: item.longitude, lat: item.latitude, lng: item.longitude },
                                 icon: item.type == 'StopOvertime' ? stopOvertime : arrivedOffset
                             }
                         })
-                        this.drawRoute(path)
-                        // this.createMap(this.locations)
+                        this.drawRoute(path, status)
                     }
                 }
             })
         },
-        /**
-         * 创建地图
-         */
-        createMap(path) {
-            console.log(path.length)
-            this.map = new AMap.Map('amapLocationSelect')
-            this.driving = new AMap.TruckDriving({
-                map: this.map,
-                size: 3,
-                hideMarkers: true
-            }).search(path, (status, result) => {
-                const startMarker = new AMap.Marker({
-                    position: path[0].lnglat,
-                    icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
-                    map: this.map
-                })
-                const endMarker = new AMap.Marker({
-                    position: path[path.length - 1].lnglat,
-                    icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
-                    map: this.map
-                })
-                this.alarmMsgs.forEach(item => {
-                    new AMap.Marker({
-                        position: item.position,
-                        icon: item.icon,
-                        map: this.map
-                    })
-                })
-            })
-        },
-        drawRoute (path) {
+        drawRoute(path, status) {
             const startMarker = new AMap.Marker({
                 position: path[0],
-                icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
+                icon: require('../assets/imgs/qd.png'),
                 map: this.map
             })
-            const endMarker = new AMap.Marker({
-                position: path[path.length - 1],
-                icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
-                map: this.map
-            })
+            let endMarker = null
+            if (status == 'Finished') {
+                endMarker = new AMap.Marker({
+                    position: path[path.length - 1],
+                    icon: require('../assets/imgs/zd.png'),
+                    map: this.map,
+                    offset: new AMap.Pixel(-17, -19),
+                })
+            } else {
+                endMarker = new AMap.Marker({
+                    position: path[path.length - 1],
+                    icon: require('../assets/imgs/dtcb.png'),
+                    map: this.map,
+                    offset: new AMap.Pixel(-25, -27),
+                })
+            }
+            
             this.alarmMsgs.forEach(item => {
                 new AMap.Marker({
                     position: item.position,
                     icon: item.icon,
                     map: this.map,
-                    offset: new AMap.Pixel(-25, -54)
+                    offset: new AMap.Pixel(-17, -19),
+                    zIndex: 10
                 })
             })
             const routeLine = new AMap.Polyline({
@@ -119,14 +102,14 @@ export default {
                 isOutline: true,
                 outlineColor: '#ffeeee',
                 borderWeight: 1,
-                strokeWeight: 5,
-                strokeColor: '#0091ff',
+                strokeWeight: 6,
+                strokeColor: '#75b3fc',
                 lineJoin: 'round',
                 showDir: true
             })
             routeLine.setMap(this.map)
             // 调整视野达到最佳显示区域
-            // this.map.setFitView([ startMarker ])
+            // this.map.setFitView([ startMarker, endMarker, routeLine ])
             this.map.setCenter(path[parseInt(path.length/2)])
         }
     }
