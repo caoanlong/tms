@@ -405,8 +405,9 @@ export default {
 			this.trailDialog = false
 		},
 		trail(dispatchOrderID) {
-			this.currentDispatchOrderID = dispatchOrderID
-			this.trailDialog = true
+			// this.currentDispatchOrderID = dispatchOrderID
+			// this.trailDialog = true
+			this.$router.push({name: 'trackquery', query: { dispatchOrderID }})
 		},
 		/**
 		 * 关闭调度

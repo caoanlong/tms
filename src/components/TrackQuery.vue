@@ -21,17 +21,23 @@ export default {
         this.mapHeight = window.innerHeight 
         this.getList()
     },
+    mounted() {
+        this.map = new AMap.Map('amapLocationSelect')
+    },
     methods: {
         getList() {
             const url = baseURL + '/deliveryOrder/getTracks'
             const params = {
                 osn: this.$route.query.osn,
-                companyCode: this.$route.query.companyCode
+                companyCode: this.$route.query.companyCode,
+                dispatchOrderID: this.$route.query.dispatchOrderID
             }
             axios({
                 url,
                 params,
-                headers: { Authorization: this.$route.query.Authorization }
+                headers: { 
+                    Authorization: this.$route.query.Authorization || localStorage.getItem('token')
+                }
             }).then(res => {
                 if (res.data.code == 200) {
                     if (res.data.data) {
@@ -59,7 +65,6 @@ export default {
             })
         },
         drawRoute(path) {
-            this.map = new AMap.Map('amapLocationSelect')
             const startMarker = new AMap.Marker({
                 position: path[0],
                 icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
