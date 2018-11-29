@@ -2,7 +2,7 @@
     <div class="trans-container">
         <div class="left">
             <el-input placeholder="提货单/承运单号/车牌" v-model="keywords" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search"></el-button>
+                <el-button slot="append" icon="el-icon-search">查询</el-button>
             </el-input>
             <div class="trucks">
                 <div class="total">共{{total}}个在途车辆</div>
