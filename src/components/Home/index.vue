@@ -36,6 +36,7 @@ export default {
 	width 100%
 	height 60px
 	background-color #3ba0e6
+	margin-bottom 10px
 	.tab
 		display flex
 		width 180px
