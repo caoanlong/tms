@@ -263,7 +263,8 @@ export default {
 		trail(dispatchOrderID) {
 			// this.currentDispatchOrderID = dispatchOrderID
 			// this.trailDialog = true
-			this.$router.push({name: 'trackquery', query: { dispatchOrderID }})
+			const routeData = this.$router.resolve({name: 'trackquery', query: { dispatchOrderID }})
+			window.open(routeData.href, '_blank')
 		},
 		copy(carrierOrderID) {
 			this.$router.push({name: 'copycarrierbill', query: { carrierOrderID }})

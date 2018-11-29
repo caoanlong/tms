@@ -43,6 +43,7 @@ export default {
                     if (res.data.data) {
                         const locations = res.data.data.locations
                         const alarmMsgs = res.data.data.alarmMsgs
+                        const status = res.data.data.status
                         const stopOvertime = require('../assets/imgs/tccs.png')
                         const arrivedOffset = require('../assets/imgs/ycxh.png')
                         const path = locations.map(item => {
@@ -59,22 +60,32 @@ export default {
                                 icon: item.type == 'StopOvertime' ? stopOvertime : arrivedOffset
                             }
                         })
-                        this.drawRoute(path)
+                        this.drawRoute(path, status)
                     }
                 }
             })
         },
-        drawRoute(path) {
+        drawRoute(path, status) {
             const startMarker = new AMap.Marker({
                 position: path[0],
                 icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
                 map: this.map
             })
-            const endMarker = new AMap.Marker({
-                position: path[path.length - 1],
-                icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
-                map: this.map
-            })
+            let endMarker = null
+            if (status == 'Finished') {
+                endMarker = new AMap.Marker({
+                    position: path[path.length - 1],
+                    icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
+                    map: this.map
+                })
+            } else {
+                endMarker = new AMap.Marker({
+                    position: path[path.length - 1],
+                    icon: require('../assets/imgs/dtcb.png'),
+                    map: this.map
+                })
+            }
+            
             this.alarmMsgs.forEach(item => {
                 new AMap.Marker({
                     position: item.position,
