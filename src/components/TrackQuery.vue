@@ -44,8 +44,8 @@ export default {
                         const locations = res.data.data.locations
                         const alarmMsgs = res.data.data.alarmMsgs
                         const status = res.data.data.status
-                        const stopOvertime = require('../assets/imgs/tccs.png')
-                        const arrivedOffset = require('../assets/imgs/ycxh.png')
+                        const stopOvertime = require('../assets/imgs/tcbj.png')
+                        const arrivedOffset = require('../assets/imgs/xhbj.png')
                         const path = locations.map(item => {
                             return {
                                 N: item.loc.latitude, 
@@ -68,14 +68,14 @@ export default {
         drawRoute(path, status) {
             const startMarker = new AMap.Marker({
                 position: path[0],
-                icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
+                icon: require('../assets/imgs/qd.png'),
                 map: this.map
             })
             let endMarker = null
             if (status == 'Finished') {
                 endMarker = new AMap.Marker({
                     position: path[path.length - 1],
-                    icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
+                    icon: require('../assets/imgs/zd.png'),
                     map: this.map,
                     offset: new AMap.Pixel(-20, -22),
                 })
@@ -102,8 +102,8 @@ export default {
                 isOutline: true,
                 outlineColor: '#ffeeee',
                 borderWeight: 1,
-                strokeWeight: 5,
-                strokeColor: '#0091ff',
+                strokeWeight: 6,
+                strokeColor: '#75b3fc',
                 lineJoin: 'round',
                 showDir: true
             })
