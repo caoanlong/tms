@@ -13,15 +13,13 @@ export default {
             map: null,
             truckDriving: null,
             mapHeight: 0,
-            alarmMsgs: []
+            alarmMsgs: [],
+            locations: []
         }
     },
     created() {
         this.mapHeight = window.innerHeight 
         this.getList()
-    },
-    mounted() {
-        this.createMap()
     },
     methods: {
         getList() {
@@ -39,8 +37,8 @@ export default {
                     if (res.data.data) {
                         const locations = res.data.data.locations
                         const alarmMsgs = res.data.data.alarmMsgs
-                        const stopOvertime = require('../assets/imgs/tcbj.png')
-                        const arrivedOffset = require('../assets/imgs/xhbj.png')
+                        const stopOvertime = require('../assets/imgs/tccs.png')
+                        const arrivedOffset = require('../assets/imgs/ycxh.png')
                         const path = locations.map(item => {
                             return {
                                 N: item.loc.latitude, 
@@ -60,13 +58,8 @@ export default {
                 }
             })
         },
-        /**
-         * 创建地图
-         */
-        createMap() {
+        drawRoute(path) {
             this.map = new AMap.Map('amapLocationSelect')
-        },
-        drawRoute (path) {
             const startMarker = new AMap.Marker({
                 position: path[0],
                 icon: 'https://webapi.amap.com/theme/v1.3/markers/n/start.png',
@@ -81,7 +74,9 @@ export default {
                 new AMap.Marker({
                     position: item.position,
                     icon: item.icon,
-                    map: this.map
+                    map: this.map,
+                    offset: new AMap.Pixel(-20, -22),
+                    zIndex: 10
                 })
             })
             const routeLine = new AMap.Polyline({
@@ -91,7 +86,8 @@ export default {
                 borderWeight: 1,
                 strokeWeight: 5,
                 strokeColor: '#0091ff',
-                lineJoin: 'round'
+                lineJoin: 'round',
+                showDir: true
             })
             routeLine.setMap(this.map)
             // 调整视野达到最佳显示区域
