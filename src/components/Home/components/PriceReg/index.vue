@@ -6,9 +6,9 @@
                 <div class="con">
                     <div id="chart1" style="height:225px"></div>
                     <div class="legend">
-                        <p class="p1"><i></i><span>总单量</span>2400单</p>
-                        <p class="p2"><i></i><span>特价单</span>600单</p>
-                        <p class="p3"><i></i><span>特价占比</span>25%</p>
+                        <p class="p1"><i></i><span>总单量</span>{{priceReg.sumOfCarrierOrder?priceReg.sumOfCarrierOrder:0}}单</p>
+                        <p class="p2"><i></i><span>特价单</span>{{priceReg.sumOfSelfPickCarrierOrder?priceReg.sumOfSelfPickCarrierOrder:0}}单</p>
+                        <p class="p3"><i></i><span>特价占比</span>{{(priceReg.sumOfCarrierOrder&&priceReg.sumOfSelfPickCarrierOrder)?(priceReg.sumOfSelfPickCarrierOrder/priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':0}}</p>
                     </div>
                 </div>
             </div>
@@ -17,20 +17,20 @@
                 <div class="con">
                     <div id="chart2" style="height:225px"></div>
                     <div class="legend">
-                        <p class="p1"><i></i><span>总单量</span>2400单</p>
-                        <p class="p2"><i></i><span>异常单</span>600单</p>
-                        <p class="p3"><i></i><span>异常占比</span>25%</p>
+                        <p class="p1"><i></i><span>总单量</span>{{priceReg.sumOfCarrierOrder?priceReg.sumOfCarrierOrder:0}}单</p>
+                        <p class="p2"><i></i><span>异常单</span>{{priceReg.sumOfAlarm?priceReg.sumOfAlarm:0}}单</p>
+                        <p class="p3"><i></i><span>异常占比</span>{{(priceReg.sumOfCarrierOrder&&priceReg.sumOfAlarm)?(priceReg.sumOfAlarm/priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':0}}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="middle">
-            <div id="map" style="height:748px"></div>
+            <div id="map" :style="{'height':fullHeight+'px'}"></div>
             <div class="changeData">
-                <el-radio-group v-model="dataType" size="mini">
-                    <el-radio-button label="month">当月数据</el-radio-button>
-                    <el-radio-button label="today">当日数据</el-radio-button>
-                </el-radio-group>
+                <el-tabs v-model="dataType" type="card" @tab-click="handleClick">
+                    <el-tab-pane label="当月数据" name="0"></el-tab-pane>
+                    <el-tab-pane label="当日数据" name="1"></el-tab-pane>
+                </el-tabs>
             </div>
             <div class="mapLegend">
                 <p class="p1"><i></i>工厂名称</p>
@@ -44,8 +44,8 @@
                 <div class="con">
                     <div id="chart3" style="height:225px"></div>
                     <div class="legend">
-                        <p class="p1"><i></i><span>停车超时</span></p>
-                        <p class="p2"><i></i><span>违规卸货</span></p>
+                        <p class="p1"><i></i><span>停车超时</span>{{priceReg.stopOvertime}}</p>
+                        <p class="p2"><i></i><span>违规卸货</span>{{priceReg.arrivedOffset}}</p>
                     </div>
                 </div>
             </div>
@@ -68,39 +68,33 @@ require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 import "../../../../../static/echarts/yunnan"
 import markPointJson from "../../../../../static/echarts/markPoint"
+import testJson from "../../../../../static/echarts/testJson"
+import testJson1 from "../../../../../static/echarts/testJson1"
+import { Message } from 'element-ui'
+import Home from '../../../../api/Home'
 export default {
     data(){
         return {
             markPointer:[],
-            dataType: 'month'
-        }
-    },
-    mounted() {
-        this.drawCharts()
-    },
-    watch: {
-		type(val) {
-            this.type = val
-            this.drawCharts()
-		}
-	},
-	activated() {
-        this.type = 'month'
-        this.drawCharts()
-	},
-    methods: {
-        drawCharts() {
-            let chart1 = echarts.init(document.getElementById('chart1'))
-            let chart2 = echarts.init(document.getElementById('chart2'))
-            let chart3 = echarts.init(document.getElementById('chart3'))
-            let chart4 = echarts.init(document.getElementById('chart4'))
-            let mapChart = echarts.init(document.getElementById('map'))
-            // 绘制图表
-            chart1.setOption({
-                legend: {
-                    show:false,
-                    data: ['正常价','特价单']
-                },
+            dataType: '0',
+            fullHeight: document.documentElement.clientHeight -225,
+            priceReg:{
+                //总单量
+                sumOfCarrierOrder:'',
+                //特价单
+                sumOfSelfPickCarrierOrder:'',
+                //异常单
+                sumOfAlarm:'',
+                //违规卸货
+                arrivedOffset:'',
+                //停车超时
+                stopOvertime:'',
+                //公司名称
+                shipperCompanyName:[],
+                //公司异常单
+                ex:[],
+            },
+            chartOption1:{
                 series : [
                     {
                         type: 'pie',
@@ -109,11 +103,8 @@ export default {
                             normal: {
                                 show: true,
                                 position: 'center',
-                                formatter: function (data) {
-                                    return ' 总单量\n 2400单'
-                                },
                                 textStyle: {
-                                    color: '#37A2DA',
+                                    color: '#409EFF',
                                     fontWeight: 700,
                                     fontSize: 14
                                 }
@@ -125,18 +116,24 @@ export default {
                             }
                         },
                         hoverAnimation:false,
-                        color: ['#37A2DA', '#FF9F7F'],
+                        color: ['#409EFF', '#f4516c'],
                         radius : ['40%','60%'],
-                        center: ['25%', '50%'],
+                        center: ['28%', '50%'],
                         data:[
-                            {value:1800, name:'正常价'},
-                            {value:600, name:'特价单'},
+                            {
+                                value:'', 
+                                name:'正常价'
+                            },
+                            {
+                                value:'', 
+                                name:'特价单'
+                            },
                         ]
                     }
                 ]  
         
-            })
-            chart2.setOption({
+            },
+            chartOption2:{
                 legend: {
                     show:false,
                     data: ['正常单','异常单']
@@ -149,11 +146,8 @@ export default {
                             normal: {
                                 show: true,
                                 position: 'center',
-                                formatter: function (data) {
-                                    return ' 总单量\n 2400单'
-                                },
                                 textStyle: {
-                                    color: '#37A2DA',
+                                    color: '#409EFF',
                                     fontWeight: 700,
                                     fontSize: 14
                                 }
@@ -165,18 +159,24 @@ export default {
                             }
                         },
                         hoverAnimation:false,
-                        color: ['#37A2DA', '#FF9F7F'],
+                        color: ['#409EFF', '#f4516c'],
                         radius : ['40%','60%'],
-                        center: ['25%', '50%'],
+                        center: ['28%', '50%'],
                         data:[
-                            {value:1800, name:'正常单'},
-                            {value:600, name:'异常单'},
+                            {
+                                value:1800, 
+                                name:'正常单'
+                            },
+                            {
+                                value:600, 
+                                name:'异常单'
+                            },
                         ]
                     }
                 ]  
         
-            })
-            chart3.setOption({
+            },
+            chartOption3:{
                 legend: {
                     show:false,
                     data: ['停车超时','违规卸货']
@@ -198,19 +198,19 @@ export default {
                             }
                         },
                         hoverAnimation:false,
-                        color: ['#37A2DA', '#FF9F7F'],
+                        color: ['#409EFF', '#f4516c'],
                         radius : '60%',
-                        center: ['30%', '50%'],
+                        center: ['28%', '50%'],
                         data:[
-                            {value:600, name:'停车超时'},
-                            {value:600, name:'违规卸货'},
+                            {value:'', name:'停车超时'},
+                            {value:'', name:'违规卸货'},
                         ]
                     }
                 ]  
         
-            })
-            chart4.setOption({
-                color: ['#37A2DA'],
+            },
+            chartOption4 :{
+                color: ['#409EFF'],
                 grid: {
                     left: '10',
                     right: '10',
@@ -222,7 +222,7 @@ export default {
                     {
                         type : 'category',
                         show : false,
-                        data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        data : [],
                     }
                 ],
                 xAxis : [
@@ -233,26 +233,32 @@ export default {
                 ],
                 series : [
                     {
-                        name:'直接访问',
                         type:'bar',
                         barWidth: '20',
-                        data:[10, 52, 200, 334, 390, 330, 220],
+                        data:[],
                         label:{
                             show:true,
-                            position:'insideLeft',
-                            formatter: "{b}{c}",
-                            color:'#fc9'
+                            formatter:function (params) {
+                                return params.name+'   '+params.value
+                            },
+                            position:['20','3'],
+                            color:'#f4516c',
+                            textBorderColor:'#fff',
+                            textBorderWidth:1
+                        },
+                        itemStyle:{
+                            barBorderRadius:4
                         }
                     }
                 ]
         
-            })
-            mapChart.setOption({
+            },
+            mapOption :{
                 geo: {
                     map: "云南",
                     label: {
                         show:true,
-                        color:"#666"
+                        color:"#ccc"
                     },
                     itemStyle: {
                         areaColor: "#f8f8f8",
@@ -261,7 +267,7 @@ export default {
                     emphasis: {
                         label:{
                             show:true,
-                            color:"#666"
+                            color:"#ccc"
                         },
                         itemStyle: {
                             areaColor: "#f8f8f8",                            
@@ -294,13 +300,13 @@ export default {
                             },
                             rich:{
                                 a: {
-                                    color: '#37A2DA'
+                                    color: '#409EFF'
                                 },
                                 b: {
                                     color: '#000'
                                 },
                                 c: {
-                                    color: '#f00'
+                                    color: '#f4516c'
                                 },
                             }
                         },
@@ -308,7 +314,61 @@ export default {
                         symbol:'circle',
                     }
                 }]
-            })
+            }
+        }
+    },
+    mounted() {
+        this.getInfo()
+        window.onresize = () => {
+			window.fullHeight = document.documentElement.clientHeight
+			this.fullHeight = window.fullHeight-225
+		}
+    },
+	activated() {
+        this.type = 0
+        this.getInfo()
+	},
+    methods: {
+        getInfo(){
+            Home.getPriceReg({
+				type:this.dataType
+			}).then(res => {
+                if(this.dataType == 0) {
+                    this.priceReg = testJson
+                }else{
+                    this.priceReg = testJson1
+                }
+                // this.priceReg = res.data
+                this.$nextTick(() => {
+                    this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
+                    this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
+                    this.chartOption1.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfSelfPickCarrierOrder)?'特价占比\n'+(this.priceReg.sumOfSelfPickCarrierOrder/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无特价'
+                    this.chartOption2.series[0].data[0].value= this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfAlarm
+                    this.chartOption2.series[0].data[1].value= this.priceReg.sumOfAlarm
+                    this.chartOption2.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfAlarm)?'异常占比\n'+(this.priceReg.sumOfAlarm/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无异常'
+                    this.chartOption3.series[0].data[0].value= this.priceReg.stopOvertime
+                    this.chartOption3.series[0].data[1].value= this.priceReg.arrivedOffset
+                    this.chartOption4.yAxis[0].data = this.priceReg.rankList.map(item => item.shipperCompanyName)
+                    this.chartOption4.series[0].data = this.priceReg.rankList.map(item => item.ex)
+                    this.drawCharts()
+                })
+			})
+        },
+        handleClick(tab, event) {
+            this.getInfo()
+        },
+        drawCharts() {
+            let chart1 = echarts.init(document.getElementById('chart1'))
+            let chart2 = echarts.init(document.getElementById('chart2'))
+            let chart3 = echarts.init(document.getElementById('chart3'))
+            let chart4 = echarts.init(document.getElementById('chart4'))
+            let mapChart = echarts.init(document.getElementById('map'))
+            // 绘制图表
+            chart1.setOption(this.chartOption1,true)
+            chart2.setOption(this.chartOption2,true)
+            chart3.setOption(this.chartOption3,true)
+            chart4.setOption(this.chartOption4,true)
+            mapChart.setOption(this.mapOption,true)
             setTimeout(function (){
                 window.onresize = function () {
                     chart1.resize()
@@ -340,16 +400,16 @@ export default {
         position relative
         .mapLegend
             position absolute
-            right 0
-            bottom 0
+            right 0px
+            top 50px
             p
                 height 20px
                 line-height 20px
                 font-size 12px
                 &.p1
-                    color #37A2DA
+                    color #409EFF
                     i
-                        background #37A2DA 
+                        background #409EFF 
                 &.p2
                     color #000
                     i
@@ -368,7 +428,8 @@ export default {
         .changeData
             position absolute
             left 0
-            top 4px
+            top 0
+            right 0
 .sideSection
     width 300px
     position absolute
@@ -378,12 +439,12 @@ export default {
         border-radius 4px
         .title
             border-bottom 1px solid #ddd
-            padding 10px 15px
+            padding 12px 15px
             font-size 14px
             color #666
             span
                 font-size 12px
-                color #37A2DA
+                color #409EFF
                 cursor pointer
         .con
             position relative
@@ -398,13 +459,13 @@ export default {
                     height 20px
                     line-height 20px
                     &.p1
-                        color #37A2DA
+                        color #409EFF
                         i
-                            background #37A2DA 
+                            background #409EFF 
                     &.p2
-                        color #FF9F7F
+                        color #f4516c
                         i
-                            background #FF9F7F 
+                            background #f4516c 
                     &.p3
                         color #999
                         i

@@ -44,11 +44,11 @@
 							<el-input v-model="cargo.weight" placeholder="0"><template slot="append">公斤</template></el-input>
 						</el-form-item>
 						<el-form-item label="体积">
-							<el-input v-model="cargo.volumn" placeholder="0"><template slot="append">立方</template></el-input>
+							<el-input v-model="cargo.volume" placeholder="0"><template slot="append">立方</template></el-input>
 						</el-form-item>
 						<el-form-item label="配载方式" prop="dispatchType">
 							<el-select style="width: 100%" placeholder="请选择" v-model="cargo.dispatchType">
-								<el-option label="体积" value="Volumn"></el-option>
+								<el-option label="体积" value="volume"></el-option>
 								<el-option label="重量" value="Weight"></el-option>
 							</el-select>
 						</el-form-item>
@@ -94,7 +94,7 @@ export default {
                 code: '',
                 dispatchType:'Weight',
                 weight:'',
-                volumn:''
+                volume:''
 			},
 			rules: {
 				cargoName: [{required: true, message: '请输入货物名称'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],

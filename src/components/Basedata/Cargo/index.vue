@@ -59,11 +59,11 @@
 					</el-table-column>
 					<el-table-column label="单位" prop="cargoUnit" align="center" width="70"></el-table-column>
                     <el-table-column label="重量" prop="weight" align="center"></el-table-column>
-                    <el-table-column label="体积" prop="volumn" align="center"></el-table-column>
-                    <el-table-column label="配载方式" prop="dispatchType" align="center">
+                    <el-table-column label="体积" prop="volume" align="center"></el-table-column>
+                    <el-table-column label="配载方式" align="center">
                         <template slot-scope="scope">
-							<span v-if="cargo.dispatchType == 'Weight'">按重量配载</span>
-							<span v-if="cargo.dispatchType == 'Volumn'">按体积配载</span>
+							<span v-if="scope.row.dispatchType == 'Weight'">按重量配载</span>
+							<span v-if="scope.row.dispatchType == 'Volume'">按体积配载</span>
 						</template>
                     </el-table-column>
 					<el-table-column label="操作" align="center" width="100">
@@ -101,7 +101,8 @@ export default {
 			find: {
 				shipperCompanyName: '',
 				cargoName: ''
-			}
+            },
+            cargo:{}
 		}
 	},
 	created() {
