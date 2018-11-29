@@ -76,13 +76,15 @@ export default {
                 endMarker = new AMap.Marker({
                     position: path[path.length - 1],
                     icon: 'https://webapi.amap.com/theme/v1.3/markers/n/end.png',
-                    map: this.map
+                    map: this.map,
+                    offset: new AMap.Pixel(-20, -22),
                 })
             } else {
                 endMarker = new AMap.Marker({
                     position: path[path.length - 1],
                     icon: require('../assets/imgs/dtcb.png'),
-                    map: this.map
+                    map: this.map,
+                    offset: new AMap.Pixel(-20, -22),
                 })
             }
             
