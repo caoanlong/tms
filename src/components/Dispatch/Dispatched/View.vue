@@ -198,30 +198,7 @@
 						</p>
 						<p v-if="dispatchOrderDetail.escortLicenseNum"><label>押运员从业资格证</label>{{dispatchOrderDetail.escortLicenseNum}}</p>
 					</div>
-					<p class="dispatchLogTit">调度日志</p>
-					<ul class="dispatchLog" v-if="dispatchLogs.length>0">
-						<!-- 日志动作: Accept-接单 Offer-报价/抢单 Comfirm-确认抢单/报价 Load-装车 Unload-到货 Upload-运输上报 Refuse-拒绝接单 Canceled-取消 Overdue-超时取消  -->
-						<li v-for="logsItem in dispatchLogs" :key="logsItem.dispatchLogID">
-							<p>
-								<span class="action" v-if="logsItem.action =='Accept'">接单</span>
-								<span class="action" v-else-if="logsItem.action =='Offer'">报价/抢单</span>
-								<span class="action" v-else-if="logsItem.action =='Comfirm'">确认抢单/报价</span>
-								<span class="action" v-else-if="logsItem.action =='Load'">装车</span>
-								<span class="action" v-else-if="logsItem.action =='Unload'">到货</span>
-								<span class="action" v-else-if="logsItem.action =='Upload'">运输上报</span>
-								<span class="action" v-else-if="logsItem.action =='Refuse'">拒绝接单</span>
-								<span class="action" v-else-if="logsItem.action =='Canceled'">取消</span>
-								<span class="action" v-else-if="logsItem.action =='StopOvertime'">停车超时</span>
-								<span class="action" v-else-if="logsItem.action =='ArrivedOffset'">未送达指定点</span>
-								<span class="action" v-else>超时取消</span>
-								<span class="dateTime">{{logsItem.createTime | getdatefromtimestamp }}</span>
-							</p>
-							<p>{{logsItem.description}}</p>
-							<p v-if="logsItem.action =='Load'">装车地址：{{logsItem.posAddress}}</p>
-							<p v-if="logsItem.action =='Unload'">到货地址：{{logsItem.posAddress}}</p>
-						</li>
-					</ul>
-					<p v-else class="dispatchLog c2">暂无调度日志</p>
+					<DispatchLog :dispatchOrderID="$route.query.dispatchOrderID"></DispatchLog>
 				</el-col>
 			</el-row>
 			<div class="wf-footer clearfix text-center">
@@ -241,6 +218,7 @@ import Dispatchbill from '../../../api/Dispatchbill'
 import DispatchOrder from '../../../api/DispatchOrder'
 import TaskItem from '../components/TaskItem'
 import TrailMap from '../components/TrailMap'
+import DispatchLog from '../components/DispatchLog'
 import axios from 'axios'
 export default {
 	data() {
@@ -251,7 +229,7 @@ export default {
 			bizDispatchFeeList: [],
 			dispatchOrderFees:{},
 			dispatchTask:{},
-			dispatchLogs:{},
+			dispatchLog:{},
 			persons:[],
 			dispatchOrderlocationList:[],
 			totalDistance:'',
@@ -260,19 +238,17 @@ export default {
 			hideAmount:false
 		}
 	},
-	components:{ TaskItem, TrailMap },
+	components:{ TaskItem, TrailMap ,DispatchLog },
 	created() {
 		this.getDetail()
 		this.getFees()
 		this.getTaskList()
-		this.getLogs()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
 			this.getDetail()
 			this.getFees()
 			this.getTaskList()
-			this.getLogs()
 		}
 	},
 	methods: {
@@ -294,7 +270,7 @@ export default {
 				this.dispatchOrderDetail = res.detail
 				this.dispatchOrderlocationList = res.locationList
 				if (this.persons.length == 0) this.createPersons()
-				this.getDistance()
+				// this.getDistance()
 			})
 		},
 		getFees() {
@@ -309,12 +285,7 @@ export default {
 				this.dispatchTask = res
 			})
 		},
-		getLogs() {
-			const dispatchOrderID = this.$route.query.dispatchOrderID
-			DispatchOrder.logList({ dispatchOrderID }).then(res => {
-				this.dispatchLogs = res
-			})
-		},
+		
 		createPersons() {
 			if (this.dispatchOrderDetail.driverID) {
 				this.persons.push({
@@ -463,27 +434,7 @@ export default {
 		display inline-block
 		border-radius 6px
 		vertical-align middle
-	.dispatchLogTit
-		border-top 1px solid #ddd
-		padding-top 10px
-	.dispatchLog
-		padding-left 40px
-		li
-			padding 5px 
-			list-style none
-			position relative
-			&:before
-				content ""
-				width 6px
-				height 6px
-				background #ccc
-				display block
-				position absolute
-				left -10px
-				top 17px
-			p
-				line-height 30px
-				color #999
+
 .num-label
 	margin-right 10px
 	width 18px
