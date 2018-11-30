@@ -40,21 +40,21 @@
             <div class="filter">
                 <el-form :inline="true" size="mini">
                     <el-form-item label="工厂">
-                        <el-select placeholder="请选择">
+                        <el-select placeholder="请选择" v-model="find.company">
                             <el-option label="全部" value="全部"></el-option>
                             <el-option label="临沧工厂" value="临沧工厂"></el-option>
                             <el-option label="邵通工厂" value="邵通工厂"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="异常原因">
-                        <el-select placeholder="请选择">
+                        <el-select placeholder="请选择" v-model="find.status">
                             <el-option label="全部" value="全部"></el-option>
                             <el-option label="停车超时" value="停车超时"></el-option>
                             <el-option label="卸货异常" value="卸货异常"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="数据来源">
-                        <el-select placeholder="请选择">
+                        <el-select placeholder="请选择" v-model="find.type">
                             <el-option label="全部" value="全部"></el-option>
                             <el-option label="GPS" value="GPS"></el-option>
                             <el-option label="APP" value="APP"></el-option>
@@ -80,6 +80,11 @@ export default {
             total: 100,
             pageIndex: 1,
             pageSize: 6,
+            find: {
+                company: '',
+                status: '',
+                type: ''
+            },
             mapHeight: 0,
             map: null
         }
@@ -118,6 +123,7 @@ export default {
                         <div style="position:absolute;z-index:5;width:100%;color:#fff;background:${path[i].background};height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:10px">${path[i].plateNo}</div>
                         <div style="position:absolute;bottom:2px;left:42px;background:${path[i].background};width:16px;height:16px;transform:rotate(45deg)"></div>
                     </div>`,
+                    offset: new AMap.Pixel(-50, -50),
                     map: this.map
                 })
             }
