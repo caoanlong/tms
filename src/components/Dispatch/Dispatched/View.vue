@@ -211,6 +211,8 @@
 								<span class="action" v-else-if="logsItem.action =='Upload'">运输上报</span>
 								<span class="action" v-else-if="logsItem.action =='Refuse'">拒绝接单</span>
 								<span class="action" v-else-if="logsItem.action =='Canceled'">取消</span>
+								<span class="action" v-else-if="logsItem.action =='StopOvertime'">停车超时</span>
+								<span class="action" v-else-if="logsItem.action =='ArrivedOffset'">未送达指定点</span>
 								<span class="action" v-else>超时取消</span>
 								<span class="dateTime">{{logsItem.createTime | getdatefromtimestamp }}</span>
 							</p>
