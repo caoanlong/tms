@@ -88,7 +88,7 @@ export default {
         this.getCompanys()
     },
     mounted() {
-        this.createMap()
+        // this.createMap()
     },
     methods: {
         search() {
@@ -110,6 +110,7 @@ export default {
             }).then(res => {
                 this.list = res.records
                 this.total = res.total
+                this.createMap()
             })
         },
         getCompanys() {
@@ -126,29 +127,31 @@ export default {
          */
         createMap() {
             this.map = new AMap.Map('amapLocationSelect')
-            const truckPath = [
-                {
-                    position: [103.310594, 27.288413],
-                    plateNo: '鄂A585KT',
-                    background: '#409EFF'
-                },{
-                    position: [103.468386, 27.321035],
-                    plateNo: '粤B585KT',
-                    background: '#fb7629'
-                }
-            ]
+            const truckPathNormal = this.list.filter(item => item.longitude&&item.latitude&&item.msgType=='')
+            const truckPathExp = this.list.filter(item => item.longitude&&item.latitude&&item.msgType)
             const companyPath = [
                 {
                     position: [103.389767, 27.296766],
                     plateNo: '临沧工厂'
                 }
             ]
-            for (let i = 0; i < truckPath.length; i++) {
+            for (let i = 0; i < truckPathExp.length; i++) {
                 new AMap.Marker({
-                    position: truckPath[i].position,
+                    position: [truckPathExp[i].longitude,truckPathExp[i].latitude],
                     content: `<div style="position:relative;width:100px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:${truckPath[i].background};height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:10px">${truckPath[i].plateNo}</div>
-                        <div style="position:absolute;bottom:2px;left:42px;background:${truckPath[i].background};width:16px;height:16px;transform:rotate(45deg)"></div>
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#fb7629;height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:10px">${truckPathExp[i].plateNo}</div>
+                        <div style="position:absolute;bottom:2px;left:42px;background:#fb7629;width:16px;height:16px;transform:rotate(45deg)"></div>
+                    </div>`,
+                    offset: new AMap.Pixel(-50, -50),
+                    map: this.map
+                })
+            }
+            for (let i = 0; i < truckPathNormal.length; i++) {
+                new AMap.Marker({
+                    position: [truckPathNormal[i].longitude,truckPathNormal[i].latitude],
+                    content: `<div style="position:relative;width:100px;height:50px;text-align:center">
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#409EFF;height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:10px">${truckPathNormal[i].plateNo}</div>
+                        <div style="position:absolute;bottom:2px;left:42px;background:#409EFF;width:16px;height:16px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
                     map: this.map
@@ -165,7 +168,8 @@ export default {
                     map: this.map
                 })
             }
-            this.map.setCenter(truckPath[parseInt(truckPath.length / 2)].position)
+            const center = this.list[parseInt(this.list.length / 2)]
+            this.map.setCenter([center.longitude,center.latitude])
         }
     }
 }
@@ -190,9 +194,8 @@ export default {
                 color #999
                 font-size 12px
                 padding-left 10px
-                height 20px
-                line-height 20px
-                border-bottom 1px solid #ddd
+                height 30px
+                line-height 30px
                 .total-num
                     color #409EFF
                     font-weight bold
@@ -200,14 +203,17 @@ export default {
                 height 600px
                 overflow auto
     .right
-        height 640px
+        height 670px
         border 1px solid #dddddd
+        position relative
         .filter
             width 100%
             height 50px
             background-color #ffffff
             border-bottom 1px solid #ddd
             padding 10px 20px
+            position absolute
+            z-index 11
         #amapLocationSelect
             height 100%
 </style>
