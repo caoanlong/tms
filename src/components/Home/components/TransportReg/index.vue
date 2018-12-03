@@ -1,38 +1,22 @@
 <template>
     <div class="trans-container">
         <div class="left">
-            <el-input placeholder="提货单/承运单号/车牌" v-model="keywords" class="input-with-select">
-                <el-button slot="append" type="primary" icon="el-icon-search">查询</el-button>
+            <el-input placeholder="提货单/承运单号/车牌" v-model="find.keyword" class="input-with-select">
+                <el-button slot="append" type="primary" icon="el-icon-search" @click="search">查询</el-button>
             </el-input>
             <div class="trucks">
                 <div class="total">共<span class="total-num">{{total}}</span>个在途车辆</div>
                 <div class="wrapper">
-                    <div class="truck" v-for="item in pageSize" :key="item">
-                        <div class="up">
-                            <span class="order">发货单 <span class="order-num">265544669987</span></span>
-                            <el-tag class="order-tag" type="danger" size="mini">异常</el-tag>
-                        </div>
-                        <div class="middle">
-                            <span class="plateNo">云A-11111</span>
-                            <span class="status finished">已结束</span>
-                        </div>
-                        <div class="down">
-                            <div class="address">
-                                <svg-icon icon-class="location" style="color:#409EFF"></svg-icon>
-                                <span class="address-txt">昆明大理州G25高速昆明大理州G25高速</span>
-                            </div>
-                            <div class="view">
-                                <svg-icon icon-class="foot"></svg-icon>查看轨迹<svg-icon icon-class="arrow-right"></svg-icon>
-                            </div>
-                        </div>
-                    </div>
+                    <truck-item v-for="(item, i) in list" :key="i" :truck="item"></truck-item>
                 </div>
             </div>
             <el-row class="page">
                 <el-pagination
                     small
                     layout="prev, pager, next"
-                    :total="total">
+                    :total="total" 
+                    :page-size="pageSize" 
+                    @current-change="pageChange">
                 </el-pagination>
             </el-row>
         </div>
@@ -40,28 +24,33 @@
             <div class="filter">
                 <el-form :inline="true" size="mini">
                     <el-form-item label="工厂">
-                        <el-select placeholder="请选择" v-model="find.company">
-                            <el-option label="全部" value="全部"></el-option>
-                            <el-option label="临沧工厂" value="临沧工厂"></el-option>
-                            <el-option label="邵通工厂" value="邵通工厂"></el-option>
+                        <el-select placeholder="请选择" v-model="find.companyCode">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option 
+                                :label="item.companyName" 
+                                :value="item.code" 
+                                v-for="(item, i) in companys" 
+                                :key="i">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="异常原因">
-                        <el-select placeholder="请选择" v-model="find.status">
-                            <el-option label="全部" value="全部"></el-option>
-                            <el-option label="停车超时" value="停车超时"></el-option>
-                            <el-option label="卸货异常" value="卸货异常"></el-option>
+                        <el-select placeholder="请选择" v-model="find.msgType">
+                            <el-option label="全部" value="all"></el-option>
+                            <el-option label="停车超时" value="StopOvertime"></el-option>
+                            <el-option label="卸货异常" value="ArrivedOffset"></el-option>
+                            <el-option label="无" value="normal"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="数据来源">
                         <el-select placeholder="请选择" v-model="find.type">
-                            <el-option label="全部" value="全部"></el-option>
+                            <el-option label="全部" value=""></el-option>
                             <el-option label="GPS" value="GPS"></el-option>
                             <el-option label="APP" value="APP"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="success" icon="el-icon-refresh">刷新</el-button>
+                        <el-button type="success" icon="el-icon-refresh" @click="search">刷新</el-button>
                     </el-form-item>
                 </el-form>
             </div>
@@ -72,39 +61,72 @@
 
 <script>
 import Page from '../../../CommonComponents/Page'
+import Home from '../../../../api/Home'
+import Company from '../../../../api/Company'
+import TruckItem from './components/TruckItem'
 export default {
-    components: { Page },
+    components: { Page, TruckItem },
     data() {
         return {
-            keywords: '',
-            total: 100,
+            total: 0,
             pageIndex: 1,
             pageSize: 6,
             find: {
-                company: '',
-                status: '',
+                keyword: '',
+                companyCode: '',
+                msgType: 'all',
                 type: ''
             },
+            list: [],
+            companys: [],
             mapHeight: 0,
             map: null
         }
+    },
+    created() {
+        this.getTransportReg()
+        this.getCompanys()
     },
     mounted() {
         this.createMap()
     },
     methods: {
-        pageChange() {
-
+        search() {
+            this.pageIndex = 1
+            this.getTransportReg()
         },
-        pageSizeChange() {
-
+        pageChange(index) {
+            this.pageIndex = index
+            this.getTransportReg()
+        },
+        getTransportReg() {
+            Home.getTransportReg({
+                current: this.pageIndex,
+                size: this.pageSize,
+                keyword: this.find.keyword,
+                companyCode: this.find.companyCode,
+                msgType: this.find.msgType,
+                type: this.find.type
+            }).then(res => {
+                this.list = res.records
+                this.total = res.total
+            })
+        },
+        getCompanys() {
+            Company.customerFind({
+				current: 1,
+                size: 1000,
+                customerType: 'Shipper'
+			}).then(res => {
+                this.companys = res.records
+			})
         },
         /**
          * 创建地图
          */
         createMap() {
             this.map = new AMap.Map('amapLocationSelect')
-            const path = [
+            const truckPath = [
                 {
                     position: [103.310594, 27.288413],
                     plateNo: '鄂A585KT',
@@ -115,19 +137,35 @@ export default {
                     background: '#fb7629'
                 }
             ]
-            for (let i = 0; i < path.length; i++) {
-                const element = path[i]
+            const companyPath = [
+                {
+                    position: [103.389767, 27.296766],
+                    plateNo: '临沧工厂'
+                }
+            ]
+            for (let i = 0; i < truckPath.length; i++) {
                 new AMap.Marker({
-                    position: path[i].position,
+                    position: truckPath[i].position,
                     content: `<div style="position:relative;width:100px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:${path[i].background};height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:10px">${path[i].plateNo}</div>
-                        <div style="position:absolute;bottom:2px;left:42px;background:${path[i].background};width:16px;height:16px;transform:rotate(45deg)"></div>
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:${truckPath[i].background};height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:10px">${truckPath[i].plateNo}</div>
+                        <div style="position:absolute;bottom:2px;left:42px;background:${truckPath[i].background};width:16px;height:16px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
                     map: this.map
                 })
             }
-            this.map.setCenter(path[parseInt(path.length / 2)].position)
+            for (let j = 0; j < companyPath.length; j++) {
+                new AMap.Marker({
+                    position: companyPath[j].position,
+                    content: `<div style="position:relative;width:120px;height:50px;text-align:center">
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:5px">${companyPath[j].plateNo}</div>
+                        <div style="position:absolute;bottom:2px;left:52px;background:#9e74b6;width:16px;height:16px;transform:rotate(45deg)"></div>
+                    </div>`,
+                    offset: new AMap.Pixel(-50, -50),
+                    map: this.map
+                })
+            }
+            this.map.setCenter(truckPath[parseInt(truckPath.length / 2)].position)
         }
     }
 }
@@ -161,54 +199,6 @@ export default {
             .wrapper
                 height 600px
                 overflow auto
-                .truck
-                    border-top 1px solid #ddd
-                    padding 10px
-                    .up
-                        height 26px
-                        line-height 26px
-                        .order
-                            color #666
-                            font-size 13px
-                            .order-num
-                                color #409EFF
-                        .order-tag
-                            float right
-                    .middle
-                        height 26px
-                        line-height 26px
-                        padding-right 70px
-                        .plateNo
-                            font-size 15px
-                            font-weight bold
-                            color #555
-                        .status
-                            padding-left 5px
-                            text-align right
-                            font-size 13px
-                            color #999
-                            &.finished
-                                color #7ac918
-                    .down
-                        height 26px
-                        line-height 26px
-                        position relative
-                        padding-right 90px
-                        .address
-                            font-size 12px
-                            color #999
-                            overflow hidden
-                            text-overflow ellipsis
-                            white-space nowrap
-                        .view
-                            position absolute
-                            right 0
-                            top 0
-                            width 90px
-                            text-align right
-                            color #409EFF
-                            font-size 14px
-                            cursor pointer
     .right
         height 640px
         border 1px solid #dddddd
