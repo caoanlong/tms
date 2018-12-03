@@ -204,7 +204,7 @@ export default {
 		},
 		del(supercargoID) {
 			deleteConfirm(supercargoID, supercargoIDs => {
-				SuperCargo.del({ supercargoIDs }).then(res => {
+				Company.transporterDeleteBatch({ supercargoIDs }).then(res => {
 					Message.success('删除成功!')
 					this.getList()
 				})
