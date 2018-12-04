@@ -259,7 +259,6 @@ export default {
 				keyword:dispatchOrderNo,
 			}).then(res => {
                 this.alarmInfo = res.records
-                console.log(res.records)
 			})
         },
 		// 查询运输列表

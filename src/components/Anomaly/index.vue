@@ -20,10 +20,9 @@
 					</el-form-item>
                     <el-form-item label="异常原因" class="customerSelect">
 						<el-select placeholder="请选择" v-model="find.type">
-							<el-option label="全部" value="all"></el-option>
+							<el-option label="全部" value=""></el-option>
                             <el-option label="停车超时" value="StopOvertime"></el-option>
                             <el-option label="卸货异常" value="ArrivedOffset"></el-option>
-                            <el-option label="无" value="normal"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="异常时间从">
@@ -74,7 +73,7 @@
                     </el-table-column>
 					<el-table-column label="操作" align="center" width="100">
 						<template slot-scope="scope">
-							<el-button size="mini" @click="view(scope.row.carrierOrderAlarmID)">轨迹</el-button>
+							<el-button size="mini" @click="view(scope.row.dispatchOrderID)">轨迹</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -97,7 +96,7 @@ export default {
             find: { 
                 keyword: '',
                 customerID:'',
-                type:'all',
+                type:'',
                 beginTime:this.getCurrentMonthFirst(),
                 endTime:this.getCurrentMonthLast()
             },
@@ -120,15 +119,15 @@ export default {
         reset(){
             this.find.keyword = ''
 			this.find.customerID = ''
-			this.find.type = 'all'
+			this.find.type = ''
 			this.find.beginTime =this.getCurrentMonthFirst()
 			this.find.endTime = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.getList()
         },
-        view(carrierOrderAlarmID){
-
+        view(dispatchOrderID){
+            this.$router.push({ name: 'trackquery' , query: {dispatchOrderID} })
         },
         getCompanys() {
             Company.customerFind({
