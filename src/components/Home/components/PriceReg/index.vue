@@ -246,7 +246,7 @@ export default {
                 xAxis : [
                     {
                         type : 'value',
-                        show : false,
+                        show : false
                     }
                 ],
                 series : [

@@ -43,15 +43,21 @@ export default {
 		return {
 			dispatchLog:[]
 		}
-	},
-	created() {
-        
+    },
+    watch: {
+        dispatchOrderID: {
+    　　　　handler(newValue, oldValue) {
+    　　　　　　this.getLogs()
+    　　　　},
+    　　　　deep: true
+    　　}
+    },
+	mounted() {
         this.getLogs()
     },
 	methods: {
 		async getLogs() {
-            const dispatchLog = await DispatchOrder.logList({ dispatchOrderID:this.dispatchOrderID })
-            console.log(this.dispatchOrderID)
+			const dispatchLog = await DispatchOrder.logList({ dispatchOrderID:this.dispatchOrderID })
 			for(let i=0;i<dispatchLog.length;i++){
 				if(dispatchLog[i].action=='StopOvertime'){
 					const {data} =  await AutoNavMap.getLocation({
