@@ -401,6 +401,11 @@ const router = new Router({
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 router.beforeEach((to, from, next) => {
+    if (to.name == 'monitoring') {
+        const href = 'http://139.159.253.116:8080/clbs/v/monitoring/realTimeMonitoring'
+        window.open(href, '_blank')
+        return
+    }
     NProgress.start()
     if (localStorage.getItem('token') && localStorage.getItem('token') != 'undefined') {
         if (to.path === '/login') {
