@@ -39,7 +39,7 @@
                                 <div class="time">2018-12-03 11:22:33</div>
                             </div>
                             <div class="desc">备注：地址偏移</div>
-                            <div class="address">备注：地址偏移</div>
+                            <div class="address">地址：彩云北路66号附近</div>
                         </div>
                     </div>
                     <div class="step">
@@ -47,7 +47,14 @@
                             <div class="circle"></div>
                             <dir class="left-line"></dir>
                         </div>
-                        <div class="step-right">卸货完成 2018-12-03 11:22:33 地址：彩云北路66号附近</div>
+                        <div class="step-right">
+                            <div class="status">
+                                <div class="tit">卸货完成</div>
+                                <div class="time">2018-12-03 11:22:33</div>
+                            </div>
+                            <div class="desc">备注：地址偏移</div>
+                            <div class="address">地址：彩云北路66号附近</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -65,7 +72,9 @@ export default {
             truckDriving: null,
             mapHeight: 0,
             alarmMsgs: [],
-            locations: []
+            locations: [],
+            customerAddressList: [],
+            consigneeFencingType: '',
         }
     },
     created() {
@@ -106,20 +115,13 @@ export default {
                             }
                         })
                         this.alarmMsgs = alarmMsgs.map(item => {
-                            const stopOvertimeContent = `<div style="position:relative;font-size:14px;width:100px;height:26px;line-height:26px;color:#fff;background:#f9376b;border-radius:10px;text-align:center">
-                                停车${item.keepMinute}分钟
-                                <div style="position:absolute;z-index:-1;bottom:-6px;left:44px;background:#f9376b;width:16px;height:16px;transform:rotate(45deg)"></div>
-                            </div>`
-                            const arrivedOffsetContent = `<div style="position:relative;font-size:14px;width:100px;height:26px;line-height:26px;color:#fff;background:#f9376b;border-radius:10px;text-align:center">
-                                卸货地址偏离
-                                <div style="position:absolute;z-index:-1;bottom:-6px;left:44px;background:#f9376b;width:16px;height:16px;transform:rotate(45deg)"></div>
-                            </div>`
                             return {
                                 position: { N: item.latitude, O: item.longitude, lat: item.latitude, lng: item.longitude },
-                                icon: item.type == 'StopOvertime' ? stopOvertime : arrivedOffset,
-                                content: 'StopOvertime' ? stopOvertimeContent : arrivedOffsetContent
+                                icon: item.type == 'StopOvertime' ? stopOvertime : arrivedOffset
                             }
                         })
+                        this.consigneeFencingType = res.data.data.consigneeFencingType
+                        this.customerAddressList = res.data.data.customerAddressList
                         this.drawRoute(path, status)
                     }
                 }
@@ -137,27 +139,35 @@ export default {
                     position: path[path.length - 1],
                     icon: require('../assets/imgs/zd.png'),
                     map: this.map,
-                    offset: new AMap.Pixel(-17, -19),
+                    offset: new AMap.Pixel(-17, -37),
                 })
             } else {
                 endMarker = new AMap.Marker({
                     position: path[path.length - 1],
                     icon: require('../assets/imgs/dtcb.png'),
                     map: this.map,
-                    offset: new AMap.Pixel(-25, -27),
+                    offset: new AMap.Pixel(-25, -54),
                 })
             }
             
             this.alarmMsgs.forEach(item => {
-                new AMap.Marker({
+                const alarmMsgs = new AMap.Marker({
                     position: item.position,
                     icon: item.icon,
-                    content: item.content,
                     map: this.map,
-                    offset: new AMap.Pixel(-50, -36),
+                    offset: new AMap.Pixel(-17, -37),
                     zIndex: 10
                 })
+                alarmMsgs.on('click', (e) => {
+                    this.drawInfoWindow(e.lnglat, item)
+                })
             })
+            if (this.consigneeFencingType == 'Point') {
+                this.customerAddressList.forEach(item => {
+                    this.drawAddressPoint(item)
+                })
+            }
+            // this.drawArea()
             const routeLine = new AMap.Polyline({
                 path,
                 isOutline: true,
@@ -172,6 +182,75 @@ export default {
             // 调整视野达到最佳显示区域
             // this.map.setFitView([ startMarker, endMarker, routeLine ])
             this.map.setCenter(path[parseInt(path.length/2)])
+        },
+        /**
+         * 绘制信息窗体
+         */
+        drawInfoWindow(position, item) {
+            const content = `<div>
+                <div style="padding:0px 4px;">
+                    <h3>${item.companyName}</h3>
+                    <div>电话 : 010-84107000   邮编 : 100102</div>
+                    <div>地址 : 北京市望京阜通东大街方恒国际中心A座16层</div>
+                </div>
+            </div>`
+            // 创建 infoWindow 实例	
+            const infoWindow = new AMap.InfoWindow({ content })
+            // 打开信息窗体
+            infoWindow.open(this.map, position)
+        },
+        /**
+         * 绘制地址监控
+         */
+        drawAddressPoint(item) {
+            const addressPoint = new AMap.Marker({
+                position: [item.locationLng,item.locationLat],
+                icon: require('../assets/imgs/yjdz.png'),
+                map: this.map,
+                offset: new AMap.Pixel(-13, -29),
+                zIndex: 10
+            })
+            const circleMarker = new AMap.CircleMarker({
+                center: new AMap.LngLat(item.locationLng,item.locationLat),  // 圆心位置
+                radius: +item.monitorScope/10, // 圆半径
+                fillColor: '#409EFF',   // 圆形填充颜色
+                fillOpacity: 0.3,
+                strokeColor: '#409EFF', // 描边颜色
+                strokeWeight: 2, // 描边宽度
+                map: this.map
+            })
+        },
+        /**
+         * 绘制区域监控
+         */
+        drawArea() {
+            const districtSearch = new AMap.DistrictSearch({
+                // 关键字对应的行政区级别，country表示国家
+                level: 'district',
+                // 返回行政区边界坐标等具体信息
+                extensions: 'all'
+            })
+            
+            // 搜索所有省/直辖市信息
+            districtSearch.search('南山区', (status, result) => {
+                // 查询成功时，result即为对应的行政区信息
+                const bounds = result.districtList[1].boundaries
+                const polygons = []
+                if (bounds) {
+                    for (let i = 0, l = bounds.length; i < l; i++) {
+                        //生成行政区划polygon
+                        const polygon = new AMap.Polygon({
+                            map: this.map,
+                            strokeWeight: 1,
+                            path: bounds[i],
+                            fillOpacity: 0.3,
+                            fillColor: '#409EFF',
+                            strokeColor: '#409EFF'
+                        })
+                        polygons.push(polygon)
+                    }
+                }
+            })
         }
     }
 }
@@ -236,7 +315,7 @@ export default {
                             width 14px
                             height 14px
                             border-radius 100%
-                            background-color green
+                            background-color #8bce31
                         .circle
                             position absolute
                             left 5px
@@ -245,14 +324,15 @@ export default {
                             width 10px
                             height 10px
                             border-radius 100%
-                            background-color gray
+                            background-color #aaa
                     .step-right
                         flex 1
-                        background-color pink
+                        padding-bottom 20px
                         .status
                             width 100%
                             font-size 14px
                             display flex
+                            margin-bottom 5px
                             .tit
                                 flex 0 0 80px
                                 color #333
@@ -264,6 +344,6 @@ export default {
                         .desc, .address
                             color #999
                             font-size 13px
-                            height 30px
-                            line-height 30px
+                            height 20px
+                            line-height 20px
 </style>
