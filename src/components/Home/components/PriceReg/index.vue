@@ -285,6 +285,15 @@ export default {
         
             },
             mapOption :{
+                tooltip : {
+                    show:true,
+                    trigger: 'item',
+                    formatter:function(params){
+                        return params.data.name+'<br />总单量/异常量：'+
+                        params.data.carrier+'<br />总客户/异常客户：'
+                        +params.data.customer
+                    },
+                },
                 geo: {
                     map: "云南",
                     label: {
@@ -318,8 +327,10 @@ export default {
                             formatter: '{b}'
                         }
                     },
+                    
                     markPoint:{
                         data:[],
+                        
                         label:{
                             show:true,
                             itemStyle:{
