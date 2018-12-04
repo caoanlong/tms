@@ -87,9 +87,6 @@ export default {
         this.getTransportReg()
         this.getCompanys()
     },
-    mounted() {
-        // this.createMap()
-    },
     methods: {
         search() {
             this.pageIndex = 1
@@ -131,16 +128,72 @@ export default {
             const truckPathExp = this.list.filter(item => item.longitude&&item.latitude&&item.msgType)
             const companyPath = [
                 {
-                    position: [103.389767, 27.296766],
-                    plateNo: '临沧工厂'
+                    "position": [103.009685, 25.064784],
+                    "plateNo": "东骏工厂"
+                },
+                {
+                    "position": [102.555311, 25.269536],
+                    "plateNo": "富民工厂"
+                },
+                {
+                    "position": [102.848636, 24.835932],
+                    "plateNo": "呈贡工厂"
+                },
+                {
+                    "position": [103.801771, 27.444765],
+                    "plateNo": "昭通工厂"
+                },
+                {
+                    "position": [103.1759, 26.133272],
+                    "plateNo": "东川工厂"
+                },
+                {
+                    "position": [99.563572, 27.545611],
+                    "plateNo": "迪庆工厂"
+                },
+                {
+                    "position": [101.057291, 21.910696],
+                    "plateNo": "景洪工厂"
+                },
+                {
+                    "position": [101.520619, 25.070767],
+                    "plateNo": "楚雄工厂"
+                },
+                {
+                    "position": [103.254504, 23.697547],
+                    "plateNo": "红河工厂"
+                },
+                {
+                    "position": [103.246033, 23.305761],
+                    "plateNo": "个旧工厂"
+                },
+                {
+                    "position": [101.861789, 26.427004],
+                    "plateNo": "攀枝花工厂"
+                },
+                {
+                    "position": [101.366987, 26.719193],
+                    "plateNo": "丽江工厂"
+                },
+                {
+                    "position": [99.93806, 26.589454],
+                    "plateNo": "剑川工厂"
+                },
+                {
+                    "position": [99.693993, 23.900584],
+                    "plateNo": "临沧工厂"
+                },
+                {
+                    "position": [99.106157, 25.621965],
+                    "plateNo": "云龙工厂"
                 }
             ]
             for (let i = 0; i < truckPathExp.length; i++) {
                 new AMap.Marker({
                     position: [truckPathExp[i].longitude,truckPathExp[i].latitude],
                     content: `<div style="position:relative;width:100px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#fb7629;height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:10px">${truckPathExp[i].plateNo}</div>
-                        <div style="position:absolute;bottom:2px;left:42px;background:#fb7629;width:16px;height:16px;transform:rotate(45deg)"></div>
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#fb7629;height:40px;line-height:40px;border-radius:5px">${truckPathExp[i].plateNo}</div>
+                        <div style="position:absolute;bottom:6px;left:42px;background:#fb7629;width:10px;height:10px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
                     map: this.map
@@ -150,8 +203,8 @@ export default {
                 new AMap.Marker({
                     position: [truckPathNormal[i].longitude,truckPathNormal[i].latitude],
                     content: `<div style="position:relative;width:100px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#409EFF;height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:10px">${truckPathNormal[i].plateNo}</div>
-                        <div style="position:absolute;bottom:2px;left:42px;background:#409EFF;width:16px;height:16px;transform:rotate(45deg)"></div>
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#409EFF;height:40px;line-height:40px;border-radius:5px">${truckPathNormal[i].plateNo}</div>
+                        <div style="position:absolute;bottom:6px;left:42px;background:#409EFF;width:10px;height:10px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
                     map: this.map
@@ -161,8 +214,8 @@ export default {
                 new AMap.Marker({
                     position: companyPath[j].position,
                     content: `<div style="position:relative;width:120px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-bottom:2px solid #fff;border-radius:5px">${companyPath[j].plateNo}</div>
-                        <div style="position:absolute;bottom:2px;left:52px;background:#9e74b6;width:16px;height:16px;transform:rotate(45deg)"></div>
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">${companyPath[j].plateNo}</div>
+                        <div style="position:absolute;bottom:6px;left:52px;background:#9e74b6;width:10px;height:10px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
                     map: this.map
