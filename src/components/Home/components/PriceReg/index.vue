@@ -52,8 +52,7 @@
             <div class="card">
                 <div class="title">异常工厂/单<span class="fr" @click="viewMore" >查看更多</span></div>
                 <div class="con">
-                    <div id="chart4" :style="priceReg.alarmRankList.length>0?'225px':0"></div>
-                    <p class="tips" v-show="!priceReg.alarmRankList.length">暂无异常</p>
+                    <div id="chart4" style="height:225px"></div>
                 </div>
             </div>
         </div>
@@ -395,6 +394,7 @@ export default {
             chart1.setOption(this.chartOption1,true)
             chart2.setOption(this.chartOption2,true)
             chart3.setOption(this.chartOption3,true)
+            chart4.setOption(this.chartOption4,true)
             mapChart.setOption(this.mapOption,true)
             setTimeout(function (){
                 window.onresize = function () {
