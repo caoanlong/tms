@@ -55,7 +55,11 @@
 					<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
 					<el-table-column label="起点地区" prop="fromSite" align="center"></el-table-column>
 					<el-table-column label="终点地区" prop="toSite" align="center"></el-table-column>
-					<el-table-column label="调度日期" prop="dispatchDate" align="center"></el-table-column>
+					<el-table-column label="调度日期" prop="dispatchDate" align="center">
+                        <template slot-scope="scope">
+                            {{scope.row.dispatchTime | getdatefromtimestamp}}
+                        </template>
+                    </el-table-column>
 					<el-table-column label="车牌号" prop="plateNo" align="center"></el-table-column>
 					<el-table-column label="异常原因" prop="type" align="center">
                         <template slot-scope="scope">
