@@ -8,18 +8,22 @@
 						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
 					</el-form-item>
                     <el-form-item label="工厂" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.companyID">
-							<el-option value="Committed" label="全部">全部</el-option>
-							<el-option value="Running" label="执行中">执行中</el-option>
-							<el-option value="Signed" label="已完成">已完成</el-option>
-							<el-option value="Closed" label="已关闭">已关闭</el-option>
-						</el-select>
+						<el-select placeholder="请选择" v-model="find.customerID">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option 
+                                :label="item.companyName" 
+                                :value="item.customerID" 
+                                v-for="(item, i) in companys" 
+                                :key="i">
+                            </el-option>
+                        </el-select>
 					</el-form-item>
                     <el-form-item label="异常原因" class="customerSelect">
 						<el-select placeholder="请选择" v-model="find.type">
-							<el-option value="Committed" label="全部">全部</el-option>
-							<el-option value="Running" label="停车超时">停车超时</el-option>
-							<el-option value="Signed" label="未准时到达">未准时到达</el-option>
+							<el-option label="全部" value="all"></el-option>
+                            <el-option label="停车超时" value="StopOvertime"></el-option>
+                            <el-option label="卸货异常" value="ArrivedOffset"></el-option>
+                            <el-option label="无" value="normal"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="异常时间从">
@@ -71,21 +75,28 @@ import { Message } from 'element-ui'
 import requestByJson, { baseURL } from '../../common/requestByJson'
 import { baseMixin } from '../../common/mixin'
 import CarrierOrderAlarm from '../../api/CarrierOrderAlarm'
+import Company from '../../api/Company'
+import { getDateTotimestamp } from "../../common/utils";
 export default {
     mixins: [baseMixin],
 	data() {
 		return {
             find: { 
                 keyword: '',
-                companyID:'',
-                type:'',
-                beginTime:'',
-                endTime:'',
+                customerID:'',
+                type:'all',
+                beginTime:this.getCurrentMonthFirst(),
+                endTime:this.getCurrentMonthLast()
             },
+            companys: [],
+            curCompany: {},
 		}
     },
     created(){
         this.getList()
+        this.getCompanys()
+        this.getCurrentMonthFirst()
+        this.getCurrentMonthLast()
     },
 	methods: {
 		search(){
@@ -95,8 +106,8 @@ export default {
         },
         reset(){
             this.find.keyword = ''
-			this.find.companyID = ''
-			this.find.type = ''
+			this.find.customerID = ''
+			this.find.type = 'all'
 			this.find.beginTime = ''
 			this.find.endTime = ''
 			this.pageIndex = this.PAGEINDEX
@@ -106,13 +117,22 @@ export default {
         view(carrierOrderAlarmID){
 
         },
+        getCompanys() {
+            Company.customerFind({
+				current: 1,
+                size: 1000,
+                customerType: 'Shipper'
+			}).then(res => {
+                this.companys = res.records
+			})
+        },
         getList() {
 			this.tableData = []
 			CarrierOrderAlarm.find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
-                companyID: this.find.companyID,
+                companyID: this.find.customerID,
                 type:this.find.type,
 				beginTime: this.find.beginTime,
 				endTime: this.find.endTime
@@ -121,6 +141,19 @@ export default {
 				this.total = res.total
 			})
         },
+        getCurrentMonthFirst(){
+            let date =new Date()
+            date.setDate(1)
+            return getDateTotimestamp(date)
+        },
+        getCurrentMonthLast(){
+            let date=new Date()
+            let currentMonth=date.getMonth()
+            let nextMonth=++currentMonth
+            let nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1)
+            let oneDay=1000*60*60*24
+            return getDateTotimestamp(new Date(nextMonthFirstDay-oneDay))
+        }
 	}
 }
 

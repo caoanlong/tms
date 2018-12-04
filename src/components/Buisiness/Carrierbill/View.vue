@@ -116,7 +116,7 @@
 								<span v-else>已签收</span>
 							</td>
                             <td>
-                                <el-popover @show="getCarrierOrderAlarm(transport.dispatchOrderID)" placement="right" trigger="hover">
+                                <el-popover @show="getCarrierOrderAlarm(transport.dispatchOrderNo)" placement="right" trigger="hover">
                                     <div slot>{{alarmInfo}}</div>
                                     <el-button type="text" slot="reference" class="alarmStatus" v-if="transport.alarmFlag=='Y'">有</el-button>
                                 </el-popover>
@@ -248,10 +248,10 @@ export default {
 				this.getTransports(carrierOrderID)
 			})
         },
-        getCarrierOrderAlarm(dispatchOrderID){
-            console.log(dispatchOrderID)
+        getCarrierOrderAlarm(dispatchOrderNo){
+            console.log(dispatchOrderNo)
             CarrierOrderAlarm.find({
-				keyword:dispatchOrderID,
+				keyword:dispatchOrderNo,
 			}).then(res => {
 				this.alarmInfo = res.records
 			})

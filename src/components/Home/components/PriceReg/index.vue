@@ -52,8 +52,7 @@
             <div class="card">
                 <div class="title">异常工厂/单<span class="fr" @click="viewMore" >查看更多</span></div>
                 <div class="con">
-                    <div id="chart4" :style="priceReg.alarmRankList.length>0?'225px':0"></div>
-                    <p class="tips" v-show="!priceReg.alarmRankList.length">暂无异常</p>
+                    <div id="chart4" style="height:225px"></div>
                 </div>
             </div>
         </div>
@@ -68,9 +67,6 @@ require('echarts/lib/chart/map')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 import "../../../../../static/echarts/yunnan"
-import markPointJson from "../../../../../static/echarts/markPoint"
-import testJson from "../../../../../static/echarts/testJson"
-import testJson1 from "../../../../../static/echarts/testJson1"
 import { Message } from 'element-ui'
 import Home from '../../../../api/Home'
 export default {
@@ -398,6 +394,7 @@ export default {
             chart1.setOption(this.chartOption1,true)
             chart2.setOption(this.chartOption2,true)
             chart3.setOption(this.chartOption3,true)
+            chart4.setOption(this.chartOption4,true)
             mapChart.setOption(this.mapOption,true)
             setTimeout(function (){
                 window.onresize = function () {
@@ -412,14 +409,12 @@ export default {
             
         },
         formatMarkPoint(data){
-            console.log(data)
             for(let i=0;i<data.length;i++){
                 this.markPoint[i].name = data[i].shipperCompanyName
                 this.markPoint[i].coord= [data[i].lng,data[i].lat]
                 this.markPoint[i].customer = data[i].countCustomerAlarm+'/'+data[i].countCustomer
                 this.markPoint[i].carrier = data[i].countCarrierAlarmNum+'/'+data[i].countCarrierNum
             }
-            console.log(this.markPoint)
         },
         viewMore(){
             this.$router.push({ name: 'anomaly' })
