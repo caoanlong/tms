@@ -95,8 +95,11 @@ export default {
                 volume:''
 			},
 			rules: {
+				code: [{required: true, message: '请输入货物编号'}],
 				cargoName: [{required: true, message: '请输入货物名称'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
+				cargoType: [{required: true, message: '请选择货物类型'}],
 				cargoUnit: [{required: true, message: '请选择货物单位'}],
+				dispatchType: [{required: true, message: '请选择配载方式'}]
 			},
 			rules1: {
 				unit: [{required: true, message: '请输入货物单位'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}]

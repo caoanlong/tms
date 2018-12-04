@@ -6,6 +6,7 @@
         </div>
         <div class="middle">
             <span class="plateNo">{{truck.plateNo}}</span>
+            <span class="status">运输中</span>
         </div>
         <div class="down">
             <div class="address">
@@ -55,6 +56,10 @@ export default {
             font-size 15px
             font-weight bold
             color #555
+        .status
+            padding-left 5px
+            font-size 13px
+            color #67c23a
     .down
         height 26px
         line-height 26px
