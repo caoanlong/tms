@@ -5,55 +5,45 @@
             <div class="logs-top">
                 <div class="shipperNo">
                     <span class="tit">发货单</span>
-                    <span class="ctx">25665889977899877</span>
+                    <span class="ctx">{{data.shipperNo}}</span>
                 </div>
                 <div class="shipperInfo">
                     <div class="shipperItem">
                         <span class="tit">车辆：</span>
-                        <span class="ctx">云A69988</span>
+                        <span class="ctx">{{data.plateNo}}</span>
                     </div>
                     <div class="shipperItem">
                         <span class="tit">工厂：</span>
-                        <span class="ctx">临沧工厂</span>
+                        <span class="ctx">{{data.shipperCompanyName}}</span>
                     </div>
                     <div class="shipperItem">
                         <span class="tit">客户：</span>
-                        <span class="ctx">小柏商贸</span>
+                        <span class="ctx">{{data.consigneeCompanyName}}</span>
                     </div>
                     <div class="shipperItem">
                         <span class="tit">类型：</span>
-                        <span class="ctx">地址监控</span>
+                        <span class="ctx">
+                            {{data.consigneeFencingType == 'Point' 
+                            ? '地址监控' 
+                            : (data.consigneeFencingType == 'Area' ? '区域监控' : '')}}
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="logs-pannel" :style="{'height': (mapHeight-270) + 'px'}">
                 <div class="steps">
-                    <div class="step">
+                    <div class="step" v-for="(log, i) in logs" :key="i">
                         <div class="step-left">
-                            <div class="circle-cur"></div>
+                            <div :class="i == 0 ? 'circle-cur' : 'circle'"></div>
                             <dir class="left-line"></dir>
                         </div>
                         <div class="step-right">
                             <div class="status">
-                                <div class="tit">卸货完成</div>
-                                <div class="time">2018-12-03 11:22:33</div>
+                                <div class="tit">{{DISPATHLOGACTION[log.action]}}</div>
+                                <div class="time">{{log.createTime | getdatefromtimestamp}}</div>
                             </div>
-                            <div class="desc">备注：地址偏移</div>
-                            <div class="address">地址：彩云北路66号附近</div>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-left">
-                            <div class="circle"></div>
-                            <dir class="left-line"></dir>
-                        </div>
-                        <div class="step-right">
-                            <div class="status">
-                                <div class="tit">卸货完成</div>
-                                <div class="time">2018-12-03 11:22:33</div>
-                            </div>
-                            <div class="desc">备注：地址偏移</div>
-                            <div class="address">地址：彩云北路66号附近</div>
+                            <div class="desc">备注：{{log.description}}</div>
+                            <div class="address">地址：{{log.posAddress}}</div>
                         </div>
                     </div>
                 </div>
@@ -65,109 +55,120 @@
 <script>
 import axios from 'axios'
 import { baseURL } from '../common/request'
+import { AMAPKEY } from '../common/const'
+import AutoNavMap from '../api/AutoNavMap'
+import DispatchOrder from '../api/DispatchOrder'
 export default {
     data() {
         return {
             map: null,
             truckDriving: null,
             mapHeight: 0,
+            logs: [],
+            data: {},
             alarmMsgs: [],
             locations: [],
             customerAddressList: [],
+            customerMonitorAreaList: [],
             consigneeFencingType: '',
+            status: '',
+            district: null
         }
     },
     created() {
-        this.mapHeight = window.innerHeight 
+        this.mapHeight = window.innerHeight
+        this.getLogs()
         this.getList()
     },
     mounted() {
         this.map = new AMap.Map('amapLocationSelect')
+        this.district = new AMap.DistrictSearch({
+            subdistrict: 1,   //返回下一级行政区
+            showbiz: false,  //最后一级返回街道信息
+            extensions: 'all'
+        })
     },
     methods: {
-        getList() {
+        async getLogs() {
+            const res = await DispatchOrder.logList({ 
+                dispatchOrderID: this.$route.query.dispatchOrderID,
+                osn: this.$route.query.osn
+            })
+            const logs = res.reverse()
+            for (let i = 0; i < logs.length; i++) {
+                if (logs[i].action == 'StopOvertime') {
+                    logs[i].posAddress = await this.getAddressByLnglat([
+                        logs[i].longitude, logs[i].latitude
+                    ])
+                }
+            }
+            this.logs = logs
+        },
+        async getList() {
             const url = baseURL + '/deliveryOrder/getTracks'
             const params = {
                 osn: this.$route.query.osn,
                 companyCode: this.$route.query.companyCode,
                 dispatchOrderID: this.$route.query.dispatchOrderID
             }
-            axios({
-                url,
-                params,
+            const { data } = await axios({
+                url, params,
                 headers: { 
                     Authorization: this.$route.query.Authorization || localStorage.getItem('token')
                 }
-            }).then(res => {
-                if (res.data.code == 200) {
-                    if (res.data.data) {
-                        const locations = res.data.data.locations
-                        const alarmMsgs = res.data.data.alarmMsgs
-                        const status = res.data.data.status
-                        const stopOvertime = require('../assets/imgs/tcbj.png')
-                        const arrivedOffset = require('../assets/imgs/xhbj.png')
-                        const path = locations.map(item => {
-                            return {
-                                N: item.loc.latitude, 
-                                O: item.loc.longitude,
-                                lng: item.loc.longitude,
-                                lat: item.loc.latitude
-                            }
-                        })
-                        this.alarmMsgs = alarmMsgs.map(item => {
-                            return {
-                                position: { N: item.latitude, O: item.longitude, lat: item.latitude, lng: item.longitude },
-                                icon: item.type == 'StopOvertime' ? stopOvertime : arrivedOffset
-                            }
-                        })
-                        this.consigneeFencingType = res.data.data.consigneeFencingType
-                        this.customerAddressList = res.data.data.customerAddressList
-                        this.drawRoute(path, status)
+            })
+            if (data.code == 200 && data.data) {
+                this.data = data.data
+                const { 
+                    locations, 
+                    status, 
+                    alarmMsgs, 
+                    consigneeFencingType, 
+                    customerAddressList, 
+                    customerMonitorAreaList 
+                } = data.data
+                for (let i = 0; i < alarmMsgs.length; i++) {
+                    if (alarmMsgs[i].type == 'StopOvertime') {
+                        alarmMsgs[i].posLocation = await this.getAddressByLnglat([
+                            alarmMsgs[i].longitude, alarmMsgs[i].latitude
+                        ])
                     }
                 }
-            })
-        },
-        drawRoute(path, status) {
-            const startMarker = new AMap.Marker({
-                position: path[0],
-                icon: require('../assets/imgs/qd.png'),
-                map: this.map
-            })
-            let endMarker = null
-            if (status == 'Finished') {
-                endMarker = new AMap.Marker({
-                    position: path[path.length - 1],
-                    icon: require('../assets/imgs/zd.png'),
-                    map: this.map,
-                    offset: new AMap.Pixel(-17, -37),
-                })
-            } else {
-                endMarker = new AMap.Marker({
-                    position: path[path.length - 1],
-                    icon: require('../assets/imgs/dtcb.png'),
-                    map: this.map,
-                    offset: new AMap.Pixel(-25, -54),
-                })
+                this.status = status
+                this.consigneeFencingType = consigneeFencingType
+                this.customerAddressList = customerAddressList || []
+                this.customerMonitorAreaList = customerMonitorAreaList || []
+                this.alarmMsgs = alarmMsgs
+                this.drawRoute(locations, status)
             }
-            
+        },
+        drawRoute(locations, status) {
+            // 绘制开始结束点
+            this.drawStartEndPoint(locations[0], locations[locations.length-1])
+            // 绘制异常点标记以及信息窗体事件
             this.alarmMsgs.forEach(item => {
                 const alarmMsgs = new AMap.Marker({
-                    position: item.position,
-                    icon: item.icon,
+                    position: [item.longitude, item.latitude],
+                    icon: item.type == 'StopOvertime' ? require('../assets/imgs/tcbj.png') : require('../assets/imgs/xhbj.png'),
                     map: this.map,
                     offset: new AMap.Pixel(-17, -37),
                     zIndex: 10
                 })
-                alarmMsgs.on('click', (e) => {
-                    this.drawInfoWindow(e.lnglat, item)
+                alarmMsgs.on('mouseover', (e) => {
+                    this.drawInfoWindow(item, alarmMsgs)
                 })
             })
+            // 绘制地址监控
             if (this.consigneeFencingType == 'Point') {
                 this.customerAddressList.forEach(item => {
                     this.drawAddressPoint(item)
                 })
+            } else if (this.consigneeFencingType == 'Area') {
+                this.customerMonitorAreaList.forEach(item => {
+                    this.drawArea(item)
+                })
             }
-            // this.drawArea()
+            const path = locations.map(item => [item.loc.longitude, item.loc.latitude])
             const routeLine = new AMap.Polyline({
                 path,
                 isOutline: true,
@@ -180,31 +181,49 @@ export default {
             })
             routeLine.setMap(this.map)
             // 调整视野达到最佳显示区域
-            // this.map.setFitView([ startMarker, endMarker, routeLine ])
-            this.map.setCenter(path[parseInt(path.length/2)])
+            this.map.setFitView(routeLine)
+            this.map.setZoom(9)
+            // this.map.setCenter(path[parseInt(path.length/2)])
         },
         /**
-         * 绘制信息窗体
+         * 绘制开始结束点标记以及信息窗体事件
          */
-        drawInfoWindow(position, item) {
-            const content = `<div>
-                <div style="padding:0px 4px;">
-                    <h3>${item.companyName}</h3>
-                    <div>电话 : 010-84107000   邮编 : 100102</div>
-                    <div>地址 : 北京市望京阜通东大街方恒国际中心A座16层</div>
-                </div>
-            </div>`
-            // 创建 infoWindow 实例	
-            const infoWindow = new AMap.InfoWindow({ content })
-            // 打开信息窗体
-            infoWindow.open(this.map, position)
+        async drawStartEndPoint(startPos, endPos) {
+            // 绘制开始结束标记点以及信息窗体事件
+            const startMarker = new AMap.Marker({
+                position: [startPos.longitude, startPos.latitude],
+                icon: require('../assets/imgs/qd.png'),
+                map: this.map
+            })
+            const endMarker = new AMap.Marker({
+                position: [endPos.longitude, endPos.latitude],
+                icon: status == 'Finished' ? require('../assets/imgs/zd.png') : require('../assets/imgs/dtcb.png'),
+                map: this.map,
+                offset: status == 'Finished' ? new AMap.Pixel(-17, -37) : new AMap.Pixel(-25, -54)
+            })
+            startPos.posLocation = await this.getAddressByLnglat([
+                startPos.longitude, startPos.latitude
+            ])
+            endPos.posLocation = await this.getAddressByLnglat([
+                endPos.longitude, endPos.latitude
+            ])
+            startMarker.on('mouseover', e => {
+                const start = Object.assign({}, startPos)
+                start.type = 'start'
+                this.drawInfoWindow(start, startMarker)
+            })
+            endMarker.on('mouseover', e => {
+                const end = Object.assign({}, endPos)
+                end.type = 'end'
+                this.drawInfoWindow(end, endMarker)
+            })
         },
         /**
          * 绘制地址监控
          */
-        drawAddressPoint(item) {
+        async drawAddressPoint(item) {
             const addressPoint = new AMap.Marker({
-                position: [item.locationLng,item.locationLat],
+                position: [item.locationLng, item.locationLat],
                 icon: require('../assets/imgs/yjdz.png'),
                 map: this.map,
                 offset: new AMap.Pixel(-13, -29),
@@ -219,22 +238,33 @@ export default {
                 strokeWeight: 2, // 描边宽度
                 map: this.map
             })
+            item.posLocation = await this.getAddressByLnglat([
+                item.locationLng, item.locationLat
+            ])
+            addressPoint.on('mouseover', e => {
+                const start = Object.assign({}, item)
+                start.longitude = item.locationLng
+                start.latitude = item.locationLat
+                start.type = 'Point'
+                this.drawInfoWindow(start, addressPoint)
+            })
         },
         /**
          * 绘制区域监控
          */
-        drawArea() {
-            const districtSearch = new AMap.DistrictSearch({
-                // 关键字对应的行政区级别，country表示国家
-                level: 'district',
-                // 返回行政区边界坐标等具体信息
-                extensions: 'all'
-            })
-            
-            // 搜索所有省/直辖市信息
-            districtSearch.search('南山区', (status, result) => {
+        drawArea(item) {
+            const length = item.fullName.split(',').filter(item => item).length
+            if (length == 3) {
+                this.district.setLevel('district')
+            } else if (length == 2) {
+                this.district.setLevel('city')
+            } else if (length == 1) {
+                this.district.setLevel('province')
+            }
+            this.district.setExtensions('all')
+            this.district.search(String(item.areaID), (status, result) => {
                 // 查询成功时，result即为对应的行政区信息
-                const bounds = result.districtList[1].boundaries
+                const bounds = result.districtList[0].boundaries
                 const polygons = []
                 if (bounds) {
                     for (let i = 0, l = bounds.length; i < l; i++) {
@@ -251,6 +281,64 @@ export default {
                     }
                 }
             })
+        },
+        /**
+         * 绘制信息窗体
+         */
+        drawInfoWindow(item, marker) {
+            let title = ''
+            let remark = ''
+            if (item.type && item.type == 'StopOvertime') {
+                title = `<h3 style="color:red">停车异常</h3>`
+                remark = `<div>备注：停车${item.keepMinute}分钟</div>`
+            }
+            if (item.type && item.type == 'ArrivedOffset') {
+                title = `<h3 style="color:red">卸货异常</h3>`
+                remark = `<div>备注：</div>`
+            }
+            if (item.type && item.type == 'start') {
+                title = `<h3>开始运输</h3>`
+                remark = `<div>备注：</div>`
+            }
+            if (item.type && item.type == 'end') {
+                if (this.status == 'Finished') {
+                    title = `<h3>完成卸货</h3>`
+                    remark = `<div>备注：</div>`
+                } else {
+                    title = `<h3>车辆位置</h3>`
+                    remark = `<div>备注：</div>`
+                }
+            }
+            if (item.type && item.type == 'Point') {
+                title = `<h3>${item.companyName}</h3>`
+                remark = `<div>围栏范围：${item.monitorScope}</div>`
+            }
+            const lng = `<div>经度：${item.longitude}</div>`
+            const lat = `<div>纬度：${item.latitude}</div>`
+            const content = `<div>
+                <div style="padding:0px 4px;">
+                    ${title}${remark}${lng}${lat}
+                    <div>地址: ${item.posLocation}</div>
+                </div>
+            </div>`
+            // 创建 infoWindow 实例	
+            const infoWindow = new AMap.InfoWindow({ content })
+            // 打开信息窗体
+            infoWindow.open(this.map, [item.longitude, item.latitude])
+            marker.on('mouseout', (e) => {
+                infoWindow.close()
+            })
+        },
+        /**
+         * 根据经纬度获取详细地址
+         */
+        async getAddressByLnglat(location) {
+            const { data } =  await AutoNavMap.getLocation({ 
+                key: AMAPKEY, 
+                location: location.join(',') 
+            })
+            const address = data.regeocode.formatted_address
+            return address
         }
     }
 }
@@ -292,6 +380,7 @@ export default {
             padding 10px
             background-color #ffffff
             box-shadow 0 3px 5px rgba(0,0,0,.3)
+            overflow auto
             .steps
                 .step
                     width 100%
@@ -327,7 +416,7 @@ export default {
                             background-color #aaa
                     .step-right
                         flex 1
-                        padding-bottom 20px
+                        padding-bottom 40px
                         .status
                             width 100%
                             font-size 14px
