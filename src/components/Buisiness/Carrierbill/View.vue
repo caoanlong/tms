@@ -117,7 +117,12 @@
 							</td>
                             <td>
                                 <el-popover @show="getCarrierOrderAlarm(transport.dispatchOrderNo)" placement="right" trigger="hover">
-                                    <div slot>{{alarmInfo}}</div>
+                                    <div slot style="height:200px;overflow:hidden;overflow-y:auto">
+                                        <div v-for="(item,index) in alarmInfo" :key="index" class="alarmItem">
+                                            <p>{{index+1}}.<b>{{item.type=="StopOvertime"?'停车超时':'卸货异常'}}</b><span class="createTime fr">{{item.createTime | getdatefromtimestamp}}</span></p>
+                                            <p class="address">地址：{{item.consigneeAddress}}</p>
+                                        </div>
+                                    </div>
                                     <el-button type="text" slot="reference" class="alarmStatus" v-if="transport.alarmFlag=='Y'">有</el-button>
                                 </el-popover>
                                 <span v-if="transport.alarmFlag=='N'"  style="color:#67C23A">无</span>
@@ -253,7 +258,8 @@ export default {
             CarrierOrderAlarm.find({
 				keyword:dispatchOrderNo,
 			}).then(res => {
-				this.alarmInfo = res.records
+                this.alarmInfo = res.records
+                console.log(res.records)
 			})
         },
 		// 查询运输列表
@@ -327,4 +333,23 @@ export default {
 		display inline-block
 		text-align left
 		color #666
+.alarmItem
+    width 240px
+    padding 5px 0
+    p
+        line-height 20px
+        font-size 14px
+        .createTime
+            font-size 12px
+            color #999
+        &.address
+            font-size 13px
+            width 240px
+            height 20px
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
+            color #666
+    &~.alarmItem
+        border-top 1px dashed #ddd
 </style>
