@@ -24,9 +24,10 @@
             <div class="filter">
                 <el-form :inline="true" size="mini">
                     <el-form-item label="工厂">
-                        <el-select placeholder="请选择" v-model="find.companyCode" @change="changeCompany">
+                        <el-select placeholder="请选择" v-model="find.company">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
+                                value-key="code"
                                 :label="item.companyName" 
                                 :value="item.code" 
                                 v-for="(item, i) in companys" 
@@ -60,9 +61,11 @@
 </template>
 
 <script>
+import { AMAPKEY } from '../../../../common/const'
 import Page from '../../../CommonComponents/Page'
 import Home from '../../../../api/Home'
 import Company from '../../../../api/Company'
+import AutoNavMap from '../../../../api/AutoNavMap'
 import TruckItem from './components/TruckItem'
 export default {
     components: { Page, TruckItem },
@@ -73,9 +76,9 @@ export default {
             pageSize: 6,
             find: {
                 keyword: '',
-                companyCode: '',
+                company: {},
                 msgType: 'all',
-                type: ''
+                type: 'GPS'
             },
             curCompany: {},
             list: [],
@@ -85,18 +88,12 @@ export default {
         }
     },
     created() {
-        this.getTransportReg()
         this.getCompanys()
     },
     mounted() {
         this.map = new AMap.Map('amapLocationSelect')
     },
     methods: {
-        changeCompany(code) {
-            const curCompany = this.companys.filter(item => item.code == code)[0]
-            this.curCompany.companyName = curCompany.companyName
-            this.getTransportReg()
-        },
         search() {
             this.pageIndex = 1
             this.getTransportReg()
@@ -105,22 +102,28 @@ export default {
             this.pageIndex = index
             this.getTransportReg()
         },
-        getTransportReg() {
-            Home.getTransportReg({
+        async getTransportReg() {
+            const { records, total } = await Home.getTransportReg({
                 current: this.pageIndex,
                 size: this.pageSize,
                 keyword: this.find.keyword,
-                companyCode: this.find.companyCode,
+                companyCode: this.find.company.code,
                 msgType: this.find.msgType,
                 type: this.find.type
-            }).then(res => {
-                this.list = res.records
-                this.total = res.total
-                const first = res.records[0]
-                this.curCompany.lng = first.shipperLongitude || ''
-                this.curCompany.lat = first.shipperLatitude || ''
-                this.createMarker()
             })
+            this.total = total
+            const list = records
+            if (records[0]) {
+                if (records[0].shipperLongitude) this.find.company.longitude = records[0].shipperLongitude
+                if (records[0].shipperLatitude) this.find.company.latitude = records[0].shipperLatitude
+            }
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].longitude && list[i].latitude) {
+                    list[i].posAddress = await this.getAddressByLnglat([list[i].longitude, list[i].latitude])
+                }
+            }
+            this.list = list
+            this.createMarker()
         },
         getCompanys() {
             Company.customerFind({
@@ -129,6 +132,8 @@ export default {
                 customerType: 'Shipper'
 			}).then(res => {
                 this.companys = res.records
+                this.find.company = this.companys.filter(item => item.companyName == '临沧工厂')[0]
+                this.getTransportReg()
 			})
         },
         /**
@@ -137,19 +142,8 @@ export default {
         createMarker() {
             const truckPathNormal = this.list.filter(item => item.longitude&&item.latitude&&item.msgType=='')
             const truckPathExp = this.list.filter(item => item.longitude&&item.latitude&&item.msgType)
-            for (let i = 0; i < truckPathExp.length; i++) {
-                new AMap.Marker({
-                    position: [truckPathExp[i].longitude,truckPathExp[i].latitude],
-                    content: `<div style="position:relative;width:100px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#fb7629;height:40px;line-height:40px;border-radius:5px">${truckPathExp[i].plateNo}</div>
-                        <div style="position:absolute;bottom:6px;left:42px;background:#fb7629;width:10px;height:10px;transform:rotate(45deg)"></div>
-                    </div>`,
-                    offset: new AMap.Pixel(-50, -50),
-                    map: this.map
-                })
-            }
             for (let i = 0; i < truckPathNormal.length; i++) {
-                new AMap.Marker({
+                const truckPathNormalMarker = new AMap.Marker({
                     position: [truckPathNormal[i].longitude,truckPathNormal[i].latitude],
                     content: `<div style="position:relative;width:100px;height:50px;text-align:center">
                         <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#409EFF;height:40px;line-height:40px;border-radius:5px">${truckPathNormal[i].plateNo}</div>
@@ -158,20 +152,54 @@ export default {
                     offset: new AMap.Pixel(-50, -50),
                     map: this.map
                 })
+                const dispatchOrderID = truckPathNormal[i].dispatchOrderID
+                truckPathNormalMarker.on('click', e => {
+                    const routeData = this.$router.resolve({name: 'trackquery', query: { dispatchOrderID }})
+			        window.open(routeData.href, '_blank')
+                })
             }
-            if (this.curCompany.lng && this.curCompany.lat && this.curCompany.companyName) {
-                new AMap.Marker({
-                    position: [this.curCompany.lng, this.curCompany.lat],
+            for (let i = 0; i < truckPathExp.length; i++) {
+                const truckPathExpMarker = new AMap.Marker({
+                    position: [truckPathExp[i].longitude,truckPathExp[i].latitude],
+                    content: `<div style="position:relative;width:100px;height:50px;text-align:center">
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#fb7629;height:40px;line-height:40px;border-radius:5px">${truckPathExp[i].plateNo}</div>
+                        <div style="position:absolute;bottom:6px;left:42px;background:#fb7629;width:10px;height:10px;transform:rotate(45deg)"></div>
+                    </div>`,
+                    offset: new AMap.Pixel(-50, -50),
+                    map: this.map
+                })
+                const dispatchOrderID = truckPathExp[i].dispatchOrderID
+                truckPathExpMarker.on('click', e => {
+                    const routeData = this.$router.resolve({name: 'trackquery', query: { dispatchOrderID }})
+			        window.open(routeData.href, '_blank')
+                })
+            }
+            
+            if (this.find.company.longitude && this.find.company.latitude && this.find.company.companyName) {
+                const companyMarker = new AMap.Marker({
+                    position: [this.find.company.longitude, this.find.company.latitude],
                     content: `<div style="position:relative;min-width:140px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">${this.curCompany.companyName}</div>
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">${this.find.company.companyName}</div>
                         <div style="position:absolute;bottom:6px;left:52px;background:#9e74b6;width:10px;height:10px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
                     map: this.map
                 })
             }
-            const center = this.list[parseInt(this.list.length / 2)]
-            this.map.setCenter([center.longitude,center.latitude])
+            // 使用setFitView方法 自适应显示
+            this.map.setFitView()
+            // if (center) this.map.setCenter([center.longitude, center.latitude])
+        },
+        /**
+         * 根据经纬度获取详细地址
+         */
+        async getAddressByLnglat(location) {
+            const { data } =  await AutoNavMap.getLocation({ 
+                key: AMAPKEY, 
+                location: location.join(',') 
+            })
+            const address = data.regeocode.formatted_address
+            return address
         }
     }
 }

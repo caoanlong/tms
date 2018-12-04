@@ -94,7 +94,7 @@ export default {
                 dispatchOrderID: this.$route.query.dispatchOrderID,
                 osn: this.$route.query.osn
             })
-            const logs = res.reverse()
+            const logs = res
             for (let i = 0; i < logs.length; i++) {
                 if (logs[i].action == 'StopOvertime') {
                     logs[i].posAddress = await this.getAddressByLnglat([
@@ -376,6 +376,9 @@ export default {
                 .shipperItem
                     height 30px
                     line-height 30px
+                    overflow hidden
+                    text-overflow ellipsis
+                    white-space nowrap
         .logs-pannel
             padding 10px
             background-color #ffffff
