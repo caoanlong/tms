@@ -63,7 +63,7 @@
                     <el-table-column label="配载方式" align="center">
                         <template slot-scope="scope">
 							<span v-if="scope.row.dispatchType == 'Weight'">按重量配载</span>
-							<span v-if="scope.row.dispatchType == 'Volume'">按体积配载</span>
+							<span v-else>按体积配载</span>
 						</template>
                     </el-table-column>
 					<el-table-column label="操作" align="center" width="100">
