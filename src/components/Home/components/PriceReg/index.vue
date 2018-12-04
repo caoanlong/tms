@@ -68,9 +68,6 @@ require('echarts/lib/chart/map')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 import "../../../../../static/echarts/yunnan"
-import markPointJson from "../../../../../static/echarts/markPoint"
-import testJson from "../../../../../static/echarts/testJson"
-import testJson1 from "../../../../../static/echarts/testJson1"
 import { Message } from 'element-ui'
 import Home from '../../../../api/Home'
 export default {
@@ -412,14 +409,12 @@ export default {
             
         },
         formatMarkPoint(data){
-            console.log(data)
             for(let i=0;i<data.length;i++){
                 this.markPoint[i].name = data[i].shipperCompanyName
                 this.markPoint[i].coord= [data[i].lng,data[i].lat]
                 this.markPoint[i].customer = data[i].countCustomerAlarm+'/'+data[i].countCustomer
                 this.markPoint[i].carrier = data[i].countCarrierAlarmNum+'/'+data[i].countCarrierNum
             }
-            console.log(this.markPoint)
         },
         viewMore(){
             this.$router.push({ name: 'anomaly' })
