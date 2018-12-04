@@ -50,11 +50,11 @@
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="发货单号" prop="shipperNo" align="center"></el-table-column>
-					<el-table-column label="发货工厂" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="客户" prop="consigneeName" align="center"></el-table-column>
-					<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
-					<el-table-column label="起点地区" prop="fromSite" align="center"></el-table-column>
-					<el-table-column label="终点地区" prop="toSite" align="center"></el-table-column>
+					<el-table-column label="发货工厂" prop="companyName"></el-table-column>
+					<el-table-column label="客户" prop="consigneeName"></el-table-column>
+					<el-table-column label="货物名称" prop="cargoName"></el-table-column>
+					<el-table-column label="起点地区" prop="fromSite"></el-table-column>
+					<el-table-column label="终点地区" prop="toSite" ></el-table-column>
 					<el-table-column label="调度日期" prop="dispatchDate" align="center">
                         <template slot-scope="scope">
                             {{scope.row.dispatchTime | getdatefromtimestamp}}
