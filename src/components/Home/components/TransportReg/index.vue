@@ -24,7 +24,7 @@
             <div class="filter">
                 <el-form :inline="true" size="mini">
                     <el-form-item label="工厂">
-                        <el-select placeholder="请选择" v-model="find.company">
+                        <el-select placeholder="请选择" v-model="find.companyName">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
                                 value-key="code"
@@ -76,6 +76,7 @@ export default {
             pageSize: 6,
             find: {
                 keyword: '',
+                companyName:'',
                 company: {},
                 msgType: 'all',
                 type: 'GPS'
@@ -133,6 +134,7 @@ export default {
 			}).then(res => {
                 this.companys = res.records
                 this.find.company = this.companys.filter(item => item.companyName == '临沧工厂')[0]
+                this.find.companyName = this.companys.filter(item => item.companyName == '临沧工厂')[0].companyName
                 this.getTransportReg()
 			})
         },

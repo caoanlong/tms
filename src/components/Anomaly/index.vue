@@ -127,7 +127,8 @@ export default {
 			this.getList()
         },
         view(dispatchOrderID){
-            this.$router.push({ name: 'trackquery' , query: {dispatchOrderID} })
+            const routeData = this.$router.resolve({name: 'trackquery', query: { dispatchOrderID }})
+			window.open(routeData.href, '_blank')
         },
         getCompanys() {
             Company.customerFind({
