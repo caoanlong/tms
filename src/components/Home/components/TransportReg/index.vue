@@ -24,7 +24,7 @@
             <div class="filter">
                 <el-form :inline="true" size="mini">
                     <el-form-item label="工厂">
-                        <el-select placeholder="请选择" v-model="find.companyCode">
+                        <el-select placeholder="请选择" v-model="find.companyCode" @change="changeCompany">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
                                 :label="item.companyName" 
@@ -35,7 +35,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="异常原因">
-                        <el-select placeholder="请选择" v-model="find.msgType">
+                        <el-select placeholder="请选择" v-model="find.msgType" style="width:120px">
                             <el-option label="全部" value="all"></el-option>
                             <el-option label="停车超时" value="StopOvertime"></el-option>
                             <el-option label="卸货异常" value="ArrivedOffset"></el-option>
@@ -43,7 +43,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="数据来源">
-                        <el-select placeholder="请选择" v-model="find.type">
+                        <el-select placeholder="请选择" v-model="find.type" style="width:100px">
                             <el-option label="全部" value=""></el-option>
                             <el-option label="GPS" value="GPS"></el-option>
                             <el-option label="APP" value="APP"></el-option>
@@ -77,6 +77,7 @@ export default {
                 msgType: 'all',
                 type: ''
             },
+            curCompany: {},
             list: [],
             companys: [],
             mapHeight: 0,
@@ -87,7 +88,15 @@ export default {
         this.getTransportReg()
         this.getCompanys()
     },
+    mounted() {
+        this.map = new AMap.Map('amapLocationSelect')
+    },
     methods: {
+        changeCompany(code) {
+            const curCompany = this.companys.filter(item => item.code == code)[0]
+            this.curCompany.companyName = curCompany.companyName
+            this.getTransportReg()
+        },
         search() {
             this.pageIndex = 1
             this.getTransportReg()
@@ -107,7 +116,10 @@ export default {
             }).then(res => {
                 this.list = res.records
                 this.total = res.total
-                this.createMap()
+                const first = res.records[0]
+                this.curCompany.lng = first.shipperLongitude || ''
+                this.curCompany.lat = first.shipperLatitude || ''
+                this.createMarker()
             })
         },
         getCompanys() {
@@ -122,72 +134,9 @@ export default {
         /**
          * 创建地图
          */
-        createMap() {
-            this.map = new AMap.Map('amapLocationSelect')
+        createMarker() {
             const truckPathNormal = this.list.filter(item => item.longitude&&item.latitude&&item.msgType=='')
             const truckPathExp = this.list.filter(item => item.longitude&&item.latitude&&item.msgType)
-            const companyPath = [
-                {
-                    "position": [103.009685, 25.064784],
-                    "plateNo": "东骏工厂"
-                },
-                {
-                    "position": [102.555311, 25.269536],
-                    "plateNo": "富民工厂"
-                },
-                {
-                    "position": [102.848636, 24.835932],
-                    "plateNo": "呈贡工厂"
-                },
-                {
-                    "position": [103.801771, 27.444765],
-                    "plateNo": "昭通工厂"
-                },
-                {
-                    "position": [103.1759, 26.133272],
-                    "plateNo": "东川工厂"
-                },
-                {
-                    "position": [99.563572, 27.545611],
-                    "plateNo": "迪庆工厂"
-                },
-                {
-                    "position": [101.057291, 21.910696],
-                    "plateNo": "景洪工厂"
-                },
-                {
-                    "position": [101.520619, 25.070767],
-                    "plateNo": "楚雄工厂"
-                },
-                {
-                    "position": [103.254504, 23.697547],
-                    "plateNo": "红河工厂"
-                },
-                {
-                    "position": [103.246033, 23.305761],
-                    "plateNo": "个旧工厂"
-                },
-                {
-                    "position": [101.861789, 26.427004],
-                    "plateNo": "攀枝花工厂"
-                },
-                {
-                    "position": [101.366987, 26.719193],
-                    "plateNo": "丽江工厂"
-                },
-                {
-                    "position": [99.93806, 26.589454],
-                    "plateNo": "剑川工厂"
-                },
-                {
-                    "position": [99.693993, 23.900584],
-                    "plateNo": "临沧工厂"
-                },
-                {
-                    "position": [99.106157, 25.621965],
-                    "plateNo": "云龙工厂"
-                }
-            ]
             for (let i = 0; i < truckPathExp.length; i++) {
                 new AMap.Marker({
                     position: [truckPathExp[i].longitude,truckPathExp[i].latitude],
@@ -210,11 +159,11 @@ export default {
                     map: this.map
                 })
             }
-            for (let j = 0; j < companyPath.length; j++) {
+            if (this.curCompany.lng && this.curCompany.lat && this.curCompany.companyName) {
                 new AMap.Marker({
-                    position: companyPath[j].position,
-                    content: `<div style="position:relative;width:120px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">${companyPath[j].plateNo}</div>
+                    position: [this.curCompany.lng, this.curCompany.lat],
+                    content: `<div style="position:relative;min-width:140px;height:50px;text-align:center">
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">${this.curCompany.companyName}</div>
                         <div style="position:absolute;bottom:6px;left:52px;background:#9e74b6;width:10px;height:10px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
