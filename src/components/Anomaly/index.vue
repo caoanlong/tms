@@ -117,8 +117,8 @@ export default {
             this.find.keyword = ''
 			this.find.customerID = ''
 			this.find.type = 'all'
-			this.find.beginTime = ''
-			this.find.endTime = ''
+			this.find.beginTime =this.getCurrentMonthFirst()
+			this.find.endTime = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.getList()
