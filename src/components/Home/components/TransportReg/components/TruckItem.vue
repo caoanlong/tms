@@ -11,7 +11,7 @@
         <div class="down">
             <div class="address">
                 <svg-icon icon-class="location" style="color:#409EFF"></svg-icon>
-                <span class="address-txt">{{truck.posAddress}}</span>
+                <span class="address-txt">{{truck.posAddress || '暂未获取到位置信息'}}</span>
             </div>
             <div class="view" @click="viewTrack(truck.dispatchOrderID)">
                 <svg-icon icon-class="foot"></svg-icon>查看轨迹<svg-icon icon-class="arrow-right"></svg-icon>
@@ -23,7 +23,10 @@
 <script>
 export default {
     props: {
-        truck: Object
+        truck: {
+            type: Object,
+            default: {}
+        }
     },
     methods: {
         viewTrack(dispatchOrderID) {
