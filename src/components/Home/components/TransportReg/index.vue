@@ -24,14 +24,13 @@
             <div class="filter">
                 <el-form :inline="true" size="mini">
                     <el-form-item label="工厂">
-                        <el-select placeholder="请选择" v-model="find.company">
+                        <el-select placeholder="请选择" v-model="curCompany" value-key="companyCode">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
-                                value-key="code"
                                 :label="item.companyName" 
-                                :value="item.code" 
-                                v-for="(item, i) in companys" 
-                                :key="i">
+                                :value="item" 
+                                v-for="item in companys" 
+                                :key="item.companyCode">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -76,7 +75,7 @@ export default {
             pageSize: 6,
             find: {
                 keyword: '',
-                company: {},
+                companyCode: '',
                 msgType: 'all',
                 type: 'GPS'
             },
@@ -85,6 +84,14 @@ export default {
             companys: [],
             mapHeight: 0,
             map: null
+        }
+    },
+    watch: {
+        curCompany: {
+            handler(value) {
+                this.find.companyCode = value.companyCode
+            },
+            deep: true
         }
     },
     created() {
@@ -103,36 +110,39 @@ export default {
             this.getTransportReg()
         },
         async getTransportReg() {
+            this.map.clearMap()
             const { records, total } = await Home.getTransportReg({
                 current: this.pageIndex,
                 size: this.pageSize,
                 keyword: this.find.keyword,
-                companyCode: this.find.company.code,
+                companyCode: this.find.companyCode,
                 msgType: this.find.msgType,
                 type: this.find.type
             })
             this.total = total
+            this.list = records
             const list = records
-            if (records[0]) {
-                if (records[0].shipperLongitude) this.find.company.longitude = records[0].shipperLongitude
-                if (records[0].shipperLatitude) this.find.company.latitude = records[0].shipperLatitude
-            }
             for (let i = 0; i < list.length; i++) {
-                if (list[i].longitude && list[i].latitude) {
-                    list[i].posAddress = await this.getAddressByLnglat([list[i].longitude, list[i].latitude])
+                let position = null
+                try {
+                    position = await Home.getTruckAddress({ plateNo: list[i].plateNo })
+                } catch (err) {
+                    console.log(err)
+                }
+                if (position && position.longitude && position.latitude) {
+                    list[i].posAddress = position.posAddress || ''
+                    list[i].longitude = position.longitude
+                    list[i].latitude = position.latitude
                 }
             }
             this.list = list
             this.createMarker()
         },
         getCompanys() {
-            Company.customerFind({
-				current: 1,
-                size: 1000,
-                customerType: 'Shipper'
-			}).then(res => {
-                this.companys = res.records
-                this.find.company = this.companys.filter(item => item.companyName == '临沧工厂')[0]
+            Company.customeShipperList().then(res => {
+                this.companys = res
+                this.curCompany = res.filter(item => item.companyName == '临沧工厂')[0]
+                this.find.companyCode = this.curCompany.companyCode
                 this.getTransportReg()
 			})
         },
@@ -175,12 +185,12 @@ export default {
                 })
             }
             
-            if (this.find.company.longitude && this.find.company.latitude && this.find.company.companyName) {
+            if (this.curCompany.lng && this.curCompany.lat) {
                 const companyMarker = new AMap.Marker({
-                    position: [this.find.company.longitude, this.find.company.latitude],
+                    position: [this.curCompany.lng, this.curCompany.lat],
                     content: `<div style="position:relative;min-width:140px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">${this.find.company.companyName}</div>
-                        <div style="position:absolute;bottom:6px;left:52px;background:#9e74b6;width:10px;height:10px;transform:rotate(45deg)"></div>
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">${this.curCompany.companyName}</div>
+                        <div style="position:absolute;bottom:6px;left:66px;background:#9e74b6;width:10px;height:10px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
                     map: this.map
@@ -196,7 +206,7 @@ export default {
         async getAddressByLnglat(location) {
             const { data } =  await AutoNavMap.getLocation({ 
                 key: AMAPKEY, 
-                location: location.join(',') 
+                location: location.join(',')
             })
             const address = data.regeocode.formatted_address
             return address

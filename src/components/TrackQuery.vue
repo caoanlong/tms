@@ -181,8 +181,7 @@ export default {
             })
             routeLine.setMap(this.map)
             // 调整视野达到最佳显示区域
-            this.map.setFitView(routeLine)
-            this.map.setZoom(9)
+            this.map.setFitView()
             // this.map.setCenter(path[parseInt(path.length/2)])
         },
         /**
@@ -197,9 +196,9 @@ export default {
             })
             const endMarker = new AMap.Marker({
                 position: [endPos.longitude, endPos.latitude],
-                icon: status == 'Finished' ? require('../assets/imgs/zd.png') : require('../assets/imgs/dtcb.png'),
+                icon: this.status == 'Finished' ? require('../assets/imgs/zd.png') : require('../assets/imgs/dtcb.png'),
                 map: this.map,
-                offset: status == 'Finished' ? new AMap.Pixel(-17, -37) : new AMap.Pixel(-25, -54)
+                offset: this.status == 'Finished' ? new AMap.Pixel(-17, -37) : new AMap.Pixel(-25, -54)
             })
             startPos.posLocation = await this.getAddressByLnglat([
                 startPos.longitude, startPos.latitude
