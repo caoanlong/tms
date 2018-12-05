@@ -2,12 +2,12 @@
     <div class="track-container">
         <div id="amapLocationSelect" :style="{'height': mapHeight + 'px'}"></div>
         <div class="logs">
-            <div class="logs-top">
-                <div class="shipperNo">
+            <div class="logs-top" v-loading="logsTopLoading">
+                <div class="shipperNo" v-if="!logsTopLoading">
                     <span class="tit">发货单</span>
                     <span class="ctx">{{data.shipperNo}}</span>
                 </div>
-                <div class="shipperInfo">
+                <div class="shipperInfo" v-if="!logsTopLoading">
                     <div class="shipperItem">
                         <span class="tit">车辆：</span>
                         <span class="ctx">{{data.plateNo}}</span>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            <div class="logs-pannel" :style="{'height': (mapHeight-270) + 'px'}">
+            <div class="logs-pannel" v-loading="logsLoading" :style="{'height': (mapHeight-270) + 'px'}">
                 <div class="steps">
                     <div class="step" v-for="(log, i) in logs" :key="i">
                         <div class="step-left">
@@ -72,7 +72,9 @@ export default {
             customerMonitorAreaList: [],
             consigneeFencingType: '',
             status: '',
-            district: null
+            district: null,
+            logsTopLoading: true,
+            logsLoading: true
         }
     },
     created() {
@@ -102,6 +104,7 @@ export default {
                     ])
                 }
             }
+            this.logsLoading = false
             this.logs = logs
         },
         async getList() {
@@ -118,6 +121,7 @@ export default {
                 }
             })
             if (data.code == 200 && data.data) {
+                this.logsTopLoading = false
                 this.data = data.data
                 const { 
                     locations, 
@@ -196,7 +200,9 @@ export default {
             })
             const endMarker = new AMap.Marker({
                 position: [endPos.longitude, endPos.latitude],
-                icon: this.status == 'Finished' ? require('../assets/imgs/zd.png') : require('../assets/imgs/dtcb.png'),
+                icon: this.status == 'Finished' 
+                    ? (this.alarmMsgs.map(item => item.type).includes('ArrivedOffset') ? require('../assets/imgs/xhbj.png') : require('../assets/imgs/zd.png')) 
+                    : require('../assets/imgs/dtcb.png'),
                 map: this.map,
                 offset: this.status == 'Finished' ? new AMap.Pixel(-17, -37) : new AMap.Pixel(-25, -54)
             })
@@ -228,13 +234,15 @@ export default {
                 offset: new AMap.Pixel(-13, -29),
                 zIndex: 10
             })
-            const circleMarker = new AMap.CircleMarker({
-                center: new AMap.LngLat(item.locationLng,item.locationLat),  // 圆心位置
-                radius: +item.monitorScope/10, // 圆半径
-                fillColor: '#409EFF',   // 圆形填充颜色
+            const circle = new AMap.Circle({
+                center: [item.locationLng, item.locationLat],
+                radius: item.monitorScope, //半径
+                strokeColor: "#409EFF", 
+                strokeOpacity: 1,
+                strokeWeight: 2,
                 fillOpacity: 0.3,
-                strokeColor: '#409EFF', // 描边颜色
-                strokeWeight: 2, // 描边宽度
+                fillColor: '#409EFF',
+                zIndex: 50,
                 map: this.map
             })
             item.posLocation = await this.getAddressByLnglat([
