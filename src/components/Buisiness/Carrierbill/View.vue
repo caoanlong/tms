@@ -208,6 +208,8 @@ import TrailMap from '../../Dispatch/components/TrailMap'
 import CarryOrder from '../../../api/CarryOrder'
 import UploadPhoto from './components/UploadPhoto'
 import CarrierOrderAlarm from '../../../api/CarrierOrderAlarm'
+import AutoNavMap from '../../../api/AutoNavMap'
+import { AMAPKEY } from '../../../common/const'
 export default {
 	data() {
 		return {
@@ -253,14 +255,22 @@ export default {
 				this.getTransports(carrierOrderID)
 			})
         },
-        getCarrierOrderAlarm(dispatchOrderNo){
-            CarrierOrderAlarm.find({
-                keyword:dispatchOrderNo,
-                size:1000
-			}).then(res => {
-                this.alarmInfo = res.records
-			})
+        async getCarrierOrderAlarm(dispatchOrderNo){
+            const alarmInfo = await CarrierOrderAlarm.find({keyword:dispatchOrderNo,size:1000})
+            let alarmInfoData = alarmInfo.records
+            for(let i=0;i<alarmInfoData.length;i++){
+                const {data} =  await AutoNavMap.getLocation({
+                    key:AMAPKEY,
+                    location:alarmInfoData[i].longitude+','+alarmInfoData[i].latitude
+                })
+                const posLocation = data.regeocode.formatted_address
+                if(!alarmInfoData[i].posLocation){
+                    alarmInfoData[i].posLocation = posLocation
+                }
+            }
+            this.alarmInfo = alarmInfoData
         },
+
 		// 查询运输列表
 		getTransports(carrierOrderID) {
 			CarryOrder.taskList({ carrierOrderID }).then(res => {
