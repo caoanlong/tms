@@ -120,24 +120,23 @@ export default {
                 msgType: this.find.msgType,
                 type: this.find.type
             })
+            this.loading = false
             this.total = total
-            const list = records
-            for (let i = 0; i < list.length; i++) {
+            this.list = records
+            for (let i = 0; i < this.list.length; i++) {
                 let position = null
                 let posAddress = ''
                 try {
-                    position = await Home.getTruckAddress({ plateNo: list[i].plateNo })
+                    position = await Home.getTruckAddress({ plateNo: this.list[i].plateNo })
                 } catch (err) {
                     console.log(err) 
                 }
                 if (position && position.longitude && position.latitude) {
-                    list[i].longitude = position.longitude
-                    list[i].latitude = position.latitude
-                    list[i].posAddress = await this.getAddressByLnglat([position.longitude, position.latitude])
+                    this.$set(this.list[i], 'longitude', position.longitude)
+                    this.$set(this.list[i], 'latitude', position.latitude)
+                    this.$set(this.list[i], 'posAddress', await this.getAddressByLnglat([position.longitude, position.latitude]))
                 }
             }
-            this.loading = false
-            this.list = list
             this.createMarker()
         },
         getCompanys() {

@@ -96,16 +96,16 @@ export default {
                 dispatchOrderID: this.$route.query.dispatchOrderID,
                 osn: this.$route.query.osn
             })
-            const logs = res
-            for (let i = 0; i < logs.length; i++) {
-                if (logs[i].action == 'StopOvertime') {
-                    logs[i].posAddress = await this.getAddressByLnglat([
-                        logs[i].longitude, logs[i].latitude
+            this.logsLoading = false
+            this.logs = res
+            for (let i = 0; i < this.logs.length; i++) {
+                if (this.logs[i].action == 'StopOvertime') {
+                    const posAddress = await this.getAddressByLnglat([
+                        this.logs[i].longitude, this.logs[i].latitude
                     ])
+                    this.$set(this.logs[i], 'posAddress', posAddress)
                 }
             }
-            this.logsLoading = false
-            this.logs = logs
         },
         async getList() {
             const url = baseURL + '/deliveryOrder/getTracks'
@@ -151,16 +151,18 @@ export default {
             this.drawStartEndPoint(locations[0], locations[locations.length-1])
             // 绘制异常点标记以及信息窗体事件
             this.alarmMsgs.forEach(item => {
-                const alarmMsgs = new AMap.Marker({
-                    position: [item.longitude, item.latitude],
-                    icon: item.type == 'StopOvertime' ? require('../assets/imgs/tcbj.png') : require('../assets/imgs/xhbj.png'),
-                    map: this.map,
-                    offset: new AMap.Pixel(-17, -37),
-                    zIndex: 10
-                })
-                alarmMsgs.on('mouseover', (e) => {
-                    this.drawInfoWindow(item, alarmMsgs)
-                })
+                if (item.type == 'StopOvertime') {
+                    const alarmMsgs = new AMap.Marker({
+                        position: [item.longitude, item.latitude],
+                        icon: require('../assets/imgs/tcbj.png'),
+                        map: this.map,
+                        offset: new AMap.Pixel(-17, -37),
+                        zIndex: 10
+                    })
+                    alarmMsgs.on('mouseover', (e) => {
+                        this.drawInfoWindow(item, alarmMsgs)
+                    })
+                }
             })
             // 绘制地址监控
             if (this.consigneeFencingType == 'Point') {
@@ -329,7 +331,10 @@ export default {
                 </div>
             </div>`
             // 创建 infoWindow 实例	
-            const infoWindow = new AMap.InfoWindow({ content })
+            const infoWindow = new AMap.InfoWindow({
+                content,
+                offset: new AMap.Pixel(0, -30)
+            })
             // 打开信息窗体
             infoWindow.open(this.map, [item.longitude, item.latitude])
             marker.on('mouseout', (e) => {

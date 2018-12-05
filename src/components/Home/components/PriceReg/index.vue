@@ -259,7 +259,7 @@ export default {
                         label:{
                             show:true,
                             formatter:function (params) {
-                                console.log(params)
+                                console.log('{a|'+(params.dataIndex+1)+'}  '+params.name+'   '+params.value)
                                  return '{a|'+(params.dataIndex+1)+'}  '+params.name+'   '+params.value
                             },
                             rich:{
