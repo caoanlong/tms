@@ -265,7 +265,6 @@ export default {
                         label:{
                             show:true,
                             formatter:function (params) {
-                                console.log(params)
                                  return params.name+'   '+params.value
                             },
                             rich:{
