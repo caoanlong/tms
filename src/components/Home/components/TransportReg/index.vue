@@ -187,10 +187,14 @@ export default {
             }
             
             if (this.curCompany.lng && this.curCompany.lat) {
+                const img = require('../../../../assets/imgs/gctb.png')
                 const companyMarker = new AMap.Marker({
                     position: [this.curCompany.lng, this.curCompany.lat],
                     content: `<div style="position:relative;min-width:140px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">${this.curCompany.companyName}</div>
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#9e74b6;height:40px;line-height:40px;border-radius:5px">
+                            <img style="width:18px" src="${img}"/>
+                            ${this.curCompany.companyName}
+                        </div>
                         <div style="position:absolute;bottom:6px;left:66px;background:#9e74b6;width:10px;height:10px;transform:rotate(45deg)"></div>
                     </div>`,
                     offset: new AMap.Pixel(-50, -50),
@@ -199,7 +203,6 @@ export default {
             }
             // 使用setFitView方法 自适应显示
             this.map.setFitView()
-            // if (center) this.map.setCenter([center.longitude, center.latitude])
         },
         /**
          * 根据经纬度获取详细地址
