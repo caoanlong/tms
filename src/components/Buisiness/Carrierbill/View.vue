@@ -254,9 +254,9 @@ export default {
 			})
         },
         getCarrierOrderAlarm(dispatchOrderNo){
-            console.log(dispatchOrderNo)
             CarrierOrderAlarm.find({
-				keyword:dispatchOrderNo,
+                keyword:dispatchOrderNo,
+                size:1000
 			}).then(res => {
                 this.alarmInfo = res.records
 			})

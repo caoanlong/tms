@@ -198,7 +198,7 @@
 						</p>
 						<p v-if="dispatchOrderDetail.escortLicenseNum"><label>押运员从业资格证</label>{{dispatchOrderDetail.escortLicenseNum}}</p>
 					</div>
-					<DispatchLog :dispatchOrderID="$route.query.dispatchOrderID" :key="new Date().getTime()"></DispatchLog>
+					<DispatchLog :logList="logList" :key="new Date().getTime()"></DispatchLog>
 				</el-col>
 			</el-row>
 			<div class="wf-footer clearfix text-center">
@@ -219,6 +219,8 @@ import DispatchOrder from '../../../api/DispatchOrder'
 import TaskItem from '../components/TaskItem'
 import TrailMap from '../components/TrailMap'
 import DispatchLog from '../components/DispatchLog'
+import AutoNavMap from '../../../api/AutoNavMap'
+import { AMAPKEY } from '../../../common/const'
 import axios from 'axios'
 export default {
 	data() {
@@ -229,7 +231,7 @@ export default {
 			bizDispatchFeeList: [],
 			dispatchOrderFees:{},
 			dispatchTask:{},
-			dispatchLog:{},
+			logList:[],
 			persons:[],
 			dispatchOrderlocationList:[],
 			totalDistance:'',
@@ -242,13 +244,15 @@ export default {
 	created() {
 		this.getDetail()
 		this.getFees()
-		this.getTaskList()
+        this.getTaskList()
+        this.getLogs()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
 			this.getDetail()
 			this.getFees()
-			this.getTaskList()
+            this.getTaskList()
+            this.getLogs()
 		}
 	},
 	methods: {
@@ -375,6 +379,21 @@ export default {
 				this.totalDistance += Number(item.nodeDistance)
 			})
 			this.dispatchOrderlocationList = arrays
+        },
+        async getLogs() {
+            this.logList=[]
+			const dispatchLog = await DispatchOrder.logList({ dispatchOrderID:this.$route.query.dispatchOrderID })
+			for(let i=0;i<dispatchLog.length;i++){
+				if(dispatchLog[i].action=='StopOvertime'){
+					const {data} =  await AutoNavMap.getLocation({
+						key:AMAPKEY,
+						location:dispatchLog[i].longitude+','+dispatchLog[i].latitude
+					})
+					const StopOverAddress = data.regeocode.formatted_address
+					dispatchLog[i].StopOverAddress = StopOverAddress
+				}
+            }
+            this.logList = dispatchLog
 		},
 		back() {
 			this.$router.push({name: 'dispatched'})

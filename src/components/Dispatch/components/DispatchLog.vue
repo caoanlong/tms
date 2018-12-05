@@ -1,9 +1,9 @@
 <template>
 	<div class="dispatchLog">
 		<p class="dispatchLogTit">调度日志</p>
-		<ul v-if="dispatchLog.length>0">
+		<ul>
 			<!-- 日志动作: Accept-接单 Offer-报价/抢单 Comfirm-确认抢单/报价 Load-装车 Unload-到货 Upload-运输上报 Refuse-拒绝接单 Canceled-取消 Overdue-超时取消  -->
-			<li v-for="(logsItem,index) in dispatchLog" :key="index">
+			<li v-for="(logsItem,index) in logList" :key="index">
 				<p>
 					<span class="action" v-if="logsItem.action =='Accept'">接单</span>
 					<span class="action" v-else-if="logsItem.action =='Offer'">报价/抢单</span>
@@ -26,45 +26,13 @@
 				<p v-if="logsItem.action =='Unload'">到货地址：{{logsItem.posAddress}}</p>
 			</li>
 		</ul>
-        
-		<p class="dispatchTips c2" v-else>暂无调度日志</p>
-        <p v-show="isLoading">加载中</p>
 	</div>
 </template>
 
 <script>
-import { Message } from 'element-ui'
-import DispatchOrder from '../../../api/DispatchOrder'
-import AutoNavMap from '../../../api/AutoNavMap'
-import { AMAPKEY } from '../../../common/const'
 export default {
 	props: {
-		dispatchOrderID:String
-	},
-	data() {
-		return {
-            dispatchLog:[]
-		}
-    },
-    created(){
-        this.getLogs()
-    },
-	methods: {
-		async getLogs() {
-            this.dispatchLog=[]
-			const dispatchLog = await DispatchOrder.logList({ dispatchOrderID:this.dispatchOrderID })
-			for(let i=0;i<dispatchLog.length;i++){
-				if(dispatchLog[i].action=='StopOvertime'){
-					const {data} =  await AutoNavMap.getLocation({
-						key:AMAPKEY,
-						location:dispatchLog[i].longitude+','+dispatchLog[i].latitude
-					})
-					const StopOverAddress = data.regeocode.formatted_address
-					dispatchLog[i].StopOverAddress = StopOverAddress
-				}
-            }
-            this.dispatchLog = dispatchLog
-		}
+		logList:Array,
 	}
 }
 </script>

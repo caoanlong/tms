@@ -53,7 +53,7 @@
             </div>
             <div class="card">
                 <div class="title">异常工厂/单<span class="fr" @click="viewMore" >查看更多</span></div>
-                <div class="con">
+                <div class="con" style="height:450px">
                     <div id="chart4" style="height:450px"></div>
                 </div>
             </div>
@@ -248,7 +248,7 @@ export default {
                 xAxis : [
                     {
                         type : 'value',
-                        show : false
+                        show : false,
                     }
                 ],
                 series : [
@@ -259,6 +259,7 @@ export default {
                         label:{
                             show:true,
                             formatter:function (params) {
+                                console.log(params)
                                  return '{a|'+(params.dataIndex+1)+'}  '+params.name+'   '+params.value
                             },
                             rich:{
@@ -299,7 +300,7 @@ export default {
                 roam:true,
                 scaleLimit:{
                     min:0.5,
-                    max:2
+                    max:5
                 },
                 geo: {
                     map: "云南",
