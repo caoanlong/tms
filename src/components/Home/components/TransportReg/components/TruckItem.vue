@@ -23,7 +23,10 @@
 <script>
 export default {
     props: {
-        truck: Object
+        truck: {
+            type: Object,
+            default: {}
+        }
     },
     methods: {
         viewTrack(dispatchOrderID) {

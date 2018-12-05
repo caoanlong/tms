@@ -6,7 +6,7 @@
             </el-input>
             <div class="trucks">
                 <div class="total">共<span class="total-num">{{total}}</span>个在途车辆</div>
-                <div class="wrapper">
+                <div class="wrapper" v-loading="loading">
                     <truck-item v-for="(item, i) in list" :key="i" :truck="item"></truck-item>
                 </div>
             </div>
@@ -83,7 +83,8 @@ export default {
             list: [],
             companys: [],
             mapHeight: 0,
-            map: null
+            map: null,
+            loading: true
         }
     },
     watch: {
@@ -120,21 +121,22 @@ export default {
                 type: this.find.type
             })
             this.total = total
-            this.list = records
             const list = records
             for (let i = 0; i < list.length; i++) {
                 let position = null
+                let posAddress = ''
                 try {
                     position = await Home.getTruckAddress({ plateNo: list[i].plateNo })
                 } catch (err) {
-                    console.log(err)
+                    console.log(err) 
                 }
                 if (position && position.longitude && position.latitude) {
-                    list[i].posAddress = position.posAddress || ''
                     list[i].longitude = position.longitude
                     list[i].latitude = position.latitude
+                    list[i].posAddress = await this.getAddressByLnglat([position.longitude, position.latitude])
                 }
             }
+            this.loading = false
             this.list = list
             this.createMarker()
         },
