@@ -54,16 +54,16 @@
             <div class="card">
                 <div class="title">异常工厂/单<span class="fr" @click="viewMore" >查看更多</span></div>
                 <div class="con" style="height:450px;padding:10px" v-loading="exComloading">
-                    <div style="margin-bottom: 15px" v-for="(item, index) in priceReg.alarmRankList" :key="index">
-                        <div style="height:24px;line-height:24px">
-                            <span>{{index + 1}}</span>
+                    <div style="margin-bottom: 10px" v-for="(item, index) in priceReg.alarmRankList" :key="index">
+                        <div style="height:20px;line-height:20px;font-size:12px">
+                            <span>{{index + 1}}.</span>
                             <span>{{item.shipperCompanyName}}</span>
                             <span style="color:#409EFF">{{item.percentage}}</span>
                         </div>
                         <el-progress 
                             :text-inside="false"
                             :show-text="false" 
-                            :stroke-width="18" 
+                            :stroke-width="14" 
                             :percentage="item.percentage">
                         </el-progress>
                     </div>
