@@ -117,9 +117,9 @@
 							</td>
                             <td>
                                 <el-popover @show="getCarrierOrderAlarm(transport.dispatchOrderNo)" placement="right" trigger="hover">
-                                    <div slot style="height:200px;overflow:hidden;overflow-y:auto">
+                                    <div slot style="max-height:200px;overflow:hidden;overflow-y:auto">
                                         <div v-for="(item,index) in alarmInfo" :key="index" class="alarmItem">
-                                            <p>{{index+1}}.<b>{{item.type=="StopOvertime"?'停车超时':'卸货异常'}}</b><span class="createTime fr">{{item.createTime | getdatefromtimestamp}}</span></p>
+                                            <p>{{index+1}}.<b>{{item.type=="StopOvertime"?'停车超时':'卸货异常'}}</b><span class="keepMinute" v-if="item.type=='StopOvertime'">超时：{{item.keepMinute}} 分钟</span><span class="createTime fr">{{item.createTime | getdatefromtimestamp}}</span></p>
                                             <p class="address">地址：{{item.consigneeAddress}}</p>
                                         </div>
                                     </div>
@@ -333,7 +333,7 @@ export default {
 		text-align left
 		color #666
 .alarmItem
-    width 240px
+    width 360px
     padding 5px 0
     p
         line-height 20px
@@ -341,9 +341,13 @@ export default {
         .createTime
             font-size 12px
             color #999
+        .keepMinute
+            font-size 12px
+            margin-left 10px
+            color #f00
         &.address
             font-size 13px
-            width 240px
+            width 320px
             height 20px
             overflow hidden
             text-overflow ellipsis

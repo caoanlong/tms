@@ -27,8 +27,8 @@
 							<p>{{cargo.volume}}</p>
 						</el-form-item>
 						<el-form-item label="配载方式" prop="packageType">
-							<p v-if="cargo.dispatchType == 'Volume'">体积</p>
-							<p v-else-if="cargo.dispatchType == 'Weight'">重量</p>
+							<p v-if="cargo.dispatchType == 'Weight'">重量</p>
+                            <p v-else>体积</p>
 						</el-form-item>
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
