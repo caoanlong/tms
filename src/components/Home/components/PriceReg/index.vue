@@ -53,11 +53,20 @@
             </div>
             <div class="card">
                 <div class="title">异常工厂/单<span class="fr" @click="viewMore" >查看更多</span></div>
-                <div class="con" style="height:450px">
-                    <ul>
-                        <li v-for="(item,index) in priceReg.alarmRankList" :key="index">{{index+1}}<el-progress :text-inside="false" :show-text="false" :stroke-width="18" :percentage="100" ></el-progress></li>
-                    </ul>
-                    
+                <div class="con" style="height:450px;padding:10px" v-loading="exComloading">
+                    <div style="margin-bottom: 15px" v-for="(item, index) in priceReg.alarmRankList" :key="index">
+                        <div style="height:24px;line-height:24px">
+                            <span>{{index + 1}}</span>
+                            <span>{{item.shipperCompanyName}}</span>
+                            <span style="color:#409EFF">{{item.percentage}}</span>
+                        </div>
+                        <el-progress 
+                            :text-inside="false"
+                            :show-text="false" 
+                            :stroke-width="18" 
+                            :percentage="item.percentage">
+                        </el-progress>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,6 +86,7 @@ import Home from '../../../../api/Home'
 export default {
     data(){
         return {
+            exComloading: true,
             markPoint:[],
             dataType: '0',
             percentage:'',
@@ -390,6 +400,15 @@ export default {
 				type:this.dataType
 			}).then(res => {
                 this.priceReg = res
+                const max = Math.max.apply(null, this.priceReg.alarmRankList.map(item => item.ex))
+                this.priceReg.alarmRankList = res.alarmRankList.map(item => {
+                    return {
+                        ex: +item.ex,
+                        shipperCompanyName: item.shipperCompanyName,
+                        percentage: Math.round(+item.ex*100/max)
+                    }
+                })
+                this.exComloading = false
                 this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
                 this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
                 this.chartOption1.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfSelfPickCarrierOrder)?'特价占比\n'+(this.priceReg.sumOfSelfPickCarrierOrder/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无特价'
@@ -402,7 +421,6 @@ export default {
                 this.formatMarkPoint(this.priceReg.rankList)
                 this.mapOption.series[0].markPoint.data = this.markPoint
                 this.drawCharts()
-                let max= Math.max.apply(null,this.priceReg.alarmRankList.map(item => item.ex))
                 
             })
         },

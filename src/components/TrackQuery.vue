@@ -32,18 +32,33 @@
             </div>
             <div class="logs-pannel" v-loading="logsLoading" :style="{'height': (mapHeight-270) + 'px'}">
                 <div class="steps">
-                    <div class="step" v-for="(log, i) in logs" :key="i">
+                    <div class="step step-ex" v-for="(log, i) in logs" :key="i">
                         <div class="step-left">
                             <div :class="i == 0 ? 'circle-cur' : 'circle'"></div>
                             <dir class="left-line"></dir>
                         </div>
                         <div class="step-right">
                             <div class="status">
-                                <div class="tit">{{DISPATHLOGACTION[log.action]}}</div>
-                                <div class="time">{{log.createTime | getdatefromtimestamp}}</div>
+                                <div class="tit" 
+                                    :style="{'color': log.action == 'StopOvertime' || log.action == 'ArrivedOffset' ? 'red' : ''}">
+                                    {{DISPATHLOGACTION[log.action]}}
+                                </div>
+                                <div 
+                                    class="time" 
+                                    :style="{'color': log.action == 'StopOvertime' || log.action == 'ArrivedOffset' ? 'red' : ''}">
+                                    {{log.createTime | getdatefromtimestamp}}
+                                </div>
                             </div>
-                            <div class="desc">备注：{{log.description}}</div>
-                            <div class="address">地址：{{log.posAddress}}</div>
+                            <div 
+                                class="desc" 
+                                :style="{'color': log.action == 'StopOvertime' || log.action == 'ArrivedOffset' ? 'red' : ''}">
+                                备注：{{log.description}}
+                            </div>
+                            <div 
+                                class="address" 
+                                :style="{'color': log.action == 'StopOvertime' || log.action == 'ArrivedOffset' ? 'red' : ''}">
+                                地址：{{log.posAddress}}
+                            </div>
                         </div>
                     </div>
                 </div>
