@@ -54,7 +54,10 @@
             <div class="card">
                 <div class="title">异常工厂/单<span class="fr" @click="viewMore" >查看更多</span></div>
                 <div class="con" style="height:450px">
-                    <div id="chart4" style="height:450px"></div>
+                    <ul>
+                        <li v-for="(item,index) in priceReg.alarmRankList" :key="index">{{index+1}}<el-progress :text-inside="false" :show-text="false" :stroke-width="18" :percentage="100" ></el-progress></li>
+                    </ul>
+                    
                 </div>
             </div>
         </div>
@@ -76,6 +79,7 @@ export default {
         return {
             markPoint:[],
             dataType: '0',
+            percentage:'',
             fullHeight: document.documentElement.clientHeight -225,
             priceReg:{
                 //总单量
@@ -236,7 +240,7 @@ export default {
                     right: '10',
                     bottom: '10',
                     top:'10',
-                    containLabel: false
+                    containLabel: true
                 },
                 yAxis : [
                     {
@@ -255,12 +259,14 @@ export default {
                     {
                         type:'bar',
                         barWidth: '20',
+                        barGap:'20',
+                        barCategoryGap:'20',
                         data:[],
                         label:{
                             show:true,
                             formatter:function (params) {
                                 console.log(params)
-                                 return '{a|'+(params.dataIndex+1)+'}  '+params.name+'   '+params.value
+                                 return params.name+'   '+params.value
                             },
                             rich:{
                                 a: {
@@ -393,12 +399,12 @@ export default {
                 this.chartOption2.series[0].label.normal.formatter = (this.priceReg.sumOfCarrierOrder&&this.priceReg.sumOfAlarm)?'异常占比\n'+(this.priceReg.sumOfAlarm/this.priceReg.sumOfCarrierOrder*100).toFixed(2)+'%':'暂无异常'
                 this.chartOption3.series[0].data[0].value= this.priceReg.stopOvertime
                 this.chartOption3.series[0].data[1].value= this.priceReg.arrivedOffset
-                this.chartOption4.yAxis[0].data = this.priceReg.alarmRankList.map(item => item.shipperCompanyName).reverse()
-                this.chartOption4.series[0].data = this.priceReg.alarmRankList.map(item => item.ex).reverse()
                 this.markPoint = this.priceReg.rankList
                 this.formatMarkPoint(this.priceReg.rankList)
                 this.mapOption.series[0].markPoint.data = this.markPoint
                 this.drawCharts()
+                let max= Math.max.apply(null,this.priceReg.alarmRankList.map(item => item.ex))
+                
             })
         },
         handleClick(tab, event) {
@@ -408,20 +414,17 @@ export default {
             let chart1 = echarts.init(document.getElementById('chart1'))
             let chart2 = echarts.init(document.getElementById('chart2'))
             let chart3 = echarts.init(document.getElementById('chart3'))
-            let chart4 = echarts.init(document.getElementById('chart4'))
             let mapChart = echarts.init(document.getElementById('map'))
             // 绘制图表
             chart1.setOption(this.chartOption1,true)
             chart2.setOption(this.chartOption2,true)
             chart3.setOption(this.chartOption3,true)
-            chart4.setOption(this.chartOption4,true)
             mapChart.setOption(this.mapOption,true)
             setTimeout(function (){
                 window.onresize = function () {
                     chart1.resize()
                     chart2.resize()
                     chart3.resize()
-                    chart4.resize()
                     mapChart.resize()
                 }
             },200)
@@ -555,6 +558,21 @@ export default {
                     display inline-block
                     vertical-align top
                     margin-right 5px
+        .num
+            width 20px
+            position absolute
+            top 0
+            left 10px
+            span
+                width 20px
+                height 20px
+                display block
+                border-radius 10px
+                background #f00
+                color #409EFF
+                text-align center
+                line-height 20px
+                margin 23px 0
         &~.card
             margin-top 10px
 </style>

@@ -120,7 +120,7 @@
                                     <div slot style="max-height:200px;overflow:hidden;overflow-y:auto">
                                         <div v-for="(item,index) in alarmInfo" :key="index" class="alarmItem">
                                             <p>{{index+1}}.<b>{{item.type=="StopOvertime"?'停车超时':'卸货异常'}}</b><span class="keepMinute" v-if="item.type=='StopOvertime'">超时：{{item.keepMinute}} 分钟</span><span class="createTime fr">{{item.createTime | getdatefromtimestamp}}</span></p>
-                                            <p class="address">地址：{{item.consigneeAddress}}</p>
+                                            <p class="address">地址：{{item.posLocation}}</p>
                                         </div>
                                     </div>
                                     <el-button type="text" slot="reference" class="alarmStatus" v-if="transport.alarmFlag=='Y'">有</el-button>
