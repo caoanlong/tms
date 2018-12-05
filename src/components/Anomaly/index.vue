@@ -20,10 +20,9 @@
 					</el-form-item>
                     <el-form-item label="异常原因" class="customerSelect">
 						<el-select placeholder="请选择" v-model="find.type">
-							<el-option label="全部" value="all"></el-option>
+							<el-option label="全部" value=""></el-option>
                             <el-option label="停车超时" value="StopOvertime"></el-option>
                             <el-option label="卸货异常" value="ArrivedOffset"></el-option>
-                            <el-option label="无" value="normal"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="异常时间从">
@@ -50,18 +49,31 @@
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="发货单号" prop="shipperNo" align="center"></el-table-column>
-					<el-table-column label="发货工厂" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="客户" prop="consigneeName" align="center"></el-table-column>
-					<el-table-column label="货物名称" prop="cargoName" align="center"></el-table-column>
-					<el-table-column label="起点地区" prop="fromSite" align="center"></el-table-column>
-					<el-table-column label="终点地区" prop="toSite" align="center"></el-table-column>
-					<el-table-column label="调度日期" prop="dispatchDate" align="center"></el-table-column>
+					<el-table-column label="发货工厂" prop="companyName"></el-table-column>
+					<el-table-column label="客户" prop="consigneeName"></el-table-column>
+					<el-table-column label="货物名称" prop="cargoName"></el-table-column>
+					<el-table-column label="起点地区" prop="fromSite"></el-table-column>
+					<el-table-column label="终点地区" prop="toSite" ></el-table-column>
+					<el-table-column label="调度日期" prop="dispatchDate" align="center">
+                        <template slot-scope="scope">
+                            {{scope.row.dispatchTime | getdatefromtimestamp}}
+                        </template>
+                    </el-table-column>
 					<el-table-column label="车牌号" prop="plateNo" align="center"></el-table-column>
-					<el-table-column label="异常原因" prop="type" align="center"></el-table-column>
-					<el-table-column label="异常时间" prop="createTime" align="center"></el-table-column>
+					<el-table-column label="异常原因" prop="type" align="center">
+                        <template slot-scope="scope">
+							<span v-if="scope.row.type=='StopOvertime'">停车超时</span>
+							<span v-else>卸货异常</span>
+						</template>
+                    </el-table-column>
+					<el-table-column label="异常时间" prop="createTime" align="center">
+                        <template slot-scope="scope">
+                            {{scope.row.createTime | getdatefromtimestamp}}
+                        </template>
+                    </el-table-column>
 					<el-table-column label="操作" align="center" width="100">
 						<template slot-scope="scope">
-							<el-button size="mini" @click="view(scope.row.carrierOrderAlarmID)">轨迹</el-button>
+							<el-button size="mini" @click="view(scope.row.dispatchOrderID)">轨迹</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -84,7 +96,7 @@ export default {
             find: { 
                 keyword: '',
                 customerID:'',
-                type:'all',
+                type:'',
                 beginTime:this.getCurrentMonthFirst(),
                 endTime:this.getCurrentMonthLast()
             },
@@ -107,15 +119,16 @@ export default {
         reset(){
             this.find.keyword = ''
 			this.find.customerID = ''
-			this.find.type = 'all'
-			this.find.beginTime = ''
-			this.find.endTime = ''
+			this.find.type = ''
+			this.find.beginTime =this.getCurrentMonthFirst()
+			this.find.endTime = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.getList()
         },
-        view(carrierOrderAlarmID){
-
+        view(dispatchOrderID){
+            const routeData = this.$router.resolve({name: 'trackquery', query: { dispatchOrderID }})
+			window.open(routeData.href, '_blank')
         },
         getCompanys() {
             Company.customerFind({

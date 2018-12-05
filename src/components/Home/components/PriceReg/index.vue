@@ -31,7 +31,9 @@
                     <el-tab-pane label="当月数据" name="0"></el-tab-pane>
                     <el-tab-pane label="当日数据" name="1"></el-tab-pane>
                 </el-tabs>
+                <el-button size="mini" type="primary" class="resetMap" @click="resetMap">重置地图</el-button>
             </div>
+            
             <div class="mapLegend">
                 <p class="p1"><i></i>工厂名称</p>
                 <p class="p2"><i></i>总单量/异常量</p>
@@ -45,14 +47,14 @@
                     <div id="chart3" style="height:225px"></div>
                     <div class="legend">
                         <p class="p1"><i></i><span>停车超时</span>{{priceReg.stopOvertime}}</p>
-                        <p class="p2"><i></i><span>违规卸货</span>{{priceReg.arrivedOffset}}</p>
+                        <p class="p2"><i></i><span>卸货异常</span>{{priceReg.arrivedOffset}}</p>
                     </div>
                 </div>
             </div>
             <div class="card">
                 <div class="title">异常工厂/单<span class="fr" @click="viewMore" >查看更多</span></div>
                 <div class="con">
-                    <div id="chart4" style="height:225px"></div>
+                    <div id="chart4" style="height:450px"></div>
                 </div>
             </div>
         </div>
@@ -82,7 +84,7 @@ export default {
                 sumOfSelfPickCarrierOrder:'',
                 //异常单
                 sumOfAlarm:'',
-                //违规卸货
+                //卸货异常
                 arrivedOffset:'',
                 //停车超时
                 stopOvertime:'',
@@ -193,7 +195,7 @@ export default {
             chartOption3:{
                 legend: {
                     show:false,
-                    data: ['停车超时','违规卸货']
+                    data: ['停车超时','卸货异常']
                 },
                 series : [
                     {
@@ -221,7 +223,7 @@ export default {
                         center: ['28%', '50%'],
                         data:[
                             {value:'', name:'停车超时'},
-                            {value:'', name:'违规卸货'},
+                            {value:'', name:'卸货异常'},
                         ]
                     }
                 ]  
@@ -246,7 +248,7 @@ export default {
                 xAxis : [
                     {
                         type : 'value',
-                        show : false,
+                        show : false
                     }
                 ],
                 series : [
@@ -273,9 +275,9 @@ export default {
                                
                             },
                             position:'insideLeft',
-                            color:'#f4516c',
-                            textBorderColor:'#fff',
-                            textBorderWidth:1
+                            color:'#fff',
+                            // textBorderColor:'#fff',
+                            // textBorderWidth:1
                         },
                         itemStyle:{
                             barBorderRadius:4
@@ -294,6 +296,11 @@ export default {
                         +params.data.customer
                     },
                 },
+                roam:true,
+                scaleLimit:{
+                    min:0.5,
+                    max:2
+                },
                 geo: {
                     map: "云南",
                     label: {
@@ -304,6 +311,7 @@ export default {
                         areaColor: "#f8f8f8",
                         borderColor: "#999",
                     },
+                    center:[101.520619, 25.070767],
                     emphasis: {
                         label:{
                             show:true,
@@ -423,12 +431,16 @@ export default {
             for(let i=0;i<data.length;i++){
                 this.markPoint[i].name = data[i].shipperCompanyName
                 this.markPoint[i].coord= [data[i].lng,data[i].lat]
-                this.markPoint[i].customer = data[i].countCustomerAlarm+'/'+data[i].countCustomer
-                this.markPoint[i].carrier = data[i].countCarrierAlarmNum+'/'+data[i].countCarrierNum
+                this.markPoint[i].customer = data[i].countCustomer+'/'+data[i].countCustomerAlarm
+                this.markPoint[i].carrier = data[i].countCarrierNum+'/'+data[i].countCarrierAlarmNum
             }
         },
         viewMore(){
             this.$router.push({ name: 'anomaly' })
+        },
+        resetMap(){
+            let mapChart = echarts.init(document.getElementById('map'))
+            mapChart.setOption(this.mapOption,true)
         }
     }
 }
@@ -444,6 +456,7 @@ export default {
         right 0
     .middle
         position relative
+        
         .mapLegend
             position absolute
             right 0px
@@ -476,6 +489,10 @@ export default {
             left 0
             top 0
             right 0
+            .resetMap
+                position absolute
+                top 7px
+                right 0
 .sideSection
     width 300px
     position absolute

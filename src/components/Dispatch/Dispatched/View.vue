@@ -198,7 +198,7 @@
 						</p>
 						<p v-if="dispatchOrderDetail.escortLicenseNum"><label>押运员从业资格证</label>{{dispatchOrderDetail.escortLicenseNum}}</p>
 					</div>
-					<DispatchLog :dispatchOrderID="$route.query.dispatchOrderID"></DispatchLog>
+					<DispatchLog :dispatchOrderID="$route.query.dispatchOrderID" :key="new Date().getTime()"></DispatchLog>
 				</el-col>
 			</el-row>
 			<div class="wf-footer clearfix text-center">

@@ -26,7 +26,9 @@
 				<p v-if="logsItem.action =='Unload'">到货地址：{{logsItem.posAddress}}</p>
 			</li>
 		</ul>
+        
 		<p class="dispatchTips c2" v-else>暂无调度日志</p>
+        <p v-show="isLoading">加载中</p>
 	</div>
 </template>
 
@@ -41,14 +43,15 @@ export default {
 	},
 	data() {
 		return {
-			dispatchLog:[]
+            dispatchLog:[]
 		}
-	},
-	created() {
+    },
+    created(){
         this.getLogs()
     },
 	methods: {
 		async getLogs() {
+            this.dispatchLog=[]
 			const dispatchLog = await DispatchOrder.logList({ dispatchOrderID:this.dispatchOrderID })
 			for(let i=0;i<dispatchLog.length;i++){
 				if(dispatchLog[i].action=='StopOvertime'){
@@ -58,10 +61,9 @@ export default {
 					})
 					const StopOverAddress = data.regeocode.formatted_address
 					dispatchLog[i].StopOverAddress = StopOverAddress
-				
 				}
-			}
-			this.dispatchLog = dispatchLog
+            }
+            this.dispatchLog = dispatchLog
 		}
 	}
 }
