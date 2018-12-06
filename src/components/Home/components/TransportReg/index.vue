@@ -15,6 +15,7 @@
                     small
                     layout="prev, pager, next"
                     :total="total" 
+                    :current-page.sync="pageIndex"
                     :page-size="pageSize" 
                     @current-change="pageChange">
                 </el-pagination>

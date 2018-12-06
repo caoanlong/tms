@@ -58,7 +58,7 @@
                         <div style="height:24px;line-height:24px">
                             <span>{{index + 1}}</span>
                             <span>{{item.shipperCompanyName}}</span>
-                            <span style="color:#409EFF">{{item.percentage}}</span>
+                            <span style="color:#409EFF">{{item.ex}}</span>
                         </div>
                         <el-progress 
                             :text-inside="false"

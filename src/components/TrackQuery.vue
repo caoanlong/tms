@@ -218,7 +218,11 @@ export default {
             const endMarker = new AMap.Marker({
                 position: [endPos.longitude, endPos.latitude],
                 icon: this.status == 'Finished' 
-                    ? (this.alarmMsgs.map(item => item.type).includes('ArrivedOffset') ? require('../assets/imgs/xhbj.png') : require('../assets/imgs/zd.png')) 
+                    ? (
+                        this.alarmMsgs.map(item => item.type).includes('ArrivedOffset') 
+                        ? require('../assets/imgs/xhbj.png') 
+                        : require('../assets/imgs/zd.png')
+                    ) 
                     : require('../assets/imgs/dtcb.png'),
                 map: this.map,
                 offset: this.status == 'Finished' ? new AMap.Pixel(-17, -37) : new AMap.Pixel(-25, -54)
@@ -326,8 +330,17 @@ export default {
             }
             if (item.type && item.type == 'end') {
                 if (this.status == 'Finished') {
-                    title = `<h3>完成卸货</h3>`
-                    remark = `<div>备注：</div>`
+                    if (this.alarmMsgs.map(item => item.type).includes('ArrivedOffset')) {
+                        title = `<h3 style="color:red">卸货异常</h3>`
+                        if (this.consigneeFencingType == 'Point') {
+                            remark = `<div>备注：卸货地址偏移</div>`
+                        } else if (this.consigneeFencingType == 'Area') {
+                            remark = `<div>备注：卸货地区偏移</div>`
+                        }
+                    } else {
+                        title = `<h3>完成卸货</h3>`
+                        remark = `<div>备注：</div>`
+                    }
                 } else {
                     title = `<h3>车辆位置</h3>`
                     remark = `<div>备注：</div>`
