@@ -256,7 +256,7 @@ export default {
                 roam:true,
                 scaleLimit:{
                     min:0.5,
-                    max:50
+                    max:100
                 },
                 geo: {
                     map: "云南",
