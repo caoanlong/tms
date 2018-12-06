@@ -425,6 +425,17 @@ class Company extends Base {
         })
     }
 
+    customerAddressListOfAll(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/customer/address/listOfAll',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
+
     /**
      * 车辆
      */

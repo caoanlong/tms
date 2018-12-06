@@ -53,6 +53,9 @@
                     <el-form-item>
                         <el-button type="success" icon="el-icon-refresh" @click="search">刷新</el-button>
                     </el-form-item>
+                    <el-form-item>
+                        <el-button type="default" @click="controllConsignee">{{controllConsigneeTxt}}收货单位</el-button>
+                    </el-form-item>
                 </el-form>
             </div>
             <div id="amapLocationSelect"></div>
@@ -83,6 +86,9 @@ export default {
             curCompany: {},
             list: [],
             companys: [],
+            consignees: [],
+            consigneeMarkers: [],
+            controllConsigneeTxt: '显示',
             mapHeight: 0,
             map: null,
             loading: true
@@ -91,7 +97,7 @@ export default {
     watch: {
         curCompany: {
             handler(value) {
-                this.find.companyCode = value.companyCode
+                this.find.companyCode = value ? value.companyCode : ''
             },
             deep: true
         }
@@ -105,10 +111,12 @@ export default {
     methods: {
         search() {
             this.pageIndex = 1
+            this.controllConsigneeTxt = '显示'
             this.getTransportReg()
         },
         pageChange(index) {
             this.pageIndex = index
+            this.controllConsigneeTxt = '显示'
             this.getTransportReg()
         },
         async getTransportReg() {
@@ -144,7 +152,9 @@ export default {
             Company.customeShipperList().then(res => {
                 this.companys = res
                 this.curCompany = res.filter(item => item.companyName == '临沧工厂')[0]
-                this.find.companyCode = this.curCompany.companyCode
+                if (this.curCompany && this.curCompany.companyCode) {
+                    this.find.companyCode = this.curCompany.companyCode
+                }
                 this.getTransportReg()
 			})
         },
@@ -187,7 +197,7 @@ export default {
                 })
             }
             
-            if (this.curCompany.lng && this.curCompany.lat) {
+            if (this.curCompany && this.curCompany.lng && this.curCompany.lat) {
                 const img = require('../../../../assets/imgs/gctb.png')
                 const companyMarker = new AMap.Marker({
                     position: [this.curCompany.lng, this.curCompany.lat],
@@ -215,6 +225,61 @@ export default {
             })
             const address = data.regeocode.formatted_address
             return address
+        },
+        controllConsignee() {
+            if (this.controllConsigneeTxt == '显示') {
+                this.showConsignee()
+                this.controllConsigneeTxt = '隐藏'
+            } else {
+                this.hideConsignee()
+                this.controllConsigneeTxt = '显示'
+            }
+        },
+        async showConsignee() {
+            this.consigneeMarkers = []
+            this.consignees = await Company.customerAddressListOfAll()
+            for (let i = 0; i < this.consignees.length; i++) {
+                const consigneeMarker = new AMap.Marker({
+                    position: [this.consignees[i].locationLng, this.consignees[i].locationLat],
+                    icon: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png',
+                    map: this.map
+                })
+                this.consigneeMarkers.push(consigneeMarker)
+                consigneeMarker.on('mouseover', e => {
+                    this.drawInfoWindow(this.consignees[i], consigneeMarker)
+                })
+                
+            }
+            this.map.setFitView()
+        },
+        hideConsignee() {
+            for (let i = 0; i < this.consigneeMarkers.length; i++) {
+                this.consigneeMarkers[i].hide()
+            }
+        },
+        /**
+         * 绘制信息窗体
+         */
+        drawInfoWindow(item, marker) {
+            const title = `<h3>${item.companyName}</h3>`
+            const lng = `<div>经度：${item.locationLng}</div>`
+            const lat = `<div>纬度：${item.locationLat}</div>`
+            const address = `<div>地址: ${item.locationAddress}</div>`
+            const content = `<div>
+                <div style="padding:0px 4px;">
+                    ${title}${lng}${lat}${address}
+                </div>
+            </div>`
+            // 创建 infoWindow 实例	
+            const infoWindow = new AMap.InfoWindow({
+                content,
+                offset: new AMap.Pixel(0, -30)
+            })
+            // 打开信息窗体
+            infoWindow.open(this.map, [item.locationLng, item.locationLat])
+            marker.on('mouseout', (e) => {
+                infoWindow.close()
+            })
         }
     }
 }
