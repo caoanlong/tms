@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="middle">
-            <div id="map" :style="{'height':fullHeight+'px'}"></div>
+            <div id="map" style="height:772px" class="map"></div>
             <div class="changeData">
                 <el-tabs v-model="dataType" type="card" @tab-click="handleClick">
                     <el-tab-pane label="当月数据" name="0"></el-tab-pane>
@@ -337,7 +337,7 @@ export default {
                             areaColor: "#f8f8f8",                            
                         },
                     },
-                    zoom:1.2   
+                    zoom:1.3   
                 },
                 series: [
                 {
@@ -477,10 +477,12 @@ export default {
         right 0
     .middle
         position relative
-        
+        .map
+            border 1px solid #ddd
+            border-top none
         .mapLegend
             position absolute
-            right 0px
+            right 10px
             top 50px
             p
                 height 20px

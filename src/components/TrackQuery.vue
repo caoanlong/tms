@@ -348,7 +348,7 @@ export default {
             }
             if (item.type && item.type == 'Point') {
                 title = `<h3>${item.companyName}</h3>`
-                remark = `<div>围栏范围：${item.monitorScope}</div>`
+                remark = `<div>围栏范围：${item.monitorScope}米</div>`
             }
             const lng = `<div>经度：${item.longitude}</div>`
             const lat = `<div>纬度：${item.latitude}</div>`
