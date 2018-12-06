@@ -1,7 +1,8 @@
 export const PAGEINDEX = 1
 export const PAGESIZE = 10
 export const TOTAL = 0
-export const MAPKEY = '3a29e75c898b755e250dfcf99c3ebd45'
+export const MAPKEY = '3a29e75c898b755e250dfcf99c3ebd45' //百度地图KEY
+export const AMAPKEY = '3a29e75c898b755e250dfcf99c3ebd45' //高德地图KEY
 
 /**
  * 调度单类型
@@ -253,4 +254,21 @@ export const CARGOTYPES = {
     "Cement": "水泥",
     "Chamotte": "熟料",
     "SemiFinished": "半成品"
+}
+
+/**
+ * 调度日志类型
+ */
+export const DISPATHLOGACTION = {
+    Accept: "接单",
+    Offer: "报价/抢单",
+    Comfirm: "确认抢单/报价",
+    Load: "装车",
+    Unload: "到货",
+    Upload: "运输上报",
+    Refuse: "拒绝接单",
+    Canceled: "取消",
+    Overdue: "超时取消",
+    StopOvertime: "停车异常",
+    ArrivedOffset: "卸货异常"
 }

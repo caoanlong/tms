@@ -54,7 +54,9 @@
 					<tr>
 						<th class="w1">承运单</th>
 						<th class="w4">状态</th>
+						<th class="w1">发货单号</th>
 						<th class="w3">货物</th>
+						<th class="w1">异常</th>
 						<th class="w1">货量</th>
 						<th class="w1">件数</th>
 						<th class="w2">装车地</th>
@@ -65,10 +67,10 @@
 					</tr>
 					<template v-for="item in dispatchBillList">
 						<tr>
-							<td colspan="10" class="blank"></td>
+							<td colspan="12" class="blank"></td>
 						</tr>
 						<tr>
-							<td colspan="10" class="txt-l">
+							<td colspan="12" class="txt-l">
 								<div class="dispatchbillTit">
 									<span class="num" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
 									<el-tag type="info" size="mini" >{{DISPATCHORDERTYPESIMPLE[item.type]}}</el-tag>
@@ -176,8 +178,14 @@
 							<td><el-tag size="mini" type="warning" v-if="taskItem.status == 'Committed'">待装车</el-tag>
 								<el-tag size="mini" v-else-if="taskItem.status == 'Loaded'">已装运</el-tag>
 								<el-tag size="mini" type="success" v-else-if="taskItem.status == 'Signed'">已签收</el-tag>
-								<el-tag size="mini" type="info" v-else>已作废</el-tag></td>
+								<el-tag size="mini" type="info" v-else>已作废</el-tag>
+                            </td>
+                            <td>{{taskItem.shipperNo}}</td>
 							<td class="txt-l"><span class="text-overflow" style="width:270px">{{taskItem.cargoName}}</span></td>
+                            <td>
+                                <span v-if="taskItem.alarmFlag=='Y'" style="color:#F56C6C">有</span>
+                                <span v-else style="color:#67C23A">无</span>
+                            </td>
 							<td class="text-center" v-if="taskItem.cargoWeight || taskItem.cargoVolume || taskItem.cargoVolume">
 								{{taskItem.cargoWeight ? taskItem.cargoWeight + '吨' : ''}}
 								{{taskItem.cargoVolume ? (taskItem.cargoWeight ? '/' : '') + taskItem.cargoVolume + '方' : ''}}

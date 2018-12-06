@@ -98,6 +98,7 @@
 							<th>调度单号</th>
 							<th>任务单号</th>
 							<th>状态</th>
+							<th>异常</th>
 							<th>车牌号</th>
 							<th>司机</th>
 							<th>押运员</th>
@@ -114,6 +115,18 @@
 								<span v-else-if="transport.status == 'Loaded'">已装运</span>
 								<span v-else>已签收</span>
 							</td>
+                            <td>
+                                <el-popover @show="getCarrierOrderAlarm(transport.dispatchOrderNo)" placement="right" trigger="hover">
+                                    <div slot style="max-height:200px;overflow:hidden;overflow-y:auto">
+                                        <div v-for="(item,index) in alarmInfo" :key="index" class="alarmItem">
+                                            <p>{{index+1}}.<b>{{item.type=="StopOvertime"?'停车超时':'卸货异常'}}</b><span class="keepMinute" v-if="item.type=='StopOvertime'">超时：{{item.keepMinute}} 分钟</span><span class="createTime fr">{{item.createTime | getdatefromtimestamp}}</span></p>
+                                            <p class="address">地址：{{item.posLocation}}</p>
+                                        </div>
+                                    </div>
+                                    <el-button type="text" slot="reference" class="alarmStatus" v-if="transport.alarmFlag=='Y'">有</el-button>
+                                </el-popover>
+                                <span v-if="transport.alarmFlag=='N'"  style="color:#67C23A">无</span>
+                            </td>
 							<td>
 								{{transport.plateNo}}
 								{{transport.trailerPlateNo ? ('/' + transport.trailerPlateNo) : ''}}
@@ -194,6 +207,9 @@ import { Message } from 'element-ui'
 import TrailMap from '../../Dispatch/components/TrailMap'
 import CarryOrder from '../../../api/CarryOrder'
 import UploadPhoto from './components/UploadPhoto'
+import CarrierOrderAlarm from '../../../api/CarrierOrderAlarm'
+import AutoNavMap from '../../../api/AutoNavMap'
+import { AMAPKEY } from '../../../common/const'
 export default {
 	data() {
 		return {
@@ -209,7 +225,8 @@ export default {
 			currentConsigneeArea: '',
 			carrierCargo: [],
 			porRequire: [],
-			transports: []
+            transports: [],
+            alarmInfo:[]
 		}
 	},
 	components: { UploadPhoto,TrailMap },
@@ -237,11 +254,27 @@ export default {
 				this.carrierCargo = res.carrierCargo
 				this.getTransports(carrierOrderID)
 			})
-		},
+        },
+        async getCarrierOrderAlarm(dispatchOrderNo){
+            const alarmInfo = await CarrierOrderAlarm.find({keyword:dispatchOrderNo,size:1000})
+            let alarmInfoData = alarmInfo.records
+            for(let i=0;i<alarmInfoData.length;i++){
+                const {data} =  await AutoNavMap.getLocation({
+                    key:AMAPKEY,
+                    location:alarmInfoData[i].longitude+','+alarmInfoData[i].latitude
+                })
+                const posLocation = data.regeocode.formatted_address
+                if(!alarmInfoData[i].posLocation){
+                    alarmInfoData[i].posLocation = posLocation
+                }
+            }
+            this.alarmInfo = alarmInfoData
+        },
+
 		// 查询运输列表
 		getTransports(carrierOrderID) {
 			CarryOrder.taskList({ carrierOrderID }).then(res => {
-				this.transports = res
+                this.transports = res
 			})
 		},
 		// 查看照片弹窗回调
@@ -276,6 +309,9 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.alarmStatus
+    padding 0
+    color #F56C6C
 .statusTag
 	position absolute
 	right 10px
@@ -306,4 +342,27 @@ export default {
 		display inline-block
 		text-align left
 		color #666
+.alarmItem
+    width 360px
+    padding 5px 0
+    p
+        line-height 20px
+        font-size 14px
+        .createTime
+            font-size 12px
+            color #999
+        .keepMinute
+            font-size 12px
+            margin-left 10px
+            color #f00
+        &.address
+            font-size 13px
+            width 320px
+            height 20px
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
+            color #666
+    &~.alarmItem
+        border-top 1px dashed #ddd
 </style>

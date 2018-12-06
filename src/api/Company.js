@@ -122,6 +122,16 @@ class Company extends Base {
             })
         })
     }
+    customeShipperList(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/customer/shipperList',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
     customerRoutePriceAdd(data) {
         if (!this.isClick) return Promise.reject('重复提交！')
         this.isClick = false
@@ -415,6 +425,17 @@ class Company extends Base {
         })
     }
 
+    customerAddressListOfAll(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/customer/address/listOfAll',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
+
     /**
      * 车辆
      */
@@ -574,6 +595,16 @@ class Company extends Base {
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
             url: this.baseUrl + '/transporter/update',
+            method: 'post',
+            data
+        })
+    }
+    transporterDeleteBatch(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + '/transporter/deleteBatch',
             method: 'post',
             data
         })

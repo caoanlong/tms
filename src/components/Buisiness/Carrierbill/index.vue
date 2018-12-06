@@ -56,6 +56,12 @@
 							<el-tag size="mini" class="statusTag" type="info" v-else-if="scope.row.status == 'Closed'">已关闭</el-tag>
 						</template>
 					</el-table-column>
+                    <el-table-column label="异常" align="center" width="60">
+                        <template slot-scope="scope">
+							<span v-if="scope.row.alarmFlag=='Y'" style="color:#F56C6C">有</span>
+                            <span v-else style="color:#67C23A">无</span>
+						</template>
+                    </el-table-column>
 					<el-table-column label="货物" prop="cargoName"></el-table-column>
 					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
 					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
@@ -166,7 +172,7 @@ export default {
 				this.tableData = res.records
 				this.total= res.total
 			})
-		},
+        },
 		handleCommand(e) {
 			if(e.type == 'view') {
 				this.$router.push({name: 'viewcarrierbill', query: {carrierOrderID: e.id}})

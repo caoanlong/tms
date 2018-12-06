@@ -5,7 +5,7 @@
 			<el-row>
 				<el-col :span="18" :offset="3">
 					<el-form label-width="120px" :model="cargo" :rules="rules" ref="ruleForm" size="small">
-						<el-form-item label="发货单位">
+						<el-form-item label="所属客户">
 							<el-autocomplete  style="width:100%"
 								value-key="companyName" 
 								v-model="cargo.shipperCompanyName"
@@ -14,6 +14,9 @@
 								@select="handSelectShipper">
 								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelectShipper"></i>
 							</el-autocomplete>
+						</el-form-item>
+                        <el-form-item label="货物编号" prop="code">
+							<el-input v-model="cargo.code" :maxlength="100"></el-input>
 						</el-form-item>
 						<el-form-item label="货物名称" prop="cargoName">
 							<el-input v-model="cargo.cargoName" :maxlength="100"></el-input>
@@ -28,57 +31,26 @@
 								</el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="危险品类别" v-if="cargo.cargoType == 'DangerousCargo'" prop="dangerousCoodsCategory">
-							<el-input v-model="cargo.dangerousCoodsCategory" :maxlength="100"></el-input>
+						<el-form-item label="单位" prop="cargoUnit">
+                            <div style="padding-right:60px; position: relative;">
+                                <el-select placeholder="请选择" v-model="cargo.cargoUnit" style="width:100%">
+                                    <el-option v-for="item in units" :label="item.unit" :value="item.unit" :key="item.cargoUnitID"></el-option>
+                                </el-select>
+                                <el-button style="position:absolute;right:0;top:0" type="text" @click="dialogFormVisible = true">添加单位</el-button>
+                            </div>
+							
 						</el-form-item>
-						<el-form-item label="包装单位" prop="cargoUnit">
-							<el-select style="width:70%" placeholder="请选择" v-model="cargo.cargoUnit">
-								<el-option v-for="item in units" :label="item.unit" :value="item.unit" :key="item.cargoUnitID"></el-option>
-							</el-select>
-							<el-button style="position:relative;left:10px" type="text" @click="dialogFormVisible = true">添加单位</el-button>
+						<el-form-item label="重量">
+							<el-input v-model="cargo.weight"><template slot="append">公斤</template></el-input>
 						</el-form-item>
-						<el-form-item label="包装材质" prop="packageType">
-							<el-select style="width: 100%" placeholder="请选择" v-model="cargo.packageType">
-								<el-option label="纸质" value="纸质"></el-option>
-								<el-option label="木质" value="木质"></el-option>
-								<el-option label="铁质" value="铁质"></el-option>
-								<el-option label="塑料" value="塑料"></el-option>
-								<el-option label="玻璃" value="玻璃"></el-option>
-								<el-option label="其他材料" value="其他材料"></el-option>
-							</el-select>
+						<el-form-item label="体积">
+							<el-input v-model="cargo.volume"><template slot="append">立方</template></el-input>
 						</el-form-item>
 						<el-form-item label="配载方式" prop="dispatchType">
 							<el-select style="width: 100%" placeholder="请选择" v-model="cargo.dispatchType">
-								<el-option label="体积" value="Volumn"></el-option>
+								<el-option label="体积" value="volume"></el-option>
 								<el-option label="重量" value="Weight"></el-option>
 							</el-select>
-						</el-form-item>
-						<el-form-item label="货物编号">
-							<el-input v-model="cargo.code" :maxlength="100"></el-input>
-						</el-form-item>
-						<el-form-item label="防护要求" style="margin-bottom:0">
-							<el-checkbox-group v-model="requires" @change="handleCheckedRequireChange">
-								<el-checkbox label="moistureProof">防潮</el-checkbox>
-								<el-checkbox label="waterProof">防水</el-checkbox>
-								<el-checkbox label="quakeProof">防震</el-checkbox>
-								<el-checkbox label="dropProof">防摔</el-checkbox>
-								<el-checkbox label="antimagnetic">防磁</el-checkbox>
-								<el-checkbox label="antiStatic">防静电</el-checkbox>
-								<el-checkbox label="radiationProof">防辐射</el-checkbox>
-							</el-checkbox-group>
-							<el-checkbox v-model="checkAll" @change="handleCheckAllRequireChange">无要求</el-checkbox>
-						</el-form-item>
-						<el-form-item>
-							<span @click="fold" class="foldIcon" >其他项 <svg-icon icon-class="arrow-down" class="icon" :class="{fold: isFold}"></svg-icon></span>
-						</el-form-item>
-						<el-form-item label="品名表名称" v-if="isFold" prop="productName">
-							<el-input v-model="cargo.productName"></el-input>
-						</el-form-item>
-						<el-form-item label="CN编码" v-if="isFold" prop="cnCode">
-							<el-input v-model="cargo.cnCode"></el-input>
-						</el-form-item>
-						<el-form-item label="UN编码" v-if="isFold" prop="unCode">
-							<el-input v-model="cargo.unCode"></el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="save">保存</el-button>
@@ -111,39 +83,23 @@ export default {
 			dialogFormVisible: false,
 			unit: { unit: ''},
 			units: [],
-			requires: [],
-			checkAll: false,
 			cargo: {
 				customerID: '',
 				shipperCompanyName: '',
 				cargoName: '',
 				cargoType: '',
-				dangerousCoodsCategory: '',
 				cargoUnit: '',
-				packageType: '',
-				moistureProof: 'N',
-				waterProof: 'N',
-				quakeProof: 'N',
-				dropProof: 'N',
-				antimagnetic: 'N',
-				antiStatic: 'N',
-				radiationProof: 'N',
-				code: '',
-				productName: '',
-				cnCode: '',
-				unCode: ''
+                code: '',
+                dispatchType:'',
+                weight:'',
+                volume:''
 			},
-			isFold:false,
 			rules: {
+				code: [{required: true, message: '请输入货物编号'}],
 				cargoName: [{required: true, message: '请输入货物名称'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
 				cargoType: [{required: true, message: '请选择货物类型'}],
-				dangerousCoodsCategory: [{required: true, message: '请输入危险品类别'}],
 				cargoUnit: [{required: true, message: '请选择货物单位'}],
-				packageType: [{required: true, message: '请选择包装类型'}],
-				dispatchType: [{required: true, message: '请选择配载方式'}],
-				productName: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
-				cnCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}],
-				unCode: [{min: 1, max: 20, message: '长度在 1 到 20 个字符'}]
+				dispatchType: [{required: true, message: '请选择配载方式'}]
 			},
 			rules1: {
 				unit: [{required: true, message: '请输入货物单位'}, {min: 1, max: 20, message: '长度在 1 到 20 个字符'}]

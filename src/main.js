@@ -14,7 +14,6 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-
 // global filters
 import * as filters from './filters'
 

@@ -22,7 +22,7 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="password">
-						<el-input  auto-complete="off" :type="passwordType" v-model="login.password" placeholder="请输入密码">
+						<el-input  auto-complete="off" :type="passwordType" v-model="login.password" placeholder="请输入密码" @keyup.enter.native="handLogin">
 							<template slot="prefix">
 								<svg-icon class="ico" icon-class="password"></svg-icon>
 							</template>
@@ -140,7 +140,7 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item prop="confirmPassword">
-						<el-input  auto-complete="off" :type="passwordType" v-model="findPassword.confirmPassword" placeholder="请重复输入密码">
+						<el-input  auto-complete="off" :type="passwordType" v-model="findPassword.confirmPassword" placeholder="请重复输入密码"  @keyup.enter.native="handFindPassword">
 							<template slot="prefix">
 								<svg-icon class="ico" icon-class="password"></svg-icon>
 							</template>
