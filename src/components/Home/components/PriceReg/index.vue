@@ -315,7 +315,7 @@ export default {
                 roam:true,
                 scaleLimit:{
                     min:0.5,
-                    max:5
+                    max:10
                 },
                 geo: {
                     map: "云南",
@@ -325,7 +325,7 @@ export default {
                     },
                     itemStyle: {
                         areaColor: "#f8f8f8",
-                        borderColor: "#999",
+                        borderColor: "#999"
                     },
                     center:[101.520619, 25.070767],
                     emphasis: {
@@ -334,7 +334,7 @@ export default {
                             color:"#ccc"
                         },
                         itemStyle: {
-                            areaColor: "#f8f8f8",                            
+                            areaColor: "#f2f2f2",                            
                         },
                     },
                     zoom:1.3   
@@ -357,9 +357,6 @@ export default {
                         
                         label:{
                             show:true,
-                            itemStyle:{
-                                normal:{color:'yellow'}
-                            },
                             formatter:function(params){
                                 return '{a|'+ params.data.name+'}\n{b|'+params.data.carrier+'}\n{c|'+params.data.customer+'}'
                             },
@@ -376,8 +373,8 @@ export default {
                                 },
                             }
                         },
-                        symbolSize:10,
-                        symbol:'circle',
+                        symbolSize:12,
+                        symbol:'circle'
                     }
                 }]
             }
@@ -480,6 +477,7 @@ export default {
         .map
             border 1px solid #ddd
             border-top none
+            border-radius 0 0 4px 4px
         .mapLegend
             position absolute
             right 10px
