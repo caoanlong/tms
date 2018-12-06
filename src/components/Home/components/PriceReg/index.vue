@@ -243,65 +243,6 @@ export default {
                 ]  
         
             },
-            chartOption4 :{
-                color: ['#409EFF'],
-                grid: {
-                    left: '10',
-                    right: '10',
-                    bottom: '10',
-                    top:'10',
-                    containLabel: true
-                },
-                yAxis : [
-                    {
-                        type : 'category',
-                        show : false,
-                        data : [],
-                    }
-                ],
-                xAxis : [
-                    {
-                        type : 'value',
-                        show : false,
-                    }
-                ],
-                series : [
-                    {
-                        type:'bar',
-                        barWidth: '20',
-                        barGap:'20',
-                        barCategoryGap:'20',
-                        data:[],
-                        label:{
-                            show:true,
-                            formatter:function (params) {
-                                 return params.name+'   '+params.value
-                            },
-                            rich:{
-                                a: {
-                                    color: '#409EFF',
-                                    backgroundColor:'#fff',
-                                    width:14,
-                                    height:14,
-                                    lineHeight:14,
-                                    borderRadius:8,
-                                    align:'center',
-                                    verticalAlign:'top'
-                                }
-                               
-                            },
-                            position:'insideLeft',
-                            color:'#fff',
-                            // textBorderColor:'#fff',
-                            // textBorderWidth:1
-                        },
-                        itemStyle:{
-                            barBorderRadius:4
-                        }
-                    }
-                ]
-        
-            },
             mapOption :{
                 tooltip : {
                     show:true,
@@ -315,7 +256,7 @@ export default {
                 roam:true,
                 scaleLimit:{
                     min:0.5,
-                    max:10
+                    max:50
                 },
                 geo: {
                     map: "云南",
