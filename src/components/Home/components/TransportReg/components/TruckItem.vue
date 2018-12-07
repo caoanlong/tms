@@ -6,7 +6,9 @@
         </div>
         <div class="middle">
             <span class="plateNo">{{truck.plateNo}}</span>
-            <span class="status">运输中</span>
+            <!-- <span class="status">运输中</span> -->
+            <el-tag size="mini" type="success">运输中</el-tag>
+            <el-tag size="mini" :type="truck.gpsFlag=='Y'?'success':'info'" :class="truck.gpsFlag=='Y'?'el-icon-success':'el-icon-warning'"> GPS</el-tag>
         </div>
         <div class="down">
             <div class="address">
