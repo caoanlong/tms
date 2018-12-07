@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { checkFloat6 } from '../../../common/valid'
+import { checkFloat6, checkLng, checkLat } from '../../../common/valid'
 export default {
     props: {
         location: Array,
@@ -56,8 +56,15 @@ export default {
             lnglat: [0,0],
             address: '',
             rules: {
-                lng: [ {required: true, message: '请输入经度', validator: checkFloat6} ],
-                lat: [ {required: true, message: '请输入纬度', validator: checkFloat6} ]
+                lng: [ 
+                    {required: true, message: '请输入经度'},
+                    {validator: checkFloat6},
+                    {validator: checkLng}
+                ],
+                lat: [
+                    {required: true, message: '请输入纬度'},
+                    {validator: checkLat}
+                ]
             }
         }
     },
