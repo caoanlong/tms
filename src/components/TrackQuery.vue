@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import axios from 'axios'
 import { baseURL } from '../common/request'
 import { AMAPKEY } from '../common/const'
@@ -159,6 +160,9 @@ export default {
                 this.customerMonitorAreaList = customerMonitorAreaList || []
                 this.alarmMsgs = alarmMsgs
                 this.drawRoute(locations, status)
+            } else {
+                this.logsTopLoading = false
+                Message.error(data.msg)
             }
         },
         drawRoute(locations, status) {
