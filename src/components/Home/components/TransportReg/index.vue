@@ -289,7 +289,7 @@ export default {
 .trans-container
     width 100%
     position relative
-    padding-left 320px
+    padding-left 310px
     .left
         position absolute
         left 0
