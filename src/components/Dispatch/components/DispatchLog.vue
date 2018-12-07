@@ -14,7 +14,7 @@
 					<span class="action" v-else-if="logsItem.action =='Refuse'">拒绝接单</span>
 					<span class="action" v-else-if="logsItem.action =='Canceled'">取消</span>
 					<span class="action" v-else-if="logsItem.action =='StopOvertime'" style="color:#f00">停车超时</span>
-					<span class="action" v-else-if="logsItem.action =='ArrivedOffset'" style="color:#f00">未送达指定点</span>
+					<span class="action" v-else-if="logsItem.action =='ArrivedOffset'" style="color:#f00">卸货异常</span>
 					<span class="action" v-else>超时取消</span>
 					<span class="dateTime"  :style="(logsItem.action =='StopOvertime' || logsItem.action =='ArrivedOffset')?'color:#f00':''">{{logsItem.createTime | getdatefromtimestamp }}</span>
 				</p>
@@ -22,8 +22,9 @@
 					停车地址：{{logsItem.StopOverAddress}} 
 				</p>
 				<p :style="(logsItem.action =='StopOvertime' || logsItem.action =='ArrivedOffset')?'color:#f00':''">{{logsItem.description}}</p>
-				<p v-if="logsItem.action =='Load'">装车地址：{{logsItem.posAddress}}</p>
-				<p v-if="logsItem.action =='Unload'">到货地址：{{logsItem.posAddress}}</p>
+                <p v-if="logsItem.action =='Load'">装车地址：{{logsItem.posAddress}}</p>
+                <p v-if="logsItem.action =='Unload'">到货地址：{{logsItem.posAddress}}</p>
+                <p v-if="logsItem.action =='ArrivedOffset'" style="color:#f00">卸货地址：{{logsItem.posAddress}}</p>
 			</li>
 		</ul>
 	</div>
