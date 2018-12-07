@@ -86,10 +86,13 @@ export default {
     },
     methods: {
         search() {
-            this.lnglat = [this.find.lng, this.find.lat]
-            this.map.setCenter(this.lnglat)
-            this.map.clearMap()
-            this.map.add(this.createMarker(this.lnglat))
+            this.$refs['ruleForm'].validate(valid => {
+                if (!valid) return
+                this.lnglat = [this.find.lng, this.find.lat]
+                this.map.setCenter(this.lnglat)
+                this.map.clearMap()
+                this.map.add(this.createMarker(this.lnglat))
+            })
         },
         reset() {
 			this.find.lng = ''
