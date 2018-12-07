@@ -76,7 +76,7 @@ export default {
         return {
             total: 0,
             pageIndex: 1,
-            pageSize: 6,
+            pageSize: 20,
             find: {
                 keyword: '',
                 companyCode: '',

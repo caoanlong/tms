@@ -2,8 +2,8 @@
 	<div>
 		<div class="head">
 			<div class="tab">
-				<div class="transport-reg"><span :class="type == 'transport-reg' ? 'active' : ''" @click="change('transport-reg')">运输调控</span></div>
-				<div class="price-reg"><span :class="type == 'price-reg' ? 'active' : ''" @click="change('price-reg')">价格调控</span></div>
+				<div class="transport-reg"><span :class="type == 'transport-reg' ? 'active' : ''" @click="change('transport-reg')">运输监控</span></div>
+				<div class="price-reg"><span :class="type == 'price-reg' ? 'active' : ''" @click="change('price-reg')">价格监控</span></div>
 			</div>
 		</div>
 		<component :is="type"></component>
