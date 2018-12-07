@@ -58,7 +58,7 @@ export default {
             rules: {
                 lng: [ 
                     {required: true, message: '请输入经度'},
-                    {validator: checkFloat6},
+                    // {validator: checkFloat6},
                     {validator: checkLng}
                 ],
                 lat: [
