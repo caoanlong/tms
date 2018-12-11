@@ -6,7 +6,11 @@
         </div>
         <div class="middle">
             <span class="plateNo">{{truck.plateNo}}</span>
-            <span class="status">运输中</span>
+            <el-tag size="mini" type="success">运输中</el-tag>
+            <el-tooltip placement="top" effect="light">
+                <div slot="content">{{truck.gpsFlag=='Y'?'GPS已安装':'GPS未安装'}}</div>
+                <el-tag size="mini" :type="truck.gpsFlag=='Y'?'success':'info'" :class="truck.gpsFlag=='Y'?'el-icon-success':'el-icon-warning'"> GPS</el-tag>
+            </el-tooltip>
         </div>
         <div class="down">
             <div class="address">
@@ -58,10 +62,6 @@ export default {
             font-size 15px
             font-weight bold
             color #555
-        .status
-            padding-left 5px
-            font-size 13px
-            color #67c23a
     .down
         height 26px
         line-height 26px

@@ -193,3 +193,21 @@ export const yyyymmddhhmmss = (rule, value, callback) => {
 		callback()
 	}
 }
+
+// 验证经度
+export const checkLng = (rule, value, callback) => {
+	if (value > -180 && value < 180) {
+		callback()
+	} else {
+		callback(new Error('请输入正确的经度'))
+	}
+}
+
+// 验证纬度
+export const checkLat = (rule, value, callback) => {
+	if (value > -90 && value < 90) {
+		callback()
+	} else {
+		callback(new Error('请输入正确的纬度'))
+	}
+}
