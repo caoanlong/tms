@@ -54,7 +54,6 @@ export default {
     .middle
         height 26px
         line-height 26px
-        padding-right 70px
         .plateNo
             font-size 15px
             font-weight bold
