@@ -110,7 +110,8 @@ export default {
         async getLogs() {
             const res = await DispatchOrder.logList({ 
                 dispatchOrderID: this.$route.query.dispatchOrderID,
-                osn: this.$route.query.osn
+                osn: this.$route.query.osn,
+                Authorization: this.$route.query.Authorization || localStorage.getItem('token')
             })
             this.logsLoading = false
             this.logs = res
