@@ -15,6 +15,7 @@ export default function request (data) {
 	service.interceptors.request.use(config => {
 		config.headers['Content-Type'] = 'application/json'
 		config.headers['Authorization'] = localStorage.getItem('token')
+		config.headers['Request-From'] = 'PC'
 		return config
 	}, error => {
 		// Do something with request error

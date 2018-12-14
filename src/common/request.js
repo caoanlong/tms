@@ -59,7 +59,8 @@ const ajax = function (json) {
 			data: !json.contentType ? qs.stringify(data) : JSON.stringify(data),
 			headers: {
 				'Content-Type': json.contentType || 'application/x-www-form-urlencoded;charset=utf-8',
-				'Authorization': localStorage.getItem('token')
+				'Authorization': localStorage.getItem('token'),
+				'Request-From': 'PC'
 			},
 			beforeSend: (res) => { },
 			complete: (xhr, data) => {

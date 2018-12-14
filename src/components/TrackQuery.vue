@@ -134,7 +134,8 @@ export default {
             const { data } = await axios({
                 url, params,
                 headers: { 
-                    Authorization: this.$route.query.Authorization || localStorage.getItem('token')
+                    'Authorization': this.$route.query.Authorization || localStorage.getItem('token'),
+                    'Request-From': 'PC'
                 }
             })
             if (data.code == 200 && data.data) {
