@@ -58,6 +58,33 @@ const routerMap = [
                 component: () => import('../components/Anomaly/CustomerCaveat')
             },
             /**
+             * 交货单
+             */
+            {
+                path: '/delivery',
+                name: 'delivery',
+                meta: { title: '交货单'},
+                component: () => import('../components/Buisiness/Delivery')
+            },
+            {
+                path: '/adddelivery',
+                name: 'adddelivery',
+                meta: { title: '添加交货单'},
+                component: () => import('../components/Buisiness/Delivery/Add')
+            },
+            {
+                path: '/editdelivery',
+                name: 'editdelivery',
+                meta: { title: '编辑交货单'},
+                component: () => import('../components/Buisiness/Delivery/Edit')
+            },
+            {
+                path: '/viewdelivery',
+                name: 'viewdelivery',
+                meta: { title: '交货单详情'},
+                component: () => import('../components/Buisiness/Delivery/View')
+            },
+            /**
              * 业务  buisiness
              */
             {

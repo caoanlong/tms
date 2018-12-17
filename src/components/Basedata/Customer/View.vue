@@ -8,70 +8,68 @@
 						<el-form-item label="客户LOGO">
 							<ImageUpload :files="[recdeliverycomp.logoUrl]" :isPreview="true"/>
 						</el-form-item>
-						<el-form-item label="客户名称" prop="companyName">
+						<el-form-item label="客户名称">
 							<p>{{recdeliverycomp.companyName}}</p>
 						</el-form-item>
-						<el-form-item label="客户类型" prop="customerType">
+						<el-form-item label="客户类型">
 							<p>{{recdeliverycomp.customerType.map((item) => CUSTOMERTYPE[item]).join(' , ')}}</p>
 						</el-form-item>
-						<el-form-item label="所在区域" prop="companyAreaID">
+                        <el-form-item label="所属片区">
+							<p>{{recdeliverycomp.companyArea}}</p>
+						</el-form-item>
+						<el-form-item label="所在区域">
 							<p>{{recdeliverycomp.companyArea}}</p>
 						</el-form-item>
 						<el-form-item label="联系人">
 							<p>{{recdeliverycomp.contactName}}</p>
 						</el-form-item>
-						<el-form-item label="手机号" prop="contactPhone">
+						<el-form-item label="手机号">
 							<p>{{recdeliverycomp.contactPhone}}</p>
 						</el-form-item>
-                        <el-form-item label="客户编号" prop="code">
+                        <el-form-item label="客户编号">
 							<p>{{recdeliverycomp.code}}</p>
 						</el-form-item>
                         <el-form-item label="监控类型">
 							<p>
-                                {{recdeliverycomp.fencingType == 'Point' 
-                                    ? '地址监控' 
-                                    : (recdeliverycomp.fencingType == 'Area' ? '区域监控' : '')}}
+                                {{recdeliverycomp.fencingType == 'Point'? '地址监控' : (recdeliverycomp.fencingType == 'Area' ? '区域监控' : '')}}
                             </p>
 						</el-form-item>
-                        <div class="areaTable table" v-show="recdeliverycomp.fencingType == 'Area'">
-                            <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
-                                <el-table-column prop="provice" label="省" align="center">
-                                    <template slot-scope="scope">
-                                        {{scope.row.provice}}
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="city" label="市" align="center">
-                                    <template slot-scope="scope">
-                                    {{scope.row.city}}
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="area" label="区" align="center">
-                                    <template slot-scope="scope">
-                                    {{scope.row.area}}
-                                    </template>
-                                </el-table-column>
-                            </el-table>
+                        <div class="monitoringBox">
+                            <el-tabs v-model="activeName2" type="card" @tab-click="handleClick" class="areaTable table">
+                                <el-tab-pane label="区域监控" name="first">
+                                    <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
+                                        <el-table-column prop="provice" label="省" align="center"></el-table-column>
+                                        <el-table-column prop="city" label="市" align="center"></el-table-column>
+                                        <el-table-column prop="area" label="区" align="center"></el-table-column>
+                                    </el-table>
+                                </el-tab-pane>
+                                <el-tab-pane label="地址监控" name="second">
+                                    <div class="table">
+                                        <el-table :data="addressList" style="border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
+                                            <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
+                                            <el-table-column prop="contactName" label="联系人" align="center"></el-table-column>
+                                            <el-table-column prop="contactPhone" label="联系电话" align="center" width="120"></el-table-column>
+                                            <el-table-column prop="areaID" label="区域" align="center">
+                                                <template slot-scope="scope">
+                                                    {{scope.row.areaID | searchAreaByKey}}
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column prop="detailAddress" label="地址" align="center">
+                                                <template slot-scope="scope">
+                                                    <span>{{scope.row.locationAddress?scope.row.locationAddress:''}}{{scope.row.detailAddress?scope.row.detailAddress:''}}</span>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column prop="monitorScope" label="围栏范围" align="center">
+                                                <template slot-scope="scope">
+                                                    {{scope.row.monitorScope?scope.row.monitorScope+'米':''}}
+                                                </template>
+                                            </el-table-column>
+                                        </el-table>
+                                    </div>
+                                </el-tab-pane>
+                            </el-tabs>
                         </div>
-                        <div class="areaTable table" v-show="recdeliverycomp.fencingType == 'Point'">
-                            <el-table :data="addressList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
-                                <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
-                                <el-table-column prop="contactName" label="联系人" align="center">
-                                </el-table-column>
-                                <el-table-column prop="contactPhone" label="联系电话" align="center">
-                                </el-table-column>
-                                <el-table-column label="区域" align="center">
-                                    <template slot-scope="scope">
-                                        {{scope.row.areaID | searchAreaByKey}}
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="detailAddress" label="地址" align="center"></el-table-column>
-                                <el-table-column prop="monitorScope" label="围栏范围" align="center">
-                                    <template slot-scope="scope">
-                                        {{scope.row.monitorScope?scope.row.monitorScope+'米':''}}
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                        </div>
+                        
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
 						</el-form-item>
