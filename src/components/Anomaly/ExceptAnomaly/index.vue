@@ -114,8 +114,8 @@ export default {
                 keyword: '',
                 customerID:'',
                 type:'',
-                beginTime:this.getCurrentMonthFirst(),
-                endTime:this.getCurrentMonthLast()
+                beginTime: this.getCurrentMonthFirst(),
+                endTime: this.getCurrentMonthLast()
             },
             companys: [],
 			curCompany: {},

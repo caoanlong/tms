@@ -61,7 +61,6 @@ import { baseURL } from '../../../common/requestByJson'
 import { baseMixin } from '../../../common/mixin'
 import CarrierOrderAlarm from '../../../api/CarrierOrderAlarm'
 import Company from '../../../api/Company'
-import { getDateTotimestamp } from "../../../common/utils"
 export default {
     mixins: [baseMixin],
 	data() {
@@ -81,8 +80,6 @@ export default {
 		this.resetExportExcelUrl()
         this.getList()
         this.getCompanys()
-        this.getCurrentMonthFirst()
-        this.getCurrentMonthLast()
     },
 	methods: {
 		search(){
@@ -94,8 +91,6 @@ export default {
             this.find.keyword = ''
 			this.find.customerID = ''
 			this.find.type = ''
-			this.find.beginTime =this.getCurrentMonthFirst()
-			this.find.endTime = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
@@ -129,19 +124,6 @@ export default {
 				this.total = res.total
 			})
         },
-        getCurrentMonthFirst(){
-            let date =new Date()
-            date.setDate(1)
-            return getDateTotimestamp(date)
-        },
-        getCurrentMonthLast(){
-            let date=new Date()
-            let currentMonth=date.getMonth()
-            let nextMonth=++currentMonth
-            let nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1)
-            let oneDay=1000*60*60*24
-            return getDateTotimestamp(new Date(nextMonthFirstDay-oneDay))
-		},
 		inputChange() {
 			this.resetExportExcelUrl()
 		},
