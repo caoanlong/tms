@@ -16,6 +16,14 @@
 								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
 							</el-autocomplete>
 						</el-form-item>
+                        <el-form-item label="所属片区" class="customerSelect">
+                            <el-select  placeholder="请选择" style="width:100%">
+                                <el-option value="Shipper" label="发货方"></el-option>
+                            </el-select>
+                        </el-form-item>
+						<el-form-item label="终端用户名称">
+							<el-input v-model="companyAddress.contactName" placeholder="请输入终端用户名称"></el-input>
+						</el-form-item>
 						<el-form-item label="联系人">
 							<el-input v-model="companyAddress.contactName" placeholder="请输入..."></el-input>
 						</el-form-item>

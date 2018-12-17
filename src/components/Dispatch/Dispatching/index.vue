@@ -4,82 +4,64 @@
 			<div slot="header" class="clearfix">{{$route.query.dispatchOrderID ? '重新调度配载' : '调度配载'}}</div>
 			<div class="search">
 				<el-form :inline="true" size="small">
-					<el-row>
-						<el-form-item label="关键字">
-							<el-input placeholder="承运单号/货物名称/发货方/到货方" v-model="find.keyword"></el-input>
-						</el-form-item>
-						<el-form-item label="发货地">
-							<dist-picker 
-								:distList="selectedShipperArea" 
-								@hand-select="handleSelectedShipperArea" 
-								style="width:250px">
-							</dist-picker>
-						</el-form-item>
-						<el-form-item label="收货地">
-							<dist-picker 
-								:distList="selectedConsigneeArea" 
-								@hand-select="handleSelectedConsigneeArea" 
-								style="width:250px">
-							</dist-picker>
-						</el-form-item>
-					</el-row>
-					<el-row>					
-						<el-form-item label="委托时间从">
-							<el-date-picker 
-								type="date" 
-								:clearable="false" 
-								value-format="timestamp" 
-								style="width:160px" 
-								v-model="find.commissionDateBegin">
-							</el-date-picker>
-							<span class="tracto">至</span>
-							<el-date-picker 
-								type="date" 
-								:clearable="false" 
-								value-format="timestamp" 
-								style="width:160px" 
-								v-model="find.commissionDateEnd">
-							</el-date-picker>
-						</el-form-item>
-						<el-form-item label="到货时间从">
-							<el-date-picker 
-								type="date" 
-								:clearable="false" 
-								value-format="timestamp" 
-								style="width:160px" 
-								v-model="find.consigneeDateBegin">
-							</el-date-picker>
-							<span class="tracto">至</span>
-							<el-date-picker 
-								type="date" 
-								:clearable="false" 
-								value-format="timestamp" 
-								style="width:160px" 
-								v-model="find.consigneeDateEnd">
-							</el-date-picker>
-						</el-form-item>
-						<el-form-item label="装车时间从">
-							<el-date-picker 
-								type="date" 
-								:clearable="false" 
-								value-format="timestamp" 
-								style="width:160px" 
-								v-model="find.shipperDateBegin">
-							</el-date-picker>
-							<span class="tracto">至</span>
-							<el-date-picker 
-								type="date" 
-								:clearable="false" 
-								value-format="timestamp" 
-								style="width:160px" 
-								v-model="find.shipperDateEnd">
-							</el-date-picker>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" @click="search">搜索</el-button>
-							<el-button type="default" @click="reset">重置</el-button>
-						</el-form-item>
-					</el-row>
+					<el-form-item label="交货单号">
+						<el-input placeholder="交货单号" v-model="find.keyword" @change="inputChange"></el-input>
+					</el-form-item>
+					<el-form-item label="调度单号">
+						<el-input placeholder="调度单号" v-model="find.shipperConsignee" @change="inputChange"></el-input>
+					</el-form-item>
+					<el-form-item label="工厂名称">
+						<el-select placeholder="全部" v-model="find.status" style="width:120px" @change="inputChange">
+							<el-option value="" label="全部">全部</el-option>
+						</el-select>
+					</el-form-item>
+                    <el-form-item label="客户名称">
+						<el-autocomplete 
+							style="width:100%" 
+                            value-key="companyName" 
+                            placeholder="请输入..."
+                            @change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
+                        </el-autocomplete>
+					</el-form-item>
+                    <el-form-item label="产品名称">
+						<el-autocomplete 
+							style="width:100%" 
+                            value-key="companyName" 
+                            placeholder="请输入..."
+                            @change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
+                        </el-autocomplete>
+					</el-form-item>
+					<el-form-item label="货物类型">
+						<el-select placeholder="全部" v-model="find.type" style="width:120px" @change="inputChange">
+							<el-option value="" label="全部"></el-option>
+							<el-option value="水泥" label="水泥"></el-option>
+							<el-option value="半成品" label="半成品"></el-option>
+						</el-select>
+					</el-form-item>
+                    <el-form-item label="装车时间">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px" 
+							@change="inputChange">
+						</el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="到货时间">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px" 
+							@change="inputChange">
+						</el-date-picker>
+                    </el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="search(isCur)">搜索</el-button>
+						<el-button type="default" @click="reset(isCur)">重置</el-button>
+					</el-form-item>
 				</el-form>
 			</div>
 			<div class="table-container">
@@ -90,7 +72,7 @@
 							<tr>
 								<th>
 									<p class="cursor">
-										承运单号&nbsp;
+										交货单号&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
 												class="arrow-up" 
@@ -100,21 +82,9 @@
 											</svg-icon>
 										</span>
 									</p>
-									<p class="cursor">
-										委托时间&nbsp;
-										<span class="arrow-group">
-											<svg-icon 
-												class="arrow-down" 
-												:class="{'active': find.orderBy == 'CommissionDate', 'rotate': (find.orderBy == 'CommissionDate' && find.sortType == 'asc')}" 
-												icon-class="triangle" 
-												@click.native="sort('CommissionDate', find.sortType == 'desc' ? 'asc' : 'desc')">
-											</svg-icon>
-										</span>
-									</p>
-								</th>
 								<th>
 									<p class="cursor">
-										发货方&nbsp;
+										发货工厂&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
 												class="arrow-up" 
@@ -125,7 +95,7 @@
 										</span>
 									</p>
 									<p class="cursor">
-										到货方&nbsp;
+										到货客户&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
 												class="arrow-down" 
@@ -208,7 +178,7 @@
 										</span>
 									</p>
 								</th>
-								<th>货物</th>
+								<th>产品</th>
 								<th>订单量</th>
 								<th>剩余量</th>
 							</tr>
@@ -273,11 +243,11 @@
 					<table class="table-main" style="padding-right: 299px">
 						<thead>
 							<tr>
-								<th>承运单号</th>
-								<th><p>发货方</p><p>到货方</p></th>
+								<th>交货单号</th>
+								<th><p>发货工厂</p><p>到货客户</p></th>
 								<th><p>装车地区</p><p>卸货地区</p></th>
 								<th><p>装车地址</p><p>卸货地址</p></th>
-								<th>货物</th>
+								<th>产品</th>
 								<th>配载方式</th>
 							</tr>
 						</thead>
@@ -570,6 +540,8 @@ export default {
 		}
 	},
 	methods:{
+        inputChange(){},
+        clearSelect(){},
 		reset() {
 			this.find.keyword = ''
 			this.find.shipperAreaID = ''

@@ -4,26 +4,61 @@
 			<div slot="header" class="tab clearfix"><span :class="isCur==0?'cur':''" @click="tabClick(0)">已调度</span><span :class="isCur==1?'cur':''" @click="tabClick(1)">调度历史</span></div>
 			<div class="search">
 				<el-form :inline="true" size="small">
-					<el-form-item label="关键字">
-						<el-input placeholder="调度单号/货物名称/司机/车牌号" v-model="find.keyword" @change="inputChange"></el-input>
+					<el-form-item label="交货单号">
+						<el-input placeholder="交货单号" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
-					<el-form-item label="收发单位">
-						<el-input placeholder="收发单位" v-model="find.shipperConsignee" @change="inputChange"></el-input>
+					<el-form-item label="调度单号">
+						<el-input placeholder="调度单号" v-model="find.shipperConsignee" @change="inputChange"></el-input>
 					</el-form-item>
-					<el-form-item label="调度状态">
+					<el-form-item label="工厂名称">
 						<el-select placeholder="全部" v-model="find.status" style="width:120px" @change="inputChange">
 							<el-option value="" label="全部">全部</el-option>
-							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS1" :key="key" v-if="isCur==0"></el-option>
-							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS2" :key="key" v-if="isCur==1"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="调度类型">
+                    <el-form-item label="客户名称">
+						<el-autocomplete 
+							style="width:100%" 
+                            value-key="companyName" 
+                            placeholder="请输入..."
+                            @change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
+                        </el-autocomplete>
+					</el-form-item>
+                    <el-form-item label="产品名称">
+						<el-autocomplete 
+							style="width:100%" 
+                            value-key="companyName" 
+                            placeholder="请输入..."
+                            @change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
+                        </el-autocomplete>
+					</el-form-item>
+					<el-form-item label="货物类型">
 						<el-select placeholder="全部" v-model="find.type" style="width:120px" @change="inputChange">
-							<el-option value="" label="全部">全部</el-option>
-							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERTYPE" :key="key"></el-option>
+							<el-option value="" label="全部"></el-option>
+							<el-option value="水泥" label="水泥"></el-option>
+							<el-option value="半成品" label="半成品"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="调度时间从">
+                    <el-form-item label="装车时间">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px" 
+							@change="inputChange">
+						</el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="到货时间">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px" 
+							@change="inputChange">
+						</el-date-picker>
+                    </el-form-item>
+					<el-form-item label="创建时间从">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
@@ -54,7 +89,8 @@
 					<tr>
 						<th class="w1">承运单</th>
 						<th class="w4">状态</th>
-						<th class="w1">发货单号</th>
+						<th class="w1">交货单号</th>
+						<th class="w1">发货方</th>
 						<th class="w3">货物</th>
 						<th class="w1">异常</th>
 						<th class="w1">货量</th>
@@ -67,10 +103,10 @@
 					</tr>
 					<template v-for="item in dispatchBillList">
 						<tr>
-							<td colspan="12" class="blank"></td>
+							<td colspan="13" class="blank"></td>
 						</tr>
 						<tr>
-							<td colspan="12" class="txt-l">
+							<td colspan="13" class="txt-l">
 								<div class="dispatchbillTit">
 									<span class="num" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
 									<el-tag type="info" size="mini" >{{DISPATCHORDERTYPESIMPLE[item.type]}}</el-tag>
@@ -181,6 +217,7 @@
 								<el-tag size="mini" type="info" v-else>已作废</el-tag>
                             </td>
                             <td>{{taskItem.shipperNo}}</td>
+                            <td>{{taskItem.shipperCompanyName}}</td>
 							<td class="txt-l"><span class="text-overflow" style="width:270px">{{taskItem.cargoName}}</span></td>
                             <td>
                                 <span v-if="taskItem.alarmFlag=='Y'" style="color:#F56C6C">有</span>
@@ -365,7 +402,8 @@ export default {
 			}else{
 				this.getHistoryList()
 			}
-		},
+        },
+        clearSelect(){},
 		getDispatchedList() {
 			DispatchOrder.listOfOnway({
 				current: this.pageIndex,
