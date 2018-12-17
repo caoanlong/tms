@@ -8,6 +8,12 @@
 						<el-form-item label="所属客户">
                             <p>{{companyAddress.companyName}}</p>
 						</el-form-item>
+						<el-form-item label="所属片区">
+                            <p>{{companyAddress.companyName}}</p>
+						</el-form-item>
+						<el-form-item label="终端用户名称">
+                            <p>{{companyAddress.companyName}}</p>
+						</el-form-item>
 						<el-form-item label="联系人">
                             <p>{{companyAddress.contactName}}</p>
 						</el-form-item>

@@ -4,9 +4,7 @@
 			<div slot="header" class="clearfix">客户地址</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="关键字">
-						<el-input placeholder="请输入关键字" v-model="find.keyword"  @change="inputChange"></el-input>
-					</el-form-item>
+
                     <el-form-item label="所属客户">
                         <el-autocomplete 
 							style="width:100%" 
@@ -18,6 +16,19 @@
 							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
                         </el-autocomplete>
                     </el-form-item>
+                    <el-form-item label="所属片区" class="customerSelect">
+						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
+							<el-option value="Shipper" label="发货方"></el-option>
+							<el-option value="Consignee" label="收货方"></el-option>
+							<el-option value="Delegate" label="委托方"></el-option>
+						</el-select>
+					</el-form-item>
+                    <el-form-item label="终端用户名称">
+						<el-input placeholder="请输入终端用户名称" v-model="find.keyword"  @change="inputChange"></el-input>
+					</el-form-item>
+                    <el-form-item label="地址">
+						<el-input placeholder="请输入地址" v-model="find.keyword"  @change="inputChange"></el-input>
+					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
 						<el-button type="default" @click="reset">重置</el-button>
@@ -50,9 +61,10 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="所属客户" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="地址编号" prop="code" align="center"></el-table-column>
+					<el-table-column label="所属片区" prop="code" align="center"></el-table-column>
+					<el-table-column label="终端用户名称" prop="code" align="center"></el-table-column>
 					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
-					<el-table-column label="电话" prop="contactPhone" align="center"></el-table-column>
+					<el-table-column label="手机" prop="contactPhone" align="center"></el-table-column>
 					<el-table-column label="区域" prop="contactArea" align="center"></el-table-column>
 					<el-table-column label="地址" align="center">
 						<template slot-scope="scope">
@@ -171,7 +183,8 @@ export default {
 			}else if(e.type == 'delete'){
 				this.del(e.id)
 			}
-		},
+        },
+        inputChange(){},
 		add() {
 			if (this.customerID && this.companyName) {
 				this.$router.push({ 
