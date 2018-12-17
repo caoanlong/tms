@@ -1,14 +1,11 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card">
-			<div slot="header" class="clearfix">异常报警</div>
+			<div slot="header" class="clearfix">工厂报警</div>
 			<div class="search">
 				<el-form :inline="true" size="small">
-					<el-form-item label="关键字">
-						<el-input placeholder="请输入关键字" v-model="find.keyword"></el-input>
-					</el-form-item>
-                    <el-form-item label="工厂" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.customerID">
+                    <el-form-item label="工厂名称" class="customerSelect">
+						<el-select placeholder="请选择" v-model="find.customerID" @change="inputChange">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
                                 :label="item.companyName" 
@@ -18,27 +15,12 @@
                             </el-option>
                         </el-select>
 					</el-form-item>
-                    <el-form-item label="异常原因" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.type">
+                    <el-form-item label="所属片区" class="customerSelect">
+						<el-select placeholder="请选择" v-model="find.type" @change="inputChange">
 							<el-option label="全部" value=""></el-option>
                             <el-option label="停车超时" value="StopOvertime"></el-option>
                             <el-option label="卸货异常" value="ArrivedOffset"></el-option>
 						</el-select>
-					</el-form-item>
-					<el-form-item label="异常时间从">
-						<el-date-picker 
-							type="date" 
-							:clearable="false" 
-							value-format="timestamp" v-model="find.beginTime">
-						</el-date-picker>
-					</el-form-item>
-					<el-form-item label="至">
-						<el-date-picker 
-							type="date" 
-							:clearable="false" 
-							value-format="timestamp" 
-							v-model="find.endTime">
-						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -46,36 +28,27 @@
 					</el-form-item>
 				</el-form>
 			</div>
+			<div class="tableControl">
+				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
+				<a :href="templateUrl" download="customer.xlsx" class="download-btn">
+					<svg-icon iconClass="excel-icon"></svg-icon>
+					<span>下载模板</span>
+				</a>
+			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="发货单号" prop="shipperNo" align="center"></el-table-column>
-					<el-table-column label="发货工厂" prop="companyName"></el-table-column>
-					<el-table-column label="客户" prop="consigneeName"></el-table-column>
-					<el-table-column label="货物名称" prop="cargoName"></el-table-column>
-					<el-table-column label="起点地区" prop="fromSite"></el-table-column>
-					<el-table-column label="终点地区" prop="toSite" ></el-table-column>
-					<el-table-column label="调度日期" prop="dispatchDate" align="center">
-                        <template slot-scope="scope">
-                            {{scope.row.dispatchTime | getdatefromtimestamp}}
-                        </template>
-                    </el-table-column>
-					<el-table-column label="车牌号" prop="plateNo" align="center"></el-table-column>
-					<el-table-column label="异常原因" prop="type" align="center">
-                        <template slot-scope="scope">
-							<span v-if="scope.row.type=='StopOvertime'">停车超时</span>
-							<span v-else>卸货异常</span>
-						</template>
-                    </el-table-column>
-					<el-table-column label="异常时间" prop="createTime" align="center">
-                        <template slot-scope="scope">
-                            {{scope.row.createTime | getdatefromtimestamp}}
-                        </template>
-                    </el-table-column>
-					<el-table-column label="操作" align="center" width="100">
-						<template slot-scope="scope">
-							<el-button size="mini" @click="view(scope.row.dispatchOrderID)">轨迹</el-button>
-						</template>
-					</el-table-column>
+					<el-table-column label="工厂" prop="companyName" align="center"></el-table-column>
+					<el-table-column label="所属片区" prop="area"></el-table-column>
+					<el-table-column label="总单量" prop="orderNum"></el-table-column>
+					<el-table-column label="特价单量" prop="priceOrderNum"></el-table-column>
+					<el-table-column label="特价占比" prop="pricePercent"></el-table-column>
+					<el-table-column label="异常单" prop="exceptOrder"></el-table-column>
+					<el-table-column label="异常占比" prop="exceptPercent"></el-table-column>
+					<el-table-column label="停车报警次数" prop="stopNum"></el-table-column>
+					<el-table-column label="卸货报警次数" prop="arriveNum"></el-table-column>
+					<el-table-column label="下单客户量" prop="orderCustomerNum"></el-table-column>
+					<el-table-column label="异常客户" prop="exceptCustomer" ></el-table-column>
+					<el-table-column label="异常客户占比" prop="exceptCustomerPercent" align="center"></el-table-column>
 				</el-table>
 				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
@@ -84,27 +57,28 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import requestByJson, { baseURL } from '../../common/requestByJson'
-import { baseMixin } from '../../common/mixin'
-import CarrierOrderAlarm from '../../api/CarrierOrderAlarm'
-import Company from '../../api/Company'
-import { getDateTotimestamp } from "../../common/utils";
+import { baseURL } from '../../../common/requestByJson'
+import { baseMixin } from '../../../common/mixin'
+import CarrierOrderAlarm from '../../../api/CarrierOrderAlarm'
+import Company from '../../../api/Company'
+import { getDateTotimestamp } from "../../../common/utils"
 export default {
     mixins: [baseMixin],
 	data() {
 		return {
             find: { 
-                keyword: '',
-                customerID:'',
-                type:'',
-                beginTime:this.getCurrentMonthFirst(),
-                endTime:this.getCurrentMonthLast()
+                customerID: '',
+                type: ''
             },
             companys: [],
-            curCompany: {},
+			curCompany: {},
+			exportExcelUrl: '',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
+				+ localStorage.getItem("token"),
 		}
     },
     created(){
+		this.resetExportExcelUrl()
         this.getList()
         this.getCompanys()
         this.getCurrentMonthFirst()
@@ -124,6 +98,7 @@ export default {
 			this.find.endTime = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
+			this.resetExportExcelUrl()
 			this.getList()
         },
         view(dispatchOrderID){
@@ -166,11 +141,42 @@ export default {
             let nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1)
             let oneDay=1000*60*60*24
             return getDateTotimestamp(new Date(nextMonthFirstDay-oneDay))
-        }
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
+		},
+		resetExportExcelUrl(){
+			this.exportExcelUrl = baseURL + '/company/customer/export?Authorization=' 
+				+ localStorage.getItem("token") 
+				+ '&keyword=' + this.find.keyword
+				+ '&customerType=' + this.find.customerType
+		}
 	}
 }
 
 </script>
 <style lang="stylus" scoped>
-
+.download-btn
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-right 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
+.upload-File
+	display inline-block
+	margin 0 10px
 </style>
