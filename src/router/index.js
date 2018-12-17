@@ -40,10 +40,22 @@ const routerMap = [
              * 异常报警
              */
             {
-                path: '/anomaly',
-                name: 'anomaly',
+                path: '/exceptanomaly',
+                name: 'exceptanomaly',
                 meta: { title: '异常报警'},
-                component: () => import('../components/Anomaly')
+                component: () => import('../components/Anomaly/ExceptAnomaly')
+            },
+            {
+                path: '/companycaveat',
+                name: 'companycaveat',
+                meta: { title: '工厂报警'},
+                component: () => import('../components/Anomaly/CompanyCaveat')
+            },
+            {
+                path: '/customercaveat',
+                name: 'customercaveat',
+                meta: { title: '客户报警'},
+                component: () => import('../components/Anomaly/CustomerCaveat')
             },
             /**
              * 业务  buisiness
@@ -257,6 +269,12 @@ const routerMap = [
                 name: 'expirewarn',
                 meta: { title: '到期预警' },
                 component: () => import ('../components/TransTeam/ExpireWarn/index'),
+            },
+            {
+                path: '/gpsdevice',
+                name: 'gpsdevice',
+                meta: { title: 'GPS设备' },
+                component: () => import ('../components/TransTeam/GPSDevice'),
             },
             /**
              * 基础资料  basedata
