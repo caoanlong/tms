@@ -4,10 +4,28 @@
 			<div slot="header" class="clearfix">客户</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="关键字">
-						<el-input placeholder="请输入关键字" v-model="find.keyword"  @change="inputChange"></el-input>
+					<el-form-item label="客户名称">
+						<el-input placeholder="请输入客户名称" v-model="find.keyword"  @change="inputChange"></el-input>
 					</el-form-item>
-					<el-form-item label="类型" class="customerSelect">
+					<el-form-item label="客户编号">
+						<el-input placeholder="请输入客户编号" v-model="find.keyword"  @change="inputChange"></el-input>
+					</el-form-item>
+                    <el-form-item label="监控类型" class="customerSelect">
+						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
+							<el-option value="" label="全部"></el-option>
+							<el-option value="Shipper" label="区域监控"></el-option>
+							<el-option value="Consignee" label="地址监控"></el-option>
+							<el-option value="Delegate" label="混合监控"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="客户类型" class="customerSelect">
+						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
+							<el-option value="Shipper" label="发货方"></el-option>
+							<el-option value="Consignee" label="收货方"></el-option>
+							<el-option value="Delegate" label="委托方"></el-option>
+						</el-select>
+					</el-form-item>
+                    <el-form-item label="所属片区" class="customerSelect">
 						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
 							<el-option value="Shipper" label="发货方"></el-option>
 							<el-option value="Consignee" label="收货方"></el-option>
@@ -46,8 +64,9 @@
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="客户名称" prop="companyName"></el-table-column>
 					<el-table-column label="客户编号" prop="code" align="center" width="140"></el-table-column>
-					<el-table-column label="地区" prop="companyArea" align="center"></el-table-column>
-					<el-table-column label="类型" prop="customerType" width="120" align="center">
+					<el-table-column label="所属片区" prop="code" align="center" width="140"></el-table-column>
+					<el-table-column label="监控类型" prop="companyArea" align="center" width="140"></el-table-column>
+					<el-table-column label="客户类型" prop="customerType" align="center" width="140">
 						<template slot-scope="scope">
 							{{scope.row.customerType?scope.row.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , '):''}}
 						</template>
@@ -57,11 +76,15 @@
 					<el-table-column label="监控区域" prop="monitorAreaCount" width="80" align="center">
                         <template slot-scope="scope">{{scope.row.monitorAreaCount}}</template>
                     </el-table-column>
-					<el-table-column label="TA的地址" prop="customerAddressNum" width="140" align="center">
+					<el-table-column label="监控地址" prop="monitorAreaCount" width="80" align="center">
+                        <template slot-scope="scope">{{scope.row.customerAddressNum}}</template>
+                    </el-table-column>
+
+					<!-- <el-table-column label="TA的地址" prop="customerAddressNum" width="140" align="center">
 						<template slot-scope="scope">
 							<span :class="{'link': Number(scope.row.customerAddressNum) > 0}" @click="viewAddress(scope.row)">{{scope.row.customerAddressNum + '个地址'}}</span>
 						</template>
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">

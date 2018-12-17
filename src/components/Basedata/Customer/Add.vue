@@ -27,6 +27,11 @@
 								<el-checkbox label="Delegate">委托方</el-checkbox>
 							</el-checkbox-group>							
 						</el-form-item>
+                        <el-form-item label="所属片区" class="customerSelect">
+                            <el-select  placeholder="请选择">
+                                <el-option value="Shipper" label="发货方"></el-option>
+                            </el-select>
+                        </el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">
 							<dist-picker :distList="selectedArea" @hand-select="handleSelectedArea"></dist-picker>
 						</el-form-item>
@@ -46,61 +51,61 @@
                             <el-select v-model="recdeliverycomp.fencingType" placeholder="请选择">
                                 <el-option label="区域监控" value="Area"></el-option>
                                 <el-option label="地址监控" value="Point"></el-option>
+                                <el-option label="混合监控" value="Point"></el-option>
                             </el-select>					
 						</el-form-item>
 				</el-col>
 			</el-row>
-            <el-row 
-                v-if="recdeliverycomp.fencingType == 'Area'" 
-                v-show="recdeliverycomp.customerType.includes('Shipper') || recdeliverycomp.customerType.includes('Consignee')">
-				<el-col style="padding-left:120px">
-                    <div class="addTit">区域监控<span class="el-icon-plus fr addTitBtn" @click="isAddAreaVisible = true"> 增加</span></div>
-                    <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
-                            <el-table-column prop="provice" label="省" align="center"></el-table-column>
-                            <el-table-column prop="city" label="市" align="center"></el-table-column>
-                            <el-table-column prop="area" label="区" align="center"></el-table-column>
-                            <el-table-column label="控制" align="center">
-                                <template slot-scope="scope">
-                                    <span v-if="monitoringAreaList.length>1" @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
-                                </template>
-                            </el-table-column>
-                        </el-table>
+            <el-row v-if="recdeliverycomp.customerType.includes('Shipper') || recdeliverycomp.customerType.includes('Consignee')">
+                <el-col class="monitoringBox">
+                    <span class="el-icon-plus fr addTitBtn" @click="isAddAreaVisible = true"> 增加</span>
+                    <span class="el-icon-plus fr addTitBtn" @click="isAddAddressVisible = true"> 增加</span>
+                    <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+                        <el-tab-pane label="区域监控" name="first">
+                            <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
+                                <el-table-column prop="provice" label="省" align="center"></el-table-column>
+                                <el-table-column prop="city" label="市" align="center"></el-table-column>
+                                <el-table-column prop="area" label="区" align="center"></el-table-column>
+                                <el-table-column label="操作" align="center">
+                                    <template slot-scope="scope">
+                                        <span v-if="monitoringAreaList.length>1" @click="del(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-tab-pane>
+                        <el-tab-pane label="地址监控" name="second">
+                            <div class="table">
+                                <el-table :data="addressList" style="border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
+                                    <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
+                                    <el-table-column prop="contactName" label="联系人" align="center"></el-table-column>
+                                    <el-table-column prop="contactPhone" label="联系电话" align="center" width="120"></el-table-column>
+                                    <el-table-column prop="areaID" label="区域" align="center">
+                                        <template slot-scope="scope">
+                                            {{scope.row.areaID | searchAreaByKey}}
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="detailAddress" label="地址" align="center">
+                                        <template slot-scope="scope">
+                                            <span>{{scope.row.locationAddress?scope.row.locationAddress:''}}{{scope.row.detailAddress?scope.row.detailAddress:''}}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="monitorScope" label="围栏范围" align="center">
+                                        <template slot-scope="scope">
+                                            {{scope.row.monitorScope?scope.row.monitorScope+'米':''}}
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column label="操作" align="center">
+                                        <template slot-scope="scope">
+                                            <span v-if="addressList.length>1" @click="delAddress(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </el-tab-pane>
+                    </el-tabs>
                 </el-col>
             </el-row>
-            <el-row 
-                v-if="recdeliverycomp.fencingType == 'Point'" 
-                v-show="recdeliverycomp.customerType.includes('Shipper') || recdeliverycomp.customerType.includes('Consignee')">
-				<el-col style="padding-left:120px">
-                    <div class="addTit">地址监控<span class="el-icon-plus fr addTitBtn" @click="isAddAddressVisible = true"> 增加</span></div>
-                    <div class="table">
-                        <el-table :data="addressList" style="border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
-                            <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
-                            <el-table-column prop="contactName" label="联系人" align="center"></el-table-column>
-                            <el-table-column prop="contactPhone" label="联系电话" align="center" width="120"></el-table-column>
-                            <el-table-column prop="areaID" label="区域" align="center">
-                                <template slot-scope="scope">
-                                    {{scope.row.areaID | searchAreaByKey}}
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="detailAddress" label="地址" align="center">
-                                <template slot-scope="scope">
-                                    <span>{{scope.row.locationAddress?scope.row.locationAddress:''}}{{scope.row.detailAddress?scope.row.detailAddress:''}}</span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column prop="monitorScope" label="围栏范围" align="center">
-                                <template slot-scope="scope">
-                                    {{scope.row.monitorScope?scope.row.monitorScope+'米':''}}
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="控制" align="center">
-                                <template slot-scope="scope">
-                                    <span v-if="addressList.length>1" @click="delAddress(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                </el-col>
-            </el-row>
+            
             <el-row>
 				<el-col>
                     <el-form-item>
@@ -251,25 +256,24 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.addTit
-    height 33px
-    line-height 33px
-    font-size 14px
-    color #999
-    padding 0 15px
-    border 1px solid #ebeef5
-    border-bottom none
-    border-radius 4px 4px 0 0
+.monitoringBox
+    position relative
+    padding-left 120px
     .addTitBtn
-        height 32px
-        line-height 32px
+        height 40px
+        line-height 40px
         color #409EFF
         cursor pointer
-.deleteBtn
-    color #F56C6C
-    height 20px
-    line-height 20px
-    cursor pointer
-    font-size 12px
-    display inline-block
+        position absolute
+        right 0
+        top 0
+        font-size 14px
+        z-index 10
+    .deleteBtn
+        color #F56C6C
+        height 20px
+        line-height 20px
+        cursor pointer
+        font-size 12px
+        display inline-block
 </style>
