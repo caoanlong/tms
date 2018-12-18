@@ -1,6 +1,10 @@
 import { Message } from 'element-ui'
+import moment from 'moment'
 
 export default function install(Vue) {
+
+	Vue.prototype.moment = moment
+
 	// 图片地址
 	Vue.prototype.imgUrl = process.env.IMG_API
 

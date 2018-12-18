@@ -4,8 +4,62 @@
 			<div slot="header" class="clearfix">承运单列表</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
-					<el-form-item label="关键字">
-						<el-input placeholder="承运单号/货物名称" style="width:150px" v-model="find.keyword" @change="inputChange"></el-input>
+					<el-form-item label="交货单号">
+						<el-input 
+							placeholder="请输入交货单号" 
+							style="width:150px" 
+							v-model="find.keyword" 
+							@change="inputChange">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="承运单号">
+						<el-input 
+							placeholder="请输入承运单号" 
+							style="width:150px" 
+							v-model="find.keyword" 
+							@change="inputChange">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="工厂名称" class="customerSelect">
+						<el-select placeholder="请选择" v-model="find.customerID" @change="inputChange">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option 
+                                :label="item.companyName" 
+                                :value="item.customerID" 
+                                v-for="(item, i) in companys" 
+                                :key="i">
+                            </el-option>
+                        </el-select>
+					</el-form-item>
+					<el-form-item label="客户名称">
+						<el-input 
+							placeholder="请输入客户名称" 
+							style="width:150px" 
+							v-model="find.keyword" 
+							@change="inputChange">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="产品名称">
+						<el-input 
+							placeholder="请输入产品名称" 
+							style="width:150px" 
+							v-model="find.keyword" 
+							@change="inputChange">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="车牌">
+						<el-input 
+							placeholder="请输入车牌号" 
+							style="width:150px" 
+							v-model="find.keyword" 
+							@change="inputChange">
+						</el-input>
+					</el-form-item>
+					<el-form-item label="是否异常" class="customerSelect">
+						<el-select placeholder="请选择" v-model="find.status" @change="inputChange">
+							<el-option value="Y" label="是"></el-option>
+							<el-option value="N" label="否"></el-option>
+						</el-select>
 					</el-form-item>
 					<el-form-item label="状态" class="customerSelect">
 						<el-select placeholder="请选择" v-model="find.status" @change="inputChange">
@@ -15,14 +69,14 @@
 							<el-option value="Closed" label="已关闭">已关闭</el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="委托时间从" prop="begin">
+					<el-form-item label="创建开始" prop="begin">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" v-model="find.begin" @change="inputChange">
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="至" prop="end">
+					<el-form-item label="创建结束" prop="end">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
@@ -43,11 +97,18 @@
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<!-- <el-table-column label="Id" type="selection" align="center" width="40"></el-table-column> -->
-					<el-table-column label="单号" width="170"  align="center">
+					<el-table-column label="承运单号" width="170"  align="center">
 						<template slot-scope="scope">
 							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
 						</template>
 					</el-table-column>
+					<el-table-column label="交货单号" prop="shipperNo"></el-table-column>
+					<el-table-column label="异常" align="center" width="60">
+                        <template slot-scope="scope">
+							<span v-if="scope.row.alarmFlag=='Y'" style="color:#F56C6C">有</span>
+                            <span v-else style="color:#67C23A">无</span>
+						</template>
+                    </el-table-column>
 					<el-table-column label="状态" align="center" width='80'>
 						<template slot-scope="scope">
 							<el-tag size="mini" class="statusTag" type="warning" v-if="scope.row.status == 'Committed'">未执行</el-tag>
@@ -56,22 +117,9 @@
 							<el-tag size="mini" class="statusTag" type="info" v-else-if="scope.row.status == 'Closed'">已关闭</el-tag>
 						</template>
 					</el-table-column>
-                    <el-table-column label="异常" align="center" width="60">
-                        <template slot-scope="scope">
-							<span v-if="scope.row.alarmFlag=='Y'" style="color:#F56C6C">有</span>
-                            <span v-else style="color:#67C23A">无</span>
-						</template>
-                    </el-table-column>
+					<el-table-column label="发货方" prop="shipperCompanyName"></el-table-column>
+					<el-table-column label="收货方" prop="consigneeCompanyName"></el-table-column>
 					<el-table-column label="货物" prop="cargoName"></el-table-column>
-					<el-table-column label="发货公司" prop="shipperCompanyName"></el-table-column>
-					<el-table-column label="发货地" prop="shipperArea"></el-table-column>
-					<el-table-column label="委托时间" width="100" align="center">
-						<template slot-scope="scope">
-							<span v-if="scope.row.commissionDate">{{ new Date(scope.row.commissionDate).getTime() | getdatefromtimestamp(true)}}</span>
-						</template>
-					</el-table-column>
-					<el-table-column label="到货公司" prop="consigneeCompanyName"></el-table-column>
-					<el-table-column label="到货地" prop="consigneeArea"></el-table-column>
 					<el-table-column label="原货量">
 						<template slot-scope="scope">
 							<span>{{[(scope.row.cargoWeightSum+'吨'),(scope.row.cargoVolumeSum+'方'),(scope.row.cargoNumSum)] | trimSpaceAndJoinSlash }}</span>
@@ -80,6 +128,11 @@
 					<el-table-column label="待配载量">
 						<template slot-scope="scope">
 							<span>{{[(scope.row.remainingCargoWeight+'吨'),(scope.row.remainingCargoVolume+'方'),(scope.row.remainingCargoNum)] | trimSpaceAndJoinSlash }}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="创建时间" width="140" align="center">
+						<template slot-scope="scope">
+							<span v-if="scope.row.createTime">{{moment(scope.row.createTime).format('YYYY-MM-DD hh:mm:ss')}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
@@ -108,6 +161,7 @@ import { baseMixin } from '../../../common/mixin'
 import dist from '../../../assets/data/distpicker.data.js'
 import { deleteConfirm, closeConfirm } from '../../../common/utils'
 import CarryOrder from '../../../api/CarryOrder'
+import Company from '../../../api/Company'
 export default {
 	mixins: [baseMixin],
 	data() {
@@ -118,12 +172,14 @@ export default {
 				begin: '',
 				end: ''
 			},
+			companys: [],
 			exportExcelUrl: '',
 		}
 	},
 	created() {
 		this.resetExportExcelUrl()
 		this.getList()
+		this.getCompanys()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
@@ -160,6 +216,15 @@ export default {
 		inputChange() {
 			this.resetExportExcelUrl()
 		},
+		getCompanys() {
+            Company.customerFind({
+				current: 1,
+                size: 1000,
+                customerType: 'Shipper'
+			}).then(res => {
+                this.companys = res.records
+			})
+        },
 		getList() {
 			CarryOrder.find({
 				current: this.pageIndex,
