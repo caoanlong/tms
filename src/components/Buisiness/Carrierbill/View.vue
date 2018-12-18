@@ -156,32 +156,6 @@
 					</table>
 				</div>
 			</el-row>
-			<el-row :gutter="20">
-				<el-col :span="12">
-					<div class="section-block">
-						<span class="block-title">运输费用</span>
-						<el-row class="block-content" style="padding-bottom:20px">
-							<div>
-								<span class="tit">运费金额</span>
-								<span class="ctt">{{carrierOrder.freight}}</span>
-							</div>
-						</el-row>
-					</div>
-				</el-col>
-				<el-col :span="12">
-					<div class="section-block">
-						<span class="block-title">回单要求</span>
-						<el-row class="block-content" style="padding-bottom:20px">
-							<div>
-								<span class="tit">单据</span>
-								<span class="ctt">
-									<span v-for="(item,index) in carrierOrder.porRequire" :key="index">{{(index >1)?',':''}}{{mapType[item]}}</span>
-								</span>
-							</div>
-						</el-row>
-					</div>
-				</el-col>
-			</el-row>
 			<div class="wf-footer clearfix text-center">
 				<el-button type="primary" @click="copy(carrierOrder.carrierOrderID)">复制</el-button>
 				<el-button @click="back">返回</el-button>
@@ -214,17 +188,12 @@ export default {
 	data() {
 		return {
 			trailDialog: false,
-			mapType: {
-				'ConsigneePor': '货物托运单',
-				'ShipperPor': '货物发货单'
-			},
 			carrierOrder: {},
 			isPhotoVisible: false, 
 			currentDispatchTaskID: '',
 			currentShipperArea: '',
 			currentConsigneeArea: '',
 			carrierCargo: [],
-			porRequire: [],
             transports: [],
             alarmInfo:[]
 		}
@@ -250,7 +219,6 @@ export default {
 			const carrierOrderID = this.$route.query.carrierOrderID
 			CarryOrder.findById({ carrierOrderID, isEdit: false }).then(res => {
 				this.carrierOrder = res
-				this.carrierOrder.porRequire = res.porRequire ? res.porRequire.split(',') : []
 				this.carrierCargo = res.carrierCargo
 				this.getTransports(carrierOrderID)
 			})

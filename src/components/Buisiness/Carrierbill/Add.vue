@@ -9,34 +9,6 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="8">
-						<el-form-item label="运输方式" prop="transportType">
-							<el-select 
-								v-model="carrierbillInfo.transportType" 
-								placeholder="请选择" 
-								style="width:100%">
-								<el-option 
-									v-for="(label, value) in TRANSPORTTYPE" 
-									:key="value" 
-									:label="label" 
-									:value="value">
-								</el-option>
-							</el-select>
-						</el-form-item>
-					</el-col>
-					<el-col :span="8">
-						<el-form-item label="委托时间" prop="commissionDate">
-							<el-date-picker 
-								style="width:100%" 
-								type="date" 
-								placeholder="请选择" 
-								value-format="timestamp" 
-								v-model="carrierbillInfo.commissionDate">
-							</el-date-picker>
-						</el-form-item>
-					</el-col>
-				</el-row>
-				<el-row>
-					<el-col :span="8">
 						<el-form-item label="委托方" prop="consignorID">
 							<el-autocomplete
 								value-key="companyName" style="width:100%"
@@ -51,6 +23,17 @@
 							</el-autocomplete>
 						</el-form-item>
 					</el-col>
+					<el-col :span="8">
+						<el-form-item label="委托时间" prop="commissionDate">
+							<el-date-picker 
+								style="width:100%" 
+								type="date" 
+								placeholder="请选择" 
+								value-format="timestamp" 
+								v-model="carrierbillInfo.commissionDate">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
 				</el-row>
 				<el-row :gutter="20">
 					<el-col :span="12">
@@ -58,7 +41,7 @@
 							<span class="block-title">发货信息</span>
 							<span class="addCompany" @click="addAddress('shipper')">新增企业地址</span>
 							<el-row class="block-content">
-								<el-form-item label="发货单位" prop="shipperID">
+								<el-form-item label="发货方" prop="shipperID">
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
 										v-model="carrierbillInfo.shipperCompanyName"
@@ -125,7 +108,7 @@
 							<span class="block-title">到货信息</span>
 							<span class="addCompany" @click="addAddress('consignee')">新增企业地址</span>
 							<el-row class="block-content">
-								<el-form-item label="收货单位" prop="consigneeID">
+								<el-form-item label="到货方" prop="consigneeID">
 									<el-autocomplete  style="width:100%"
 										value-key="companyName" 
 										v-model="carrierbillInfo.consigneeCompanyName"
@@ -137,7 +120,7 @@
 								</el-form-item>
 							</el-row>
 							<el-row class="block-content">
-								<el-form-item label="收货地址" prop="consigneeAreaID">
+								<el-form-item label="到货地址" prop="consigneeAreaID">
 									<input v-model="carrierbillInfo.consigneeAreaID" hidden="true"/>
 									<dropdown-select 
 										addressType="收货单位"
@@ -192,22 +175,15 @@
 					</el-col>
 				</el-row>
 				<el-row>
-					<el-col :span="24">
-						<p class="feeTips c1 text-center">运输距离：{{receivableDistance?Number(receivableDistance/1000).toFixed(2):''}}公里</p>
-					</el-col>
-				</el-row>
-				<el-row>
 					<div class="section-block">
-						<span class="block-title">货物信息</span>
+						<span class="block-title">产品信息</span>
 						<div class="cargoTable">
 							<el-form label-width="0" size="small" :model="carrierbillInfo" ref="cargoRuleForm">
 								<table class="cargoList">
 									<tr>
-										<th><span>*</span>货名</th>
-										<th width="130">配载方式</th>
-										<th width="200">货量</th>
-                                        <th width="180">数量</th>
-										<th width="150">单位</th>
+										<th><span>*</span>产品名称</th>
+										<th width="200">数量</th>
+										<th width="200">重量</th>
 										<th>操作</th>
 									</tr>
 									<tbody>
@@ -233,62 +209,32 @@
 													</el-autocomplete>
 												</el-form-item>
 											</td>
-											<td>
-												<el-form-item label-width="0">
-													<el-input placeholder="配载方式" style="width:100%" :value="DISPATCHTYPE[item.dispatchType]" disabled></el-input>
+											<td style="border-spacing:0">
+												<el-form-item 
+													label-width="0" 
+													:prop="'carrierCargo.' + index + '.cargoNum'" 
+													:rules="[{ validator: checkInt }]">
+													<el-input placeholder="货物数量" v-model="item.cargoNum">
+														<template slot="append">袋</template>
+													</el-input>
 												</el-form-item>
 											</td>
 											<td style="border-spacing:0">
 												<el-form-item 
 													label-width="0" 
 													:prop="'carrierCargo.' + index + '.cargoWeight'" 
-													:rules="[{ validator: checkFloat2 },{
+													:rules="[{ validator: checkFloat2 }, {
 														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Weight' &&(!item.cargoWeight || item.cargoWeight == '0')) {
+															if (!item.cargoWeight) {
 																callback('请输入重量')
 															} else {
 																callback()
 															}
 														}
-													}]" 
-													v-if="item.dispatchType=='Weight'">
+													}]">
 													<el-input placeholder="货物重量" v-model="item.cargoWeight">
 														<template slot="append">吨</template>
 													</el-input>
-												</el-form-item>
-											
-												<el-form-item 
-													label-width="0" 
-													:prop="'carrierCargo.' + index + '.cargoVolume'" 
-													:rules="[{ validator: checkFloat2 },{
-														validator: (rule, value, callback) => {
-															if (item.dispatchType=='Volumn' &&(!item.cargoVolume|| item.cargoVolume == '0')) {
-																callback('请输入体积')
-															} else {
-																callback()
-															}
-														}
-													}]" v-else-if="item.dispatchType=='Volumn'">
-													<el-input placeholder="货物体积" v-model="item.cargoVolume">
-														<template slot="append">方</template>
-													</el-input>
-												</el-form-item>
-											</td>
-                                            <td>
-												<el-form-item label-width="0" :prop="'carrierCargo.' + index + '.cargoNum'">
-													<el-input-number v-model="item.cargoNum" :min="0" style="width:100%"></el-input-number>
-												</el-form-item>
-											</td>
-											<td>
-												<el-form-item label-width="0">
-													<el-select v-model="item.cargoUnitName" placeholder="货物单位" disabled>
-														<el-option 
-															v-for="(unit, index) in units" 
-															:key="index" 
-															:label="unit.unit" 
-															:value="unit.unit">
-														</el-option>
-													</el-select>
 												</el-form-item>
 											</td>
 											<td  align="center">
@@ -301,14 +247,10 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<td colspan="2" align="right">合计：</td>
-											<td align="center" v-if="carrierbillInfo.carrierCargo[0].dispatchType=='Weight'">{{sum('cargoWeight')}}吨</td>
-											<td align="center" v-else-if="carrierbillInfo.carrierCargo[0].dispatchType=='Volumn'">
-												{{sum('cargoVolume')}}方
-											</td>
-											<td align="center" v-else></td>
-                                            <td align="center">{{parseInt(sum('cargoNum'))}}</td>
-											<td align="center" colspan="2"></td>
+											<td align="right">合计：</td>
+											<td align="center">{{parseInt(sum('cargoNum'))}}袋</td>
+											<td align="center">{{sum('cargoWeight')}}吨</td>
+											<td align="center"></td>
 										</tr>
 									</tfoot>
 								</table>
@@ -319,13 +261,9 @@
 				<el-row :gutter="20">
 					<el-col :span="12">
 						<div class="section-block" style="min-height:120px">
-							<span class="block-title">运输费用<span class="titTips">（如已配置委托方的应收运价，系统会默认算金额）</span></span>
+							<span class="block-title">运输费用</span>
 							<el-row class="block-content">
-								<div class="transFeeTips" v-if="+receivableWeightUnitPrice || +receivableVolumnUnitPrice">
-									<svg-icon icon-class="info" class="infoIcon"></svg-icon>
-									<p>委托方{{carrierbillInfo.consignorName}}已配置应收运价（{{receivableWeightUnitPrice}}元/吨公里，{{receivableVolumnUnitPrice}}元/方公里）根据货量、运输距离计算出的参考金额 {{totalPrice()}}元</p>
-								</div>
-								<el-form-item label="运费金额" prop="freight">
+								<el-form-item label="应收金额" prop="freight">
 									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight"  @change="changeFreight"></el-input>
 								</el-form-item>
 							</el-row>
@@ -337,8 +275,8 @@
 							<el-row class="block-content">
 								<el-form-item label="单据">
 									<el-checkbox-group v-model="carrierbillInfo.porRequire">
-										<el-checkbox label="ConsigneePor" name="porRequire">货物托运单</el-checkbox>
-										<el-checkbox label="ShipperPor" name="porRequire">货物发货单</el-checkbox>
+										<el-checkbox label="ConsigneePor" name="porRequire">托运单</el-checkbox>
+										<el-checkbox label="ShipperPor" name="porRequire">发货单</el-checkbox>
 									</el-checkbox-group>
 								</el-form-item>
 							</el-row>
@@ -361,57 +299,44 @@
 	</div>
 </template>
 <script type="text/javascript">
-import { Message } from "element-ui";
-import axios from "axios";
-import { mapGetters } from "vuex";
-import Carrierbill from "../../../api/Carrierbill";
-import Company from "../../../api/Company";
-import CarryOrder from "../../../api/CarryOrder";
-import CargoUnit from "../../../api/CargoUnit";
-import { timeToTimestamp } from "../../../common/utils";
-import DropdownSelect from "../../CommonComponents/DropdownSelect";
-import AddComAddress from "./components/AddComAddress";
-import { checkInt, checkFloat2 } from "../../../common/validator";
+import { Message } from "element-ui"
+import axios from "axios"
+import { mapGetters } from "vuex"
+import Carrierbill from "../../../api/Carrierbill"
+import Company from "../../../api/Company"
+import CarryOrder from "../../../api/CarryOrder"
+import CargoUnit from "../../../api/CargoUnit"
+import { timeToTimestamp } from "../../../common/utils"
+import DropdownSelect from "../../CommonComponents/DropdownSelect"
+import AddComAddress from "./components/AddComAddress"
+import { checkInt, checkFloat2 } from "../../../common/validator"
 export default {
 	data() {
 		const checkShipperDateTime = (rule, value, callback) => {
-		if (
-			this.carrierbillInfo.consigneeDate &&
-			value > this.carrierbillInfo.consigneeDate
-		) {
-			callback(new Error("发货时间不能晚于到货时间"));
-		} else {
-			callback();
+			if (this.carrierbillInfo.consigneeDate 
+				&& value > this.carrierbillInfo.consigneeDate) {
+				callback(new Error("发货时间不能晚于到货时间"))
+			} else {
+				callback()
+			}
 		}
-		};
 		const checkConsigneeDateTime = (rule, value, callback) => {
-		if (
-			this.carrierbillInfo.shipperDate &&
-			value < this.carrierbillInfo.shipperDate
-		) {
-			callback(new Error("到货时间不能早于发货时间"));
-		} else {
-			callback();
+			if (this.carrierbillInfo.shipperDate 
+				&& value < this.carrierbillInfo.shipperDate) {
+				callback(new Error("到货时间不能早于发货时间"))
+			} else {
+				callback()
+			}
 		}
-		};
 		return {
 			currentCompany: {},
 			addressDialog: false,
 			isChangeShipper: false,
 			isChangeConsignee: false,
-			placeholder1: "请选择发货地址",
-			placeholder2: "请选择收货地址",
 			units: [],
 			minDateTime: "",
-			shipperAddress: [],
-			consigneeAddress: [],
-			searchKeyWord: "",
-			receivableDistance: 0,
-			receivableVolumnUnitPrice: 0,
-			receivableWeightUnitPrice: 0,
 			carrierbillInfo: {
 				shipperNo: "" /** String 发货单号*/,
-				transportType: "公路运输" /** String 运输方式*/,
 				commissionDate: new Date().getTime() /** Date 委托时间*/,
 				shipperID: "" /** Long 发货单位ID*/,
 				shipperCompanyName: "" /** String 发货单位名称*/,
@@ -441,23 +366,18 @@ export default {
 				consignorID: "" /**委托人ID*/,
 				carrierCargo: [
 					{
-					cargoID: '',
-					cargoName: '',
-					dispatchType: 'Weight',
-					cargoWeight:'',
-					cargoVolume: '',
-					cargoNum: '',
-					cargoUnitName: ''
+						cargoID: '',
+						cargoName: '',
+						cargoWeight:'',
+						cargoNum: ''
 					}
-				] /** String货物清单（JSON串）*/,
-				freight: "" /** BigDecimal运费 */,
+				], /** String货物清单（JSON串）*/
+				freight: "", /** BigDecimal运费 */
 				porRequire: [] /** String 回单要求 */
 			},
 			freight: "",
 			selectedShipper: null,
 			selectedConsignee: null,
-			selectedShipperAddress: null,
-			selectedConsigneeAddress: null,
 			flagShipperCompanyName: "",
 			flagConsigneeCompanyName: "",
 			rules: {
@@ -476,8 +396,7 @@ export default {
 					{ required: true, message: "请选择收货时间" },
 					{ validator: checkConsigneeDateTime }
 				],
-				transportType: [{ required: true, message: "请选择运输方式" }],
-				freight: [{ required: true, message: "请输入运费金额" }]
+				freight: [{ required: true, message: "请输入应收金额" }]
 			}
 		}
 	},
@@ -493,7 +412,6 @@ export default {
 		if(!this.$route.query.cache) {
 			this.carrierbillInfo = {
 				shipperNo: "" /** String 发货单号*/,
-				transportType: "公路运输" /** String 运输方式*/,
 				commissionDate: new Date().getTime() /** Date 委托时间*/,
 				shipperID: "" /** Long 发货单位ID*/,
 				shipperCompanyName: "" /** String 发货单位名称*/,
@@ -523,13 +441,13 @@ export default {
 				consignorID: "" /**委托人ID*/,
 				carrierCargo: [
 					{
-					cargoID: '',
-					cargoName: '',
-					dispatchType: 'Weight',
-					cargoWeight:'',
-					cargoVolume: '',
-					cargoNum: '',
-					cargoUnitName: ''
+						cargoID: '',
+						cargoName: '',
+						dispatchType: 'Weight',
+						cargoWeight:'',
+						cargoVolume: '',
+						cargoNum: '',
+						cargoUnitName: ''
 					}
 				] /** String货物清单（JSON串）*/,
 				freight: "" /** BigDecimal运费 */,
@@ -548,49 +466,31 @@ export default {
         }
         return sum.toFixed(2)
     },
-    totalPrice() {
-      let sum = 0;
-      if (this.receivableDistance) {
-        for (let i = this.carrierbillInfo.carrierCargo.length - 1; i >= 0; i--) {
-          if (this.carrierbillInfo.carrierCargo[i].dispatchType == "Weight") {
-            sum += (Number(this.carrierbillInfo.carrierCargo[i].cargoWeight) 
-			  * this.receivableWeightUnitPrice 
-			  * this.receivableDistance) / 1000
-          } else {
-            sum += (Number(this.carrierbillInfo.carrierCargo[i].cargoVolume) 
-			  * this.receivableVolumnUnitPrice 
-			  * this.receivableDistance) / 1000
-          }
-        }
-	  }
-      this.carrierbillInfo.freight = sum ? sum.toFixed(2) : ""
-      return sum.toFixed(2)
-    },
     changeFreight(val) {
     	this.freight = val
     },
     handSelectDate() {
-      this.$refs["ruleForm"].validateField("shipperDate");
-      this.$refs["ruleForm"].validateField("consigneeDate");
-      let now = new Date();
-      let hour = now.getHours() < 10 ? "0" + now.getHours() : now.getHours();
+      this.$refs["ruleForm"].validateField("shipperDate")
+      this.$refs["ruleForm"].validateField("consigneeDate")
+      let now = new Date()
+      let hour = now.getHours() < 10 ? "0" + now.getHours() : now.getHours()
       let minute =
-        now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes();
+        now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes()
       if (this.carrierbillInfo.shipperDate < now) {
         if (minute > 30) {
-          this.minDateTime = hour + 1 + ":" + "00";
+          this.minDateTime = hour + 1 + ":" + "00"
         } else {
-          this.minDateTime = hour + ":" + "00";
+          this.minDateTime = hour + ":" + "00"
         }
       } else {
-        this.minDateTime = "";
+        this.minDateTime = ""
       }
 
       if (!this.carrierbillInfo.shipperDate) {
-        this.carrierbillInfo.shipperTime = "";
+        this.carrierbillInfo.shipperTime = ""
       }
       if (!this.carrierbillInfo.consigneeDate) {
-        this.carrierbillInfo.consigneeTime = "";
+        this.carrierbillInfo.consigneeTime = ""
       }
     },
     getUnits() {
@@ -605,47 +505,40 @@ export default {
           size: 1000,
           customerID: this.carrierbillInfo.shipperID,
           cargoName: queryString
-        })
-        .then(res => {
+        }).then(res => {
           const obj = {},
             result = [],
-            list = res.records;
+            list = res.records
           for (let i = 0; i < list.length; i++) {
             if (!obj[list[i].cargoName]) {
-              obj[list[i].cargoName] = 1;
-              result.push(list[i]);
+              obj[list[i].cargoName] = 1
+              result.push(list[i])
             }
           }
-          cb(result);
-        });
+          cb(result)
+        })
     },
     clearSelect(index) {
-      this.carrierbillInfo.carrierCargo[index].cargoName = "";
-      this.carrierbillInfo.carrierCargo[index].cargoID = "";
+      this.carrierbillInfo.carrierCargo[index].cargoName = ""
+      this.carrierbillInfo.carrierCargo[index].cargoID = ""
     },
     getConsignorCompany(queryString, cb) {
       if (queryString != this.carrierbillInfo.flagconsignorName) {
-        this.carrierbillInfo.consignorID = "";
+        this.carrierbillInfo.consignorID = ""
       }
       Company.customerSuggest({
           customerType: "Delegate",
           companyName: queryString
-        })
-        .then(res => {
-          cb(res);
-        });
+        }).then(res => { cb(res) })
     },
     getShipperCompany(queryString, cb) {
       if (queryString != this.carrierbillInfo.flagShipperCompanyName) {
-        this.carrierbillInfo.shipperID = "";
+        this.carrierbillInfo.shipperID = ""
       }
       Company.customerSuggest({
           customerType: "Shipper",
           companyName: queryString
-        })
-        .then(res => {
-          cb(res);
-        });
+        }).then(res => { cb(res) })
     },
     getConsigneeCompany(queryString, cb) {
 		if (queryString != this.carrierbillInfo.flagConsigneeCompanyName) {
@@ -671,11 +564,6 @@ export default {
 		}).then(res => { cb && cb(res) })
     },
     handSelectCargo(data) {
-		if (this.carrierbillInfo.carrierCargo.length > 1 
-			&& data.dispatchType != this.carrierbillInfo.carrierCargo[0].dispatchType) {
-			Message.error("配载方式不一样,请选择")
-			return
-		}
 		this.carrierbillInfo.carrierCargo.forEach(item => {
 			if (item.cargoName == data.cargoName) {
 				item.cargoID = data.cargoID
@@ -700,7 +588,6 @@ export default {
 			this.carrierbillInfo.consignorName = data.companyName
 			this.carrierbillInfo.flagconsignorName = data.companyName
 		})
-		this.listForCalc()
 		data.customerType.includes('Shipper') && this.handSelectShipperCompany(data)
 	},
 	/**
@@ -716,7 +603,6 @@ export default {
 			this.carrierbillInfo.flagShipperCompanyName = data.companyName
 			this.getShipperAddress("", false)
 		})
-		this.listForCalc()
 	},
 	/**
 	 * 选择收获单位
@@ -731,7 +617,6 @@ export default {
 			this.carrierbillInfo.flagConsigneeCompanyName = data.companyName
 			this.getConsigneeAddress("", false)
 		})
-		this.listForCalc()
     },
     handSelectShipperAddress(data) {
 		this.carrierbillInfo.shipperAreaID = data.areaID;
@@ -743,7 +628,6 @@ export default {
 		this.carrierbillInfo.shipperLocationAddress = data.locationAddress;
 		this.carrierbillInfo.shipperLocationLng = data.locationLng;
 		this.carrierbillInfo.shipperLocationLat = data.locationLat;
-		this.listForCalc();
 		this.$refs["ruleForm"].validateField("shipperAreaID");
     },
     handSelectConsigneeAddress(data) {
@@ -756,7 +640,6 @@ export default {
 		this.carrierbillInfo.consigneeLocationAddress = data.locationAddress;
 		this.carrierbillInfo.consigneeLocationLng = data.locationLng;
 		this.carrierbillInfo.consigneeLocationLat = data.locationLat;
-		this.listForCalc();
 		this.$refs["ruleForm"].validateField("consigneeAreaID");
     },
     clearSelectShipper() {
@@ -770,60 +653,6 @@ export default {
     clearSelectConsignor() {
 		this.carrierbillInfo.consignorName = " "
 		this.carrierbillInfo.consignorID = ""
-    },
-    listForCalc() {
-      const customerID = this.carrierbillInfo.consignorID; /**委托客户ID*/
-      const shipperCustomerID = this.carrierbillInfo.shipperID; /**发货客户ID*/
-      const shipperCustomerAddressID = this.carrierbillInfo.shipperAddressID; /**发货客户地址ID*/
-      const consigneeCustomerID = this.carrierbillInfo.consigneeID; /**收货客户ID*/
-      const consigneeCustomerAddressID = this.carrierbillInfo.consigneeAddressID; /**收货客户地址ID*/
-      if (
-        !customerID ||
-        !shipperCustomerID ||
-        !shipperCustomerAddressID ||
-        !consigneeCustomerID ||
-        !consigneeCustomerAddressID
-      )
-        return;
-      Company.customerRoutePriceListForCalc([
-          {
-            customerID,
-            shipperCustomerID,
-            shipperCustomerAddressID,
-            consigneeCustomerID,
-            consigneeCustomerAddressID
-          }
-        ])
-        .then(res => {
-          this.receivableDistance = res[0].receivableDistance;
-          this.receivableVolumnUnitPrice = res[0].receivableVolumnUnitPrice;
-          this.receivableWeightUnitPrice = res[0].receivableWeightUnitPrice;
-          if (!this.receivableDistance) {
-            const start =
-              this.carrierbillInfo.shipperLocationLng +
-              "," +
-              this.carrierbillInfo.shipperLocationLat;
-            const end =
-              this.carrierbillInfo.consigneeLocationLng +
-              "," +
-              this.carrierbillInfo.consigneeLocationLat;
-            this.getDistance(start, end);
-          }
-			if (+this.receivableVolumnUnitPrice == 0 && +this.receivableWeightUnitPrice == 0 ) {
-				this.carrierbillInfo.freight = ""
-			}
-        })
-    },
-    /**
-     * 调用高德地图接口获取距离
-     */
-    async getDistance(start, end) {
-      const url = `https://restapi.amap.com/v3/distance?origins=${start}&destination=${end}&key=${
-        this.MAPKEY
-      }`;
-      const res = await axios({ url });
-      if (res.data.status == 1)
-        this.receivableDistance = res.data.results[0].distance;
     },
     async save() {
 		const valid1 = await this.$refs["ruleForm"].validate()
@@ -885,13 +714,13 @@ export default {
 		this.addressDialog = true
     },
     handAddress() {
-      this.addressDialog = false;
+      this.addressDialog = false
     },
     back() {
         this.$router.push({ name: 'carrierbill' })
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

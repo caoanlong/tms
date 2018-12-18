@@ -8,7 +8,7 @@
 						<el-input 
 							placeholder="请输入交货单号" 
 							style="width:150px" 
-							v-model="find.keyword" 
+							v-model="find.deliveryOrderNo" 
 							@change="inputChange">
 						</el-input>
 					</el-form-item>
@@ -16,12 +16,12 @@
 						<el-input 
 							placeholder="请输入承运单号" 
 							style="width:150px" 
-							v-model="find.keyword" 
+							v-model="find.carrierOrderNo" 
 							@change="inputChange">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="工厂名称" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.customerID" @change="inputChange">
+					<el-form-item label="工厂名称">
+						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
                                 :label="item.companyName" 
@@ -32,18 +32,21 @@
                         </el-select>
 					</el-form-item>
 					<el-form-item label="客户名称">
-						<el-input 
-							placeholder="请输入客户名称" 
-							style="width:150px" 
-							v-model="find.keyword" 
-							@change="inputChange">
-						</el-input>
-					</el-form-item>
+                        <el-autocomplete 
+							style="width:100%" 
+                            value-key="companyName" 
+                            v-model="find.customerName"
+                            :fetch-suggestions="getCustomers"
+                            placeholder="请输入客户名称"
+                            @select="handSelectCustomer"  @change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
+                        </el-autocomplete>
+                    </el-form-item>
 					<el-form-item label="产品名称">
 						<el-input 
 							placeholder="请输入产品名称" 
 							style="width:150px" 
-							v-model="find.keyword" 
+							v-model="find.cargoName" 
 							@change="inputChange">
 						</el-input>
 					</el-form-item>
@@ -51,29 +54,31 @@
 						<el-input 
 							placeholder="请输入车牌号" 
 							style="width:150px" 
-							v-model="find.keyword" 
+							v-model="find.plateNo" 
 							@change="inputChange">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="是否异常" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.status" @change="inputChange">
+					<el-form-item label="是否异常">
+						<el-select placeholder="请选择" v-model="find.verifyFlag" @change="inputChange">
 							<el-option value="Y" label="是"></el-option>
 							<el-option value="N" label="否"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="状态" class="customerSelect">
+					<el-form-item label="状态">
 						<el-select placeholder="请选择" v-model="find.status" @change="inputChange">
-							<el-option value="Committed" label="未执行">未执行</el-option>
-							<el-option value="Running" label="执行中">执行中</el-option>
-							<el-option value="Signed" label="已完成">已完成</el-option>
-							<el-option value="Closed" label="已关闭">已关闭</el-option>
+							<el-option value="Committed" label="未执行"></el-option>
+							<el-option value="Running" label="执行中"></el-option>
+							<el-option value="Signed" label="已完成"></el-option>
+							<el-option value="Closed" label="已关闭"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="创建开始" prop="begin">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
-							value-format="timestamp" v-model="find.begin" @change="inputChange">
+							value-format="timestamp" 
+							v-model="find.begin" 
+							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="创建结束" prop="end">
@@ -81,7 +86,8 @@
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							v-model="find.end" @change="inputChange">
+							v-model="find.end" 
+							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -96,13 +102,12 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
-					<!-- <el-table-column label="Id" type="selection" align="center" width="40"></el-table-column> -->
-					<el-table-column label="承运单号" width="170"  align="center">
+					<el-table-column label="承运单号" width="170" align="center">
 						<template slot-scope="scope">
 							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="交货单号" prop="shipperNo"></el-table-column>
+					<el-table-column label="交货单号" prop="deliveryOrderNo" align="center"></el-table-column>
 					<el-table-column label="异常" align="center" width="60">
                         <template slot-scope="scope">
 							<span v-if="scope.row.alarmFlag=='Y'" style="color:#F56C6C">有</span>
@@ -117,18 +122,16 @@
 							<el-tag size="mini" class="statusTag" type="info" v-else-if="scope.row.status == 'Closed'">已关闭</el-tag>
 						</template>
 					</el-table-column>
-					<el-table-column label="发货方" prop="shipperCompanyName"></el-table-column>
-					<el-table-column label="收货方" prop="consigneeCompanyName"></el-table-column>
-					<el-table-column label="货物" prop="cargoName"></el-table-column>
-					<el-table-column label="原货量">
-						<template slot-scope="scope">
-							<span>{{[(scope.row.cargoWeightSum+'吨'),(scope.row.cargoVolumeSum+'方'),(scope.row.cargoNumSum)] | trimSpaceAndJoinSlash }}</span>
-						</template>
+					<el-table-column label="发货方" prop="shipperCompanyName" align="center"></el-table-column>
+					<el-table-column label="收货方" prop="consigneeCompanyName" align="center"></el-table-column>
+					<el-table-column label="货物" prop="cargoName" align="center"></el-table-column>
+					<el-table-column label="订单量" align="center">
+						<el-table-column label="数量（袋）" prop="cargoNumSum" align="center"></el-table-column>
+						<el-table-column label="重量（吨）" prop="cargoWeightSum" align="center"></el-table-column>
 					</el-table-column>
-					<el-table-column label="待配载量">
-						<template slot-scope="scope">
-							<span>{{[(scope.row.remainingCargoWeight+'吨'),(scope.row.remainingCargoVolume+'方'),(scope.row.remainingCargoNum)] | trimSpaceAndJoinSlash }}</span>
-						</template>
+					<el-table-column label="剩余量" align="center">
+						<el-table-column label="数量（袋）" prop="remainingCargoNum" align="center"></el-table-column>
+						<el-table-column label="重量（吨）" prop="remainingCargoWeight" align="center"></el-table-column>
 					</el-table-column>
 					<el-table-column label="创建时间" width="140" align="center">
 						<template slot-scope="scope">
@@ -167,13 +170,22 @@ export default {
 	data() {
 		return {
 			find: {
-				keyword: '',
+				deliveryOrderNo: '',
+				carrierOrderNo: '',
+				shipperID: '',
+
+				consigneeID: '',
+				customerName: '',
+
+				cargoName: '',
+				plateNo: '',
+				verifyFlag: '',
 				status: '',
 				begin: '',
 				end: ''
 			},
 			companys: [],
-			exportExcelUrl: '',
+			exportExcelUrl: ''
 		}
 	},
 	created() {
@@ -187,6 +199,20 @@ export default {
 		}
 	},
 	methods: {
+		getCustomers(companyName, cb) {
+			this.find.consigneeID = ''
+			Company.customerSuggest({ companyName }).then(res => { cb(res) })
+		},
+		handSelectCustomer(data){
+			this.find.consigneeID = data.customerID
+			this.find.customerName = data.companyName
+			this.resetExportExcelUrl()
+		},
+		clearSelectCustomer(){
+			this.find.consigneeID = ''
+			this.find.customerName =''
+			this.resetExportExcelUrl()
+		},
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.carrierOrderID)
 		},
@@ -197,18 +223,23 @@ export default {
 			this.getList()
 		},
 		reset() {
-			this.find.keyword = ''
-			this.find.status = ''
-			this.find.begin = ''
-			this.find.end = ''
+			for(const key in this.find)
+				this.find[key] = ''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/carryOrder/export?Request-From=PC&Authorization=' + localStorage.getItem("token")	
-			+ '&keyword=' + this.find.keyword 
+			this.exportExcelUrl = baseURL + '/carryOrder/export?Request-From=PC&Authorization=' 
+			+ localStorage.getItem("token")	
+			+ '&deliveryOrderNo=' + this.find.deliveryOrderNo 
+			+ '&carrierOrderNo=' + this.find.carrierOrderNo
+			+ '&shipperID=' + this.find.shipperID
+			+ '&consigneeID=' + this.find.consigneeID
+			+ '&cargoName=' + this.find.cargoName
+			+ '&plateNo=' + this.find.plateNo
+			+ '&verifyFlag=' + this.find.verifyFlag
 			+ '&status=' + this.find.status
 			+ '&begin=' + this.find.begin 
 			+ '&end=' + this.find.end
@@ -229,7 +260,13 @@ export default {
 			CarryOrder.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.find.keyword,
+				deliveryOrderNo: this.find.deliveryOrderNo,
+				carrierOrderNo: this.find.carrierOrderNo,
+				shipperID: this.find.shipperID,
+				consigneeID: this.find.consigneeID,
+				cargoName: this.find.cargoName,
+				plateNo: this.find.plateNo,
+				verifyFlag: this.find.verifyFlag,
 				status: this.find.status,
 				begin: this.find.begin,
 				end: this.find.end
