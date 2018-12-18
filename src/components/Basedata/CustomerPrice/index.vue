@@ -148,7 +148,7 @@ export default {
 			bool && this.getList()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/customer/routePrice/export?Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/company/customer/routePrice/export?Request-From=PC&Authorization=' + localStorage.getItem("token") 
 				+ '&keyword=' + this.find.keyword
 		},
 		inputChange() {

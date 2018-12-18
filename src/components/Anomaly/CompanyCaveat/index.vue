@@ -128,7 +128,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/customer/export?Authorization=' 
+			this.exportExcelUrl = baseURL + '/company/customer/export?Request-From=PC&Authorization=' 
 				+ localStorage.getItem("token") 
 				+ '&keyword=' + this.find.keyword
 				+ '&customerType=' + this.find.customerType

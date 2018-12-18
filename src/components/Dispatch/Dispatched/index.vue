@@ -354,14 +354,14 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/dispatchOrder/exportDispatched?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl = baseURL + '/dispatchOrder/exportDispatched?Request-From=PC&Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&shipperConsignee=' + this.find.shipperConsignee
 			+ '&status=' + this.find.status 
 			+ '&type=' + this.find.type 
 			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime 
 			+ '&dispatchEndTime=' + this.find.dispatchEndTime
-			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory?Request-From=PC&Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&shipperConsignee=' + this.find.shipperConsignee
 			+ '&status=' + this.find.status 

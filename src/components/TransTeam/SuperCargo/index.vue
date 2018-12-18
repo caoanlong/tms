@@ -99,8 +99,8 @@ export default {
 		return {
 			supercargoType: [],
 			keyword: '',
-			importFileUrl: baseURL + '/company/transporter/import?Authorization=' + localStorage.getItem("token"),
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
+			importFileUrl: '',
+			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
 			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=supercargo.xlsx&&Authorization=' +localStorage.getItem("token"),
 		}
@@ -154,7 +154,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl =  baseURL + '/company/transporter/export?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl =  baseURL + '/company/transporter/export?Request-From=PC&Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.keyword 
 			+ '&supercargoType=' + this.supercargoType.join(',')
 		},

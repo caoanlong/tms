@@ -76,7 +76,7 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
+			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
 			importFileUrl: baseURL +'/company/notruck/carryOrder/import',
 			exportExcelUrl:  baseURL + '/company/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=waybill.xlsx&Authorization=' + localStorage.getItem("token"),
@@ -111,7 +111,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/company/notruck/carryOrder/export?Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/company/notruck/carryOrder/export?Request-From=PC&Authorization=' + localStorage.getItem("token") 
 				+ '&shippingNoteNumber=' + this.find.shippingNoteNumber
 				+ '&carrier=' + this.find.carrier
 		},

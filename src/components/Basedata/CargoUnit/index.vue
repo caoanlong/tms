@@ -78,7 +78,7 @@ export default {
 	},
 	methods: {
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/cargoUnit/export?Authorization=' + localStorage.getItem("token")
+			this.exportExcelUrl = baseURL + '/company/cargoUnit/export?Request-From=PC&Authorization=' + localStorage.getItem("token")
 				+ '&unit=' + this.find.keyword
 		},
 		inputChange() {

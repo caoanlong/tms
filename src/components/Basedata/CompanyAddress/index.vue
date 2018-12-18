@@ -117,8 +117,8 @@ export default {
 	data() {
 		return {
 			dialogFormVisible: false,
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			importFileUrl: baseURL + '/company/customer/address/import?Authorization=' + localStorage.getItem("token"),
+			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
+			importFileUrl: '',
 			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: { keyword: '',customerID: '', companyName: '' },
@@ -210,7 +210,7 @@ export default {
 			}, this.selectedList)
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/customer/address/export?Authorization=' + localStorage.getItem("token")
+			this.exportExcelUrl = baseURL + '/company/customer/address/export?Request-From=PC&Authorization=' + localStorage.getItem("token")
 				+ '&keyword=' + this.find.keyword + '&companyName=' + this.find.companyName
 			
 		},

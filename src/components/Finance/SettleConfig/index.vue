@@ -143,7 +143,7 @@ export default {
 			findShipperArea: '',
 			findShipperCompanyName: '',
 			importFileUrl: baseURL + '/transportPrice/upload',
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
+			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=freight.xlsx&&Authorization=' +localStorage.getItem("token"),
 			templateTit:'freight.xlsx'
 		}

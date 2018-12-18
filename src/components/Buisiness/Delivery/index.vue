@@ -186,7 +186,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/carryOrder/export?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl = baseURL + '/carryOrder/export?Request-From=PC&Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&status=' + this.find.status
 			+ '&begin=' + this.find.begin 
