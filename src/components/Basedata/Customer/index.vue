@@ -8,28 +8,28 @@
 						<el-input placeholder="请输入客户名称" v-model="find.keyword"  @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="客户编号">
-						<el-input placeholder="请输入客户编号" v-model="find.keyword"  @change="inputChange"></el-input>
+						<el-input placeholder="请输入客户编号" v-model="find.code"  @change="inputChange"></el-input>
 					</el-form-item>
                     <el-form-item label="监控类型" class="customerSelect">
-						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
+						<el-select v-model="find.fencingType" placeholder="请选择"  @change="inputChange">
 							<el-option value="" label="全部"></el-option>
-							<el-option value="Shipper" label="区域监控"></el-option>
-							<el-option value="Consignee" label="地址监控"></el-option>
-							<el-option value="Delegate" label="混合监控"></el-option>
+							<el-option value="Area" label="区域监控"></el-option>
+							<el-option value="Point" label="地址监控"></el-option>
+							<el-option value="Mix" label="混合监控"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="客户类型" class="customerSelect">
 						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
+                            <el-option value="" label="全部"></el-option>
 							<el-option value="Shipper" label="发货方"></el-option>
 							<el-option value="Consignee" label="收货方"></el-option>
 							<el-option value="Delegate" label="委托方"></el-option>
 						</el-select>
 					</el-form-item>
                     <el-form-item label="所属片区" class="customerSelect">
-						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
-							<el-option value="Shipper" label="发货方"></el-option>
-							<el-option value="Consignee" label="收货方"></el-option>
-							<el-option value="Delegate" label="委托方"></el-option>
+						<el-select v-model="find.zone" placeholder="请选择"  @change="inputChange">
+                            <el-option value="" label="全部"></el-option>
+							<el-option v-for="(item,index) in CustomerZone" :key="index" :value="item.code" :label="item.code"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item>
@@ -64,8 +64,14 @@
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="客户名称" prop="companyName"></el-table-column>
 					<el-table-column label="客户编号" prop="code" align="center" width="140"></el-table-column>
-					<el-table-column label="所属片区" prop="code" align="center" width="140"></el-table-column>
-					<el-table-column label="监控类型" prop="companyArea" align="center" width="140"></el-table-column>
+					<el-table-column label="所属片区" prop="zone" align="center" width="140"></el-table-column>
+					<el-table-column label="监控类型" prop="fencingType" align="center" width="140">
+                        <template slot-scope="scope">
+							<span v-if="scope.row.fencingType=='Point'">地址监控</span>
+							<span v-else-if="scope.row.fencingType=='Area'">区域监控</span>
+							<span v-else>混合监控</span>
+						</template>
+                    </el-table-column>
 					<el-table-column label="客户类型" prop="customerType" align="center" width="140">
 						<template slot-scope="scope">
 							{{scope.row.customerType?scope.row.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , '):''}}
@@ -107,6 +113,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Company from '../../../api/Company'
+import BaseDict from '../../../api/BaseDict'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
@@ -120,13 +127,18 @@ export default {
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
 				keyword: '',
-				customerType: ''
-			}
+                customerType: '',
+                code:'',
+                fencingType:'',
+                zone:''
+            },
+            CustomerZone:[]
 		}
 	},
 	created() {
 		this.resetExportExcelUrl()
-		this.getList()
+        this.getList()
+        this.getDictList()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
@@ -137,6 +149,9 @@ export default {
 		reset() {
 			this.find.keyword = ''
 			this.find.customerType = ''
+			this.find.code = ''
+			this.find.fencingType = ''
+			this.find.zone = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.resetExportExcelUrl()
@@ -150,10 +165,20 @@ export default {
 				current: this.pageIndex,
 				size: this.pageSize,
 				customerType: this.find.customerType,
-				keyword: this.find.keyword
+                keyword: this.find.keyword,
+                code:this.find.code,
+                zone:this.find.zone,
+                fencingType:this.find.fencingType
 			}).then(res => {
 				this.tableData = res.records
 				this.total= res.total
+			})
+        },
+        getDictList() {
+			BaseDict.getDict({
+				groupName:'CustomerZone'
+			}).then(res => {
+				this.CustomerZone = res.data
 			})
 		},
 		add() { 
