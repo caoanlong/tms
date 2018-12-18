@@ -244,18 +244,6 @@ const routerMap = [
                 component: () => import ('../components/TransTeam/Truck/index'),
             },
             {
-                path: '/addtruck',
-                name: 'addtruck',
-                meta: { title: '添加车辆' },
-                component: () => import ('../components/TransTeam/Truck/Add'),
-            },
-            {
-                path: '/edittruck',
-                name: 'edittruck',
-                meta: { title: '编辑车辆' },
-                component: () => import ('../components/TransTeam/Truck/Edit'),
-            },
-            {
                 path: '/viewtruck',
                 name: 'viewtruck',
                 meta: { title: '查看车辆' },
