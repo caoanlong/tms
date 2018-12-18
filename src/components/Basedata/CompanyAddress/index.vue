@@ -118,7 +118,7 @@ export default {
 		return {
 			dialogFormVisible: false,
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
-			importFileUrl: '',
+			importFileUrl: baseURL + '/company/customer/address/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: { keyword: '',customerID: '', companyName: '' },

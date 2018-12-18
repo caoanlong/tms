@@ -77,7 +77,7 @@ export default {
 	data() {
 		return {
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
-			importFileUrl: baseURL +'/company/notruck/carryOrder/import',
+			importFileUrl: baseURL +'/company/notruck/carryOrder/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:  baseURL + '/company/notruck/carryOrder/export/excelTemplate?fileName=waybill.xlsx ',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=waybill.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {

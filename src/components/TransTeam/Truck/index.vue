@@ -73,7 +73,7 @@ export default {
 			rules: {
 				plateNo: [ {min: 1, max: 20, message: '长度在 1 到 20 个字符'} ]
 			},
-			importFileUrl: '',
+			importFileUrl: baseURL + '/company/truck/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=truck.xlsx&&Authorization=' +localStorage.getItem("token"),

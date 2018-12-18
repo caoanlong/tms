@@ -78,7 +78,7 @@ export default {
 	data() {
 		return {
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
-			importFileUrl: '',
+			importFileUrl: baseURL + '/company/notruck/truck/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:baseURL + '/company/notruck/truck/export/excelTemplate?fileName=trucksource.xlsx ',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=trucksource.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
@@ -112,7 +112,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/company/notruck/truck/export?Request-From=PC&Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/company/notruck/truck/export?Authorization=' + localStorage.getItem("token") 
 				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
 				+ '&documentName=' + this.find.documentName
 		},

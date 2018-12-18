@@ -99,7 +99,7 @@ export default {
 		return {
 			supercargoType: [],
 			keyword: '',
-			importFileUrl: '',
+			importFileUrl: baseURL + '/company/transporter/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
 			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=supercargo.xlsx&&Authorization=' +localStorage.getItem("token"),
