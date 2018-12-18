@@ -36,7 +36,6 @@
 				</el-upload>
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
 				<a :href="templateUrl" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
-				
 			</div>
 			<div class="table">
 				<el-table

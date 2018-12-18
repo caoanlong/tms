@@ -1,746 +1,185 @@
 <template>
-	<div class="main-content" style="padding-left:200px">
-		<div ref="truck">
+    <div class="main-content" >
 		<el-card class="box-card">
-			<el-row class="section-block target1" style="margin-bottom:20px">
-				<span class="block-title">基本信息</span>
+            <el-row class="section-block" style="margin-bottom:20px">
+				<span class="block-title">驾驶员信息</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
 						<el-col :span="12">
-							<div>
-								<span class="tit">车辆编号</span>
-								<span class="ctt">{{truck.code}}</span>
+							<div class="flex-item">
+								<div class="tit">手机号</div>
+								<div class="ctt">{{truck.carOwnerMobile || '13049497395'}}</div>
 							</div>
-							<div>
-								<span class="tit">车牌号码</span>
-								<span class="ctt">{{truck.plateNo}}</span>
-							</div>
-							<div>
-								<span class="tit">车牌颜色</span>
-								<span class="ctt">{{truck.plateNoColor}}</span>
-							</div>
-							<div>
-								<span class="tit">车辆归属</span>
-								<span class="ctt" v-if="truck.cooperateRelation == 'Self'">自有</span>
-								<span class="ctt" v-else-if="truck.cooperateRelation == 'Attach'">挂靠</span>
-								<span class="ctt" v-else-if="truck.cooperateRelation == 'Social'">社会</span>
+							<div class="flex-item">
+								<div class="tit">正面照片</div>
+								<div class="ctt">
+                                    <ImageUpload :width="80" :height="80" :files="[truck.truckFrontPic]" :isPreview="true"/>
+                                </div>
 							</div>
 						</el-col>
 						<el-col :span="12">
-							<div>
-								<span class="tit">车辆类别</span>
-								<span class="ctt" v-if="truck.truckCategory == 'WholeVehicle'">整车</span>
-								<span class="ctt" v-else-if="truck.truckCategory == 'Tractor'">牵引车</span>
-								<span class="ctt" v-else-if="truck.truckCategory == 'Trailer'">挂车</span>
+							<div class="flex-item">
+								<div class="tit">姓名</div>
+								<div class="ctt">{{truck.name || '罗凯'}}</div>
 							</div>
-							<div>
-								<span class="tit">挂车牌号码</span>
-								<span class="ctt">{{truck.trailerPlateNo}}</span>
-							</div>
-							<div>
-								<span class="tit">车辆类型</span>
-								<span v-if="truck.truckType == 'TankTruck'">罐式货车</span>
-								<span v-else-if="truck.truckType == 'VanTruck'">厢式货车</span>
-								<span v-else-if="truck.truckType == 'BarrackTruck'">仓栅货车</span>
-								<span v-else-if="truck.truckType == 'TailgateTruck'">栏板货车</span>
-								<span v-else-if="truck.truckType == 'DumpTruck'">自卸货车</span>
-								<span v-else-if="truck.truckType == 'HeavySemitrailerTractor'">重型半挂牵引车</span>
-								<span v-else-if="truck.truckType == 'TankTrailer'">罐式挂车</span>
-								<span v-else-if="truck.truckType == 'VanTrailer'">厢式挂车</span>
-								<span v-else-if="truck.truckType == 'BarrackTrailer'">仓栅挂车</span>
-								<span v-else-if="truck.truckType == 'TailgateTrailer'">栏板挂车</span>
-								<span v-else-if="truck.truckType == 'ContainerTrailer'">集装箱挂车</span>
-							</div>
-							<div>
-								<span class="tit">司机</span>
-								<span class="ctt">{{truck.primaryDriverName}}&nbsp;{{truck.secondaryDriverName}}</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.truckFrontPic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.truckSidePic1]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.truckSidePic2]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target2" style="margin-bottom:20px">
-				<span class="block-title">所属单位/车主</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">车主/单位名称</span>
-								<span class="ctt">{{truck.carOwnerName}}</span>
-							</div>
-							<div>
-								<span class="tit">车主/单位地址</span>
-								<span class="ctt">{{truck.carOwnerAddress}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">车主/单位电话</span>
-								<span class="ctt">{{truck.carOwnerMobile}}</span>
-							</div>
-							<div>
-								<span class="tit">所有权类型</span>
-								<span class="ctt">{{truck.propertyType}}</span>
+							<div class="flex-item">
+								<div class="tit">驾驶证</div>
+								<div class="ctt">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="120" :height="80" :files="[truck.truckFrontPic]" :isPreview="true"/>
+										<p>正本</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="120" :height="80" :files="[truck.truckFrontPic]" :isPreview="true"/>
+										<p>副本</p>
+									</div>
+								</div>
 							</div>
 						</el-col>
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block target3" style="margin-bottom:20px">
-				<span class="block-title">行驶证</span>
+			<el-row class="section-block" style="margin-bottom:20px">
+				<span class="block-title">车辆信息</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">注册日期</span>
-								<span class="ctt" v-if="truck.driverLicRegisterTime">{{truck.driverLicRegisterTime | getdatefromtimestamp(true)}}</span>
+						<el-col :span="6">
+							<div class="flex-item">
+								<div class="tit">车牌号</div>
+								<div class="ctt">{{truck.plateNo}}</div>
 							</div>
-							<div>
-								<span class="tit">有效期从</span>
-								<span class="ctt" v-if="truck.driverLicBeginTime">{{truck.driverLicBeginTime | getdatefromtimestamp(true)}}至{{truck.driverLicExpiresTime | getdatefromtimestamp(true)}}</span>
+							<div class="flex-item">
+								<div class="tit">车牌品牌</div>
+								<div class="ctt">雷克萨斯</div>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="flex-item">
+								<div class="tit">车长</div>
+								<div class="ctt">{{(truck.length/1000).toFixed(1) + '米'}}</div>
+							</div>
+							<div class="flex-item">
+								<div class="tit">车辆照片</div>
+								<div class="ctt">
+									<ImageUpload :width="120" :height="80" :files="[truck.truckFrontPic]" :isPreview="true"/>
+								</div>
 							</div>
 						</el-col>
 						<el-col :span="12">
-							<div>
-								<span class="tit">发证日期</span>
-								<span class="ctt" v-if="truck.driverLicIssueTime">{{truck.driverLicIssueTime | getdatefromtimestamp(true)}}</span>
+							<div class="flex-item">
+								<div class="tit">车型</div>
+								<div class="ctt">罐体</div>
 							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.driverLicPic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.driverLicSidePic]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target4" style="margin-bottom:20px">
-				<span class="block-title">道路运输许可证</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">许可证号</span>
-								<span class="ctt">{{truck.roadTransportNo}}</span>
-							</div>
-							<div>
-								<span class="tit">经营范围</span>
-								<span class="ctt">{{truck.businessScope}}</span>
-							</div>
-							<div>
-								<span class="tit">许可运输品</span>
-								<span class="ctt">{{truck.roadTransportGoods}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">年审日期到</span>
-								<span class="ctt" v-if="truck.roadTransportLicAnnualPeriod">{{truck.roadTransportLicAnnualPeriod | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">许可运输品是否剧毒</span>
-								<span class="ctt">{{truck.roadTransportGoodsIsPoisonous == 'Y' ? '是' : '否'}}</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.roadTransportPic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.roadTransportSidePic]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target5" style="margin-bottom:20px">
-				<span class="block-title">GPS</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-                        <el-col :span="12">
-                            <div>
-								<span class="tit">是否安装GPS</span>
-								<span class="ctt">GPS{{truck.gpsFlag=='Y'?'已':'未'}}安装</span>
-							</div>
-                        </el-col>
-					</el-row>
-                    <el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">入网号</span>
-								<span class="ctt">{{truck.gpsNetworkNo}}</span>
-							</div>
-							<div>
-								<span class="tit">序列号</span>
-								<span class="ctt">{{truck.gpsSerialNumber}}</span>
-							</div>
-							<div>
-								<span class="tit">有效期从</span>
-								<span class="ctt" v-if="truck.gpsValidBeginDate">{{truck.gpsValidBeginDate | getdatefromtimestamp(true)}}至{{truck.gpsValidEndDate | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">费用</span>
-								<span class="ctt">{{truck.gpsCostAmount}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">卡号</span>
-								<span class="ctt">{{truck.gpsCardNo}}</span>
-							</div>
-							<div>
-								<span class="tit">安装时间</span>
-								<span class="ctt" v-if="truck.gpsSetupTime">{{truck.gpsSetupTime | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">类型</span>
-								<span class="ctt">{{truck.gpsType}}</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.gpsEquippedCertifyPic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.gpsEquippedCertifyPic2]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-		</el-card>
-		<el-card class="box-card">
-			<div slot="header" class="clearfix"><span>保险信息</span></div>
-			<el-row class="section-block target6" style="margin-bottom:20px">
-				<span class="block-title">交强险</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">保险公司</span>
-								<span class="ctt">{{truck.saliInsuranceVendor}}</span>
-							</div>
-							<div>
-								<span class="tit">保险到期日</span>
-								<span class="ctt" v-if="truck.saliInsuranceExpires">{{truck.saliInsuranceExpires | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">车船税金额</span>
-								<span class="ctt">{{truck.saliInsuranceTaxAmount}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">保险单号</span>
-								<span class="ctt">{{truck.saliInsuranceNo}}</span>
-							</div>
-							<div>
-								<span class="tit">保险金额</span>
-								<span class="ctt">{{truck.saliInsuranceAmount}}</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.saliInsurancePic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.saliInsurancePic2]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target7" style="margin-bottom:20px">
-				<span class="block-title">商业险</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">保险单号</span>
-								<span class="ctt">{{truck.bizInsuranceNo}}</span>
-							</div>
-							<div>
-								<span class="tit">保险金额</span>
-								<span class="ctt">{{truck.bizInsuranceAmount}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">保险到期日</span>
-								<span class="ctt" v-if="truck.bizInsuranceExpires">{{truck.bizInsuranceExpires | getdatefromtimestamp(true)}}</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.bizInsurancePic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.bizInsurancePic2]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target8" style="margin-bottom:20px">
-				<span class="block-title">承运险</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">保险单号</span>
-								<span class="ctt">{{truck.carrierRiskInsuranceNo}}</span>
-							</div>
-							<div>
-								<span class="tit">保险金额</span>
-								<span class="ctt">{{truck.carrierRiskInsuranceAmount}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">保险到期日</span>
-								<span class="ctt" v-if="truck.carrierRiskInsuranceExpires">{{truck.carrierRiskInsuranceExpires | getdatefromtimestamp(true)}}</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.carrierRiskInsurancePic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.carrierRiskInsurancePic2]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target9" style="margin-bottom:20px">
-				<span class="block-title">货运险</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">保险单号</span>
-								<span class="ctt">{{truck.cargoInsuranceNo}}</span>
-							</div>
-							<div>
-								<span class="tit">保险金额</span>
-								<span class="ctt">{{truck.cargoInsuranceAmount}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">保险到期日</span>
-								<span class="ctt" v-if="truck.cargoInsuranceExpireDate">{{truck.cargoInsuranceExpireDate | getdatefromtimestamp(true)}}</span>
+							<div class="flex-item">
+								<div class="tit">行驶证照片</div>
+								<div class="ctt">
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="120" :height="80" :files="[truck.truckFrontPic]" :isPreview="true"/>
+										<p>正本</p>
+									</div>
+									<div class="uploadTruckPicItem">
+										<ImageUpload :width="120" :height="80" :files="[truck.truckFrontPic]" :isPreview="true"/>
+										<p>副本</p>
+									</div>
+								</div>
 							</div>
 						</el-col>
 					</el-row>
 				</div>
 			</el-row>
-			<el-row class="section-block target10" style="margin-bottom:20px">
-				<span class="block-title">保险备注</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<div>
-							<span class="tit">保险备注</span>
-							<span class="ctt">{{truck.insuranceNote}}</span>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-		</el-card>
-		<el-card class="box-card">
-			<div slot="header" class="clearfix"><span>技术参数</span></div>
-			<el-row class="section-block target11" style="margin-bottom:20px">
-				<span class="block-title">技术参数</span>
+			<el-row class="section-block" style="margin-bottom:20px">
+				<span class="block-title">其他信息</span>
 				<div class="block-content">
 					<el-row style="margin-bottom: 10px">
 						<el-col :span="8">
-							<div>
-								<span class="tit">车长</span>
-								<span class="ctt">{{truck.length}}mm</span>
-							</div>
-							<div>
-								<span class="tit">装载重量</span>
-								<span class="ctt">{{truck.loads}}kg</span>
+							<div class="flex-item">
+								<div class="tit">最后上线</div>
+								<div class="ctt">{{moment().format('YYYY-MM-DD hh:mm:ss')}}</div>
 							</div>
 						</el-col>
 						<el-col :span="8">
-							<div>
-								<span class="tit">车宽</span>
-								<span class="ctt">{{truck.width}}mm</span>
-							</div>
-							<div>
-								<span class="tit">装载体积</span>
-								<span class="ctt">{{truck.loadVolume}}m³</span>
+							<div class="flex-item">
+								<div class="tit">GPS安装</div>
+								<div class="ctt">{{truck.gpsFlag == 'Y' ? '已安装' : '未安装'}}</div>
 							</div>
 						</el-col>
 						<el-col :span="8">
-							<div>
-								<span class="tit">车高</span>
-								<span class="ctt">{{truck.high}}mm</span>
+							<div class="flex-item">
+								<div class="tit">便携设备</div>
+								<div class="ctt">255668897KJ23</div>
 							</div>
 						</el-col>
 					</el-row>
 				</div>
 			</el-row>
 		</el-card>
-		<el-card class="box-card">
-			<div slot="header" class="clearfix"><span>其他信息</span></div>
-			<el-row class="section-block target12" style="margin-bottom:20px">
-				<span class="block-title">罐体</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">罐体类型</span>
-								<span class="ctt">{{truck.cannedType}}</span>
-							</div>
-							<div>
-								<span class="tit">罐体检测有效期至</span>
-								<span class="ctt" v-if="truck.tankQCExpires">{{truck.tankQCExpires | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">压力表监测有效期至</span>
-								<span class="ctt" v-if="truck.pressureGaugeQCExpires">{{truck.pressureGaugeQCExpires | getdatefromtimestamp(true)}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">容积</span>
-								<span class="ctt">{{truck.tankVolume}}</span>
-							</div>
-							<div>
-								<span class="tit">安全阀监测有效期至</span>
-								<span class="ctt" v-if="truck.safetyValvesQCExpires">{{truck.safetyValvesQCExpires | getdatefromtimestamp(true)}}</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.cannedMonitorTableCertificatePic1]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.cannedMonitorTableCertificatePic2]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target13" style="margin-bottom:20px">
-				<span class="block-title">保证金</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">金额</span>
-								<span class="ctt">{{truck.securityDepositAmount}}</span>
-							</div>
-							<div>
-								<span class="tit">二次安全保证金金额</span>
-								<span class="ctt">{{truck.secondSecurityDepositAmount}}</span>
-							</div>
-							<div>
-								<span class="tit">缴费日期</span>
-								<span class="ctt" v-if="truck.securityDepositPayDate">{{truck.securityDepositPayDate | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">保证金备注</span>
-								<span class="ctt">{{truck.securityDepositNote}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">日期</span>
-								<span class="ctt" v-if="truck.securityDepositDate">{{truck.securityDepositDate | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">二次安全保证金日期</span>
-								<span class="ctt" v-if="truck.secondSecurityDepositDate">{{truck.secondSecurityDepositDate | getdatefromtimestamp(true)}}</span>
-							</div>
-						</el-col>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target14" style="margin-bottom:20px">
-				<span class="block-title">技术等级</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">等级评定</span>
-								<span class="ctt">{{truck.rank}}</span>
-							</div>
-							<div>
-								<span class="tit">下次评级日期</span>
-								<span class="ctt" v-if="truck.nextRankEvaluteTime">{{truck.nextRankEvaluteTime | getdatefromtimestamp(true)}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">评级日期</span>
-								<span class="ctt" v-if="truck.rankEvaluteTime">{{truck.rankEvaluteTime | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">审验备注</span>
-								<span class="ctt">{{truck.rankRemark}}</span>
-							</div>
-						</el-col>
-					</el-row>
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.technicalRankPic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.technicalRankPic2]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target15" style="margin-bottom:20px">
-				<span class="block-title">二级维护</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">维护日期</span>
-								<span class="ctt" v-if="truck.secondaMaintainTime">{{truck.secondaMaintainTime | getdatefromtimestamp(true)}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">下次维护</span>
-								<span class="ctt" v-if="truck.nextSecondLevel">{{truck.nextSecondLevel | getdatefromtimestamp(true)}}</span>
-							</div>
-						</el-col>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target16" style="margin-bottom:20px">
-				<span class="block-title">管理协议</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<el-col :span="12">
-							<div>
-								<span class="tit">金额</span>
-								<span class="ctt">{{truck.managementAgreementAmount}}</span>
-							</div>
-							<div>
-								<span class="tit">安全责任书到期日</span>
-								<span class="ctt" v-if="truck.safetyLiabilityLetterExpireDate">{{truck.safetyLiabilityLetterExpireDate | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">协议备注</span>
-								<span class="ctt">{{truck.managementAgreementNote}}</span>
-							</div>
-						</el-col>
-						<el-col :span="12">
-							<div>
-								<span class="tit">缴费日期</span>
-								<span class="ctt" v-if="truck.managementAgreementPayDate">{{truck.managementAgreementPayDate | getdatefromtimestamp(true)}}</span>
-							</div>
-							<div>
-								<span class="tit">元/轴/月</span>
-								<span class="ctt">{{truck.managementAgreementMoneyPerMonth}}</span>
-							</div>
-						</el-col>
-						<div>
-							<span class="tit">有效期</span>
-							<span class="ctt" v-if="truck.managementAgreementBeginDate">{{truck.managementAgreementBeginDate | getdatefromtimestamp(true)}}至{{truck.managementAgreementExpireDate | getdatefromtimestamp(true)}}</span>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-			<el-row class="section-block target17" style="margin-bottom:20px">
-				<span class="block-title">其他</span>
-				<div class="block-content">
-					<el-row style="margin-bottom: 10px">
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.purchaseInvoicePic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.vehicleCertificatePic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.vehicleRegistrationCertificatePic]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.otherTruckPic1]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.otherTruckPic2]" :isPreview="true"/>
-						</div>
-						<div class="uploadTruckPicItem">
-							<ImageUpload :width="180" :height="120" :files="[truck.otherTruckPic3]" :isPreview="true"/>
-						</div>
-					</el-row>
-				</div>
-			</el-row>
-		</el-card>
-		</div>
-		<div class="formHandle text-center" ref="btns">
-			<el-button @click="back">返回</el-button>
-			<el-button type="primary" @click="print">预览打印</el-button>	
-		</div>
-		<SelectPosition class="lift-nav" :titleList="titleList"></SelectPosition>
-	</div>
+    </div>
 </template>
-<script type="text/javascript">
-import { mapGetters } from 'vuex'
-import { Message } from 'element-ui'
-import LiftEffect from '../../../common/LiftEffect'
+
+<script>
 import ImageUpload from '../../CommonComponents/ImageUpload'
-import SelectPosition from '../components/SelectPosition'
 import Company from '../../../api/Company'
 export default {
-	data() {
+    components: { ImageUpload },
+    data() {
 		return {
-			titleList: [
-				'基本信息',
-				'所属单位/车主',
-				'行驶证',
-				'道路运输许可证',
-				'GPS',
-				'交强险',
-				'商业险',
-				'承运险',
-				'货运险',
-				'保险备注',
-				'技术参数',
-				'罐体',
-				'保证金',
-				'技术等级',
-				'二级维护',
-				'管理协议',
-				'其他'
-			],
 			truck: {}
 		}
 	},
-	computed: {
-		...mapGetters(['visitedViews'])
-	},
-	components: { ImageUpload, SelectPosition },
-	created() {
-		if (sessionStorage.getItem('visitedViews')) {
-			const views = JSON.parse(sessionStorage.getItem('visitedViews'))
-			views.forEach(item => {
-				this.$store.dispatch('addVisitedViews', item)
-			})
-		}
+    created() {
 		this.getInfo()
 	},
-	activated() {
-		if(!this.$route.query.cache) {
-			if (sessionStorage.getItem('visitedViews')) {
-				const views = JSON.parse(sessionStorage.getItem('visitedViews'))
-				views.forEach(item => {
-					this.$store.dispatch('addVisitedViews', item)
-				})
-			}
-			this.getInfo()
-		}
-	},
-	mounted() {
-		LiftEffect({
-			"control1": ".lift-nav", 	//侧栏电梯的容器
-			"control2": ".lift",        //需要遍历的电梯的父元素
-			"target": [
-				".target1",
-				".target2",
-				".target3",
-				".target4",
-				".target5",
-				".target6",
-				".target7",
-				".target8",
-				".target9",
-				".target10",
-				".target11",
-				".target12",
-				".target13",
-				".target14",
-				".target15",
-				".target16",
-				".target17"
-			], 							//监听的内容，注意一定要从小到大输入
-			"current": "active" 		//选中的样式
-		})
-	},
-	beforeDestroy() {
-		sessionStorage.removeItem('visitedViews')
-	},
-	methods: {
-		print() {
-			const views = this.visitedViews.map(item => {
-				return {
-					name: item.name,
-					path: item.path,
-					query: item.query,
-					meta: { title: item.title}
-				}
-			})
-			sessionStorage.setItem('visitedViews', JSON.stringify(views))
-			let truckElem = this.$refs.truck
-			const winElem = window.document.body.innerHTML
-			window.document.body.innerHTML = truckElem.innerHTML
-			// // document.execCommand('print')
-			window.print()
-			window.document.body.innerHTML = winElem
-			window.location.reload()
-		},
-		getInfo() {
+    methods: {
+        getInfo() {
 			const truckID = this.$route.query.truckID
 			Company.truckFindById({ truckID }).then(res => {
 				this.truck = res
 			})
-		},
-		back() {
+        },
+        back() {
 			this.$router.push({name: 'truck'})
+		}
+    }
+}
+</script>
+
+<style lang="stylus" scoped>
+.box-card {
+	margin-bottom: 10px;
+}
+.section-block {
+	margin: 10px 0 0;
+	.block-content {
+        font-size: 14px;
+        line-height: 2;
+		.flex-item {
+			position: relative;
+			padding-left: 140px;
+			.tit {
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 126px;
+				text-align: right;
+				color: #333;
+				font-weight: bold;
+			}
+			.ctt {
+				flex: 1;
+				text-align: left;
+				color: #666;
+				.uploadTruckPicItem {
+					float: left;
+					margin-right: 10px;
+					p {
+						margin: 0;
+						text-align: center;
+						font-size: 12px;
+						color: #999;
+					}
+				}
+			}
 		}
 	}
 }
-
-</script>
-<style lang="stylus" scoped>
-.section-block
-	margin 10px 0 0
-.uploadTruckPicItem
-	display inline-block
-	margin-right 10px
-	p
-		margin 0
-		text-align center
-		font-size 12px
-		color #999
-.box-card
-	margin-bottom 10px
-.el-checkbox-group
-	display inline-block
-	margin-left 40px
-.block-content
-	font-size 14px
-	line-height 2
-	.tit
-		display inline-block
-		width 126px
-		text-align right
-		margin-right 10px
-		color #333
-		font-weight bold
-	.ctt
-		display inline-block
-		text-align left
-		color #666
 </style>
