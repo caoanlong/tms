@@ -114,8 +114,8 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			importFileUrl: baseURL + '/company/customer/import?Authorization=' + localStorage.getItem("token"),
+			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From': 'PC'},
+			importFileUrl: baseURL + '/company/customer/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
@@ -193,7 +193,7 @@ export default {
 			}, this.selectedList)
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/customer/export?Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/company/customer/export?Request-From=PC&Authorization=' + localStorage.getItem("token") 
 				+ '&keyword=' + this.find.keyword
 				+ '&customerType=' + this.find.customerType
 		},

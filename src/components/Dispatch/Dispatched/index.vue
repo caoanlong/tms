@@ -25,13 +25,7 @@
                         </el-autocomplete>
 					</el-form-item>
                     <el-form-item label="产品名称">
-						<el-autocomplete 
-							style="width:100%" 
-                            value-key="companyName" 
-                            placeholder="请输入..."
-                            @change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
-                        </el-autocomplete>
+						<el-input placeholder="产品名称" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="货物类型">
 						<el-select placeholder="全部" v-model="find.type" style="width:120px" @change="inputChange">
@@ -360,14 +354,14 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/dispatchOrder/exportDispatched?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl = baseURL + '/dispatchOrder/exportDispatched?Request-From=PC&Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&shipperConsignee=' + this.find.shipperConsignee
 			+ '&status=' + this.find.status 
 			+ '&type=' + this.find.type 
 			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime 
 			+ '&dispatchEndTime=' + this.find.dispatchEndTime
-			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory?Request-From=PC&Authorization=' + localStorage.getItem("token")	
 			+ '&keyword=' + this.find.keyword 
 			+ '&shipperConsignee=' + this.find.shipperConsignee
 			+ '&status=' + this.find.status 

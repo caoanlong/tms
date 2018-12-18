@@ -177,7 +177,7 @@ export default {
 	},
 	methods: {
 		resetExportExcelUrl() {
-			this.exportExcelUrl =baseURL + '/company/exportExpire?Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl =baseURL + '/company/exportExpire?Request-From=PC&Authorization=' + localStorage.getItem("token")	
 			+ '&realName=' + this.findrealName 
 			+ '&objType=' + this.findobjType
 			+ '&expiredCertificate=' + this.findexpiredCertificate

@@ -77,8 +77,8 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			importFileUrl: baseURL + '/company/notruck/truck/import',
+			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
+			importFileUrl: baseURL + '/company/notruck/truck/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:baseURL + '/company/notruck/truck/export/excelTemplate?fileName=trucksource.xlsx ',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=trucksource.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {

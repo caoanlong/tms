@@ -76,8 +76,8 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			uploadHeaders: {'Authorization': localStorage.getItem('token')},
-			importFileUrl: baseURL + '/company/notruck/cargoSource/import',
+			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
+			importFileUrl: baseURL + '/company/notruck/cargoSource/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:baseURL + '/company/notruck/cargoSource/export/excelTemplate?fileName=goodssource.xlsx ',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=goodssource.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
@@ -109,7 +109,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/notruck/cargoSource/export?Authorization=' + localStorage.getItem("token") 
+			this.exportExcelUrl = baseURL + '/company/notruck/cargoSource/export?Request-From=PC&Authorization=' + localStorage.getItem("token") 
 				+ '&messageReferenceNumber=' + this.find.messageReferenceNumber
 		},
 		inputChange() {
