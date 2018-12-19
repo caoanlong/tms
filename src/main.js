@@ -8,8 +8,6 @@ import 'normalize.css/normalize.css'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-import VModal from 'vue-js-modal'
-
 import './assets/styles/index.styl'
 import './assets/styles/sidebar.styl'
 import './assets/styles/newUI.styl'
@@ -39,7 +37,6 @@ Object.keys(consts).forEach(key => {
 })
 
 Vue.use(Element)
-Vue.use(VModal)
 Vue.use(globalConf)
 
 Vue.config.productionTip = false
