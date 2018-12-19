@@ -37,7 +37,7 @@
 					<el-table-column label="状态" prop="status"></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
-                            <el-button type="danger" size="mini" @click="del(scope.row.id)">回收</el-button>
+                            <el-button type="danger" size="mini" @click="isRecycleDeviceVisible = true">回收</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -45,15 +45,17 @@
 			</div>
 		</el-card>
         <issue-device :isVisible="isIssueDeviceVisible" @control="issueDeviceCallback"></issue-device>
+        <recycle-device :isVisible="isRecycleDeviceVisible" @control="recycleDeviceCallback"></recycle-device>
 	</div>
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import IssueDevice from './components/IssueDevice'
+import RecycleDevice from './components/RecycleDevice'
 export default {
     mixins: [baseMixin],
-    components: { IssueDevice },
+    components: { IssueDevice, RecycleDevice },
 	data() {
 		return {
 			find: {
@@ -61,7 +63,8 @@ export default {
 				truck: '',
 				status: ''
             },
-            isIssueDeviceVisible: false
+            isIssueDeviceVisible: false,
+            isRecycleDeviceVisible: false
 		}
 	},
 	created() {
@@ -95,17 +98,12 @@ export default {
                 }
             ]
 		},
-		del(memberID) {
-			deleteConfirm(memberID, memberID => {
-				SysMember.del({ memberID }).then(res => {
-					Message.success('删除成功!')
-					this.getList()
-				})
-			})
-        },
         issueDeviceCallback() {
             this.isIssueDeviceVisible = false
-        }
+		},
+		recycleDeviceCallback() {
+			this.isRecycleDeviceVisible = false
+		}
 	}
 }
 </script>

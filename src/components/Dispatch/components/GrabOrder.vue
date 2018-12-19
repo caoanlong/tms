@@ -57,13 +57,11 @@
                     </el-radio-group>
                 </el-form-item>
             </el-row>
-            <div class="transFeeTips">
-                <svg-icon icon-class="info" class="infoIcon"></svg-icon>
-                <p>支付运费上限金额：{{freightUpLimit}}元 <span v-if="isExceed" class="exceedTips">一口价金额已大于支付运费上限金额，如确认以金额 <b>{{grabOrder.freight}}</b> 元发布，请忽略此信息</span></p>
-            </div>
             <el-row>
                 <el-form-item label="一口价金额" v-if="grabOrder.type == 'Grab'" prop="freight">
-                    <el-input style="width:250px" placeholder="请输入..." v-model="grabOrder.freight" @input="checkLimit"><template slot="append">元</template></el-input>
+                    <el-input style="width:250px" placeholder="请输入..." v-model="grabOrder.freight">
+                        <template slot="append">元</template>
+                    </el-input>
                 </el-form-item>
             </el-row>
             <el-row>
@@ -141,10 +139,6 @@ export default {
         },
         transLines: Array,
         dispatchTaskCargoList: Array,
-        freightUpLimit: {
-            type: Number | String,
-            default: 0
-        },
         isVisible: {
             type: Boolean,
             default: false
@@ -152,7 +146,6 @@ export default {
     },
     data() {
         return {
-            isExceed:false,
             grabOrder: {
                 requiredTruckType: '',
                 requiredTruckLength: '',
@@ -172,16 +165,7 @@ export default {
                 type: [{ required: true , message: '请选择报价类型' }],
                 freight: [
                     { required: true , message: '请输入一口价' },
-                    { validator: checkInt },
-                    // { 
-                    //     validator: (rule, value, callback) => {
-                    //         if (+value > +this.freightUpLimit) {
-                    //             callback('一口价不能大于运费上限！')
-                    //         } else {
-                    //             callback()
-                    //         }
-                    //     } 
-                    // }
+                    { validator: checkInt }
                 ],
                 payMode: [{ required: true , message: '请选择运费支付方式' }]
             }
@@ -204,13 +188,6 @@ export default {
         }
     },
     methods: {
-         checkLimit(val){
-            if(Number(val)>Number(this.freightUpLimit)){
-                this.isExceed = true
-            }else{
-                this.isExceed = false
-            }
-        },
         getTruckLengths(queryString, cb) {
             cb(this.TRUCKLENGTH)
         },

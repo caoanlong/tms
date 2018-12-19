@@ -89,7 +89,6 @@ export default {
             consignees: [],
             consigneeMarkers: [],
             controllConsigneeTxt: '显示',
-            mapHeight: 0,
             map: null,
             loading: true
         }
