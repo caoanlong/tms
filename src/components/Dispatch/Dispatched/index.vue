@@ -5,13 +5,13 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="交货单号">
-						<el-input placeholder="交货单号" v-model="find.deliveryOrderNo" @change="inputChange"></el-input>
+						<el-input placeholder="交货单号" v-model="find.shipperNo" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="调度单号">
-						<el-input placeholder="调度单号" v-model="find.shipperConsignee" @change="inputChange"></el-input>
+						<el-input placeholder="调度单号" v-model="find.dispatchOrderNo" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="工厂名称">
-						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
+						<el-select placeholder="请选择" v-model="find.shipperCustomerID" @change="inputChange">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
                                 :label="item.companyName" 
@@ -25,7 +25,7 @@
                         <el-autocomplete 
 							style="width:100%" 
                             value-key="companyName" 
-                            v-model="find.customerName"
+                            v-model="find.consigneeCustomer"
                             :fetch-suggestions="getCustomers"
                             placeholder="请输入客户名称" 
                             @select="handSelectCustomer" 
@@ -34,13 +34,19 @@
                         </el-autocomplete>
                     </el-form-item>
                     <el-form-item label="产品名称">
-						<el-input placeholder="产品名称" v-model="find.keyword" @change="inputChange"></el-input>
+						<el-input placeholder="产品名称" v-model="find.cargoName" @change="inputChange"></el-input>
 					</el-form-item>
-					<el-form-item label="货物类型">
+                    <el-form-item label="调度状态">
+						<el-select placeholder="全部" v-model="find.status" style="width:120px" @change="inputChange">
+							<el-option value="" label="全部">全部</el-option>
+							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS1" :key="key" v-if="isCur==0"></el-option>
+							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERSTATUS2" :key="key" v-if="isCur==1"></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="调度类型">
 						<el-select placeholder="全部" v-model="find.type" style="width:120px" @change="inputChange">
-							<el-option value="" label="全部"></el-option>
-							<el-option value="水泥" label="水泥"></el-option>
-							<el-option value="半成品" label="半成品"></el-option>
+							<el-option value="" label="全部">全部</el-option>
+							<el-option :value="key" :label="value" v-for="(value, key) in DISPATCHORDERTYPE" :key="key"></el-option>
 						</el-select>
 					</el-form-item>
                     <el-form-item label="装车时间">
@@ -48,7 +54,8 @@
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							style="width:160px" 
+							style="width:160px"
+                            v-model="find.shipperDateBegin"
 							@change="inputChange">
 						</el-date-picker>
                     </el-form-item>
@@ -57,7 +64,8 @@
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							style="width:160px" 
+							style="width:160px"
+                            v-model="find.shipperDateEnd"
 							@change="inputChange">
 						</el-date-picker>
                     </el-form-item>
@@ -66,8 +74,8 @@
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							style="width:160px" 
-							v-model="find.dispatchBeginTime" @change="inputChange">
+							style="width:160px"
+							v-model="find.consigneeDateBegin" @change="inputChange">
 						</el-date-picker>
 						<span class="tracto">至</span>
 						<el-date-picker 
@@ -75,7 +83,7 @@
 							:clearable="false" 
 							value-format="timestamp" 
 							style="width:160px" 
-							v-model="find.dispatchEndTime" @change="inputChange">
+							v-model="find.consigneeDateEnd" @change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -282,12 +290,18 @@ export default {
 		return{
 			isCur: 0,
 			find:{
-				keyword:'',
-				shipperConsignee:'',
+                shipperNo:'',
+                dispatchOrderNo:'',
+				shipperCustomerID:'',
+				consigneeCustomerID:'',
+				consigneeCustomer:'',
+				cargoName:'',
 				status:'',
 				type:'',
-				dispatchBeginTime:'',
-				dispatchEndTime:''
+				shipperDateBegin:'',
+				shipperDateEnd:'',
+				consigneeDateBegin:'',
+				consigneeDateEnd:''
 			},
 			companys: [],
 			timer: null,
@@ -350,12 +364,17 @@ export default {
 			this.getList()
 		},
 		resetSearch(){
-			this.find.keyword = ''
-			this.find.shipperConsignee = ''
-			this.find.status = ''
-			this.find.type = ''
-			this.find.dispatchBeginTime = ''
-			this.find.dispatchEndTime = ''
+			this.find.shipperNo=''
+            this.find.dispatchOrderNo=''
+            this.find.shipperCustomerID=''
+            this.find.consigneeCustomerID=''
+            this.find.cargoName=''
+            this.find.status=''
+            this.find.type=''
+            this.find.shipperDateBegin=''
+            this.find.shipperDateEnd=''
+            this.find.consigneeDateBegin=''
+            this.find.consigneeDateEnd=''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			
@@ -367,19 +386,29 @@ export default {
 		},
 		resetExportExcelUrl() {
 			this.exportExcelUrl = baseURL + '/dispatchOrder/exportDispatched?Request-From=PC&Authorization=' + localStorage.getItem("token")	
-			+ '&keyword=' + this.find.keyword 
-			+ '&shipperConsignee=' + this.find.shipperConsignee
+			+ '&shipperNo=' + this.find.shipperNo 
+			+ '&dispatchOrderNo=' + this.find.dispatchOrderNo
+			+ '&shipperCustomerID=' + this.find.shipperCustomerID
+			+ '&consigneeCustomerID=' + this.find.consigneeCustomerID
+			+ '&cargoName=' + this.find.cargoName
 			+ '&status=' + this.find.status 
 			+ '&type=' + this.find.type 
-			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime 
-			+ '&dispatchEndTime=' + this.find.dispatchEndTime
+			+ '&shipperDateBegin=' + this.find.shipperDateBegin
+			+ '&shipperDateEnd=' + this.find.shipperDateEnd
+			+ '&consigneeDateBegin=' + this.find.consigneeDateBegin
+			+ '&consigneeDateEnd=' + this.find.consigneeDateEnd
 			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory?Request-From=PC&Authorization=' + localStorage.getItem("token")	
-			+ '&keyword=' + this.find.keyword 
-			+ '&shipperConsignee=' + this.find.shipperConsignee
+			+ '&shipperNo=' + this.find.shipperNo 
+			+ '&dispatchOrderNo=' + this.find.dispatchOrderNo
+			+ '&shipperCustomerID=' + this.find.shipperCustomerID
+			+ '&consigneeCustomerID=' + this.find.consigneeCustomerID
+			+ '&cargoName=' + this.find.cargoName
 			+ '&status=' + this.find.status 
 			+ '&type=' + this.find.type
-			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime 
-			+ '&dispatchEndTime=' + this.find.dispatchEndTime
+			+ '&shipperDateBegin=' + this.find.shipperDateBegin
+			+ '&shipperDateEnd=' + this.find.shipperDateEnd
+			+ '&consigneeDateBegin=' + this.find.consigneeDateBegin
+			+ '&consigneeDateEnd=' + this.find.consigneeDateEnd
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
@@ -403,16 +432,22 @@ export default {
 		},
 		getCustomers(companyName, cb) {
 			this.find.consigneeID = ''
-			Company.customerSuggest({ companyName }).then(res => { cb(res) })
+			Company.customerFind({
+                current: 1,
+                size: 1000,
+                customerType: 'Consignee'
+            }).then(res => {
+                cb(res.records) 
+            })
 		},
 		handSelectCustomer(data){
-			this.find.consigneeID = data.customerID
-			this.find.customerName = data.companyName
+			this.find.consigneeCustomerID = data.customerID
+            this.find.consigneeCustomer = data.companyName
 			this.resetExportExcelUrl()
 		},
 		clearSelectCustomer(){
-			this.find.consigneeID = ''
-			this.find.customerName =''
+			this.find.consigneeCustomerID = ''
+			this.find.consigneeCustomer =''
 			this.resetExportExcelUrl()
 		},
 		getCompanys() {
@@ -439,12 +474,17 @@ export default {
 			DispatchOrder.listOfOnway({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.find.keyword,
-				shipperConsignee: this.find.shipperConsignee,
-				status: this.find.status,
-				type: this.find.type,
-				dispatchBeginTime: this.find.dispatchBeginTime,
-				dispatchEndTime: this.find.dispatchEndTime
+				shipperNo:this.find.shipperNo,
+                dispatchOrderNo:this.find.dispatchOrderNo,
+                shipperCustomerID:this.find.shipperCustomerID,
+                consigneeCustomerID:this.find.consigneeCustomerID,
+                cargoName:this.find.cargoName,
+                status:this.find.status,
+                type:this.find.type,
+                shipperDateBegin:this.find.shipperDateBegin,
+                shipperDateEnd:this.find.shipperDateEnd,
+                consigneeDateBegin:this.find.consigneeDateBegin,
+                consigneeDateEnd:this.find.consigneeDateEnd
 			}).then(res => {
 				this.dispatchBillList = res.records
 				this.total = res.total
@@ -454,12 +494,17 @@ export default {
 			DispatchOrder.listOfHistory({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.find.keyword,
-				shipperConsignee: this.find.shipperConsignee,
-				status: this.find.status,
-				type: this.find.type,
-				dispatchBeginTime: this.find.dispatchBeginTime,
-				dispatchEndTime: this.find.dispatchEndTime
+				shipperNo:this.find.shipperNo,
+                dispatchOrderNo:this.find.dispatchOrderNo,
+                shipperCustomerID:this.find.shipperCustomerID,
+                consigneeCustomerID:this.find.consigneeCustomerID,
+                cargoName:this.find.cargoName,
+                status:this.find.status,
+                type:this.find.type,
+                shipperDateBegin:this.find.shipperDateBegin,
+                shipperDateEnd:this.find.shipperDateEnd,
+                consigneeDateBegin:this.find.consigneeDateBegin,
+                consigneeDateEnd:this.find.consigneeDateEnd
 			}).then(res => {
 				this.dispatchBillList = res.records
 				this.total = res.total
