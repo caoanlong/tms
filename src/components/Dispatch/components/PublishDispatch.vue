@@ -227,7 +227,8 @@
         </el-dialog>
         <select-truck 
             v-if="truckDialog"
-            :loadDate="loadDate"
+            :loadDate="loadDate" 
+            :selectedTruck="selectedTruck"
             @control="handSelectTruck">
         </select-truck>
     </div>

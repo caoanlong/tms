@@ -4,7 +4,7 @@
         <div class="logs">
             <div class="logs-top" v-loading="logsTopLoading">
                 <div class="shipperNo" v-if="!logsTopLoading">
-                    <span class="tit">发货单</span>
+                    <span class="tit">交货单</span>
                     <span class="ctx">{{data.shipperNo}}</span>
                 </div>
                 <div class="shipperInfo" v-if="!logsTopLoading">
@@ -198,6 +198,13 @@ export default {
                 this.customerMonitorAreaList.forEach(item => {
                     this.drawArea(item)
                 })
+            } else {
+                this.customerAddressList.forEach(item => {
+                    this.drawAddressPoint(item)
+                })
+                this.customerMonitorAreaList.forEach(item => {
+                    this.drawArea(item)
+                })
             }
             const path = locations.map(item => [item.loc.longitude, item.loc.latitude])
             const routeLine = new AMap.Polyline({
@@ -268,11 +275,11 @@ export default {
             const circle = new AMap.Circle({
                 center: [item.locationLng, item.locationLat],
                 radius: item.monitorScope, //半径
-                strokeColor: "#409EFF", 
+                strokeColor: "#ff6900", 
                 strokeOpacity: 1,
                 strokeWeight: 2,
                 fillOpacity: 0.3,
-                fillColor: '#409EFF',
+                fillColor: '#ff6900',
                 zIndex: 50,
                 map: this.map
             })
@@ -346,6 +353,8 @@ export default {
                             remark = `<div>备注：卸货地址偏移</div>`
                         } else if (this.consigneeFencingType == 'Area') {
                             remark = `<div>备注：卸货地区偏移</div>`
+                        } else {
+                            remark = `<div>备注：卸货地址&地区偏移</div>`
                         }
                     } else {
                         title = `<h3>完成卸货</h3>`

@@ -113,7 +113,8 @@ import AutoNavMap from '../../../api/AutoNavMap'
 export default {
     mixins: [baseMixin],
     props: {
-        loadDate: Number | String
+        loadDate: Number | String,
+        selectedTruck: Object
     },
     data() {
         return {
@@ -137,6 +138,9 @@ export default {
         }
     },
     created() {
+        if (this.selectedTruck.truckID) {
+            this.selected = this.selectedTruck
+        }
         this.reset()
         this.createMapMask()
     },
@@ -189,6 +193,7 @@ export default {
                     primaryDriverExpiredCertificateList: (item.primaryDriver && item.primaryDriver.expiredCertificate) 
                     ? item.primaryDriver.expiredCertificate.split(',') : []
                 }))
+                // this.createMarker()
 			})
         },
         close(bool) {
@@ -209,20 +214,24 @@ export default {
          */
         createMap() {
             this.map = new AMap.Map('amapLocationSelect')
-            // if (this.location && this.location[0] && this.location[1]) {
-            //     this.lnglat = this.location
-            //     this.map.setCenter(this.location)
-            //     this.map.add(this.createMarker(this.location))
-            // } else {
-            //     this.getLocationByArea()
-            // }
-            // this.map.on('click', (e) => {
-            //     this.lnglat = [e.lnglat.lng, e.lnglat.lat]
-            //     this.map.setCenter(this.lnglat)
-            //     this.map.clearMap()
-            //     this.map.add(this.createMarker(this.lnglat))
-            //     this.getAddressByLocation(this.lnglat)
-            // })
+        },
+        createMarker() {
+            for (let i = 0; i < this.tableData.length; i++) {
+                const truckPathMarker = new AMap.Marker({
+                    position: [this.tableData[i].longitude,this.tableData[i].latitude],
+                    content: `<div style="position:relative;width:100px;height:50px;text-align:center">
+                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#409EFF;height:40px;line-height:40px;border-radius:5px">${truckPathNormal[i].plateNo}</div>
+                        <div style="position:absolute;bottom:6px;left:42px;background:#409EFF;width:10px;height:10px;transform:rotate(45deg)"></div>
+                    </div>`,
+                    offset: new AMap.Pixel(-50, -50),
+                    map: this.map
+                })
+                truckPathMarker.on('click', e => {
+                    this.selected = this.tableData[i]
+                })
+            }
+            // 使用setFitView方法 自适应显示
+            this.map.setFitView()
         },
         /**
          * 创建地图弹窗遮罩
