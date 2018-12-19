@@ -27,9 +27,9 @@
 								<el-checkbox label="Delegate">委托方</el-checkbox>
 							</el-checkbox-group>							
 						</el-form-item>
-                        <el-form-item label="所属片区" class="customerSelect">
-                            <el-select  placeholder="请选择">
-                                <el-option value="Shipper" label="发货方"></el-option>
+                        <el-form-item label="所属片区" class="customerSelect" prop="zone">
+                            <el-select placeholder="请选择" v-model="recdeliverycomp.zone">
+                                <el-option v-for="(item,index) in CustomerZone" :key="index" :value="item.code" :label="item.code"></el-option>
                             </el-select>
                         </el-form-item>
 						<el-form-item label="所在区域" prop="companyAreaID">
@@ -48,20 +48,20 @@
                             label="监控类型" 
                             prop="fencingType" 
                             v-if="recdeliverycomp.customerType.includes('Shipper') || recdeliverycomp.customerType.includes('Consignee')">
-                            <el-select v-model="recdeliverycomp.fencingType" placeholder="请选择">
+                            <el-select v-model="recdeliverycomp.fencingType" placeholder="请选择" @change="selectFencingType">
                                 <el-option label="区域监控" value="Area"></el-option>
                                 <el-option label="地址监控" value="Point"></el-option>
-                                <el-option label="混合监控" value="Point"></el-option>
+                                <el-option label="混合监控" value="Mix"></el-option>
                             </el-select>					
 						</el-form-item>
                     </el-col>
                 </el-row>
-                <el-row v-if="recdeliverycomp.customerType.includes('Shipper') || recdeliverycomp.customerType.includes('Consignee')">
+                <el-row v-if="recdeliverycomp.customerType.includes('Shipper')&& recdeliverycomp.fencingType || recdeliverycomp.customerType.includes('Consignee') && recdeliverycomp.fencingType">
                     <el-col class="monitoringBox">
-                        <span class="el-icon-plus fr addTitBtn" @click="isAddAreaVisible = true"> 增加</span>
-                        <span class="el-icon-plus fr addTitBtn" @click="isAddAddressVisible = true"> 增加</span>
-                        <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-                            <el-tab-pane label="区域监控" name="first">
+                        <span class="el-icon-plus fr addTitBtn" v-show="monitoringType=='Area'" @click="isAddAreaVisible = true"> 增加</span>
+                        <span class="el-icon-plus fr addTitBtn" v-show="monitoringType=='Point'" @click="isAddAddressVisible = true"> 增加</span>
+                        <el-tabs v-model="monitoringType" type="card">
+                            <el-tab-pane label="区域监控" name="Area" :disabled="recdeliverycomp.fencingType =='Point'">
                                 <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                     <el-table-column prop="provice" label="省" align="center"></el-table-column>
                                     <el-table-column prop="city" label="市" align="center"></el-table-column>
@@ -73,7 +73,7 @@
                                     </el-table-column>
                                 </el-table>
                             </el-tab-pane>
-                            <el-tab-pane label="地址监控" name="second">
+                            <el-tab-pane label="地址监控" name="Point" :disabled="recdeliverycomp.fencingType =='Area'">
                                 <div class="table">
                                     <el-table :data="addressList" style="border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                         <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
@@ -122,6 +122,7 @@
 <script type="text/javascript">
 import { Message } from 'element-ui'
 import Company from '../../../api/Company'
+import BaseDict from '../../../api/BaseDict'
 import ImageUpload from '../../CommonComponents/ImageUpload'
 import distData from '../../../assets/data/distpicker.data'
 import DistPicker from '../../CommonComponents/DistPicker'
@@ -147,12 +148,15 @@ export default {
                 customerType: [],
                 code:'',
                 fencingType:'',
+                zone:'',
                 areas:[{
                     provice:'',
                     city:'',
                     area:'',
                 }]
             },
+            CustomerZone:[],
+            monitoringType:'',
 			rules: {
                 logoUrl:[ {required: true, message: '请上传客户LOGO'} ],
 				companyName: [ 
@@ -162,21 +166,38 @@ export default {
 				companyAreaID: [ { required: true, message: '请选择区域', trigger: 'change' } ],
 				customerType: [ { required: true, message: '请选择类型', trigger: 'change' } ],
                 code: [ { required: true, message: '请输入客户编号' } ],
+                zone: [ { required: true, message: '请选择所属片区' } ],
                 fencingType: [ { required: true, message: '请选择监控类型' } ]
             }
 		}
 	},
 	created() {
         this.getInfo()
+        this.getDictList()
         this.getAddressList()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
             this.getInfo()
+            this.getDictList()
             this.getAddressList()
 		}
 	},
 	methods: {
+        getDictList() {
+			BaseDict.getDict({
+				groupName:'CustomerZone'
+			}).then(res => {
+				this.CustomerZone = res.data
+			})
+        },
+        selectFencingType(type){
+            if(type=='Mix'){
+                this.monitoringType = 'Area'
+            }else{
+                this.monitoringType = type
+            }  
+        },
 		handleLogoSuccess(res) {
 			this.recdeliverycomp.logoUrl = res.length == 0 ? '' : res[0]
 		},
@@ -232,12 +253,14 @@ export default {
 		save() {
 			this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return
-                if(this.recdeliverycomp.fencingType=='Point' && this.addressList.length<1){
+                if((this.recdeliverycomp.fencingType == 'Point' || this.recdeliverycomp.fencingType == 'Mix') && this.addressList.length < 1) {
                     Message.error('请添加监控地址')
+                    this.monitoringType = 'Point'
                     return
                 }
-                if(this.recdeliverycomp.fencingType=='Area' && this.monitoringAreaList.length<1){
+                if((this.recdeliverycomp.fencingType == 'Area' || this.recdeliverycomp.fencingType == 'Mix') && this.monitoringAreaList.length < 1) {
                     Message.error('请添加监控区域')
+                    this.monitoringType = 'Area'
                     return
                 }
 				const recdeliverycomp = {
@@ -249,11 +272,18 @@ export default {
                         contactPhone: this.recdeliverycomp.contactPhone,
                         customerType: this.recdeliverycomp.customerType.join(','),
                         code: this.recdeliverycomp.code,
+                        zone: this.recdeliverycomp.zone,
                         fencingType: this.recdeliverycomp.fencingType,
                         customerID: this.$route.query.customerID
                     },
                     areas: this.monitoringAreaList,
                     addressList: this.addressList
+                }
+                if(this.recdeliverycomp.fencingType=='Area'){
+                    recdeliverycomp.addressList=''
+                }
+                if(this.recdeliverycomp.fencingType=='Point'){
+                    recdeliverycomp.areas=''
                 }
 				Company.customerUpdate(recdeliverycomp).then(res => {
 					Message.success('保存成功！')
@@ -272,7 +302,12 @@ export default {
                     item.city = searchAreaByAreaID(String(item.areaID).substr(0, 4) + '00')
                     item.area = searchAreaByAreaID(String(item.areaID))
                 })
-				this.selectedArea = areaIdToArrayId(String(res.customer.companyAreaID))
+                this.selectedArea = areaIdToArrayId(String(res.customer.companyAreaID))
+                if(res.customer.fencingType=='Mix'){
+                    this.monitoringType = 'Area'
+                }else{
+                    this.monitoringType = res.customer.fencingType
+                }
 			})
         },
         getAddressList() {

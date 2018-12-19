@@ -15,7 +15,7 @@
 							<p>{{recdeliverycomp.customerType.map((item) => CUSTOMERTYPE[item]).join(' , ')}}</p>
 						</el-form-item>
                         <el-form-item label="所属片区">
-							<p>{{recdeliverycomp.companyArea}}</p>
+							<p>{{recdeliverycomp.zone}}</p>
 						</el-form-item>
 						<el-form-item label="所在区域">
 							<p>{{recdeliverycomp.companyArea}}</p>
@@ -31,19 +31,22 @@
 						</el-form-item>
                         <el-form-item label="监控类型">
 							<p>
-                                {{recdeliverycomp.fencingType == 'Point'? '地址监控' : (recdeliverycomp.fencingType == 'Area' ? '区域监控' : '')}}
+                                <span v-if="recdeliverycomp.fencingType == 'Point'">地址监控</span>
+                                <span v-else-if="recdeliverycomp.fencingType == 'Area'">区域监控</span>
+                                <span v-else>混合监控</span>
+                                
                             </p>
 						</el-form-item>
                         <div class="monitoringBox">
-                            <el-tabs v-model="activeName2" type="card" @tab-click="handleClick" class="areaTable table">
-                                <el-tab-pane label="区域监控" name="first">
+                            <el-tabs v-model="monitoringType" type="card"  class="areaTable table">
+                                <el-tab-pane label="区域监控" name="Area" :disabled="recdeliverycomp.fencingType =='Point'">
                                     <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                         <el-table-column prop="provice" label="省" align="center"></el-table-column>
                                         <el-table-column prop="city" label="市" align="center"></el-table-column>
                                         <el-table-column prop="area" label="区" align="center"></el-table-column>
                                     </el-table>
                                 </el-tab-pane>
-                                <el-tab-pane label="地址监控" name="second">
+                                <el-tab-pane label="地址监控" name="Point" :disabled="recdeliverycomp.fencingType =='Area'">
                                     <div class="table">
                                         <el-table :data="addressList" style="border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                             <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
@@ -104,7 +107,8 @@ export default {
                     city:'',
                     area:'',
                 }]
-			},
+            },
+            monitoringType:''
 		}
 	},
 	computed: {
@@ -128,6 +132,11 @@ export default {
                     item.area = searchAreaByAreaID(String(item.areaID))
                 })
                 this.getAddressList()
+                if(res.customer.fencingType=='Mix'){
+                    this.monitoringType = 'Area'
+                }else{
+                    this.monitoringType = res.customer.fencingType
+                }
 			})
         },
         getAddressList() {
