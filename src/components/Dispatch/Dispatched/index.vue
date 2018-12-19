@@ -5,25 +5,31 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="交货单号">
-						<el-input placeholder="交货单号" v-model="find.keyword" @change="inputChange"></el-input>
-					</el-form-item>
-					<el-form-item label="调度单号">
-						<el-input placeholder="调度单号" v-model="find.shipperConsignee" @change="inputChange"></el-input>
+						<el-input placeholder="交货单号" v-model="find.deliveryOrderNo" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="工厂名称">
-						<el-select placeholder="全部" v-model="find.status" style="width:120px" @change="inputChange">
-							<el-option value="" label="全部">全部</el-option>
-						</el-select>
+						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option 
+                                :label="item.companyName" 
+                                :value="item.customerID" 
+                                v-for="(item, i) in companys" 
+                                :key="i">
+                            </el-option>
+                        </el-select>
 					</el-form-item>
-                    <el-form-item label="客户名称">
-						<el-autocomplete 
+					<el-form-item label="客户名称">
+                        <el-autocomplete 
 							style="width:100%" 
                             value-key="companyName" 
-                            placeholder="请输入..."
-                            @change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
+                            v-model="find.customerName"
+                            :fetch-suggestions="getCustomers"
+                            placeholder="请输入客户名称" 
+                            @select="handSelectCustomer" 
+							@change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
                         </el-autocomplete>
-					</el-form-item>
+                    </el-form-item>
                     <el-form-item label="产品名称">
 						<el-input placeholder="产品名称" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
@@ -76,7 +82,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<a :href="isCur==0?exportExcelUrl:exportExcelUrl1" class="exportExcel el-icon-download">导出</a>
+				<a :href="isCur == 0 ? exportExcelUrl : exportExcelUrl1" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="tableBox">
 				<table class="customerTable">
@@ -260,10 +266,11 @@
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import DispatchOrder from '../../../api/DispatchOrder'
+import Company from '../../../api/Company'
 import TrailMap from '../components/TrailMap'
 import UploadPhoto from '../components/UploadPhoto'
 import Scramble from '../components/Scramble'
-import request, { baseURL } from '../../../common/request'
+import { baseURL } from '../../../common/request'
 import { closeConfirm, dispatchCancel } from '../../../common/utils'
 export default {
 	mixins: [baseMixin],
@@ -279,6 +286,7 @@ export default {
 				dispatchBeginTime:'',
 				dispatchEndTime:''
 			},
+			companys: [],
 			timer: null,
 			trailDialog: false,
 			dispatchBillList: [],
@@ -321,6 +329,7 @@ export default {
 	created() {
 		this.resetExportExcelUrl()
 		this.getList()
+		this.getCompanys()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
@@ -389,7 +398,30 @@ export default {
 		handUploadPhoto(bool) {
 			this.isPhotoVisible = false
 		},
-		getList(){
+		getCustomers(companyName, cb) {
+			this.find.consigneeID = ''
+			Company.customerSuggest({ companyName }).then(res => { cb(res) })
+		},
+		handSelectCustomer(data){
+			this.find.consigneeID = data.customerID
+			this.find.customerName = data.companyName
+			this.resetExportExcelUrl()
+		},
+		clearSelectCustomer(){
+			this.find.consigneeID = ''
+			this.find.customerName =''
+			this.resetExportExcelUrl()
+		},
+		getCompanys() {
+            Company.customerFind({
+				current: 1,
+                size: 1000,
+                customerType: 'Shipper'
+			}).then(res => {
+                this.companys = res.records
+			})
+        },
+		getList() {
 			this.dispatchBillList = []
 			if(this.isCur == 0){
 				this.getDispatchedList()
@@ -397,7 +429,9 @@ export default {
 				this.getHistoryList()
 			}
         },
-        clearSelect(){},
+        clearSelect() {
+
+		},
 		getDispatchedList() {
 			DispatchOrder.listOfOnway({
 				current: this.pageIndex,
