@@ -1,6 +1,6 @@
 <template>
 	<div class="taskItem">
-		<div class="title">任务{{index+1}}（承运单号：{{taskItem.carrierOrderNo}}） 发货单号：{{taskItem.shipperNo}}</div>
+		<div class="title">任务{{index+1}}（承运单号：{{taskItem.carrierOrderNo}}） 交货单号：{{taskItem.shipperNo}}</div>
 		<div class="baseInfo">
 			<div class="from">
 				<div class="hasPic">
