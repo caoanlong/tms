@@ -7,6 +7,9 @@
 					<el-form-item label="交货单号">
 						<el-input placeholder="交货单号" v-model="find.deliveryOrderNo" @change="inputChange"></el-input>
 					</el-form-item>
+					<el-form-item label="调度单号">
+						<el-input placeholder="调度单号" v-model="find.shipperConsignee" @change="inputChange"></el-input>
+					</el-form-item>
 					<el-form-item label="工厂名称">
 						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
                             <el-option label="全部" value=""></el-option>
