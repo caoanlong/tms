@@ -21,25 +21,45 @@
                     </span>
                 </div>
                 <el-row>
-                    <table class="dialog-table">
-                        <caption>车辆人员</caption>
+                    <p class="feeTit">车辆人员</p>
+                    <div v-if="!selectedTruck.truckID" style="text-align:center">
+                        <el-button type="primary" icon="el-icon-plus" round plain @click="addTruck">添加车辆</el-button>
+                    </div>
+                    <table class="dialog-table" v-else>
                         <thead>
                             <tr>
                                 <th>车辆</th>
+                                <th>定位位置</th>
+                                <th>定位时间</th>
+                                <th>离工厂距离</th>
                                 <th>驾驶员</th>
-                                <th>随行人员</th>
+                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td align="center">
-                                    <span v-if="selectedTruck.truckID">
+                                    <span>
                                         <strong>{{selectedTruck.plateNo}}</strong>
-                                        <span>{{(Number(selectedTruck.length)/1000).toFixed(2)}}米/{{TRUCKTYPE[selectedTruck.truckType]}}/{{(Number(selectedTruck.loads)/1000).toFixed(2)}}吨/{{selectedTruck.loadVolume}}方</span>
-                                        <el-tag size="mini" type="success">{{selectedTruck.workStatus == 'Free' ? '空闲' : '业务中'}}</el-tag>
+                                        <span>
+                                            {{[
+                                                (Number(selectedTruck.length)/1000).toFixed(2) + '米',
+                                                TRUCKTYPE[selectedTruck.truckType]
+                                            ].join('/')}}
+                                        </span>
+                                        <el-tag size="mini" type="success">
+                                            {{selectedTruck.workStatus == 'Free' ? '空闲' : '业务中'}}
+                                        </el-tag>
                                         <el-tooltip placement="top" effect="light">
-                                            <div slot="content">{{selectedTruck.gpsFlag=='Y'?'GPS已安装':'GPS未安装'}}</div>
-                                            <el-tag size="mini" :type="selectedTruck.gpsFlag=='Y'?'success':'info'" :class="selectedTruck.gpsFlag=='Y'?'el-icon-success':'el-icon-warning'"> GPS</el-tag>
+                                            <div slot="content">
+                                                {{selectedTruck.gpsFlag == 'Y' ? 'GPS已安装' : 'GPS未安装'}}
+                                            </div>
+                                            <el-tag 
+                                                size="mini" 
+                                                :type="selectedTruck.gpsFlag == 'Y' ? 'success' : 'info'" 
+                                                :class="selectedTruck.gpsFlag == 'Y' ? 'el-icon-success' : 'el-icon-warning'">
+                                                GPS
+                                            </el-tag>
                                         </el-tooltip>
                                         <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
                                             <div slot="content">
@@ -54,103 +74,38 @@
                                             </div>
                                             <el-tag size="mini" type="danger" v-if="selectedTruck.expiredCertificate">到期</el-tag>
                                         </el-tooltip>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <span class="add-btn" @click="addTruck">更换</span>
                                     </span>
-                                    <span class="add-btn" @click="addTruck" v-else>+ 添加车辆<b style="color:red">*</b></span>
+                                </td>
+                                <td align="center">临沧G95公路彩云路口</td>
+                                <td align="center">1天前</td>
+                                <td align="center">1公里</td>
+                                <td align="center">
+                                    <strong>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.realName}}</strong>
+                                    <span>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.mobile}}</span>
                                 </td>
                                 <td align="center">
-                                    <span v-if="selectedTruck.primaryDriver && selectedTruck.primaryDriver.supercargoID">
-                                        <strong>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.realName}}</strong>
-                                        <span>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.mobile}}</span>
-                                        <el-tag size="mini" type="success" v-if="selectedTruck.primaryDriver">空闲</el-tag>
-                                        <el-tag size="mini" type="warning" v-if="selectedTruck.primaryDriver && selectedTruck.primaryDriver.appStatus == 'Y'">APP</el-tag>
-                                        <el-tag size="mini" type="info" v-else-if="selectedTruck.primaryDriver && selectedTruck.primaryDriver.appStatus == 'N'">APP</el-tag>
-                                        <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
-                                            <div slot="content">
-                                                <el-tag 
-                                                    size="mini" 
-                                                    type="danger" 
-                                                    v-for="(x, index) in selectedTruck.primaryDriver ? selectedTruck.primaryDriver.expiredCertificate.split(',') : []" 
-                                                    :key="index" 
-                                                    v-if="selectedTruck.primaryDriver.expiredCertificate">
-                                                    {{ EXPIREWARN[x] }}
-                                                </el-tag>
-                                            </div>
-                                            <el-tag size="mini" type="danger" v-if="selectedTruck.primaryDriver && selectedTruck.primaryDriver.expiredCertificate">到期</el-tag>
-                                        </el-tooltip>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <span class="add-btn" @click="addPerson('primary')">更换</span>
-                                    </span>
-                                    <span class="add-btn" @click="addPerson('primary')" v-else v-show="selectedTruck.truckID">+ 添加驾驶员</span>
-                                </td>
-                                <td align="center">
-                                    <span v-if="selectedTruck.superCargo && selectedTruck.superCargo.supercargoID">
-                                        <strong>{{selectedTruck.superCargo && selectedTruck.superCargo.realName}}</strong>
-                                        <span>{{selectedTruck.superCargo && selectedTruck.superCargo.mobile}}</span>
-                                        <el-tag size="mini" type="success" v-if="selectedTruck.superCargo">空闲</el-tag>
-                                        <el-tag size="mini" type="warning" v-if="selectedTruck.superCargo && selectedTruck.superCargo.appStatus == 'Y'">APP</el-tag>
-                                        <el-tag size="mini" type="info" v-else-if="selectedTruck.superCargo && selectedTruck.superCargo.appStatus == 'N'">APP</el-tag>
-                                        <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
-                                            <div slot="content">
-                                                <el-tag 
-                                                    size="mini" 
-                                                    type="danger" 
-                                                    v-for="(x, index) in selectedTruck.superCargo ? selectedTruck.superCargo.expiredCertificate.split(',') : []" 
-                                                    :key="index" 
-                                                    v-if="selectedTruck.superCargo.expiredCertificate">
-                                                    {{ EXPIREWARN[x] }}
-                                                </el-tag>
-                                            </div>
-                                            <el-tag size="mini" type="danger" v-if="selectedTruck.superCargo && selectedTruck.superCargo.expiredCertificate">到期</el-tag>
-                                        </el-tooltip>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <span class="add-btn" @click="addPerson('second')">更换</span>
-                                        <span class="add-btn" @click="delPerson('second')">删除</span>
-                                    </span>
-                                    <span class="add-btn" @click="addPerson('second')" v-else v-show="selectedTruck.truckID">+ 添加随行人员</span>
+                                    <el-button 
+                                        size="mini"
+                                        type="primary" 
+                                        icon="el-icon-edit" 
+                                        round plain 
+                                        @click="addTruck">
+                                        更换车辆
+                                    </el-button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </el-row>
                 <el-row style="margin-top:15px">
-                    <p class="feeTit">基础运费
-                        <span style="font-size:12px;color:#ccc;font-weight:400">（如已配置委托方给司机的运价，系统会默认算金额）</span>
-                    </p>
-                    <!-- <el-tooltip content="点击关闭 tooltip 功能" placement="top" effect="light"> -->
-                        <!-- <div slot="content">
-                            <table class="dialog-table">
-                                <tr>
-                                    <th>委托方</th>
-                                    <th>起点</th>
-                                    <th>终点</th>
-                                    <th>运输距离</th>
-                                    <th>吨公里</th>
-                                    <th>方公里</th>
-                                </tr>
-                                <tr v-for="(item, i) in dispatchTaskCargoList" :key="i">
-                                    <th>{{item.consignorName}}</th>
-                                    <td>{{item.shipperArea}}</td>
-                                    <td>{{item.consigneeArea}}</td>
-                                    <td>{{(item.payableDistance/1000).toFixed(2) || 0}}公里</td>
-                                    <td>{{item.payableWeightUnitPrice || 0}}元</td>
-                                    <td>{{item.payableVolumnUnitPrice || 0}}元</td>
-                                </tr>
-                            </table>
-                        </div> -->
-                        <div class="transFeeTips">
-                            <svg-icon icon-class="info" class="infoIcon"></svg-icon>
-                            <p>支付运费上限金额：{{freightUpLimit}}元 <span v-if="isExceed" class="exceedTips">基础运费已大于支付运费上限金额，如确认以金额 <b>{{baseDizDispatchFee.amount}}</b> 元发布，请忽略此信息</span></p>
-                        </div>
-                    <!-- </el-tooltip> -->
+                    <p class="feeTit">基础运费</p>
                     <el-form 
                         ref="baseDizDispatchFeeRuleForm" 
                         :model="baseDizDispatchFee" 
                         :rules="baseDizDispatchFeeRule"
                         :inline="true" size="mini">
                         <el-form-item label="基础运费" prop="amount">
-                            <el-input placeholder="请输入..." v-model="baseDizDispatchFee.amount" @input="checkLimit"></el-input>
+                            <el-input placeholder="请输入..." v-model="baseDizDispatchFee.amount"></el-input>
                         </el-form-item>
                         <el-form-item label="支付方式" prop="payMode">
                             <el-select 
@@ -265,56 +220,16 @@
                 <div class="num-info">
                     <span class="num-tit">总运费：{{totalFreight?Number(totalFreight).toFixed(2):'0.00'}}元</span>
                 </div>
-                <el-row>
-                    <el-form size="small" :model="normal" ref="ruleForm2">
-                        <el-col :span="12">
-                            <el-form-item label="接单截止时间" label-width="100px">
-                                <el-date-picker 
-                                    format="yyyy-MM-dd"
-                                    v-model="normal.endDate" 
-                                    type="date" 
-                                    placeholder="请选择日期"
-                                    style="width:100%"
-                                    value-format="timestamp"
-                                    @change="handSelectDate"
-                                    :picker-options="{ disabledDate: (curDate) => new Date() - 3600000*24 >= curDate }">
-                                </el-date-picker>
-                            </el-form-item>
-                         </el-col>
-                         <el-col :span="12">
-                            <el-form-item label-width="20px">
-                                <el-time-select
-                                    :disabled = this.normal.endDate?false:true
-                                    v-model="normal.endTime"
-                                    :picker-options="{
-                                        start:'00:00',
-                                        step: '01:00',
-                                        end:'23:00',
-                                        minTime: (normal.endDate> new Date() ) ? '' :this.minDateTime
-                                    }"
-                                    placeholder="请选择时间">
-                                </el-time-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-form>
-                </el-row>
                 <el-row style="margin-top:20px" class="text-center">
                     <el-button @click="close" size="small">取消</el-button>
                     <el-button type="primary" @click="publish" size="small">&nbsp;&nbsp;&nbsp;发布&nbsp;&nbsp;&nbsp;</el-button>
                 </el-row>
         </el-dialog>
         <select-truck 
+            v-if="truckDialog"
             :loadDate="loadDate"
-            :isVisible="truckDialog" 
             @control="handSelectTruck">
         </select-truck>
-        <select-person 
-            :loadDate="loadDate"
-            :isVisible="personDialog" 
-            :truck="selectedTruck" 
-            :type="personType" 
-            @control="handSelectPerson">
-        </select-person>
     </div>
 </template>
 
@@ -346,10 +261,6 @@ export default {
         },
         transLines: Array,
         dispatchTaskCargoList: Array,
-        freightUpLimit: {
-            type: Number | String,
-            default: 0
-        },
         isVisible: {
             type: Boolean,
             default: false
@@ -357,11 +268,9 @@ export default {
     },
     data() {
         return {
-            isExceed:false,
             truckDialog: false,
             personDialog: false,
             selectedTruck: {},
-            personType: 'primary',
             loadDate: '',
             baseDizDispatchFee: {
                 item: 'Freight',  // 费用科目
@@ -372,26 +281,10 @@ export default {
                 payMode: 'Prepay',  // 支付方式
                 amount: ''  // 金额
             },
-            minDateTime:'',
-            endDateTime:'',
             bizDispatchFeeList: [],
-            normal: {
-                endDate: ''
-            },
             persons: [],
             baseDizDispatchFeeRule: {
-                amount: [
-                    { required: true, message: '请输入基础运费' },
-                    // { 
-                    //     validator: (rule, value, callback) => {
-                    //         if (+value > +this.freightUpLimit) {
-                    //             callback('基础运费不能大于运费上限！')
-                    //         } else {
-                    //             callback()
-                    //         }
-                    //     } 
-                    // }
-                ],
+                amount: [{ required: true, message: '请输入基础运费' }],
                 payMode: [{ required: true, message: '请选择支付方式' }],
             }
         }
@@ -399,7 +292,6 @@ export default {
     watch: {
         dispatchTaskCargoList: {
             handler(list) {
-                // this.normal.endDate = Math.min(...val.map(item => item.shipperDate))
                 for (let i = 0; i < list.length; i++) {
                     const start = [list[i].shipperLocationLng, list[i].shipperLocationLat]
                     const end = [list[i].consigneeLocationLng, list[i].consigneeLocationLat]
@@ -417,19 +309,7 @@ export default {
             deep: true
         },
         isVisible: function (val){
-            if(val){
-                let now = new Date()
-                let hour = now.getHours() < 10 ? '0' + now.getHours() : now.getHours()
-                let minute = now.getMinutes() < 10 ? '0' + now.getMinutes() : now.getMinutes()
-                if(minute > 30){
-                    this.minDateTime =  hour +1 +":"+"00"
-                }else{
-                    this.minDateTime =  hour +":"+"00"
-                }
-                this.totalPrice()
-            } else {
-                this.minDateTime = ""
-            }
+            val && this.totalPrice()
         }
     },
     computed: {
@@ -442,13 +322,6 @@ export default {
         }
     },
     methods: {
-        checkLimit(val){
-            if(Number(val)>Number(this.freightUpLimit)){
-                this.isExceed = true
-            }else{
-                this.isExceed = false
-            }
-        },
         /**
 		 * 调用高德地图接口获取距离
 		 */
@@ -487,34 +360,12 @@ export default {
                 }
             }
         },
-        handSelectPerson(type, data) {
-            this.personDialog = false
-            if (!data) return
-            data.type = type
-            if (type == 'primary') {
-                this.selectedTruck.primaryDriver = data
-                this.baseDizDispatchFee.superCargoID = data.supercargoID
-                this.baseDizDispatchFee.superCargoName = data.realName
-            } else {
-                this.selectedTruck.superCargo = data
-            }
-            this.clearSelectedSuperCargo()
-            this.createPersons()
-        },
         handSelectItem(data, index) {
             this.bizDispatchFeeList[index].superCargoID = data.supercargoID
             this.bizDispatchFeeList[index].superCargoName = data.realName
         },
         addTruck() {
             this.truckDialog = true
-        },
-        addPerson(type) {
-            this.personType = type
-            this.personDialog = true
-        },
-        delPerson() {
-            this.selectedTruck.superCargo = null
-            this.createPersons()
         },
         /**
          * 添加费用
@@ -569,13 +420,6 @@ export default {
             }
             this.bizDispatchFeeList = bizDispatchFeeList
         },
-        handSelectDate(value){
-            this.endDateTime = value
-            if(!value){
-                this.normal.endTime = ''
-                this.endDateTime = ''
-			}
-        },
         /**
          * 发布
          */
@@ -627,15 +471,6 @@ export default {
                         amount: item.amount
                     }
                 })
-                if (this.normal.endTime) {
-                    this.normal.endDate = this.endDateTime + timeToTimestamp(this.normal.endTime)
-                } else {
-                    if(this.normal.endDate){
-                        this.normal.endDate = this.endDateTime + 3600000*24-1000
-                    } else {
-                        this.normal.endDate = ''
-                    }
-                }
                 DispatchOrder.addForDispatch({
                     truckID: this.selectedTruck.truckID,
                     driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',

@@ -8,19 +8,28 @@
 						<el-input placeholder="交货单号" v-model="find.keyword" @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item label="工厂名称">
-						<el-select placeholder="全部" v-model="find.status" style="width:120px" @change="inputChange">
-							<el-option value="" label="全部">全部</el-option>
-						</el-select>
+						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option 
+                                :label="item.companyName" 
+                                :value="item.customerID" 
+                                v-for="(item, i) in companys" 
+                                :key="i">
+                            </el-option>
+                        </el-select>
 					</el-form-item>
-                    <el-form-item label="客户名称">
-						<el-autocomplete 
+					<el-form-item label="客户名称">
+                        <el-autocomplete 
 							style="width:100%" 
                             value-key="companyName" 
-                            placeholder="请输入..."
-                            @change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
+                            v-model="find.customerName"
+                            :fetch-suggestions="getCustomers"
+                            placeholder="请输入客户名称" 
+                            @select="handSelectCustomer" 
+							@change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
                         </el-autocomplete>
-					</el-form-item>
+                    </el-form-item>
                     <el-form-item label="产品名称">
 						<el-autocomplete 
 							style="width:100%" 
@@ -30,14 +39,7 @@
 							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
                         </el-autocomplete>
 					</el-form-item>
-					<el-form-item label="货物类型">
-						<el-select placeholder="全部" v-model="find.type" style="width:120px" @change="inputChange">
-							<el-option value="" label="全部"></el-option>
-							<el-option value="水泥" label="水泥"></el-option>
-							<el-option value="半成品" label="半成品"></el-option>
-						</el-select>
-					</el-form-item>
-                    <el-form-item label="装车时间">
+                    <el-form-item label="装车日期">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
@@ -46,7 +48,7 @@
 							@change="inputChange">
 						</el-date-picker>
                     </el-form-item>
-                    <el-form-item label="到货时间">
+                    <el-form-item label="到货日期">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
@@ -56,8 +58,8 @@
 						</el-date-picker>
                     </el-form-item>
 					<el-form-item>
-						<el-button type="primary" @click="search(isCur)">搜索</el-button>
-						<el-button type="default" @click="reset(isCur)">重置</el-button>
+						<el-button type="primary" @click="search()">搜索</el-button>
+						<el-button type="default" @click="reset()">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
@@ -343,10 +345,6 @@
 					<span class="num-label"><span>重</span>{{totalWeight}}</span>
 					<span class="num-label"><span>体</span>{{totalVolume}}</span>
 				</div>
-				<div class="num-info">
-					<span class="num-tit">运费上限</span>
-					<span class="num-label">￥{{freightUpLimit}}元</span>
-				</div>
 			</el-card>
 			<el-card class="table-container" style="margin-top:20px">
 				<div class="table-tit">运输线路</div>
@@ -412,7 +410,6 @@
 			:totalDistance="totalDistance" 
 			:transLines="transLines" 
 			:dispatchTaskCargoList="selectedList" 
-			:freightUpLimit="freightUpLimit" 
 			:isVisible="dispatchDialog" 
 			@cancel="handClosePublish">
 		</publish-dispatch>
@@ -423,7 +420,6 @@
 			:totalDistance="totalDistance" 
 			:transLines="transLines" 
 			:dispatchTaskCargoList="selectedList" 
-			:freightUpLimit="freightUpLimit" 
 			:isVisible="grabDialog" 
 			@cancel="handCloseGrab">
 		</grab-order>
@@ -438,6 +434,7 @@ import PublishDispatch from '../components/PublishDispatch'
 import GrabOrder from '../components/GrabOrder'
 import { baseMixin } from '../../../common/mixin'
 import CarryOrder from '../../../api/CarryOrder'
+import Company from '../../../api/Company'
 import { checkFloat2, checkInt } from '../../../common/valid'
 import { arrayUnique ,isFullDay} from '../../../common/utils'
 export default {
@@ -460,6 +457,7 @@ export default {
 				orderBy: 'CarrierOrderNo',
 				sortType: 'desc'
 			},
+			companys: [],
 			selectedShipperArea: [],
 			selectedConsigneeArea: [],
 			selectedListNoRepeat: [],
@@ -490,40 +488,13 @@ export default {
 				return prev + curr
 			}, 0).toFixed(2)
 			return Number(val)
-		},
-		// 运费上限
-		freightUpLimit() {
-			let freight = 0
-			this.selectedList.forEach(item => {
-				// 按重量配载
-				if (item.dispatchType == 'Weight') {
-					// 如果吨公里价格存在
-					if (item.payableWeightUnitPrice) {
-						freight += Number(item.payableWeightUnitPrice)
-								* (item.payableDistance ? Number(item.payableDistance)/1000 : 0) 
-								* (item.cargoWeightNew ? item.cargoWeightNew : 0)
-					} else {
-						freight += item.freightUnit * +item.cargoWeightNew
-					}
-				// 按体积配载
-				} else {
-					// 如果方公里价格存在
-					if (item.payableVolumnUnitPrice) {
-						freight += Number(item.payableVolumnUnitPrice) 
-								* (item.payableDistance ? Number(item.payableDistance)/1000 : 0)
-								* (item.cargoVolumeNew ? item.cargoVolumeNew : 0)
-					} else {
-						freight += item.freightUnit * +item.cargoVolumeNew
-					}
-				}
-			})
-			return freight.toFixed(2)
 		}
 	},
 	created() {
 		const dispatchOrderID = this.$route.query.dispatchOrderID
 		this.getList()
 		dispatchOrderID && this.getSelectedList()
+		this.getCompanys()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
@@ -537,8 +508,12 @@ export default {
 		}
 	},
 	methods:{
-        inputChange(){},
-        clearSelect(){},
+        inputChange() {
+
+		},
+        clearSelect() {
+
+		},
 		reset() {
 			this.find.keyword = ''
 			this.find.shipperAreaID = ''
@@ -557,6 +532,29 @@ export default {
 			this.pageSize = this.PAGESIZE
 			this.getList()
 		},
+		getCustomers(companyName, cb) {
+			this.find.consigneeID = ''
+			Company.customerSuggest({ companyName }).then(res => { cb(res) })
+		},
+		handSelectCustomer(data){
+			this.find.consigneeID = data.customerID
+			this.find.customerName = data.companyName
+			this.resetExportExcelUrl()
+		},
+		clearSelectCustomer(){
+			this.find.consigneeID = ''
+			this.find.customerName =''
+			this.resetExportExcelUrl()
+		},
+		getCompanys() {
+            Company.customerFind({
+				current: 1,
+                size: 1000,
+                customerType: 'Shipper'
+			}).then(res => {
+                this.companys = res.records
+			})
+        },
 		/**
 		 * 排序搜索
 		 */

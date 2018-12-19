@@ -100,6 +100,10 @@ export default {
     },
     mounted() {
         this.map = new AMap.Map('amapLocationSelect')
+        this.map.plugin(["AMap.Scale"], () => {
+            const scale = new AMap.Scale()
+            this.map.addControl(scale)
+        })
         this.district = new AMap.DistrictSearch({
             subdistrict: 1,   //返回下一级行政区
             showbiz: false,  //最后一级返回街道信息
