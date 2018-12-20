@@ -6,27 +6,26 @@
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
                     <el-form-item label="所属客户">
                         <el-autocomplete 
-							style="width:100%" 
                             value-key="companyName" 
                             v-model="find.companyName"
-                            :fetch-suggestions="getCompanys"
-                            placeholder="请输入..."
-                            @select="handSelect"  @change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
+                            :fetch-suggestions="getCustomers"
+                            placeholder="请输入客户名称" 
+                            @select="handSelectCustomer" 
+							@change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
                         </el-autocomplete>
                     </el-form-item>
                     <el-form-item label="所属片区" class="customerSelect">
-						<el-select v-model="find.customerType" placeholder="请选择"  @change="inputChange">
-							<el-option value="Shipper" label="发货方"></el-option>
-							<el-option value="Consignee" label="收货方"></el-option>
-							<el-option value="Delegate" label="委托方"></el-option>
+						<el-select v-model="find.zone" placeholder="请选择"  @change="inputChange">
+                            <el-option value="" label="全部"></el-option>
+							<el-option v-for="(item,index) in CustomerZone" :key="index" :value="item.code" :label="item.code"></el-option>
 						</el-select>
 					</el-form-item>
                     <el-form-item label="终端用户名称">
-						<el-input placeholder="请输入终端用户名称" v-model="find.keyword"  @change="inputChange"></el-input>
+						<el-input placeholder="请输入终端用户名称" v-model="find.finalUsername"  @change="inputChange"></el-input>
 					</el-form-item>
                     <el-form-item label="地址">
-						<el-input placeholder="请输入地址" v-model="find.keyword"  @change="inputChange"></el-input>
+						<el-input placeholder="请输入地址" v-model="find.locationAddress"  @change="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -60,8 +59,8 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="所属客户" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="所属片区" prop="code" align="center"></el-table-column>
-					<el-table-column label="终端用户名称" prop="code" align="center"></el-table-column>
+					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
+					<el-table-column label="终端用户名称" prop="finalUsername" align="center"></el-table-column>
 					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
 					<el-table-column label="手机" prop="contactPhone" align="center"></el-table-column>
 					<el-table-column label="区域" prop="contactArea" align="center"></el-table-column>
@@ -70,6 +69,8 @@
 							<span>{{scope.row.locationAddress}}{{scope.row.detailAddress}}</span>
 						</template>
 					</el-table-column>
+					<el-table-column label="地址编码" prop="code" align="center"></el-table-column>
+
                     <el-table-column label="围栏范围" prop="monitorScope" align="center">
                         <template slot-scope="scope">
 							<span>{{scope.row.monitorScope?scope.row.monitorScope+'米':''}}</span>
@@ -108,6 +109,7 @@
 import { Message } from 'element-ui'
 import CargoUnit from '../../../api/CargoUnit'
 import Company from '../../../api/Company'
+import BaseDict from '../../../api/BaseDict'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
@@ -120,10 +122,18 @@ export default {
 			importFileUrl: baseURL + '/company/customer/address/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:'',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
-			find: { keyword: '',customerID: '', companyName: '' },
+			find: { 
+                keyword: '',
+                zone:'',
+                customerID: '', 
+                companyName: '' ,
+                locationAddress:'',
+                finalUsername:''
+            },
 			unit: '',
 			customerID: '',
-			companyName: ''
+            companyName: '',
+            CustomerZone:[]
 		}
 	},
 	activated() {
@@ -132,29 +142,43 @@ export default {
 		if (customerID) this.find.customerID = customerID
 		if (companyName) this.find.companyName = companyName
 		this.resetExportExcelUrl()
-		this.getList()
+        this.getList()
+        this.getDictList()
 	},
 	methods: {
-        getCompanys(queryString, cb) {
-			this.find.customerID = ''
-			Company.customerSuggest({
-				companyName: queryString
-			}).then(res => { cb(res) })
-        },
-        handSelect(data){
+        getDictList() {
+			BaseDict.getDict({
+				groupName:'CustomerZone'
+			}).then(res => {
+				this.CustomerZone = res.data
+			})
+		},
+        getCustomers(companyName, cb) {
+			this.find.consigneeID = ''
+			Company.customerFind({
+                current: 1,
+                size: 1000,
+                customerType: 'Consignee'
+            }).then(res => {
+                cb(res.records) 
+            })
+		},
+        handSelectCustomer(data){
 			this.find.customerID = data.customerID
-			this.find.companyName = data.companyName
+            this.find.companyName = data.companyName
 			this.resetExportExcelUrl()
 		},
-		clearSelect(){
+		clearSelectCustomer(){
 			this.find.customerID = ''
 			this.find.companyName =''
 			this.resetExportExcelUrl()
 		},
 		reset() {
-			this.find.keyword = ''
-			this.find.customerID = ''
-			this.find.companyName = ''
+			this.find.zone=''
+            this.find.customerID=''
+            this.find.companyName=''
+            this.find.locationAddress=''
+            this.find.finalUsername=''
 			this.pageIndex = 1
 			this.resetExportExcelUrl()
 			this.getList()
@@ -167,8 +191,10 @@ export default {
 			Company.customerAddressFind({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.find.keyword,
-				companyName: this.find.companyName
+                zone:this.find.zone,
+                customerID:this.find.customerID, 
+                companyName:this.find.companyName,
+                locationAddress:this.find.locationAddress
 			}).then(res => {
 				this.tableData = res.records
 				this.total = res.total
@@ -185,12 +211,14 @@ export default {
         },
         inputChange(){},
 		add() {
-			if (this.customerID && this.companyName) {
+            const customerID = this.$route.query.customerID
+		    const companyName = this.$route.query.companyName
+			if (customerID && companyName) {
 				this.$router.push({ 
 					name: 'addcompanyaddress', 
 					query: { 
-						customerID: this.customerID, 
-						companyName: this.companyName,
+						customerID: this.$route.query.customerID, 
+						companyName: this.$route.query.companyName,
 						contactName: this.$route.query.contactName,
 						contactPhone: this.$route.query.contactPhone,
 						companyAreaID: this.$route.query.companyAreaID
