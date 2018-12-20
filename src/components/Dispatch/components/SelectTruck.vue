@@ -165,7 +165,7 @@ export default {
                 return
             }
             this.pageIndex = 1
-			this.pageSize = 10
+			this.pageSize = 5
             this.getList()
         },
         reset() {
@@ -174,7 +174,7 @@ export default {
             this.find.workStatus = 'Free'
             this.find.appStatus = ''
 			this.pageIndex = 1
-			this.pageSize = 10
+			this.pageSize = 5
 			this.getList()
 		},
         getList() {
@@ -299,7 +299,7 @@ export default {
     width 1100px
     position fixed
     left 50%
-    top 60px
+    top 40px
     margin-left -550px
     padding 10px
     background-color #fff

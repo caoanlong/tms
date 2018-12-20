@@ -186,6 +186,7 @@
 								<table class="cargoList">
 									<tr>
 										<th><span>*</span>产品名称</th>
+										<th width="130">配载方式</th>
 										<th width="200">数量</th>
 										<th width="200">重量</th>
 										<th>操作</th>
@@ -211,6 +212,11 @@
 														</template>
 														<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect(index)"></i>
 													</el-autocomplete>
+												</el-form-item>
+											</td>
+											<td>
+												<el-form-item label-width="0">
+													<el-input placeholder="配载方式" style="width:100%" :value="DISPATCHTYPE[item.dispatchType]" disabled></el-input>
 												</el-form-item>
 											</td>
 											<td style="border-spacing:0">

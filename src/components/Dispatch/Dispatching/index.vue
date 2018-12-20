@@ -5,10 +5,10 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="交货单号">
-						<el-input placeholder="交货单号" v-model="find.keyword" @change="inputChange"></el-input>
+						<el-input placeholder="交货单号" v-model="find.shipperNo"></el-input>
 					</el-form-item>
 					<el-form-item label="工厂名称">
-						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
+						<el-select placeholder="请选择" v-model="find.shipperCustomerID">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
                                 :label="item.companyName" 
@@ -22,22 +22,15 @@
                         <el-autocomplete 
 							style="width:100%" 
                             value-key="companyName" 
-                            v-model="find.customerName"
-                            :fetch-suggestions="getCustomers"
+                            v-model="find.consigneeCustomerName"
+                            :fetch-suggestions="getConsigneeCustomers"
                             placeholder="请输入客户名称" 
-                            @select="handSelectCustomer" 
-							@change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
+                            @select="handSelectConsigneeCustomer" >
+							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectConsigneeCustomer"></i>
                         </el-autocomplete>
                     </el-form-item>
                     <el-form-item label="产品名称">
-						<el-autocomplete 
-							style="width:100%" 
-                            value-key="companyName" 
-                            placeholder="请输入..."
-                            @change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
-                        </el-autocomplete>
+						<el-input placeholder="请输入产品名称" v-model="find.cargoName"></el-input>
 					</el-form-item>
                     <el-form-item label="装车日期">
 						<el-date-picker 
@@ -45,7 +38,7 @@
 							:clearable="false" 
 							value-format="timestamp" 
 							style="width:160px" 
-							@change="inputChange">
+							v-model="find.shipperDateBegin">
 						</el-date-picker>
                     </el-form-item>
                     <el-form-item label="到货日期">
@@ -54,7 +47,7 @@
 							:clearable="false" 
 							value-format="timestamp" 
 							style="width:160px" 
-							@change="inputChange">
+							v-model="find.shipperDateEnd">
 						</el-date-picker>
                     </el-form-item>
 					<el-form-item>
@@ -185,8 +178,8 @@
 						<tbody>
 							<tr v-for="(item, index) in tableData" :key="index">
 								<td align="center">
-									<p>{{item.carrierOrderNo}}</p>
-									<p v-if="item.commissionDate">{{item.commissionDate | getdatefromtimestamp}}</p>
+									<p>{{item.shipperNo}}</p>
+									<p v-if="item.commissionDate">{{moment(item.commissionDate).format('YYYY-MM-DD hh:mm:ss')}}</p>
 								</td>
 								<td>
 									<p>{{item.shipperCompanyName}}</p>
@@ -445,15 +438,13 @@ export default {
 			dispatchDialog: false,
 			grabDialog: false,
 			find: {
-				keyword: '',
-				shipperAreaID: '',
-				consigneeAreaID: '',
-				commissionDateBegin: '',
-				commissionDateEnd: '',
+				shipperNo: '',
+				shipperCustomerID: '',
+				consigneeCustomerID: '',
+				consigneeCustomerName: '',
+				cargoName: '',
 				shipperDateBegin: '',
 				shipperDateEnd: '',
-				consigneeDateBegin: '',
-				consigneeDateEnd: '',
 				orderBy: 'CarrierOrderNo',
 				sortType: 'desc'
 			},
@@ -508,22 +499,14 @@ export default {
 		}
 	},
 	methods:{
-        inputChange() {
-
-		},
-        clearSelect() {
-
-		},
 		reset() {
-			this.find.keyword = ''
-			this.find.shipperAreaID = ''
-			this.find.consigneeAreaID = ''
-			this.find.commissionDateBegin = ''
-			this.find.commissionDateEnd = ''
+			this.find.shipperNo = ''
+			this.find.shipperCustomerID = ''
+			this.find.consigneeCustomerID = ''
+			this.find.consigneeCustomerName = ''
+			this.find.cargoName = ''
 			this.find.shipperDateBegin = ''
 			this.find.shipperDateEnd = ''
-			this.find.consigneeDateBegin = ''
-			this.find.consigneeDateEnd = ''
 			this.find.orderBy = 'CarrierOrderNo'
 			this.find.sortType = 'desc'
 			this.selectedShipperArea = []
@@ -532,18 +515,18 @@ export default {
 			this.pageSize = this.PAGESIZE
 			this.getList()
 		},
-		getCustomers(companyName, cb) {
-			this.find.consigneeID = ''
+		getConsigneeCustomers(companyName, cb) {
+			this.find.consigneeCustomerID = ''
 			Company.customerSuggest({ companyName }).then(res => { cb(res) })
 		},
-		handSelectCustomer(data){
-			this.find.consigneeID = data.customerID
-			this.find.customerName = data.companyName
+		handSelectConsigneeCustomer(data){
+			this.find.consigneeCustomerID = data.customerID
+			this.find.consigneeCustomerName = data.companyName
 			this.resetExportExcelUrl()
 		},
-		clearSelectCustomer(){
-			this.find.consigneeID = ''
-			this.find.customerName =''
+		clearSelectConsigneeCustomer(){
+			this.find.consigneeCustomerID = ''
+			this.find.consigneeCustomerName =''
 			this.resetExportExcelUrl()
 		},
 		getCompanys() {
@@ -694,24 +677,6 @@ export default {
 				this.totalDistance += Number(item.nodeDistance)
 			})
 			this.transLines = arrays
-		},
-		handleSelectedShipperArea(data) {
-			if (data) {
-				this.find.shipperAreaID = data[data.length - 1]
-				this.selectedShipperArea = data
-			} else {
-				this.find.shipperAreaID = ''
-				this.selectedShipperArea = []
-			}
-		},
-		handleSelectedConsigneeArea(data) {
-			if (data) {
-				this.find.consigneeAreaID = data[data.length - 1]
-				this.selectedConsigneeArea = data
-			} else {
-				this.find.consigneeAreaID = ''
-				this.selectedConsigneeArea = []
-			}
 		},
 		getList () {
 			const params = Object.assign(this.find, {
