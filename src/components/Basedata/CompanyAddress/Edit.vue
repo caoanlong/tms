@@ -16,13 +16,8 @@
 								<i class="el-icon-close el-input__icon" slot="suffix"  @click="clearSelect"></i>
 							</el-autocomplete>
 						</el-form-item>
-                        <el-form-item label="所属片区" class="customerSelect">
-                            <el-select  placeholder="请选择" style="width:100%">
-                                <el-option value="Shipper" label="发货方"></el-option>
-                            </el-select>
-                        </el-form-item>
-						<el-form-item label="终端用户名称">
-							<el-input v-model="companyAddress.contactName" placeholder="请输入终端用户名称"></el-input>
+						<el-form-item label="终端用户名称" prop="finalUsername">
+							<el-input v-model="companyAddress.finalUsername" placeholder="请输入终端用户名称"></el-input>
 						</el-form-item>
 						<el-form-item label="联系人">
 							<el-input v-model="companyAddress.contactName" placeholder="请输入..."></el-input>
@@ -98,11 +93,13 @@ export default {
 				locationLat: '',
                 locationAddress: '',
                 monitorScope: '',
-                code: ''
-			},
+                code: '',
+                finalUsername:''
+            },
 			rules: {
 				customerID: [{required: true, message: '请输入所属客户'}],
-				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
+                areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
+				finalUsername: [{ required: true, message: '请输入终端用户名称'}],
 				locationAddress: [{required: true, message: '请输入定位地址'}],
 				detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
 				monitorScope: [{validator: checkFloat2}]
@@ -111,7 +108,7 @@ export default {
 	},
 	components: { DistPicker, SelectLocation },
 	created() {
-		this.getInfo()
+        this.getInfo()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
