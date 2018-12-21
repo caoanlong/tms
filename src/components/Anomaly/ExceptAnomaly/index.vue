@@ -112,7 +112,7 @@ export default {
 		return {
             find: { 
                 keyword: '',
-                customerID:'',
+                companyID:'',
                 type:'',
                 beginTime: this.getCurrentMonthFirst(),
                 endTime: this.getCurrentMonthLast()
@@ -139,7 +139,7 @@ export default {
         },
         reset(){
             this.find.keyword = ''
-			this.find.customerID = ''
+			this.find.companyID = ''
 			this.find.type = ''
 			this.find.beginTime =this.getCurrentMonthFirst()
 			this.find.endTime = this.getCurrentMonthLast()

@@ -150,6 +150,28 @@ export function deleteConfirm(id, callback, idList) {
     })
 }
 
+export function dispatchConfirm(id, callback, idList) {
+    let ids = ''
+    if (id && (typeof id == 'string' || typeof id == 'number')) {
+        ids = id
+    } else {
+        ids = idList.join(',')
+    }
+    if (!ids) {
+        Message({ type: 'warning', message: '请选择' })
+        return
+    }
+    vueInstance.$confirm('此操作将进行调度, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        callback && callback(ids)
+    }).catch(err => {
+        Message.info('已取消')
+    })
+}
+
 /**
  * 删除确认(json数组传参数)
  * @param {单个id} id 
