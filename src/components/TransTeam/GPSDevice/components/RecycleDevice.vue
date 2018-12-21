@@ -6,10 +6,10 @@
             :show-close="false" 
             :close-on-click-modal="false">
             <el-form label-width="120px" ref="ruleForm" size="small">
-                <el-form-item label="终端号" prop="snNo">
-                    <p>{{gpdDevice.snNo}}</p>
+                <el-form-item label="终端号">
+                    <p>{{gpdDevice.deviceNumber}}</p>
                 </el-form-item>
-                <el-form-item label="车牌" prop="plateNo">
+                <el-form-item label="车牌">
                     <p>{{gpdDevice.plateNo}}</p>
                 </el-form-item>
             </el-form>
@@ -22,27 +22,24 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
+import DriverPortalGpsSetupLog from '../../../../api/DriverPortalGpsSetupLog'
 export default {
     props: {
         isVisible: {
             type: Boolean,
             default: false
-        }
-    },
-    data() {
-        return {
-            gpdDevice: {
-                snNo: '',
-                plateNo: ''
-            }
-        }
+        },
+        gpdDevice: Object
     },
     methods: {
         recycle() {
-
+            DriverPortalGpsSetupLog.update({portalGpsLogID: this.gpdDevice.portalGpsLogID}).then(res => {
+                Message.success('回收成功！')
+                this.close()
+            })
         },
         close() {
-            this.$refs['ruleForm'].resetFields()
             this.$emit('control')
         }
     }

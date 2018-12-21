@@ -5,16 +5,16 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="终端号">
-						<el-input placeholder="请输入终端号" v-model="find.snNo"></el-input>
+						<el-input placeholder="请输入终端号" v-model="find.deviceNumber"></el-input>
 					</el-form-item>
                     <el-form-item label="车辆">
-						<el-input placeholder="请输入车牌/手机号" v-model="find.truck"></el-input>
+						<el-input placeholder="请输入车牌/手机号" v-model="find.keyword"></el-input>
 					</el-form-item>
                     <el-form-item label="状态">
-						<el-select placeholder="请选择" style="width:100%" v-model="find.status">
+						<el-select placeholder="请选择" style="width:100%" v-model="find.recycleFlag">
                             <el-option label="全部" value=""></el-option>
-                            <el-option label="使用中" value="use"></el-option>
-                            <el-option label="已回收" value="recycle"></el-option>
+                            <el-option label="使用中" value="N"></el-option>
+                            <el-option label="已回收" value="Y"></el-option>
                         </el-select>
 					</el-form-item>
 					<el-form-item>
@@ -28,16 +28,39 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini">
-					<el-table-column label="终端号" prop="snNo"></el-table-column>
+					<el-table-column label="终端号" prop="deviceNumber"></el-table-column>
 					<el-table-column label="装配车辆" prop="plateNo"></el-table-column>
 					<el-table-column label="司机手机" prop="mobile"></el-table-column>
-					<el-table-column label="装配日期" prop="loadDate"></el-table-column>
-					<el-table-column label="回收日期" prop="recycleDate"></el-table-column>
-					<el-table-column label="装配天数" prop="loadDays"></el-table-column>
-					<el-table-column label="状态" prop="status"></el-table-column>
-					<el-table-column width="80" align="center" fixed="right">
+					<el-table-column label="装配日期">
 						<template slot-scope="scope">
-                            <el-button type="danger" size="mini" @click="isRecycleDeviceVisible = true">回收</el-button>
+							<span>{{moment(scope.row.createTime).format('YYYY-MM-DD')}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="回收日期">
+						<template slot-scope="scope">
+							<span>{{moment(scope.row.updateTime).format('YYYY-MM-DD')}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="装配天数" prop="loadDays">
+						<template slot-scope="scope">
+							<span>{{moment(scope.row.updateTime).diff(moment(scope.row.createTime), 'days')}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="状态" prop="recycleFlag">
+						<template slot-scope="scope">
+							<el-tag size="mini" type="warning" v-if="scope.row.recycleFlag == 'N'">使用中</el-tag>
+							<el-tag size="mini" type="info" v-else-if="scope.row.recycleFlag == 'Y'">已回收</el-tag>
+						</template>
+					</el-table-column>
+					<el-table-column label="操作" width="80" align="center" fixed="right">
+						<template slot-scope="scope">
+                            <el-button 
+								type="danger" 
+								size="mini" 
+								v-if="scope.row.recycleFlag == 'N'" 
+								@click="recycle(scope.row)">
+								回收
+							</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -45,7 +68,7 @@
 			</div>
 		</el-card>
         <issue-device :isVisible="isIssueDeviceVisible" @control="issueDeviceCallback"></issue-device>
-        <recycle-device :isVisible="isRecycleDeviceVisible" @control="recycleDeviceCallback"></recycle-device>
+        <recycle-device :isVisible="isRecycleDeviceVisible" :gpdDevice="currentGpdDevice" @control="recycleDeviceCallback"></recycle-device>
 	</div>
 </template>
 <script type="text/javascript">
@@ -53,16 +76,18 @@ import { Message } from 'element-ui'
 import { baseMixin } from '../../../common/mixin'
 import IssueDevice from './components/IssueDevice'
 import RecycleDevice from './components/RecycleDevice'
+import DriverPortalGpsSetupLog from '../../../api/DriverPortalGpsSetupLog'
 export default {
     mixins: [baseMixin],
     components: { IssueDevice, RecycleDevice },
 	data() {
 		return {
 			find: {
-				snNo: '',
-				truck: '',
-				status: ''
-            },
+				deviceNumber: '',
+				keyword: '',
+				recycleFlag: ''
+			},
+			currentGpdDevice: {},
             isIssueDeviceVisible: false,
             isRecycleDeviceVisible: false
 		}
@@ -77,32 +102,36 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.find.snNo = ''
-			this.find.truck = ''
-			this.find.status = ''
+			this.find.deviceNumber = ''
+			this.find.keyword = ''
+			this.find.recycleFlag = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
 		},
 		getList() {
-            this.total = 1
-            this.tableData = [
-                {
-                    snNo: 123,
-                    plateNo: '鄂A585KT',
-                    mobile: '13049497395',
-                    loadDate: '2018-12-15',
-                    recycleDate: '2018-12-19',
-                    loadDays: '12',
-                    status: '使用中',
-                }
-            ]
+			DriverPortalGpsSetupLog.find({
+				current: this.pageIndex,
+				size: this.pageSize,
+				deviceNumber: this.find.deviceNumber,
+				keyword: this.find.keyword,
+				recycleFlag: this.find.recycleFlag
+			}).then(res => {
+				this.total = res.total
+            	this.tableData = res.records
+			})
+		},
+		recycle(obj) {
+			this.isRecycleDeviceVisible = true
+			this.currentGpdDevice = obj
 		},
         issueDeviceCallback() {
-            this.isIssueDeviceVisible = false
+			this.isIssueDeviceVisible = false
+			this.getList()
 		},
 		recycleDeviceCallback() {
 			this.isRecycleDeviceVisible = false
+			this.getList()
 		}
 	}
 }
