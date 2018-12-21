@@ -6,67 +6,68 @@
                 <el-row>
                     <el-col :span="8">
 						<el-form-item label="交货单号">
-							<p>{{deliveryInfo.companyName}}</p>
-						</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="工厂名称">
-							<p>{{deliveryInfo.companyArea}}</p>
-						</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-						<el-form-item label="客户名称">
-							<p>{{deliveryInfo.companyArea}}</p>
-						</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-						<el-form-item label="产品名称">
-							<p>{{deliveryInfo.contactName}}</p>
-						</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-						<el-form-item label="产品数量">
-							<p>{{deliveryInfo.contactPhone}}</p>
-						</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="产品重量">
 							<p>{{deliveryInfo.code}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">
+                        <el-form-item label="工厂名称">
+							<p>{{deliveryInfo.shipperName}}</p>
+						</el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+						<el-form-item label="客户名称">
+							<p>{{deliveryInfo.consigneeName}}</p>
+						</el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+						<el-form-item label="产品名称">
+							<p>{{deliveryInfo.cargoName}}</p>
+						</el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+						<el-form-item label="产品数量">
+							<p>{{deliveryInfo.cargoQuantity?deliveryInfo.cargoQuantity+'袋':''}}</p>
+						</el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="产品重量">
+							<p>{{deliveryInfo.cargoWeight?deliveryInfo.cargoWeight+'吨':''}}</p>
+						</el-form-item>
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="监控级别">
-                            <p>{{deliveryInfo.code}}</p>
+                            <p>{{deliveryInfo.level}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="车牌号">
-                            <p>{{deliveryInfo.code}}</p>
+                            <p>{{deliveryInfo.plateNo}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="出厂时间">
-                            <p>{{deliveryInfo.code}}</p>
+                            <p>{{ moment(deliveryInfo.outTime).format('YYYY-MM-DD HH:mm:ss')}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="校验结果">
-                            <p>{{deliveryInfo.code}}</p>
+                            <p><span v-if="deliveryInfo.verifyFlag=='Y'" stytle="color:#67C23A">已通过</span>
+                            <span v-else style="color:#F56C6C">未通过</span></p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="数据来源">
-                            <p>{{deliveryInfo.code}}</p>
+                            <p>{{deliveryInfo.comeFrom}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="创建时间">
-                            <p>{{deliveryInfo.code}}</p>
+                            <p>{{ moment(deliveryInfo.createTime).format('YYYY-MM-DD HH:mm:ss')}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="校验备注">
-                            <p>{{deliveryInfo.code}}</p>
+                            <p>{{deliveryInfo.verifyRemark}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col>
@@ -80,6 +81,9 @@
 	</div>
 </template>
 <script type="text/javascript">
+import request, { baseURL } from '../../../common/request'
+import { baseMixin } from '../../../common/mixin'
+import DeliveryOrder from '../../../api/DeliveryOrder'
 import { Message } from 'element-ui'
 export default {
 
@@ -87,8 +91,17 @@ export default {
 		return {
             deliveryInfo:{}
         }
-	},
+    },
+    created(){
+        this.getInfo()
+    },
 	methods: {
+        getInfo() {
+			const deliveryOrderID = this.$route.query.deliveryOrderID
+			DeliveryOrder.orderDetail({ deliveryOrderID}).then(res => {
+				this.deliveryInfo = res
+			})
+        },
 		back() {
 			this.$router.push({name: 'delivery'})
 		}

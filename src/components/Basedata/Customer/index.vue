@@ -146,6 +146,12 @@ export default {
 		}
 	},
 	methods: {
+        search() {
+			this.pageIndex = this.PAGEINDEX
+            this.pageSize = this.PAGESIZE
+			this.resetExportExcelUrl()
+			this.getList()
+		},
 		reset() {
 			this.find.keyword = ''
 			this.find.customerType = ''

@@ -82,6 +82,28 @@ class Company extends Base {
             })
         })
     }
+    // 客户报警
+    customerAlarmList(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/customer/customerAlarmList',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
+    // 工厂报警
+    shipperAlarmList(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/customer/shipperAlarmList',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
     customerFindById(params) {
         return new Promise((resolve, reject) => {
             this.request({
