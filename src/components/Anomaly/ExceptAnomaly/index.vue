@@ -69,9 +69,9 @@
 					<el-table-column label="发货工厂" prop="companyName"></el-table-column>
 					<el-table-column label="客户" prop="consigneeName"></el-table-column>
 					<el-table-column label="货物名称" prop="cargoName"></el-table-column>
-					<el-table-column label="起点地区" prop="fromSite"></el-table-column>
-					<el-table-column label="终点地区" prop="toSite" ></el-table-column>
-					<el-table-column label="调度日期" prop="dispatchDate" align="center">
+					<el-table-column label="起点地区" prop="fromSite" align="center"></el-table-column>
+					<el-table-column label="终点地区" prop="toSite" align="center"></el-table-column>
+					<el-table-column label="调度日期" align="center" width="140">
                         <template slot-scope="scope">
                             {{scope.row.dispatchTime | getdatefromtimestamp}}
                         </template>
@@ -83,7 +83,7 @@
 							<span v-else>卸货异常</span>
 						</template>
                     </el-table-column>
-					<el-table-column label="异常时间" prop="createTime" align="center">
+					<el-table-column label="异常时间" align="center" width="140">
                         <template slot-scope="scope">
                             {{scope.row.createTime | getdatefromtimestamp}}
                         </template>
@@ -193,10 +193,13 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/customer/export?Request-From=PC&Authorization=' 
+			this.exportExcelUrl = baseURL + '/carrierOrderAlarm/export?Request-From=PC&Authorization=' 
 				+ localStorage.getItem("token") 
 				+ '&keyword=' + this.find.keyword
-				+ '&customerType=' + this.find.customerType
+				+ '&companyID=' + this.find.companyID
+				+ '&type=' + this.find.type
+				+ '&beginTime=' + this.find.beginTime
+				+ '&endTime=' + this.find.endTime
 		}
 	}
 }

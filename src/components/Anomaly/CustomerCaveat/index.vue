@@ -5,36 +5,39 @@
 			<div class="search">
 				<el-form :inline="true" size="small">
                     <el-form-item label="客户名称" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.type" @change="inputChange">
-							<el-option label="全部" value=""></el-option>
-                            <el-option label="停车超时" value="StopOvertime"></el-option>
-                            <el-option label="卸货异常" value="ArrivedOffset"></el-option>
-						</el-select>
+						<el-autocomplete 
+                            value-key="companyName" 
+                            v-model="find.companyName"
+                            :fetch-suggestions="getCustomers"
+                            placeholder="请输入客户名称" 
+                            @select="handSelectCustomer" 
+							@change="inputChange">
+							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
+                        </el-autocomplete>
 					</el-form-item>
-                    <el-form-item label="客户编号" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.type" @change="inputChange">
-							<el-option label="全部" value=""></el-option>
-                            <el-option label="停车超时" value="StopOvertime"></el-option>
-                            <el-option label="卸货异常" value="ArrivedOffset"></el-option>
-						</el-select>
+                    <el-form-item label="客户编号">
+						<el-input placeholder="请输入客户编号" v-model="find.code"  @change="inputChange"></el-input>
 					</el-form-item>
                     <el-form-item label="所属片区" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.type" @change="inputChange">
-							<el-option label="全部" value=""></el-option>
-                            <el-option label="停车超时" value="StopOvertime"></el-option>
-                            <el-option label="卸货异常" value="ArrivedOffset"></el-option>
+						<el-select v-model="find.zone" placeholder="请选择"  @change="inputChange">
+                            <el-option value="" label="全部"></el-option>
+							<el-option v-for="(item,index) in CustomerZone" :key="index" :value="item.code" :label="item.code"></el-option>
 						</el-select>
 					</el-form-item>
-                    <el-form-item label="工厂名称" class="customerSelect">
-						<el-select placeholder="请选择" v-model="find.customerID" @change="inputChange">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option 
-                                :label="item.companyName" 
-                                :value="item.customerID" 
-                                v-for="(item, i) in companys" 
-                                :key="i">
-                            </el-option>
-                        </el-select>
+                    <el-form-item label="时间段从">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" v-model="find.beginTime" @change="inputChange">
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item label="至">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							v-model="find.endTime" @change="inputChange">
+						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -51,15 +54,18 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="客户名称" prop="customerName" align="center"></el-table-column>
-					<el-table-column label="客户编号" prop="customerCode"></el-table-column>
-					<el-table-column label="工厂名称" prop="companyName"></el-table-column>
-					<el-table-column label="所属片区" prop="area"></el-table-column>
-					<el-table-column label="总单量" prop="orderNum"></el-table-column>
-					<el-table-column label="异常单" prop="exceptOrder"></el-table-column>
-					<el-table-column label="异常占比" prop="exceptPercent"></el-table-column>
-					<el-table-column label="停车报警次数" prop="stopNum"></el-table-column>
-					<el-table-column label="卸货报警次数" prop="arriveNum"></el-table-column>
+					<el-table-column label="客户名称" prop="consigneeName" align="center"></el-table-column>
+					<el-table-column label="客户编号" prop="code" align="center"></el-table-column>
+					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
+					<el-table-column label="总单量" prop="orderNum" align="center"></el-table-column>
+					<el-table-column label="异常单" prop="alarmNum" align="center"></el-table-column>
+					<el-table-column label="异常占比" align="center">
+                        <template slot-scope="scope">
+                            {{(scope.row.alarmNum && scope.row.orderNum)? (scope.row.alarmNum/scope.row.orderNum +'%'):0}}
+                        </template>
+                    </el-table-column>
+					<el-table-column label="停车报警次数" prop="stopOverTimeNum" align="center"></el-table-column>
+					<el-table-column label="卸货报警次数" prop="arrivedOffsetNum" align="center"></el-table-column>
 				</el-table>
 				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
@@ -70,17 +76,22 @@
 import { Message } from 'element-ui'
 import { baseURL } from '../../../common/requestByJson'
 import { baseMixin } from '../../../common/mixin'
-import CarrierOrderAlarm from '../../../api/CarrierOrderAlarm'
 import Company from '../../../api/Company'
+import BaseDict from '../../../api/BaseDict'
 export default {
     mixins: [baseMixin],
 	data() {
 		return {
             find: { 
-                customerID: '',
-                type: ''
+                consigneeID: '',
+                companyName:'',
+                code: '',
+                zone:'',
+                beginTime:'',
+                endTime:''
             },
             companys: [],
+            CustomerZone:[],
 			curCompany: {},
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
@@ -90,44 +101,56 @@ export default {
     created(){
 		this.resetExportExcelUrl()
         this.getList()
-        this.getCompanys()
+        this.getDictList()
     },
 	methods: {
-		search(){
-            this.pageIndex = this.PAGEINDEX
-			this.pageSize = this.PAGESIZE
-            this.getList()
-        },
+		getDictList() {
+			BaseDict.getDict({
+				groupName:'CustomerZone'
+			}).then(res => {
+				this.CustomerZone = res.data
+			})
+		},
         reset(){
-            this.find.keyword = ''
-			this.find.customerID = ''
-			this.find.type = ''
+            this.find.consigneeID = ''
+			this.find.companyName =''
+			this.find.code =''
+			this.find.zone =''
+			this.find.beginTime =''
+			this.find.endTime =''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
 			this.getList()
         },
-        view(dispatchOrderID){
-            const routeData = this.$router.resolve({name: 'trackquery', query: { dispatchOrderID }})
-			window.open(routeData.href, '_blank')
-        },
-        getCompanys() {
-            Company.customerFind({
-				current: 1,
+        getCustomers(companyName, cb) {
+			this.find.consigneeID = ''
+			Company.customerFind({
+                current: 1,
                 size: 1000,
-                customerType: 'Shipper'
-			}).then(res => {
-                this.companys = res.records
-			})
+                customerType: 'Consignee'
+            }).then(res => {
+                cb(res.records) 
+            })
+		},
+        handSelectCustomer(data){
+			this.find.consigneeID = data.customerID
+            this.find.companyName = data.companyName
+			this.resetExportExcelUrl()
         },
+        clearSelectCustomer(){
+			this.find.consigneeID = ''
+			this.find.companyName =''
+			this.resetExportExcelUrl()
+		},
         getList() {
 			this.tableData = []
-			CarrierOrderAlarm.find({
+			Company.customerAlarmList({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.find.keyword,
-                companyID: this.find.customerID,
-                type:this.find.type,
+				consigneeID:this.find.consigneeID,
+                code:this.find.code,
+                zone:this.find.zone,
 				beginTime: this.find.beginTime,
 				endTime: this.find.endTime
 			}).then(res => {
@@ -139,10 +162,13 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		resetExportExcelUrl(){
-			this.exportExcelUrl = baseURL + '/company/customer/export?Request-From=PC&Authorization=' 
+			this.exportExcelUrl = baseURL + '/company/customer/exportCustomerAlarmList?Request-From=PC&Authorization=' 
 				+ localStorage.getItem("token") 
-				+ '&keyword=' + this.find.keyword
-				+ '&customerType=' + this.find.customerType
+				+ '&consigneeID=' + this.find.consigneeID
+				+ '&code=' + this.find.code
+				+ '&zone=' + this.find.zone
+				+ '&beginTime=' + this.find.beginTime
+				+ '&endTime=' + this.find.endTime
 		}
 	}
 }
