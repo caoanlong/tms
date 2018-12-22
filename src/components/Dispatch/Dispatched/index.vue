@@ -58,8 +58,7 @@
                             v-model="find.shipperDateBegin"
 							@change="inputChange">
 						</el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="到货时间">
+						<span class="tracto">至</span>
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
@@ -69,7 +68,7 @@
 							@change="inputChange">
 						</el-date-picker>
                     </el-form-item>
-					<el-form-item label="创建时间从">
+					<el-form-item label="到货时间">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 

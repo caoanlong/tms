@@ -40,16 +40,32 @@
 							style="width:160px" 
 							v-model="find.shipperDateBegin">
 						</el-date-picker>
+						<span class="tracto">至</span>
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px"
+                            v-model="find.shipperDateEnd">
+						</el-date-picker>
                     </el-form-item>
-                    <el-form-item label="到货日期">
+                   <el-form-item label="到货时间">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px"
+							v-model="find.consigneeDateBegin">
+						</el-date-picker>
+						<span class="tracto">至</span>
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
 							style="width:160px" 
-							v-model="find.shipperDateEnd">
+							v-model="find.consigneeDateEnd">
 						</el-date-picker>
-                    </el-form-item>
+					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search()">搜索</el-button>
 						<el-button type="default" @click="reset()">重置</el-button>
@@ -445,6 +461,8 @@ export default {
 				cargoName: '',
 				shipperDateBegin: '',
 				shipperDateEnd: '',
+				consigneeDateBegin: '',
+				consigneeDateEnd: '',
 				orderBy: 'CarrierOrderNo',
 				sortType: 'desc'
 			},
@@ -507,6 +525,8 @@ export default {
 			this.find.cargoName = ''
 			this.find.shipperDateBegin = ''
 			this.find.shipperDateEnd = ''
+			this.find.consigneeDateBegin = ''
+			this.find.consigneeDateEnd = ''
 			this.find.orderBy = 'CarrierOrderNo'
 			this.find.sortType = 'desc'
 			this.selectedShipperArea = []

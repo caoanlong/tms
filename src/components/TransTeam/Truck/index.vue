@@ -15,7 +15,7 @@
 							<el-option value="" label="全部"></el-option>
 							<el-option value="7" label="7天前"></el-option>
 							<el-option value="15" label="15天前"></el-option>
-							<el-option value="30" label="一个月以上前"></el-option>
+							<el-option value="30" label="一个月以前"></el-option>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="业务状态">
