@@ -247,6 +247,9 @@ export default {
          */
         createMap() {
             this.map = new AMap.Map('amapLocationSelect')
+            if (this.selectedTruck.longitude && this.selectedTruck.latitude) {
+                this.map.setCenter([this.selectedTruck[i].longitude,this.selectedTruck[i].latitude])
+            }
         },
         createMarker(list) {
             for (let i = 0; i < list.length; i++) {

@@ -77,7 +77,9 @@
                                         </el-tooltip>
                                     </span>
                                 </td>
-                                <td align="center">{{selectedTruck.posAddress}}</td>
+                                <td align="center" @click="addTruck">
+                                    {{selectedTruck.posAddress}}
+                                </td>
                                 <td align="center">
                                     {{
                                         moment(selectedTruck.locationTime).diff(moment(selectedTruck.locationTime), 'days') > 0
