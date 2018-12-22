@@ -8,7 +8,7 @@
 						<el-input 
 							placeholder="请输入交货单号" 
 							style="width:150px" 
-							v-model="find.deliveryOrderNo" 
+							v-model="find.shipperNo" 
 							@change="inputChange">
 						</el-input>
 					</el-form-item>
@@ -107,7 +107,7 @@
 							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="交货单号" prop="deliveryOrderNo" align="center"></el-table-column>
+					<el-table-column label="交货单号" prop="shipperNo" align="center"></el-table-column>
 					<el-table-column label="异常" align="center" width="60">
                         <template slot-scope="scope">
 							<span v-if="scope.row.alarmFlag=='Y'" style="color:#F56C6C">有</span>
@@ -135,7 +135,7 @@
 					</el-table-column>
 					<el-table-column label="创建时间" width="140" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.createTime">{{moment(scope.row.createTime).format('YYYY-MM-DD hh:mm:ss')}}</span>
+							<span v-if="scope.row.createTime">{{moment(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss')}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
@@ -170,7 +170,7 @@ export default {
 	data() {
 		return {
 			find: {
-				deliveryOrderNo: '',
+				shipperNo: '',
 				carrierOrderNo: '',
 				shipperID: '',
 
@@ -233,7 +233,7 @@ export default {
 		resetExportExcelUrl() {
 			this.exportExcelUrl = baseURL + '/carryOrder/export?Request-From=PC&Authorization=' 
 			+ localStorage.getItem("token")
-			+ '&deliveryOrderNo=' + this.find.deliveryOrderNo 
+			+ '&shipperNo=' + this.find.shipperNo 
 			+ '&carrierOrderNo=' + this.find.carrierOrderNo
 			+ '&shipperID=' + this.find.shipperID
 			+ '&consigneeID=' + this.find.consigneeID
@@ -260,7 +260,7 @@ export default {
 			CarryOrder.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				deliveryOrderNo: this.find.deliveryOrderNo,
+				shipperNo: this.find.shipperNo,
 				carrierOrderNo: this.find.carrierOrderNo,
 				shipperID: this.find.shipperID,
 				consigneeID: this.find.consigneeID,
