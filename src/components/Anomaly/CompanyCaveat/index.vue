@@ -21,19 +21,24 @@
 							<el-option v-for="(item,index) in CustomerZone" :key="index" :value="item.code" :label="item.code"></el-option>
 						</el-select>
 					</el-form-item>
-                    <el-form-item label="时间段从">
+                   <el-form-item label="异常时间从">
 						<el-date-picker 
+							style="width: 140px" 
 							type="date" 
 							:clearable="false" 
-							value-format="timestamp" v-model="find.begin" @change="inputChange">
+							value-format="timestamp" 
+							v-model="find.begin" 
+							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="至">
 						<el-date-picker 
+							style="width: 140px" 
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							v-model="find.end" @change="inputChange">
+							v-model="find.end" 
+							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -87,6 +92,7 @@ import { baseURL } from '../../../common/requestByJson'
 import { baseMixin } from '../../../common/mixin'
 import Company from '../../../api/Company'
 import BaseDict from '../../../api/BaseDict'
+import { getDateTotimestamp } from "../../../common/utils"
 export default {
     mixins: [baseMixin],
 	data() {
@@ -95,8 +101,8 @@ export default {
                 shipperID: '',
                 companyName:'',
                 zone: '',
-                begin:'',
-                end:''
+                begin: this.getCurrentMonthFirst(),
+                end: this.getCurrentMonthLast()
             },
             companys: [],
             CustomerZone:[],
@@ -111,6 +117,8 @@ export default {
         this.getList()
         this.getCompanys()
         this.getDictList()
+        this.getCurrentMonthFirst()
+        this.getCurrentMonthLast()
     },
 	methods: {
         getDictList() {
@@ -119,12 +127,25 @@ export default {
 			}).then(res => {
 				this.CustomerZone = res.data
 			})
+        },
+        getCurrentMonthFirst(){
+            let date =new Date()
+            date.setDate(1)
+            return getDateTotimestamp(date)
+        },
+        getCurrentMonthLast(){
+            let date=new Date()
+            let currentMonth=date.getMonth()
+            let nextMonth=++currentMonth
+            let nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1)
+            let oneDay=1000*60*60*24
+            return getDateTotimestamp(new Date(nextMonthFirstDay-oneDay))
 		},
         reset(){
 			this.find.shipperID = ''
             this.find.zone = ''
-            this.find.begin=''
-            this.find.end=''
+            this.find.begin =this.getCurrentMonthFirst()
+			this.find.end = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()

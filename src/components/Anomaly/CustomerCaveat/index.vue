@@ -24,19 +24,24 @@
 							<el-option v-for="(item,index) in CustomerZone" :key="index" :value="item.code" :label="item.code"></el-option>
 						</el-select>
 					</el-form-item>
-                    <el-form-item label="时间段从">
+                    <el-form-item label="异常时间从">
 						<el-date-picker 
+							style="width: 140px" 
 							type="date" 
 							:clearable="false" 
-							value-format="timestamp" v-model="find.beginTime" @change="inputChange">
+							value-format="timestamp" 
+							v-model="find.beginTime" 
+							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item label="至">
 						<el-date-picker 
+							style="width: 140px" 
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							v-model="find.endTime" @change="inputChange">
+							v-model="find.endTime" 
+							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
@@ -78,6 +83,7 @@ import { baseURL } from '../../../common/requestByJson'
 import { baseMixin } from '../../../common/mixin'
 import Company from '../../../api/Company'
 import BaseDict from '../../../api/BaseDict'
+import { getDateTotimestamp } from "../../../common/utils"
 export default {
     mixins: [baseMixin],
 	data() {
@@ -87,8 +93,8 @@ export default {
                 companyName:'',
                 code: '',
                 zone:'',
-                beginTime:'',
-                endTime:''
+                beginTime: this.getCurrentMonthFirst(),
+                endTime: this.getCurrentMonthLast()
             },
             companys: [],
             CustomerZone:[],
@@ -102,6 +108,8 @@ export default {
 		this.resetExportExcelUrl()
         this.getList()
         this.getDictList()
+        this.getCurrentMonthFirst()
+        this.getCurrentMonthLast()
     },
 	methods: {
 		getDictList() {
@@ -116,8 +124,8 @@ export default {
 			this.find.companyName =''
 			this.find.code =''
 			this.find.zone =''
-			this.find.beginTime =''
-			this.find.endTime =''
+			this.find.beginTime =this.getCurrentMonthFirst()
+			this.find.endTime = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
@@ -142,6 +150,19 @@ export default {
 			this.find.consigneeID = ''
 			this.find.companyName =''
 			this.resetExportExcelUrl()
+        },
+        getCurrentMonthFirst(){
+            let date =new Date()
+            date.setDate(1)
+            return getDateTotimestamp(date)
+        },
+        getCurrentMonthLast(){
+            let date=new Date()
+            let currentMonth=date.getMonth()
+            let nextMonth=++currentMonth
+            let nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1)
+            let oneDay=1000*60*60*24
+            return getDateTotimestamp(new Date(nextMonthFirstDay-oneDay))
 		},
         getList() {
 			this.tableData = []
