@@ -251,8 +251,9 @@ export default {
         createMarker(list) {
             for (let i = 0; i < list.length; i++) {
                 if (list[i].longitude && list[i].latitude) {
+                    const position = [list[i].longitude,list[i].latitude]
                     const truckPathMarker = new AMap.Marker({
-                        position: [list[i].longitude,list[i].latitude],
+                        position,
                         content: `<div style="position:relative;width:100px;height:50px;text-align:center">
                             <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#409EFF;height:40px;line-height:40px;border-radius:5px">${list[i].plateNo}</div>
                             <div style="position:absolute;bottom:6px;left:42px;background:#409EFF;width:10px;height:10px;transform:rotate(45deg)"></div>
@@ -262,6 +263,7 @@ export default {
                     })
                     truckPathMarker.on('click', e => {
                         this.selected = list[i]
+                        this.map.setCenter(position)
                     })
                 }
             }
