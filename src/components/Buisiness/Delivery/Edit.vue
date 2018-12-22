@@ -164,7 +164,7 @@ export default {
 			Company.customerSuggest({
                 current: 1,
                 size: 1000,
-                customerType: 'shipper'
+                customerType: 'Shipper'
             }).then(res => {
                 cb(res) 
             })
