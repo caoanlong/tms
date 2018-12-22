@@ -31,7 +31,6 @@
                                 <th>车辆</th>
                                 <th>定位位置</th>
                                 <th>定位时间</th>
-                                <th>离工厂距离</th>
                                 <th>驾驶员</th>
                                 <th>操作</th>
                             </tr>
@@ -78,7 +77,6 @@
                                 </td>
                                 <td align="center">临沧G95公路彩云路口</td>
                                 <td align="center">1天前</td>
-                                <td align="center">1公里</td>
                                 <td align="center">
                                     <strong>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.realName}}</strong>
                                     <span>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.mobile}}</span>
@@ -424,7 +422,7 @@ export default {
         /**
          * 发布
          */
-        publish() {
+        async publish() {
             if (this.bizDispatchFeeList.length > 0) {
                 for (let i = 0; i < this.bizDispatchFeeList.length; i++) {
                     const element = this.bizDispatchFeeList[i]
@@ -434,59 +432,51 @@ export default {
                     }
                 }
             }
-            new Promise((resolve, reject) => {
-                let flag = true
-                if (this.$refs['ruleForm']) {
-                    for (let i = 0; i < this.$refs['ruleForm'].length; i++) {
-                        const item = this.$refs['ruleForm'][i]
-                        item.validate(valid => {
-                            if (!valid) flag = false
-                        })
-                    }
+            let flag = true
+            if (this.$refs['ruleForm'] && this.$refs['ruleForm'].length > 0) {
+                for (let i = 0; i < this.$refs['ruleForm'].length; i++) {
+                    const item = this.$refs['ruleForm'][i]
+                    flag = await item.validate()
                 }
-                this.$refs['ruleForm2'].validate(valid => {
-                    if (!valid) flag = false
-                })
-				flag ? resolve() : reject()
-			}).then(() => {
-                const dispatchTaskCargoList = this.dispatchTaskCargoList.map(item => {
-                    return {
-                        carrierCargoID: item.carrierCargoID,
-                        carrierOrderID: item.carrierOrderID,
-                        cargoWeight: item.cargoWeightNew,
-                        cargoVolume: item.cargoVolumeNew,
-                        cargoNum: item.cargoNumNew
-                    }
-                })
-                const tasks = this.dispatchTaskCargoList.map(item => {
-                    return { carrierOrderID: item.carrierOrderID }
-                })
-                const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
-                const bizDispatchFeeList = [this.baseDizDispatchFee, ...this.bizDispatchFeeList].map(item => {
-                    return {
-                        item: item.item,
-                        category: item.category,
-                        superCargoID: item.superCargoID,
-                        superCargoName: item.superCargoName,
-                        payMode: item.payMode,
-                        amount: item.amount
-                    }
-                })
-                DispatchOrder.addForDispatch({
-                    truckID: this.selectedTruck.truckID,
-                    driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
-                    superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',
-                    bizDispatchFeeList,
-                    dispatchTaskCargoList,
-                    dispatchTaskList,
-                    bizDispatchNodeList: this.transLines,
-                    endDate: this.normal.endDate ? this.normal.endDate:'',
-                    distance: this.totalDistance
-                }).then(res => {
-                    Message.success('成功！')
-                    this.$emit('cancel', true)
-                })
-			}).catch(err => {})
+            }
+            if (!flag) return
+
+            const dispatchTaskCargoList = this.dispatchTaskCargoList.map(item => {
+                return {
+                    carrierCargoID: item.carrierCargoID,
+                    carrierOrderID: item.carrierOrderID,
+                    cargoWeight: item.cargoWeightNew,
+                    cargoVolume: item.cargoVolumeNew,
+                    cargoNum: item.cargoNumNew
+                }
+            })
+            const tasks = this.dispatchTaskCargoList.map(item => {
+                return { carrierOrderID: item.carrierOrderID }
+            })
+            const dispatchTaskList = arrayUnique(tasks, 'carrierOrderID')
+            const bizDispatchFeeList = [this.baseDizDispatchFee, ...this.bizDispatchFeeList].map(item => {
+                return {
+                    item: item.item,
+                    category: item.category,
+                    superCargoID: item.superCargoID,
+                    superCargoName: item.superCargoName,
+                    payMode: item.payMode,
+                    amount: item.amount
+                }
+            })
+            DispatchOrder.addForDispatch({
+                truckID: this.selectedTruck.truckID,
+                driverID: this.selectedTruck.primaryDriver ? this.selectedTruck.primaryDriver.supercargoID : '',
+                superCargoID: this.selectedTruck.superCargo ? this.selectedTruck.superCargo.supercargoID : '',
+                bizDispatchFeeList,
+                dispatchTaskCargoList,
+                dispatchTaskList,
+                bizDispatchNodeList: this.transLines,
+                distance: this.totalDistance
+            }).then(res => {
+                Message.success('成功！')
+                this.$emit('cancel', true)
+            })
         },
         close() {
             this.$emit('cancel')

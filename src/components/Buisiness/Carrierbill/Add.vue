@@ -4,7 +4,7 @@
 			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="发货单号">
+						<el-form-item label="发货单号" prop="shipperNo">
 							<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperNo"></el-input>
 						</el-form-item>
 					</el-col>
@@ -253,7 +253,7 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<td align="right">合计：</td>
+											<td align="right" colspan="2">合计：</td>
 											<td align="center">{{parseInt(sum('cargoNum'))}}袋</td>
 											<td align="center">{{sum('cargoWeight')}}吨</td>
 											<td align="center"></td>
@@ -387,6 +387,7 @@ export default {
 			flagShipperCompanyName: "",
 			flagConsigneeCompanyName: "",
 			rules: {
+				shipperNo: [{ required: true, message: "请输入发货单号" }],
 				commissionDate: [{ required: true, message: "请选择委托时间" }],
 				consignorID: [{ required: true, message: "请选择委托方" }],
 				carrierrName: [{ required: true, message: "请输入承运人" }],
@@ -418,6 +419,7 @@ export default {
 		if(!this.$route.query.cache) {
 			this.carrierbillInfo = {
 				shipperNo: "" /** String 发货单号*/,
+				transportType: '公路运输',
 				commissionDate: new Date().getTime() /** Date 委托时间*/,
 				shipperID: "" /** Long 发货单位ID*/,
 				shipperCompanyName: "" /** String 发货单位名称*/,

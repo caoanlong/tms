@@ -138,7 +138,7 @@
 							<span v-if="scope.row.createTime">{{moment(scope.row.createTime).format('YYYY-MM-DD hh:mm:ss')}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column width="80" align="center" fixed="right">
+					<el-table-column label="操作" width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
@@ -232,7 +232,7 @@ export default {
 		},
 		resetExportExcelUrl() {
 			this.exportExcelUrl = baseURL + '/carryOrder/export?Request-From=PC&Authorization=' 
-			+ localStorage.getItem("token")	
+			+ localStorage.getItem("token")
 			+ '&deliveryOrderNo=' + this.find.deliveryOrderNo 
 			+ '&carrierOrderNo=' + this.find.carrierOrderNo
 			+ '&shipperID=' + this.find.shipperID

@@ -88,8 +88,10 @@
                             <el-tag size="mini" type="danger" v-if="item.expiredCertificate">到期</el-tag>
                         </el-tooltip>
                     </td>
-                    <td align="center">临沧G95公路彩云路口</td>
-                    <td align="center">1天前</td>
+                    <td align="center">{{item.posAddress}}</td>
+                    <td align="center">
+                        {{item.locationTime ? moment(item.locationTime).format('YYYY-MM-DD HH:mm:ss') : ''}}
+                    </td>
                     <td align="center">
                         <strong>{{item.primaryDriver && item.primaryDriver.realName}}</strong>
                         <span>{{item.primaryDriver && item.primaryDriver.mobile}}</span>
@@ -106,9 +108,11 @@
 </template>
 <script>
 import { Message } from 'element-ui'
+import { AMAPKEY } from '../../../common/const'
 import { baseMixin } from '../../../common/mixin'
 import DispatchOrder from '../../../api/DispatchOrder'
 import Company from '../../../api/Company'
+import Home from '../../../api/Home'
 import AutoNavMap from '../../../api/AutoNavMap'
 export default {
     mixins: [baseMixin],
@@ -177,24 +181,45 @@ export default {
 			this.pageSize = 5
 			this.getList()
 		},
-        getList() {
+        async getList() {
             this.tableData = []
-			DispatchOrder.listOfCanDispatchTruck({
+            const {total, records} = await DispatchOrder.listOfCanDispatchTruck({
 				current: this.pageIndex,
 				size: this.pageSize,
                 keyword: this.find.keyword,
                 shipperDate: this.find.shipperDate,
                 workStatus: this.find.workStatus
-			}).then(res => {
-                this.total = res.total
-                const list = res.records
-                this.tableData = list.map(item => Object.assign(item, {
-                    expiredCertificateList: item.expiredCertificate ? item.expiredCertificate.split(',') : [],
-                    primaryDriverExpiredCertificateList: (item.primaryDriver && item.primaryDriver.expiredCertificate) 
-                    ? item.primaryDriver.expiredCertificate.split(',') : []
-                }))
-                // this.createMarker()
-			})
+            })
+            this.total = total
+            const list = records
+            for (let i = 0; i < list.length; i++) {
+                this.$set(list[i], 'expiredCertificateList', list[i].expiredCertificate ? list[i].expiredCertificate.split(',') : [])
+                let position = null
+                let posAddress = ''
+                try {
+                    position = await Home.getTruckAddress({ plateNo: list[i].plateNo })
+                } catch (err) {
+                    console.log(err) 
+                }
+                if (position && position.longitude && position.latitude) {
+                    this.$set(list[i], 'longitude', position.longitude)
+                    this.$set(list[i], 'latitude', position.latitude)
+                    this.$set(list[i], 'locationTime', position.locationTime)
+                    this.$set(list[i], 'posAddress', await this.getAddressByLnglat([position.longitude, position.latitude]))
+                }
+            }
+            this.tableData = list
+        },
+        /**
+         * 根据经纬度获取详细地址
+         */
+        async getAddressByLnglat(location) {
+            const { data } =  await AutoNavMap.getLocation({ 
+                key: AMAPKEY, 
+                location: location.join(',')
+            })
+            const address = data.regeocode.formatted_address
+            return address
         },
         close(bool) {
             if (bool) {
