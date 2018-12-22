@@ -89,7 +89,19 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
+				<el-upload 
+					class="upload-File" 
+					name="excelFile" 
+					:action="importFileUrl" 
+					:auto-upload="true" 
+					:onError="uploadError" 
+					:onSuccess="uploadSuccess"  
+					:beforeUpload="beforeFileUpload" 
+					:headers="uploadHeaders" 
+					:show-file-list="false">
+					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
+				</el-upload>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download"> 导出</a>
                 <el-button type="default" size="mini" icon="el-icon-tickets" style="margin-left:10px" @click="dispatch">批量生成</el-button>
                 <el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
@@ -177,7 +189,10 @@ export default {
 				outTimeBegin: '',
 				outTimeEnd: ''
 			},
-            exportExcelUrl: ''
+            uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
+			importFileUrl: baseURL + '/deliveryOrder/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl:'',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=deliveryorder.xlsx&Authorization=' + localStorage.getItem("token"),
 		}
 	},
 	created() {
@@ -416,4 +431,7 @@ export default {
 	&:active
 		border-color #3a8ee6
 		color #3a8ee6
+.upload-File
+	display inline-block
+	margin-left 10px
 </style>

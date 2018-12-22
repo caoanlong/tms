@@ -72,7 +72,7 @@
 							<el-option value="Closed" label="已关闭"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="创建开始" prop="begin">
+					<el-form-item label="创建时间从" prop="begin">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
@@ -81,7 +81,7 @@
 							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
-					<el-form-item label="创建结束" prop="end">
+					<el-form-item label="至" prop="end">
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 

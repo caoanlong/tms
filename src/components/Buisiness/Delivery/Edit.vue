@@ -10,7 +10,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="工厂名称" class="customerSelect">
+                        <el-form-item label="工厂名称" class="customerSelect" prop="companyCode">
                             <el-autocomplete 
                                 value-key="companyName" 
                                 v-model="deliveryInfo.companyName"
@@ -22,7 +22,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="客户名称">
+                        <el-form-item label="客户名称" prop="dealerCode">
                             <el-autocomplete 
                                 value-key="companyName" 
                                 v-model="deliveryInfo.dealerName"
@@ -34,7 +34,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="产品名称">
+                        <el-form-item label="产品名称" prop="cargoCode">
                             <el-autocomplete 
                                 value-key="cargoName" 
                                 v-model="deliveryInfo.cargoName"
@@ -46,7 +46,7 @@
                         </el-form-item>
                     </el-col>
                    <el-col :span="8">
-                        <el-form-item label="产品数量">
+                        <el-form-item label="产品数量" prop="cargoQuantity">
                             <el-input placeholder="0" v-model="deliveryInfo.cargoQuantity"><template slot="append">袋</template></el-input>
                         </el-form-item>
                     </el-col>
@@ -56,7 +56,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="监控级别" class="customerSelect">
+                        <el-form-item label="监控级别" class="customerSelect" prop="level">
                             <el-select placeholder="请选择"  style="width:100%" v-model="deliveryInfo.level">
                                 <el-option value="A" label="A"></el-option>
                                 <el-option value="B" label="B"></el-option>
@@ -67,12 +67,12 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="车牌号">
+                        <el-form-item label="车牌号" prop="plateNo">
                             <el-input placeholder="车牌号"  v-model="deliveryInfo.plateNo"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="出厂时间">
+                        <el-form-item label="出厂时间" prop="outTime">
                             <el-date-picker 
                                 v-model="deliveryInfo.outTime"
                                 type="date" 

@@ -46,7 +46,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="出厂时间">
-                            <p>{{ moment(deliveryInfo.outTime).format('YYYY-MM-DD HH:mm:ss')}}</p>
+                            <p>{{ moment(deliveryInfo.outTime).format('YYYY-MM-DD')}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -92,9 +92,14 @@ export default {
             deliveryInfo:{}
         }
     },
-    created(){
-        this.getInfo()
-    },
+    created() {
+		this.getInfo()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.getInfo()
+		}
+	},
 	methods: {
         getInfo() {
 			const deliveryOrderID = this.$route.query.deliveryOrderID
