@@ -89,8 +89,21 @@
 			</div>
 			<div class="tableControl">
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
-                <el-button type="default" size="mini" icon="el-icon-tickets" style="margin-left:10px" @click="dispatch">批量生成</el-button>
+				<el-upload 
+					class="upload-File" 
+					name="excelFile" 
+					:action="importFileUrl" 
+					:auto-upload="true" 
+					:onError="uploadError" 
+					:onSuccess="uploadSuccess"  
+					:beforeUpload="beforeFileUpload" 
+					:headers="uploadHeaders" 
+					:show-file-list="false">
+					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
+				</el-upload>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download"> 导出</a>
+                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+                <el-button type="default" size="mini" icon="el-icon-tickets" @click="dispatch">批量生成</el-button>
                 <el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
 			<div class="table">
@@ -177,7 +190,10 @@ export default {
 				outTimeBegin: '',
 				outTimeEnd: ''
 			},
-            exportExcelUrl: ''
+            uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
+			importFileUrl: baseURL + '/deliveryOrder/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
+			exportExcelUrl:'',
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=deliveryorder.xlsx&Authorization=' + localStorage.getItem("token"),
 		}
 	},
 	created() {
@@ -218,7 +234,7 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/carryOrder/export?Request-From=PC&Authorization=' + localStorage.getItem("token")	
+			this.exportExcelUrl = baseURL + '/deliveryOrder/export?Request-From=PC&Authorization=' + localStorage.getItem("token")	
 			+ '&code=' + this.find.code 
 			+ '&companyCode=' + this.find.companyCode
 			+ '&dealerCode=' + this.find.dealerCode 
@@ -347,6 +363,15 @@ export default {
                     this.getList()
                 })
 			},this.selectedList)
+        },
+        // 导入成功
+		uploadSuccess (response) {
+			if(response.code != 200){
+				Message.error(response.msg)
+			} else{
+				Message.success(response.msg)
+				this.getList()
+			}
 		}
 	}
 }
@@ -397,6 +422,7 @@ export default {
 			.ViewTaskDetail
 				cursor pointer
 				display block
+.download-btn
 .exportExcel
 	font-size 12px
 	color #606266
@@ -406,7 +432,7 @@ export default {
 	border 1px solid #dcdfe6
 	border-radius 3px
 	background #fff
-	margin-left 10px
+	margin-right 10px
 	display inline-block
 	vertical-align top
 	&:hover
@@ -416,4 +442,7 @@ export default {
 	&:active
 		border-color #3a8ee6
 		color #3a8ee6
+.upload-File
+	display inline-block
+	margin 0 10px
 </style>

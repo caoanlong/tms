@@ -238,8 +238,12 @@ export default {
 		},
 		resetExportExcelUrl(){
 			this.exportExcelUrl = baseURL + '/company/customer/address/export?Request-From=PC&Authorization=' + localStorage.getItem("token")
-				+ '&keyword=' + this.find.keyword + '&companyName=' + this.find.companyName
-			
+                + '&keyword='+ this.find.keyword 
+                + '&companyName='+ this.find.companyName
+                + '&zone='+ this.find.zone
+                + '&customerID='+ this.find.customerID
+                + '&locationAddress='+ this.find.locationAddress
+                + '&finalUsername='+ this.find.finalUsername		
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
