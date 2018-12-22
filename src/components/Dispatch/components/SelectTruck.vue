@@ -95,7 +95,7 @@
                             <el-tag size="mini" type="danger" v-if="item.expiredCertificate">到期</el-tag>
                         </el-tooltip>
                     </td>
-                    <td align="center">{{item.posAddress}}</td>
+                    <td align="center" @click="map.setCenter([item.longitude,item.latitude])">{{item.posAddress}}</td>
                     <td align="center">
                         {{item.locationTime ? moment(item.locationTime).format('YYYY-MM-DD HH:mm:ss') : ''}}
                     </td>
