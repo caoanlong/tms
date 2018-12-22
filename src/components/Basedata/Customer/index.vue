@@ -226,7 +226,10 @@ export default {
 		resetExportExcelUrl(){
 			this.exportExcelUrl = baseURL + '/company/customer/export?Request-From=PC&Authorization=' + localStorage.getItem("token") 
 				+ '&keyword=' + this.find.keyword
-				+ '&customerType=' + this.find.customerType
+                + '&customerType=' + this.find.customerType
+                + '&code=' + this.find.code
+                + '&zone=' + this.find.zone
+                + '&fencingType=' + this.find.fencingType
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
