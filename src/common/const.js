@@ -10,7 +10,8 @@ export const AMAPKEY = '3a29e75c898b755e250dfcf99c3ebd45' //高德地图KEY
 export const DISPATCHORDERTYPE = {
     Assign: '指派',
     Grab: '抢单',
-    Offer: '报价'
+    Offer: '报价',
+    SelfPick:'自提'
 }
 export const DISPATCHORDERTYPESIMPLE = {
     Assign: '派',

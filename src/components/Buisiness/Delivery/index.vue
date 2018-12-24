@@ -222,6 +222,7 @@ export default {
             this.find.dealerCode=''
             this.find.dealerName=''
             this.find.cargoName=''
+            this.find.cargoCode=''
             this.find.level=''
             this.find.plateNo=''
             this.find.verifyFlag=''
@@ -294,7 +295,8 @@ export default {
 			this.find.cargoCode = ''
 			Company.cargoFind({
                 current: 1,
-                size: 1000
+                size: 1000,
+                cargoName: this.find.cargoName
             }).then(res => {
                 cb(res.records)
             })
