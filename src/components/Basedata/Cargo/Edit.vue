@@ -46,12 +46,6 @@
 						<el-form-item label="体积">
 							<el-input v-model="cargo.volume"><template slot="append">立方</template></el-input>
 						</el-form-item>
-						<el-form-item label="配载方式" prop="dispatchType">
-							<el-select style="width: 100%" placeholder="请选择" v-model="cargo.dispatchType">
-								<el-option label="体积" value="volume"></el-option>
-								<el-option label="重量" value="Weight"></el-option>
-							</el-select>
-						</el-form-item>
 						<el-form-item>
 							<el-button type="primary" @click="save">保存</el-button>
 							<el-button @click="back">取消</el-button>
@@ -90,7 +84,7 @@ export default {
 				cargoType: '',
 				cargoUnit: '',
                 code: '',
-                dispatchType:'',
+                dispatchType:'Weight',
                 weight:'',
                 volume:''
 			},

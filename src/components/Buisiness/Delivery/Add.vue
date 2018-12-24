@@ -122,7 +122,6 @@ export default {
                 code: [ { required: true, message: '请输入交货单号' } ],
                 companyCode: [ { required: true, message: '请选择工厂' } ],
                 dealerCode: [ { required: true, message: '请选择客户' } ],
-                cargoCode: [ { required: true, message: '请输入交货单号' } ],
                 cargoWeight: [ { required: true, message: '请输入产品重量' } ],
                 cargoCode: [ { required: true, message: '请选择产品' } ],
                 plateNo: [ { required: true, message: '请输入车牌号' } ],
@@ -194,7 +193,8 @@ export default {
 			this.deliveryInfo.cargoCode = ''
 			Company.cargoFind({
                 current: 1,
-                size: 1000
+                size: 1000,
+                cargoName: this.deliveryInfo.cargoName
             }).then(res => {
                 cb(res.records)
             })
