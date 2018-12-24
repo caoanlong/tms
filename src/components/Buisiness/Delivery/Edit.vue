@@ -200,7 +200,8 @@ export default {
 			this.deliveryInfo.cargoCode = ''
 			Company.cargoFind({
                 current: 1,
-                size: 1000
+                size: 1000,
+                cargoName: this.deliveryInfo.cargoName
             }).then(res => {
                 cb(res.records)
             })
