@@ -25,7 +25,7 @@
                         <el-form-item label="客户名称" prop="dealerCode">
                             <el-autocomplete 
                                 value-key="companyName" 
-                                v-model="deliveryInfo.consigneeName"
+                                v-model="deliveryInfo.dealerName"
                                 :fetch-suggestions="getDealer"
                                 placeholder="请输入客户名称" 
                                 @select="handSelectDealer" style="width:100%">
@@ -165,7 +165,8 @@ export default {
 			Company.customerSuggest({
                 current: 1,
                 size: 1000,
-                customerType: 'Shipper'
+                customerType: 'Shipper',
+                companyName:this.deliveryInfo.shipperName
             }).then(res => {
                 cb(res) 
             })
@@ -183,14 +184,15 @@ export default {
 			Company.customerSuggest({
                 current: 1,
                 size: 1000,
-                customerType: 'Consignee'
+                customerType: 'Consignee',
+                companyName:this.deliveryInfo.dealerName
             }).then(res => {
                 cb(res)
             })
 		},
         handSelectDealer(data){
 			this.deliveryInfo.dealerCode = data.code
-            this.deliveryInfo.consigneeName = data.companyName
+            this.deliveryInfo.dealerName = data.companyName
         },
         clearSelectDealer(){
 			this.deliveryInfo.dealerCode = ''

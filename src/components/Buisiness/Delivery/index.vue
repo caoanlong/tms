@@ -256,7 +256,8 @@ export default {
 			Company.customerFind({
                 current: 1,
                 size: 1000,
-                customerType: 'Shipper'
+                customerType: 'Shipper',
+                keyword:this.find.companyName
             }).then(res => {
                 cb(res.records) 
             })
@@ -276,7 +277,8 @@ export default {
 			Company.customerFind({
                 current: 1,
                 size: 1000,
-                customerType: 'Consignee'
+                customerType: 'Consignee',
+                keyword:this.find.dealerName
             }).then(res => {
                 cb(res.records)
             })
