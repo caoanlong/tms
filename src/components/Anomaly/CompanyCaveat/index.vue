@@ -58,7 +58,12 @@
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="工厂" prop="companyName" align="center">
                         <template slot-scope="scope">
-							<span @click="view(scope.row.companyID)" class="link">{{scope.row.companyName}}</span>
+							<router-link 
+								tag="span" 
+								class="link" 
+								:to="{name: 'customercaveat', query: {shipperID: scope.row.shipperID}}">
+								{{scope.row.companyName}}
+							</router-link>
 						</template>
                     </el-table-column>
 					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
@@ -115,18 +120,19 @@ export default {
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
 				+ localStorage.getItem("token"),
 		}
-    },
-    created(){
-        if(this.$route.query.companyID){
-            this.find.shipperID = this.$route.query.companyID
-            this.find.companyName = this.$route.query.companyName
-        }
+	},
+	created() {
 		this.resetExportExcelUrl()
         this.getList()
         this.getCompanys()
         this.getDictList()
         this.getCurrentMonthFirst()
         this.getCurrentMonthLast()
+	},
+    activated(){
+		if(!this.$route.query.cache) {
+			this.reset()
+		}
     },
 	methods: {
         getDictList() {

@@ -104,7 +104,9 @@
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column label="承运单号" width="170" align="center">
 						<template slot-scope="scope">
-							<span @click="view(scope.row.carrierOrderID)" class="link">{{scope.row.carrierOrderNo}}</span>
+							<span @click="view(scope.row.carrierOrderID)" class="link">
+								{{scope.row.carrierOrderNo}}
+							</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="交货单号" prop="shipperNo" align="center"></el-table-column>

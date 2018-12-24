@@ -123,8 +123,8 @@ export default {
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
 				+ localStorage.getItem("token"),
 		}
-    },
-    created() {
+	},
+	created() {
 		const consigneeName = this.$route.query.consigneeName
 		if (consigneeName) this.find.keyword = consigneeName
 		this.resetExportExcelUrl()
@@ -132,7 +132,12 @@ export default {
         this.getCompanys()
         this.getCurrentMonthFirst()
         this.getCurrentMonthLast()
-    },
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.reset()
+		}
+	},
 	methods: {
 		search(){
             this.pageIndex = this.PAGEINDEX
@@ -148,6 +153,8 @@ export default {
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
+			const consigneeName = this.$route.query.consigneeName
+			if (consigneeName) this.find.keyword = consigneeName
 			this.getList()
         },
         view(dispatchOrderID){
