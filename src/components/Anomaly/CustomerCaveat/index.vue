@@ -18,6 +18,17 @@
                     <el-form-item label="客户编号">
 						<el-input placeholder="请输入客户编号" v-model="find.code"  @change="inputChange"></el-input>
 					</el-form-item>
+					<el-form-item label="工厂名称" class="customerSelect">
+						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
+                            <el-option label="全部" value=""></el-option>
+                            <el-option 
+                                :label="item.companyName" 
+                                :value="item.customerID" 
+                                v-for="(item, i) in companys" 
+                                :key="i">
+                            </el-option>
+                        </el-select>
+					</el-form-item>
                     <el-form-item label="所属片区" class="customerSelect">
 						<el-select v-model="find.zone" placeholder="请选择"  @change="inputChange">
                             <el-option value="" label="全部"></el-option>
@@ -98,6 +109,7 @@ export default {
                 consigneeID: '',
                 companyName:'',
                 code: '',
+                shipperID: '',
                 zone:'',
                 beginTime: this.getCurrentMonthFirst(),
                 endTime: this.getCurrentMonthLast()
@@ -109,13 +121,21 @@ export default {
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
 				+ localStorage.getItem("token"),
 		}
-    },
-    created(){
+	},
+	created() {
+		const shipperID = this.$route.query.shipperID
+		if (shipperID) this.find.shipperID = shipperID
 		this.resetExportExcelUrl()
         this.getList()
-        this.getDictList()
+		this.getDictList()
+		this.getCompanys()
         this.getCurrentMonthFirst()
         this.getCurrentMonthLast()
+	},
+    activated() {
+		if(!this.$route.query.cache) {
+			this.reset()
+		}
     },
 	methods: {
 		getDictList() {
@@ -125,16 +145,28 @@ export default {
 				this.CustomerZone = res.data
 			})
 		},
+		getCompanys() {
+            Company.customerFind({
+				current: 1,
+                size: 1000,
+                customerType: 'Shipper'
+			}).then(res => {
+                this.companys = res.records
+			})
+        },
         reset(){
             this.find.consigneeID = ''
 			this.find.companyName =''
 			this.find.code =''
+			this.find.shipperID =''
 			this.find.zone =''
 			this.find.beginTime =this.getCurrentMonthFirst()
 			this.find.endTime = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
+			const shipperID = this.$route.query.shipperID
+			if (shipperID) this.find.shipperID = shipperID
 			this.getList()
         },
         getCustomers(companyName, cb) {
@@ -175,9 +207,10 @@ export default {
 			Company.customerAlarmList({
 				current: this.pageIndex,
 				size: this.pageSize,
-				consigneeID:this.find.consigneeID,
-                code:this.find.code,
-                zone:this.find.zone,
+				consigneeID: this.find.consigneeID,
+                code: this.find.code,
+                shipperID: this.find.shipperID,
+                zone: this.find.zone,
 				beginTime: this.find.beginTime,
 				endTime: this.find.endTime
 			}).then(res => {
