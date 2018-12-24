@@ -395,7 +395,7 @@ export default {
             }
         },
         viewMore(){
-            this.$router.push({ name: 'anomaly' })
+            this.$router.push({ name: 'companycaveat' })
         },
         resetMap(){
             let mapChart = echarts.init(document.getElementById('map'))

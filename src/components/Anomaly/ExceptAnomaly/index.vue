@@ -124,7 +124,9 @@ export default {
 				+ localStorage.getItem("token"),
 		}
     },
-    created(){
+    created() {
+		const consigneeName = this.$route.query.consigneeName
+		if (consigneeName) this.find.keyword = consigneeName
 		this.resetExportExcelUrl()
         this.getList()
         this.getCompanys()

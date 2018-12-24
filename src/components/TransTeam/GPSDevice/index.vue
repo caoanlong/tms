@@ -38,7 +38,7 @@
 					</el-table-column>
 					<el-table-column label="回收日期">
 						<template slot-scope="scope">
-							<span>{{moment(scope.row.updateTime).format('YYYY-MM-DD')}}</span>
+							<span v-if="scope.row.updateTime">{{moment(scope.row.updateTime).format('YYYY-MM-DD')}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="装配天数" prop="loadDays">
