@@ -63,10 +63,10 @@
 			</div>
 			<div class="tableControl">
 				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
-				<a :href="templateUrl" download="customer.xlsx" class="download-btn">
+				<!-- <a :href="templateUrl" download="customer.xlsx" class="download-btn">
 					<svg-icon iconClass="excel-icon"></svg-icon>
 					<span>下载模板</span>
-				</a>
+				</a> -->
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
@@ -118,8 +118,8 @@ export default {
             CustomerZone:[],
 			curCompany: {},
 			exportExcelUrl: '',
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
-				+ localStorage.getItem("token"),
+			// templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
+			// 	+ localStorage.getItem("token"),
 		}
 	},
 	created() {
