@@ -46,7 +46,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="出厂时间">
-                            <p>{{ moment(deliveryInfo.outTime).format('YYYY-MM-DD')}}</p>
+                            <p>{{ moment(deliveryInfo.outTime).format('YYYY-MM-DD HH:mm:ss')}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">

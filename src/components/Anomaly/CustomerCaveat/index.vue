@@ -59,7 +59,11 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="客户名称" prop="consigneeName" align="center"></el-table-column>
+					<el-table-column label="客户名称" align="center">
+                        <template slot-scope="scope">
+							<span @click="view(scope.row.consigneeID,scope.row.consigneeName)" class="link">{{scope.row.consigneeName}}</span>
+						</template>
+                    </el-table-column>
 					<el-table-column label="客户编号" prop="code" align="center"></el-table-column>
 					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
 					<el-table-column label="总单量" prop="orderNum" align="center"></el-table-column>
@@ -190,7 +194,10 @@ export default {
 				+ '&zone=' + this.find.zone
 				+ '&beginTime=' + this.find.beginTime
 				+ '&endTime=' + this.find.endTime
-		}
+        },
+        view(companyID,consigneeName){
+            this.$router.push({ name: 'companycaveat', query: { companyID,consigneeName }})
+        }
 	}
 }
 

@@ -12,7 +12,7 @@
                             value-key="companyName" 
                             v-model="find.companyName"
                             :fetch-suggestions="getCustomers"
-                            placeholder="请输入客户名称" 
+                            placeholder="请输入工厂名称" 
                             @select="handSelectCustomer" 
 							@change="inputChange">
 							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
@@ -34,7 +34,7 @@
                             value-key="cargoName" 
                             v-model="find.cargoName"
                             :fetch-suggestions="getCargoList"
-                            placeholder="请输入客户名称" 
+                            placeholder="请输入产品名称" 
                             @select="handSelectCargoList" style="width:100%">
                             <i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCargoList"></i>
                         </el-autocomplete>

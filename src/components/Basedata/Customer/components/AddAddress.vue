@@ -46,6 +46,9 @@
                         <el-form-item label="地址编号">
 							<el-input v-model="customerAddress.code" placeholder="请输入地址编号"></el-input>
 						</el-form-item>
+                        <el-form-item label="终端用户名称" prop="finalUsername">
+							<el-input v-model="customerAddress.finalUsername" placeholder="请输入终端用户名称"></el-input>
+						</el-form-item>
 				    </el-col>
 			    </el-row>
             </el-form>
@@ -92,11 +95,12 @@ export default {
 				locationLat: '',
                 locationAddress: '',
                 monitorScope:'',
-                code: ''
+                code: '',
+                finalUsername:''
             },
             rules: {
 				areaID: [{ required: true, message: '请选择区域', trigger: 'change' }],
-				locationAddress: [{required: true, message: '请输入定位地址'}],
+                locationAddress: [{required: true, message: '请输入定位地址'}],
                 detailAddress: [{min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
                 monitorScope: [
                     {required: true, message: '请输入围栏范围'},

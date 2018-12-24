@@ -12,10 +12,9 @@
                     <el-col :span="8">
                         <el-form-item label="工厂名称" class="customerSelect" prop="companyCode">
                             <el-autocomplete 
-                                value-key="companyName" 
-                                v-model="deliveryInfo.companyName"
+                                v-model="deliveryInfo.shipperName"
                                 :fetch-suggestions="getCustomers"
-                                placeholder="请输入客户名称" 
+                                placeholder="请输入工厂名称" 
                                 @select="handSelectCustomer" style="width:100%">
                                 <i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
                             </el-autocomplete>
@@ -24,8 +23,7 @@
                     <el-col :span="8">
                         <el-form-item label="客户名称" prop="dealerCode">
                             <el-autocomplete 
-                                value-key="companyName" 
-                                v-model="deliveryInfo.dealerName"
+                                v-model="deliveryInfo.consigneeName"
                                 :fetch-suggestions="getDealer"
                                 placeholder="请输入客户名称" 
                                 @select="handSelectDealer" style="width:100%">
@@ -39,19 +37,19 @@
                                 value-key="cargoName" 
                                 v-model="deliveryInfo.cargoName"
                                 :fetch-suggestions="getCargoList"
-                                placeholder="请输入客户名称" 
+                                placeholder="请输入产品名称" 
                                 @select="handSelectCargoList" style="width:100%">
                                 <i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCargoList"></i>
                             </el-autocomplete>
                         </el-form-item>
                     </el-col>
                    <el-col :span="8">
-                        <el-form-item label="产品数量" prop="cargoQuantity">
+                        <el-form-item label="产品数量">
                             <el-input placeholder="0" v-model="deliveryInfo.cargoQuantity"><template slot="append">袋</template></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="产品重量">
+                        <el-form-item label="产品重量" prop="cargoWeight">
                             <el-input placeholder="0" v-model="deliveryInfo.cargoWeight"><template slot="append">吨</template></el-input>
                         </el-form-item>
                     </el-col>
@@ -75,7 +73,7 @@
                         <el-form-item label="出厂时间" prop="outTime">
                             <el-date-picker 
                                 v-model="deliveryInfo.outTime"
-                                type="date" 
+                                type="datetime" 
                                 :clearable="false" 
                                 value-format="timestamp"  style="width:100%">
                             </el-date-picker>
@@ -96,6 +94,7 @@
 </template>
 <script type="text/javascript">
 import DeliveryOrder from '../../../api/DeliveryOrder'
+import Company from '../../../api/Company'
 import { Message } from 'element-ui'
 export default {
 
@@ -120,7 +119,7 @@ export default {
                 companyCode: [ { required: true, message: '请选择工厂' } ],
                 dealerCode: [ { required: true, message: '请选择客户' } ],
                 cargoCode: [ { required: true, message: '请输入交货单号' } ],
-                cargoQuantity: [ { required: true, message: '请输入产品数量' } ],
+                cargoWeight: [ { required: true, message: '请输入产品重量' } ],
                 cargoCode: [ { required: true, message: '请选择产品' } ],
                 plateNo: [ { required: true, message: '请输入车牌号' } ],
                 level: [ { required: true, message: '请选择监控级别' } ],
@@ -171,11 +170,11 @@ export default {
         },
         handSelectCustomer(data){
 			this.deliveryInfo.companyCode = data.code
-            this.deliveryInfo.companyName = data.companyName
+            this.deliveryInfo.shipperName = data.companyName
         },
         clearSelectCustomer(){
 			this.deliveryInfo.companyCode = ''
-			this.deliveryInfo.companyName =''
+			this.deliveryInfo.shipperName = ''
 		},
         getDealer(companyName, cb) {
 			this.deliveryInfo.dealerCode = ''
@@ -189,11 +188,11 @@ export default {
 		},
         handSelectDealer(data){
 			this.deliveryInfo.dealerCode = data.code
-            this.deliveryInfo.dealerName = data.companyName
+            this.deliveryInfo.consigneeName = data.companyName
         },
         clearSelectDealer(){
 			this.deliveryInfo.dealerCode = ''
-			this.deliveryInfo.dealerName =''
+			this.deliveryInfo.consigneeName =''
 		},
         getCargoList(Name, cb) {
 			this.deliveryInfo.cargoCode = ''

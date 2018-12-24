@@ -61,7 +61,7 @@
                     <span class="el-icon-plus fr addTitBtn" v-show="monitoringType=='Area'" @click="isAddAreaVisible = true"> 增加</span>
                     <span class="el-icon-plus fr addTitBtn" v-show="monitoringType=='Point'" @click="isAddAddressVisible = true"> 增加</span>
                     <el-tabs v-model="monitoringType" type="card">
-                        <el-tab-pane label="区域监控" name="Area" :disabled="recdeliverycomp.fencingType =='Point'">
+                        <el-tab-pane label="监控区域" name="Area" :disabled="recdeliverycomp.fencingType =='Point'">
                             <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                 <el-table-column prop="provice" label="省" align="center"></el-table-column>
                                 <el-table-column prop="city" label="市" align="center"></el-table-column>
@@ -73,7 +73,7 @@
                                 </el-table-column>
                             </el-table>
                         </el-tab-pane>
-                        <el-tab-pane label="地址监控" name="Point" :disabled="recdeliverycomp.fencingType =='Area'">
+                        <el-tab-pane label="监控地址" name="Point" :disabled="recdeliverycomp.fencingType =='Area'">
                             <div class="table">
                                 <el-table :data="addressList" style="border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
                                     <el-table-column prop="code" label="地址编号" align="center"></el-table-column>
@@ -241,13 +241,18 @@ export default {
         add() {
 			this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return
-                if((this.recdeliverycomp.fencingType == 'Point' || this.recdeliverycomp.fencingType == 'Mix') && this.addressList.length < 1) {
+                if(this.recdeliverycomp.fencingType == 'Point'  && this.addressList.length < 1) {
                     Message.error('请添加监控地址')
                     this.monitoringType = 'Point'
                     return
                 }
-                if((this.recdeliverycomp.fencingType == 'Area' || this.recdeliverycomp.fencingType == 'Mix') && this.monitoringAreaList.length < 1) {
+                if(this.recdeliverycomp.fencingType == 'Area'  && this.monitoringAreaList.length < 1) {
                     Message.error('请添加监控区域')
+                    this.monitoringType = 'Area'
+                    return
+                }
+                if(this.recdeliverycomp.fencingType == 'Mix'  && (this.monitoringAreaList.length < 1 && this.addressList.length < 1)) {
+                    Message.error('请添加监控区域或者监控地址')
                     this.monitoringType = 'Area'
                     return
                 }

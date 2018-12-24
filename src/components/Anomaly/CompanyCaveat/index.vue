@@ -56,7 +56,11 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="工厂" prop="companyName" align="center"></el-table-column>
+					<el-table-column label="工厂" prop="companyName" align="center">
+                        <template slot-scope="scope">
+							<span @click="view(scope.row.companyID)" class="link">{{scope.row.companyName}}</span>
+						</template>
+                    </el-table-column>
 					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
 					<el-table-column label="总单量" prop="carrierOrderNum" align="center"></el-table-column>
 					<el-table-column label="特价单量" prop="selfPickNum" align="center"></el-table-column>
@@ -113,6 +117,10 @@ export default {
 		}
     },
     created(){
+        if(this.$route.query.companyID){
+            this.find.shipperID = this.$route.query.companyID
+            this.find.companyName = this.$route.query.companyName
+        }
 		this.resetExportExcelUrl()
         this.getList()
         this.getCompanys()
@@ -169,7 +177,6 @@ export default {
                 zone:this.find.zone,
                 begin:this.find.begin,
                 end:this.find.end,
-
 			}).then(res => {
 				this.tableData = res.records
 				this.total = res.total
@@ -185,7 +192,10 @@ export default {
 				+ '&zone=' + this.find.zone
 				+ '&begin=' + this.find.begin
 				+ '&end=' + this.find.end
-		}
+        },
+        view(companyID ){
+            this.$router.push({ name: 'exceptanomaly', query: { companyID }})
+        }
 	}
 }
 
