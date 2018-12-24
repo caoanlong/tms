@@ -201,7 +201,7 @@ export const TRUCKLENGTH = [
     { value: 16 },
     { value: 17 },
     { value: 17.5 },
-    { value: 1 },
+    { value: 18 }
 ]
 
 /**

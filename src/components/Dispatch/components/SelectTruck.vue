@@ -59,7 +59,14 @@
                     </td>
                     <td align="center">
                         <strong>{{item.plateNo}}</strong>
-                        <span>{{[(Number(item.length)/1000).toFixed(2) + '米', TRUCKTYPE[item.truckType]].join('/')}}</span>
+                        <span>
+                            {{
+                                [
+                                    item.length ? (Number(item.length)/1000).toFixed(2) + '米' : '',
+                                    TRUCKTYPE[item.truckType]
+                                ].filter(item => item).join('/')
+                            }}
+                        </span>
                         <el-tag 
                             size="mini" 
                             type="success">
@@ -88,7 +95,7 @@
                             <el-tag size="mini" type="danger" v-if="item.expiredCertificate">到期</el-tag>
                         </el-tooltip>
                     </td>
-                    <td align="center">{{item.posAddress}}</td>
+                    <td align="center" @click="map.setCenter([item.longitude,item.latitude])">{{item.posAddress}}</td>
                     <td align="center">
                         {{item.locationTime ? moment(item.locationTime).format('YYYY-MM-DD HH:mm:ss') : ''}}
                     </td>
@@ -209,6 +216,7 @@ export default {
                 }
             }
             this.tableData = list
+            this.createMarker(list)
         },
         /**
          * 根据经纬度获取详细地址
@@ -239,21 +247,28 @@ export default {
          */
         createMap() {
             this.map = new AMap.Map('amapLocationSelect')
+            if (this.selectedTruck.longitude && this.selectedTruck.latitude) {
+                this.map.setCenter([this.selectedTruck[i].longitude,this.selectedTruck[i].latitude])
+            }
         },
-        createMarker() {
-            for (let i = 0; i < this.tableData.length; i++) {
-                const truckPathMarker = new AMap.Marker({
-                    position: [this.tableData[i].longitude,this.tableData[i].latitude],
-                    content: `<div style="position:relative;width:100px;height:50px;text-align:center">
-                        <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#409EFF;height:40px;line-height:40px;border-radius:5px">${truckPathNormal[i].plateNo}</div>
-                        <div style="position:absolute;bottom:6px;left:42px;background:#409EFF;width:10px;height:10px;transform:rotate(45deg)"></div>
-                    </div>`,
-                    offset: new AMap.Pixel(-50, -50),
-                    map: this.map
-                })
-                truckPathMarker.on('click', e => {
-                    this.selected = this.tableData[i]
-                })
+        createMarker(list) {
+            for (let i = 0; i < list.length; i++) {
+                if (list[i].longitude && list[i].latitude) {
+                    const position = [list[i].longitude,list[i].latitude]
+                    const truckPathMarker = new AMap.Marker({
+                        position,
+                        content: `<div style="position:relative;width:100px;height:50px;text-align:center">
+                            <div style="position:absolute;z-index:5;width:100%;color:#fff;background:#409EFF;height:40px;line-height:40px;border-radius:5px">${list[i].plateNo}</div>
+                            <div style="position:absolute;bottom:6px;left:42px;background:#409EFF;width:10px;height:10px;transform:rotate(45deg)"></div>
+                        </div>`,
+                        offset: new AMap.Pixel(-50, -50),
+                        map: this.map
+                    })
+                    truckPathMarker.on('click', e => {
+                        this.selected = list[i]
+                        this.map.setCenter(position)
+                    })
+                }
             }
             // 使用setFitView方法 自适应显示
             this.map.setFitView()

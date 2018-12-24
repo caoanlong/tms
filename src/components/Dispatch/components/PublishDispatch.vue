@@ -41,10 +41,12 @@
                                     <span>
                                         <strong>{{selectedTruck.plateNo}}</strong>
                                         <span>
-                                            {{[
-                                                (Number(selectedTruck.length)/1000).toFixed(2) + '米',
-                                                TRUCKTYPE[selectedTruck.truckType]
-                                            ].join('/')}}
+                                            {{
+                                                [
+                                                    selectedTruck.length ? (Number(selectedTruck.length)/1000).toFixed(2) + '米' : '',
+                                                    TRUCKTYPE[selectedTruck.truckType]
+                                                ].filter(item => item).join('/')
+                                            }}
                                         </span>
                                         <el-tag size="mini" type="success">
                                             {{selectedTruck.workStatus == 'Free' ? '空闲' : '业务中'}}
@@ -75,8 +77,16 @@
                                         </el-tooltip>
                                     </span>
                                 </td>
-                                <td align="center">临沧G95公路彩云路口</td>
-                                <td align="center">1天前</td>
+                                <td align="center" @click="addTruck">
+                                    {{selectedTruck.posAddress}}
+                                </td>
+                                <td align="center">
+                                    {{
+                                        moment(selectedTruck.locationTime).diff(moment(selectedTruck.locationTime), 'days') > 0
+                                        ? moment(selectedTruck.locationTime).diff(moment(selectedTruck.locationTime), 'days')
+                                        : moment(selectedTruck.locationTime).format('YYYY-MM-DD HH:mm:ss')
+                                    }}
+                                </td>
                                 <td align="center">
                                     <strong>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.realName}}</strong>
                                     <span>{{selectedTruck.primaryDriver && selectedTruck.primaryDriver.mobile}}</span>
@@ -344,6 +354,7 @@ export default {
             return sum ? Number(sum).toFixed(2) : 0
         },
         handSelectTruck(data) {
+            console.log(data)
             this.truckDialog = false
             this.selectedTruck = data ? data : {}
             this.createPersons()

@@ -23,7 +23,6 @@
 
 <script>
 import { Message } from 'element-ui'
-import { checkPlateNoNew } from '../../../../common/valid'
 import DriverPortalGpsSetupLog from '../../../../api/DriverPortalGpsSetupLog'
 export default {
     props: {
@@ -40,7 +39,7 @@ export default {
             },
             rules: {
 				deviceNumber: [{required: true, message: '请输入终端号'}],
-				plateNo: [{required: true, message: '请输入车牌号'}, {validator: checkPlateNoNew}]
+				plateNo: [{required: true, message: '请输入车牌号'}]
 			}
         }
     },

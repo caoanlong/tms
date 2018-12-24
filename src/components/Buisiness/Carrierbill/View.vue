@@ -100,6 +100,7 @@
 							<th>状态</th>
 							<th>异常</th>
 							<th>车牌号</th>
+							<th>是否安装GPS</th>
 							<th>司机</th>
 							<th>押运员</th>
 							<th>货物名称</th>
@@ -131,8 +132,8 @@
 								{{transport.plateNo}}
 								{{transport.trailerPlateNo ? ('/' + transport.trailerPlateNo) : ''}}
 							</td>
+							<td>{{transport.gpsFlag == 'Y' ? 'GPS已安装' : 'GPS未安装'}}</td>
 							<td>{{transport.driverName}}</td>
-							<td>{{transport.superCargoName}}</td>
 							<td>{{transport.cargoName}}</td>
 							<td>{{[(transport.loadWeightSum + '吨'),(transport.loadVolumeSum + '方'),(transport.LoadNumSum)] | trimSpaceAndJoinSlash}}
 							</td>

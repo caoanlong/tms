@@ -40,16 +40,32 @@
 							style="width:160px" 
 							v-model="find.shipperDateBegin">
 						</el-date-picker>
+						<span class="tracto">至</span>
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px"
+                            v-model="find.shipperDateEnd">
+						</el-date-picker>
                     </el-form-item>
-                    <el-form-item label="到货日期">
+                   <el-form-item label="到货时间">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px"
+							v-model="find.consigneeDateBegin">
+						</el-date-picker>
+						<span class="tracto">至</span>
 						<el-date-picker 
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
 							style="width:160px" 
-							v-model="find.shipperDateEnd">
+							v-model="find.consigneeDateEnd">
 						</el-date-picker>
-                    </el-form-item>
+					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search()">搜索</el-button>
 						<el-button type="default" @click="reset()">重置</el-button>
@@ -179,7 +195,6 @@
 							<tr v-for="(item, index) in tableData" :key="index">
 								<td align="center">
 									<p>{{item.shipperNo}}</p>
-									<p v-if="item.commissionDate">{{moment(item.commissionDate).format('YYYY-MM-DD hh:mm:ss')}}</p>
 								</td>
 								<td>
 									<p>{{item.shipperCompanyName}}</p>
@@ -245,7 +260,7 @@
 						</thead>
 						<tbody>
 							<tr style="height:93px" v-for="(item, index) in selectedList" :key="index">
-								<td align="center">{{item.carrierOrderNo}}</td>
+								<td align="center">{{item.shipperNo}}</td>
 								<td>
 									<p>{{item.shipperCompanyName}}</p>
 									<p>{{item.consigneeCompanyName}}</p>
@@ -346,7 +361,7 @@
 						<thead>
 							<tr>
 								<th>优先</th>
-								<th>承运单</th>
+								<th>交货单号</th>
 								<th>类型</th>
 								<th>地点</th>
 								<th>距离</th>
@@ -356,7 +371,7 @@
 						<tbody>
 							<tr style="height:50px" v-for="(item, index) in transLines" :key="index">
 								<td align="center">{{index+1}}</td>
-								<td align="center">{{item.carrierOrderNo}}</td>
+								<td align="center">{{item.shipperNo}}</td>
 								<td align="center" :class="item.type">{{item.type == 'Load' ? '装车' : '卸货'}}</td>
 								<td align="center">{{item.areaName + item.posAddress + item.detailAddress}}</td>
 								<td align="center">{{(Number(item.nodeDistance)/1000).toFixed(2)}}公里</td>
@@ -445,6 +460,8 @@ export default {
 				cargoName: '',
 				shipperDateBegin: '',
 				shipperDateEnd: '',
+				consigneeDateBegin: '',
+				consigneeDateEnd: '',
 				orderBy: 'CarrierOrderNo',
 				sortType: 'desc'
 			},
@@ -507,6 +524,8 @@ export default {
 			this.find.cargoName = ''
 			this.find.shipperDateBegin = ''
 			this.find.shipperDateEnd = ''
+			this.find.consigneeDateBegin = ''
+			this.find.consigneeDateEnd = ''
 			this.find.orderBy = 'CarrierOrderNo'
 			this.find.sortType = 'desc'
 			this.selectedShipperArea = []
@@ -625,6 +644,7 @@ export default {
 					type: 'Load',
 					carrierOrderID: i.carrierOrderID,
 					carrierOrderNo: i.carrierOrderNo,
+					shipperNo: i.shipperNo,
 					detailAddress: i.shipperDetailAddress,
 					posAddress: i.shipperLocationAddress,
 					areaName: i.shipperArea,
@@ -637,6 +657,7 @@ export default {
 					type: 'Unload',
 					carrierOrderID: i.carrierOrderID,
 					carrierOrderNo: i.carrierOrderNo,
+					shipperNo: i.shipperNo,
 					detailAddress: i.consigneeDetailAddress,
 					posAddress: i.consigneeLocationAddress,
 					areaName: i.consigneeArea,
