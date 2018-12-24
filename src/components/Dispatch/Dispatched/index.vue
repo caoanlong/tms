@@ -367,6 +367,7 @@ export default {
             this.find.dispatchOrderNo=''
             this.find.shipperCustomerID=''
             this.find.consigneeCustomerID=''
+            this.find.consigneeCustomer=''
             this.find.cargoName=''
             this.find.status=''
             this.find.type=''

@@ -15,7 +15,7 @@
                                 value-key="companyName" 
                                 v-model="deliveryInfo.companyName"
                                 :fetch-suggestions="getCustomers"
-                                placeholder="请输入客户名称" 
+                                placeholder="请输入工厂名称" 
                                 @select="handSelectCustomer" style="width:100%">
                                 <i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
                             </el-autocomplete>
@@ -39,19 +39,19 @@
                                 value-key="cargoName" 
                                 v-model="deliveryInfo.cargoName"
                                 :fetch-suggestions="getCargoList"
-                                placeholder="请输入客户名称" 
+                                placeholder="请输入产品名称" 
                                 @select="handSelectCargoList" style="width:100%">
                                 <i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCargoList"></i>
                             </el-autocomplete>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="产品数量" prop="cargoQuantity">
+                        <el-form-item label="产品数量">
                             <el-input placeholder="0" v-model="deliveryInfo.cargoQuantity"><template slot="append">袋</template></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="产品重量">
+                        <el-form-item label="产品重量" prop="cargoWeight">
                             <el-input placeholder="0" v-model="deliveryInfo.cargoWeight"><template slot="append">吨</template></el-input>
                         </el-form-item>
                     </el-col>
@@ -75,7 +75,7 @@
                         <el-form-item label="出厂时间" prop="outTime">
                             <el-date-picker 
                                 v-model="deliveryInfo.outTime"
-                                type="date" 
+                                type="datetime" 
                                 :clearable="false" 
                                 value-format="timestamp"  style="width:100%">
                             </el-date-picker>
@@ -123,7 +123,7 @@ export default {
                 companyCode: [ { required: true, message: '请选择工厂' } ],
                 dealerCode: [ { required: true, message: '请选择客户' } ],
                 cargoCode: [ { required: true, message: '请输入交货单号' } ],
-                cargoQuantity: [ { required: true, message: '请输入产品数量' } ],
+                cargoWeight: [ { required: true, message: '请输入产品重量' } ],
                 cargoCode: [ { required: true, message: '请选择产品' } ],
                 plateNo: [ { required: true, message: '请输入车牌号' } ],
                 level: [ { required: true, message: '请选择监控级别' } ],
