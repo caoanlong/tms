@@ -61,7 +61,7 @@
 							<router-link 
 								tag="span" 
 								class="link" 
-								:to="{name: 'customercaveat', query: {shipperID: scope.row.shipperID}}">
+								:to="{name: 'customercaveat', query: {customerIDs: scope.row.customerIDs}}">
 								{{scope.row.companyName}}
 							</router-link>
 						</template>
