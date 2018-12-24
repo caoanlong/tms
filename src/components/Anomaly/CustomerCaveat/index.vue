@@ -59,7 +59,13 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="客户名称" prop="consigneeName" align="center"></el-table-column>
+					<el-table-column label="客户名称" prop="consigneeName" align="center">
+						<template slot-scope="scope">
+							<router-link tag="span" class="link" :to="{name: 'exceptanomaly', query: {consigneeName: scope.row.consigneeName}}">
+								{{scope.row.consigneeName}}
+							</router-link>
+						</template>
+					</el-table-column>
 					<el-table-column label="客户编号" prop="code" align="center"></el-table-column>
 					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
 					<el-table-column label="总单量" prop="orderNum" align="center"></el-table-column>
