@@ -9,7 +9,7 @@
 			</div>
 			<div class="datetime">
 				<span class="label">发货单号：{{carrierOrder.shipperNo}}</span>
-				<span class="label">运输方式：{{carrierOrder.transportType}}</span>
+				<!-- <span class="label">运输方式：{{carrierOrder.transportType}}</span> -->
 				<span class="label" v-if="carrierOrder.commissionDate">委托时间：{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
 				<span class="label">委托方：{{carrierOrder.consignorName}}</span>
 			</div>
