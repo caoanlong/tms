@@ -158,7 +158,8 @@ export default {
 			Company.customerFind({
                 current: 1,
                 size: 1000,
-                customerType: 'Consignee'
+                customerType: 'Shipper',
+                keyword:this.find.companyName
             }).then(res => {
                 cb(res.records) 
             })
@@ -194,7 +195,8 @@ export default {
                 zone:this.find.zone,
                 customerID:this.find.customerID, 
                 companyName:this.find.companyName,
-                locationAddress:this.find.locationAddress
+                locationAddress:this.find.locationAddress,
+                finalUsername:this.find.finalUsername
 			}).then(res => {
 				this.tableData = res.records
 				this.total = res.total

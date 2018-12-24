@@ -96,7 +96,7 @@
                                         </el-table-column>
                                         <el-table-column label="操作" align="center">
                                             <template slot-scope="scope">
-                                                <span v-if="addressList.length>1" @click="delAddress(scope.$index)" class="el-icon-delete deleteBtn"> 删除</span>
+                                                <span v-if="addressList.length>1" @click="delAddress(scope.row.customerAddressID)" class="el-icon-delete deleteBtn"> 删除</span>
                                             </template>
                                         </el-table-column>
                                     </el-table>

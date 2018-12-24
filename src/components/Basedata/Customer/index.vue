@@ -68,8 +68,8 @@
 					<el-table-column label="监控类型" prop="fencingType" align="center" width="140">
                         <template slot-scope="scope">
 							<span v-if="scope.row.fencingType=='Point'">地址监控</span>
-							<span v-else-if="scope.row.fencingType=='Area'">区域监控</span>
-							<span v-else>混合监控</span>
+							<span v-if="scope.row.fencingType=='Area'">区域监控</span>
+							<span v-if="scope.row.fencingType=='Mix'">混合监控</span>
 						</template>
                     </el-table-column>
 					<el-table-column label="客户类型" prop="customerType" align="center" width="140">

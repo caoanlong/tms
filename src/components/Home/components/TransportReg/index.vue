@@ -1,7 +1,7 @@
 <template>
     <div class="trans-container">
         <div class="left">
-            <el-input placeholder="提货单/承运单号/车牌" v-model="find.keyword" class="input-with-select">
+            <el-input placeholder="交货单/承运单号/车牌" v-model="find.keyword" class="input-with-select">
                 <el-button slot="append" type="primary" icon="el-icon-search" @click="search">查询</el-button>
             </el-input>
             <div class="trucks">
