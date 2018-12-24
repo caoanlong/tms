@@ -66,13 +66,13 @@
 					<el-table-column label="特价单量" prop="selfPickNum" align="center"></el-table-column>
 					<el-table-column label="特价占比" align="center">
                         <template slot-scope="scope">
-                            {{(scope.row.carrierOrderNum && scope.row.selfPickNum)? (scope.row.selfPickNum/scope.row.carrierOrderNum +'%'):0}}
+                            {{(scope.row.carrierOrderNum && scope.row.selfPickNum)? ((scope.row.selfPickNum/scope.row.carrierOrderNum*100).toFixed(2) +'%'):0}}
                         </template>
                     </el-table-column>
 					<el-table-column label="异常单" prop="alarmNum" align="center"></el-table-column>
 					<el-table-column label="异常占比" align="center">
                         <template slot-scope="scope">
-                            {{(scope.row.carrierOrderNum && scope.row.alarmNum)? (scope.row.alarmNum/scope.row.carrierOrderNum +'%'):0}}
+                            {{(scope.row.carrierOrderNum && scope.row.alarmNum)? ((scope.row.alarmNum/scope.row.carrierOrderNum*100).toFixed(2) +'%'):0}}
                         </template>
                     </el-table-column>
 					<el-table-column label="停车报警次数" prop="stopOverTimeNum" align="center"></el-table-column>
@@ -81,7 +81,7 @@
 					<el-table-column label="异常客户" prop="customerAlarmNum" align="center"></el-table-column>
 					<el-table-column label="异常客户占比" align="center">
                         <template slot-scope="scope">
-                            {{(scope.row.customerNum && scope.row.customerAlarmNum)? (scope.row.customerAlarmNum/scope.row.customerNum +'%'):0}}
+                            {{(scope.row.customerNum && scope.row.customerAlarmNum)? ((scope.row.customerAlarmNum/scope.row.customerNum*100).toFixed(2) +'%'):0}}
                         </template>
                     </el-table-column>
 				</el-table>

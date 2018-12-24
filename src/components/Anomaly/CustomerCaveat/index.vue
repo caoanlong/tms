@@ -72,7 +72,7 @@
 					<el-table-column label="异常单" prop="alarmNum" align="center"></el-table-column>
 					<el-table-column label="异常占比" align="center">
                         <template slot-scope="scope">
-                            {{(scope.row.alarmNum && scope.row.orderNum)? (scope.row.alarmNum/scope.row.orderNum +'%'):0}}
+                            {{(scope.row.alarmNum && scope.row.orderNum)? ((scope.row.alarmNum/scope.row.orderNum*100).toFixed(2) +'%'):0}}
                         </template>
                     </el-table-column>
 					<el-table-column label="停车报警次数" prop="stopOverTimeNum" align="center"></el-table-column>
