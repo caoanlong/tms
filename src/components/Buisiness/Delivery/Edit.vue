@@ -12,6 +12,7 @@
                     <el-col :span="8">
                         <el-form-item label="工厂名称" class="customerSelect" prop="companyCode">
                             <el-autocomplete 
+                                value-key="companyName" 
                                 v-model="deliveryInfo.shipperName"
                                 :fetch-suggestions="getCustomers"
                                 placeholder="请输入工厂名称" 
@@ -23,6 +24,7 @@
                     <el-col :span="8">
                         <el-form-item label="客户名称" prop="dealerCode">
                             <el-autocomplete 
+                                value-key="companyName" 
                                 v-model="deliveryInfo.consigneeName"
                                 :fetch-suggestions="getDealer"
                                 placeholder="请输入客户名称" 

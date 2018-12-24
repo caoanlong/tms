@@ -27,7 +27,7 @@
 								<el-checkbox label="Delegate">委托方</el-checkbox>
 							</el-checkbox-group>							
 						</el-form-item>
-                        <el-form-item label="所属片区" class="customerSelect" prop="zone">
+                        <el-form-item label="所属片区" class="customerSelect">
                             <el-select placeholder="请选择" v-model="recdeliverycomp.zone">
                                 <el-option v-for="(item,index) in CustomerZone" :key="index" :value="item.code" :label="item.code"></el-option>
                             </el-select>
@@ -166,7 +166,6 @@ export default {
 				companyAreaID: [ { required: true, message: '请选择区域', trigger: 'change' } ],
 				customerType: [ { required: true, message: '请选择类型', trigger: 'change' } ],
                 code: [ { required: true, message: '请输入客户编号' } ],
-                zone: [ { required: true, message: '请选择所属片区' } ],
                 fencingType: [ { required: true, message: '请选择监控类型' } ]
             }
 		}
