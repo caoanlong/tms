@@ -29,15 +29,14 @@
                         <el-form-item label="客户编号">
 							<p>{{recdeliverycomp.code}}</p>
 						</el-form-item>
-                        <el-form-item label="监控类型">
+                        <el-form-item label="监控类型" v-if="isShow">
 							<p>
                                 <span v-if="recdeliverycomp.fencingType == 'Point'">地址监控</span>
-                                <span v-else-if="recdeliverycomp.fencingType == 'Area'">区域监控</span>
-                                <span v-else>混合监控</span>
-                                
+                                <span v-if="recdeliverycomp.fencingType == 'Area'">区域监控</span>
+                                <span v-if="recdeliverycomp.fencingType == 'Mix'">混合监控</span>
                             </p>
 						</el-form-item>
-                        <div class="monitoringBox">
+                        <div class="monitoringBox" v-if="isShow">
                             <el-tabs v-model="monitoringType" type="card"  class="areaTable table">
                                 <el-tab-pane label="监控区域" name="Area" :disabled="recdeliverycomp.fencingType =='Point'">
                                     <el-table :data="monitoringAreaList" style="width: 100%;border-radius:0 0 4px 4px;margin-bottom:18px" border size="mini">
@@ -108,15 +107,21 @@ export default {
                     area:'',
                 }]
             },
-            monitoringType:''
+            monitoringType:'',
+            isShow:false
 		}
 	},
 	computed: {
 		dist: () => dist
-	},
+    },
+    created(){
+        this.getInfo()
+        
+    },
 	activated() {
 		if(!this.$route.query.cache) {
             this.getInfo()
+
 		}
 	},
 	methods: {
@@ -137,6 +142,11 @@ export default {
                 }else{
                     this.monitoringType = res.customer.fencingType
                 }
+                if((res.customer.customerType).includes('Shipper') || (res.customer.customerType).includes('Consignee')){
+                    this.isShow = true
+                }else{
+                    this.isShow = false
+                }
 			})
         },
         getAddressList() {
@@ -151,7 +161,7 @@ export default {
 				const latestView = views.slice(-1)[0]
 				if (latestView) this.$router.push({name: latestView.name, query: latestView.query})
 			})
-		}
+        }
 	},
 	components: {
 		ImageUpload

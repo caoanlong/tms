@@ -435,7 +435,7 @@ export default {
 			Company.customerFind({
                 current: 1,
                 size: 1000,
-                customerType: 'Shipper',
+                customerType: 'Consignee',
                 keyword:this.find.consigneeCustomer
             }).then(res => {
                 cb(res.records) 

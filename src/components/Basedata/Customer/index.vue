@@ -99,7 +99,7 @@
 									<el-dropdown-item :command="{type: 'address', data: scope.row}">地址</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'view', id:scope.row.customerID}">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}" v-if="scope.row.customerAddressNum>1">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
