@@ -7,7 +7,7 @@
 					<el-form-item label="关键字">
 						<el-input 
 							style="width:250px" 
-							placeholder="发货单号/客户名称/车牌号/调度单号" 
+							placeholder="交货单号/客户名称/车牌号/调度单号" 
 							v-model="find.keyword" 
 							@change="inputChange">
 						</el-input>
@@ -65,7 +65,7 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="发货单号" prop="shipperNo" align="center"></el-table-column>
+					<el-table-column label="交货单号" prop="shipperNo" align="center"></el-table-column>
 					<el-table-column label="发货工厂" prop="companyName"></el-table-column>
 					<el-table-column label="客户" prop="consigneeName"></el-table-column>
 					<el-table-column label="货物名称" prop="cargoName"></el-table-column>
