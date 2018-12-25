@@ -81,7 +81,10 @@ export default {
 			})
 		},
 		back() {
-			this.$router.push({name: 'companyaddress'})
+			this.$store.dispatch('delVisitedViews', this.$route).then((views) => {
+				const latestView = views.slice(-1)[0]
+				if (latestView) this.$router.push({name: latestView.name, query: latestView.query})
+			})
 		}
 	}
 }

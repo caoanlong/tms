@@ -8,7 +8,7 @@
 				<el-tag size="mini" class="statusTag" type="info" v-else-if="carrierOrder.status=='Closed'">已关闭</el-tag>
 			</div>
 			<div class="datetime">
-				<span class="label">发货单号：{{carrierOrder.shipperNo}}</span>
+				<span class="label">交货单号：{{carrierOrder.shipperNo}}</span>
 				<!-- <span class="label">运输方式：{{carrierOrder.transportType}}</span> -->
 				<span class="label" v-if="carrierOrder.commissionDate">委托时间：{{carrierOrder.commissionDate | getdatefromtimestamp(true)}}</span>
 				<span class="label">委托方：{{carrierOrder.consignorName}}</span>
@@ -273,7 +273,10 @@ export default {
 			this.$router.push({name: 'copycarrierbill', query: { carrierOrderID }})
 		},
 		back() {
-			this.$router.go(-1)
+			this.$store.dispatch('delVisitedViews', this.$route).then((views) => {
+				const latestView = views.slice(-1)[0]
+				if (latestView) this.$router.push({name: latestView.name, query: latestView.query})
+			})
 		}
 	}
 }
