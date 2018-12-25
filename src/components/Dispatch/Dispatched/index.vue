@@ -430,12 +430,13 @@ export default {
 		handUploadPhoto(bool) {
 			this.isPhotoVisible = false
 		},
-		getCustomers(companyName, cb) {
+        getCustomers(companyName, cb) {
 			this.find.consigneeID = ''
 			Company.customerFind({
                 current: 1,
                 size: 1000,
-                customerType: 'Consignee'
+                customerType: 'Shipper',
+                keyword:this.find.consigneeCustomer
             }).then(res => {
                 cb(res.records) 
             })

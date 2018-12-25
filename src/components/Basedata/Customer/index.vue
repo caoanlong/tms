@@ -68,8 +68,8 @@
 					<el-table-column label="监控类型" prop="fencingType" align="center" width="140">
                         <template slot-scope="scope">
 							<span v-if="scope.row.fencingType=='Point'">地址监控</span>
-							<span v-else-if="scope.row.fencingType=='Area'">区域监控</span>
-							<span v-else>混合监控</span>
+							<span v-if="scope.row.fencingType=='Area'">区域监控</span>
+							<span v-if="scope.row.fencingType=='Mix'">混合监控</span>
 						</template>
                     </el-table-column>
 					<el-table-column label="客户类型" prop="customerType" align="center" width="140">
@@ -99,7 +99,7 @@
 									<el-dropdown-item :command="{type: 'address', data: scope.row}">地址</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'view', id:scope.row.customerID}">查看</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}" >删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerID}" v-if="scope.row.customerAddressNum>1">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>

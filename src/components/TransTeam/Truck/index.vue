@@ -75,7 +75,7 @@
 						<template slot-scope="scope">{{scope.row.type}}</template>
 					</el-table-column>
 					<el-table-column label="安装GPS" align="center">
-						<template slot-scope="scope">{{scope.row.gpsFlag == 'Y' ? '是' : '否'}}</template>
+						<template slot-scope="scope">{{scope.row.gpsFlag == 'Y' ? '已安装' : '未安装'}}</template>
 					</el-table-column>
 					<el-table-column label="便携终端号" prop="deviceNumber" align="center"></el-table-column>
 					<el-table-column label="业务状态" prop="workStatus" align="center">

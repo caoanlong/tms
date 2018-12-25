@@ -22,11 +22,9 @@
                     </div>
                     <div class="shipperItem">
                         <span class="tit">类型：</span>
-                        <span class="ctx">
-                            {{data.consigneeFencingType == 'Point' 
-                            ? '地址监控' 
-                            : (data.consigneeFencingType == 'Area' ? '区域监控' : '')}}
-                        </span>
+                        <span class="ctx" v-if="data.consigneeFencingType == 'Point'">地址监控</span>
+                        <span class="ctx" v-if="data.consigneeFencingType == 'Area'">区域监控</span>
+                        <span class="ctx" v-if="data.consigneeFencingType == 'Mix'">混合监控</span>
                     </div>
                 </div>
             </div>

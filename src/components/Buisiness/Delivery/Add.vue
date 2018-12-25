@@ -158,7 +158,8 @@ export default {
 			Company.customerSuggest({
                 current: 1,
                 size: 1000,
-                customerType: 'Shipper'
+                customerType: 'Shipper',
+                companyName:this.deliveryInfo.companyName
             }).then(res => {
                 cb(res) 
             })
@@ -176,7 +177,8 @@ export default {
 			Company.customerSuggest({
                 current: 1,
                 size: 1000,
-                customerType: 'Consignee'
+                customerType: 'Consignee',
+                companyName:this.deliveryInfo.dealerName
             }).then(res => {
                 cb(res)
             })

@@ -1,7 +1,7 @@
 <template>
     <div class="truck">
         <div class="up">
-            <span class="order">发货单 <span class="order-num">{{truck.shipperNo}}</span></span>
+            <span class="order">交货单 <span class="order-num">{{truck.shipperNo}}</span></span>
             <el-tag class="order-tag" type="danger" size="mini" v-if="truck.msgType">异常</el-tag>
         </div>
         <div class="middle">

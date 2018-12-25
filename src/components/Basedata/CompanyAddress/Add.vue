@@ -140,7 +140,9 @@ export default {
 	methods: {
 		getCompanys(queryString, cb) {
 			this.companyAddress.customerID = ''
-			Company.customerSuggest({
+			    Company.customerSuggest({
+                current: 1,
+                size: 1000,
 				companyName: queryString
 			}).then(res => { cb(res) })
 		},
