@@ -127,7 +127,10 @@ export default {
 			})
 		},
 		back() {
-			this.$router.push({name: 'usermanage'})
+			this.$store.dispatch('delVisitedViews', this.$route).then((views) => {
+				const latestView = views.slice(-1)[0]
+				if (latestView) this.$router.push({name: latestView.name, query: latestView.query})
+			})
 		}
 	},
 	components: {

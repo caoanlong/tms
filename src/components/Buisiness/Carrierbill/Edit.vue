@@ -4,7 +4,7 @@
 			<el-form label-width="100px" size="small" :model="carrierbillInfo" :rules="rules" ref="ruleForm">
 				<el-row>
 					<el-col :span="8">
-						<el-form-item label="发货单号" prop="shipperNo">
+						<el-form-item label="交货单号" prop="shipperNo">
 							<el-input placeholder="请输入..." v-model="carrierbillInfo.shipperNo"></el-input>
 						</el-form-item>
 					</el-col>
