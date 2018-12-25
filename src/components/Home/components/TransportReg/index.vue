@@ -35,14 +35,6 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="异常原因">
-                        <el-select placeholder="请选择" v-model="find.msgType" style="width:120px">
-                            <el-option label="全部" value="all"></el-option>
-                            <el-option label="停车超时" value="StopOvertime"></el-option>
-                            <el-option label="卸货异常" value="ArrivedOffset"></el-option>
-                            <el-option label="无" value="normal"></el-option>
-                        </el-select>
-                    </el-form-item>
                     <el-form-item label="数据来源">
                         <el-select placeholder="请选择" v-model="find.type" style="width:100px">
                             <el-option label="全部" value=""></el-option>
@@ -80,7 +72,6 @@ export default {
             find: {
                 keyword: '',
                 companyCode: '',
-                msgType: 'all',
                 type: 'GPS'
             },
             curCompany: {},
@@ -125,7 +116,6 @@ export default {
                 size: this.pageSize,
                 keyword: this.find.keyword,
                 companyCode: this.find.companyCode,
-                msgType: this.find.msgType,
                 type: this.find.type
             })
             this.loading = false
@@ -161,7 +151,7 @@ export default {
          * 创建地图
          */
         createMarker() {
-            const truckPathNormal = this.list.filter(item => item.longitude&&item.latitude&&item.msgType=='')
+            const truckPathNormal = this.list.filter(item => item.longitude&&item.latitude&&!item.msgType)
             const truckPathExp = this.list.filter(item => item.longitude&&item.latitude&&item.msgType)
             for (let i = 0; i < truckPathNormal.length; i++) {
                 const truckPathNormalMarker = new AMap.Marker({
