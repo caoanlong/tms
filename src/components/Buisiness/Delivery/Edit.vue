@@ -166,7 +166,7 @@ export default {
                 current: 1,
                 size: 1000,
                 customerType: 'Shipper',
-                companyName:this.deliveryInfo.shipperName
+                companyName:this.shipperName
             }).then(res => {
                 cb(res) 
             })
