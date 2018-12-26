@@ -112,17 +112,21 @@ export default {
 		back() {
             this.$router.push({name:'delivery'})
         },
-        dispatch() {
+        dispatch(deliveryOrderID) {
             const deliveryOrderID = this.$route.query.deliveryOrderID
 			dispatchConfirm(deliveryOrderID, deliveryOrderIDs => {
 				DeliveryOrder.dispatch({ deliveryOrderIDs }).then(res => {
 					Message({ 
-                        type: 'info', 
+                        type: 'success', 
                         message: res.data.msg 
                     })
-					this.getInfo()
+					this.getList()
 				}).catch(err => {
-                    this.getInfo()
+                    Message({ 
+                        type: 'error', 
+                        message: res.data.msg 
+                    })
+                    this.getList()
                 })
 			},this.selectedList)
         },
