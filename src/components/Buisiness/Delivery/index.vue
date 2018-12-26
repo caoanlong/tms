@@ -359,11 +359,15 @@ export default {
 			dispatchConfirm(deliveryOrderID, deliveryOrderIDs => {
 				DeliveryOrder.dispatch({ deliveryOrderIDs }).then(res => {
 					Message({ 
-                        type: 'info', 
+                        type: 'success', 
                         message: res.data.msg 
                     })
 					this.getList()
 				}).catch(err => {
+                    Message({ 
+                        type: 'error', 
+                        message: res.data.msg 
+                    })
                     this.getList()
                 })
 			},this.selectedList)

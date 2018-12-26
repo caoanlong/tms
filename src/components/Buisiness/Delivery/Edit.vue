@@ -13,7 +13,7 @@
                         <el-form-item label="工厂名称" class="customerSelect" prop="companyCode">
                             <el-autocomplete 
                                 value-key="companyName" 
-                                v-model="deliveryInfo.shipperName"
+                                v-model="shipperName"
                                 :fetch-suggestions="getCustomers"
                                 placeholder="请输入工厂名称" 
                                 @select="handSelectCustomer" style="width:100%">
@@ -25,7 +25,7 @@
                         <el-form-item label="客户名称" prop="dealerCode">
                             <el-autocomplete 
                                 value-key="companyName" 
-                                v-model="deliveryInfo.dealerName"
+                                v-model="dealerName"
                                 :fetch-suggestions="getDealer"
                                 placeholder="请输入客户名称" 
                                 @select="handSelectDealer" style="width:100%">
@@ -102,12 +102,12 @@ export default {
 
 	data() {
 		return {
+            shipperName:'',
+            dealerName:'',
             deliveryInfo:{
                 code:'',
                 companyCode:'',
-                companyName:'',
                 dealerCode:'',
-                dealerName:'',
                 cargoName:'',
                 cargoCode:'',
                 cargoWeight:'',
@@ -131,12 +131,12 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
+            this.dealerName='',
+            this.shipperName='',
 			this.deliveryInfo = {
 				code:'',
                 companyCode:'',
-                companyName:'',
                 dealerCode:'',
-                dealerName:'',
                 cargoName:'',
                 cargoCode:'',
                 cargoWeight:'',
@@ -156,8 +156,8 @@ export default {
 			const deliveryOrderID = this.$route.query.deliveryOrderID
 			DeliveryOrder.orderDetail({ deliveryOrderID}).then(res => {
 				this.deliveryInfo = res
-				this.deliveryInfo.companyName = res.shipperName
-				this.deliveryInfo.dealerName = res.consigneeName
+				this.shipperName = res.shipperName
+				this.dealerName = res.consigneeName
 			})
         },
         getCustomers(companyName, cb) {
@@ -166,18 +166,18 @@ export default {
                 current: 1,
                 size: 1000,
                 customerType: 'Shipper',
-                companyName:this.deliveryInfo.shipperName
+                companyName:this.shipperName
             }).then(res => {
                 cb(res) 
             })
         },
         handSelectCustomer(data){
 			this.deliveryInfo.companyCode = data.code
-            this.deliveryInfo.shipperName = data.companyName
+            this.shipperName = data.companyName
         },
         clearSelectCustomer(){
 			this.deliveryInfo.companyCode = ''
-			this.deliveryInfo.shipperName = ''
+			this.shipperName = ''
 		},
         getDealer(companyName, cb) {
 			this.deliveryInfo.dealerCode = ''
@@ -185,18 +185,18 @@ export default {
                 current: 1,
                 size: 1000,
                 customerType: 'Consignee',
-                companyName:this.deliveryInfo.dealerName
+                companyName:this.dealerName
             }).then(res => {
                 cb(res)
             })
 		},
         handSelectDealer(data){
 			this.deliveryInfo.dealerCode = data.code
-            this.deliveryInfo.dealerName = data.companyName
+            this.dealerName = data.companyName
         },
         clearSelectDealer(){
 			this.deliveryInfo.dealerCode = ''
-			this.deliveryInfo.consigneeName =''
+			this.dealerName =''
 		},
         getCargoList(Name, cb) {
 			this.deliveryInfo.cargoCode = ''

@@ -36,7 +36,7 @@
 					<el-col :span="12">
 						<div class="section-block posr">
 							<span class="block-title">发货信息</span>
-							<span class="addCompany" @click="addAddress('shipper')">新增企业地址</span>
+							
 							<el-row class="block-content">
                                 <el-form-item label="发货方" prop="shipperID">
 									<el-autocomplete  style="width:100%"
@@ -108,7 +108,6 @@
 					<el-col :span="12">
 						<div class="section-block posr">
 							<span class="block-title">到货信息</span>
-							<span class="addCompany" @click="addAddress('consignee')">新增企业地址</span>
 							<el-row class="block-content">
                                 <el-form-item label="到货方" prop="consigneeID">
 									<el-autocomplete  style="width:100%"
@@ -301,11 +300,6 @@
 				</el-row>
 			</el-form>
 		</el-card>
-		<add-com-address 
-			:isVisible="addressDialog" 
-			:company="currentCompany" 
-			@control="handAddress">
-		</add-com-address>
 	</div>
 </template>
 <script type="text/javascript">
@@ -316,7 +310,6 @@ import CarryOrder from '../../../api/CarryOrder'
 import Company from '../../../api/Company'
 import { timeToTimestamp, timestampToTime, formattimestamp } from '../../../common/utils'
 import DropdownSelect from '../../CommonComponents/DropdownSelect'
-import AddComAddress from './components/AddComAddress'
 import { checkInt, checkFloat2 } from '../../../common/validator'
 export default {
 	data() {
@@ -336,7 +329,6 @@ export default {
 		}
 		return {
 			currentCompany: {},
-			addressDialog: false,
 			isChangeShipper: false,
 			isChangeConsignee: false,
 			units: [],
@@ -409,7 +401,7 @@ export default {
 			}
 		}
 	},
-	components: { DropdownSelect, AddComAddress},
+	components: { DropdownSelect},
 	computed: {
 		checkInt: () => checkInt,
 		checkFloat2: () => checkFloat2
@@ -714,17 +706,6 @@ export default {
 			this.carrierbillInfo.consignorName = ' '
 			this.carrierbillInfo.consignorID =''
 		},
-		/**
-		 * 添加企业地址
-		 */
-		addAddress(type) {
-            if (type == "shipper") {
-                this.currentCompany = this.selectedShipper
-            } else {
-                this.currentCompany = this.selectedConsignee
-            }
-            this.addressDialog = true
-        },
 		handAddress() {
 			this.addressDialog = false
 		},
