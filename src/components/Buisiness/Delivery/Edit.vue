@@ -185,7 +185,7 @@ export default {
                 current: 1,
                 size: 1000,
                 customerType: 'Consignee',
-                companyName:this.deliveryInfo.dealerName
+                companyName:this.dealerName
             }).then(res => {
                 cb(res)
             })
