@@ -112,7 +112,7 @@ export default {
 		back() {
             this.$router.push({name:'delivery'})
         },
-        dispatch(deliveryOrderID) {
+        dispatch() {
             const deliveryOrderID = this.$route.query.deliveryOrderID
 			dispatchConfirm(deliveryOrderID, deliveryOrderIDs => {
 				DeliveryOrder.dispatch({ deliveryOrderIDs }).then(res => {
