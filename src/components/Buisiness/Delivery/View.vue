@@ -57,7 +57,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="数据来源">
-                            <p>{{deliveryInfo.comeFrom}}</p>
+                            <p>{{deliveryInfo.comeFrom=='TMS'?'手工录入':'DL系统'}}</p>
 						</el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -73,6 +73,7 @@
                     <el-col>
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
+							<el-button type="primary" @click="dispatch">生成调度</el-button>
 						</el-form-item>
 				    </el-col>
                 </el-row>
@@ -84,6 +85,7 @@
 import request, { baseURL } from '../../../common/request'
 import { baseMixin } from '../../../common/mixin'
 import DeliveryOrder from '../../../api/DeliveryOrder'
+import { dispatchConfirm } from '../../../common/utils'
 import { Message } from 'element-ui'
 export default {
 
@@ -108,11 +110,22 @@ export default {
 			})
         },
 		back() {
-			this.$store.dispatch('delVisitedViews', this.$route).then((views) => {
-				const latestView = views.slice(-1)[0]
-				if (latestView) this.$router.push({name: latestView.name, query: latestView.query})
-			})
-		}
+            this.$router.push({name:'delivery'})
+        },
+        dispatch() {
+            const deliveryOrderID = this.$route.query.deliveryOrderID
+			dispatchConfirm(deliveryOrderID, deliveryOrderIDs => {
+				DeliveryOrder.dispatch({ deliveryOrderIDs }).then(res => {
+					Message({ 
+                        type: 'info', 
+                        message: res.data.msg 
+                    })
+					this.getInfo()
+				}).catch(err => {
+                    this.getInfo()
+                })
+			},this.selectedList)
+        },
 	}
 }
 </script>

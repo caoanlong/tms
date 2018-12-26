@@ -687,7 +687,7 @@ export default {
             } else {
                 carrierbill.consigneeDate = String(Number(formattimestamp(carrierbill.consigneeDate)) + 86399000)
             }
-			carrierbill.freight = this.freight ? this.freight : this.carrierbillInfo.freight
+            carrierbill.freight = this.freight ? this.freight : this.carrierbillInfo.freight
 			CarryOrder.update(carrierbill).then(res => {
 				Message.success('成功！')
 				this.$router.push({name: 'carrierbill'})
