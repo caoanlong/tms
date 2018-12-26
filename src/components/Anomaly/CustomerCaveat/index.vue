@@ -121,7 +121,7 @@ export default {
 	},
     activated() {
 		if(!this.$route.query.cache) {
-			this.reset()
+			this.reset(true)
 		}
     },
 	methods: {
@@ -132,7 +132,7 @@ export default {
 				this.CustomerZone = res.data
 			})
 		},
-        reset(){
+        reset(bool){
             this.find.consigneeID = ''
 			this.find.companyName =''
 			this.find.code = ''
@@ -143,8 +143,10 @@ export default {
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
-			const customerIDs = this.$route.query.customerIDs
-			if (customerIDs) this.find.customerIDs = customerIDs
+			if (bool) {
+				const customerIDs = this.$route.query.customerIDs
+				if (customerIDs) this.find.customerIDs = customerIDs
+			}
 			this.getList()
         },
         getCustomers(companyName, cb) {

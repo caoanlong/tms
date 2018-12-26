@@ -135,7 +135,7 @@ export default {
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.reset()
+			this.reset(true)
 		}
 	},
 	methods: {
@@ -144,7 +144,7 @@ export default {
 			this.pageSize = this.PAGESIZE
             this.getList()
         },
-        reset(){
+        reset(bool){
             this.find.keyword = ''
 			this.find.customerID = ''
 			this.find.type = ''
@@ -153,8 +153,10 @@ export default {
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
-			const consigneeName = this.$route.query.consigneeName
-			if (consigneeName) this.find.keyword = consigneeName
+			if (bool) {
+				const consigneeName = this.$route.query.consigneeName
+				if (consigneeName) this.find.keyword = consigneeName
+			}
 			this.getList()
         },
         view(dispatchOrderID){
