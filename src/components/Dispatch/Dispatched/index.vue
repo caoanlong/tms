@@ -100,7 +100,7 @@
 						<th class="w1">承运单</th>
 						<th class="w4">状态</th>
 						<th class="w1">交货单号</th>
-						<th class="w1">发货方</th>
+						<th class="w1">发货方（工厂）</th>
 						<th class="w3">货物</th>
 						<th class="w1">异常</th>
 						<th class="w1">货量</th>

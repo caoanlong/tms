@@ -73,7 +73,7 @@
                     <el-col>
 						<el-form-item>
 							<el-button @click="back">返回</el-button>
-							<el-button type="primary" @click="dispatch">生成调度</el-button>
+							<el-button type="primary" @click="dispatch"  v-if="deliveryInfo.verifyFlag=='N'">生成调度</el-button>
 						</el-form-item>
 				    </el-col>
                 </el-row>
