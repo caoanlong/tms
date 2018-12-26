@@ -120,13 +120,13 @@ export default {
                         type: 'success', 
                         message: res.data.msg 
                     })
-					this.getList()
+					this.getInfo()
 				}).catch(err => {
                     Message({ 
                         type: 'error', 
                         message: res.data.msg 
                     })
-                    this.getList()
+                    this.getInfo()
                 })
 			},this.selectedList)
         },
