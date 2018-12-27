@@ -85,7 +85,6 @@
                         </template>
                     </el-table-column>
 				</el-table>
-				<Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
 			</div>
 		</el-card>
 	</div>
@@ -153,8 +152,6 @@ export default {
             this.find.zone = ''
             this.find.begin =this.getCurrentMonthFirst()
 			this.find.end = this.getCurrentMonthLast()
-			this.pageIndex = this.PAGEINDEX
-			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
 			this.getList()
         },
@@ -171,14 +168,13 @@ export default {
 			this.tableData = []
 			Company.shipperAlarmList({
 				current: this.pageIndex,
-				size: this.pageSize,
+				size: 100,
                 shipperID: this.find.shipperID,
                 zone:this.find.zone,
                 begin:this.find.begin,
                 end:this.find.end
 			}).then(res => {
 				this.tableData = res.records
-				this.total = res.total
 			})
         },
 		inputChange() {
