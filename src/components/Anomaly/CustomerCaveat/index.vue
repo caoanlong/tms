@@ -30,7 +30,7 @@
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							v-model="find.beginTime" 
+							v-model="find.begin" 
 							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
@@ -40,7 +40,7 @@
 							type="date" 
 							:clearable="false" 
 							value-format="timestamp" 
-							v-model="find.endTime" 
+							v-model="find.end" 
 							@change="inputChange">
 						</el-date-picker>
 					</el-form-item>
@@ -96,8 +96,8 @@ export default {
                 code: '',
                 customerIDs: '0',
                 zone:'',
-                beginTime: this.getCurrentMonthFirst(),
-                endTime: this.getCurrentMonthLast()
+                begin: this.getCurrentMonthFirst(),
+                end: this.getCurrentMonthLast()
             },
             CustomerZone:[],
 			curCompany: {},
@@ -139,8 +139,8 @@ export default {
 			this.find.code = ''
 			this.find.customerIDs = '0'
 			this.find.zone = ''
-			this.find.beginTime =this.getCurrentMonthFirst()
-			this.find.endTime = this.getCurrentMonthLast()
+			this.find.begin =this.getCurrentMonthFirst()
+			this.find.end = this.getCurrentMonthLast()
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
@@ -195,8 +195,8 @@ export default {
                 code: this.find.code,
                 customerIDs: this.find.customerIDs,
                 zone: this.find.zone,
-				beginTime: this.find.beginTime,
-				endTime: this.find.endTime
+				begin: this.find.begin,
+				end: this.find.end
 			}).then(res => {
 				this.tableData = res.records
 				this.total = res.total
@@ -212,8 +212,8 @@ export default {
 				+ '&code=' + this.find.code
 				+ '&customerIDs=' + this.find.customerIDs
 				+ '&zone=' + this.find.zone
-				+ '&beginTime=' + this.find.beginTime
-				+ '&endTime=' + this.find.endTime
+				+ '&begin=' + this.find.begin
+				+ '&end=' + this.find.end
 		}
 	}
 }
