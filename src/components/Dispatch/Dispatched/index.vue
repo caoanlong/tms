@@ -406,32 +406,27 @@ export default {
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/dispatchOrder/exportDispatched?Request-From=PC&Authorization=' + localStorage.getItem("token")	
-			+ '&shipperNo=' + this.find.shipperNo 
-			+ '&dispatchOrderNo=' + this.find.dispatchOrderNo
-			+ '&shipperCustomerID=' + this.find.shipperCustomerID
-			+ '&consigneeCustomerID=' + this.find.consigneeCustomerID
-			+ '&cargoName=' + this.find.cargoName
-			+ '&status=' + this.find.status 
-			+ '&type=' + this.find.type 
-			+ '&shipperDateBegin=' + this.find.shipperDateBegin
-			+ '&shipperDateEnd=' + this.find.shipperDateEnd
-			+ '&consigneeDateBegin=' + this.find.consigneeDateBegin
-			+ '&consigneeDateEnd=' + this.find.consigneeDateEnd
-			this.exportExcelUrl1 = baseURL + '/dispatchOrder/exportHistory?Request-From=PC&Authorization=' + localStorage.getItem("token")	
-			+ '&shipperNo=' + this.find.shipperNo 
-			+ '&dispatchOrderNo=' + this.find.dispatchOrderNo
-			+ '&shipperCustomerID=' + this.find.shipperCustomerID
-			+ '&consigneeCustomerID=' + this.find.consigneeCustomerID
-			+ '&cargoName=' + this.find.cargoName
-			+ '&status=' + this.find.status 
-			+ '&type=' + this.find.type
-			+ '&shipperDateBegin=' + this.find.shipperDateBegin
-			+ '&shipperDateEnd=' + this.find.shipperDateEnd
-			+ '&consigneeDateBegin=' + this.find.consigneeDateBegin
-			+ '&consigneeDateEnd=' + this.find.consigneeDateEnd
-			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime
-			+ '&dispatchEndTime=' + this.find.dispatchEndTime
+			const params = '&shipperNo=' + this.find.shipperNo 
+						+ '&dispatchOrderNo=' + this.find.dispatchOrderNo
+						+ '&shipperCustomerID=' + this.find.shipperCustomerID
+						+ '&consigneeCustomerID=' + this.find.consigneeCustomerID
+						+ '&cargoName=' + this.find.cargoName
+						+ '&status=' + this.find.status 
+						+ '&type=' + this.find.type
+						+ '&shipperDateBegin=' + this.find.shipperDateBegin
+						+ '&shipperDateEnd=' + this.find.shipperDateEnd
+						+ '&consigneeDateBegin=' + this.find.consigneeDateBegin
+						+ '&consigneeDateEnd=' + this.find.consigneeDateEnd
+						+ '&dispatchBeginTime=' + this.find.dispatchBeginTime
+						+ '&dispatchEndTime=' + this.find.dispatchEndTime
+			this.exportExcelUrl = baseURL 
+				+ '/dispatchOrder/exportDispatched?Request-From=PC&Authorization=' 
+				+ localStorage.getItem("token")	
+				+ params
+			this.exportExcelUrl1 = baseURL 
+				+ '/dispatchOrder/exportHistory?Request-From=PC&Authorization=' 
+				+ localStorage.getItem("token")	
+				+ params
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
