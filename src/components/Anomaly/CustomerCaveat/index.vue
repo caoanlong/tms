@@ -46,16 +46,12 @@
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
-						<el-button type="default" @click="reset">重置</el-button>
+						<el-button type="default" @click="reset(false)">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<div class="tableControl">
 				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
-				<!-- <a :href="templateUrl" download="customer.xlsx" class="download-btn">
-					<svg-icon iconClass="excel-icon"></svg-icon>
-					<span>下载模板</span>
-				</a> -->
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
@@ -105,13 +101,11 @@ export default {
             },
             CustomerZone:[],
 			curCompany: {},
-			exportExcelUrl: '',
-			// templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
-			// 	+ localStorage.getItem("token"),
+			exportExcelUrl: ''
 		}
 	},
 	created() {
-		const customerIDs = this.$route.query.customerIDs
+		const customerIDs = localStorage.getItem('customerIDs')
 		if (customerIDs) this.find.customerIDs = customerIDs
 		this.resetExportExcelUrl()
         this.getList()
@@ -127,14 +121,21 @@ export default {
 	methods: {
 		getDictList() {
 			BaseDict.getDict({
-				groupName:'CustomerZone'
+				groupName: 'CustomerZone'
 			}).then(res => {
 				this.CustomerZone = res.data
 			})
 		},
+		search() {
+			this.pageIndex = this.PAGEINDEX
+			this.pageSize = this.PAGESIZE
+			this.find.customerIDs = '0'
+			localStorage.removeItem('customerIDs')
+			this.getList()
+		},
         reset(bool){
             this.find.consigneeID = ''
-			this.find.companyName =''
+			this.find.companyName = ''
 			this.find.code = ''
 			this.find.customerIDs = '0'
 			this.find.zone = ''
@@ -144,8 +145,10 @@ export default {
 			this.pageSize = this.PAGESIZE
 			this.resetExportExcelUrl()
 			if (bool) {
-				const customerIDs = this.$route.query.customerIDs
+				const customerIDs = localStorage.getItem('customerIDs')
 				if (customerIDs) this.find.customerIDs = customerIDs
+			} else {
+				localStorage.removeItem('customerIDs')
 			}
 			this.getList()
         },

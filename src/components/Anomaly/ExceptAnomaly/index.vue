@@ -52,16 +52,12 @@
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
-						<el-button type="default" @click="reset">重置</el-button>
+						<el-button type="default" @click="reset(false)">重置</el-button>
 					</el-form-item>
 				</el-form>
 			</div>
 			<div class="tableControl">
 				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
-				<!-- <a :href="templateUrl" download="customer.xlsx" class="download-btn">
-					<svg-icon iconClass="excel-icon"></svg-icon>
-					<span>下载模板</span>
-				</a> -->
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
@@ -119,9 +115,7 @@ export default {
             },
             companys: [],
 			curCompany: {},
-			exportExcelUrl: '',
-			// templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
-			// 	+ localStorage.getItem("token"),
+			exportExcelUrl: ''
 		}
 	},
 	created() {

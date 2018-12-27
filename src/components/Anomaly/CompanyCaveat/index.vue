@@ -49,21 +49,16 @@
 			</div>
 			<div class="tableControl">
 				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
-				<!-- <a :href="templateUrl" download="customer.xlsx" class="download-btn">
-					<svg-icon iconClass="excel-icon"></svg-icon>
-					<span>下载模板</span>
-				</a> -->
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="工厂" prop="companyName" align="center">
                         <template slot-scope="scope">
-							<router-link 
-								tag="span" 
+							<span 
 								class="link" 
-								:to="{name: 'customercaveat', query: {customerIDs: scope.row.customerIDs}}">
+								@click="toCustomerExcept(scope.row.customerIDs)">
 								{{scope.row.companyName}}
-							</router-link>
+							</span>
 						</template>
                     </el-table-column>
 					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
@@ -114,11 +109,9 @@ export default {
                 end: this.getCurrentMonthLast()
             },
             companys: [],
-            CustomerZone:[],
+            CustomerZone: [],
 			curCompany: {},
-			exportExcelUrl: '',
-			// templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' 
-			// 	+ localStorage.getItem("token"),
+			exportExcelUrl: ''
 		}
 	},
 	created() {
@@ -137,7 +130,7 @@ export default {
 	methods: {
         getDictList() {
 			BaseDict.getDict({
-				groupName:'CustomerZone'
+				groupName: 'CustomerZone'
 			}).then(res => {
 				this.CustomerZone = res.data
 			})
@@ -182,7 +175,7 @@ export default {
                 shipperID: this.find.shipperID,
                 zone:this.find.zone,
                 begin:this.find.begin,
-                end:this.find.end,
+                end:this.find.end
 			}).then(res => {
 				this.tableData = res.records
 				this.total = res.total
@@ -198,7 +191,11 @@ export default {
 				+ '&zone=' + this.find.zone
 				+ '&begin=' + this.find.begin
 				+ '&end=' + this.find.end
-        },
+		},
+		toCustomerExcept(customerIDs) {
+			localStorage.setItem('customerIDs', customerIDs)
+			this.$router.push({name: 'customercaveat'})
+		},
         view(companyID ){
             this.$router.push({ name: 'exceptanomaly', query: { companyID }})
         }
