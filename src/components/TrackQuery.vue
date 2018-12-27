@@ -110,19 +110,29 @@ export default {
     },
     methods: {
         async getLogs() {
-            const res = await DispatchOrder.logList({ 
+            const url = baseURL + '/dispatchOrder/logList'
+            const params = {
                 dispatchOrderID: this.$route.query.dispatchOrderID,
                 osn: this.$route.query.osn,
                 Authorization: this.$route.query.Authorization || localStorage.getItem('token')
+            }
+            const { data } = await axios({
+                url, params,
+                headers: { 
+                    'Authorization': this.$route.query.Authorization || localStorage.getItem('token'),
+                    'Request-From': 'Open'
+                }
             })
-            this.logsLoading = false
-            this.logs = res
-            for (let i = 0; i < this.logs.length; i++) {
-                if (this.logs[i].action == 'StopOvertime') {
-                    const posAddress = await this.getAddressByLnglat([
-                        this.logs[i].longitude, this.logs[i].latitude
-                    ])
-                    this.$set(this.logs[i], 'posAddress', posAddress)
+            if (data.code == 200 && data.data) {
+                this.logsLoading = false
+                this.logs = data.data
+                for (let i = 0; i < this.logs.length; i++) {
+                    if (this.logs[i].action == 'StopOvertime') {
+                        const posAddress = await this.getAddressByLnglat([
+                            this.logs[i].longitude, this.logs[i].latitude
+                        ])
+                        this.$set(this.logs[i], 'posAddress', posAddress)
+                    }
                 }
             }
         },
