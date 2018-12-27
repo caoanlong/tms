@@ -399,6 +399,12 @@ export default {
 		ImageUpload,
 		DistPicker
 	},
+	created() {
+		if (localStorage.getItem('token')) {
+			this.$store.dispatch('getUserInfo')
+			this.$store.dispatch('getMenu')
+		}
+	},
 	methods:{
 		modifyCompany() {
 			this.editCompanyInfoDialog = true

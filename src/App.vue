@@ -6,13 +6,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-	name: 'App',
-	created() {
-		if (localStorage.getItem('token')) {
-			this.$store.dispatch('getUserInfo')
-			this.$store.dispatch('getMenu')
-		}
-	}
+	name: 'App'
 }
 
 </script>
