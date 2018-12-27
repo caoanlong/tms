@@ -85,6 +85,23 @@
 							v-model="find.consigneeDateEnd" @change="inputChange">
 						</el-date-picker>
 					</el-form-item>
+					<el-form-item label="创建时间">
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px"
+							v-model="find.dispatchBeginTime" @change="inputChange">
+						</el-date-picker>
+						<span class="tracto">至</span>
+						<el-date-picker 
+							type="date" 
+							:clearable="false" 
+							value-format="timestamp" 
+							style="width:160px" 
+							v-model="find.dispatchEndTime" @change="inputChange">
+						</el-date-picker>
+					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search(isCur)">搜索</el-button>
 						<el-button type="default" @click="reset(isCur)">重置</el-button>
@@ -300,7 +317,9 @@ export default {
 				shipperDateBegin:'',
 				shipperDateEnd:'',
 				consigneeDateBegin:'',
-				consigneeDateEnd:''
+				consigneeDateEnd:'',
+				dispatchBeginTime:'',
+				dispatchEndTime:''
 			},
 			companys: [],
 			timer: null,
@@ -409,6 +428,8 @@ export default {
 			+ '&shipperDateEnd=' + this.find.shipperDateEnd
 			+ '&consigneeDateBegin=' + this.find.consigneeDateBegin
 			+ '&consigneeDateEnd=' + this.find.consigneeDateEnd
+			+ '&dispatchBeginTime=' + this.find.dispatchBeginTime
+			+ '&dispatchEndTime=' + this.find.dispatchEndTime
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
@@ -485,7 +506,9 @@ export default {
                 shipperDateBegin:this.find.shipperDateBegin,
                 shipperDateEnd:this.find.shipperDateEnd,
                 consigneeDateBegin:this.find.consigneeDateBegin,
-                consigneeDateEnd:this.find.consigneeDateEnd
+                consigneeDateEnd:this.find.consigneeDateEnd,
+                dispatchBeginTime:this.find.dispatchBeginTime,
+                dispatchEndTime:this.find.dispatchEndTime
 			}).then(res => {
 				this.dispatchBillList = res.records
 				this.total = res.total
@@ -505,7 +528,9 @@ export default {
                 shipperDateBegin:this.find.shipperDateBegin,
                 shipperDateEnd:this.find.shipperDateEnd,
                 consigneeDateBegin:this.find.consigneeDateBegin,
-                consigneeDateEnd:this.find.consigneeDateEnd
+				consigneeDateEnd:this.find.consigneeDateEnd,
+				dispatchBeginTime:this.find.dispatchBeginTime,
+                dispatchEndTime:this.find.dispatchEndTime
 			}).then(res => {
 				this.dispatchBillList = res.records
 				this.total = res.total
