@@ -394,6 +394,8 @@ export default {
             this.find.shipperDateEnd=''
             this.find.consigneeDateBegin=''
             this.find.consigneeDateEnd=''
+            this.find.dispatchBeginTime=''
+            this.find.dispatchEndTime=''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			
