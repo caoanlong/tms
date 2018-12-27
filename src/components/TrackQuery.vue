@@ -137,7 +137,7 @@ export default {
                 url, params,
                 headers: { 
                     'Authorization': this.$route.query.Authorization || localStorage.getItem('token'),
-                    'Request-From': 'PC'
+                    'Request-From': 'Open'
                 }
             })
             if (data.code == 200 && data.data) {
