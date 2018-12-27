@@ -46,12 +46,12 @@
 				</el-col>
 			</el-row>
 			<el-row class="section-block" style="margin-bottom:20px;">
-				<span class="block-title">货物信息</span>
+				<span class="block-title">产品信息</span>
 				<div class="block-content">
 					<table class="wf-table">
 						<tr>
 							<!-- <th>客户单号</th> -->
-							<th>货物名称</th>
+							<th>产品名称</th>
 							<th>配载方式</th>
 							<th>原货量</th>
 							<th>待配载量</th>
@@ -103,7 +103,7 @@
 							<th>是否安装GPS</th>
 							<th>司机</th>
 							<th>押运员</th>
-							<th>货物名称</th>
+							<th>产品名称</th>
 							<th>配载货量</th>
 							<th>运输照片</th>
 						</tr>
