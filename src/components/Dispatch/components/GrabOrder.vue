@@ -51,7 +51,7 @@
             </el-row>
             <el-row>
                 <el-form-item label="报价类型" prop="type">
-                    <el-radio-group v-model="grabOrder.type">
+                    <el-radio-group v-model="grabOrder.type" @change="changeType">
                         <el-radio label="Grab" value="Grab">定价抢单</el-radio>
                         <el-radio label="Offer" value="Offer">司机报价</el-radio>
                     </el-radio-group>
@@ -182,12 +182,26 @@ export default {
                 }else{
                     this.minDateTime =  hour +":"+"00"
                 }
+                this.grabOrder = {
+                    requiredTruckType: '',
+                    requiredTruckLength: '',
+                    type: 'Grab',
+                    payMode: 'Prepay',
+                    endDate: '',
+                    freight: ''
+                }
+                this.$nextTick(() => {
+                    this.$refs['ruleForm'].resetFields()
+                })
             } else {
                 this.minDateTime = ""
             }
         }
     },
     methods: {
+        changeType(type) {
+            if (type == 'Offer') this.grabOrder.freight = ''
+        },
         getTruckLengths(queryString, cb) {
             cb(this.TRUCKLENGTH)
         },
