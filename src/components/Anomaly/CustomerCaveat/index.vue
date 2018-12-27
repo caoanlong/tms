@@ -152,12 +152,13 @@ export default {
 			}
 			this.getList()
         },
-        getCustomers(companyName, cb) {
+        getCustomers(keyword, cb) {
 			this.find.consigneeID = ''
 			Company.customerFind({
                 current: 1,
                 size: 1000,
-                customerType: 'Consignee'
+				customerType: 'Consignee',
+				keyword
             }).then(res => {
                 cb(res.records) 
             })
