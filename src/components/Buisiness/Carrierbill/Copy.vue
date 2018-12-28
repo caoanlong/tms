@@ -272,7 +272,7 @@
 						<div class="section-block" style="min-height:120px">
 							<span class="block-title">运输费用</span>
 							<el-row class="block-content">
-								<el-form-item label="应收金额" prop="freight">
+								<el-form-item label="应收金额">
 									<el-input placeholder="请输入..." v-model="carrierbillInfo.freight" @change="changeFreight"></el-input>
 								</el-form-item>
 							</el-row>

@@ -19,6 +19,8 @@
 							<p>{{deliveryInfo.consigneeName}}</p>
 						</el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="8">
 						<el-form-item label="产品名称">
 							<p>{{deliveryInfo.cargoName}}</p>
@@ -34,6 +36,8 @@
 							<p>{{deliveryInfo.cargoWeight?deliveryInfo.cargoWeight+'吨':''}}</p>
 						</el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="8">
                         <el-form-item label="监控级别">
                             <p>{{deliveryInfo.level}}</p>
@@ -49,6 +53,8 @@
                             <p>{{ moment(deliveryInfo.outTime).format('YYYY-MM-DD HH:mm:ss')}}</p>
 						</el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="8">
                         <el-form-item label="校验结果">
                             <p><span v-if="deliveryInfo.verifyFlag=='Y'" stytle="color:#67C23A">已通过</span>
@@ -65,17 +71,17 @@
                             <p>{{ moment(deliveryInfo.createTime).format('YYYY-MM-DD HH:mm:ss')}}</p>
 						</el-form-item>
                     </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="校验备注">
-                            <p>{{deliveryInfo.verifyRemark}}</p>
-						</el-form-item>
-                    </el-col>
-                    <el-col>
-						<el-form-item>
-							<el-button @click="back">返回</el-button>
-							<el-button type="primary" @click="dispatch"  v-if="deliveryInfo.verifyFlag=='N'">生成调度</el-button>
-						</el-form-item>
-				    </el-col>
+                </el-row>
+                <el-row>
+                    <el-form-item label="校验备注">
+                        <p>{{deliveryInfo.verifyRemark}}</p>
+                    </el-form-item>
+                </el-row>
+                <el-row>
+                    <el-form-item class="text-center">
+                        <el-button @click="back">返回</el-button>
+                        <el-button type="primary" @click="dispatch"  v-if="deliveryInfo.verifyFlag=='N'">生成调度</el-button>
+                    </el-form-item>
                 </el-row>
             </el-form>
 		</el-card>
