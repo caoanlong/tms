@@ -95,7 +95,7 @@ export default {
 	data() {
 		return {
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
-			importFileUrl: baseURL + '/company/cargo/export?Request-From=PC&Authorization=' + localStorage.getItem("token"),
+			importFileUrl: baseURL + '/company/cargo/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl: '',
 			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=cargo.xlsx&Authorization=' + localStorage.getItem("token"),
 			find: {
