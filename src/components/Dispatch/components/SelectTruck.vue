@@ -12,7 +12,7 @@
         <div class="wrapper">
             <div id="amapLocationSelect"></div>
         </div>
-        <el-form :inline="true" size="mini" style="margin-top:20px">
+        <el-form :inline="true" size="mini" style="margin-top:20px;">
             <el-form-item label="关键字">
                 <el-input placeholder="编号/姓名/车牌号/车长/车型" v-model="find.keyword" style="width:190px"></el-input>
             </el-form-item>
@@ -294,7 +294,7 @@ export default {
             odiv.style.bottom = '0'
             odiv.style.backgroundColor = '#000000'
             odiv.style.opacity = '0.5'
-            odiv.style.zIndex = '2003'
+            odiv.style.zIndex = '2100'
             document.body.appendChild(odiv)
         },
         /**
@@ -313,6 +313,11 @@ export default {
     }
 }
 </script>
+<style lang="stylus">
+.el-select-dropdown
+    z-index 2200 !important
+</style>
+
 <style lang="stylus" scoped>
 .wf-check
     position relative
@@ -353,7 +358,7 @@ export default {
     background-color #fff
     border-radius 2px
     box-shadow 0 1px 3px rgba(0,0,0,.3)
-    z-index 2004
+    z-index 2101
     &.max
         width 100%
         left 0
