@@ -294,7 +294,7 @@ export default {
             odiv.style.bottom = '0'
             odiv.style.backgroundColor = '#000000'
             odiv.style.opacity = '0.5'
-            odiv.style.zIndex = '9999'
+            odiv.style.zIndex = '2003'
             document.body.appendChild(odiv)
         },
         /**
@@ -353,7 +353,7 @@ export default {
     background-color #fff
     border-radius 2px
     box-shadow 0 1px 3px rgba(0,0,0,.3)
-    z-index 10000
+    z-index 2004
     &.max
         width 100%
         left 0
