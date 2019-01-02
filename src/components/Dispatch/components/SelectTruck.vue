@@ -1,7 +1,7 @@
 <template>
     <div class="map-container" :class="isMax?'max':''">
         <div class="dialog-tit">
-            <div class="title">选择定位地址</div>
+            <div class="title">选择车辆</div>
             <span class="minMax" @click="resizeDialog">
                 <svg-icon :icon-class="isMax?'min':'max'"></svg-icon>
             </span>
@@ -106,7 +106,15 @@
                 </tr>
             </tbody>
         </table>
-        <Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+        <el-pagination
+            @size-change="pageSizeChange"
+            @current-change="pageChange"
+            :current-page="pageIndex"
+            :page-sizes="[5, 10, 20, 30, 40, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+        </el-pagination>
         <div class="dialog-footer">
             <el-button @click="close(false)">取消</el-button>
             <el-button type="primary" @click="close(true)">确定</el-button>

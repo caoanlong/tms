@@ -11,7 +11,15 @@
 			<p class="c1">货量： 
 				{{[(scrambleList.cargoWeight+'吨'),(scrambleList.cargoVolume+'方'),(scrambleList.cargoNum)] | trimSpaceAndJoinSlash}}
 			</p>
-			<p class="c1">{{scrambleList.load}} 装 {{scrambleList.unLoad}} 卸  预计里程 {{(Number(scrambleList.mileages)/1000).toFixed(2)}}公里</p>
+			<p class="c1">
+                {{scrambleList.load}} 
+                装 
+                {{scrambleList.unLoad}} 
+                卸  
+                预计里程 
+                {{(Number(scrambleList.mileages)/1000).toFixed(2)}}
+                公里
+            </p>
 			<div class="tableBox">
 				<table class="customerTable">
 					<caption>
@@ -34,18 +42,32 @@
 							<tr>
 								<td class="txt-l">
 									<p>{{item.plateNo}} 
-										<el-tag size="mini" v-if="item.gps">GPS</el-tag>
+										<!-- <el-tag size="mini" v-if="item.gps">GPS</el-tag> -->
+                                        <el-tag 
+                                            size="mini" 
+                                            :type="item.gps ? 'success' : 'info'" 
+                                            :class="item.gps ? 'el-icon-success' : 'el-icon-warning'">
+                                            GPS
+                                        </el-tag>
 										<el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
 											<div slot="content">
-												<el-tag size="mini" type="danger" v-for="(truckItem,index) in item.truckExpiredCertificate.split(',')" :key="index">{{
-													EXPIREWARN[truckItem]
-												}}</el-tag>
+												<el-tag 
+                                                    size="mini" 
+                                                    type="danger" 
+                                                    v-for="(truckItem, index) in item.truckExpiredCertificate.split(',')" 
+                                                    :key="index">
+                                                    {{EXPIREWARN[truckItem]}}
+                                                </el-tag>
 											</div>
 											<el-tag size="mini" type="danger" v-if="item.truckExpiredCertificate.length>0">到期</el-tag>
 										</el-tooltip>
 									</p>
 									<p>
-										{{Number(item.length/1000).toFixed(1)}} 米 / {{TRUCKTYPE[item.truckType]}} {{item.loads?'/ '+Number(item.loads/1000).toFixed(2)+'吨':''}}{{item.loadVolume?'/ '+item.loadVolume+'方':''}} 
+                                        {{[
+                                            item.length ? Number(item.length/1000).toFixed(1) + '米' : null,
+                                            TRUCKTYPE[item.truckType],
+                                            item.loads ? Number(item.loads/1000).toFixed(2) + '吨' : null
+                                        ].filter(item => item).join('/')}}
 									</p>
 								</td>
 								<td class="txt-l">

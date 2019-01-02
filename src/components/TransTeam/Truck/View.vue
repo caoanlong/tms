@@ -167,12 +167,13 @@ export default {
         line-height: 2;
 		.flex-item {
 			position: relative;
-			padding-left: 140px;
+			padding-left: 180px;
+			min-height: 30px;
 			.tit {
 				position: absolute;
 				left: 0;
 				top: 0;
-				width: 126px;
+				width: 166px;
 				text-align: right;
 				color: #333;
 				font-weight: bold;
