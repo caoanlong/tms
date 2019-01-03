@@ -66,13 +66,17 @@
 					<el-table-column label="姓名" prop="realName" align="center"></el-table-column>
 					<el-table-column label="APP最后上线" prop="mobile" align="center" width="140">
 						<template slot-scope="scope">
-							<span v-if="scope.row.latestStartup">{{moment(scope.row.latestStartup).format('YYYY-MM-DD hh:mm:ss')}}</span>
+							<span v-if="scope.row.latestStartup">
+								{{moment(scope.row.latestStartup).format('YYYY-MM-DD hh:mm:ss')}}
+							</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="当前车辆" prop="plateNo" align="center"></el-table-column>
-					<el-table-column label="车型" align="center">
+					<el-table-column label="车长/车型" align="center">
 						<!-- <template slot-scope="scope">{{TRUCKTYPE[scope.row.truckType]}}</template> -->
-						<template slot-scope="scope">{{scope.row.type}}</template>
+						<template slot-scope="scope">
+							{{[scope.row.length + '米', scope.row.type].filter(item => item).join('/')}}
+						</template>
 					</el-table-column>
 					<el-table-column label="安装GPS" align="center">
 						<template slot-scope="scope">{{scope.row.gpsFlag == 'Y' ? '已安装' : '未安装'}}</template>
