@@ -75,7 +75,10 @@
 					<el-table-column label="车长/车型" align="center">
 						<!-- <template slot-scope="scope">{{TRUCKTYPE[scope.row.truckType]}}</template> -->
 						<template slot-scope="scope">
-							{{[scope.row.length + '米', scope.row.type].filter(item => item).join('/')}}
+							{{[
+								scope.row.length ? scope.row.length + '米' : null, 
+								scope.row.type
+							].filter(item => item).join('/')}}
 						</template>
 					</el-table-column>
 					<el-table-column label="安装GPS" align="center">
