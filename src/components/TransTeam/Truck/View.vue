@@ -56,7 +56,7 @@
 						<el-col :span="6">
 							<div class="flex-item">
 								<div class="tit">车长</div>
-								<div class="ctt">{{truck.length + '米'}}</div>
+								<div class="ctt">{{truck.length ? truck.length + '米' : ''}}</div>
 							</div>
 							<div class="flex-item">
 								<div class="tit">车辆照片</div>
