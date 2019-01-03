@@ -38,74 +38,76 @@
                 <el-button type="default" size="mini" icon="el-icon-refresh" @click="checkGPS">刷新GPS</el-button>
             </el-form-item>
         </el-form>
-        <table class="dialog-table">
-            <thead>
-                <tr>
-                    <th width="60">选择</th>
-                    <th>车辆</th>
-                    <th>定位位置</th>
-                    <th>定位时间</th>
-                    <th>驾驶员</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="item in tableData" :key="item.truckID">
-                    <td class="wf-check">
-                        <span 
-                            class="checkbox" 
-                            :class="selected.truckID == item.truckID ? 'selected' : ''"
-                            @click="handSelect(item)">
-                        </span>
-                    </td>
-                    <td align="center">
-                        <strong>{{item.plateNo}}</strong>
-                        <span>
-                            {{
-                                [
-                                    item.length ? (Number(item.length)/1000).toFixed(2) + '米' : '',
-                                    TRUCKTYPE[item.truckType]
-                                ].filter(item => item).join('/')
-                            }}
-                        </span>
-                        <el-tag 
-                            size="mini" 
-                            type="success">
-                            {{item.workStatus == 'Free' ? '空闲' : '业务中'}}
-                        </el-tag>
-                        <el-tooltip placement="top" effect="light">
-                            <div slot="content">{{item.gpsFlag == 'Y' ? 'GPS已安装' : 'GPS未安装'}}</div>
+        <div style="height:245px;overflow:auto">
+            <table class="dialog-table">
+                <thead>
+                    <tr>
+                        <th width="60">选择</th>
+                        <th>车辆</th>
+                        <th>定位位置</th>
+                        <th>定位时间</th>
+                        <th>驾驶员</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in tableData" :key="item.truckID">
+                        <td class="wf-check">
+                            <span 
+                                class="checkbox" 
+                                :class="selected.truckID == item.truckID ? 'selected' : ''"
+                                @click="handSelect(item)">
+                            </span>
+                        </td>
+                        <td align="center">
+                            <strong>{{item.plateNo}}</strong>
+                            <span>
+                                {{
+                                    [
+                                        item.length ? (Number(item.length)/1000).toFixed(2) + '米' : '',
+                                        TRUCKTYPE[item.truckType]
+                                    ].filter(item => item).join('/')
+                                }}
+                            </span>
                             <el-tag 
                                 size="mini" 
-                                :type="item.gpsFlag == 'Y' ? 'success' : 'info'" 
-                                :class="item.gpsFlag == 'Y' ? 'el-icon-success' : 'el-icon-warning'">
-                                GPS
+                                type="success">
+                                {{item.workStatus == 'Free' ? '空闲' : '业务中'}}
                             </el-tag>
-                        </el-tooltip>
-                        <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
-                            <div slot="content">
+                            <el-tooltip placement="top" effect="light">
+                                <div slot="content">{{item.gpsFlag == 'Y' ? 'GPS已安装' : 'GPS未安装'}}</div>
                                 <el-tag 
                                     size="mini" 
-                                    type="danger" 
-                                    v-for="(x, index) in item.expiredCertificateList" 
-                                    :key="index" 
-                                    v-if="item.expiredCertificate">
-                                    {{ EXPIREWARN[x] }}
+                                    :type="item.gpsFlag == 'Y' ? 'success' : 'info'" 
+                                    :class="item.gpsFlag == 'Y' ? 'el-icon-success' : 'el-icon-warning'">
+                                    GPS
                                 </el-tag>
-                            </div>
-                            <el-tag size="mini" type="danger" v-if="item.expiredCertificate">到期</el-tag>
-                        </el-tooltip>
-                    </td>
-                    <td align="center" @click="map.setCenter([item.longitude,item.latitude])">{{item.posAddress}}</td>
-                    <td align="center">
-                        {{item.locationTime ? moment(item.locationTime).format('YYYY-MM-DD HH:mm:ss') : ''}}
-                    </td>
-                    <td align="center">
-                        <strong>{{item.primaryDriver && item.primaryDriver.realName}}</strong>
-                        <span>{{item.primaryDriver && item.primaryDriver.mobile}}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                            </el-tooltip>
+                            <el-tooltip placement="right" effect="light" popper-class="expirewarnPop">
+                                <div slot="content">
+                                    <el-tag 
+                                        size="mini" 
+                                        type="danger" 
+                                        v-for="(x, index) in item.expiredCertificateList" 
+                                        :key="index" 
+                                        v-if="item.expiredCertificate">
+                                        {{ EXPIREWARN[x] }}
+                                    </el-tag>
+                                </div>
+                                <el-tag size="mini" type="danger" v-if="item.expiredCertificate">到期</el-tag>
+                            </el-tooltip>
+                        </td>
+                        <td align="center" @click="map.setCenter([item.longitude,item.latitude])">{{item.posAddress}}</td>
+                        <td align="center">
+                            {{item.locationTime ? moment(item.locationTime).format('YYYY-MM-DD HH:mm:ss') : ''}}
+                        </td>
+                        <td align="center">
+                            <strong>{{item.primaryDriver && item.primaryDriver.realName}}</strong>
+                            <span>{{item.primaryDriver && item.primaryDriver.mobile}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <el-pagination
             @size-change="pageSizeChange"
             @current-change="pageChange"
