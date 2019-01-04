@@ -316,7 +316,7 @@ export default {
 }
 </script>
 <style lang="stylus">
-.el-select-dropdown
+.el-select-dropdown, .el-picker-panel
     z-index 10100 !important
 </style>
 
