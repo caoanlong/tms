@@ -6,9 +6,8 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-	name: 'App'
+    name: 'App'
 }
-
 </script>
 <style lang="stylus" scoped>
 

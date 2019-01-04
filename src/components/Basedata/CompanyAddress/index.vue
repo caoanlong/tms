@@ -58,20 +58,20 @@
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="所属客户" prop="companyName" align="center"></el-table-column>
-					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
-					<el-table-column label="终端用户名称" prop="finalUsername" align="center"></el-table-column>
-					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
-					<el-table-column label="手机" prop="contactPhone" align="center"></el-table-column>
-					<el-table-column label="区域" prop="contactArea" align="center"></el-table-column>
-					<el-table-column label="地址" align="center">
+					<el-table-column label="所属客户" prop="companyName"   align="center" width='200' ></el-table-column>
+					<el-table-column label="所属片区" prop="zone"  align="center" width='160'></el-table-column>
+					<el-table-column label="终端用户名称" prop="finalUsername"   align="center" width='140'></el-table-column>
+					<el-table-column label="联系人" prop="contactName"   align="center" width='140'></el-table-column>
+					<el-table-column label="手机" prop="contactPhone"   align="center" width='140'></el-table-column>
+					<el-table-column label="区域" prop="contactArea"   align="center" width='140'></el-table-column>
+					<el-table-column label="地址">
 						<template slot-scope="scope">
 							<span>{{scope.row.locationAddress}}{{scope.row.detailAddress}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="地址编码" prop="code" align="center"></el-table-column>
+					<el-table-column label="地址编码" prop="code"   align="center" width='100'></el-table-column>
 
-                    <el-table-column label="围栏范围" prop="monitorScope" align="center">
+                    <el-table-column label="围栏范围" prop="monitorScope"   align="center" width='100'>
                         <template slot-scope="scope">
 							<span>{{scope.row.monitorScope?scope.row.monitorScope+'米':''}}</span>
 						</template>

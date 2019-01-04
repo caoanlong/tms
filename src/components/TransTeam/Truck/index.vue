@@ -50,10 +50,10 @@
 					ref="recTable"
 					:data="tableData"
 					border style="width: 100%" size="mini" stripe>
-					<el-table-column label="编号" align="center" width="80">
+					<el-table-column label="编号" align="center" width="180">
 						<template slot-scope="scope">{{scope.$index+1}}</template>
 					</el-table-column>
-					<el-table-column label="手机号" prop="mobile" align="center">
+					<el-table-column label="手机号" prop="mobile" align="center" width='140'>
 						<template slot-scope="scope">
 							<router-link 
 								tag="span" 
@@ -63,22 +63,22 @@
 							</router-link>
 						</template>
 					</el-table-column>
-					<el-table-column label="姓名" prop="realName" align="center"></el-table-column>
+					<el-table-column label="姓名" prop="realName" align="center"  width='140'></el-table-column>
 					<el-table-column label="APP最后上线" prop="mobile" align="center" width="140">
 						<template slot-scope="scope">
 							<span v-if="scope.row.latestStartup">{{moment(scope.row.latestStartup).format('YYYY-MM-DD hh:mm:ss')}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="当前车辆" prop="plateNo" align="center"></el-table-column>
-					<el-table-column label="车型" align="center">
+					<el-table-column label="当前车辆" prop="plateNo" align="center"  width='180'></el-table-column>
+					<el-table-column label="车型" align="center"  width='180'>
 						<!-- <template slot-scope="scope">{{TRUCKTYPE[scope.row.truckType]}}</template> -->
 						<template slot-scope="scope">{{scope.row.type}}</template>
 					</el-table-column>
-					<el-table-column label="安装GPS" align="center">
+					<el-table-column label="安装GPS" align="center" width='80'>
 						<template slot-scope="scope">{{scope.row.gpsFlag == 'Y' ? '已安装' : '未安装'}}</template>
 					</el-table-column>
 					<el-table-column label="便携终端号" prop="deviceNumber" align="center"></el-table-column>
-					<el-table-column label="业务状态" prop="workStatus" align="center">
+					<el-table-column label="业务状态" prop="workStatus" align="center"  width='100'>
 						<template slot-scope="scope">
 							<el-tag size="mini" type="success" v-if="scope.row.workStatus == 'Free'">空闲中</el-tag>
 							<el-tag size="mini" type="warning" v-else-if="scope.row.workStatus == 'Working'">运输中</el-tag>
