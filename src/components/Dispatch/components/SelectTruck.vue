@@ -296,7 +296,7 @@ export default {
             odiv.style.bottom = '0'
             odiv.style.backgroundColor = '#000000'
             odiv.style.opacity = '0.5'
-            odiv.style.zIndex = '2100'
+            odiv.style.zIndex = '10000'
             document.body.appendChild(odiv)
         },
         /**
@@ -317,7 +317,7 @@ export default {
 </script>
 <style lang="stylus">
 .el-select-dropdown
-    z-index 2200 !important
+    z-index 10100 !important
 </style>
 
 <style lang="stylus" scoped>
@@ -360,7 +360,7 @@ export default {
     background-color #fff
     border-radius 2px
     box-shadow 0 1px 3px rgba(0,0,0,.3)
-    z-index 2101
+    z-index 10001
     &.max
         width 100%
         left 0
