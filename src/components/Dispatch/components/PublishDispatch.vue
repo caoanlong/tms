@@ -318,7 +318,20 @@ export default {
             deep: true
         },
         isVisible: function (val){
-            val && this.totalPrice()
+            if (val) {
+                this.totalPrice()
+                this.selectedTruck = {}
+                this.baseDizDispatchFee = {
+                    item: 'Freight',  // 费用科目
+                    category: 'Basic', // 费用类型
+                    superCargo: '',  // 收款人
+                    superCargoID: '',  // 收款人
+                    superCargoName: '',  // 收款人
+                    payMode: 'Prepay',  // 支付方式
+                    amount: ''  // 金额
+                }
+                this.bizDispatchFeeList = []
+            }
         }
     },
     computed: {

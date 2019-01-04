@@ -541,12 +541,10 @@ export default {
 		handSelectConsigneeCustomer(data){
 			this.find.consigneeCustomerID = data.customerID
 			this.find.consigneeCustomerName = data.companyName
-			this.resetExportExcelUrl()
 		},
 		clearSelectConsigneeCustomer(){
 			this.find.consigneeCustomerID = ''
 			this.find.consigneeCustomerName =''
-			this.resetExportExcelUrl()
 		},
 		getCompanys() {
             Company.customerFind({
