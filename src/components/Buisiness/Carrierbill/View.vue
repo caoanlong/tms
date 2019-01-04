@@ -133,8 +133,8 @@
 								{{transport.trailerPlateNo ? ('/' + transport.trailerPlateNo) : ''}}
 							</td>
 							<td>{{transport.gpsFlag == 'Y' ? 'GPS已安装' : 'GPS未安装'}}</td>
-                            <td></td>
 							<td>{{transport.driverName}}</td>
+                            <td></td>
 							<td>{{transport.cargoName}}</td>
 							<td>{{[(transport.loadWeightSum + '吨'),(transport.loadVolumeSum + '方'),(transport.LoadNumSum)] | trimSpaceAndJoinSlash}}
 							</td>
