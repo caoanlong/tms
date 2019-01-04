@@ -240,11 +240,7 @@ export default {
             return address
         },
         close(bool) {
-            if (bool) {
-                this.$emit('control', this.selected)
-            } else {
-                this.$emit('control')
-            }
+            this.$emit('control', this.selected.truckID ? this.selected : null)
         },
         checkGPS() {
             const plateNos = this.tableData.map(item => item.plateNo).join(',')
