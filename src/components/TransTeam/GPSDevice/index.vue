@@ -28,9 +28,9 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini">
-					<el-table-column label="终端号" prop="deviceNumber"  align="center" width='200'></el-table-column>
-					<el-table-column label="装配车辆" prop="plateNo"   align="center" width='150'></el-table-column>
-					<el-table-column label="司机手机" prop="mobile"   align="center" width='140'></el-table-column>
+					<el-table-column label="终端号" prop="deviceNumber"  align="center"></el-table-column>
+					<el-table-column label="装配车辆" prop="plateNo"   align="center"></el-table-column>
+					<el-table-column label="司机手机" prop="mobile"   align="center"></el-table-column>
 					<el-table-column label="装配日期"  align="center">
 						<template slot-scope="scope">
 							<span>{{moment(scope.row.createTime).format('YYYY-MM-DD')}}</span>
@@ -41,7 +41,7 @@
 							<span v-if="scope.row.updateTime">{{moment(scope.row.updateTime).format('YYYY-MM-DD')}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="装配天数" prop="loadDays"   align="center">
+					<el-table-column label="装配天数" prop="loadDays" align="center">
 						<template slot-scope="scope">
 							<span>{{moment(scope.row.updateTime).diff(moment(scope.row.createTime), 'days')}}</span>
 						</template>

@@ -118,7 +118,7 @@
                     <el-table-column label="车牌号" align="center"  width='120' prop="plateNo"></el-table-column>
 					<el-table-column label="工厂" prop="shipperName" align="center"  width='130'></el-table-column>
 					<el-table-column label="客户" prop="consigneeName" align="center"  width='130'></el-table-column>
-					<el-table-column label="产品" prop="cargoName" align="center"  width='130'></el-table-column>
+					<el-table-column label="产品" prop="cargoName" align="center"></el-table-column>
 					<el-table-column label="数量（袋）" prop="cargoQuantity"  align="center"  width='120'></el-table-column>
 					<el-table-column label="重量（吨）" prop="cargoWeight"  align="center"  width='120'></el-table-column>
 					<el-table-column label="创建时间" width="140" align="center">
@@ -142,7 +142,7 @@
                             <span v-else style="color:#F56C6C">未通过</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="备注" prop="verifyRemark" width='150'></el-table-column>
+					<el-table-column label="备注" prop="verifyRemark"></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click" v-if="scope.row.verifyFlag =='N'">

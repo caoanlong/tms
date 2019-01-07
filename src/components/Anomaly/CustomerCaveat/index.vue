@@ -62,8 +62,8 @@
 							</router-link>
 						</template>
 					</el-table-column>
-					<el-table-column label="客户编号" prop="code" align="center" width='120'></el-table-column>
-					<el-table-column label="所属片区" prop="zone" align="center" width='120'></el-table-column>
+					<el-table-column label="客户编号" prop="code" align="center"></el-table-column>
+					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
 					<el-table-column label="总单量" prop="orderNum" align="center"></el-table-column>
 					<el-table-column label="异常单" prop="alarmNum" align="center"></el-table-column>
 					<el-table-column label="异常占比" align="center">
