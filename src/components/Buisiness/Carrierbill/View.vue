@@ -144,7 +144,7 @@
 									type="primary" 
 									size="mini" 
 									@click="viewPhotos(transport.dispatchTaskID)">
-									查看({{transport.taskPicNum}})
+									查看照片
 								</el-button>
 								<el-button
 									:disabled="transport.dispatchOrderStatus != 'Finished' && transport.dispatchOrderStatus !='Ordered'"
