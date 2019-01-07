@@ -109,7 +109,7 @@
 							</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="交货单号" prop="shipperNo" align="center"></el-table-column>
+					<el-table-column label="交货单号" prop="shipperNo"  align="center"  width='120' ></el-table-column>
 					<el-table-column label="异常" align="center" width="60">
                         <template slot-scope="scope">
 							<span v-if="scope.row.alarmFlag=='Y'" style="color:#F56C6C">有</span>
@@ -124,16 +124,16 @@
 							<el-tag size="mini" class="statusTag" type="info" v-else-if="scope.row.status == 'Closed'">已关闭</el-tag>
 						</template>
 					</el-table-column>
-					<el-table-column label="发货方（工厂）" prop="shipperCompanyName" align="center"></el-table-column>
-					<el-table-column label="收货方" prop="consigneeCompanyName" align="center"></el-table-column>
-					<el-table-column label="货物" prop="cargoName" align="center"></el-table-column>
-					<el-table-column label="订单量" align="center">
-						<el-table-column label="数量（袋）" prop="cargoNumSum" align="center"></el-table-column>
-						<el-table-column label="重量（吨）" prop="cargoWeightSum" align="center"></el-table-column>
+					<el-table-column label="发货方（工厂）" prop="shipperCompanyName" align="center"  width='120'></el-table-column>
+					<el-table-column label="收货方" prop="consigneeCompanyName" align="center"  width='120'></el-table-column>
+					<el-table-column label="货物" prop="cargoName" align="center"  width='120'></el-table-column>
+					<el-table-column label="订单量"  align="center"  width='200'>
+						<el-table-column label="数量（袋）" prop="cargoNumSum" align="center"  width='100'></el-table-column>
+						<el-table-column label="重量（吨）" prop="cargoWeightSum" align="center"  width='100'></el-table-column>
 					</el-table-column>
-					<el-table-column label="剩余量" align="center">
-						<el-table-column label="数量（袋）" prop="remainingCargoNum" align="center"></el-table-column>
-						<el-table-column label="重量（吨）" prop="remainingCargoWeight" align="center"></el-table-column>
+					<el-table-column label="剩余量"  align="center"  width='200'>
+						<el-table-column label="数量（袋）" prop="remainingCargoNum" align="center" width='100'></el-table-column>
+						<el-table-column label="重量（吨）" prop="remainingCargoWeight" align="center" width='100'></el-table-column>
 					</el-table-column>
 					<el-table-column label="创建时间" width="140" align="center">
 						<template slot-scope="scope">

@@ -62,9 +62,9 @@
 					:data="tableData" @selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="客户名称" prop="companyName"></el-table-column>
+					<el-table-column label="客户名称" prop="companyName"   align="center" width='200'></el-table-column>
 					<el-table-column label="客户编号" prop="code" align="center" width="140"></el-table-column>
-					<el-table-column label="所属片区" prop="zone" align="center" width="140"></el-table-column>
+					<el-table-column label="所属片区" prop="zone" align="center" width="160"></el-table-column>
 					<el-table-column label="监控类型" prop="fencingType" align="center" width="140">
                         <template slot-scope="scope">
 							<span v-if="scope.row.fencingType=='Point'">地址监控</span>
@@ -72,17 +72,17 @@
 							<span v-if="scope.row.fencingType=='Mix'">混合监控</span>
 						</template>
                     </el-table-column>
-					<el-table-column label="客户类型" prop="customerType" align="center" width="140">
+					<el-table-column label="客户类型" prop="customerType" align="center">
 						<template slot-scope="scope">
 							{{scope.row.customerType?scope.row.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , '):''}}
 						</template>
 					</el-table-column>
-					<el-table-column label="联系人" prop="contactName" width="100" align="center"></el-table-column>
+					<el-table-column label="联系人" prop="contactName" width="140" align="center"></el-table-column>
 					<el-table-column label="手机" prop="contactPhone" width="140" align="center"></el-table-column>
-					<el-table-column label="监控区域" prop="monitorAreaCount" width="80" align="center">
+					<el-table-column label="监控区域" prop="monitorAreaCount" width="100" align="center">
                         <template slot-scope="scope">{{scope.row.monitorAreaCount}}</template>
                     </el-table-column>
-					<el-table-column label="监控地址" prop="monitorAreaCount" width="80" align="center">
+					<el-table-column label="监控地址" prop="monitorAreaCount" width="100" align="center">
                         <template slot-scope="scope">{{scope.row.customerAddressNum}}</template>
                     </el-table-column>
 

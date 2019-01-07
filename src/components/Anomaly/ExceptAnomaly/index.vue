@@ -61,19 +61,19 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="交货单号" prop="shipperNo" align="center"></el-table-column>
-					<el-table-column label="发货工厂" prop="companyName"></el-table-column>
-					<el-table-column label="客户" prop="consigneeName"></el-table-column>
-					<el-table-column label="货物名称" prop="cargoName"></el-table-column>
-					<el-table-column label="起点地区" prop="fromSite" align="center"></el-table-column>
-					<el-table-column label="终点地区" prop="toSite" align="center"></el-table-column>
+					<el-table-column label="交货单号" prop="shipperNo" align="center" width='160'></el-table-column>
+					<el-table-column label="发货工厂" prop="companyName" width='120'></el-table-column>
+					<el-table-column label="客户" prop="consigneeName" width='140'></el-table-column>
+					<el-table-column label="货物名称" prop="cargoName" width='140'></el-table-column>
+					<el-table-column label="起点地区" prop="fromSite" align="center" width='120'></el-table-column>
+					<el-table-column label="终点地区" prop="toSite" align="center" width='120'></el-table-column>
 					<el-table-column label="调度日期" align="center" width="140">
                         <template slot-scope="scope">
                             {{scope.row.dispatchTime | getdatefromtimestamp}}
                         </template>
                     </el-table-column>
-					<el-table-column label="车牌号" prop="plateNo" align="center"></el-table-column>
-					<el-table-column label="异常原因" prop="type" align="center">
+					<el-table-column label="车牌号" prop="plateNo" align="center" width='120'></el-table-column>
+					<el-table-column label="异常原因" prop="type" align="center" width='100'>
                         <template slot-scope="scope">
 							<span v-if="scope.row.type=='StopOvertime'">停车超时</span>
 							<span v-else>卸货异常</span>

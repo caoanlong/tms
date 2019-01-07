@@ -52,7 +52,7 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="工厂" prop="companyName" align="center">
+					<el-table-column label="工厂" prop="companyName" align="center"  width='160'>
                         <template slot-scope="scope">
 							<span 
 								class="link" 
@@ -61,8 +61,8 @@
 							</span>
 						</template>
                     </el-table-column>
-					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
-					<el-table-column label="总单量" prop="carrierOrderNum" align="center"></el-table-column>
+					<el-table-column label="所属片区" prop="zone" align="center"  width='140'></el-table-column>
+					<el-table-column label="总单量" prop="carrierOrderNum" align="center" ></el-table-column>
 					<el-table-column label="特价单量" prop="selfPickNum" align="center"></el-table-column>
 					<el-table-column label="特价占比" align="center">
                         <template slot-scope="scope">

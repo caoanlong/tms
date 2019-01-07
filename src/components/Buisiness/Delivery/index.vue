@@ -109,40 +109,40 @@
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="交货单号" width="170"  align="center">
+					<el-table-column label="交货单号" width="150"  align="center">
 						<template slot-scope="scope">
 							<span @click="view(scope.row.deliveryOrderID)" class="link">{{scope.row.code}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="监控级别" align="center" width='80' prop="level"></el-table-column>
                     <el-table-column label="车牌号" align="center"  width='120' prop="plateNo"></el-table-column>
-					<el-table-column label="工厂" prop="shipperName" align="center"></el-table-column>
-					<el-table-column label="客户" prop="consigneeName"></el-table-column>
-					<el-table-column label="产品" prop="cargoName"></el-table-column>
-					<el-table-column label="数量（袋）" prop="cargoQuantity" align="center"></el-table-column>
-					<el-table-column label="重量（吨）" prop="cargoWeight" align="center"></el-table-column>
+					<el-table-column label="工厂" prop="shipperName" align="center"  width='130'></el-table-column>
+					<el-table-column label="客户" prop="consigneeName" align="center"  width='130'></el-table-column>
+					<el-table-column label="产品" prop="cargoName" align="center"  width='130'></el-table-column>
+					<el-table-column label="数量（袋）" prop="cargoQuantity"  align="center"  width='120'></el-table-column>
+					<el-table-column label="重量（吨）" prop="cargoWeight"  align="center"  width='120'></el-table-column>
 					<el-table-column label="创建时间" width="140" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.createTime">{{ moment(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss')}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="业务状态" prop="status" align="center">
+					<el-table-column label="业务状态" prop="status"  align="center"  width='100'>
                         <template slot-scope="scope">
 						    {{scope.row.status=='Loaded'?'已装车':'已卸货'}}
 						</template>
                     </el-table-column>
-					<el-table-column label="数据来源" align="center">
+					<el-table-column label="数据来源"  align="center"  width='120'>
                         <template slot-scope="scope">
 						    {{scope.row.comeFrom=='TMS'?'手工录入':'DL系统'}}
 						</template>
                     </el-table-column>
-					<el-table-column label="数据校验" align="center">
+					<el-table-column label="数据校验"  align="center"  width='120'>
 						<template slot-scope="scope">
                             <span v-if="scope.row.verifyFlag=='Y'" stytle="color:#67C23A">已通过</span>
                             <span v-else style="color:#F56C6C">未通过</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="备注" prop="verifyRemark"></el-table-column>
+					<el-table-column label="备注" prop="verifyRemark" width='150'></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click" v-if="scope.row.verifyFlag =='N'">
