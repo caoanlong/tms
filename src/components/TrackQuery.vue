@@ -3,8 +3,8 @@
         <div id="amapLocationSelect" :style="{'height': mapHeight + 'px'}"></div>
         <div class="logs">
             <div class="logs-top" v-loading="logsTopLoading">
-                <el-carousel trigger="click">
-                    <el-carousel-item v-for="item in deliveryList" :key="item.shipperNo">
+                <el-carousel trigger="click" indicator-position="outside" height="160px">
+                    <el-carousel-item v-for="(item, i) in deliveryList" :key="i">
                         <div class="shipperNo" v-if="!logsTopLoading">
                             <span class="tit">交货单</span>
                             <span class="ctx">{{item.shipperNo}}</span>
@@ -418,6 +418,11 @@ export default {
 }
 </script>
 
+<style lang="stylus">
+.el-carousel__button
+    background-color #999!important
+</style>
+
 <style lang="stylus" scoped>
 .track-container
     position relative
@@ -431,7 +436,7 @@ export default {
         width 300px
         padding 20px
         .logs-top
-            height 190px
+            height 200px
             background-color #ffffff
             box-shadow 0 3px 5px rgba(0,0,0,.3)
             margin-bottom 20px
