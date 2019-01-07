@@ -3,30 +3,34 @@
         <div id="amapLocationSelect" :style="{'height': mapHeight + 'px'}"></div>
         <div class="logs">
             <div class="logs-top" v-loading="logsTopLoading">
-                <div class="shipperNo" v-if="!logsTopLoading">
-                    <span class="tit">交货单</span>
-                    <span class="ctx">{{data.shipperNo}}</span>
-                </div>
-                <div class="shipperInfo" v-if="!logsTopLoading">
-                    <div class="shipperItem">
-                        <span class="tit">车辆：</span>
-                        <span class="ctx">{{data.plateNo}}</span>
-                    </div>
-                    <div class="shipperItem">
-                        <span class="tit">工厂：</span>
-                        <span class="ctx">{{data.shipperCompanyName}}</span>
-                    </div>
-                    <div class="shipperItem">
-                        <span class="tit">客户：</span>
-                        <span class="ctx">{{data.consigneeCompanyName}}</span>
-                    </div>
-                    <div class="shipperItem">
-                        <span class="tit">类型：</span>
-                        <span class="ctx" v-if="data.consigneeFencingType == 'Point'">地址监控</span>
-                        <span class="ctx" v-if="data.consigneeFencingType == 'Area'">区域监控</span>
-                        <span class="ctx" v-if="data.consigneeFencingType == 'Mix'">混合监控</span>
-                    </div>
-                </div>
+                <el-carousel trigger="click">
+                    <el-carousel-item v-for="item in deliveryList" :key="item.shipperNo">
+                        <div class="shipperNo" v-if="!logsTopLoading">
+                            <span class="tit">交货单</span>
+                            <span class="ctx">{{item.shipperNo}}</span>
+                        </div>
+                        <div class="shipperInfo" v-if="!logsTopLoading">
+                            <div class="shipperItem">
+                                <span class="tit">车辆：</span>
+                                <span class="ctx">{{item.plateNo}}</span>
+                            </div>
+                            <div class="shipperItem">
+                                <span class="tit">工厂：</span>
+                                <span class="ctx">{{item.shipperCompanyName}}</span>
+                            </div>
+                            <div class="shipperItem">
+                                <span class="tit">客户：</span>
+                                <span class="ctx">{{item.consigneeCompanyName}}</span>
+                            </div>
+                            <div class="shipperItem">
+                                <span class="tit">类型：</span>
+                                <span class="ctx" v-if="item.consigneeFencingType == 'Point'">地址监控</span>
+                                <span class="ctx" v-if="item.consigneeFencingType == 'Area'">区域监控</span>
+                                <span class="ctx" v-if="item.consigneeFencingType == 'Mix'">混合监控</span>
+                            </div>
+                        </div>
+                    </el-carousel-item>
+                </el-carousel>
             </div>
             <div class="logs-pannel" v-loading="logsLoading" :style="{'height': (mapHeight-270) + 'px'}">
                 <div class="steps">
@@ -82,6 +86,7 @@ export default {
             data: {},
             alarmMsgs: [],
             locations: [],
+            deliveryList: [],
             customerAddressList: [],
             customerMonitorAreaList: [],
             consigneeFencingType: '',
@@ -154,6 +159,7 @@ export default {
                 this.logsTopLoading = false
                 this.data = data.data
                 const { 
+                    deliveryList, 
                     locations, 
                     status, 
                     alarmMsgs, 
@@ -161,6 +167,7 @@ export default {
                     customerAddressList, 
                     customerMonitorAreaList 
                 } = data.data
+                this.deliveryList = deliveryList
                 for (let i = 0; i < alarmMsgs.length; i++) {
                     if (alarmMsgs[i].type == 'StopOvertime') {
                         alarmMsgs[i].posLocation = await this.getAddressByLnglat([
