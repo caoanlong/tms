@@ -184,12 +184,12 @@ export default {
                         customerMonitorAreaList.push(...deliveryList[i].customerMonitorAreaList)
                     }
                 }
-                this.status = status
+                this.status = status[0]
                 this.consigneeFencingType = consigneeFencingType
                 this.customerAddressList = customerAddressList
                 this.customerMonitorAreaList = customerMonitorAreaList
                 this.alarmMsgs = alarmMsgs
-                this.drawRoute(locations, status)
+                this.drawRoute(locations, status[0])
             } else {
                 this.logsTopLoading = false
                 Message.error(data.msg)
@@ -214,22 +214,12 @@ export default {
                 }
             })
             // 绘制地址监控
-            if (this.consigneeFencingType == 'Point') {
-                this.customerAddressList.forEach(item => {
-                    this.drawAddressPoint(item)
-                })
-            } else if (this.consigneeFencingType == 'Area') {
-                this.customerMonitorAreaList.forEach(item => {
-                    this.drawArea(item)
-                })
-            } else {
-                this.customerAddressList.forEach(item => {
-                    this.drawAddressPoint(item)
-                })
-                this.customerMonitorAreaList.forEach(item => {
-                    this.drawArea(item)
-                })
-            }
+            this.customerAddressList.forEach(item => {
+                this.drawAddressPoint(item)
+            })
+            this.customerMonitorAreaList.forEach(item => {
+                this.drawArea(item)
+            })
             const path = locations.map(item => [item.loc.longitude, item.loc.latitude])
             const routeLine = new AMap.Polyline({
                 path,
