@@ -163,9 +163,7 @@ export default {
                     locations, 
                     status, 
                     alarmMsgs, 
-                    consigneeFencingType, 
-                    customerAddressList, 
-                    customerMonitorAreaList 
+                    consigneeFencingType
                 } = data.data
                 this.deliveryList = deliveryList
                 for (let i = 0; i < alarmMsgs.length; i++) {
@@ -175,10 +173,21 @@ export default {
                         ])
                     }
                 }
+                const customerAddressList = []
+                const customerMonitorAreaList = []
+                for (let i = 0; i < deliveryList.length; i++) {
+                    const element = deliveryList[i]
+                    if (deliveryList[i].customerAddressList && deliveryList[i].customerAddressList.length > 0) {
+                        customerAddressList.push(...deliveryList[i].customerAddressList)
+                    }
+                    if (deliveryList[i].customerMonitorAreaList && deliveryList[i].customerMonitorAreaList.length > 0) {
+                        customerMonitorAreaList.push(...deliveryList[i].customerMonitorAreaList)
+                    }
+                }
                 this.status = status
                 this.consigneeFencingType = consigneeFencingType
-                this.customerAddressList = customerAddressList || []
-                this.customerMonitorAreaList = customerMonitorAreaList || []
+                this.customerAddressList = customerAddressList
+                this.customerMonitorAreaList = customerMonitorAreaList
                 this.alarmMsgs = alarmMsgs
                 this.drawRoute(locations, status)
             } else {
