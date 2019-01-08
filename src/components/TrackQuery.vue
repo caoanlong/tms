@@ -161,7 +161,6 @@ export default {
                 const { 
                     deliveryList, 
                     locations, 
-                    status, 
                     alarmMsgs, 
                     consigneeFencingType
                 } = data.data
@@ -184,12 +183,12 @@ export default {
                         customerMonitorAreaList.push(...deliveryList[i].customerMonitorAreaList)
                     }
                 }
-                this.status = status[0]
+                this.status = deliveryList[0].status
                 this.consigneeFencingType = consigneeFencingType
                 this.customerAddressList = customerAddressList
                 this.customerMonitorAreaList = customerMonitorAreaList
                 this.alarmMsgs = alarmMsgs
-                this.drawRoute(locations, status[0])
+                this.drawRoute(locations, this.status)
             } else {
                 this.logsTopLoading = false
                 Message.error(data.msg)
