@@ -39,8 +39,8 @@
 		<div class="picCon" v-if="taskItem.dispatchTaskPicList.length>0">
 			<ImageUpload 
 				:isShowType="true" 
-				:objs="taskItem.dispatchTaskPicList" 
-				:files="taskItem.dispatchTaskPicList.map(item => item.minURL)" 
+				:objs="dispatchTaskPicList" 
+				:files="dispatchTaskPics" 
 				:isPreview="true">
 			</ImageUpload>
 		</div>
@@ -86,12 +86,44 @@ export default {
 	},
 	computed: {
 		defaultImg: () => defaultImg,
-		resizeImg: () => resizeImg
+		resizeImg: () => resizeImg,
+		dispatchTaskPicList() {
+			const arr = this.sort(this.taskItem.dispatchTaskPicList)
+			return arr
+		},
+		dispatchTaskPics() {
+			const arr = this.sort(this.taskItem.dispatchTaskPicList)
+			return arr.map(item => item.minURL)
+		}
 	},
 	components: {ImageUpload},
 	methods:{
 		unfold(){
 			this.isFold = !this.isFold
+		},
+		sort(list) {
+			const arr = []
+			for (let i = 0; i < list.length; i++) {
+				if (list[i].type == 'Loaded') {
+					arr.push(list[i])
+				}
+			}
+			for (let i = 0; i < list.length; i++) {
+				if (list[i].type == 'Arrived') {
+					arr.push(list[i])
+				}
+			}
+			for (let i = 0; i < list.length; i++) {
+				if (list[i].type == 'Received') {
+					arr.push(list[i])
+				}
+			}
+			for (let i = 0; i < list.length; i++) {
+				if (!list[i].type || (list[i].type != 'Loaded' && list[i].type == 'Arrived' && list[i].type == 'Received')) {
+					arr.push(list[i])
+				}
+			}
+			return arr
 		}
 	}
 }
