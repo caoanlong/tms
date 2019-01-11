@@ -138,8 +138,8 @@
 									<span class="num" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
 									<el-tag type="info" size="mini" >{{DISPATCHORDERTYPESIMPLE[item.type]}}</el-tag>
 									<div class="quoteInfo">
-										<span v-if="item.type=='Assign'">{{item.plateNo}}</span>
-										<div v-else>
+										<span>{{item.plateNo}}</span>
+										<div v-if="item.type=='Grab' || item.type=='Offer'">
 											<div class="quoteList" v-autoscroll v-if="item.status == 'Committed'">
 												<div 
 													class="quoteListItem" 
