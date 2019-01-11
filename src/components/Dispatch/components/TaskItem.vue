@@ -33,9 +33,16 @@
 				<p class="c6" v-if="taskItem.consigneeActualDate">{{taskItem.consigneeActualDate | getdatefromtimestamp('min')}}（实际到货）<el-tag size="mini" type="danger" v-if="taskItem.isArrivedOverTime=='Y'">延迟到货</el-tag></p>
 			</div>
 		</div>
-		<div class="picTit" v-if="taskItem.dispatchTaskPicList.length>0">任务照片（{{taskItem.dispatchTaskPicList.length}}）</div>
+		<div class="picTit" v-if="taskItem.dispatchTaskPicList.length>0">
+			任务照片（{{taskItem.dispatchTaskPicList.length}}）
+		</div>
 		<div class="picCon" v-if="taskItem.dispatchTaskPicList.length>0">
-			<ImageUpload :isShowType="true" :objs="taskItem.dispatchTaskPicList" :files="taskItem.dispatchTaskPicList.map(item => item.minURL)" :isPreview="true"/>
+			<ImageUpload 
+				:isShowType="true" 
+				:objs="taskItem.dispatchTaskPicList" 
+				:files="taskItem.dispatchTaskPicList.map(item => item.minURL)" 
+				:isPreview="true">
+			</ImageUpload>
 		</div>
 		<div class="cargoTit">
 			承运货物
