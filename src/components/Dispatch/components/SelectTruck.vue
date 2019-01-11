@@ -58,7 +58,7 @@
                                 @click="handSelect(item)">
                             </span>
                         </td>
-                        <td align="center">
+                        <td align="center" @click="handSelect(item)">
                             <strong>{{item.plateNo}}</strong>
                             <span>
                                 {{
@@ -96,11 +96,11 @@
                                 <el-tag size="mini" type="danger" v-if="item.expiredCertificate">到期</el-tag>
                             </el-tooltip>
                         </td>
-                        <td align="center" @click="map.setCenter([item.longitude,item.latitude])">{{item.posAddress}}</td>
-                        <td align="center">
+                        <td align="center" class="link" @click="map.setCenter([item.longitude,item.latitude])">{{item.posAddress}}</td>
+                        <td align="center" @click="handSelect(item)">
                             {{item.locationTime ? moment(item.locationTime).format('YYYY-MM-DD HH:mm:ss') : ''}}
                         </td>
-                        <td align="center">
+                        <td align="center" @click="handSelect(item)">
                             <strong>{{item.primaryDriver && item.primaryDriver.realName}}</strong>
                             <span>{{item.primaryDriver && item.primaryDriver.mobile}}</span>
                         </td>
