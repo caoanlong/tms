@@ -145,96 +145,6 @@ const routerMap = [
                 component: () => import ('../components/Dispatch/Dispatched/View')
             },
             /**
-             * 无车承运人   notruckcarrier
-             */
-            {
-                path: '/notruckcargosource',
-                name: 'notruckcargosource',
-                meta: { title: '货源上传' },
-                component: () => import ('../components/NoTruckCarrier/NotruckCargoSource')
-            },
-            {
-                path: '/addnotruckcargosource',
-                name: 'addnotruckcargosource',
-                meta: { title: '添加货源' },
-                component: () => import ('../components/NoTruckCarrier/NotruckCargoSource/Add')
-            },
-            {
-                path: '/viewnotruckcargosource',
-                name: 'viewnotruckcargosource',
-                meta: { title: '查看货源' },
-                component: () => import ('../components/NoTruckCarrier/NotruckCargoSource/View')
-            },
-            {
-                path: '/notrucktruck',
-                name: 'notrucktruck',
-                meta: { title: '车源上传' },
-                component: () => import ('../components/NoTruckCarrier/NoTruckTruck')
-            },
-            {
-                path: '/addnotrucktruck',
-                name: 'addnotrucktruck',
-                meta: { title: '添加车源' },
-                component: () => import ('../components/NoTruckCarrier/NoTruckTruck/Add')
-            },
-            {
-                path: '/viewnotrucktruck',
-                name: 'viewnotrucktruck',
-                meta: { title: '查看车源' },
-                component: () => import ('../components/NoTruckCarrier/NoTruckTruck/View')
-            },
-            {
-                path: '/notruckcarryorder',
-                name: 'notruckcarryorder',
-                meta: { title: '运单上传' },
-                component: () => import ('../components/NoTruckCarrier/NotruckCarryOrder')
-            },
-            {
-                path: '/addnotruckcarryorder',
-                name: 'addnotruckcarryorder',
-                meta: { title: '添加运单' },
-                component: () => import ('../components/NoTruckCarrier/NotruckCarryOrder/Add')
-            },
-            {
-                path: '/viewnotruckcarryorder',
-                name: 'viewnotruckcarryorder',
-                meta: { title: '查看运单' },
-                component: () => import ('../components/NoTruckCarrier/NotruckCarryOrder/View')
-            },
-            {
-                path: '/notruckbroker',
-                name: 'notruckbroker',
-                meta: { title: '资料补充' },
-                component: () => import ('../components/NoTruckCarrier/NotruckBroker')
-            },
-            /**
-             * 财务   finance
-             */
-            {
-                path: '/settleconfig',
-                name: 'settleconfig',
-                meta: { title: '结算设置' },
-                component: () => import ('../components/Finance/SettleConfig/index'),
-            },
-            {
-                path: '/addsettleconfig',
-                name: 'addsettleconfig',
-                meta: { title: '添加运费模板' },
-                component: () => import ('../components/Finance/SettleConfig/Add'),
-            },
-            {
-                path: '/editsettleconfig',
-                name: 'editsettleconfig',
-                meta: { title: '编辑运费模板' },
-                component: () => import ('../components/Finance/SettleConfig/Edit'),
-            },
-            {
-                path: '/viewsettleconfig',
-                name: 'viewsettleconfig',
-                meta: { title: '查看运费模板' },
-                component: () => import ('../components/Finance/SettleConfig/View'),
-            },
-            /**
              * 运输档案  transteam
              */
             {
@@ -272,18 +182,6 @@ const routerMap = [
                 name: 'viewsupercargo',
                 meta: { title: '查看运输人员' },
                 component: () => import ('../components/TransTeam/SuperCargo/View'),
-            },
-            {
-                path: '/refdriverapp',
-                name: 'refdriverapp',
-                meta: { title: '关联司机APP' },
-                component: () => import ('../components/TransTeam/RefDriverApp/index'),
-            },
-            {
-                path: '/expirewarn',
-                name: 'expirewarn',
-                meta: { title: '到期预警' },
-                component: () => import ('../components/TransTeam/ExpireWarn/index'),
             },
             {
                 path: '/gpsdevice',
@@ -341,12 +239,6 @@ const routerMap = [
                 name: 'viewcompanyaddress',
                 meta: { title: '查看客户地址' },
                 component: () => import ('../components/Basedata/CompanyAddress/View'),
-            },
-            {
-                path: '/customerprice',
-                name: 'customerprice',
-                meta: { title: '客户定价' },
-                component: () => import ('../components/Basedata/CustomerPrice'),
             },
             {
                 path: '/cargounit',

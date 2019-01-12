@@ -713,7 +713,7 @@
 import { Message } from 'element-ui'
 import LiftEffect from '../../../common/LiftEffect'
 import ImageUpload from '../../CommonComponents/ImageUpload'
-import SelectPosition from '../components/SelectPosition'
+import SelectPosition from './components/SelectPosition'
 import Company from '../../../api/Company'
 import { checkTel, checkIDCard, checkDriverLicenseNum } from '../../../common/validator'
 export default {
