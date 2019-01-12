@@ -311,6 +311,18 @@ const routerMap = [
                 name: 'rolemanage',
                 meta: { title: '角色管理' },
                 component: () => import ('../components/System/Rolemanage')
+            },
+            {
+                path: '/logs',
+                name: 'logs',
+                meta: { title: '操作日志' },
+                component: () => import('../components/System/Logs')
+            },
+            {
+                path: '/viewlogs',
+                name: 'viewlogs',
+                meta: { title: '日志详情' },
+                component: () => import('../components/System/Logs/View')
             }
         ]
     }
