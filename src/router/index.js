@@ -313,6 +313,18 @@ const routerMap = [
                 component: () => import ('../components/System/Rolemanage')
             },
             {
+                path: '/addrole',
+                name: 'addrole',
+                meta: { title: '添加角色' },
+                component: () => import ('../components/System/Rolemanage/Add')
+            },
+            {
+                path: '/editrole',
+                name: 'editrole',
+                meta: { title: '编辑角色' },
+                component: () => import ('../components/System/Rolemanage/Edit')
+            },
+            {
                 path: '/logs',
                 name: 'logs',
                 meta: { title: '操作日志' },
