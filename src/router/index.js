@@ -301,6 +301,12 @@ const routerMap = [
                 component: () => import ('../components/System/Usermanage/Add')
             },
             {
+                path: '/edituser',
+                name: 'edituser',
+                meta: { title: '编辑用户' },
+                component: () => import ('../components/System/Usermanage/Edit')
+            },
+            {
                 path: '/viewuser',
                 name: 'viewuser',
                 meta: { title: '查看用户' },
@@ -335,6 +341,12 @@ const routerMap = [
                 name: 'viewlogs',
                 meta: { title: '日志详情' },
                 component: () => import('../components/System/Logs/View')
+            },
+            {
+                path: '/orgpersons',
+                name: 'orgpersons',
+                meta: { title: '组织人员' },
+                component: () => import('../components/System/OrgPersons')
             }
         ]
     }

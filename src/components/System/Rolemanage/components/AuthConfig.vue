@@ -1,5 +1,11 @@
 <template>
-    <el-dialog title="权限设置" :visible.sync="showSetAuth" :show-close="false" :close-on-click-modal="false" width="30%">
+    <el-dialog 
+        title="权限设置" 
+        :visible.sync="showSetAuth" 
+        :show-close="false" 
+        :close-on-click-modal="false" 
+        width="30%" 
+        :append-to-body="true">
         <el-tree 
             :data="menus"
             show-checkbox

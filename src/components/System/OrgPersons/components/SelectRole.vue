@@ -1,5 +1,11 @@
 <template>
-    <el-dialog title="选择角色" :visible.sync="showSelectRole" :show-close="false" :close-on-click-modal="false" width="600px">
+    <el-dialog 
+        title="选择角色" 
+        :visible.sync="isVisible" 
+        :show-close="false" 
+        :close-on-click-modal="false" 
+        width="600px" 
+        :append-to-body="true">
         <el-table 
             ref="roleTable"
             :data="roles" 
@@ -9,12 +15,6 @@
             size="mini">
             <el-table-column type="selection" align="center" :selectable="(row) => row.roleType != 'SysSuperAdmin'"></el-table-column>
             <el-table-column label="角色" prop="roleName"></el-table-column>
-            <el-table-column label="拥有权限">
-                <template slot-scope="scope">
-                    <span v-if="scope.row.roleType == 'SysSuperAdmin'">全部</span>
-                    <span v-else>{{scope.row.num}}</span>
-                </template>
-            </el-table-column>
         </el-table>
         <div class="section-block" v-if="selectedRoles.length > 0">
             <span class="block-title">已配置角色</span>
@@ -28,7 +28,7 @@
             </el-row>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="cancelRole">取 消</el-button>
+            <el-button @click="close">取 消</el-button>
             <el-button type="primary" @click="submitSetRole">确 定</el-button>
         </span>
     </el-dialog>
@@ -38,7 +38,7 @@ import { Message } from 'element-ui'
 import SysMemRole from '../../../../api/SysMemRole'
 export default {
     props: {
-        showSelectRole: {
+        isVisible: {
             type: Boolean,
             default: false
         },
@@ -53,13 +53,13 @@ export default {
         }
     },
     watch: {
-        showSelectRole(newVal) {
+        isVisible(newVal) {
             this.getRoleList()
         }
     },
     methods: {
-        cancelRole() {
-            this.$emit('selected-role')
+        close() {
+            this.$emit('control')
         },
         submitSetRole() {
             SysMemRole.update({
@@ -67,7 +67,7 @@ export default {
                 memberID: this.memberID
             }).then(res => {
                 Message.success('成功！')
-                this.$emit('selected-role', true)
+                this.$emit('control', true)
             })
         },
         selectRoleChange(data) {

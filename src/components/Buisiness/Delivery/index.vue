@@ -102,7 +102,9 @@
 					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
 				</el-upload>
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download"> 导出</a>
-                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn">
+					<svg-icon iconClass="excel-icon"></svg-icon>下载模板
+				</a>
                 <el-button type="default" size="mini" icon="el-icon-tickets" @click="dispatch">批量生成</el-button>
                 <el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
 			</div>
@@ -165,7 +167,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
-import request, { baseURL } from '../../../common/request'
+import { baseURL } from '../../../common/request'
 import { baseMixin } from '../../../common/mixin'
 import dist from '../../../assets/data/distpicker.data.js'
 import { deleteConfirm,dispatchConfirm } from '../../../common/utils'

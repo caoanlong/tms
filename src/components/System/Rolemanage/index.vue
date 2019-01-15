@@ -21,13 +21,14 @@
 					@click="$router.push({name: 'addrole'})">
 					添加
 				</el-button>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="table">
 				<el-table 
 					ref="roleTable" 
 					:data="tableData" 
 					border style="width: 100%" size="mini">
-					<el-table-column type="selection" align="center" width="40" :selectable="(row) => row.roleType != 'SysAdmin'"></el-table-column>
+					<el-table-column label="编号" type="index" width="50" align="center"></el-table-column>
 					<el-table-column label="角色名称" prop="roleName" align="center"></el-table-column>
 					<el-table-column label="权限英文" prop="permission" align="center"></el-table-column>
 					<el-table-column label="角色类型" prop="roleType" align="center">
@@ -71,7 +72,8 @@ export default {
 	mixins: [baseMixin],
 	data() {
 		return {
-			find: { roleName: '' }
+			find: { roleName: '' },
+			exportExcelUrl: ''
 		}
 	},
 	created() {
@@ -121,5 +123,23 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-
+.exportExcel
+	font-size 12px
+	color #606266
+	height 29px
+	line-height 29px
+	padding 0 15px
+	border 1px solid #dcdfe6
+	border-radius 3px
+	background #fff
+	margin-left 10px
+	display inline-block
+	vertical-align top
+	&:hover
+		border-color #c6e2ff
+		color #409eff
+		background #ecf5ff
+	&:active
+		border-color #3a8ee6
+		color #3a8ee6
 </style>
