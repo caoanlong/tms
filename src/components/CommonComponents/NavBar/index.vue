@@ -1,10 +1,13 @@
 <template>
 	<div class="fixHead">
-		<div class="logo" @click="sendToParent('companyInfo')">
-			<!-- <img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
-			<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180"> -->
-			<img :src="userInfo && userInfo.logoUrl ? resizeImg(userInfo.logoUrl, '_100x100.') : defaultImg" />
-			<span class="companyName">{{companyName}}</span>
+		<div class="headL">
+			<div class="logo" @click="sendToParent('companyInfo')">
+				<!-- <img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
+				<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180"> -->
+				<img :src="userInfo && userInfo.logoUrl ? resizeImg(userInfo.logoUrl, '_100x100.') : defaultImg" />
+				<span class="companyName">{{companyName}}</span>
+			</div>
+			<div class="organization">组织名称 <span @click="dialogVisible = true">切换 <i class="el-icon-arrow-down"></i></span></div>
 		</div>
 		<el-menu class="navbar" mode="horizontal">
 			<div class="right-menu">
@@ -26,6 +29,17 @@
 				</el-dropdown>
 			</div>
 		</el-menu>
+		<el-dialog
+			title="切换组织"
+			:visible.sync="dialogVisible"
+			append-to-body="true"
+			width="30%">
+			<span>这是一段信息</span>
+			<span slot="footer" class="dialog-footer">
+				<el-button @click="dialogVisible = false">取 消</el-button>
+				<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+			</span>
+			</el-dialog>
 	</div>
 </template>
 
@@ -34,6 +48,11 @@ import { mapGetters } from 'vuex'
 import { defaultImg } from '../../../assets/icons/icons'
 import { resizeImg } from '../../../common/utils'
 export default {
+	data(){
+		return {
+			dialogVisible: false
+		};
+	},
 	computed: {
 		...mapGetters([
 			'name',
@@ -49,6 +68,9 @@ export default {
 			this.$store.dispatch('loginOut').then(() => {
 				location.reload()
 			})
+		},
+		changeOrganization(){
+
 		},
 		sendToParent(type){
 			this.$emit('listenToChild',type,true)
@@ -98,23 +120,28 @@ export default {
 					vertical-align middle
 				.el-icon-caret-bottom
 					font-size 12px
-.logo
-	padding 9px
+.headL
 	position absolute
 	left 0
 	top 0
-	cursor pointer
-	img
-		width 32px
-		height 32px
-		border-radius 8px
-		vertical-align top
-	.companyName
-		font-size 18px
-		line-height 32px
-		margin-left 9px
-		color #fff
-
-		
+	height 50px
+	color #fff
+	.logo
+		padding 9px
+		cursor pointer
+		display inline-block
+		img
+			width 32px
+			height 32px
+			border-radius 8px
+			vertical-align top
+		.companyName
+			font-size 20px
+			line-height 32px
+			margin-left 9px
+	.organization
+		font-size 14px
+		display inline-block
+		margin-left 20px
 </style>
 
