@@ -4,8 +4,8 @@
 			<div slot="header" class="clearfix">角色列表</div>
 			<div class="search">
 				<el-form :inline="true"  class="demo-form-inline"  size="small">
-					<el-form-item label="名称">
-						<el-input placeholder="请输入..." v-model="find.roleName"></el-input>
+					<el-form-item label="角色名称">
+						<el-input placeholder="角色名称" v-model="find.roleName" @input="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -30,12 +30,11 @@
 					border style="width: 100%" size="mini">
 					<el-table-column label="编号" type="index" width="50" align="center"></el-table-column>
 					<el-table-column label="角色名称" prop="roleName" align="center"></el-table-column>
-					<el-table-column label="权限英文" prop="permission" align="center"></el-table-column>
+					<el-table-column label="权限英文" prop="roleEnName" align="center"></el-table-column>
 					<el-table-column label="角色类型" prop="roleType" align="center">
 						<template slot-scope="scope">
-							<span v-if="scope.row.roleType == 'SysSuperAdmin'">系统管理员</span>
-							<span v-else-if="scope.row.roleType == 'SysAdmin'">系统角色</span>
-							<span v-else-if="scope.row.roleType == 'SysMember'">自定义角色</span>
+							<span v-if="scope.row.roleType == 'System'">系统角色</span>
+							<span v-else-if="scope.row.roleType == 'Business'">业务角色</span>
 						</template>
 					</el-table-column>
 					<el-table-column width="100" align="center" fixed="right">
@@ -49,7 +48,7 @@
 									</el-dropdown-item>
 									<el-dropdown-item 
 										:command="{type: 'delete', id: scope.row.roleID}" 
-										v-if="scope.row.roleType != 'SysAdmin'">
+										v-if="scope.row.roleType != 'System'">
 										删除
 									</el-dropdown-item>
 								</el-dropdown-menu>
@@ -68,6 +67,7 @@ import { mapGetters } from 'vuex'
 import { baseMixin } from '../../../common/mixin'
 import SysRole from '../../../api/SysRole'
 import { deleteConfirm } from '../../../common/utils'
+import { baseURL } from '../../../common/request'
 export default {
 	mixins: [baseMixin],
 	data() {
@@ -78,6 +78,7 @@ export default {
 	},
 	created() {
 		this.getList()
+		this.resetExportExcelUrl()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
@@ -85,10 +86,19 @@ export default {
 		}
 	},
 	methods: {
+		resetExportExcelUrl() {
+			this.exportExcelUrl = baseURL 
+				+ '/sys/role/export?Request-From=PC&Authorization=' 
+				+ localStorage.getItem("token")	
+				+ '&roleName=' + this.find.roleName 
+		},
+		inputChange() {
+			this.resetExportExcelUrl()
+        },
 		handleCommand(e) {
 			switch (e.type) {
 				case 'edit':
-					this.$router.push({name: 'editrole', query: { id: e.id }})
+					this.$router.push({name: 'editrole', query: { roleID: e.id }})
 					break
 				case 'delete':
 					this.del(e.id)

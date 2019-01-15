@@ -5,7 +5,7 @@
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
 					<el-form-item label="员工">
-						<el-input placeholder="工号/名字/手机号" v-model="find.keyword"></el-input>
+						<el-input placeholder="工号/名字/手机号" v-model="find.keyword" @input="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>

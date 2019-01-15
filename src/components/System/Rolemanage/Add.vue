@@ -7,19 +7,24 @@
 			<el-row :gutter="20">
 				<el-col :span="12" :offset="6">
 					<el-form label-width="120px" :model="role" :rules="rules" ref="ruleForm">
-						<el-form-item label="角色名称" prop="name">
-							<el-input placeholder="请输入..." v-model="role.name"></el-input>
+						<el-form-item label="角色名称" prop="roleName">
+							<el-input placeholder="请输入..." v-model="role.roleName"></el-input>
 						</el-form-item>
-                        <el-form-item label="权限英文" prop="permission">
-							<el-input placeholder="请输入..." v-model="role.permission"></el-input>
+                        <el-form-item label="权限英文" prop="roleEnName">
+							<el-input placeholder="请输入..." v-model="role.roleEnName"></el-input>
 						</el-form-item>
                         <el-form-item label="权限菜单" prop="menus">
                             <el-row style="border: 1px solid #dedede">
                                 <el-tree 
-                                    :data="data" 
+                                    ref="tree"
+                                    :data="menus" 
                                     :props="defaultProps" 
-                                    show-checkbox
-                                    @check="handleCheckChange">
+                                    node-key="id"
+                                    show-checkbox 
+                                    highlight-current 
+                                    :default-checked-keys="selectedMenuIds"
+                                    @check="handleCheckChange" 
+                                    @check-change="selectMenu">
                                 </el-tree>
                             </el-row>
 						</el-form-item>
@@ -35,111 +40,63 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
+import SysRole from '../../../api/SysRole'
+import SysRoleMenu from '../../../api/SysRoleMenu'
 export default {
     data() {
         return {
-            data: [
-                {
-                    id: 1,
-                    name: '系统管理',
-                    sort: 1,
-                    type: 'module',
-                    isShow: 'Y',
-                    children: [
-                        {
-                            id: 2,
-                            name: '系统设置',
-                            sort: 1,
-                            type: 'module',
-                            isShow: 'Y',
-                            children: [
-                                {
-                                    id: 3,
-                                    name: '用户管理',
-                                    sort: 1,
-                                    type: 'menu',
-                                    isShow: 'Y',
-                                    path: '/user'
-                                },
-                                {
-                                    id: 4,
-                                    name: '角色管理',
-                                    sort: 2,
-                                    type: 'menu',
-                                    isShow: 'Y',
-                                    path: '/role'
-                                }
-                            ],
-                        },
-                        {
-                            id: 5,
-                            name: '区域管理',
-                            sort: 2,
-                            type: 'menu',
-                            isShow: 'Y',
-                            path: '/area'
-                        }
-                    ]
-                },
-                {
-                    id: 6,
-                    name: '业务配置',
-                    sort: 2,
-                    type: 'module',
-                    isShow: 'Y',
-                    children: [
-                        {
-                            id: 7,
-                            name: 'App客户',
-                            sort: 2,
-                            type: 'menu',
-                            isShow: 'Y',
-                            path: '/customer'
-                        },
-                        {
-                            id: 8,
-                            name: 'App管理',
-                            sort: 3,
-                            type: 'menu',
-                            isShow: 'Y',
-                            path: '/app'
-                        }
-                    ]
-                },
-                {
-                    id: 9,
-                    name: 'TMS管理',
-                    sort: 3,
-                    type: 'menu',
-                    isShow: 'Y',
-                    path: '/tms'
-                }
-            ],
+            menus: [],
             defaultProps: {
                 children: 'children',
                 label: 'name'
             },
+            selectedMenuIds: [],
             role: {
-                name: '',
-                permission: '',
-                menus: []
+                roleName: '',
+                roleEnName: ''
             },
             rules: {
-                name: [
+                roleName: [
                     {required: true, message: '请输入角色名称'},
                     {min: 2, max: 10, message: '长度在 2 到 10 个字符'}
                 ],
-                permission: [{required: true, message: '请输入权限英文'}]
+                roleEnName: [{required: true, message: '请输入权限英文'}]
             }
         }
     },
+    created() {
+        this.getMenus()
+    },
+    activated() {
+		if(!this.$route.query.cache) {
+            this.getMenus()
+		}
+	},
     methods: {
         handleCheckChange(data, checked, indeterminate) {
-            console.log(checked.checkedNodes)
+            
         },
+        getMenus() {
+            SysRoleMenu.find().then(res => {
+                const { menuList } = res
+                this.menus = menuList
+            })
+        },
+        selectMenu(data, isSelected) {
+            this.selectedMenuIds = this.$refs['tree'].getCheckedKeys()
+		},
         save() {
             this.$refs['ruleForm'].validate(valid => {
-                console.log(valid)
+                if (!valid) return
+                SysRole.saveOrUpdate({
+                    menuIDs: this.selectedMenuIds.join(','),
+                    roleName: this.role.roleName,
+                    roleEnName: this.role.roleEnName
+                }).then(res => {
+                    Message.success('成功！')
+                    this.$router.push({name: 'rolemanage'})
+                })
             })
         },
         back() {
