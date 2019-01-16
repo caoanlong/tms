@@ -9,10 +9,6 @@
 			:unique-opened="true" 
 			:default-active="$route.name"
 			:collapse="isCollapse">
-			<!-- <el-menu-item index="home">
-				<svg-icon icon-class="home-icon"></svg-icon>
-				<span slot="title">首页</span>
-			</el-menu-item> -->
 			<sidebar-item :routes="menus"></sidebar-item>
 		</el-menu>
 	</div>

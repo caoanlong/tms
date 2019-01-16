@@ -1,6 +1,6 @@
 <template>
 	<div class="menu-wrapper">
-		<template v-for="item in routes" v-if="item.isShow == 'Y'">
+		<template v-for="item in routes.filter(i => i.isShow == 'Y')">
 			<el-menu-item 
 				v-if="!item.children || item.children.length == 0" 
 				:index="item.target" 
@@ -14,7 +14,7 @@
 					<svg-icon v-if="item.icon" :icon-class="item.icon"></svg-icon>
 					<span slot="title" class="labelTit">{{item.name}}</span>
 				</template>
-				<template v-for="child in item.children" v-if="child.isShow == 'Y'">
+				<template v-for="child in item.children.filter(i => i.isShow == 'Y')">
 					<el-menu-item 
 						:index="child.target" 
 						:key="child.target"  

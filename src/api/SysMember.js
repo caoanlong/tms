@@ -66,6 +66,17 @@ class SysMember extends Base {
             data
         })
     }
+
+    organizationList(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/organizationList',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
 }
 
 export default new SysMember('/sys/mem', request)

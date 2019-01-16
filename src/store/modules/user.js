@@ -7,6 +7,7 @@ const user = {
 		name: localStorage.getItem('name'),
 		mobile: localStorage.getItem('mobile'),
 		companyName: localStorage.getItem('companyName'),
+		organizationName: localStorage.getItem('organizationName'),
 		companyID: localStorage.getItem('companyID'),
 		token: localStorage.getItem('token')
 	},
@@ -26,6 +27,10 @@ const user = {
 		SET_COMPANYNAME: (state, companyName) => {
 			state.companyName = companyName
 			localStorage.setItem('companyName', companyName)
+		},
+		SET_ORGNAME: (state, organizationName) => {
+			state.organizationName = organizationName
+			localStorage.setItem('organizationName', organizationName)
 		},
 		SET_COMPANYID: (state, companyID) => {
 			state.companyID = companyID
@@ -54,19 +59,16 @@ const user = {
 		},
 		getUserInfo({ commit }) {
 			return new Promise((resolve, reject) => {
-				// Member.info().then(res => {
-				// 	commit('SET_USERINFO', res.data)
-				// 	commit('SET_NAME', res.data.userName)
-				// 	commit('SET_MOBILE', res.data.mobile)
-				// 	commit('SET_COMPANYNAME', res.data.companyName)
-				// 	commit('SET_COMPANYID', res.data.companyID)
-				// })
 				SysMember.detail().then(res => {
 					commit('SET_USERINFO', res)
 					commit('SET_NAME', res.userName)
 					commit('SET_MOBILE', res.mobile)
 					commit('SET_COMPANYNAME', res.companyName)
+					commit('SET_ORGNAME', res.organizationName)
 					commit('SET_COMPANYID', res.companyID)
+					resolve()
+				}).catch(err => {
+					reject(err)
 				})
 			})
 		}

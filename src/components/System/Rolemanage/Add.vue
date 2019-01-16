@@ -70,6 +70,11 @@ export default {
     },
     activated() {
 		if(!this.$route.query.cache) {
+            this.selectedMenuIds = []
+            this.role = {
+                roleName: '',
+                roleEnName: ''
+            }
             this.getMenus()
 		}
 	},

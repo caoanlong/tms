@@ -2,12 +2,13 @@
 	<div class="fixHead">
 		<div class="headL">
 			<div class="logo" @click="sendToParent('companyInfo')">
-				<!-- <img v-if="userInfo && userInfo.logoUrl" :src="imgUrl + userInfo.logoUrl">
-				<img v-else src="../../../assets/imgs/defaultLogo.png" height="50" width="180"> -->
 				<img :src="userInfo && userInfo.logoUrl ? resizeImg(userInfo.logoUrl, '_100x100.') : defaultImg" />
 				<span class="companyName">{{companyName}}</span>
 			</div>
-			<div class="organization">组织名称 <span @click="dialogVisible = true">切换 <i class="el-icon-arrow-down"></i></span></div>
+			<div class="organization">
+				{{organizationName}} 
+				<span @click="changeOrganization">切换 <i class="el-icon-arrow-down"></i></span>
+			</div>
 		</div>
 		<el-menu class="navbar" mode="horizontal">
 			<div class="right-menu">
@@ -34,7 +35,25 @@
 			:visible.sync="dialogVisible"
 			:append-to-body="true"
 			width="30%">
-			<span>这是一段信息</span>
+			<table class="dialog-table">
+				<thead>
+					<tr>
+						<th width="60">选择</th>
+						<th>组织名称</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="item in orgs" :key="item.id" @click="handSelectOrg(item)">
+						<td class="wf-check">
+							<span 
+								class="checkbox" 
+								:class="selectedOrgs.id == item.id ? 'selected' : ''">
+							</span>
+						</td>
+						<td align="center"><span>{{item.name}}</span></td>
+					</tr>
+				</tbody>
+			</table>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -47,17 +66,21 @@
 import { mapGetters } from 'vuex'
 import { defaultImg } from '../../../assets/icons/icons'
 import { resizeImg } from '../../../common/utils'
+import SysMember from '../../../api/SysMember'
 export default {
 	data(){
 		return {
-			dialogVisible: false
+			dialogVisible: false,
+			orgs: [],
+			selectedOrgs: {}
 		};
 	},
 	computed: {
 		...mapGetters([
 			'name',
 			'companyName',
-			'userInfo',
+			'organizationName',
+			'userInfo'
 		]),
 		defaultImg: () => defaultImg,
 		errorImg: () => require('../../../assets/imgs/avatar.gif'),
@@ -69,8 +92,17 @@ export default {
 				location.reload()
 			})
 		},
-		changeOrganization(){
-
+		getOrgs() {
+			SysMember.organizationList().then(res => {
+				this.orgs = res
+			})
+		},
+		changeOrganization() {
+			this.dialogVisible = true
+			this.getOrgs()
+		},
+		handSelectOrg(data) {
+			this.selectedOrgs = data
 		},
 		sendToParent(type){
 			this.$emit('listenToChild',type,true)
@@ -143,5 +175,32 @@ export default {
 		font-size 14px
 		display inline-block
 		margin-left 20px
+		cursor pointer
+.dialog-table
+	font-size 12px
+	background #dcdfe6
+	border-spacing 1px
+	width 100%
+    th
+		background #f2f2f2
+		color #666
+		padding 10px 15px
+	td
+		padding 10px 15px
+		background #fff
+	.wf-check
+		position relative
+		text-align center
+		.checkbox
+			display block
+			width 14px
+			height 14px
+			margin 0 auto
+			background url("../../../assets/imgs/checkbox.png") no-repeat 0 0
+			cursor pointer
+			&:hover
+				background-position -14px 0
+			&.selected
+				background-position -28px 0
 </style>
 
