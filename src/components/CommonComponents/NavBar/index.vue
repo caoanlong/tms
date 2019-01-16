@@ -5,9 +5,9 @@
 				<img :src="userInfo && userInfo.logoUrl ? resizeImg(userInfo.logoUrl, '_100x100.') : defaultImg" />
 				<span class="companyName">{{companyName}}</span>
 			</div>
-			<div class="organization">
-				{{organizationName}} 
-				<span @click="changeOrganization">切换 <i class="el-icon-arrow-down"></i></span>
+			<div class="organization" @click="changeOrganization">
+				{{loginOrganizationName}} 
+				<span>切换 <i class="el-icon-arrow-down"></i></span>
 			</div>
 		</div>
 		<el-menu class="navbar" mode="horizontal">
@@ -56,17 +56,19 @@
 			</table>
 			<span slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
-				<el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+				<el-button type="primary" @click="handChange">确 定</el-button>
 			</span>
 		</el-dialog>
 	</div>
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import { mapGetters } from 'vuex'
 import { defaultImg } from '../../../assets/icons/icons'
 import { resizeImg } from '../../../common/utils'
 import SysMember from '../../../api/SysMember'
+import Organization from '../../../api/Organization'
 export default {
 	data(){
 		return {
@@ -79,12 +81,19 @@ export default {
 		...mapGetters([
 			'name',
 			'companyName',
-			'organizationName',
+			'loginOrganizationID',
+			'loginOrganizationName',
 			'userInfo'
 		]),
 		defaultImg: () => defaultImg,
 		errorImg: () => require('../../../assets/imgs/avatar.gif'),
 		resizeImg: () => resizeImg
+	},
+	created() {
+		this.selectedOrgs = {
+			id: this.loginOrganizationID,
+			name: this.loginOrganizationName
+		}
 	},
 	methods: {
 		logout() {
@@ -103,6 +112,16 @@ export default {
 		},
 		handSelectOrg(data) {
 			this.selectedOrgs = data
+		},
+		handChange() {
+			Organization.selectOrganization({
+				organizationID: this.selectedOrgs.id
+			}).then(res => {
+				this.dialogVisible = false
+				Message.success('切换成功！')
+				this.$store.dispatch('getUserInfo')
+				// this.$store.dispatch('getMenu')
+			})
 		},
 		sendToParent(type){
 			this.$emit('listenToChild',type,true)

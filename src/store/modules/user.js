@@ -7,7 +7,8 @@ const user = {
 		name: localStorage.getItem('name'),
 		mobile: localStorage.getItem('mobile'),
 		companyName: localStorage.getItem('companyName'),
-		organizationName: localStorage.getItem('organizationName'),
+		loginOrganizationID: localStorage.getItem('loginOrganizationID'),
+		loginOrganizationName: localStorage.getItem('loginOrganizationName'),
 		companyID: localStorage.getItem('companyID'),
 		token: localStorage.getItem('token')
 	},
@@ -28,9 +29,13 @@ const user = {
 			state.companyName = companyName
 			localStorage.setItem('companyName', companyName)
 		},
-		SET_ORGNAME: (state, organizationName) => {
-			state.organizationName = organizationName
-			localStorage.setItem('organizationName', organizationName)
+		SET_ORGID: (state, loginOrganizationID) => {
+			state.loginOrganizationID = loginOrganizationID
+			localStorage.setItem('loginOrganizationID', loginOrganizationID)
+		},
+		SET_ORGNAME: (state, loginOrganizationName) => {
+			state.loginOrganizationName = loginOrganizationName
+			localStorage.setItem('loginOrganizationName', loginOrganizationName)
 		},
 		SET_COMPANYID: (state, companyID) => {
 			state.companyID = companyID
@@ -64,7 +69,8 @@ const user = {
 					commit('SET_NAME', res.userName)
 					commit('SET_MOBILE', res.mobile)
 					commit('SET_COMPANYNAME', res.companyName)
-					commit('SET_ORGNAME', res.organizationName)
+					commit('SET_ORGID', res.loginOrganizationID)
+					commit('SET_ORGNAME', res.loginOrganizationName)
 					commit('SET_COMPANYID', res.companyID)
 					resolve()
 				}).catch(err => {

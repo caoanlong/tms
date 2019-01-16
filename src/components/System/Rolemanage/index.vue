@@ -39,18 +39,11 @@
 					</el-table-column>
 					<el-table-column width="100" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-dropdown  @command="handleCommand"  trigger="click">
+							<el-dropdown  @command="handleCommand"  trigger="click" v-if="scope.row.roleType != 'System'">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item 
-										:command="{type: 'edit', id: scope.row.roleID}">
-										编辑
-									</el-dropdown-item>
-									<el-dropdown-item 
-										:command="{type: 'delete', id: scope.row.roleID}" 
-										v-if="scope.row.roleType != 'System'">
-										删除
-									</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.roleID}">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.roleID}">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
