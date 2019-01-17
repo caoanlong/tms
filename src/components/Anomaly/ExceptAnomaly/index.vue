@@ -97,6 +97,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import { baseURL } from '../../../common/requestByJson'
 import { baseMixin } from '../../../common/mixin'
 import CarrierOrderAlarm from '../../../api/CarrierOrderAlarm'
@@ -131,7 +132,10 @@ export default {
 		if(!this.$route.query.cache) {
 			this.reset(true)
 		}
-	},
+    },
+    computed: {
+        ...mapGetters(['permissions'])
+    },
 	methods: {
 		search(){
             this.pageIndex = this.PAGEINDEX

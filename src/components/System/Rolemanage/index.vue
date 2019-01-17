@@ -18,10 +18,10 @@
 					type="default" 
 					size="mini" 
 					icon="el-icon-plus" 
-					@click="$router.push({name: 'addrole'})">
+					@click="$router.push({name: 'addrole'})" v-if="permissions[$route.name]&&permissions[$route.name]['add']">
 					添加
 				</el-button>
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
 				<el-table 
@@ -39,11 +39,11 @@
 					</el-table-column>
 					<el-table-column width="100" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-dropdown  @command="handleCommand"  trigger="click" v-if="scope.row.roleType != 'System'">
+							<el-dropdown  @command="handleCommand"  trigger="click" v-if="(scope.row.roleType != 'System')&&(permissions[$route.name]&&permissions[$route.name]['update'] || permissions[$route.name]&&permissions[$route.name]['delete'])">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.roleID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.roleID}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.roleID}" v-if="permissions[$route.name]&&permissions[$route.name]['update']">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.roleID}" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -77,6 +77,9 @@ export default {
 		if(!this.$route.query.cache) {
 			this.reset()
 		}
+    },
+    computed: {
+		...mapGetters(['permissions'])
 	},
 	methods: {
 		resetExportExcelUrl() {

@@ -34,8 +34,8 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add" v-if="permissions[$route.name]&&permissions[$route.name]['add']">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="del" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">批量删除</el-button>
 				<el-upload 
 					class="upload-File" 
 					name="excelFile" 
@@ -46,10 +46,10 @@
 					:beforeUpload="beforeFileUpload" 
 					:headers="uploadHeaders" 
 					:show-file-list="false">
-					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
+					<el-button type="default" size="mini" icon="el-icon-upload2" v-if="permissions[$route.name]&&permissions[$route.name]['import']">导入</el-button>
 				</el-upload>
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
-				<a :href="templateUrl" class="download-btn"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
+				<a :href="templateUrl" class="download-btn" v-if="permissions[$route.name]&&permissions[$route.name]['downLoadTemplate']"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
 			<div class="table">
 				<el-table 
@@ -81,9 +81,9 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id:scope.row.customerAddressID}">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerAddressID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerAddressID}">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id:scope.row.customerAddressID}"  v-if="permissions[$route.name]&&permissions[$route.name]['detail']">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.customerAddressID}"  v-if="permissions[$route.name]&&permissions[$route.name]['update']">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.customerAddressID}"  v-if="permissions[$route.name]&&permissions[$route.name]['delete']">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -107,6 +107,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import CargoUnit from '../../../api/CargoUnit'
 import Company from '../../../api/Company'
 import BaseDict from '../../../api/BaseDict'
@@ -144,7 +145,10 @@ export default {
 		this.resetExportExcelUrl()
         this.getList()
         this.getDictList()
-	},
+    },
+    computed: {
+        ...mapGetters(['permissions'])
+    },
 	methods: {
         getDictList() {
 			BaseDict.getDict({
