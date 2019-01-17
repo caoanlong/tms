@@ -24,7 +24,7 @@
 					type="default" 
 					size="mini" 
 					icon="el-icon-plus" 
-					@click="$router.push({ name: 'adduser' })">
+					@click="$router.push({ name: 'adduser' })" v-if="permissions[$route.name]['add']">
 					添加
 				</el-button>
 				<el-upload 
@@ -77,6 +77,7 @@
 	</div>
 </template>
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
 import { Message } from 'element-ui'
 import { baseURL } from '../../../common/request'
 import { baseMixin } from '../../../common/mixin'
@@ -105,6 +106,9 @@ export default {
 		}
 	},
 	components: { Reset },
+	computed: {
+		...mapGetters(['permissions'])
+	},
 	created() {
 		this.resetExportExcelUrl()
 		if(this.$route.query.cache) {

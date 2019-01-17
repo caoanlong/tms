@@ -9,6 +9,7 @@ const getters = {
 	companyID: state => state.user.companyID,
 	sidebar: state => state.app.sidebar,
 	menus: state => state.menus.menus,
+	permissions: state => state.menus.permissions,
 	visitedViews: state => state.tagsView.visitedViews,
 	cachedViews: state => state.tagsView.cachedViews,
 	selectedCarrierBill: state => state.dispatch.selectedCarrierBill,
