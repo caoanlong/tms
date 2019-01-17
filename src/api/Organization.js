@@ -42,6 +42,16 @@ class Organization extends Base {
             })
         })
     }
+    getOrganizationMember() {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/getOrganizationMember',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
 }
 
 export default new Organization('/organization', request)

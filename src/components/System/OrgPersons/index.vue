@@ -28,7 +28,8 @@
 					:data="data.children" 
 					node-key="id"
 					:props="defaultProps" 
-					highlight-current>
+					highlight-current 
+					:expand-on-click-node="false">
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span>{{ node.label }}</span>
 						<span>
@@ -44,12 +45,12 @@
 							@click="() => edit(data)">
 							编辑
 						</el-button>
-						<el-button
+						<!-- <el-button
 							type="text"
 							size="mini"
 							@click="() => remove(data)">
 							删除
-						</el-button>
+						</el-button> -->
 						</span>
 					</span>
 				</el-tree>

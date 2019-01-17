@@ -14,13 +14,13 @@
                 <el-form-item label="组织名称" prop="name">
                     <el-input v-model="org.name"></el-input>
                 </el-form-item>
-                <el-form-item label="管理员" prop="admins">
+                <el-form-item label="管理员" prop="members">
                     <div style="position:relative;padding-right:180px;">
                         <div style="border:1px solid #dcdfe6;border-radius:4px;padding:0 10px;min-height:40px">
                             <el-tag 
                                 size="small"
                                 closable style="margin-right: 5px" 
-                                v-for="(item, i) in org.admins" 
+                                v-for="(item, i) in org.members" 
                                 :key="i" @close="closeTag(item)">
                                 {{item.realName}}
                             </el-tag>
@@ -49,7 +49,7 @@
             @control="handAddAdmin">
         </add-admin>
         <select-admin 
-            :selected="org.admins"
+            :selected="org.members"
             :organizationID="parent.id" 
             :isVisible="isSelectAdminVisible" 
             @control="handSelectAdmin">
@@ -79,12 +79,12 @@ export default {
                 code: '',
                 name: '',
                 parentId: '',
-                admins: [],
+                members: [],
                 isCom: false
             },
             rules: {
 				name: [{ required: true, message: '请输入组织名称' }],
-				admins: [{ required: true, message: '请添加管理员' }],
+				members: [{ required: true, message: '请添加管理员' }],
 				isCom: [{ required: true, message: '请选择是否是工厂' }],
 				code: [{ required: true, message: '请输入工厂编码' }]
             }
@@ -93,24 +93,24 @@ export default {
     methods: {
         handAddAdmin(data) {
             if (data) {
-                this.org.admins.push(data)
+                this.org.members.push(data)
             }
             this.isAddAdminVisible = false
         },
         handSelectAdmin(data) {
             if (data) {
-                const memberIDs = this.org.admins.map(item => item.memberID)
+                const memberIDs = this.org.members.map(item => item.memberID)
                 for (let i = 0; i < data.length; i++) {
                     if (memberIDs.indexOf(data[i].memberID) == -1) {
-                        this.org.admins.push(data[i])
+                        this.org.members.push(data[i])
                     }
                 }
             }
             this.isSelectAdminVisible = false
         },
         closeTag(data) {
-            const memberIDs = this.org.admins.map(item => item.memberID)
-            this.org.admins.splice(memberIDs.indexOf(data.memberID), 1)
+            const memberIDs = this.org.members.map(item => item.memberID)
+            this.org.members.splice(memberIDs.indexOf(data.memberID), 1)
         },
         close() {
             this.$emit('control')
