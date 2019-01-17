@@ -1,7 +1,10 @@
 <template>
 	<div class="main-content">
 		<el-card class="box-card customerCardHeader">
-			<div slot="header" class="tab clearfix"><span :class="isCur==0?'cur':''" @click="tabClick(0)">已调度</span><span :class="isCur==1?'cur':''" @click="tabClick(1)">调度历史</span></div>
+			<div slot="header" class="tab clearfix">
+                <span :class="isCur==0?'cur':''" @click="tabClick(0)"  v-if="permissions[$route.name]&&permissions[$route.name]['listOfDispatched']">已调度</span>
+                <span :class="isCur==1?'cur':''" @click="tabClick(1)"  v-if="permissions[$route.name]&&permissions[$route.name]['listOfHistory']">调度历史</span>
+            </div>
 			<div class="search">
 				<el-form :inline="true" size="small">
 					<el-form-item label="交货单号">
@@ -109,7 +112,8 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<a :href="isCur == 0 ? exportExcelUrl : exportExcelUrl1" class="exportExcel el-icon-download">导出</a>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-show="isCur == 0" v-if="permissions[$route.name]&&permissions[$route.name]['exportDispatched']">导出</a>
+				<a :href="exportExcelUrl1" class="exportExcel el-icon-download" v-show="isCur == 1" v-if="permissions[$route.name]&&permissions[$route.name]['exportHistory']">导出</a>
 			</div>
 			<div class="tableBox">
 				<table class="customerTable">
@@ -135,7 +139,8 @@
 						<tr>
 							<td colspan="13" class="txt-l">
 								<div class="dispatchbillTit">
-									<span class="num" @click="view(item.dispatchOrderID)">调度单号：{{item.dispatchOrderNo}}</span>
+									<span class="num" @click="view(item.dispatchOrderID)" v-if="permissions[$route.name]&&permissions[$route.name]['detail']">调度单号：{{item.dispatchOrderNo}}</span>
+									<span class="num noCursor" v-else>调度单号：{{item.dispatchOrderNo}}</span>
 									<el-tag type="info" size="mini" >{{DISPATCHORDERTYPESIMPLE[item.type]}}</el-tag>
 									<div class="quoteInfo">
 										<span>{{item.plateNo}}</span>
@@ -178,13 +183,13 @@
 									<span 
 										class="c1" 
 										@click="scramble(item.dispatchOrderID, item.type,item.status)" 
-										v-if="item.grabNum>0&&item.type=='Offer'">
+										v-if="(item.grabNum>0&&item.type=='Offer')&&permissions[$route.name]&&permissions[$route.name]['offerList']">
 										报价人数（{{item.grabNum}}）
 									</span>
 									<span 
 										class="c1" 
 										@click="scramble(item.dispatchOrderID, item.type,item.status)" 
-										v-if="item.grabNum>0&&item.type=='Grab'">
+										v-if="(item.grabNum>0&&item.type=='Grab')&&permissions[$route.name]&&permissions[$route.name]['offerList']">
 										抢单人数（{{item.grabNum}}）
 									</span>
 									<el-button 
@@ -201,7 +206,7 @@
 										<el-button type="text" size="mini" :disabled="
 											item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Loaded') 
 											|| item.dispatchTaskCargoVOList.map(taskItem => taskItem.status).includes('Signed')
-										" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button>
+										" @click="cancelDispatchOrder(item.dispatchOrderID)" v-if="permissions[$route.name]&&permissions[$route.name]['cancel']">取消调度</el-button>
 										<!-- <el-button type="text" size="mini" :disabled="true"  @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button> -->
 									</span>
 									<!-- 已接单 -->
@@ -213,7 +218,7 @@
 										<el-button type="text" size="mini" @click="closeDispatchOrder(item.dispatchOrderID)" style="margin-left:20px">关闭</el-button>
 									</span> -->
 									<!-- 已取消 已拒绝-->
-									<span v-if="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue'">
+									<span v-if="(item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue') && (permissions[$route.name]&&permissions[$route.name]['redispatch'])">
 										<router-link 
 											tag="span" 
 											class="c6" 
@@ -223,7 +228,7 @@
 										</router-link>
 										<!-- <el-button type="text" size="mini" :disabled="true" @click="cancelDispatchOrder(item.dispatchOrderID)">取消调度</el-button> -->
 									</span>
-									<span v-if="item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue' || item.status == 'Ordered'">
+									<span v-if="(item.status == 'Canceled' || item.status == 'Rejected' || item.status == 'Overdue' || item.status == 'Ordered')&&permissions[$route.name]&&permissions[$route.name]['close']">
 										<el-button 
 											v-if="item.closed != 'Y'"
 											type="text" 
@@ -291,6 +296,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import { baseMixin } from '../../../common/mixin'
 import DispatchOrder from '../../../api/DispatchOrder'
 import Company from '../../../api/Company'
@@ -370,7 +376,10 @@ export default {
 		if(!this.$route.query.cache) {
 			this.reset()
 		}
-	},
+    },
+    computed: {
+        ...mapGetters(['permissions'])
+    },
 	destroyed() {
 		this.timer = null
 	},
@@ -667,12 +676,13 @@ export default {
 				.dispatchbillTit
 					float left
 					height 28px
-					
 					.num
 						color #409EFF
 						margin-right 10px
 						cursor pointer
 						line-height 28px
+                        &.noCursor
+							cursor auto!important
 					.quoteInfo
 						width 300px
 						padding 0 10px

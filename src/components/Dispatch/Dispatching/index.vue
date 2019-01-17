@@ -407,8 +407,8 @@
 			</el-card>
 		<el-row style="margin-top:20px">
 			<el-col :span="24" class="text-center">
-				<el-button type="primary" @click="publish('dispatch')">发布派车单</el-button>
-				<el-button type="success" @click="publish('grab')">发布抢单</el-button>
+				<el-button type="primary" @click="publish('dispatch')" v-if="permissions[$route.name]&&permissions[$route.name]['dispatch']">发布派车单</el-button>
+				<el-button type="success" @click="publish('grab')" v-if="permissions[$route.name]&&permissions[$route.name]['offer']">发布抢单</el-button>
 			</el-col>
 		</el-row>
 		<publish-dispatch 
@@ -435,6 +435,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import axios from 'axios'
 import distData from '../../../assets/data/distpicker.data'
 import DistPicker from '../../CommonComponents/DistPicker'
@@ -472,8 +473,9 @@ export default {
 			transLines: [],
 			totalDistance: 0
 		}
-	},
+    },
 	computed: {
+        ...mapGetters(['permissions']),
 		checkFloat2: () => checkFloat2,
 		checkInt: () => checkInt,
 		totalWeight() {

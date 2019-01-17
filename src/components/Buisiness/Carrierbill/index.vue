@@ -97,8 +97,8 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download">导出</a>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add" v-if="permissions[$route.name] && permissions[$route.name]['add']">添加</el-button>
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
@@ -145,10 +145,10 @@
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Committed'">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Running' || scope.row.status == 'Signed'">关闭</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Committed'">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}" v-if="permissions[$route.name]&&permissions[$route.name]['detail']">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Committed' && permissions[$route.name]&&permissions[$route.name]['update']">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}" v-if="(scope.row.status == 'Running' || scope.row.status == 'Signed')&& permissions[$route.name]&&permissions[$route.name]['close']">关闭</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Committed' && permissions[$route.name]&&permissions[$route.name]['delete']">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
@@ -161,6 +161,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import request, { baseURL } from '../../../common/request'
 import { baseMixin } from '../../../common/mixin'
 import dist from '../../../assets/data/distpicker.data.js'
@@ -194,7 +195,10 @@ export default {
 		this.resetExportExcelUrl()
 		this.getList()
 		this.getCompanys()
-	},
+    },
+    computed: {
+        ...mapGetters(['permissions'])
+    },
 	activated() {
 		if(!this.$route.query.cache) {
 			this.reset()

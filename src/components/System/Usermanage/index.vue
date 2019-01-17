@@ -24,7 +24,7 @@
 					type="default" 
 					size="mini" 
 					icon="el-icon-plus" 
-					@click="$router.push({ name: 'adduser' })" v-if="permissions[$route.name] && permissions[$route.name]['add']">
+					@click="$router.push({ name: 'adduser' })" v-if="permissions[$route.name]&&permissions[$route.name]['add']">
 					添加
 				</el-button>
 				<el-upload 
@@ -37,10 +37,10 @@
 					:beforeUpload="beforeFileUpload" 
 					:headers="uploadHeaders" 
 					:show-file-list="false">
-					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
+					<el-button type="default" size="mini" icon="el-icon-upload2" v-if="permissions[$route.name]&&permissions[$route.name]['import']">导入</el-button>
 				</el-upload>
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download"> 导出</a>
-                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn">
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']"> 导出</a>
+                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn" v-if="permissions[$route.name]&&permissions[$route.name]['downLoadTemplate']">
 					<svg-icon iconClass="excel-icon"></svg-icon>下载模板
 				</a>
 			</div>
@@ -58,13 +58,13 @@
 					<el-table-column label="归属" prop="organizationName" align="center"></el-table-column>
 					<el-table-column label="职位" prop="jobPosition" align="center"></el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
-						<template slot-scope="scope">
+						<template slot-scope="scope" v-if="permissions[$route.name]&&(permissions[$route.name]['update'] || permissions[$route.name]['delete'] || permissions[$route.name]['resetPassword'])">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.memberID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.memberID}">删除</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'reset', member: scope.row}">重置</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.memberID}" v-if="permissions[$route.name]&&permissions[$route.name]['update']">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.memberID}" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">删除</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'reset', member: scope.row}" v-if="permissions[$route.name]&&permissions[$route.name]['resetPassword']">重置</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>

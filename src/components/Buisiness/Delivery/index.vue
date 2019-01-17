@@ -88,7 +88,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="add">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="add" v-if="permissions[$route.name]&&['add']">添加</el-button>
 				<el-upload 
 					class="upload-File" 
 					name="excelFile" 
@@ -99,14 +99,14 @@
 					:beforeUpload="beforeFileUpload" 
 					:headers="uploadHeaders" 
 					:show-file-list="false">
-					<el-button type="default" size="mini" icon="el-icon-upload2">导入</el-button>
+					<el-button type="default" size="mini" icon="el-icon-upload2" v-if="permissions[$route.name]&&permissions[$route.name]['import']">导入</el-button>
 				</el-upload>
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download"> 导出</a>
-                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn">
+				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']"> 导出</a>
+                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn"  v-if="permissions[$route.name]&&permissions[$route.name]['downLoadTemplate']">
 					<svg-icon iconClass="excel-icon"></svg-icon>下载模板
 				</a>
-                <el-button type="default" size="mini" icon="el-icon-tickets" @click="dispatch">批量生成</el-button>
-                <el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
+                <el-button type="default" size="mini" icon="el-icon-tickets" @click="dispatch" v-if="permissions[$route.name]&&permissions[$route.name]['dispatch']">批量生成</el-button>
+                <el-button type="default" size="mini" icon="el-icon-delete" @click="del" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">批量删除</el-button>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
@@ -150,10 +150,10 @@
 							<el-dropdown  @command="handleCommand"  trigger="click" v-if="scope.row.verifyFlag =='N'">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown" >
-                                    <el-dropdown-item :command="{type: 'dispatch', id: scope.row.deliveryOrderID}">生成调度</el-dropdown-item>
-                                    <el-dropdown-item :command="{type: 'view', id: scope.row.deliveryOrderID}">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.deliveryOrderID}">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.deliveryOrderID}">删除</el-dropdown-item>
+                                    <el-dropdown-item :command="{type: 'dispatch', id: scope.row.deliveryOrderID}" v-if="permissions[$route.name]&&permissions[$route.name]['dispatch']">生成调度</el-dropdown-item>
+                                    <el-dropdown-item :command="{type: 'view', id: scope.row.deliveryOrderID}" v-if="permissions[$route.name]&&permissions[$route.name]['detail']">查看</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'edit', id: scope.row.deliveryOrderID}" v-if="permissions[$route.name]&&permissions[$route.name]['update']">编辑</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'delete', id: scope.row.deliveryOrderID}" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
                             <span v-else>已调度</span>
@@ -167,6 +167,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import { baseURL } from '../../../common/request'
 import { baseMixin } from '../../../common/mixin'
 import dist from '../../../assets/data/distpicker.data.js'
@@ -206,7 +207,10 @@ export default {
 		if(!this.$route.query.cache) {
 			this.reset()
 		}
-	},
+    },
+    computed: {
+        ...mapGetters(['permissions'])
+    },
 	methods: {
 		selectionChange(data) {
 			this.selectedList = data.map(item => item.deliveryOrderID)

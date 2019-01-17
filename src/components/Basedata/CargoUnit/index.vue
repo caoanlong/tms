@@ -14,9 +14,9 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="dialogFormVisible = true">添加</el-button>
-				<el-button type="default" size="mini" icon="el-icon-delete" @click="del">批量删除</el-button>
-				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download">导出</a>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="dialogFormVisible = true" v-if="permissions[$route.name]&&permissions[$route.name]['add']">添加</el-button>
+				<el-button type="default" size="mini" icon="el-icon-delete" @click="del" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">批量删除</el-button>
+				<a :href="exportExcelUrl" download="goodssource.xlsx" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
 				<el-table 
@@ -27,8 +27,8 @@
 					<el-table-column label="id" type="selection" align="center" width="40" :selectable="(row, index) => row.blDefault == 'N'"></el-table-column>
 					<el-table-column label="单位" prop="unit" align="center"></el-table-column>
 					<el-table-column label="操作" align="center">
-						<template slot-scope="scope">
-							<el-button type="danger" size="mini" :disabled="scope.row.blDefault == 'Y'" @click="del(scope.row.cargoUnitID)">删除</el-button>
+						<template slot-scope="scope" v-if="scope.row.blDefault == 'N' && (permissions[$route.name]&&permissions[$route.name]['delete'])">
+							<el-button type="danger" size="mini"  @click="del(scope.row.cargoUnitID)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -50,6 +50,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import { baseMixin } from '../../../common/mixin'
 import { baseURL } from '../../../common/request'
 import { deleteConfirm } from '../../../common/utils'
@@ -75,7 +76,10 @@ export default {
 		if(!this.$route.query.cache) {
 			this.reset()
 		}
-	},
+    },
+    computed: {
+        ...mapGetters(['permissions'])
+    },
 	methods: {
 		resetExportExcelUrl(){
 			this.exportExcelUrl = baseURL + '/company/cargoUnit/export?Request-From=PC&Authorization=' + localStorage.getItem("token")

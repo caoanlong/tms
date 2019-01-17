@@ -48,7 +48,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
+				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
@@ -91,6 +91,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import { baseURL } from '../../../common/requestByJson'
 import { baseMixin } from '../../../common/mixin'
 import Company from '../../../api/Company'
@@ -125,6 +126,9 @@ export default {
 		if(!this.$route.query.cache) {
 			this.reset()
 		}
+    },
+    computed: {
+        ...mapGetters(['permissions'])
     },
 	methods: {
         getDictList() {

@@ -24,7 +24,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="isIssueDeviceVisible = true">发放设备</el-button>
+				<el-button type="default" size="mini" icon="el-icon-plus" @click="isIssueDeviceVisible = true" v-if="permissions[$route.name]&&permissions[$route.name]['add']">发放设备</el-button>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini">
@@ -53,12 +53,12 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
-						<template slot-scope="scope">
+						<template slot-scope="scope" v-if="permissions[$route.name]&&permissions[$route.name]['update']">
                             <el-button 
 								type="danger" 
 								size="mini" 
 								v-if="scope.row.recycleFlag == 'N'" 
-								@click="recycle(scope.row)">
+								@click="recycle(scope.row)" >
 								回收
 							</el-button>
 						</template>
@@ -73,6 +73,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import { baseMixin } from '../../../common/mixin'
 import IssueDevice from './components/IssueDevice'
 import RecycleDevice from './components/RecycleDevice'
@@ -99,7 +100,10 @@ export default {
 		if(!this.$route.query.cache) {
 			this.reset()
 		}
-	},
+    },
+    computed: {
+        ...mapGetters(['permissions'])
+    },
 	methods: {
 		reset() {
 			this.find.deviceNumber = ''

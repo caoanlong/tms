@@ -49,7 +49,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<a :href="exportExcelUrl" download="tms_log_export.xlsx" class="exportExcel el-icon-download">导出</a>
+				<a :href="exportExcelUrl" download="tms_log_export.xlsx" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
 				<el-table ref="roleTable" :data="tableData" border style="width: 100%" size="mini">
@@ -72,8 +72,8 @@
 							<span>{{moment(scope.row.createDate).format('YYYY-MM-DD HH:mm:ss')}}</span>
 						</template>
                     </el-table-column>
-					<el-table-column width="100" align="center" fixed="right">
-						<template slot-scope="scope">
+					<el-table-column width="100" align="center" label="操作" fixed="right" v-if="permissions[$route.name]&&permissions[$route.name]['detail']">
+						<template slot-scope="scope" >
 							<el-button type="primary" size="mini"  @click="view(scope.row.logApiID)"><i class="el-icon-search"></i> 详情</el-button>
 						</template>
 					</el-table-column>
@@ -85,6 +85,7 @@
 </template>
 <script type="text/javascript">
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import request, { baseURL } from '../../../common/request'
 import Log from '../../../api/Log'
 import { baseMixin } from '../../../common/mixin'
@@ -114,6 +115,9 @@ export default {
 		if(!this.$route.query.cache) {
 			this.reset()
 		}
+    },
+    computed: {
+		...mapGetters(['permissions'])
 	},
 	methods: {
         getCurrentMonthFirst(){
