@@ -67,12 +67,15 @@ export default {
         }
     },
     created() {
-        this.currentRoleID = this.$route.query.roleID
-        this.getInfo()
-        this.getMenus()
+        if(this.$route.query.cache) {
+            this.currentRoleID = this.$route.query.roleID
+            this.getInfo()
+            this.getMenus()
+        }
     },
     activated() {
 		if(!this.$route.query.cache) {
+            this.currentRoleID = this.$route.query.roleID
             this.getInfo()
             this.getMenus()
 		}

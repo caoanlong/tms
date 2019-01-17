@@ -20,12 +20,15 @@
 						<el-form-item label="再次输入" prop="confirmPassword">
 							<el-input type="password" v-model="sysMember.confirmPassword"></el-input>
 						</el-form-item>
-						<el-form-item label="状态" prop="status">
-							<el-radio v-model="sysMember.status" label="Y">正常</el-radio>
-							<el-radio v-model="sysMember.status" label="N">停用</el-radio>
+						<el-form-item label="状态" prop="isPrevent">
+							<el-radio v-model="sysMember.isPrevent" label="N">正常</el-radio>
+							<el-radio v-model="sysMember.isPrevent" label="Y">停用</el-radio>
 						</el-form-item>
-						<el-form-item label="职位" prop="position">
-							<el-input v-model="sysMember.position"></el-input>
+						<el-form-item label="职位" prop="jobPosition">
+							<el-input v-model="sysMember.jobPosition"></el-input>
+						</el-form-item>
+						<el-form-item label="工号" prop="jobNumber">
+							<el-input v-model="sysMember.jobNumber"></el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button @click="back">取消</el-button>
@@ -52,7 +55,9 @@ export default {
 				mobile: '',
 				password: '',
 				confirmPassword: '',
-				status: 'Y'
+				isPrevent: 'N',
+				jobPosition: '',
+				jobNumber: ''
 			},
 			rules: {
 				mobile: [
@@ -73,7 +78,7 @@ export default {
 						value == this.sysMember.password ? callback() : callback(new Error('两次输入密码不一致!'))
 					} }
 				],
-				status: [{ required: true, message: '请选择状态' }]
+				isPrevent: [{ required: true, message: '请选择状态' }]
 			}
 		}
 	},
@@ -85,7 +90,9 @@ export default {
 				mobile: '',
 				password: '',
 				confirmPassword: '',
-				status: 'Y'
+				isPrevent: 'N',
+				jobPosition: '',
+				jobNumber: ''
 			}
 		}
 	},
@@ -93,12 +100,9 @@ export default {
 		add() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				this.sysMember.roleIDs = this.sysMember.roleIDs.join(',')
 				SysMember.add(this.sysMember).then(res => {
 					Message.success('成功！')
 					this.$router.push({name: 'usermanage'})
-				}).catch(err => {
-					this.sysMember.roleIDs = this.sysMember.roleIDs.split(',')
 				})
 			})
 		},

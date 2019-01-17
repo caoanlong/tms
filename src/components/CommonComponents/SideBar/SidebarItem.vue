@@ -1,8 +1,8 @@
 <template>
 	<div class="menu-wrapper">
-		<template v-for="item in routes.filter(i => i.isShow == 'Y')">
+		<template v-for="item in routes.filter(i => i.isShow == 'Y' && i.type != 'Button')">
 			<el-menu-item 
-				v-if="!item.children || item.children.length == 0" 
+				v-if="!item.children || item.children.length == 0  || item.children.map(i => i.type).indexOf('Button') > -1" 
 				:index="item.target" 
 				:key="item.target" 
 				:class="{'submenu-title-noDropdown':!isNest}">
@@ -14,11 +14,11 @@
 					<svg-icon v-if="item.icon" :icon-class="item.icon"></svg-icon>
 					<span slot="title" class="labelTit">{{item.name}}</span>
 				</template>
-				<template v-for="child in item.children.filter(i => i.isShow == 'Y')">
+				<template v-for="child in item.children.filter(i => i.isShow == 'Y' && i.type != 'Button')">
 					<el-menu-item 
 						:index="child.target" 
 						:key="child.target"  
-						v-if="!child.children || child.children.length == 0">
+						v-if="!child.children || child.children.length == 0 || child.children.map(i => i.type).indexOf('Button') > -1">
 						<svg-icon v-if="child.icon" :icon-class="child.icon"></svg-icon> 
 						<span>{{child.name}}</span>
 					</el-menu-item>

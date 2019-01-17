@@ -14,16 +14,19 @@
 						<el-form-item label="用户姓名" prop="realName">
 							<el-input v-model="sysMember.realName"></el-input>
 						</el-form-item>
-						<el-form-item label="状态" prop="status">
-							<el-radio v-model="sysMember.status" label="Y">正常</el-radio>
-							<el-radio v-model="sysMember.status" label="N">停用</el-radio>
+						<el-form-item label="状态" prop="isPrevent">
+							<el-radio v-model="sysMember.isPrevent" label="N">正常</el-radio>
+							<el-radio v-model="sysMember.isPrevent" label="Y">停用</el-radio>
 						</el-form-item>
-						<el-form-item label="职位" prop="position">
-							<el-input v-model="sysMember.position"></el-input>
+						<el-form-item label="职位" prop="jobPosition">
+							<el-input v-model="sysMember.jobPosition"></el-input>
+						</el-form-item>
+						<el-form-item label="工号" prop="jobNumber">
+							<el-input v-model="sysMember.jobNumber"></el-input>
 						</el-form-item>
 						<el-form-item>
 							<el-button @click="back">取消</el-button>
-							<el-button type="primary" @click="add">保存</el-button>
+							<el-button type="primary" @click="save">保存</el-button>
 						</el-form-item>
 					</el-form>
 				</el-col>
@@ -41,10 +44,12 @@ export default {
 	data() {
 		return {
 			sysMember: {
-				headPic: '',
+				mobile: '',
 				realName: '',
                 mobile: '',
-                status: 'Y'
+				isPrevent: 'N',
+				jobPosition: '',
+				jobNumber: ''
 			},
 			rules: {
 				mobile: [
@@ -55,30 +60,33 @@ export default {
 					{ required: true, message: '请输入姓名' },
 					{ min: 2, max: 20, message: '长度在 2 到 20 个字符' }
 				],
-				status: [{ required: true, message: '请选择状态' }]
+				isPrevent: [{ required: true, message: '请选择状态' }]
 			}
+		}
+	},
+	created() {
+		if(this.$route.query.cache) {
+			this.getInfo()
 		}
 	},
 	activated() {
 		if(!this.$route.query.cache) {
-			this.sysMember = {
-				headPic: '',
-				realName: '',
-                mobile: '',
-                status: 'Y'
-			}
+			this.getInfo()
 		}
 	},
 	methods: {
-		add() {
+		getInfo() {
+			const memberID = this.$route.query.memberID
+			SysMember.findById({ memberID }).then(res => {
+				this.sysMember = res
+			})
+		},
+		save() {
 			this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				this.sysMember.roleIDs = this.sysMember.roleIDs.join(',')
-				SysMember.add(this.sysMember).then(res => {
+				SysMember.update(this.sysMember).then(res => {
 					Message.success('成功！')
 					this.$router.push({name: 'usermanage'})
-				}).catch(err => {
-					this.sysMember.roleIDs = this.sysMember.roleIDs.split(',')
 				})
 			})
 		},

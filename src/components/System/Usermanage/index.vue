@@ -4,8 +4,14 @@
 			<div slot="header" class="clearfix">用户管理</div>
 			<div class="search">
 				<el-form :inline="true" class="demo-form-inline" size="small">
+					<el-form-item label="工号">
+						<el-input placeholder="工号" v-model="find.jobNumber" @input="inputChange"></el-input>
+					</el-form-item>
 					<el-form-item label="员工">
-						<el-input placeholder="工号/名字/手机号" v-model="find.keyword" @input="inputChange"></el-input>
+						<el-input placeholder="员工名字" v-model="find.realName" @input="inputChange"></el-input>
+					</el-form-item>
+					<el-form-item label="手机号">
+						<el-input placeholder="手机号" v-model="find.mobile" @input="inputChange"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="search">查询</el-button>
@@ -40,14 +46,19 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" border style="width: 100%" size="mini">
-					<el-table-column label="手机号" prop="mobile"></el-table-column>
-					<el-table-column label="姓名" prop="realName"></el-table-column>
-					<el-table-column label="状态" prop="status"></el-table-column>
-					<el-table-column label="工号" prop="workNo"></el-table-column>
-					<el-table-column label="归属" prop="in"></el-table-column>
-					<el-table-column label="职位" prop="position"></el-table-column>
+					<el-table-column label="手机号" prop="mobile" align="center"></el-table-column>
+					<el-table-column label="姓名" prop="realName" align="center"></el-table-column>
+					<el-table-column label="状态" prop="isPrevent" align="center">
+						<template slot-scope="scope">
+							<el-tag type="success" size="mini" v-if="scope.row.isPrevent == 'N'">正常</el-tag>
+							<el-tag type="danger" size="mini" v-else-if="scope.row.isPrevent == 'Y'">停用</el-tag>
+						</template>
+					</el-table-column>
+					<el-table-column label="工号" prop="jobNumber" align="center"></el-table-column>
+					<el-table-column label="归属" prop="organizationName" align="center"></el-table-column>
+					<el-table-column label="职位" prop="jobPosition" align="center"></el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
-						<template slot-scope="scope" v-if="!scope.row.registerMemberFlag">
+						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
@@ -79,21 +90,26 @@ export default {
 			isResetVisible: false,
 			curUser: null,
 			find: {
-				keyword: ''
+				jobNumber: '',
+				mobile: '',
+				realName: ''
 			},
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
 			importFileUrl: baseURL 
-				+ '/deliveryOrder/import?Request-From=PC&Authorization=' 
+				+ '/sys/mem/import?Request-From=PC&Authorization=' 
 				+ localStorage.getItem("token"),
-			exportExcelUrl:'',
+			exportExcelUrl: '',
 			templateUrl: baseURL 
-				+ '/base/filetemplate/downLoadTemplate?fileName=deliveryorder.xlsx&Authorization=' 
+				+ '/base/filetemplate/downLoadTemplate?fileName=member.xlsx&Authorization=' 
 				+ localStorage.getItem("token")
 		}
 	},
 	components: { Reset },
 	created() {
-		this.getList()
+		this.resetExportExcelUrl()
+		if(this.$route.query.cache) {
+			this.getList()
+		}
 	},
 	activated() {
 		if(!this.$route.query.cache) {
@@ -102,24 +118,20 @@ export default {
 	},
 	methods: {
 		reset() {
-			this.find.keyword = ''
+			this.find.jobNumber = ''
+			this.find.mobile = ''
+			this.find.realName = ''
 			this.pageIndex = 1
 			this.pageSize = 10
 			this.getList()
 		},
 		resetExportExcelUrl() {
-			this.exportExcelUrl = baseURL + '/deliveryOrder/export?Request-From=PC&Authorization=' + localStorage.getItem("token")	
-			+ '&code=' + this.find.code 
-			+ '&companyCode=' + this.find.companyCode
-			+ '&dealerCode=' + this.find.dealerCode 
-			+ '&cargoCode=' + this.find.cargoCode
-			+ '&level=' + this.find.level
-			+ '&plateNo=' + this.find.plateNo
-			+ '&verifyFlag=' + this.find.verifyFlag
-			+ '&cargoName=' + this.find.cargoName
-			+ '&comeFrom=' + this.find.comeFrom
-			+ '&outTimeBegin=' + this.find.outTimeBegin
-			+ '&outTimeEnd=' + this.find.outTimeEnd
+			this.exportExcelUrl = baseURL 
+				+ '/sys/mem/export?Request-From=PC&Authorization=' 
+				+ localStorage.getItem("token")	
+				+ '&jobNumber=' + this.find.jobNumber 
+				+ '&mobile=' + this.find.mobile
+				+ '&realName=' + this.find.realName
 		},
 		inputChange() {
 			this.resetExportExcelUrl()
@@ -128,7 +140,9 @@ export default {
 			SysMember.find({
 				current: this.pageIndex,
 				size: this.pageSize,
-				keyword: this.find.keyword
+				jobNumber: this.find.jobNumber,
+				mobile: this.find.mobile,
+				realName: this.find.realName
 			}).then(res => {
 				this.total = res.total
 				this.tableData = res.records
@@ -139,7 +153,7 @@ export default {
 		},
 		handleCommand(e) {
 			if(e.type == 'edit'){
-				this.$router.push({name: 'edituser', query: { userId: e.id }})
+				this.$router.push({name: 'edituser', query: { memberID: e.id }})
 			} else if (e.type == 'reset') {
 				this.curUser = e.member
 				this.isResetVisible = true
