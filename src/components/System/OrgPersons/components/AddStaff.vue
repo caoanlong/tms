@@ -43,7 +43,6 @@
                 <el-table-column label="归属" prop="roleName"></el-table-column>
                 <el-table-column label="职位" prop="roleName"></el-table-column>
             </el-table>
-            <Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button @click="close">取 消</el-button>
