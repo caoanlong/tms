@@ -7,7 +7,7 @@
 					<el-form-item label="交货单号">
 						<el-input placeholder="交货单号" v-model="find.code" @change="inputChange"></el-input>
 					</el-form-item>
-                    <el-form-item label="工厂名称" class="customerSelect">
+                    <!-- <el-form-item label="工厂名称" class="customerSelect">
 						<el-autocomplete 
                             value-key="companyName" 
                             v-model="find.companyName"
@@ -17,7 +17,7 @@
 							@change="inputChange">
 							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
                         </el-autocomplete>
-					</el-form-item>
+					</el-form-item> -->
                     <el-form-item label="客户名称">
 						<el-autocomplete 
                             value-key="companyName" 
