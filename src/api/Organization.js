@@ -42,7 +42,7 @@ class Organization extends Base {
             })
         })
     }
-    getOrganizationMember() {
+    getOrganizationMember(params) {
         return new Promise((resolve, reject) => {
             this.request({
                 url: this.baseUrl + '/getOrganizationMember',
@@ -50,6 +50,46 @@ class Organization extends Base {
             }).then(res => {
                 resolve(res.data.data || res.data || res)
             })
+        })
+    }
+    addMembers(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + '/addMembers',
+            method: 'post',
+            data
+        })
+    }
+    removeMembers(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + '/removeMembers',
+            method: 'post',
+            data
+        })
+    }
+    addibleRoleList(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/addibleRoleList',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
+    setMemberRole(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + '/setMemberRole',
+            method: 'post',
+            data
         })
     }
 }

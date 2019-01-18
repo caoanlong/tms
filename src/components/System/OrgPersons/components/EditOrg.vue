@@ -72,8 +72,17 @@ export default {
         id: String | Number
     },
     watch: {
-        id(val) {
-            val && this.getInfo(val)
+        isVisible(val) {
+            if (val) {
+                this.org = {
+                    code: '',
+                    name: '',
+                    parentId: '',
+                    members: [],
+                    isCom: false
+                }
+                this.getInfo(this.id)
+            }
         }
     },
     data() {
@@ -104,12 +113,7 @@ export default {
         },
         handSelectAdmin(data) {
             if (data) {
-                const memberIDs = this.org.members.map(item => item.memberID)
-                for (let i = 0; i < data.length; i++) {
-                    if (memberIDs.indexOf(data[i].memberID) == -1) {
-                        this.org.members.push(data[i])
-                    }
-                }
+                this.org.members.push(...data)
             }
             this.isSelectAdminVisible = false
         },

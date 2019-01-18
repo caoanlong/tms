@@ -29,20 +29,21 @@
 					node-key="id"
 					:props="defaultProps" 
 					highlight-current 
-					:expand-on-click-node="false">
+					:expand-on-click-node="false" 
+					@node-click="handClick">
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span>{{ node.label }}</span>
 						<span>
 						<el-button
 							type="text"
 							size="mini"
-							@click="() => add(data)">
+							@click.stop="() => add(data)">
 							新增
 						</el-button>
 						<el-button
 							type="text"
 							size="mini"
-							@click="() => edit(data)">
+							@click.stop="() => edit(data)">
 							编辑
 						</el-button>
 						<!-- <el-button
@@ -57,7 +58,7 @@
 			</el-card>
 		</el-col>
 		<el-col :span="17">
-			<staffs></staffs>
+			<staffs :organizationID="selectedOrgID" v-show="showStaffs"></staffs>
 		</el-col>
 		<add-org :isVisible="isAddOrgVisible" :parent="selectedParent" @control="handAddOrg"></add-org>
 		<edit-org :isVisible="isEditOrgVisible" :id="selectedID" @control="handEditOrg"></edit-org>
@@ -73,10 +74,12 @@ export default {
 	components: { Staffs, AddOrg, EditOrg },
     data() {
 		return {
+			showStaffs: false,
 			isAddOrgVisible: false,
 			isEditOrgVisible: false,
 			selectedParent: {},
 			selectedID: '',
+			selectedOrgID: '',
 			data: {},
             defaultProps: {
                 children: 'children',
@@ -87,7 +90,19 @@ export default {
 	created() {
 		this.getList()
 	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.selectedOrgID = ''
+			this.selectedID = ''
+			this.selectedParent = {}
+			this.showStaffs = false
+		}
+	},
 	methods: {
+		handClick(data) {
+			this.showStaffs = true
+			this.selectedOrgID = data.id
+		},
 		handAddOrg(bool) {
 			bool && this.getList()
 			this.isAddOrgVisible = false

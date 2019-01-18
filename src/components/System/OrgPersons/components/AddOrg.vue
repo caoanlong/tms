@@ -90,6 +90,22 @@ export default {
             }
         }
     },
+    watch: {
+        isVisible(val) {
+            if (val) {
+                this.org = {
+                    code: '',
+                    name: '',
+                    parentId: '',
+                    members: [],
+                    isCom: false
+                }
+                this.$nextTick(() => {
+                    this.$refs['ruleForm'].resetFields()
+                })
+            }
+        }
+    },
     methods: {
         handAddAdmin(data) {
             if (data) {
@@ -99,12 +115,7 @@ export default {
         },
         handSelectAdmin(data) {
             if (data) {
-                const memberIDs = this.org.members.map(item => item.memberID)
-                for (let i = 0; i < data.length; i++) {
-                    if (memberIDs.indexOf(data[i].memberID) == -1) {
-                        this.org.members.push(data[i])
-                    }
-                }
+                this.org.members.push(...data)
             }
             this.isSelectAdminVisible = false
         },

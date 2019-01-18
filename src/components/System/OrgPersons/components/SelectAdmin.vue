@@ -1,6 +1,6 @@
 <template>
     <el-dialog 
-        title="选择管理员" 
+        title="选择人员" 
         :visible.sync="isVisible" 
         :show-close="false" 
         :close-on-click-modal="false" 
@@ -29,7 +29,12 @@
                 @selection-change="selectChange" 
                 border
                 size="mini">
-                <el-table-column label="选择" type="selection" align="center"></el-table-column>
+                <el-table-column 
+                    label="选择" 
+                    type="selection" 
+                    align="center" 
+                    :selectable="(row) => !row.hasAdd">
+                </el-table-column>
                 <el-table-column label="工号" prop="jobNumber" align="center" width="70"></el-table-column>
                 <el-table-column label="姓名" prop="realName" align="center" width="100"></el-table-column>
                 <el-table-column label="手机" prop="mobile" align="center"></el-table-column>
@@ -56,7 +61,10 @@ export default {
             default: false
         },
         organizationID: String | Number,
-        selected: Array
+        selected: {
+            type: Array,
+            default: () => []
+        }
     },
     data() {
         return {
@@ -99,14 +107,6 @@ export default {
                 this.tableData = res.records
                 this.total = res.total
                 this.selectedList = this.selected
-                const memberIDs = this.selected.map(item => item.memberID)
-                this.$nextTick(() => {
-                    this.tableData.forEach(row => {
-                        if (memberIDs.includes(row.memberID)) {
-                            this.$refs.adminTable.toggleRowSelection(row)
-                        }
-                    })
-                })
             })
         },
         selectChange(data) {
