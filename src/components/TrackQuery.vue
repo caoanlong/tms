@@ -1,5 +1,12 @@
 <template>
     <div class="track-container">
+        <div class="switch-satellite">
+            <el-switch
+                v-model="isSatellite"
+                active-text="卫星地图" 
+                @change="changeSatellite">
+            </el-switch>
+        </div>
         <div id="amapLocationSelect" :style="{'height': mapHeight + 'px'}"></div>
         <div class="logs">
             <div class="logs-top" v-loading="logsTopLoading">
@@ -93,7 +100,10 @@ export default {
             status: '',
             district: null,
             logsTopLoading: true,
-            logsLoading: true
+            logsLoading: true,
+            isSatellite: false,
+            satelliteLayer: new AMap.TileLayer.Satellite(),
+            stdTileLayer: new AMap.TileLayer()
         }
     },
     created() {
@@ -114,6 +124,13 @@ export default {
         })
     },
     methods: {
+        changeSatellite(val) {
+            if (val) {
+                this.map.setLayers([this.satelliteLayer])
+            } else {
+                this.map.setLayers([this.stdTileLayer])
+            }
+        },
         async getLogs() {
             const url = baseURL + '/dispatchOrder/logList'
             const params = {
@@ -427,6 +444,14 @@ export default {
     #amapLocationSelect
         width 100%
         height 500px
+    .switch-satellite
+        position absolute
+        left 20px
+        top 20px
+        padding 10px
+        background-color #ffffff
+        box-shadow 0 3px 5px rgba(0,0,0,.3)
+        z-index 999
     .logs
         position absolute
         right 0
