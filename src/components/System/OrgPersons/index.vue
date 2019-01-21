@@ -4,10 +4,12 @@
 			<el-card class="box-card">
 				<div slot="header" class="clearfix">组织</div>
 				<el-row>
-					<el-col :span="12">
-						<div class="title">{{data.name}}</div>
+					<el-col :span="16">
+						<el-tooltip class="item" effect="dark" :content="data.name" placement="top">
+							<div class="title">{{data.name}}</div>
+						</el-tooltip>
 					</el-col>
-					<el-col :span="12">
+					<el-col :span="8">
 						<div class="btns">
 							<el-button
 								type="text"
@@ -140,6 +142,9 @@ export default {
 	line-height: 34px;
 	font-size: 18px;
 	font-weight: 500;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
 }
 .btns {
 	height: 34px;
