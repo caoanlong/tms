@@ -368,6 +368,11 @@ export default {
 		}
 	},
 	created() {
+        if(this.permissions[$route.name]&&permissions[$route.name]['listOfDispatched']){
+            this.isCur = 0
+        }else{
+            this.isCur = 1
+        }
 		this.resetExportExcelUrl()
 		this.getList()
 		this.getCompanys()
@@ -488,7 +493,8 @@ export default {
 			})
         },
 		getList() {
-			this.dispatchBillList = []
+            this.dispatchBillList = []
+            
 			if(this.isCur == 0){
 				this.getDispatchedList()
 			}else{
