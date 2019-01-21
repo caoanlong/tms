@@ -5,122 +5,130 @@
 				<div slot="header" class="clearfix">组织</div>
 				<el-row>
 					<el-col :span="12">
-						<div class="title">华新水泥有限公司</div>
+						<div class="title">{{data.name}}</div>
 					</el-col>
 					<el-col :span="12">
 						<div class="btns">
 							<el-button
 								type="text"
 								size="mini"
-								@click="() => append(data)">
+								@click="() => add(data)">
 								新增
 							</el-button>
 							<el-button
 								type="text"
 								size="mini"
-								@click="() => append(data)">
+								@click="() => edit(data)">
 								编辑
 							</el-button>
 						</div>
 					</el-col>
 				</el-row>
 				<el-tree 
-					:data="data" 
+					:data="data.children" 
 					node-key="id"
 					:props="defaultProps" 
-					highlight-current>
+					highlight-current 
+					:expand-on-click-node="false" 
+					@node-click="handClick">
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span>{{ node.label }}</span>
 						<span>
 						<el-button
 							type="text"
 							size="mini"
-							@click="() => append(data)">
+							@click.stop="() => add(data)">
 							新增
 						</el-button>
 						<el-button
 							type="text"
 							size="mini"
-							@click="() => append(data)">
+							@click.stop="() => edit(data)">
 							编辑
 						</el-button>
-						<el-button
+						<!-- <el-button
 							type="text"
 							size="mini"
-							@click="() => remove(node, data)">
+							@click="() => remove(data)">
 							删除
-						</el-button>
+						</el-button> -->
 						</span>
 					</span>
 				</el-tree>
 			</el-card>
 		</el-col>
 		<el-col :span="17">
-			<staffs></staffs>
+			<staffs :organizationID="selectedOrgID" v-show="showStaffs"></staffs>
 		</el-col>
+		<add-org :isVisible="isAddOrgVisible" :parent="selectedParent" @control="handAddOrg"></add-org>
+		<edit-org :isVisible="isEditOrgVisible" :id="selectedID" @control="handEditOrg"></edit-org>
 	</el-row>
 </template>
 
 <script>
 import Staffs from './components/Staffs'
+import AddOrg from './components/AddOrg'
+import EditOrg from './components/EditOrg'
+import Organization from '../../../api/Organization'
 export default {
-	components: { Staffs },
+	components: { Staffs, AddOrg, EditOrg },
     data() {
 		return {
-			data: [
-                {
-                    id: 1,
-                    name: '云南事业部',
-                    sort: 1,
-                    type: 'module',
-                    isShow: 'Y',
-                    children: [
-                        {
-                            id: 2,
-                            name: '昭通工厂',
-                            sort: 1,
-                            type: 'module',
-                            isShow: 'Y',
-                        },
-                        {
-                            id: 5,
-                            name: '临沧工厂',
-                            sort: 2,
-                            type: 'menu',
-                            isShow: 'Y',
-                            path: '/area'
-                        }
-                    ]
-                },
-                {
-                    id: 6,
-                    name: '湖南事业部',
-                    sort: 2,
-                    type: 'module',
-                    isShow: 'Y'
-                },
-                {
-                    id: 9,
-                    name: '武汉事业部',
-                    sort: 3,
-                    type: 'menu',
-                    isShow: 'Y',
-                    path: '/tms'
-                }
-            ],
+			showStaffs: false,
+			isAddOrgVisible: false,
+			isEditOrgVisible: false,
+			selectedParent: {},
+			selectedID: '',
+			selectedOrgID: '',
+			data: {},
             defaultProps: {
                 children: 'children',
                 label: 'name'
             }
 		}
 	},
+	created() {
+		this.getList()
+	},
+	activated() {
+		if(!this.$route.query.cache) {
+			this.selectedOrgID = ''
+			this.selectedID = ''
+			this.selectedParent = {}
+			this.showStaffs = false
+		}
+	},
 	methods: {
-		append(data) {
-			const newChild = { id: id++, label: 'testtest', children: [] };
-			if (!data.children) {
-				this.$set(data, 'children', []);
+		handClick(data) {
+			this.showStaffs = true
+			this.selectedOrgID = data.id
+		},
+		handAddOrg(bool) {
+			bool && this.getList()
+			this.isAddOrgVisible = false
+		},
+		handEditOrg(bool) {
+			bool && this.getList()
+			this.isEditOrgVisible = false
+		},
+		getList() {
+			Organization.find().then(res => {
+				this.data = res
+			})
+		},
+		add(data) {
+			this.selectedParent = {
+				id: data.id,
+				name: data.name
 			}
-			data.children.push(newChild);
+			this.isAddOrgVisible = true
+		},
+		edit(data) {
+			this.selectedID = data.id
+			this.isEditOrgVisible = true
+		},
+		remove(data) {
+
 		}
 	}
 }

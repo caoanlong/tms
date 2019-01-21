@@ -18,7 +18,7 @@
                     type="default" 
                     size="mini" 
                     icon="el-icon-plus" 
-                    @click="isAddStaffVisible = true">
+                    @click="isSelectAdminVisible = true">
                     添加
                 </el-button>
             </div>
@@ -27,28 +27,24 @@
                     ref="roleTable" 
                     :data="tableData" 
                     border style="width: 100%" size="mini">
-                    <el-table-column label="编号" type="index" width="50" align="center"></el-table-column>
-                    <el-table-column label="角色名称" prop="roleName" align="center"></el-table-column>
-                    <el-table-column label="权限英文" prop="permission" align="center"></el-table-column>
-                    <el-table-column label="角色类型" prop="roleType" align="center">
-                        <template slot-scope="scope">
-                            <span v-if="scope.row.roleType == 'SysSuperAdmin'">系统管理员</span>
-                            <span v-else-if="scope.row.roleType == 'SysAdmin'">系统角色</span>
-                            <span v-else-if="scope.row.roleType == 'SysMember'">自定义角色</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column width="100" align="center" fixed="right">
+                    <el-table-column label="工号" prop="jobNumber" align="center"></el-table-column>
+                    <el-table-column label="姓名" prop="realName" align="center"></el-table-column>
+                    <el-table-column label="手机" prop="mobile" align="center"></el-table-column>
+                    <el-table-column label="归属" prop="underOrganizationStr" align="center"></el-table-column>
+                    <el-table-column label="来源" prop="comeFrom" align="center"></el-table-column>
+                    <el-table-column label="职位" prop="jobPosition" align="center"></el-table-column>
+                    <el-table-column label="组织中角色" prop="roleName" align="center"></el-table-column>
+                    <el-table-column label="操作" width="100" align="center" fixed="right">
                         <template slot-scope="scope">
                             <el-dropdown  @command="handleCommand"  trigger="click">
                                 <el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item 
-                                        :command="{type: 'role', id: scope.row.roleID}">
+                                        :command="{type: 'role', id: scope.row.memberID}">
                                         角色
                                     </el-dropdown-item>
                                     <el-dropdown-item 
-                                        :command="{type: 'delete', id: scope.row.roleID}" 
-                                        v-if="scope.row.roleType != 'SysAdmin'">
+                                        :command="{type: 'delete', id: scope.row.memberID}">
                                         删除
                                     </el-dropdown-item>
                                 </el-dropdown-menu>
@@ -59,35 +55,54 @@
                 <Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
             </div>
         </el-card>
-        <add-staff :isVisible="isAddStaffVisible" @control="handAddStaff"></add-staff>
-        <select-role :isVisible="isSelectRoleVisible" :memberId="curMemberId" @control="handSelectRole"></select-role>
+        <select-role 
+            :isVisible="isSelectRoleVisible" 
+            :memberID="curMemberId" 
+            :organizationID="organizationID" 
+            @control="handSelectRole">
+        </select-role>
+        <select-admin 
+            :selected="tableData"
+            :organizationID="organizationID" 
+            :isVisible="isSelectAdminVisible" 
+            @control="handSelectAdmin">
+        </select-admin>
     </div>
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import { baseMixin } from '../../../../common/mixin'
-import AddStaff from './AddStaff'
+import SelectAdmin from './SelectAdmin'
 import SelectRole from './SelectRole'
+import Organization from '../../../../api/Organization'
+import { deleteConfirm } from '../../../../common/utils'
 export default {
     mixins: [baseMixin],
-    components: { AddStaff, SelectRole },
+    components: { SelectAdmin, SelectRole },
+    props: {
+        organizationID: String | Number
+    },
     data() {
         return {
-            isAddStaffVisible: false,
+            isSelectAdminVisible: false,
             isSelectRoleVisible: false,
             curMemberId: '',
             find: {
 				keyword: ''
-            },
-            tableData: [
-                {
-                    roleName: '管理员',
-                    permission: 'gly',
-                    roleType: 'SysAdmin'
-                }
-            ]
+            }
         }
     },
+    watch: {
+        organizationID(val) {
+            this.getList()
+        }
+    },
+    activated() {
+		if(!this.$route.query.cache) {
+			this.reset()
+		}
+	},
     methods: {
         handleCommand(e) {
 			if (e.type == 'role') {
@@ -97,11 +112,54 @@ export default {
 				this.del(e.id)
 			}
         },
-        handAddStaff() {
-            this.isAddStaffVisible = false
-        },
         handSelectRole() {
             this.isSelectRoleVisible = false
+        },
+        handSelectAdmin(data) {
+            if (data) {
+                const members = data.map(item => {
+                    return { memberID: item.memberID }
+                })
+                this.addMembers(members)
+            }
+            this.isSelectAdminVisible = false
+        },
+        reset() {
+            this.pageIndex = 1
+            this.pageSize = 10
+            this.find.keyword = ''
+            this.getList()
+        },
+        addMembers(members) {
+            Organization.addMembers({
+                id: this.organizationID,
+                members
+            }).then(res => {
+                Message.success('成功！')
+                this.getList()
+            })
+        },
+        getList() {
+            Organization.getOrganizationMember({
+                current: this.pageIndex,
+				size: this.pageSize,
+				keyword: this.find.keyword,
+                organizationID: this.organizationID
+            }).then(res => {
+                this.tableData = res.records
+                this.total = res.total
+            })
+        },
+        del(memberID) {
+            deleteConfirm(memberID, memberID => {
+				Organization.removeMembers({
+                    id: this.organizationID,
+                    memberID
+                }).then(res => {
+					Message.success('删除成功!')
+					this.getList()
+				})
+			})
         }
     }
 }
