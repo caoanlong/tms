@@ -6,7 +6,7 @@
 				<el-row>
 					<el-col :span="16">
 						<el-tooltip class="item" effect="dark" :content="data.name" placement="top">
-							<div class="title">{{data.name}} （{{data.children.length}}）</div>
+							<div class="title">{{data.name}}</div>
 						</el-tooltip>
 					</el-col>
 					<el-col :span="8">

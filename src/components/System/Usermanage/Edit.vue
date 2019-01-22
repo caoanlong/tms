@@ -9,7 +9,7 @@
 							<ImageUpload :files="[sysMember.headPic]" @imgUrlBack="handleHeadPicSuccess" :fixed="true"/>
 						</el-form-item>
 						<el-form-item label="手机号" prop="mobile">
-							<el-input v-model="sysMember.mobile"></el-input>
+							<p>{{sysMember.mobile}}</p>
 						</el-form-item>
 						<el-form-item label="用户姓名" prop="realName">
 							<el-input v-model="sysMember.realName"></el-input>
@@ -104,5 +104,16 @@ export default {
 
 </script>
 <style lang="stylus" scoped>
-
+.el-form-item__content
+	p
+		margin 0
+		border 1px solid #fff
+		border-bottom-color #dcdfe6
+		padding 0 15px
+		min-height 40px
+		font-family 'sans-serif'
+		line-height 40px
+		color #999
+	.el-input__inner
+		vertical-align top
 </style>
