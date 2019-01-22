@@ -6,7 +6,7 @@
 				<el-row>
 					<el-col :span="16">
 						<el-tooltip class="item" effect="dark" :content="data.name" placement="top">
-							<div class="title">{{data.name}}</div>
+							<div class="title">{{data.name}} （{{data.children.length}}）</div>
 						</el-tooltip>
 					</el-col>
 					<el-col :span="8">
@@ -16,12 +16,6 @@
 								size="mini"
 								@click="() => add(data)">
 								新增
-							</el-button>
-							<el-button
-								type="text"
-								size="mini"
-								@click="() => edit(data)">
-								编辑
 							</el-button>
 						</div>
 					</el-col>
@@ -34,7 +28,7 @@
 					:expand-on-click-node="false" 
 					@node-click="handClick">
 					<span class="custom-tree-node" slot-scope="{ node, data }">
-						<span>{{ node.label }}</span>
+						<span>{{ data.name }} （{{data.children.length}}）</span>
 						<span>
 						<el-button
 							type="text"

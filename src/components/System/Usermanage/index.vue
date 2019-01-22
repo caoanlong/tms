@@ -58,7 +58,13 @@
 					<el-table-column label="归属" prop="organizationName" align="center"></el-table-column>
 					<el-table-column label="职位" prop="jobPosition" align="center"></el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
-						<template slot-scope="scope" v-if="permissions[$route.name]&&(permissions[$route.name]['update'] || permissions[$route.name]['delete'] || permissions[$route.name]['resetPassword'])">
+						<template 
+							slot-scope="scope" 
+							v-if="permissions[$route.name] 
+								&& (permissions[$route.name]['update'] 
+									|| permissions[$route.name]['delete'] 
+									|| permissions[$route.name]['resetPassword'])
+								&& mobile != scope.row.mobile">
 							<el-dropdown  @command="handleCommand"  trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
@@ -107,7 +113,7 @@ export default {
 	},
 	components: { Reset },
 	computed: {
-		...mapGetters(['permissions'])
+		...mapGetters(['permissions', 'mobile'])
 	},
 	created() {
 		this.resetExportExcelUrl()
