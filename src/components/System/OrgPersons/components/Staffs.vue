@@ -35,7 +35,7 @@
                     <el-table-column label="职位" prop="jobPosition" align="center"></el-table-column>
                     <el-table-column label="组织中角色" prop="roleName" align="center"></el-table-column>
                     <el-table-column label="操作" width="100" align="center" fixed="right">
-                        <template slot-scope="scope">
+                        <template slot-scope="scope" v-if="scope.row.allow">
                             <el-dropdown  @command="handleCommand"  trigger="click">
                                 <el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
                                 <el-dropdown-menu slot="dropdown">
@@ -112,8 +112,9 @@ export default {
 				this.del(e.id)
 			}
         },
-        handSelectRole() {
+        handSelectRole(bool) {
             this.isSelectRoleVisible = false
+            bool && this.getList()
         },
         handSelectAdmin(data) {
             if (data) {
