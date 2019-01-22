@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
 import Staffs from './components/Staffs'
 import AddOrg from './components/AddOrg'
 import EditOrg from './components/EditOrg'
@@ -96,6 +97,10 @@ export default {
 	},
 	methods: {
 		handClick(data) {
+			if (!data.isManage) {
+				Message.error('没有权限操作！')
+				return
+			}
 			this.showStaffs = true
 			this.selectedOrgID = data.id
 		},
@@ -120,6 +125,10 @@ export default {
 			this.isAddOrgVisible = true
 		},
 		edit(data) {
+			if (!data.isManage) {
+				Message.error('没有权限操作！')
+				return
+			}
 			this.selectedID = data.id
 			this.isEditOrgVisible = true
 		},

@@ -86,7 +86,7 @@
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item :command="{type: 'edit', id: scope.row.memberID}" v-if="permissions[$route.name]&&permissions[$route.name]['update']">编辑</el-dropdown-item>
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.memberID}" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">删除</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'reset', member: scope.row}" v-if="permissions[$route.name]&&permissions[$route.name]['resetPassword']">重置</el-dropdown-item>
+									<el-dropdown-item :command="{type: 'reset', member: scope.row}" v-if="permissions[$route.name]&&permissions[$route.name]['update']">重置</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>
