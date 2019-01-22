@@ -120,7 +120,9 @@ export default {
 				this.dialogVisible = false
 				Message.success('切换成功！')
 				this.$store.dispatch('getUserInfo')
-				// this.$store.dispatch('getMenu')
+				this.$store.dispatch('getMenu')
+				this.$store.dispatch('delAllViews')
+				this.$router.push({name: 'home'})
 			})
 		},
 		sendToParent(type){

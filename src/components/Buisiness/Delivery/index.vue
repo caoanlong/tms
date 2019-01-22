@@ -102,7 +102,7 @@
 					<el-button type="default" size="mini" icon="el-icon-upload2" v-if="permissions[$route.name]&&permissions[$route.name]['import']">导入</el-button>
 				</el-upload>
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']"> 导出</a>
-                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn"  v-if="permissions[$route.name]&&permissions[$route.name]['downLoadTemplate']">
+                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn"  v-if="permissions[$route.name]&&permissions[$route.name]['import']">
 					<svg-icon iconClass="excel-icon"></svg-icon>下载模板
 				</a>
                 <el-button type="default" size="mini" icon="el-icon-tickets" @click="dispatch" v-if="permissions[$route.name]&&permissions[$route.name]['dispatch']">批量生成</el-button>

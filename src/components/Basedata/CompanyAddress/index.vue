@@ -49,7 +49,7 @@
 					<el-button type="default" size="mini" icon="el-icon-upload2" v-if="permissions[$route.name]&&permissions[$route.name]['import']">导入</el-button>
 				</el-upload>
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
-				<a :href="templateUrl" class="download-btn" v-if="permissions[$route.name]&&permissions[$route.name]['downLoadTemplate']"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
+				<a :href="templateUrl" class="download-btn" v-if="permissions[$route.name]&&permissions[$route.name]['import']"><svg-icon iconClass="excel-icon"></svg-icon> 下载模板</a>
 			</div>
 			<div class="table">
 				<el-table 
