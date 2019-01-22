@@ -20,7 +20,7 @@
 							@change="inputChange">
 						</el-input>
 					</el-form-item>
-					<el-form-item label="工厂名称">
+					<el-form-item label="发货单位">
 						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
                             <el-option label="全部" value=""></el-option>
                             <el-option 
@@ -31,13 +31,13 @@
                             </el-option>
                         </el-select>
 					</el-form-item>
-					<el-form-item label="客户名称">
+					<el-form-item label="收货单位">
                         <el-autocomplete 
 							style="width:100%" 
                             value-key="companyName" 
                             v-model="find.customerName"
                             :fetch-suggestions="getCustomers"
-                            placeholder="请输入客户名称"
+                            placeholder="请输入收货单位"
                             @select="handSelectCustomer"  @change="inputChange">
 							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
                         </el-autocomplete>

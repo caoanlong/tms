@@ -269,7 +269,7 @@
 					<el-row>
 						<div class="otherInfo">
 							<p>企业名称：{{memDetail.companyName}}</p>
-							<p>企业角色：{{memDetail.roleName}}</p>
+							<!-- <p>企业角色：{{memDetail.roleName}}</p> -->
 						</div>
 					</el-row>
 					<el-row>
