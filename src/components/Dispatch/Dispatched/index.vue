@@ -7,6 +7,9 @@
             </div>
 			<div class="search">
 				<el-form :inline="true" size="small">
+					<el-form-item label="车牌号">
+						<el-input placeholder="车牌号" v-model="find.keyword" @change="inputChange"></el-input>
+					</el-form-item>
 					<el-form-item label="交货单号">
 						<el-input placeholder="交货单号" v-model="find.shipperNo" @change="inputChange"></el-input>
 					</el-form-item>
@@ -312,6 +315,7 @@ export default {
 		return{
 			isCur: 0,
 			find:{
+                keyword:'',
                 shipperNo:'',
                 dispatchOrderNo:'',
 				shipperCustomerID:'',
@@ -368,7 +372,7 @@ export default {
 		}
 	},
 	created() {
-        if(this.permissions[$route.name]&&permissions[$route.name]['listOfDispatched']){
+        if(this.permissions[this.$route.name]&&this.permissions[this.$route.name]['listOfDispatched']){
             this.isCur = 0
         }else{
             this.isCur = 1
@@ -396,6 +400,7 @@ export default {
 			this.getList()
 		},
 		resetSearch(){
+			this.find.keyword=''
 			this.find.shipperNo=''
             this.find.dispatchOrderNo=''
             this.find.shipperCustomerID=''
@@ -421,6 +426,7 @@ export default {
 		},
 		resetExportExcelUrl() {
 			const params = '&shipperNo=' + this.find.shipperNo 
+						+ '&keyword=' + this.find.keyword
 						+ '&dispatchOrderNo=' + this.find.dispatchOrderNo
 						+ '&shipperCustomerID=' + this.find.shipperCustomerID
 						+ '&consigneeCustomerID=' + this.find.consigneeCustomerID
@@ -508,6 +514,7 @@ export default {
 			DispatchOrder.listOfOnway({
 				current: this.pageIndex,
 				size: this.pageSize,
+				keyword:this.find.keyword,
 				shipperNo:this.find.shipperNo,
                 dispatchOrderNo:this.find.dispatchOrderNo,
                 shipperCustomerID:this.find.shipperCustomerID,
@@ -530,6 +537,7 @@ export default {
 			DispatchOrder.listOfHistory({
 				current: this.pageIndex,
 				size: this.pageSize,
+				keyword:this.find.keyword,
 				shipperNo:this.find.shipperNo,
                 dispatchOrderNo:this.find.dispatchOrderNo,
                 shipperCustomerID:this.find.shipperCustomerID,
