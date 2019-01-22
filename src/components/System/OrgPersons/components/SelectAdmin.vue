@@ -33,7 +33,13 @@
                     label="选择" 
                     type="selection" 
                     align="center" 
-                    :selectable="(row) => !row.hasAdd">
+                    :selectable="(row) => {
+                        if (isAdmin) {
+                            return !selected.map(item => item.memberID).includes(row.memberID)
+                        } else {
+                            return !row.hasAdd
+                        }
+                    }">
                 </el-table-column>
                 <el-table-column label="工号" prop="jobNumber" align="center" width="70"></el-table-column>
                 <el-table-column label="姓名" prop="realName" align="center" width="100"></el-table-column>
@@ -64,6 +70,10 @@ export default {
         selected: {
             type: Array,
             default: () => []
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

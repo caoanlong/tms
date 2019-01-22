@@ -49,6 +49,7 @@
             @control="handAddAdmin">
         </add-admin>
         <select-admin 
+            :isAdmin="true" 
             :selected="org.members"
             :organizationID="org.id" 
             :isVisible="isSelectAdminVisible" 
