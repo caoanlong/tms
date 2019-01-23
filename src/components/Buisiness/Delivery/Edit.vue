@@ -11,14 +11,9 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="工厂名称" class="customerSelect" prop="companyCode">
-                            <el-autocomplete 
-                                value-key="companyName" 
-                                v-model="shipperName"
-                                :fetch-suggestions="getCustomers"
-                                placeholder="请输入工厂名称" 
-                                @select="handSelectCustomer" style="width:100%">
-                                <i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
-                            </el-autocomplete>
+                            <el-select v-model="deliveryInfo.shipperName" placeholder="请选择"  style="width:100%">
+                                <el-option :label="shipperInfo.companyName" :value="shipperInfo.companyCode"></el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -97,12 +92,13 @@
 <script type="text/javascript">
 import DeliveryOrder from '../../../api/DeliveryOrder'
 import Company from '../../../api/Company'
+import Sys from '../../../api/Sys'
 import { Message } from 'element-ui'
 export default {
 
 	data() {
 		return {
-            shipperName:'',
+            shipperInfo:{},
             dealerName:'',
             deliveryInfo:{
                 code:'',
@@ -128,11 +124,11 @@ export default {
                 outTime: [ { required: true, message: '请选择出厂时间' } ]
             }
 		}
-	},
+    },
 	activated() {
+        this.getShipperInfo()
 		if(!this.$route.query.cache) {
             this.dealerName='',
-            this.shipperName='',
 			this.deliveryInfo = {
 				code:'',
                 companyCode:'',
@@ -146,6 +142,7 @@ export default {
 				outTime: ''
 			}
             this.getInfo()
+            
         }
         if(this.$refs['ruleForm']) {
             this.$refs['ruleForm'].resetFields()
@@ -156,29 +153,15 @@ export default {
 			const deliveryOrderID = this.$route.query.deliveryOrderID
 			DeliveryOrder.orderDetail({ deliveryOrderID}).then(res => {
 				this.deliveryInfo = res
-				this.shipperName = res.shipperName
 				this.dealerName = res.consigneeName
 			})
         },
-        getCustomers(companyName, cb) {
-			this.deliveryInfo.companyCode = ''
-			Company.customerSuggest({
-                current: 1,
-                size: 1000,
-                customerType: 'Shipper',
-                companyName:this.shipperName
-            }).then(res => {
-                cb(res) 
+        getShipperInfo() {
+			Sys.info().then(res => {
+                this.shipperInfo.companyName =res.companyName
+                this.shipperInfo.companyCode =res.code
             })
         },
-        handSelectCustomer(data){
-			this.deliveryInfo.companyCode = data.code
-            this.shipperName = data.companyName
-        },
-        clearSelectCustomer(){
-			this.deliveryInfo.companyCode = ''
-			this.shipperName = ''
-		},
         getDealer(companyName, cb) {
 			this.deliveryInfo.dealerCode = ''
 			Company.customerSuggest({

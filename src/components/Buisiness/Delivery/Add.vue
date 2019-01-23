@@ -10,15 +10,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="工厂名称" class="customerSelect" prop="companyCode">
-                            <el-autocomplete 
-                                value-key="companyName" 
-                                v-model="deliveryInfo.companyName"
-                                :fetch-suggestions="getCustomers"
-                                placeholder="请输入工厂名称" 
-                                @select="handSelectCustomer" style="width:100%">
-                                <i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
-                            </el-autocomplete>
+                        <el-form-item label="工厂名称" class="customerSelect">
+                           <el-input v-model="deliveryInfo.companyName" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -100,6 +93,7 @@ import request, { baseURL } from '../../../common/request'
 import { baseMixin } from '../../../common/mixin'
 import Company from '../../../api/Company'
 import DeliveryOrder from '../../../api/DeliveryOrder'
+import Sys from '../../../api/Sys'
 export default {
 
 	data() {
@@ -131,6 +125,7 @@ export default {
 		}
 	},
 	activated() {
+        this.getShipperInfo()
 		if(!this.$route.query.cache) {
 			this.deliveryInfo = {
 				code:'',
@@ -153,15 +148,10 @@ export default {
         }
     },
 	methods: {
-		getCustomers(companyName, cb) {
-			this.deliveryInfo.companyCode = ''
-			Company.customerSuggest({
-                current: 1,
-                size: 1000,
-                customerType: 'Shipper',
-                companyName:this.deliveryInfo.companyName
-            }).then(res => {
-                cb(res) 
+		getShipperInfo() {
+			Sys.info().then(res => {
+                this.deliveryInfo.companyName =res.companyName
+                this.deliveryInfo.companyCode =res.code
             })
         },
         handSelectCustomer(data){
