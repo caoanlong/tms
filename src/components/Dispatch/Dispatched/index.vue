@@ -16,27 +16,36 @@
 					<el-form-item label="调度单号">
 						<el-input placeholder="调度单号" v-model="find.dispatchOrderNo" @change="inputChange"></el-input>
 					</el-form-item>
-					<el-form-item label="工厂名称">
-						<el-select placeholder="请选择" v-model="find.shipperCustomerID" @change="inputChange">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option 
-                                :label="item.companyName" 
-                                :value="item.customerID" 
-                                v-for="(item, i) in companys" 
-                                :key="i">
-                            </el-option>
-                        </el-select>
-					</el-form-item>
-					<el-form-item label="客户名称">
+					<el-form-item label="发货单位">
+                        <el-autocomplete 
+							style="width:100%" 
+                            value-key="companyName" 
+                            v-model="find.shipperCustomer"
+                            :fetch-suggestions="getShippers"
+                            placeholder="请输入发货单位" 
+                            @select="handSelectShipper" 
+							@change="inputChange">
+							<i 
+								class="el-icon-close el-input__icon" 
+								slot="suffix" 
+								@click="clearSelectShipper">
+							</i>
+                        </el-autocomplete>
+                    </el-form-item>
+					<el-form-item label="收货单位">
                         <el-autocomplete 
 							style="width:100%" 
                             value-key="companyName" 
                             v-model="find.consigneeCustomer"
                             :fetch-suggestions="getCustomers"
-                            placeholder="请输入客户名称" 
+                            placeholder="请输入收货单位" 
                             @select="handSelectCustomer" 
 							@change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
+							<i 
+								class="el-icon-close el-input__icon" 
+								slot="suffix" 
+								@click="clearSelectCustomer">
+							</i>
                         </el-autocomplete>
                     </el-form-item>
                     <el-form-item label="产品名称">
@@ -319,6 +328,7 @@ export default {
                 shipperNo:'',
                 dispatchOrderNo:'',
 				shipperCustomerID:'',
+				shipperCustomer:'',
 				consigneeCustomerID:'',
 				consigneeCustomer:'',
 				cargoName:'',
@@ -468,23 +478,30 @@ export default {
 		handUploadPhoto(bool) {
 			this.isPhotoVisible = false
 		},
-        getCustomers(companyName, cb) {
-			this.find.consigneeID = ''
-			Company.customerFind({
-                current: 1,
-                size: 1000,
-                customerType: 'Consignee',
-                keyword:this.find.consigneeCustomer
-            }).then(res => {
-                cb(res.records) 
-            })
+		getShippers(companyName, cb) {
+			this.find.shipperCustomerID = ''
+			Company.customerSuggest({ companyName }).then(res => { cb(res) })
 		},
-		handSelectCustomer(data){
+        getCustomers(companyName, cb) {
+			this.find.consigneeCustomerID = ''
+			Company.customerSuggest({ companyName }).then(res => { cb(res) })
+		},
+		handSelectShipper(data) {
+			this.find.shipperCustomerID = data.customerID
+            this.find.shipperCustomer = data.companyName
+			this.resetExportExcelUrl()
+		},
+		handSelectCustomer(data) {
 			this.find.consigneeCustomerID = data.customerID
             this.find.consigneeCustomer = data.companyName
 			this.resetExportExcelUrl()
 		},
-		clearSelectCustomer(){
+		clearSelectShipper() {
+			this.find.shipperCustomerID = ''
+			this.find.shipperCustomer =''
+			this.resetExportExcelUrl()
+		},
+		clearSelectCustomer() {
 			this.find.consigneeCustomerID = ''
 			this.find.consigneeCustomer =''
 			this.resetExportExcelUrl()

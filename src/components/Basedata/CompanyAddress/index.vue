@@ -122,7 +122,7 @@ export default {
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
 			importFileUrl: baseURL + '/company/customer/address/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			exportExcelUrl:'',
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Authorization=' + localStorage.getItem("token"),
+			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customerAddress.xlsx&Request-From=PC&Authorization=' + localStorage.getItem("token"),
 			find: { 
                 keyword: '',
                 zone:'',

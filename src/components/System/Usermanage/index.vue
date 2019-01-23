@@ -24,7 +24,8 @@
 					type="default" 
 					size="mini" 
 					icon="el-icon-plus" 
-					@click="$router.push({ name: 'adduser' })" v-if="permissions[$route.name]&&permissions[$route.name]['add']">
+					@click="$router.push({ name: 'adduser' })" 
+					v-if="permissions[$route.name]&&permissions[$route.name]['add']">
 					添加
 				</el-button>
 				<el-upload 
@@ -123,7 +124,7 @@ export default {
 				+ localStorage.getItem("token"),
 			exportExcelUrl: '',
 			templateUrl: baseURL 
-				+ '/base/filetemplate/downLoadTemplate?fileName=member.xlsx&Authorization=' 
+				+ '/base/filetemplate/downLoadTemplate?fileName=member.xlsx&Request-From=PC&Authorization=' 
 				+ localStorage.getItem("token")
 		}
 	},

@@ -153,13 +153,13 @@ export default {
 		uploadFile(data, cb) {
 			const url = baseURL + "/sys/picture/upload"
 			const headers = { 
-				'Content-type': 'multipart/form-data;charset=UTF-8',
-				'Request-From': 'PC'
+				'Content-type': 'multipart/form-data;charset=UTF-8'
 			}
 			const params = formDataReq({
 				"file": data
 			})
 			axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+			axios.defaults.headers.common['Request-From'] = 'PC'
 			axios.post(url, params, headers).then(res => {
 				this.fileUrl.push(res.data.data)
 				this.$emit('imgUrlBack', this.fileUrl)
