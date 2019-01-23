@@ -6,7 +6,7 @@
 				<div class="price-reg"><span :class="type == 'price-reg' ? 'active' : ''" @click="change('price-reg')">价格监控</span></div>
 			</div>
 		</div>
-		<component :is="type"></component>
+		<component :is="type" :key="new Date().getTime()"></component>
 	</div>
 </template>
 <script type="text/javascript">
