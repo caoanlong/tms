@@ -410,21 +410,22 @@ export default {
 			this.getList()
 		},
 		resetSearch(){
-			this.find.keyword=''
-			this.find.shipperNo=''
-            this.find.dispatchOrderNo=''
-            this.find.shipperCustomerID=''
-            this.find.consigneeCustomerID=''
-            this.find.consigneeCustomer=''
-            this.find.cargoName=''
-            this.find.status=''
-            this.find.type=''
-            this.find.shipperDateBegin=''
-            this.find.shipperDateEnd=''
-            this.find.consigneeDateBegin=''
-            this.find.consigneeDateEnd=''
-            this.find.dispatchBeginTime=''
-            this.find.dispatchEndTime=''
+			this.find.keyword = ''
+			this.find.shipperNo = ''
+            this.find.dispatchOrderNo = ''
+            this.find.shipperCustomerID = ''
+            this.find.shipperCustomer = ''
+            this.find.consigneeCustomerID = ''
+            this.find.consigneeCustomer = ''
+            this.find.cargoName = ''
+            this.find.status = ''
+            this.find.type = ''
+            this.find.shipperDateBegin = ''
+            this.find.shipperDateEnd = ''
+            this.find.consigneeDateBegin = ''
+            this.find.consigneeDateEnd = ''
+            this.find.dispatchBeginTime = ''
+            this.find.dispatchEndTime = ''
 			this.pageIndex = this.PAGEINDEX
 			this.pageSize = this.PAGESIZE
 			

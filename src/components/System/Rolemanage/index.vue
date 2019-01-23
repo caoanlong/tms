@@ -37,7 +37,7 @@
 							<span v-else-if="scope.row.roleType == 'Business'">业务角色</span>
 						</template>
 					</el-table-column>
-					<el-table-column width="100" align="center" fixed="right">
+					<el-table-column label="操作" width="100" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown  @command="handleCommand"  trigger="click" v-if="(scope.row.roleType != 'System')&&(permissions[$route.name]&&permissions[$route.name]['update'] || permissions[$route.name]&&permissions[$route.name]['delete'])">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
