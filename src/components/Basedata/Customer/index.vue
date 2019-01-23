@@ -128,7 +128,7 @@ export default {
 				+ localStorage.getItem("token"),
 			exportExcelUrl: '',
 			templateUrl: baseURL 
-				+ '/base/filetemplate/downLoadTemplate?fileName=customer.xlsxRequest-From=PC&Authorization=' 
+				+ '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Request-From=PC&Authorization=' 
 				+ localStorage.getItem("token"),
 			find: {
 				keyword: '',

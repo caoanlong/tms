@@ -100,7 +100,7 @@
 									</p>
 								<th>
 									<p class="cursor">
-										发货工厂&nbsp;
+										发货单位&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
 												class="arrow-up" 
@@ -111,7 +111,7 @@
 										</span>
 									</p>
 									<p class="cursor">
-										到货客户&nbsp;
+										收货单位&nbsp;
 										<span class="arrow-group">
 											<svg-icon 
 												class="arrow-down" 
@@ -259,7 +259,7 @@
 						<thead>
 							<tr>
 								<th>交货单号</th>
-								<th><p>发货工厂</p><p>到货客户</p></th>
+								<th><p>发货单位</p><p>收货单位</p></th>
 								<th><p>装车地区</p><p>卸货地区</p></th>
 								<th><p>装车地址</p><p>卸货地址</p></th>
 								<th>产品</th>
