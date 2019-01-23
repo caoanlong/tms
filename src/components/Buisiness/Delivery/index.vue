@@ -7,17 +7,6 @@
 					<el-form-item label="交货单号">
 						<el-input placeholder="交货单号" v-model="find.code" @change="inputChange"></el-input>
 					</el-form-item>
-                    <!-- <el-form-item label="工厂名称" class="customerSelect">
-						<el-autocomplete 
-                            value-key="companyName" 
-                            v-model="find.companyName"
-                            :fetch-suggestions="getCustomers"
-                            placeholder="请输入工厂名称" 
-                            @select="handSelectCustomer" 
-							@change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
-                        </el-autocomplete>
-					</el-form-item> -->
                     <el-form-item label="客户名称">
 						<el-autocomplete 
                             value-key="companyName" 
@@ -26,7 +15,11 @@
                             placeholder="请输入客户名称" 
                             @select="handSelectDealer" 
 							@change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectDealer"></i>
+							<i 
+								class="el-icon-close el-input__icon" 
+								slot="suffix" 
+								@click="clearSelectDealer">
+							</i>
                         </el-autocomplete>
 					</el-form-item>
                     <el-form-item label="产品名称">
@@ -261,44 +254,16 @@ export default {
 		inputChange() {
 			this.resetExportExcelUrl()
         },
-        getCustomers(companyName, cb) {
-			this.find.companyCode = ''
-			Company.customerFind({
-                current: 1,
-                size: 1000,
-                customerType: 'Shipper',
-                keyword:this.find.companyName
-            }).then(res => {
-                cb(res.records) 
-            })
-		},
-        handSelectCustomer(data){
-			this.find.companyCode = data.code
-            this.find.companyName = data.companyName
-			this.resetExportExcelUrl()
-        },
-        clearSelectCustomer(){
-			this.find.companyCode = ''
-			this.find.companyName =''
-			this.resetExportExcelUrl()
-		},
         getDealer(companyName, cb) {
 			this.find.dealerCode = ''
-			Company.customerFind({
-                current: 1,
-                size: 1000,
-                customerType: 'Consignee',
-                keyword:this.find.dealerName
-            }).then(res => {
-                cb(res.records)
-            })
+			Company.customerSuggest({ companyName }).then(res => { cb(res) })
 		},
-        handSelectDealer(data){
+        handSelectDealer(data) {
 			this.find.dealerCode = data.code
             this.find.dealerName = data.companyName
 			this.resetExportExcelUrl()
         },
-        clearSelectDealer(){
+        clearSelectDealer() {
 			this.find.dealerCode = ''
 			this.find.dealerName =''
 			this.resetExportExcelUrl()
