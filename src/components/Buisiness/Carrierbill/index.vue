@@ -134,7 +134,7 @@
 							<el-tag size="mini" class="statusTag" type="info" v-else-if="scope.row.status == 'Closed'">已关闭</el-tag>
 						</template>
 					</el-table-column>
-					<el-table-column label="发货方（工厂）" prop="shipperCompanyName" align="center"  width='120'></el-table-column>
+					<el-table-column label="发货方" prop="shipperCompanyName" align="center"  width='120'></el-table-column>
 					<el-table-column label="收货方" prop="consigneeCompanyName" align="center"  width='120'></el-table-column>
 					<el-table-column label="货物" prop="cargoName" align="center"  width='120'></el-table-column>
 					<el-table-column label="订单量"  align="center">
