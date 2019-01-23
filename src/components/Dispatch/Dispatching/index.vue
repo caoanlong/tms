@@ -7,26 +7,34 @@
 					<el-form-item label="交货单号">
 						<el-input placeholder="交货单号" v-model="find.shipperNo"></el-input>
 					</el-form-item>
-					<el-form-item label="工厂名称">
-						<el-select placeholder="请选择" v-model="find.shipperCustomerID">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option 
-                                :label="item.companyName" 
-                                :value="item.customerID" 
-                                v-for="(item, i) in companys" 
-                                :key="i">
-                            </el-option>
-                        </el-select>
+					<el-form-item label="发货单位">
+						<el-autocomplete 
+							style="width:100%" 
+                            value-key="companyName" 
+                            v-model="find.shipperCustomerName"
+                            :fetch-suggestions="getShipperCustomers"
+                            placeholder="请输入发货单位" 
+                            @select="handSelectShipperCustomer" >
+							<i 
+								class="el-icon-close el-input__icon" 
+								slot="suffix" 
+								@click="clearSelectShipperCustomer">
+							</i>
+                        </el-autocomplete>
 					</el-form-item>
-					<el-form-item label="客户名称">
+					<el-form-item label="收货单位">
                         <el-autocomplete 
 							style="width:100%" 
                             value-key="companyName" 
                             v-model="find.consigneeCustomerName"
                             :fetch-suggestions="getConsigneeCustomers"
-                            placeholder="请输入客户名称" 
-                            @select="handSelectConsigneeCustomer" >
-							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectConsigneeCustomer"></i>
+                            placeholder="请输入收货单位" 
+                            @select="handSelectConsigneeCustomer">
+							<i 
+								class="el-icon-close el-input__icon" 
+								slot="suffix" 
+								@click="clearSelectConsigneeCustomer">
+							</i>
                         </el-autocomplete>
                     </el-form-item>
                     <el-form-item label="产品名称">
@@ -445,7 +453,7 @@ import { baseMixin } from '../../../common/mixin'
 import CarryOrder from '../../../api/CarryOrder'
 import Company from '../../../api/Company'
 import { checkFloat2, checkInt } from '../../../common/valid'
-import { arrayUnique ,isFullDay} from '../../../common/utils'
+import { arrayUnique ,isFullDay } from '../../../common/utils'
 export default {
 	mixins: [baseMixin], 
 	components: { DistPicker, PublishDispatch, GrabOrder },
@@ -456,6 +464,7 @@ export default {
 			find: {
 				shipperNo: '',
 				shipperCustomerID: '',
+				shipperCustomerName: '',
 				consigneeCustomerID: '',
 				consigneeCustomerName: '',
 				cargoName: '',
@@ -466,7 +475,6 @@ export default {
 				orderBy: 'CarrierOrderNo',
 				sortType: 'desc'
 			},
-			companys: [],
 			selectedShipperArea: [],
 			selectedConsigneeArea: [],
 			selectedListNoRepeat: [],
@@ -504,7 +512,6 @@ export default {
 		const dispatchOrderID = this.$route.query.dispatchOrderID
 		this.getList()
 		dispatchOrderID && this.getSelectedList()
-		this.getCompanys()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
@@ -521,6 +528,7 @@ export default {
 		reset() {
 			this.find.shipperNo = ''
 			this.find.shipperCustomerID = ''
+			this.find.shipperCustomerName = ''
 			this.find.consigneeCustomerID = ''
 			this.find.consigneeCustomerName = ''
 			this.find.cargoName = ''
@@ -536,27 +544,30 @@ export default {
 			this.pageSize = this.PAGESIZE
 			this.getList()
 		},
+		getShipperCustomers(companyName, cb) {
+			this.find.shipperCustomerID = ''
+			Company.customerSuggest({ companyName }).then(res => { cb(res) })
+		},
 		getConsigneeCustomers(companyName, cb) {
 			this.find.consigneeCustomerID = ''
 			Company.customerSuggest({ companyName }).then(res => { cb(res) })
 		},
-		handSelectConsigneeCustomer(data){
+		handSelectShipperCustomer(data) {
+			this.find.shipperCustomerID = data.customerID
+			this.find.shipperCustomerName = data.companyName
+		},
+		handSelectConsigneeCustomer(data) {
 			this.find.consigneeCustomerID = data.customerID
 			this.find.consigneeCustomerName = data.companyName
 		},
-		clearSelectConsigneeCustomer(){
-			this.find.consigneeCustomerID = ''
-			this.find.consigneeCustomerName =''
+		clearSelectShipperCustomer() {
+			this.find.shipperCustomerID = ''
+			this.find.shipperCustomerName = ''
 		},
-		getCompanys() {
-            Company.customerFind({
-				current: 1,
-                size: 1000,
-                customerType: 'Shipper'
-			}).then(res => {
-                this.companys = res.records
-			})
-        },
+		clearSelectConsigneeCustomer() {
+			this.find.consigneeCustomerID = ''
+			this.find.consigneeCustomerName = ''
+		},
 		/**
 		 * 排序搜索
 		 */

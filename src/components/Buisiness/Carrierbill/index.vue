@@ -21,16 +21,21 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item label="发货单位">
-						<el-select placeholder="请选择" v-model="find.shipperID" @change="inputChange">
-                            <el-option label="全部" value=""></el-option>
-                            <el-option 
-                                :label="item.companyName" 
-                                :value="item.customerID" 
-                                v-for="(item, i) in companys" 
-                                :key="i">
-                            </el-option>
-                        </el-select>
-					</el-form-item>
+                        <el-autocomplete 
+							style="width:100%" 
+                            value-key="companyName" 
+                            v-model="find.shipperName"
+                            :fetch-suggestions="getShippers"
+                            placeholder="请输入发货单位"
+                            @select="handSelectShipper" 
+							@change="inputChange">
+							<i 
+								class="el-icon-close el-input__icon" 
+								slot="suffix" 
+								@click="clearSelectShipper">
+							</i>
+                        </el-autocomplete>
+                    </el-form-item>
 					<el-form-item label="收货单位">
                         <el-autocomplete 
 							style="width:100%" 
@@ -38,8 +43,13 @@
                             v-model="find.customerName"
                             :fetch-suggestions="getCustomers"
                             placeholder="请输入收货单位"
-                            @select="handSelectCustomer"  @change="inputChange">
-							<i class="el-icon-close el-input__icon" slot="suffix" @click="clearSelectCustomer"></i>
+                            @select="handSelectCustomer" 
+							@change="inputChange">
+							<i 
+								class="el-icon-close el-input__icon" 
+								slot="suffix" 
+								@click="clearSelectCustomer">
+							</i>
                         </el-autocomplete>
                     </el-form-item>
 					<el-form-item label="产品名称">
@@ -175,8 +185,9 @@ export default {
 			find: {
 				shipperNo: '',
 				carrierOrderNo: '',
-				shipperID: '',
 
+				shipperID: '',
+				shipperName: '',
 				consigneeID: '',
 				customerName: '',
 
@@ -187,14 +198,12 @@ export default {
 				begin: '',
 				end: ''
 			},
-			companys: [],
 			exportExcelUrl: ''
 		}
 	},
 	created() {
 		this.resetExportExcelUrl()
 		this.getList()
-		this.getCompanys()
     },
     computed: {
         ...mapGetters(['permissions'])
@@ -205,16 +214,30 @@ export default {
 		}
 	},
 	methods: {
+		getShippers(companyName, cb) {
+			this.find.shipperID = ''
+			Company.customerSuggest({ companyName }).then(res => { cb(res) })
+		},
 		getCustomers(companyName, cb) {
 			this.find.consigneeID = ''
 			Company.customerSuggest({ companyName }).then(res => { cb(res) })
+		},
+		handSelectShipper(data) {
+			this.find.shipperID = data.customerID
+			this.find.shipperName = data.companyName
+			this.resetExportExcelUrl()
 		},
 		handSelectCustomer(data){
 			this.find.consigneeID = data.customerID
 			this.find.customerName = data.companyName
 			this.resetExportExcelUrl()
 		},
-		clearSelectCustomer(){
+		clearSelectShipper() {
+			this.find.shipperID = ''
+			this.find.shipperName = ''
+			this.resetExportExcelUrl()
+		},
+		clearSelectCustomer() {
 			this.find.consigneeID = ''
 			this.find.customerName =''
 			this.resetExportExcelUrl()
@@ -253,15 +276,6 @@ export default {
 		inputChange() {
 			this.resetExportExcelUrl()
 		},
-		getCompanys() {
-            Company.customerFind({
-				current: 1,
-                size: 1000,
-                customerType: 'Shipper'
-			}).then(res => {
-                this.companys = res.records
-			})
-        },
 		getList() {
 			CarryOrder.find({
 				current: this.pageIndex,

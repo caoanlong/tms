@@ -24,7 +24,8 @@
 					type="default" 
 					size="mini" 
 					icon="el-icon-plus" 
-					@click="$router.push({ name: 'adduser' })" v-if="permissions[$route.name]&&permissions[$route.name]['add']">
+					@click="$router.push({ name: 'adduser' })" 
+					v-if="permissions[$route.name]&&permissions[$route.name]['add']">
 					添加
 				</el-button>
 				<el-upload 

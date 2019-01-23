@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { Message } from 'element-ui'
+import SysMember from '../../../../api/SysMember'
 export default {
     props: {
         isVisible: {
@@ -37,21 +39,29 @@ export default {
                 password: ''
             },
             rules: {
-				password: [{ required: true, message: '请输入密码' }]
+				password: [
+                    { required: true, message: '请输入密码' },
+                    {min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}
+                ]
 			}
         }
     },
     watch: {
-        curUser: {
-            handler(val) {
-                console.log(val)
-            },
-            deep: true
+        isVisible(val) {
+            val && (this.user.password = '')
         }
     },
     methods: {
         sure() {
-            this.close()
+            const data = Object.assign({}, this.user)
+            data.memberID = this.curUser.memberID
+            this.$refs['ruleForm'].validate(valid => {
+				if (!valid) return
+				SysMember.update(data).then(res => {
+					Message.success('成功！')
+					this.$emit('control')
+				})
+			})
         },
         close() {
             this.$emit('control')

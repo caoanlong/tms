@@ -214,8 +214,14 @@ export default {
 			getVcodeText: '获取验证码',
 			citys: [],
 			loginRules: {
-				username: [{required: true, message: '请输入用户名', trigger: 'blur'}, {min: 1, max: 50, message: '长度在 1 到 50 个字符'}],
-				password: [{required: true, message: '请输入密码', trigger: 'blur'}, {min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}]
+				username: [
+					{required: true, message: '请输入用户名', trigger: 'blur'}, 
+					{min: 1, max: 50, message: '长度在 1 到 50 个字符'}
+				],
+				password: [
+					{required: true, message: '请输入密码', trigger: 'blur'}, 
+					{min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字'}
+				]
 			},
 			registerRules: {
 				mobile: [{required: true, message: '请输入手机号'}, {validator: checkMobile}],
