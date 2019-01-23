@@ -157,6 +157,10 @@ export default {
                     }
                 }
             }
+            if (data.code != 200) {
+                this.logsLoading = false
+                Message.error(data.msg)
+            }
         },
         async getList() {
             const url = baseURL + '/deliveryOrder/getTracks'
@@ -229,10 +233,31 @@ export default {
                     })
                 }
             })
+            const distance = {}
             // 绘制地址监控
             this.customerAddressList.forEach(item => {
                 this.drawAddressPoint(item)
+                const p1 = [item.locationLng, item.locationLat]
+                for (let i = 0; i < this.alarmMsgs.length; i++) {
+                    const alarmMsg = this.alarmMsgs[i]
+                    if (alarmMsg.type == 'ArrivedOffset') {
+                        const p2 = [alarmMsg.longitude, alarmMsg.latitude]
+                        const dis = AMap.GeometryUtil.distance(p1, p2)
+                        if (!distance.dis) {
+                            distance.dis = dis
+                            distance.p1 = p1
+                            distance.p2 = p2
+                        } else {
+                            if (distance.dis > dis) {
+                                distance.dis = dis
+                                distance.p1 = p1
+                                distance.p2 = p2
+                            }
+                        }
+                    }
+                }
             })
+            this.drawLine(distance)
             this.customerMonitorAreaList.forEach(item => {
                 this.drawArea(item)
             })
@@ -416,6 +441,27 @@ export default {
             infoWindow.open(this.map, [item.longitude, item.latitude])
             marker.on('mouseout', (e) => {
                 infoWindow.close()
+            })
+        },
+        /**
+         * 绘制直线
+         */
+        drawLine(distance) {
+            const path = [new AMap.LngLat(...distance.p1), new AMap.LngLat(...distance.p2)]
+            const polyline = new AMap.Polyline({
+                path,  
+                borderWeight: 2, // 线条宽度，默认为 1
+                strokeColor: 'red', // 线条颜色
+                lineJoin: 'round', // 折线拐点连接处样式
+                map: this.map
+            })
+            const position = Array.from(distance.p1, (x, i) => {
+                return Number(((x + distance.p2[i]) / 2).toFixed(5))
+            })
+            const text = new AMap.Text({
+                position,
+                text: (distance.dis/1000).toFixed(2) + '公里',
+                map: this.map
             })
         },
         /**

@@ -10,7 +10,12 @@
             <el-form :inline="true" class="demo-form-inline" size="small">
                 <el-form-item label="归属">
                     <el-select v-model="find.underOrganizationID">
-                        <el-option v-for="item in orgs" :label="item.name" :value="item.id" :key="item.id"></el-option>
+                        <el-option 
+                            v-for="item in orgs" 
+                            :label="item.name" 
+                            :value="item.id" 
+                            :key="item.id">
+                        </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="员工">
@@ -88,6 +93,11 @@ export default {
     watch: {
         isVisible(val) {
             if (val) {
+                this.find.underOrganizationID = ''
+                this.find.keyword = ''
+                this.selectedList = []
+                this.tableData = []
+                this.total = 0
                 this.getList()
                 this.getOrgs()
             }
