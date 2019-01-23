@@ -123,9 +123,13 @@ export default {
 	data() {
 		return {
 			uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From': 'PC'},
-			importFileUrl: baseURL + '/company/customer/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
+			importFileUrl: baseURL 
+				+ '/company/customer/import?Request-From=PC&Authorization=' 
+				+ localStorage.getItem("token"),
 			exportExcelUrl: '',
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=customer.xlsx&Authorization=' + localStorage.getItem("token"),
+			templateUrl: baseURL 
+				+ '/base/filetemplate/downLoadTemplate?fileName=customer.xlsxRequest-From=PC&Authorization=' 
+				+ localStorage.getItem("token"),
 			find: {
 				keyword: '',
                 customerType: '',

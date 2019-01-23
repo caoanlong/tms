@@ -123,7 +123,7 @@ export default {
 				+ localStorage.getItem("token"),
 			exportExcelUrl: '',
 			templateUrl: baseURL 
-				+ '/base/filetemplate/downLoadTemplate?fileName=member.xlsx&Authorization=' 
+				+ '/base/filetemplate/downLoadTemplate?fileName=member.xlsx&Request-From=PC&Authorization=' 
 				+ localStorage.getItem("token")
 		}
 	},

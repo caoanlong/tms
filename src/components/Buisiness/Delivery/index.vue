@@ -194,9 +194,13 @@ export default {
 				outTimeEnd: ''
 			},
             uploadHeaders: {'Authorization': localStorage.getItem('token'),'Request-From':'PC'},
-			importFileUrl: baseURL + '/deliveryOrder/import?Request-From=PC&Authorization=' + localStorage.getItem("token"),
+			importFileUrl: baseURL 
+				+ '/deliveryOrder/import?Request-From=PC&Authorization=' 
+				+ localStorage.getItem("token"),
 			exportExcelUrl:'',
-			templateUrl: baseURL + '/base/filetemplate/downLoadTemplate?fileName=deliveryorder.xlsx&Authorization=' + localStorage.getItem("token"),
+			templateUrl: baseURL 
+				+ '/base/filetemplate/downLoadTemplate?fileName=deliveryorder.xlsx&Request-From=PC&Authorization=' 
+				+ localStorage.getItem("token")
 		}
 	},
 	created() {
