@@ -1,8 +1,11 @@
 <template>
     <div class="truck">
         <div class="up">
-            <span class="order">交货单 <span class="order-num">{{truck.shipperNo}}</span></span>
-            <el-tag class="order-tag" type="danger" size="mini" v-if="truck.msgType">异常</el-tag>
+            <div class="order">
+                交货单 
+                <span class="order-num">{{truck.shipperNoList.join('，')}}</span>
+            </div>
+            <el-tag class="order-tag" type="danger" size="mini" v-if="truck.alarmFlag == 'Y'">异常</el-tag>
         </div>
         <div class="middle">
             <span class="plateNo">{{truck.plateNo}}</span>
@@ -48,13 +51,22 @@ export default {
     .up
         height 26px
         line-height 26px
+        position relative
+        padding-right 40px
         .order
             color #666
             font-size 13px
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
             .order-num
                 color #409EFF
         .order-tag
-            float right
+            position absolute
+            right 0
+            top 0
+            width 40px
+            text-align center
     .middle
         height 26px
         line-height 26px
