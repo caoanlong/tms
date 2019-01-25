@@ -225,7 +225,7 @@ export default {
                         position: [item.longitude, item.latitude],
                         icon: require('../assets/imgs/tcbj.png'),
                         map: this.map,
-                        offset: new AMap.Pixel(-17, -37),
+                        offset: new AMap.Pixel(-13, -29),
                         zIndex: 10
                     })
                     alarmMsgs.on('mouseover', (e) => {
@@ -242,36 +242,12 @@ export default {
                     const p1 = [item.locationLng, item.locationLat]
                     const p2 = [end.longitude, end.latitude]
                     const dis = AMap.GeometryUtil.distance(p1, p2)
-                    if (!distance.dis) {
+                    if (!distance.dis || (distance.dis && distance.dis > dis)) {
                         distance.dis = dis
                         distance.p1 = p1
                         distance.p2 = p2
-                    } else {
-                        if (distance.dis > dis) {
-                            distance.dis = dis
-                            distance.p1 = p1
-                            distance.p2 = p2
-                        }
                     }
                 }
-                // for (let i = 0; i < this.alarmMsgs.length; i++) {
-                //     const alarmMsg = this.alarmMsgs[i]
-                //     if (alarmMsg.type == 'ArrivedOffset') {
-                //         const p2 = [alarmMsg.longitude, alarmMsg.latitude]
-                //         const dis = AMap.GeometryUtil.distance(p1, p2)
-                //         if (!distance.dis) {
-                //             distance.dis = dis
-                //             distance.p1 = p1
-                //             distance.p2 = p2
-                //         } else {
-                //             if (distance.dis > dis) {
-                //                 distance.dis = dis
-                //                 distance.p1 = p1
-                //                 distance.p2 = p2
-                //             }
-                //         }
-                //     }
-                // }
             })
             if (distance.dis && distance.p1 && distance.p2) this.drawLine(distance)
             this.customerMonitorAreaList.forEach(item => {
@@ -313,7 +289,7 @@ export default {
                     ) 
                     : require('../assets/imgs/dtcb.png'),
                 map: this.map,
-                offset: this.status == 'Finished' ? new AMap.Pixel(-17, -37) : new AMap.Pixel(-25, -54)
+                offset: this.status == 'Finished' ? new AMap.Pixel(-13, -29) : new AMap.Pixel(-25, -54)
             })
             startPos.posLocation = await this.getAddressByLnglat([
                 startPos.longitude, startPos.latitude
@@ -470,7 +446,8 @@ export default {
                 borderWeight: 2, // 线条宽度，默认为 1
                 strokeColor: 'red', // 线条颜色
                 lineJoin: 'round', // 折线拐点连接处样式
-                map: this.map
+                map: this.map,
+                zIndex: 60
             })
             const position = Array.from(distance.p1, (x, i) => {
                 return Number(((x + distance.p2[i]) / 2).toFixed(5))
