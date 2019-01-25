@@ -15,6 +15,8 @@ export default {
         }
     },
     created() {
+        const gohome = this.$route.query.gohome
+        if (gohome) this.$router.push({name: 'home'})
         this.icons = requireAllName(req)
     }
 }

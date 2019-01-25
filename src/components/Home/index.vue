@@ -2,11 +2,23 @@
 	<div>
 		<div class="head">
 			<div class="tab">
-				<div class="transport-reg"><span :class="type == 'transport-reg' ? 'active' : ''" @click="change('transport-reg')">运输监控</span></div>
-				<div class="price-reg"><span :class="type == 'price-reg' ? 'active' : ''" @click="change('price-reg')">价格监控</span></div>
+				<div class="transport-reg">
+					<span 
+						:class="type == 'transport-reg' ? 'active' : ''" 
+						@click="change('transport-reg')">
+						运输监控
+					</span>
+				</div>
+				<div class="price-reg">
+					<span 
+						:class="type == 'price-reg' ? 'active' : ''" 
+						@click="change('price-reg')">
+						价格监控
+					</span>
+				</div>
 			</div>
 		</div>
-		<component :is="type" :key="new Date().getTime()"></component>
+		<component :is="type"></component>
 	</div>
 </template>
 <script type="text/javascript">
@@ -17,11 +29,9 @@ export default {
 	components: { TransportReg, PriceReg },
 	data() {
 		return {
-			type: 'transport-reg'
+			type: 'transport-reg',
+			key: 0
 		}
-	},
-	activated() {
-		this.type = 'transport-reg'
 	},
 	methods: {
 		change(type) {

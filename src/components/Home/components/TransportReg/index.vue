@@ -92,7 +92,7 @@ export default {
             deep: true
         }
     },
-    created() {
+    activated() {
         this.getCompanys()
     },
     mounted() {

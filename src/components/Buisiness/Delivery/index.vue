@@ -81,7 +81,14 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<el-button type="default" size="mini" icon="el-icon-plus" @click="add" v-if="permissions[$route.name]&&['add']">添加</el-button>
+				<el-button 
+					type="default" 
+					size="mini" 
+					icon="el-icon-plus" 
+					@click="add" 
+					v-if="permissions[$route.name]&&permissions[$route.name]['add']">
+					添加
+				</el-button>
 				<el-upload 
 					class="upload-File" 
 					name="excelFile" 
@@ -92,14 +99,43 @@
 					:beforeUpload="beforeFileUpload" 
 					:headers="uploadHeaders" 
 					:show-file-list="false">
-					<el-button type="default" size="mini" icon="el-icon-upload2" v-if="permissions[$route.name]&&permissions[$route.name]['import']">导入</el-button>
+					<el-button 
+						type="default" 
+						size="mini" 
+						icon="el-icon-upload2" 
+						v-if="permissions[$route.name]&&permissions[$route.name]['import']">
+						导入
+					</el-button>
 				</el-upload>
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']"> 导出</a>
-                <a :href="templateUrl" download="deliveryorder.xlsx" class="download-btn"  v-if="permissions[$route.name]&&permissions[$route.name]['import']">
+				<a 
+					:href="exportExcelUrl" 
+					class="exportExcel el-icon-download" 
+					v-if="permissions[$route.name]&&permissions[$route.name]['export']">
+					导出
+				</a>
+                <a 
+					:href="templateUrl" 
+					download="deliveryorder.xlsx" 
+					class="download-btn"  
+					v-if="permissions[$route.name]&&permissions[$route.name]['import']">
 					<svg-icon iconClass="excel-icon"></svg-icon>下载模板
 				</a>
-                <el-button type="default" size="mini" icon="el-icon-tickets" @click="dispatch" v-if="permissions[$route.name]&&permissions[$route.name]['dispatch']">批量生成</el-button>
-                <el-button type="default" size="mini" icon="el-icon-delete" @click="del" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">批量删除</el-button>
+                <el-button 
+					type="default" 
+					size="mini" 
+					icon="el-icon-tickets" 
+					@click="dispatch" 
+					v-if="permissions[$route.name]&&permissions[$route.name]['dispatch']">
+					批量生成
+				</el-button>
+                <el-button 
+					type="default" 
+					size="mini" 
+					icon="el-icon-delete" 
+					@click="del" 
+					v-if="permissions[$route.name]&&permissions[$route.name]['delete']">
+					批量删除
+				</el-button>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">

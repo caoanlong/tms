@@ -59,6 +59,7 @@ export default {
     },
     watch: {
         isVisible(val) {
+            this.selectedList = []
             val && this.getList()
         }
     },

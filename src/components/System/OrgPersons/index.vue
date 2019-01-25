@@ -12,7 +12,7 @@
 					<el-col :span="8">
 						<div class="btns">
 							<el-button 
-								v-if="permissions[$route.name]&&permissions[$route.name]['add']"
+								v-if="permissions[$route.name]&&permissions[$route.name]['addorg']"
 								type="text"
 								size="mini"
 								@click="() => add(data)">
@@ -32,14 +32,14 @@
 						<span>{{ data.name }} （{{data.children.length}}）</span>
 						<span>
 						<el-button 
-							v-if="permissions[$route.name]&&permissions[$route.name]['add']"
+							v-if="permissions[$route.name]&&permissions[$route.name]['addorg']"
 							type="text"
 							size="mini"
 							@click.stop="() => add(data)">
 							新增
 						</el-button>
 						<el-button 
-							v-if="permissions[$route.name]&&permissions[$route.name]['update']"
+							v-if="permissions[$route.name]&&permissions[$route.name]['updateorg']"
 							type="text"
 							size="mini"
 							@click.stop="() => edit(data)">

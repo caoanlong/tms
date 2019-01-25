@@ -20,7 +20,7 @@
                             <el-tag 
                                 size="small"
                                 closable style="margin-right: 5px" 
-                                v-for="(item, i) in org.members" 
+                                v-for="(item, i) in selectedMembers" 
                                 :key="i" @close="closeTag(item)">
                                 {{item.realName}}
                             </el-tag>
@@ -129,6 +129,7 @@ export default {
         getInfo(organizationID) {
             Organization.findById({ organizationID }).then(res => {
                 this.org = res
+                this.selectedMembers = res.members
                 this.$set(this.org, 'isCom', res.code ? true : false)
             })
         },
