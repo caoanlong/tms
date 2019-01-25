@@ -237,25 +237,41 @@ export default {
             // 绘制地址监控
             this.customerAddressList.forEach(item => {
                 this.drawAddressPoint(item)
-                const p1 = [item.locationLng, item.locationLat]
-                for (let i = 0; i < this.alarmMsgs.length; i++) {
-                    const alarmMsg = this.alarmMsgs[i]
-                    if (alarmMsg.type == 'ArrivedOffset') {
-                        const p2 = [alarmMsg.longitude, alarmMsg.latitude]
-                        const dis = AMap.GeometryUtil.distance(p1, p2)
-                        if (!distance.dis) {
+                if (this.alarmMsgs.map(item => item.type).includes('ArrivedOffset')) {
+                    const end = locations[locations.length-1]
+                    const p1 = [item.locationLng, item.locationLat]
+                    const p2 = [end.longitude, end.latitude]
+                    const dis = AMap.GeometryUtil.distance(p1, p2)
+                    if (!distance.dis) {
+                        distance.dis = dis
+                        distance.p1 = p1
+                        distance.p2 = p2
+                    } else {
+                        if (distance.dis > dis) {
                             distance.dis = dis
                             distance.p1 = p1
                             distance.p2 = p2
-                        } else {
-                            if (distance.dis > dis) {
-                                distance.dis = dis
-                                distance.p1 = p1
-                                distance.p2 = p2
-                            }
                         }
                     }
                 }
+                // for (let i = 0; i < this.alarmMsgs.length; i++) {
+                //     const alarmMsg = this.alarmMsgs[i]
+                //     if (alarmMsg.type == 'ArrivedOffset') {
+                //         const p2 = [alarmMsg.longitude, alarmMsg.latitude]
+                //         const dis = AMap.GeometryUtil.distance(p1, p2)
+                //         if (!distance.dis) {
+                //             distance.dis = dis
+                //             distance.p1 = p1
+                //             distance.p2 = p2
+                //         } else {
+                //             if (distance.dis > dis) {
+                //                 distance.dis = dis
+                //                 distance.p1 = p1
+                //                 distance.p2 = p2
+                //             }
+                //         }
+                //     }
+                // }
             })
             if (distance.dis && distance.p1 && distance.p2) this.drawLine(distance)
             this.customerMonitorAreaList.forEach(item => {
@@ -426,6 +442,7 @@ export default {
             }
             const lng = `<div>经度：${item.longitude}</div>`
             const lat = `<div>纬度：${item.latitude}</div>`
+            console.log(lng, lat)
             const content = `<div>
                 <div style="padding:0px 4px;">
                     ${title}${remark}${lng}${lat}
