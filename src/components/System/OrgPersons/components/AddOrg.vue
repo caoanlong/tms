@@ -20,7 +20,7 @@
                             <el-tag 
                                 size="small"
                                 closable style="margin-right: 5px" 
-                                v-for="(item, i) in org.members" 
+                                v-for="(item, i) in selectedMembers" 
                                 :key="i" @close="closeTag(item)">
                                 {{item.realName}}
                             </el-tag>
@@ -49,7 +49,8 @@
             @control="handAddAdmin">
         </add-admin>
         <select-admin 
-            :selected="org.members"
+            :isAdd="true"
+            :selected="selectedMembers"
             :organizationID="parent.id" 
             :isVisible="isSelectAdminVisible" 
             @control="handSelectAdmin">
@@ -82,6 +83,7 @@ export default {
                 members: [],
                 isCom: false
             },
+            selectedMembers: [],
             rules: {
 				name: [{ required: true, message: '请输入组织名称' }],
 				members: [{ required: true, message: '请添加管理员' }],
@@ -109,25 +111,26 @@ export default {
     methods: {
         handAddAdmin(data) {
             if (data) {
-                this.org.members.push(data)
+                this.selectedMembers.push(data)
             }
             this.isAddAdminVisible = false
         },
         handSelectAdmin(data) {
             if (data) {
-                this.org.members.push(...data)
+                this.selectedMembers = data
             }
             this.isSelectAdminVisible = false
         },
         closeTag(data) {
-            const memberIDs = this.org.members.map(item => item.memberID)
-            this.org.members.splice(memberIDs.indexOf(data.memberID), 1)
+            const memberIDs = this.selectedMembers.map(item => item.memberID)
+            this.selectedMembers.splice(memberIDs.indexOf(data.memberID), 1)
         },
         close() {
             this.$emit('control')
         },
         save() {
             this.org.parentId = this.parent.id
+            this.org.members = this.selectedMembers
             this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
 				Organization.addOrUpdate(this.org).then(res => {

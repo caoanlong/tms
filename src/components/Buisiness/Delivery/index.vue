@@ -140,7 +140,15 @@
 					<el-table-column label="备注" prop="verifyRemark"></el-table-column>
 					<el-table-column width="80" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-dropdown  @command="handleCommand"  trigger="click" v-if="scope.row.verifyFlag =='N'">
+							<el-dropdown 
+								@command="handleCommand" 
+								trigger="click" 
+								v-if="scope.row.verifyFlag =='N'" 
+								v-show="permissions[$route.name] && (
+									permissions[$route.name]['dispatch'] 
+									|| permissions[$route.name]['detail'] 
+									|| permissions[$route.name]['update'] 
+									|| permissions[$route.name]['delete'])">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown" >
                                     <el-dropdown-item :command="{type: 'dispatch', id: scope.row.deliveryOrderID}" v-if="permissions[$route.name]&&permissions[$route.name]['dispatch']">生成调度</el-dropdown-item>

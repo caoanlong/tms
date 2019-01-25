@@ -12,7 +12,10 @@
                     <el-col :span="8">
                         <el-form-item label="工厂名称" class="customerSelect" prop="companyCode">
                             <el-select v-model="deliveryInfo.shipperName" placeholder="请选择"  style="width:100%">
-                                <el-option :label="shipperInfo.companyName" :value="shipperInfo.companyCode"></el-option>
+                                <el-option 
+                                    :label="shipperInfo.companyName" 
+                                    :value="shipperInfo.companyCode">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -99,7 +102,6 @@ import Company from '../../../api/Company'
 import Sys from '../../../api/Sys'
 import { Message } from 'element-ui'
 export default {
-
 	data() {
 		return {
             shipperInfo:{},
@@ -162,8 +164,8 @@ export default {
         },
         getShipperInfo() {
 			Sys.info().then(res => {
-                this.shipperInfo.companyName =res.companyName
-                this.shipperInfo.companyCode =res.code
+                this.shipperInfo.companyName = res.data.companyName
+                this.shipperInfo.companyCode = res.data.code
             })
         },
         getDealer(companyName, cb) {

@@ -152,13 +152,36 @@
 					</el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
 						<template slot-scope="scope">
-							<el-dropdown  @command="handleCommand"  trigger="click">
+							<el-dropdown 
+								@command="handleCommand" 
+								trigger="click" 
+								v-show="permissions[$route.name] && (
+									permissions[$route.name]['detail'] 
+									|| permissions[$route.name]['update'] 
+									|| permissions[$route.name]['close'] 
+									|| permissions[$route.name]['delete'])">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
-									<el-dropdown-item :command="{type: 'view', id: scope.row.carrierOrderID}" v-if="permissions[$route.name]&&permissions[$route.name]['detail']">查看</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'edit', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Committed' && permissions[$route.name]&&permissions[$route.name]['update']">编辑</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'close', id: scope.row.carrierOrderID}" v-if="(scope.row.status == 'Running' || scope.row.status == 'Signed')&& permissions[$route.name]&&permissions[$route.name]['close']">关闭</el-dropdown-item>
-									<el-dropdown-item :command="{type: 'delete', id: scope.row.carrierOrderID}" v-if="scope.row.status == 'Committed' && permissions[$route.name]&&permissions[$route.name]['delete']">删除</el-dropdown-item>
+									<el-dropdown-item 
+										:command="{type: 'view', id: scope.row.carrierOrderID}" 
+										v-if="permissions[$route.name]&&permissions[$route.name]['detail']">
+										查看
+									</el-dropdown-item>
+									<el-dropdown-item 
+										:command="{type: 'edit', id: scope.row.carrierOrderID}" 
+										v-if="scope.row.status == 'Committed' && permissions[$route.name] && permissions[$route.name]['update']">
+										编辑
+									</el-dropdown-item>
+									<el-dropdown-item 
+										:command="{type: 'close', id: scope.row.carrierOrderID}" 
+										v-if="(scope.row.status == 'Running' || scope.row.status == 'Signed') && permissions[$route.name]&&permissions[$route.name]['close']">
+										关闭
+									</el-dropdown-item>
+									<el-dropdown-item 
+										:command="{type: 'delete', id: scope.row.carrierOrderID}" 
+										v-if="scope.row.status == 'Committed' && permissions[$route.name] && permissions[$route.name]['delete']">
+										删除
+									</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
 						</template>

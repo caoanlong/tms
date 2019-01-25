@@ -18,7 +18,7 @@
                     type="default" 
                     size="mini" 
                     icon="el-icon-plus" 
-                    @click="isSelectAdminVisible = true">
+                    @click="isSelectMemberVisible = true">
                     添加
                 </el-button>
             </div>
@@ -61,36 +61,36 @@
             :organizationID="organizationID" 
             @control="handSelectRole">
         </select-role>
-        <select-admin 
-            :selected="tableData"
+        <select-member 
             :organizationID="organizationID" 
-            :isVisible="isSelectAdminVisible" 
-            @control="handSelectAdmin">
-        </select-admin>
+            :isVisible="isSelectMemberVisible" 
+            @control="handSelectMember">
+        </select-member>
     </div>
 </template>
 
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../../common/mixin'
-import SelectAdmin from './SelectAdmin'
+import SelectMember from './SelectMember'
 import SelectRole from './SelectRole'
 import Organization from '../../../../api/Organization'
 import { deleteConfirm } from '../../../../common/utils'
 export default {
     mixins: [baseMixin],
-    components: { SelectAdmin, SelectRole },
+    components: { SelectMember, SelectRole },
     props: {
         organizationID: String | Number
     },
     data() {
         return {
-            isSelectAdminVisible: false,
+            isSelectMemberVisible: false,
             isSelectRoleVisible: false,
             curMemberId: '',
             find: {
 				keyword: ''
-            }
+            },
+            hasAdd: []
         }
     },
     watch: {
@@ -116,14 +116,14 @@ export default {
             this.isSelectRoleVisible = false
             bool && this.getList()
         },
-        handSelectAdmin(data) {
+        handSelectMember(data) {
             if (data) {
                 const members = data.map(item => {
                     return { memberID: item.memberID }
                 })
                 this.addMembers(members)
             }
-            this.isSelectAdminVisible = false
+            this.isSelectMemberVisible = false
         },
         reset() {
             this.pageIndex = 1

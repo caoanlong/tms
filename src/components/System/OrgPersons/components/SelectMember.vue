@@ -1,6 +1,6 @@
 <template>
     <el-dialog 
-        title="选择管理员" 
+        title="选择人员" 
         :visible.sync="isVisible" 
         :show-close="false" 
         :close-on-click-modal="false" 
@@ -42,12 +42,6 @@
                 <tr v-for="item in tableData" :key="item.memberID" @click="handSelect(item)">
                     <td class="wf-check">
                         <span 
-                            v-if="isAdd"
-                            class="checkbox" 
-                            :class="selectedList.map(i => i.memberID).includes(item.memberID) ? 'selected' : ''">
-                        </span>
-                        <span 
-                            v-else
                             class="checkbox" 
                             :class="item.hasAdd ? 'disabled' : (selectedList.map(i => i.memberID).includes(item.memberID) ? 'selected' : '')">
                         </span>
@@ -61,6 +55,17 @@
             </tbody>
         </table>
         <Page :total="total" :pageIndex="pageIndex" :pageSize="pageSize" @pageChange="pageChange" @pageSizeChange="pageSizeChange"/>
+        <div class="section-block" v-if="selectedList.length > 0">
+            <span class="block-title">已选择人员</span>
+            <el-row class="block-content" style="padding-bottom: 15px">
+                <el-tag
+                    v-for="member in selectedList"
+                    :key="member.memberID" size="small"
+                    closable style="margin-right: 10px" @close="closeTag(member.memberID)">
+                    {{member.realName}}
+                </el-tag>
+            </el-row>
+        </div>
         <span slot="footer" class="dialog-footer">
             <el-button @click="close">取 消</el-button>
             <el-button type="primary" @click="add">确 定</el-button>
@@ -78,15 +83,7 @@ export default {
             type: Boolean,
             default: false
         },
-        organizationID: String | Number,
-        selected: {
-            type: Array,
-            default: () => []
-        },
-        isAdd: {
-            type: Boolean,
-            default: true
-        }
+        organizationID: String | Number
     },
     data() {
         return {
@@ -102,17 +99,12 @@ export default {
             if (val) {
                 this.find.underOrganizationID = ''
                 this.find.keyword = ''
+                this.selectedList = []
                 this.tableData = []
                 this.total = 0
                 this.getList()
                 this.getOrgs()
             }
-        },
-        selected: {
-            handler(val) {
-                console.log(val)
-            },
-            deep: true
         }
     },
     methods: {
@@ -138,11 +130,10 @@ export default {
             }).then(res => {
                 this.tableData = res.records
                 this.total = res.total
-                this.selectedList = this.selected
             })
         },
         handSelect(data) {
-            if (!this.isAdd && data.hasAdd) return
+            if (data.hasAdd) return
             const memberIDs = this.selectedList.map(item => item.memberID)
             const index = memberIDs.indexOf(data.memberID)
             if (index == -1) {
@@ -150,6 +141,9 @@ export default {
             } else {
                 this.selectedList.splice(index, 1)
             }
+        },
+        closeTag(id) {
+            this.selectedList.splice(this.selectedList.map(item => item.memberID).indexOf(id), 1)
         },
         add() {
             this.$emit('control', this.selectedList)

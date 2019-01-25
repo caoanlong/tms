@@ -97,7 +97,13 @@ export default {
             }).then(res => {
                 this.tableData = res.records
                 this.total = res.total
-                this.selectedList = this.tableData.filter(item => item.hasAdd)
+                const list = this.tableData.filter(item => item.hasAdd)
+                const roleIDs = this.selectedList.map(item => item.roleID)
+                for (let i = 0; i < list.length; i++) {
+                    if (roleIDs.indexOf(list[i].roleID) == -1) {
+                        this.selectedList.push(list[i])
+                    }
+                }
             })
         }
     }

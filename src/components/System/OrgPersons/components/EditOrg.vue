@@ -49,8 +49,8 @@
             @control="handAddAdmin">
         </add-admin>
         <select-admin 
-            :isAdmin="true" 
-            :selected="org.members"
+            :isAdd="false"
+            :selected="selectedMembers"
             :organizationID="org.id" 
             :isVisible="isSelectAdminVisible" 
             @control="handSelectAdmin">
@@ -97,6 +97,7 @@ export default {
                 members: [],
                 isCom: false
             },
+            selectedMembers: [],
             rules: {
 				name: [{ required: true, message: '请输入组织名称' }],
 				members: [{ required: true, message: '请添加管理员' }],
@@ -108,19 +109,19 @@ export default {
     methods: {
         handAddAdmin(data) {
             if (data) {
-                this.org.members.push(data)
+                this.selectedMembers.push(data)
             }
             this.isAddAdminVisible = false
         },
         handSelectAdmin(data) {
             if (data) {
-                this.org.members.push(...data)
+                this.selectedMembers = data
             }
             this.isSelectAdminVisible = false
         },
         closeTag(data) {
-            const memberIDs = this.org.members.map(item => item.memberID)
-            this.org.members.splice(memberIDs.indexOf(data.memberID), 1)
+            const memberIDs = this.selectedMembers.map(item => item.memberID)
+            this.selectedMembers.splice(memberIDs.indexOf(data.memberID), 1)
         },
         close() {
             this.$emit('control')
@@ -133,7 +134,8 @@ export default {
         },
         save() {
             this.$refs['ruleForm'].validate(valid => {
-				if (!valid) return
+                if (!valid) return
+                if (!this.org.isCom) this.org.code = ''
 				Organization.addOrUpdate(this.org).then(res => {
                     Message.success('成功！')
                     this.$emit('control', true)
