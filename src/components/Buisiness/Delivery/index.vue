@@ -179,8 +179,8 @@
 							<el-dropdown 
 								@command="handleCommand" 
 								trigger="click" 
-								v-if="scope.row.verifyFlag =='N'" 
-								v-show="permissions[$route.name] && (
+								v-show="scope.row.verifyFlag =='N'" 
+								v-if="permissions[$route.name] && (
 									permissions[$route.name]['dispatch'] 
 									|| permissions[$route.name]['detail'] 
 									|| permissions[$route.name]['update'] 

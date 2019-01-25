@@ -151,18 +151,14 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
-						<template slot-scope="scope">
-							<el-dropdown 
-								@command="handleCommand" 
-								trigger="click" 
-								v-show="permissions[$route.name] && (
-									permissions[$route.name]['detail'] 
-									|| permissions[$route.name]['update'] 
-									|| permissions[$route.name]['close'] 
-									|| permissions[$route.name]['delete']) 
-									|| scope.row.status == 'Committed' 
-									|| scope.row.status == 'Running' 
-									|| scope.row.status == 'Signed'">
+						<template 
+							slot-scope="scope" 
+							v-if="permissions[$route.name] && (
+								permissions[$route.name]['detail'] 
+								|| (permissions[$route.name]['update'] && scope.row.status == 'Committed')
+								|| (permissions[$route.name]['close'] && (scope.row.status == 'Running' || scope.row.status == 'Signed'))
+								|| (permissions[$route.name]['delete'] && scope.row.status == 'Committed'))">
+							<el-dropdown @command="handleCommand" trigger="click">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item 
