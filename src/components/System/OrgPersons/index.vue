@@ -11,7 +11,8 @@
 					</el-col>
 					<el-col :span="8">
 						<div class="btns">
-							<el-button
+							<el-button 
+								v-if="permissions[$route.name]&&permissions[$route.name]['add']"
 								type="text"
 								size="mini"
 								@click="() => add(data)">
@@ -30,19 +31,22 @@
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 						<span>{{ data.name }} （{{data.children.length}}）</span>
 						<span>
-						<el-button
+						<el-button 
+							v-if="permissions[$route.name]&&permissions[$route.name]['add']"
 							type="text"
 							size="mini"
 							@click.stop="() => add(data)">
 							新增
 						</el-button>
-						<el-button
+						<el-button 
+							v-if="permissions[$route.name]&&permissions[$route.name]['update']"
 							type="text"
 							size="mini"
 							@click.stop="() => edit(data)">
 							编辑
 						</el-button>
-						<!-- <el-button
+						<!-- <el-button 
+							v-if="permissions[$route.name]&&permissions[$route.name]['delete']"
 							type="text"
 							size="mini"
 							@click="() => remove(data)">
@@ -63,6 +67,7 @@
 
 <script>
 import { Message } from 'element-ui'
+import { mapGetters } from 'vuex'
 import Staffs from './components/Staffs'
 import AddOrg from './components/AddOrg'
 import EditOrg from './components/EditOrg'
@@ -94,6 +99,9 @@ export default {
 			this.selectedParent = {}
 			this.showStaffs = false
 		}
+	},
+	computed: {
+		...mapGetters(['permissions'])
 	},
 	methods: {
 		handClick(data) {

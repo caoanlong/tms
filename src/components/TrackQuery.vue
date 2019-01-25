@@ -257,7 +257,7 @@ export default {
                     }
                 }
             })
-            this.drawLine(distance)
+            if (distance.dis && distance.p1 && distance.p2) this.drawLine(distance)
             this.customerMonitorAreaList.forEach(item => {
                 this.drawArea(item)
             })

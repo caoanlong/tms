@@ -42,12 +42,16 @@
                     </el-col>
                    <el-col :span="8">
                         <el-form-item label="产品数量">
-                            <el-input placeholder="0" v-model="deliveryInfo.cargoQuantity"><template slot="append">袋</template></el-input>
+                            <el-input v-model="deliveryInfo.cargoQuantity">
+                                <template slot="append">袋</template>
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="产品重量" prop="cargoWeight">
-                            <el-input placeholder="0" v-model="deliveryInfo.cargoWeight"><template slot="append">吨</template></el-input>
+                            <el-input v-model="deliveryInfo.cargoWeight">
+                                <template slot="append">吨</template>
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">

@@ -43,7 +43,7 @@
 			</div>
 			<div class="tableControl">
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
-                <el-button type="default" size="mini" icon="el-icon-refresh" @click="checkGPS"  v-if="permissions[$route.name]&&permissions[$route.name]['checkGPS']">刷新GPS</el-button>
+                <el-button type="default" size="mini" icon="el-icon-refresh" @click="checkGPS">刷新GPS</el-button>
 			</div>
 			<div class="table">
 				<el-table
