@@ -80,7 +80,10 @@ export default {
 	},
     methods: {
         handleCheckChange(data, checked, indeterminate) {
-            
+            const checkedKeys = this.$refs['tree'].getCheckedKeys()
+            const halfCheckedKeys = this.$refs['tree'].getHalfCheckedKeys()
+            checkedKeys.push(...halfCheckedKeys)
+            this.selectedMenuIds = Array.from(new Set(checkedKeys))
         },
         getMenus() {
             SysRoleMenu.find().then(res => {
@@ -88,9 +91,6 @@ export default {
                 this.menus = menuList
             })
         },
-        selectMenu(data, isSelected) {
-            this.selectedMenuIds = this.$refs['tree'].getCheckedKeys()
-		},
         save() {
             this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return
