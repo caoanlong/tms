@@ -159,7 +159,10 @@
 									permissions[$route.name]['detail'] 
 									|| permissions[$route.name]['update'] 
 									|| permissions[$route.name]['close'] 
-									|| permissions[$route.name]['delete'])">
+									|| permissions[$route.name]['delete']) 
+									|| scope.row.status == 'Committed' 
+									|| scope.row.status == 'Running' 
+									|| scope.row.status == 'Signed'">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item 

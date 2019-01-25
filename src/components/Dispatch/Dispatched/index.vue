@@ -124,8 +124,20 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-show="isCur == 0" v-if="permissions[$route.name]&&permissions[$route.name]['exportDispatched']">导出</a>
-				<a :href="exportExcelUrl1" class="exportExcel el-icon-download" v-show="isCur == 1" v-if="permissions[$route.name]&&permissions[$route.name]['exportHistory']">导出</a>
+				<a 
+					:href="exportExcelUrl" 
+					class="exportExcel el-icon-download" 
+					v-show="isCur == 0" 
+					v-if="permissions[$route.name]&&permissions[$route.name]['exportDispatched']">
+					导出
+				</a>
+				<a 
+					:href="exportExcelUrl1" 
+					class="exportExcel el-icon-download" 
+					v-show="isCur == 1" 
+					v-if="permissions[$route.name]&&permissions[$route.name]['exportHistory']">
+					导出
+				</a>
 			</div>
 			<div class="tableBox">
 				<table class="customerTable">
