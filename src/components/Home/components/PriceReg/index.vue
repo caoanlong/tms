@@ -338,14 +338,16 @@ export default {
 				type:this.dataType
 			}).then(res => {
                 this.priceReg = res
-                const max = Math.max.apply(null, this.priceReg.alarmRankList.map(item => item.ex))
-                this.priceReg.alarmRankList = res.alarmRankList.map(item => {
+                const max = Math.max.apply(null, res.alarmRankList.map(item => item.ex))
+                const alarmRankList = res.alarmRankList.map(item => {
                     return {
                         ex: +item.ex,
                         shipperCompanyName: item.shipperCompanyName,
                         percentage: Math.round(+item.ex*100/max)
                     }
                 })
+                this.$set(this.priceReg, 'alarmRankList', alarmRankList)
+
                 this.exComloading = false
                 this.chartOption1.series[0].data[0].value = this.priceReg.sumOfCarrierOrder-this.priceReg.sumOfSelfPickCarrierOrder
                 this.chartOption1.series[0].data[1].value = this.priceReg.sumOfSelfPickCarrierOrder
