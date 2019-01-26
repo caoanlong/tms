@@ -40,6 +40,11 @@ const menu = {
 				const permissions = state.permissions = generatePermission(res)
 				sessionStorage.setItem('menus', JSON.stringify(menus))
 				sessionStorage.setItem('permissions', JSON.stringify(permissions))
+			}).catch(err => {
+				state.menus =  []
+				state.permissions = {}
+				sessionStorage.setItem('menus', '')
+				sessionStorage.setItem('permissions', '')
 			})
 		}
 	},
