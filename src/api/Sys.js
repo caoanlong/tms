@@ -8,7 +8,7 @@ class Sys extends Base {
                 url: this.baseUrl + '/shipperInfo',
                 params
             }).then(res => {
-                resolve(res.data.data || res.data || res)
+                resolve(res.data.data)
             })
         })
     }
