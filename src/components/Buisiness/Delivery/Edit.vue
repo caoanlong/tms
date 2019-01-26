@@ -104,7 +104,7 @@ import { Message } from 'element-ui'
 export default {
 	data() {
 		return {
-            shipperInfo:{},
+            shipperInfo: {},
             dealerName:'',
             deliveryInfo:{
                 code:'',
@@ -146,7 +146,8 @@ export default {
                 level:'',
                 plateNo:'',
 				outTime: ''
-			}
+            }
+            this.shipperInfo = {}
             this.getInfo()
         }
         if(this.$refs['ruleForm']) {
