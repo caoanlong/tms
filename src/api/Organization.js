@@ -2,94 +2,26 @@ import Base from './Base'
 import request from '../common/requestByJson'
 
 class Organization extends Base {
-    selectOrganization(data) {
-        if (!this.isClick) return Promise.reject('重复提交！')
-        this.isClick = false
-        setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
-            url: this.baseUrl + '/selectOrganization',
-            method: 'post',
-            data
-        })
-    }
-    addOrUpdate(data) {
-        if (!this.isClick) return Promise.reject('重复提交！')
-        this.isClick = false
-        setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
-            url: this.baseUrl + '/addOrUpdate',
-            method: 'post',
-            data
-        })
-    }
-    getCompanyOrg(params) {
+    addibleMemList(params) {
         return new Promise((resolve, reject) => {
             this.request({
-                url: this.baseUrl + '/getCompanyOrg',
+                url: this.baseUrl + '/addibleMemList',
                 params
             }).then(res => {
                 resolve(res.data.data || res.data || res)
             })
         })
     }
-    addibleOrganizationMember(params) {
+    getAdminOrgTree(params) {
         return new Promise((resolve, reject) => {
             this.request({
-                url: this.baseUrl + '/addibleOrganizationMember',
+                url: this.baseUrl + this._find,
                 params
             }).then(res => {
                 resolve(res.data.data || res.data || res)
+            }).catch(err => {
+                reject(err)
             })
-        })
-    }
-    getOrganizationMember(params) {
-        return new Promise((resolve, reject) => {
-            this.request({
-                url: this.baseUrl + '/getOrganizationMember',
-                params
-            }).then(res => {
-                resolve(res.data.data || res.data || res)
-            })
-        })
-    }
-    addMembers(data) {
-        if (!this.isClick) return Promise.reject('重复提交！')
-        this.isClick = false
-        setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
-            url: this.baseUrl + '/addMembers',
-            method: 'post',
-            data
-        })
-    }
-    removeMembers(data) {
-        if (!this.isClick) return Promise.reject('重复提交！')
-        this.isClick = false
-        setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
-            url: this.baseUrl + '/removeMembers',
-            method: 'post',
-            data
-        })
-    }
-    addibleRoleList(params) {
-        return new Promise((resolve, reject) => {
-            this.request({
-                url: this.baseUrl + '/addibleRoleList',
-                params
-            }).then(res => {
-                resolve(res.data.data || res.data || res)
-            })
-        })
-    }
-    setMemberRole(data) {
-        if (!this.isClick) return Promise.reject('重复提交！')
-        this.isClick = false
-        setTimeout(() => { this.isClick = true }, this.delay)
-        return this.request({
-            url: this.baseUrl + '/setMemberRole',
-            method: 'post',
-            data
         })
     }
 }

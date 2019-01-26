@@ -67,10 +67,43 @@ class SysMember extends Base {
         })
     }
 
-    organizationList(params) {
+    getOrgList(params) {
         return new Promise((resolve, reject) => {
             this.request({
-                url: this.baseUrl + '/organizationList',
+                url: this.baseUrl + '/getOrgList',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
+
+    getCompanyOrgList(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/getCompanyOrgList',
+                params
+            }).then(res => {
+                resolve(res.data.data || res.data || res)
+            })
+        })
+    }
+
+    changeOrg(data) {
+        if (!this.isClick) return Promise.reject('重复提交！')
+        this.isClick = false
+        setTimeout(() => { this.isClick = true }, this.delay)
+        return this.request({
+            url: this.baseUrl + '/changeOrg',
+            method: 'post',
+            data
+        })
+    }
+
+    getOrgMenuTree(params) {
+        return new Promise((resolve, reject) => {
+            this.request({
+                url: this.baseUrl + '/getOrgMenuTree',
                 params
             }).then(res => {
                 resolve(res.data.data || res.data || res)

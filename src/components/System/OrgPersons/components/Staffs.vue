@@ -74,7 +74,7 @@ import { Message } from 'element-ui'
 import { baseMixin } from '../../../../common/mixin'
 import SelectMember from './SelectMember'
 import SelectRole from './SelectRole'
-import Organization from '../../../../api/Organization'
+import OrganizationMember from '../../../../api/OrganizationMember'
 import { deleteConfirm } from '../../../../common/utils'
 export default {
     mixins: [baseMixin],
@@ -132,7 +132,7 @@ export default {
             this.getList()
         },
         addMembers(members) {
-            Organization.addMembers({
+            OrganizationMember.add({
                 id: this.organizationID,
                 members
             }).then(res => {
@@ -141,7 +141,7 @@ export default {
             })
         },
         getList() {
-            Organization.getOrganizationMember({
+            OrganizationMember.find({
                 current: this.pageIndex,
 				size: this.pageSize,
 				keyword: this.find.keyword,
@@ -153,7 +153,7 @@ export default {
         },
         del(memberID) {
             deleteConfirm(memberID, memberID => {
-				Organization.removeMembers({
+				OrganizationMember.remove({
                     id: this.organizationID,
                     memberID
                 }).then(res => {

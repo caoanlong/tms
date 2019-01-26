@@ -121,7 +121,7 @@ export default {
 			this.isEditOrgVisible = false
 		},
 		getList() {
-			Organization.find().then(res => {
+			Organization.getAdminOrgTree().then(res => {
 				this.data = res
 			})
 		},

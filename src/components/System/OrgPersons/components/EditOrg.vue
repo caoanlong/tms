@@ -137,7 +137,7 @@ export default {
             this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return
                 if (!this.org.isCom) this.org.code = ''
-				Organization.addOrUpdate(this.org).then(res => {
+				Organization.update(this.org).then(res => {
                     Message.success('成功！')
                     this.$emit('control', true)
                 })

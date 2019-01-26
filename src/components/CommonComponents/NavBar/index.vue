@@ -68,7 +68,6 @@ import { mapGetters } from 'vuex'
 import { defaultImg } from '../../../assets/icons/icons'
 import { resizeImg } from '../../../common/utils'
 import SysMember from '../../../api/SysMember'
-import Organization from '../../../api/Organization'
 export default {
 	data(){
 		return {
@@ -102,7 +101,7 @@ export default {
 			})
 		},
 		getOrgs() {
-			SysMember.organizationList().then(res => {
+			SysMember.getOrgList().then(res => {
 				this.orgs = res
 			})
 		},
@@ -114,7 +113,7 @@ export default {
 			this.selectedOrgs = data
 		},
 		handChange() {
-			Organization.selectOrganization({
+			SysMember.changeOrg({
 				organizationID: this.selectedOrgs.id
 			}).then(res => {
 				this.dialogVisible = false

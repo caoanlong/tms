@@ -46,7 +46,7 @@
 <script>
 import { Message } from 'element-ui'
 import { baseMixin } from '../../../../common/mixin'
-import Organization from '../../../../api/Organization'
+import OrganizationMember from '../../../../api/OrganizationMember'
 export default {
     mixins: [baseMixin],
     props: {
@@ -68,7 +68,7 @@ export default {
             this.$emit('control')
         },
         submitSetRole() {
-            Organization.setMemberRole({
+            OrganizationMember.setRoles({
                 roleIDs: this.selectedList.map(item => item.roleID),
                 memberID: this.memberID,
                 organizationID: this.organizationID
@@ -90,7 +90,7 @@ export default {
             this.selectedList.splice(this.selectedList.map(item => item.roleID).indexOf(id), 1)
         },
         getList() {
-            Organization.addibleRoleList({
+            OrganizationMember.addibleRoleList({
                 current: this.pageIndex,
 				size: this.pageSize,
                 memberID: this.memberID,

@@ -133,7 +133,7 @@ export default {
             this.org.members = this.selectedMembers
             this.$refs['ruleForm'].validate(valid => {
 				if (!valid) return
-				Organization.addOrUpdate(this.org).then(res => {
+				Organization.add(this.org).then(res => {
                     Message.success('成功！')
                     this.$emit('control', true)
                 })

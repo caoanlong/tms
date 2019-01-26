@@ -108,7 +108,7 @@ export default {
         save() {
             this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return
-                SysRole.saveOrUpdate({
+                SysRole.update({
                     roleID: this.currentRoleID,
                     menuIDs: this.selected.join(','),
                     roleName: this.role.roleName,

@@ -1,4 +1,4 @@
-import Menu from '../../api/Menu'
+import SysMember from '../../api/SysMember'
 
 
 function generatePermission(data) {
@@ -35,7 +35,7 @@ const menu = {
 	},
 	mutations: {
 		GET_MENU: (state) => {
-			Menu.find().then(res => {
+			SysMember.getOrgMenuTree().then(res => {
 				const menus = state.menus =  res
 				const permissions = state.permissions = generatePermission(res)
 				sessionStorage.setItem('menus', JSON.stringify(menus))

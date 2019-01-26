@@ -353,7 +353,6 @@ export default {
 				dispatchBeginTime:'',
 				dispatchEndTime:''
 			},
-			companys: [],
 			timer: null,
 			trailDialog: false,
 			dispatchBillList: [],
@@ -401,7 +400,6 @@ export default {
         }
 		this.resetExportExcelUrl()
 		this.getList()
-		this.getCompanys()
 	},
 	activated() {
 		if(!this.$route.query.cache) {
@@ -519,15 +517,6 @@ export default {
 			this.find.consigneeCustomer =''
 			this.resetExportExcelUrl()
 		},
-		getCompanys() {
-            Company.customerFind({
-				current: 1,
-                size: 1000,
-                customerType: 'Shipper'
-			}).then(res => {
-                this.companys = res.records
-			})
-        },
 		getList() {
             this.dispatchBillList = []
             

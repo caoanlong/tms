@@ -76,6 +76,7 @@
 <script>
 import { baseMixin } from '../../../../common/mixin'
 import Organization from '../../../../api/Organization'
+import SysMember from '../../../../api/SysMember'
 export default {
     mixins: [baseMixin],
     props: {
@@ -116,12 +117,12 @@ export default {
             this.getList()
         },
         getOrgs() {
-            Organization.getCompanyOrg().then(res => {
+            SysMember.getCompanyOrgList().then(res => {
                 this.orgs = res
             })
         },
         getList() {
-            Organization.addibleOrganizationMember({
+            Organization.addibleMemList({
                 current: this.pageIndex,
 				size: this.pageSize,
                 organizationID: this.organizationID,
