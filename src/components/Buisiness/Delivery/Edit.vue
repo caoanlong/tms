@@ -148,7 +148,6 @@ export default {
 				outTime: ''
 			}
             this.getInfo()
-            
         }
         if(this.$refs['ruleForm']) {
             this.$refs['ruleForm'].resetFields()
@@ -164,8 +163,8 @@ export default {
         },
         getShipperInfo() {
 			Sys.info().then(res => {
-                this.shipperInfo.companyName = res.companyName
-                this.shipperInfo.companyCode = res.code
+                this.$set(this.shipperInfo, 'companyName', res.companyName)
+                this.$set(this.shipperInfo, 'companyCode', res.code)
             })
         },
         getDealer(companyName, cb) {
@@ -203,7 +202,7 @@ export default {
         },
         clearSelectCargoList(){
 			this.deliveryInfo.cargoCode = ''
-			this.deliveryInfo.cargoName =''
+			this.deliveryInfo.cargoName = ''
 		},
         add() {
 			this.$refs['ruleForm'].validate(valid => {
