@@ -11,7 +11,11 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="工厂名称" class="customerSelect" prop="companyCode">
-                            <el-select v-model="deliveryInfo.shipperName" placeholder="请选择"  style="width:100%">
+                            <el-select 
+                                v-model="deliveryInfo.shipperName" 
+                                placeholder="请选择" 
+                                style="width:100%" 
+                                @change="handSelectCom">
                                 <el-option 
                                     :label="shipperInfo.companyName" 
                                     :value="shipperInfo.companyCode">
@@ -178,7 +182,10 @@ export default {
             }).then(res => {
                 cb(res)
             })
-		},
+        },
+        handSelectCom(data) {
+            this.deliveryInfo.companyCode = data
+        },
         handSelectDealer(data){
 			this.deliveryInfo.dealerCode = data.code
             this.dealerName = data.companyName
