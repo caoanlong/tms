@@ -9,7 +9,7 @@
 			:unique-opened="true" 
 			:default-active="$route.name"
 			:collapse="isCollapse">
-			<sidebar-item :routes="menus"></sidebar-item>
+			<sidebar-item :routes="menus ? menus : []"></sidebar-item>
 		</el-menu>
 	</div>
 </template>

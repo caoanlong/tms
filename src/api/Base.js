@@ -24,6 +24,8 @@ class Base {
                 params
             }).then(res => {
                 resolve(res.data.data || res.data || res)
+            }).catch(err => {
+                reject(err)
             })
         })
     }
@@ -34,6 +36,8 @@ class Base {
                 params
             }).then(res => {
                 resolve(res.data.data || res.data || res)
+            }).catch(err => {
+                reject(err)
             })
         })
     }
