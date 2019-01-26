@@ -15,7 +15,7 @@ class Organization extends Base {
     getAdminOrgTree(params) {
         return new Promise((resolve, reject) => {
             this.request({
-                url: this.baseUrl + this._find,
+                url: this.baseUrl + '/getAdminOrgTree',
                 params
             }).then(res => {
                 resolve(res.data.data || res.data || res)
