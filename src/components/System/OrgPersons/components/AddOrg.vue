@@ -102,6 +102,7 @@ export default {
                     members: [],
                     isCom: false
                 }
+                this.selectedMembers = []
                 this.$nextTick(() => {
                     this.$refs['ruleForm'].resetFields()
                 })
