@@ -99,6 +99,7 @@ export default {
                 const { menuList, menuIDList } = res
                 this.menus = menuList
                 this.selectedMenuIds = menuIDList
+                this.selected = menuIDList
             })
         },
         selectMenu(data, isSelected) {
@@ -109,7 +110,7 @@ export default {
                 if (!valid) return
                 SysRole.saveOrUpdate({
                     roleID: this.currentRoleID,
-                    menuIDs: this.selected.length > 0 ? this.selected.join(',') : this.selectedMenuIds.join(','),
+                    menuIDs: this.selected.join(','),
                     roleName: this.role.roleName,
                     roleEnName: this.role.roleEnName
                 }).then(res => {
