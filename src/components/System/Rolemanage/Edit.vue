@@ -76,6 +76,7 @@ export default {
     },
     activated() {
 		if(!this.$route.query.cache) {
+            this.selected = []
             this.currentRoleID = this.$route.query.roleID
             this.getInfo()
             this.getMenus()
