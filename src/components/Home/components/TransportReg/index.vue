@@ -92,8 +92,8 @@ export default {
             deep: true
         },
         $route: {
-            handler() {
-                this.getCompanys()
+            handler(to) {
+                if (to.name == 'home') this.getCompanys()
             },
             immediate: true
         }
