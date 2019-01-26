@@ -112,7 +112,9 @@ export default {
 	},
 	created() {
 		this.resetExportExcelUrl()
-		this.getList()
+		if(this.$route.query.cache) {
+			this.getList()
+		}
 	},
 	activated() {
 		if(!this.$route.query.cache) {
