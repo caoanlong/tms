@@ -18,7 +18,7 @@ class OrganizationMember extends Base {
         this.isClick = false
         setTimeout(() => { this.isClick = true }, this.delay)
         return this.request({
-            url: this.baseUrl + '/remove',
+            url: this.baseUrl + '/setRoles',
             method: 'post',
             data
         })

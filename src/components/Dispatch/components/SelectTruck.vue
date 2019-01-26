@@ -14,7 +14,7 @@
         </div>
         <el-form :inline="true" size="mini" style="margin-top:20px;">
             <el-form-item label="关键字">
-                <el-input placeholder="编号/姓名/车牌号/车长/车型" v-model="find.keyword" style="width:190px"></el-input>
+                <el-input placeholder="手机号/姓名/车牌/车长/车型" v-model="find.keyword" style="width:190px"></el-input>
             </el-form-item>
             <el-form-item label="装车日期">
                 <el-date-picker 
