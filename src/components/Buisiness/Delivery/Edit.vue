@@ -164,8 +164,8 @@ export default {
         },
         getShipperInfo() {
 			Sys.info().then(res => {
-                this.shipperInfo.companyName = res.data.companyName
-                this.shipperInfo.companyCode = res.data.code
+                this.shipperInfo.companyName = res.companyName
+                this.shipperInfo.companyCode = res.code
             })
         },
         getDealer(companyName, cb) {

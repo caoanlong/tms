@@ -174,7 +174,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="备注" prop="verifyRemark"></el-table-column>
-					<el-table-column width="80" align="center" fixed="right">
+					<el-table-column label="操作" width="80" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown 
 								@command="handleCommand" 
