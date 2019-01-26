@@ -90,10 +90,13 @@ export default {
                 this.find.companyCode = value ? value.companyCode : ''
             },
             deep: true
+        },
+        $route: {
+            handler() {
+                this.getCompanys()
+            },
+            immediate: true
         }
-    },
-    activated() {
-        this.getCompanys()
     },
     mounted() {
         this.map = new AMap.Map('amapLocationSelect')

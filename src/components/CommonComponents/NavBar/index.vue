@@ -122,7 +122,7 @@ export default {
 				this.$store.dispatch('getUserInfo')
 				this.$store.dispatch('getMenu')
 				this.$store.dispatch('delAllViews')
-				this.$router.push({name: 'home'})
+				this.$router.push({name: 'home', query: {_t: new Date().getTime()}})
 			})
 		},
 		sendToParent(type){

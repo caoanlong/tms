@@ -52,6 +52,7 @@ export default {
                 label: 'name'
             },
             selectedMenuIds: [],
+            selected: [],
             role: {
                 roleName: '',
                 roleEnName: ''
@@ -83,7 +84,8 @@ export default {
             const checkedKeys = this.$refs['tree'].getCheckedKeys()
             const halfCheckedKeys = this.$refs['tree'].getHalfCheckedKeys()
             checkedKeys.push(...halfCheckedKeys)
-            this.selectedMenuIds = Array.from(new Set(checkedKeys))
+            this.selected = Array.from(new Set(checkedKeys))
+            console.log(this.selected)
         },
         getMenus() {
             SysRoleMenu.find().then(res => {
@@ -91,11 +93,14 @@ export default {
                 this.menus = menuList
             })
         },
+        selectMenu(data, isSelected) {
+            
+		},
         save() {
             this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return
                 SysRole.saveOrUpdate({
-                    menuIDs: this.selectedMenuIds.join(','),
+                    menuIDs: this.selected.join(','),
                     roleName: this.role.roleName,
                     roleEnName: this.role.roleEnName
                 }).then(res => {
