@@ -62,7 +62,7 @@
 				</a>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini">
+				<el-table :data="tableData" v-loading="loading" border style="width: 100%" size="mini">
 					<el-table-column label="手机号" prop="mobile" align="center"></el-table-column>
 					<el-table-column label="姓名" prop="realName" align="center"></el-table-column>
 					<el-table-column label="状态" prop="isPrevent" align="center">
@@ -164,6 +164,7 @@ export default {
 			this.resetExportExcelUrl()
         },
 		getList() {
+            this.loading = true
 			SysMember.find({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -172,7 +173,8 @@ export default {
 				realName: this.find.realName
 			}).then(res => {
 				this.total = res.total
-				this.tableData = res.records
+                this.tableData = res.records
+                this.loading = false
 			})
 		},
 		handReset() {

@@ -41,6 +41,7 @@
 				<el-table
 					ref="recTable"
 					:data="tableData"
+                    v-loading="loading"
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" fixed type="selection" align="center" width="40"></el-table-column>
@@ -165,7 +166,8 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
-			this.tableData = []
+            this.tableData = []
+            this.loading = true
 			Company.transporterFind({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -183,7 +185,8 @@ export default {
 					}
 				})
 				this.tableData = list
-				this.total = res.total
+                this.total = res.total
+                this.loading = false
 			})
 		},
 		handleCommand(e) {

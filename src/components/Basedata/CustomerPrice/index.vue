@@ -20,6 +20,7 @@
 				<el-table 
 					ref="recTable" 
                     :data="tableData"
+                    v-loading="loading"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="委托方" prop="companyName" align="center"></el-table-column>
                     <el-table-column label="对客户应收运价" align="center">
@@ -121,6 +122,7 @@ export default {
 			this.getList()
 		},
 		getList() {
+            this.loading = true
 			Company.customerFind({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -128,7 +130,8 @@ export default {
 				customerType:'Delegate'
 			}).then(res => {
 				this.tableData = res.records
-				this.total = res.total
+                this.total = res.total
+                this.loading = false
 			})
 		},
 		handleCommand(e) {

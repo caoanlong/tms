@@ -111,7 +111,7 @@
 				<a :href="exportExcelUrl" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
+				<el-table v-loading="loading" :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column label="承运单号" width="170" align="center">
 						<template slot-scope="scope">
 							<span @click="view(scope.row.carrierOrderID)" class="link">
@@ -299,6 +299,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
+            this.loading = true
 			CarryOrder.find({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -314,7 +315,8 @@ export default {
 				end: this.find.end
 			}).then(res => {
 				this.tableData = res.records
-				this.total= res.total
+                this.total= res.total
+                this.loading = false
 			})
         },
 		handleCommand(e) {

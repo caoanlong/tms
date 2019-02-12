@@ -138,7 +138,7 @@
 				</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
+				<el-table :data="tableData" v-loading="loading" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="交货单号" width="150"  align="center">
 						<template slot-scope="scope">
@@ -331,6 +331,7 @@ export default {
 			this.find.cargoName =''
 		},
 		getList() {
+            this.loading = true
 			DeliveryOrder.orderList({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -346,7 +347,8 @@ export default {
                 outTimeEnd:this.find.outTimeEnd
 			}).then(res => {
 				this.tableData = res.records
-				this.total= res.total
+                this.total= res.total
+                this.loading = false
 			})
         },
 		handleCommand(e) {

@@ -60,7 +60,7 @@
 				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
+				<el-table :data="tableData" v-loading="loading" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="交货单号" prop="shipperNo" align="center" width='160'></el-table-column>
 					<el-table-column label="发货工厂" prop="companyName"></el-table-column>
 					<el-table-column label="客户" prop="consigneeName"></el-table-column>
@@ -167,11 +167,12 @@ export default {
                 size: 1000,
                 customerType: 'Shipper'
 			}).then(res => {
-                this.companys = res.records
+                this.companys = res
 			})
         },
         getList() {
-			this.tableData = []
+            this.tableData = []
+            this.loading = true
 			CarrierOrderAlarm.find({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -182,7 +183,8 @@ export default {
 				endTime: this.find.endTime
 			}).then(res => {
 				this.tableData = res.records
-				this.total = res.total
+                this.total = res.total
+                this.loading = false
 			})
         },
         getCurrentMonthFirst(){

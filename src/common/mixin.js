@@ -8,7 +8,8 @@ export const baseMixin = {
             pageSize: PAGESIZE,
             total: TOTAL,
             tableData: [],
-            selectedList: []
+            selectedList: [],
+            loading: false,
         }
     },
     components: { Page },

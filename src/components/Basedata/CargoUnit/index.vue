@@ -23,6 +23,7 @@
 					ref="recTable" 
 					:data="tableData"
 					@selection-change="selectionChange"
+                    v-loading="loading"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40" :selectable="(row, index) => row.blDefault == 'N'"></el-table-column>
 					<el-table-column label="单位" prop="unit" align="center"></el-table-column>
@@ -98,13 +99,15 @@ export default {
 			this.selectedList = data.map(item => item.cargoUnitID)
 		},
 		getList() {
+            this.loading = true
 			Company.cargoUnitFind({
 				current: this.pageIndex,
 				size: this.pageSize,
 				unit:this.find.keyword,
 			}).then(res => {
 				this.tableData = res.records
-				this.total= res.total
+                this.total= res.total
+                this.loading = false
 			})
 		},
 		add() {

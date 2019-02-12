@@ -51,7 +51,7 @@
 				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
+				<el-table :data="tableData" v-loading="loading" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="工厂" prop="companyName" align="center"  width='160'>
                         <template slot-scope="scope">
 							<span 
@@ -165,11 +165,12 @@ export default {
                 size: 1000,
                 customerType: 'Shipper'
 			}).then(res => {
-                this.companys = res.records
+                this.companys = res
 			})
         },
         getList() {
-			this.tableData = []
+            this.tableData = []
+            this.loading = true
 			Company.shipperAlarmList({
 				current: this.pageIndex,
 				size: 100,
@@ -178,7 +179,8 @@ export default {
                 begin:this.find.begin,
                 end:this.find.end
 			}).then(res => {
-				this.tableData = res.records
+                this.tableData = res.records
+                this.loading = false
 			})
         },
 		inputChange() {

@@ -55,6 +55,7 @@
 				<el-table 
 					ref="recTable" 
 					:data="tableData"
+                    v-loading="loading"
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
@@ -191,7 +192,8 @@ export default {
 			this.selectedList = data.map(item => item.customerAddressID)
 		},
 		getList() {
-			this.tableData = []
+            this.tableData = []
+            this.loading = true
 			Company.customerAddressFind({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -202,7 +204,8 @@ export default {
                 finalUsername:this.find.finalUsername
 			}).then(res => {
 				this.tableData = res.records
-				this.total = res.total
+                this.total = res.total
+                this.loading = false
 			})
         },
         handleCommand(e) {
