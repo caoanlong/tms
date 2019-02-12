@@ -54,7 +54,7 @@
 				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini" stripe>
+				<el-table :data="tableData" v-loading="loading" border style="width: 100%" size="mini" stripe>
 					<el-table-column label="客户名称" prop="consigneeName" align="center" width='160'>
 						<template slot-scope="scope">
 							<router-link tag="span" class="link" :to="{name: 'exceptanomaly', query: {consigneeName: scope.row.consigneeName}}">
@@ -191,7 +191,8 @@ export default {
             return getDateTotimestamp(new Date(nextMonthFirstDay-oneDay))
 		},
         getList() {
-			this.tableData = []
+            this.tableData = []
+            this.loading = true
 			if (!this.find.customerIDs) return
 			Company.customerAlarmList({
 				current: this.pageIndex,
@@ -204,7 +205,8 @@ export default {
 				end: this.find.end
 			}).then(res => {
 				this.tableData = res.records
-				this.total = res.total
+                this.total = res.total
+                this.loading = false
 			})
         },
 		inputChange() {

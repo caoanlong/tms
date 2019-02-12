@@ -26,7 +26,8 @@
 			<div class="table">
 				<el-table 
 					ref="roleTable" 
-					:data="tableData" 
+					:data="tableData"
+                    v-loading="loading" 
 					border style="width: 100%" size="mini">
 					<el-table-column label="编号" type="index" width="50" align="center"></el-table-column>
 					<el-table-column label="角色名称" prop="roleName" align="center"></el-table-column>
@@ -108,13 +109,15 @@ export default {
 			this.getList()
 		},
 		getList() {
+            this.loading = true
 			SysRole.find({
 				current: this.pageIndex,
 				size: this.pageSize,
 				roleName: this.find.roleName
 			}).then(res => {
 				this.tableData = res.records
-				this.total= res.total
+                this.total= res.total
+                this.loading = false
 			})
 		},
 		del(roleID) {

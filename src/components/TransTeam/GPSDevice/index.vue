@@ -27,7 +27,7 @@
 				<el-button type="default" size="mini" icon="el-icon-plus" @click="isIssueDeviceVisible = true" v-if="permissions[$route.name]&&permissions[$route.name]['add']">发放设备</el-button>
 			</div>
 			<div class="table">
-				<el-table :data="tableData" border style="width: 100%" size="mini">
+				<el-table :data="tableData" border v-loading="loading" style="width: 100%" size="mini">
 					<el-table-column label="终端号" prop="deviceNumber"  align="center"></el-table-column>
 					<el-table-column label="装配车辆" prop="plateNo"   align="center"></el-table-column>
 					<el-table-column label="司机手机" prop="mobile"   align="center"></el-table-column>
@@ -114,6 +114,7 @@ export default {
 			this.getList()
 		},
 		getList() {
+            this.loading = true
 			DriverPortalGpsSetupLog.find({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -122,7 +123,8 @@ export default {
 				recycleFlag: this.find.recycleFlag
 			}).then(res => {
 				this.total = res.total
-            	this.tableData = res.records
+                this.tableData = res.records
+                this.loading = false
 			})
 		},
 		recycle(obj) {

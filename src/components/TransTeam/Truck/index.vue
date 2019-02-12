@@ -49,8 +49,8 @@
 				<el-table
 					ref="recTable"
 					:data="tableData"
+                    v-loading="loading"
 					border style="width: 100%" size="mini" stripe>
-
 					<el-table-column label="编号" align="center">
 						<template slot-scope="scope">{{scope.$index+1}}</template>
 					</el-table-column>
@@ -170,6 +170,7 @@ export default {
 			})
 		},
 		getList() {
+            this.loading = true
 			Company.truckFind({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -181,7 +182,8 @@ export default {
 				gpsFlag: this.find.gpsFlag
 			}).then(res => {
 				this.tableData = res.records
-				this.total = res.total
+                this.total = res.total
+                this.loading = false
 			})
 		},
         checkGPS(){

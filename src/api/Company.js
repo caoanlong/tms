@@ -75,7 +75,7 @@ class Company extends Base {
     customerFind(params) {
         return new Promise((resolve, reject) => {
             this.request({
-                url: this.baseUrl + '/customer/list',
+                url: this.baseUrl + '/customer/suggest',
                 params
             }).then(res => {
                 resolve(res.data.data || res.data || res)

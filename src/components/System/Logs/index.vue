@@ -52,7 +52,7 @@
 				<a :href="exportExcelUrl" download="tms_log_export.xlsx" class="exportExcel el-icon-download" v-if="permissions[$route.name]&&permissions[$route.name]['export']">导出</a>
 			</div>
 			<div class="table">
-				<el-table ref="roleTable" :data="tableData" border style="width: 100%" size="mini">
+				<el-table ref="roleTable" :data="tableData" v-loading="loading" border style="width: 100%" size="mini">
 					<!-- <el-table-column label="日志编号" prop="logApiID" align="center"></el-table-column> -->
 					<el-table-column label="权限组织" prop="organizationName" align="center"></el-table-column>
 					<el-table-column label="操作界面" prop="menuPath" align="center"></el-table-column>
@@ -164,6 +164,7 @@ export default {
 			this.resetExportExcelUrl()
 		},
 		getList() {
+            this.loading = true
 			Log.find({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -175,7 +176,8 @@ export default {
                 endCreateDate:this.find.endCreateDate
 			}).then(res => {
 				this.tableData = res.records
-				this.total= res.total
+                this.total= res.total
+                this.loading = false
 			})
         },
         view(logApiID) {

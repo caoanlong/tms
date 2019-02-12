@@ -59,6 +59,7 @@
 			<div class="table">
 				<el-table 
 					ref="recTable" 
+                    v-loading="loading"
 					:data="tableData" @selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
@@ -175,6 +176,7 @@ export default {
 			this.selectedList = data.map(item => item.customerID)
 		},
 		getList() {
+            this.loading = true
 			Company.customerFind({
 				current: this.pageIndex,
 				size: this.pageSize,
@@ -185,7 +187,8 @@ export default {
                 fencingType:this.find.fencingType
 			}).then(res => {
 				this.tableData = res.records
-				this.total= res.total
+                this.total= res.total
+                this.loading = false
 			})
         },
         getDictList() {
