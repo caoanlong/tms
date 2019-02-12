@@ -59,9 +59,11 @@
 							<router-link 
 								tag="span" 
 								class="link" 
+                                v-if="permissions[$route.name]&&permissions[$route.name]['detail']"
 								:to="{name: 'viewtruck', query: {truckID: scope.row.truckID}}">
 								{{scope.row.mobile}}
 							</router-link>
+                            <span v-else>{{scope.row.mobile}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="姓名" prop="realName" align="center" ></el-table-column>
@@ -135,6 +137,9 @@ export default {
     },
     computed: {
         ...mapGetters(['permissions'])
+    },
+    mounted () {
+        console.log('22',this.permissions[this.$route.name]);
     },
 	methods: {
 		inputChange() {

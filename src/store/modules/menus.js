@@ -11,7 +11,12 @@ function generatePermission(data) {
 			if (item.children && item.children.length > 0) {
 				for (let i = 0; i < item.children.length; i++) {
 					const child = item.children[i]
-					permission[item.target][child.target] = true
+                    if(child && child.isShow == 'N'){
+					    permission[item.target][child.target] = false
+                    }
+                    else if(child && child.isShow == 'Y'){
+					    permission[item.target][child.target] = true
+                    }
 				}
 			}
 			continue
@@ -37,7 +42,7 @@ const menu = {
 		GET_MENU: (state) => {
 			SysMember.getOrgMenuTree().then(res => {
 				const menus = state.menus =  res
-				const permissions = state.permissions = generatePermission(res)
+                const permissions = state.permissions = generatePermission(res)
 				sessionStorage.setItem('menus', JSON.stringify(menus))
 				sessionStorage.setItem('permissions', JSON.stringify(permissions))
 			}).catch(err => {
