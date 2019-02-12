@@ -17,9 +17,9 @@
 						<el-form-item label="登录密码" prop="password">
 							<el-input type="password" v-model="sysMember.password"></el-input>
 						</el-form-item>
-						<el-form-item label="再次输入" prop="confirmPassword">
+						<!-- <el-form-item label="再次输入" prop="confirmPassword">
 							<el-input type="password" v-model="sysMember.confirmPassword"></el-input>
-						</el-form-item>
+						</el-form-item> -->
 						<el-form-item label="状态" prop="isPrevent">
 							<el-radio v-model="sysMember.isPrevent" label="N">正常</el-radio>
 							<el-radio v-model="sysMember.isPrevent" label="Y">停用</el-radio>
@@ -54,7 +54,7 @@ export default {
 				realName: '',
 				mobile: '',
 				password: '',
-				confirmPassword: '',
+				// confirmPassword: '',
 				isPrevent: 'N',
 				jobPosition: '',
 				jobNumber: ''
@@ -72,12 +72,12 @@ export default {
 					{ required: true, message: '请输入密码' },
 					{ min: 8, max: 16, message: '密码必须是8-16位字母、下划线、数字' }
 				],
-				confirmPassword: [
-					{ required: true, message: '请再次输入密码' },
-					{ validator: (rule, value, callback) => {
-						value == this.sysMember.password ? callback() : callback(new Error('两次输入密码不一致!'))
-					} }
-				],
+				// confirmPassword: [
+				// 	{ required: true, message: '请再次输入密码' },
+				// 	{ validator: (rule, value, callback) => {
+				// 		value == this.sysMember.password ? callback() : callback(new Error('两次输入密码不一致!'))
+				// 	} }
+				// ],
 				isPrevent: [{ required: true, message: '请选择状态' }]
 			}
 		}
@@ -89,7 +89,7 @@ export default {
 				realName: '',
 				mobile: '',
 				password: '',
-				confirmPassword: '',
+				// confirmPassword: '',
 				isPrevent: 'N',
 				jobPosition: '',
 				jobNumber: ''
