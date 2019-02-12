@@ -164,7 +164,7 @@ export default {
 				customerType: 'Consignee',
 				keyword
             }).then(res => {
-                cb(res.records) 
+                cb(res) 
             })
 		},
         handSelectCustomer(data){

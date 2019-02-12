@@ -177,7 +177,7 @@ export default {
 		},
 		getList() {
             this.loading = true
-			Company.customerFind({
+			Company.customerFind2({
 				current: this.pageIndex,
 				size: this.pageSize,
 				customerType: this.find.customerType,
