@@ -106,6 +106,7 @@ export default {
             
 		},
         save() {
+            this.handleCheckChange()
             this.$refs['ruleForm'].validate(valid => {
                 if (!valid) return
                 SysRole.update({
