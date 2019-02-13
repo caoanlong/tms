@@ -150,6 +150,7 @@ export default {
 			this.find.realName = ''
 			this.pageIndex = 1
 			this.pageSize = 10
+			this.resetExportExcelUrl()
 			this.getList()
 		},
 		resetExportExcelUrl() {

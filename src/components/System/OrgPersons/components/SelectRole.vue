@@ -9,7 +9,7 @@
         <div class="search">
             <el-form :inline="true" class="demo-form-inline" size="small">
                 <el-form-item label="角色">
-                    <el-input placeholder="角色名称" v-model="find.roleName"></el-input>
+                    <el-input placeholder="角色名称" v-model="find.keyword"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search">查询</el-button>
@@ -71,13 +71,14 @@ export default {
     data() {
         return {
             find: {
-                roleName: ''
+                keyword: ''
             }
         }
     },
     watch: {
         isVisible(val) {
             this.selectedList = []
+            this.reset()
             val && this.getList()
         }
     },
@@ -85,7 +86,7 @@ export default {
         reset() {
             this.pageIndex = 1
             this.pageSize = 10
-            this.find.roleName = ''
+            this.find.keyword = ''
             this.getList()
         },
         close() {
@@ -118,7 +119,8 @@ export default {
                 current: this.pageIndex,
 				size: this.pageSize,
                 memberID: this.memberID,
-                organizationID: this.organizationID
+                organizationID: this.organizationID,
+                keyword: this.find.keyword
             }).then(res => {
                 this.tableData = res.records
                 this.total = res.total
