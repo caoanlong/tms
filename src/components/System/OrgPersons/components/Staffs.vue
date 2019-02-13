@@ -96,6 +96,7 @@ export default {
     },
     watch: {
         organizationID(val) {
+            this.reset()
             this.getList()
         }
     },

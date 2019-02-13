@@ -51,11 +51,20 @@ const menu = {
 				sessionStorage.setItem('menus', '')
 				sessionStorage.setItem('permissions', '')
 			})
-		}
+		},
+		CLEAR_MENU: (state, menus, permissions) => {
+			state.menus = menus
+			state.permissions = permissions
+			sessionStorage.setItem('menus', '')
+			sessionStorage.setItem('permissions', '')
+		},
 	},
 	actions: {
 		getMenu ({commit}) {
 			commit('GET_MENU')
+		},
+		clearMenu() {
+			commit('CLEAR_MENU')
 		}
 	}
 }
