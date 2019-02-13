@@ -133,7 +133,8 @@ export default {
             this.org.parentId = this.parent.id
             this.org.members = this.selectedMembers
             this.$refs['ruleForm'].validate(valid => {
-				if (!valid) return
+                if (!valid) return
+                if (!this.org.isCom) this.org.code = ''
 				Organization.add(this.org).then(res => {
                     Message.success('成功！')
                     this.$emit('control', true)

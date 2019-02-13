@@ -101,8 +101,7 @@ export default {
     watch: {
         isVisible(val) {
             if (val) {
-                this.find.underOrganizationID = ''
-                this.find.keyword = ''
+                this.reset()
                 this.tableData = []
                 this.total = 0
                 this.getList()

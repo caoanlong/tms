@@ -102,6 +102,7 @@ export default {
 	},
 	watch: {
 		files(newval) {
+			this.fileUrl = []
 			if (newval.length > 0 && newval[0]) {
 				this.fileUrl = this.files
 			}

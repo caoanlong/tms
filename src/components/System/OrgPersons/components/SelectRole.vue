@@ -6,6 +6,17 @@
         :close-on-click-modal="false" 
         width="600px" 
         :append-to-body="true">
+        <div class="search">
+            <el-form :inline="true" class="demo-form-inline" size="small">
+                <el-form-item label="角色">
+                    <el-input placeholder="角色名称" v-model="find.roleName"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="search">查询</el-button>
+                    <el-button type="default" @click="reset">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
         <table class="dialog-table">
             <thead>
                 <tr>
@@ -57,6 +68,13 @@ export default {
         memberID: String | Number,
         organizationID: String | Number
     },
+    data() {
+        return {
+            find: {
+                roleName: ''
+            }
+        }
+    },
     watch: {
         isVisible(val) {
             this.selectedList = []
@@ -64,6 +82,12 @@ export default {
         }
     },
     methods: {
+        reset() {
+            this.pageIndex = 1
+            this.pageSize = 10
+            this.find.roleName = ''
+            this.getList()
+        },
         close() {
             this.$emit('control')
         },
