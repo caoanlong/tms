@@ -118,6 +118,7 @@ export default {
 			}).then(res => {
 				this.dialogVisible = false
 				Message.success('切换成功！')
+				this.$store.dispatch('clearMenu')
 				this.$store.dispatch('getUserInfo')
 				this.$store.dispatch('getMenu')
 				this.$store.dispatch('delAllViews')
