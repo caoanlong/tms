@@ -53,6 +53,7 @@
             :selected="selectedMembers"
             :organizationID="parent.id" 
             :isVisible="isSelectAdminVisible" 
+            v-if="isSelectAdminVisible"
             @control="handSelectAdmin">
         </select-admin>
     </div>
