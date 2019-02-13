@@ -49,7 +49,8 @@
                         <span 
                             v-else
                             class="checkbox" 
-                            :class="item.hasAdd ? 'disabled' : (selectedList.map(i => i.memberID).includes(item.memberID) ? 'selected' : '')">
+                            :class="{ 'selected':selectedList.map(i => i.memberID).includes(item.memberID), 
+                            'disabled': orgSelected.map(i => i.memberID).includes(item.memberID)}">
                         </span>
                     </td>
                     <td align="center">{{item.jobNumber}}</td>
@@ -95,26 +96,24 @@ export default {
                 underOrganizationID: '',
                 keyword: ''
             },
+            orgSelected:JSON.parse((JSON.stringify(this.selected))),
             orgs: []
         }
     },
     watch: {
-        isVisible(val) {
-            if (val) {
-                this.find.underOrganizationID = ''
-                this.find.keyword = ''
-                this.tableData = []
-                this.total = 0
-                this.getList()
-                this.getOrgs()
-            }
-        },
-        selected: {
-            handler(val) {
-                console.log(val)
+        isVisible: {
+            handler(val){
+                if (val) {
+                    this.find.underOrganizationID = ''
+                    this.find.keyword = ''
+                    this.tableData = []
+                    this.total = 0
+                    this.getList()
+                    this.getOrgs()
+                }
             },
-            deep: true
-        }
+            immediate: true
+        },
     },
     methods: {
         reset() {
@@ -143,7 +142,6 @@ export default {
             })
         },
         handSelect(data) {
-            if (!this.isAdd && data.hasAdd) return
             const memberIDs = this.selectedList.map(item => item.memberID)
             const index = memberIDs.indexOf(data.memberID)
             if (index == -1) {
@@ -156,7 +154,8 @@ export default {
             this.$emit('control', this.selectedList)
         },
         close() {
-            this.$emit('control')
+            this.selectedList = JSON.parse((JSON.stringify(this.orgSelected)))
+            this.$emit('control', this.selectedList)
         }
     }
 }
