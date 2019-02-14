@@ -137,7 +137,7 @@
 					</el-table-column>
 					<el-table-column label="发货方" prop="shipperCompanyName" align="center" min-width="120" :show-overflow-tooltip="true"></el-table-column>
 					<el-table-column label="收货方" prop="consigneeCompanyName" align="center"  min-width="120" :show-overflow-tooltip="true"></el-table-column>
-					<el-table-column label="货物" prop="cargoName" align="center"  width='120'></el-table-column>
+					<el-table-column label="货物" prop="cargoName" align="center" min-width="120" :show-overflow-tooltip="true"></el-table-column>
 					<el-table-column label="订单量"  align="center">
 						<el-table-column label="数量（袋）" min-width="100" prop="cargoNumSum" align="center"></el-table-column>
 						<el-table-column label="重量（吨）" min-width="100" prop="cargoWeightSum" align="center"></el-table-column>

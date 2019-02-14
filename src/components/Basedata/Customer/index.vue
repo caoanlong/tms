@@ -73,7 +73,7 @@
 							<span v-if="scope.row.fencingType=='Mix'">混合监控</span>
 						</template>
                     </el-table-column>
-					<el-table-column label="客户类型" prop="customerType" align="center">
+					<el-table-column label="客户类型"  min-width="120" :show-overflow-tooltip="true" prop="customerType" align="center">
 						<template slot-scope="scope">
 							{{scope.row.customerType?scope.row.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , '):''}}
 						</template>

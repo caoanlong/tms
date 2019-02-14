@@ -58,7 +58,7 @@
 					<el-table-column label="操作界面" min-width="120" :show-overflow-tooltip="true" prop="menuPath" align="center"></el-table-column>
 					<el-table-column label="账号" min-width="120" :show-overflow-tooltip="true" prop="mobile" align="center"></el-table-column>
 					<el-table-column label="操作人" prop="username" align="center"></el-table-column>
-					<el-table-column label="主机" prop="ip" align="center"></el-table-column>
+					<el-table-column label="主机" min-width="120" :show-overflow-tooltip="true" prop="ip" align="center"></el-table-column>
 					<el-table-column label="操作地址" prop="ipToAddress" align="center"></el-table-column>
 					<el-table-column label="状态" prop="status" align="center">
                         <!-- Succeed 成功  Failed 失败 -->

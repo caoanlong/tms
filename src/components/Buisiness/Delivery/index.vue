@@ -151,8 +151,8 @@
 					<el-table-column label="工厂" prop="shipperName" align="center"  min-width="120" :show-overflow-tooltip="true"></el-table-column>
 					<el-table-column label="客户" min-width="120" :show-overflow-tooltip="true" prop="consigneeName" align="center" ></el-table-column>
 					<el-table-column label="产品" min-width="100" :show-overflow-tooltip="true" prop="cargoName" align="center"></el-table-column>
-					<el-table-column label="数量（袋）" prop="cargoQuantity"  align="center" ></el-table-column>
-					<el-table-column label="重量（吨）" prop="cargoWeight"  align="center" ></el-table-column>
+					<el-table-column label="数量（袋）" min-width="100" :show-overflow-tooltip="true" prop="cargoQuantity"  align="center" ></el-table-column>
+					<el-table-column label="重量（吨）" min-width="100" :show-overflow-tooltip="true" prop="cargoWeight"  align="center" ></el-table-column>
 					<el-table-column label="创建时间" min-width="120" :show-overflow-tooltip="true" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.createTime">{{ moment(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss')}}</span>
