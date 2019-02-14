@@ -103,7 +103,7 @@ export default {
                 this.selectedList = []
                 this.tableData = []
                 this.total = 0
-                this.getList()
+                this.reset()
                 this.getOrgs()
             }
         }
