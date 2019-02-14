@@ -79,7 +79,13 @@
                     </el-table-column>
 					<el-table-column label="操作" align="center">
 						<template slot-scope="scope">
-							<el-dropdown  @command="handleCommand"  trigger="click">
+							<el-dropdown 
+								@command="handleCommand" 
+								trigger="click" 
+								v-if="permissions[$route.name] && (
+									permissions[$route.name]['detail'] 
+									|| permissions[$route.name]['update'] 
+									|| permissions[$route.name]['delete'])">
 								<el-button type="primary" size="mini">操作<i class="el-icon-arrow-down el-icon--right"></i></el-button>
 								<el-dropdown-menu slot="dropdown">
 									<el-dropdown-item :command="{type: 'view', id:scope.row.customerAddressID}"  v-if="permissions[$route.name]&&permissions[$route.name]['detail']">查看</el-dropdown-item>
