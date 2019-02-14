@@ -79,7 +79,7 @@ export default {
         isVisible(val) {
             this.selectedList = []
             this.reset()
-            val && this.getList()
+            this.getList2();
         }
     },
     methods: {
@@ -124,15 +124,22 @@ export default {
             }).then(res => {
                 this.tableData = res.records
                 this.total = res.total
-                const list = this.tableData.filter(item => item.hasAdd)
-                const roleIDs = this.selectedList.map(item => item.roleID)
-                for (let i = 0; i < list.length; i++) {
-                    if (roleIDs.indexOf(list[i].roleID) == -1) {
-                        this.selectedList.push(list[i])
-                    }
-                }
             })
-        }
+        },
+        // 获取所有已经选中的角色
+        getList2() {
+            OrganizationMember.addibleRoleList({
+                current: 1,
+				size: 10000,
+                memberID: this.memberID,
+                organizationID: this.organizationID,
+                keyword: this.find.keyword,
+                own: true
+            }).then(res => {
+                this.selectedList = res.records.filter(item => item.roleID)
+            })
+        },
+
     }
 }
 </script>

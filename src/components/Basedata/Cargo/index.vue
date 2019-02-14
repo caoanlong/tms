@@ -51,8 +51,8 @@
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
 					<el-table-column label="所属客户" prop="shipperCompanyName" align="center"></el-table-column>
-					<el-table-column label="货物编号" prop="code"   align="center"></el-table-column>
-					<el-table-column label="货物名称" prop="cargoName"   align="center"></el-table-column>
+					<el-table-column label="货物编号" min-width="120" :show-overflow-tooltip="true" prop="code" align="center"></el-table-column>
+					<el-table-column label="货物名称" min-width="120" :show-overflow-tooltip="true" prop="cargoName"   align="center"></el-table-column>
 					<el-table-column label="货物类型" prop="cargoType"   align="center">
 						<template slot-scope="scope">
 							<span>{{CARGOTYPES[scope.row.cargoType]}}</span>

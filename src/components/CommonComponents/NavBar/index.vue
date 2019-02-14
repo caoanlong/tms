@@ -6,7 +6,7 @@
 				<span class="companyName">{{companyName}}</span>
 			</div>
 			<div class="organization" @click="changeOrganization">
-				{{loginOrganizationName}} 
+				{{mySeletOrg}} 
 				<span>切换 <i class="el-icon-arrow-down"></i></span>
 			</div>
 		</div>
@@ -73,7 +73,8 @@ export default {
 		return {
 			dialogVisible: false,
 			orgs: [],
-			selectedOrgs: {}
+            selectedOrgs: {},
+            mySeletOrg: '',
 		};
 	},
 	computed: {
@@ -92,7 +93,8 @@ export default {
 		this.selectedOrgs = {
 			id: this.loginOrganizationID,
 			name: this.loginOrganizationName
-		}
+        }
+        this.mySeletOrg = this.selectedOrgs.name
 	},
 	methods: {
 		logout() {
@@ -102,11 +104,11 @@ export default {
 		},
 		getOrgs() {
 			SysMember.getOrgList().then(res => {
-				this.orgs = res
+                this.orgs = res
 			})
 		},
 		changeOrganization() {
-			this.dialogVisible = true
+            this.dialogVisible = true
 			this.getOrgs()
 		},
 		handSelectOrg(data) {
@@ -116,8 +118,9 @@ export default {
 			SysMember.changeOrg({
 				organizationID: this.selectedOrgs.id
 			}).then(res => {
-				this.dialogVisible = false
-				Message.success('切换成功！')
+                this.dialogVisible = false
+                Message.success('切换成功！')
+                this.mySeletOrg = this.selectedOrgs.name
 				this.$store.dispatch('clearMenu')
 				this.$store.dispatch('getUserInfo')
 				this.$store.dispatch('getMenu')

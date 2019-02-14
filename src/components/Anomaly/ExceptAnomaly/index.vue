@@ -57,7 +57,7 @@
 				</el-form>
 			</div>
 			<div class="tableControl">
-				<a :href="exportExcelUrl" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
+				<a :href="exportExcelUrl" v-if="permissions[$route.name]&&permissions[$route.name]['export']" download="customer.xlsx" class="exportExcel el-icon-download">导出</a>
 			</div>
 			<div class="table">
 				<el-table :data="tableData" v-loading="loading" border style="width: 100%" size="mini" stripe>

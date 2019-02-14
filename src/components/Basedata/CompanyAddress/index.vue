@@ -59,13 +59,13 @@
 					@selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="所属客户" prop="companyName"   align="center"></el-table-column>
-					<el-table-column label="所属片区" prop="zone"  align="center"></el-table-column>
-					<el-table-column label="终端用户名称" prop="finalUsername"   align="center"></el-table-column>
-					<el-table-column label="联系人" prop="contactName"   align="center"></el-table-column>
-					<el-table-column label="手机" prop="contactPhone"   align="center"></el-table-column>
-					<el-table-column label="区域" prop="contactArea"   align="center"></el-table-column>
-					<el-table-column label="地址">
+					<el-table-column label="所属客户" prop="companyName" min-width="120" :show-overflow-tooltip="true" align="left"></el-table-column>
+					<el-table-column label="所属片区" prop="zone" min-width="120" :show-overflow-tooltip="true" align="left"></el-table-column>
+					<el-table-column label="终端用户名称" min-width="120" :show-overflow-tooltip="true" prop="finalUsername" align="center"></el-table-column>
+					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
+					<el-table-column label="手机" min-width="100" :show-overflow-tooltip="true" prop="contactPhone" align="center"></el-table-column>
+					<el-table-column label="区域" prop="contactArea" align="center"></el-table-column>
+					<el-table-column label="地址" min-width="120" :show-overflow-tooltip="true">
 						<template slot-scope="scope">
 							<span>{{scope.row.locationAddress}}{{scope.row.detailAddress}}</span>
 						</template>

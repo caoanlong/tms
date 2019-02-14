@@ -29,12 +29,12 @@
                     v-loading="loading"
                     border style="width: 100%" size="mini">
                     <el-table-column label="工号" prop="jobNumber" align="center"></el-table-column>
-                    <el-table-column label="姓名" prop="realName" align="center"></el-table-column>
-                    <el-table-column label="手机" prop="mobile" align="center"></el-table-column>
-                    <el-table-column label="归属" prop="underOrganizationStr" align="center"></el-table-column>
+                    <el-table-column label="姓名" min-width="100" :show-overflow-tooltip="true" prop="realName" align="center"></el-table-column>
+                    <el-table-column label="手机" min-width="100" :show-overflow-tooltip="true" prop="mobile" align="center"></el-table-column>
+                    <el-table-column label="归属" min-width="120" :show-overflow-tooltip="true" prop="underOrganizationStr" align="center"></el-table-column>
                     <el-table-column label="来源" prop="comeFrom" align="center"></el-table-column>
                     <el-table-column label="职位" prop="jobPosition" align="center"></el-table-column>
-                    <el-table-column label="组织中角色" prop="roleName" align="center"></el-table-column>
+                    <el-table-column label="组织中角色" min-width="100" :show-overflow-tooltip="true" prop="roleName" align="center"></el-table-column>
                     <el-table-column label="操作" width="100" align="center" fixed="right">
                         <template slot-scope="scope" v-if="scope.row.allow">
                             <el-dropdown  @command="handleCommand"  trigger="click">

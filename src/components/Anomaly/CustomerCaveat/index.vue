@@ -55,7 +55,7 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" v-loading="loading" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="客户名称" prop="consigneeName" align="center" width='160'>
+					<el-table-column label="客户名称" prop="consigneeName" align="center" min-width="100" :show-overflow-tooltip="true">
 						<template slot-scope="scope">
 							<router-link tag="span" class="link" :to="{name: 'exceptanomaly', query: {consigneeName: scope.row.consigneeName}}">
 								{{scope.row.consigneeName}}
@@ -63,7 +63,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="客户编号" prop="code" align="center"></el-table-column>
-					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
+					<el-table-column label="所属片区" min-width="100" :show-overflow-tooltip="true" prop="zone" align="center"></el-table-column>
 					<el-table-column label="总单量" prop="orderNum" align="center"></el-table-column>
 					<el-table-column label="异常单" prop="alarmNum" align="center"></el-table-column>
 					<el-table-column label="异常占比" align="center">
