@@ -45,13 +45,13 @@
 							@click.stop="() => edit(data)">
 							编辑
 						</el-button>
-						<!-- <el-button 
+						<el-button 
 							v-if="permissions[$route.name]&&permissions[$route.name]['delete']"
 							type="text"
 							size="mini"
 							@click="() => remove(data)">
 							删除
-						</el-button> -->
+						</el-button>
 						</span>
 					</span>
 				</el-tree>
@@ -72,6 +72,7 @@ import Staffs from './components/Staffs'
 import AddOrg from './components/AddOrg'
 import EditOrg from './components/EditOrg'
 import Organization from '../../../api/Organization'
+import { deleteConfirm } from '../../../common/utils'
 export default {
 	components: { Staffs, AddOrg, EditOrg },
     data() {
@@ -141,7 +142,16 @@ export default {
 			this.isEditOrgVisible = true
 		},
 		remove(data) {
-
+			if (!data.isManage) {
+				Message.error('没有权限操作！')
+				return
+			}
+			deleteConfirm(data.id, id => {
+				Organization.del({ id }).then(res => {
+					Message.success(res.data.msg)
+					this.getList()
+				})
+			})
 		}
 	}
 }

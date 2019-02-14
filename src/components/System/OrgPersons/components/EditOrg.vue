@@ -14,7 +14,7 @@
                 <el-form-item label="组织名称" prop="name">
                     <el-input v-model="org.name"></el-input>
                 </el-form-item>
-                <el-form-item label="管理员" prop="members">
+                <el-form-item label="管理员">
                     <div style="position:relative;padding-right:180px;">
                         <div style="border:1px solid #dcdfe6;border-radius:4px;padding:0 10px;min-height:40px">
                             <el-tag 
@@ -101,7 +101,6 @@ export default {
             selectedMembers: [],
             rules: {
 				name: [{ required: true, message: '请输入组织名称' }],
-				members: [{ required: true, message: '请添加管理员' }],
 				isCom: [{ required: true, message: '请选择是否是工厂' }],
 				code: [{ required: true, message: '请输入工厂编码' }]
             }
