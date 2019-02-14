@@ -63,8 +63,8 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" v-loading="loading" border style="width: 100%" size="mini">
-					<el-table-column label="手机号" prop="mobile" align="center"></el-table-column>
-					<el-table-column label="姓名" prop="realName" align="center"></el-table-column>
+					<el-table-column label="手机号" prop="mobile" min-width="100" :show-overflow-tooltip="true" align="center"></el-table-column>
+					<el-table-column label="姓名" min-width="120" :show-overflow-tooltip="true" prop="realName" align="center"></el-table-column>
 					<el-table-column label="状态" prop="isPrevent" align="center">
 						<template slot-scope="scope">
 							<el-tag type="success" size="mini" v-if="scope.row.isPrevent == 'N'">正常</el-tag>
@@ -72,7 +72,7 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="工号" prop="jobNumber" align="center"></el-table-column>
-					<el-table-column label="归属" prop="organizationName" align="center"></el-table-column>
+					<el-table-column label="归属" min-width="120" :show-overflow-tooltip="true" prop="organizationName" align="center"></el-table-column>
 					<el-table-column label="职位" prop="jobPosition" align="center"></el-table-column>
 					<el-table-column label="操作" width="80" align="center" fixed="right">
 						<template 

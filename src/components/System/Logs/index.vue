@@ -54,11 +54,11 @@
 			<div class="table">
 				<el-table ref="roleTable" :data="tableData" v-loading="loading" border style="width: 100%" size="mini">
 					<!-- <el-table-column label="日志编号" prop="logApiID" align="center"></el-table-column> -->
-					<el-table-column label="权限组织" prop="organizationName" align="center"></el-table-column>
-					<el-table-column label="操作界面" prop="menuPath" align="center"></el-table-column>
-					<el-table-column label="账号" prop="mobile" align="center"></el-table-column>
+					<el-table-column label="权限组织" min-width="100" :show-overflow-tooltip="true" prop="organizationName" align="center"></el-table-column>
+					<el-table-column label="操作界面" min-width="120" :show-overflow-tooltip="true" prop="menuPath" align="center"></el-table-column>
+					<el-table-column label="账号" min-width="120" :show-overflow-tooltip="true" prop="mobile" align="center"></el-table-column>
 					<el-table-column label="操作人" prop="username" align="center"></el-table-column>
-					<el-table-column label="主机" prop="ip" align="center"></el-table-column>
+					<el-table-column label="主机" min-width="120" :show-overflow-tooltip="true" prop="ip" align="center"></el-table-column>
 					<el-table-column label="操作地址" prop="ipToAddress" align="center"></el-table-column>
 					<el-table-column label="状态" prop="status" align="center">
                         <!-- Succeed 成功  Failed 失败 -->
@@ -67,7 +67,7 @@
                             <el-tag size="mini" type="info" v-if="scope.row.status=='Failed'">失败</el-tag>
 						</template>
                     </el-table-column>
-					<el-table-column label="操作时间" prop="createDate" align="center">
+					<el-table-column label="操作时间" min-width="120" :show-overflow-tooltip="true" prop="createDate" align="center">
                         <template slot-scope="scope">
 							<span>{{moment(scope.row.createDate).format('YYYY-MM-DD HH:mm:ss')}}</span>
 						</template>

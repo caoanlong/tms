@@ -52,7 +52,7 @@
 			</div>
 			<div class="table">
 				<el-table :data="tableData" v-loading="loading" border style="width: 100%" size="mini" stripe>
-					<el-table-column label="工厂" prop="companyName" align="center"  width='160'>
+					<el-table-column label="工厂" prop="companyName" align="center" min-width="120" :show-overflow-tooltip="true">
                         <template slot-scope="scope">
 							<span 
 								class="link" 
@@ -61,7 +61,7 @@
 							</span>
 						</template>
                     </el-table-column>
-					<el-table-column label="所属片区" prop="zone" align="center"  width='140'></el-table-column>
+					<el-table-column label="所属片区" prop="zone" align="center" min-width="120" :show-overflow-tooltip="true"></el-table-column>
 					<el-table-column label="总单量" prop="carrierOrderNum" align="center" ></el-table-column>
 					<el-table-column label="特价单量" prop="selfPickNum" align="center"></el-table-column>
 					<el-table-column label="特价占比" align="center">
@@ -75,11 +75,11 @@
                             {{(scope.row.carrierOrderNum && scope.row.alarmNum)? ((scope.row.alarmNum/scope.row.carrierOrderNum*100).toFixed(2) +'%'):0}}
                         </template>
                     </el-table-column>
-					<el-table-column label="停车报警次数" prop="stopOverTimeNum" align="center"></el-table-column>
-					<el-table-column label="卸货报警次数" prop="arrivedOffsetNum" align="center"></el-table-column>
-					<el-table-column label="下单客户量" prop="customerNum" align="center"></el-table-column>
+					<el-table-column label="停车报警次数" min-width="120" :show-overflow-tooltip="true" prop="stopOverTimeNum" align="center"></el-table-column>
+					<el-table-column label="卸货报警次数" min-width="120" :show-overflow-tooltip="true" prop="arrivedOffsetNum" align="center"></el-table-column>
+					<el-table-column label="下单客户量" min-width="120" :show-overflow-tooltip="true" prop="customerNum" align="center"></el-table-column>
 					<el-table-column label="异常客户" prop="customerAlarmNum" align="center"></el-table-column>
-					<el-table-column label="异常客户占比" align="center">
+					<el-table-column label="异常客户占比" min-width="120" :show-overflow-tooltip="true" align="center">
                         <template slot-scope="scope">
                             {{(scope.row.customerNum && scope.row.customerAlarmNum)? ((scope.row.customerAlarmNum/scope.row.customerNum*100).toFixed(2) +'%'):0}}
                         </template>

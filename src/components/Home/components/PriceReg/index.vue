@@ -343,7 +343,7 @@ export default {
                     return {
                         ex: +item.ex,
                         shipperCompanyName: item.shipperCompanyName,
-                        percentage: Math.round(+item.ex*100/max)
+                        percentage: !max? 0 : Math.round(+item.ex*100/max)
                     }
                 })
                 this.$set(this.priceReg, 'alarmRankList', alarmRankList)

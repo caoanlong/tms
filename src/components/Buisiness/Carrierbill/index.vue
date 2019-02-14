@@ -112,21 +112,22 @@
 			</div>
 			<div class="table">
 				<el-table v-loading="loading" :data="tableData" @selection-change="selectionChange" border style="width: 100%" size="mini">
-					<el-table-column label="承运单号" width="170" align="center">
+					<el-table-column label="承运单号" min-width="120" :show-overflow-tooltip="true" align="center">
 						<template slot-scope="scope">
-							<span @click="view(scope.row.carrierOrderID)" class="link">
+							<span v-if="permissions[$route.name]&&permissions[$route.name]['detail']" @click="view(scope.row.carrierOrderID)" class="link">
 								{{scope.row.carrierOrderNo}}
 							</span>
+                            <span v-else>{{scope.row.carrierOrderNo}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="交货单号" prop="shipperNo"  align="center"  width='120' ></el-table-column>
-					<el-table-column label="异常" align="center" width="60">
+					<el-table-column label="交货单号" prop="shipperNo"  align="center"  min-width="100" :show-overflow-tooltip="true" ></el-table-column>
+					<el-table-column label="异常" align="center" min-width="60" :show-overflow-tooltip="true">
                         <template slot-scope="scope">
 							<span v-if="scope.row.alarmFlag=='Y'" style="color:#F56C6C">有</span>
                             <span v-else style="color:#67C23A">无</span>
 						</template>
                     </el-table-column>
-					<el-table-column label="状态" align="center" width='80'>
+					<el-table-column label="状态" align="center" min-width="80" :show-overflow-tooltip="true">
 						<template slot-scope="scope">
 							<el-tag size="mini" class="statusTag" type="warning" v-if="scope.row.status == 'Committed'">未执行</el-tag>
 							<el-tag size="mini" class="statusTag" type="primary" v-else-if="scope.row.status == 'Running'">执行中</el-tag>
@@ -134,18 +135,18 @@
 							<el-tag size="mini" class="statusTag" type="info" v-else-if="scope.row.status == 'Closed'">已关闭</el-tag>
 						</template>
 					</el-table-column>
-					<el-table-column label="发货方" prop="shipperCompanyName" align="center"  width='120'></el-table-column>
-					<el-table-column label="收货方" prop="consigneeCompanyName" align="center"  width='120'></el-table-column>
-					<el-table-column label="货物" prop="cargoName" align="center"  width='120'></el-table-column>
+					<el-table-column label="发货方" prop="shipperCompanyName" align="center" min-width="120" :show-overflow-tooltip="true"></el-table-column>
+					<el-table-column label="收货方" prop="consigneeCompanyName" align="center"  min-width="120" :show-overflow-tooltip="true"></el-table-column>
+					<el-table-column label="货物" prop="cargoName" align="center" min-width="120" :show-overflow-tooltip="true"></el-table-column>
 					<el-table-column label="订单量"  align="center">
-						<el-table-column label="数量（袋）" prop="cargoNumSum" align="center"></el-table-column>
-						<el-table-column label="重量（吨）" prop="cargoWeightSum" align="center"></el-table-column>
+						<el-table-column label="数量（袋）" min-width="100" prop="cargoNumSum" align="center"></el-table-column>
+						<el-table-column label="重量（吨）" min-width="100" prop="cargoWeightSum" align="center"></el-table-column>
 					</el-table-column>
 					<el-table-column label="剩余量"  align="center">
-						<el-table-column label="数量（袋）" prop="remainingCargoNum" align="center"></el-table-column>
-						<el-table-column label="重量（吨）" prop="remainingCargoWeight" align="center"></el-table-column>
+						<el-table-column label="数量（袋）" min-width="100" prop="remainingCargoNum" align="center"></el-table-column>
+						<el-table-column label="重量（吨）" min-width="100" prop="remainingCargoWeight" align="center"></el-table-column>
 					</el-table-column>
-					<el-table-column label="创建时间" width="140" align="center">
+					<el-table-column label="创建时间" min-width="120" :show-overflow-tooltip="true" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.createTime">{{moment(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss')}}</span>
 						</template>

@@ -63,9 +63,9 @@
 					:data="tableData" @selection-change="selectionChange"
 					border style="width: 100%" size="mini" stripe>
 					<el-table-column label="id" type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="客户名称" prop="companyName" align="center"></el-table-column>
+					<el-table-column label="客户名称" min-width="120" :show-overflow-tooltip="true" prop="companyName" align="left"></el-table-column>
 					<el-table-column label="客户编号" prop="code" align="center"></el-table-column>
-					<el-table-column label="所属片区" prop="zone" align="center"></el-table-column>
+					<el-table-column label="所属片区" min-width="120" :show-overflow-tooltip="true" prop="zone" align="left"></el-table-column>
 					<el-table-column label="监控类型" prop="fencingType" align="center">
                         <template slot-scope="scope">
 							<span v-if="scope.row.fencingType=='Point'">地址监控</span>
@@ -73,13 +73,13 @@
 							<span v-if="scope.row.fencingType=='Mix'">混合监控</span>
 						</template>
                     </el-table-column>
-					<el-table-column label="客户类型" prop="customerType" align="center">
+					<el-table-column label="客户类型"  min-width="120" :show-overflow-tooltip="true" prop="customerType" align="center">
 						<template slot-scope="scope">
 							{{scope.row.customerType?scope.row.customerType.split(',').map((item) => CUSTOMERTYPE[item]).join(' , '):''}}
 						</template>
 					</el-table-column>
 					<el-table-column label="联系人" prop="contactName" align="center"></el-table-column>
-					<el-table-column label="手机" prop="contactPhone" align="center"></el-table-column>
+					<el-table-column label="手机" min-width="100" :show-overflow-tooltip="true" prop="contactPhone" align="center"></el-table-column>
 					<el-table-column label="监控区域" prop="monitorAreaCount" align="center">
                         <template slot-scope="scope">{{scope.row.monitorAreaCount}}</template>
                     </el-table-column>

@@ -140,41 +140,42 @@
 			<div class="table">
 				<el-table :data="tableData" v-loading="loading" @selection-change="selectionChange" border style="width: 100%" size="mini">
 					<el-table-column type="selection" align="center" width="40"></el-table-column>
-					<el-table-column label="交货单号" width="150"  align="center">
+					<el-table-column label="交货单号" min-width="100" :show-overflow-tooltip="true" align="center">
 						<template slot-scope="scope">
-							<span @click="view(scope.row.deliveryOrderID)" class="link">{{scope.row.code}}</span>
+							<span v-if="permissions[$route.name]&&permissions[$route.name]['detail']" @click="view(scope.row.deliveryOrderID)" class="link">{{scope.row.code}}</span>
+                            <span v-else>{{scope.row.code}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="监控级别" align="center" width='80' prop="level"></el-table-column>
-                    <el-table-column label="车牌号" align="center"  width='120' prop="plateNo"></el-table-column>
-					<el-table-column label="工厂" prop="shipperName" align="center"  width='130'></el-table-column>
-					<el-table-column label="客户" prop="consigneeName" align="center"  width='130'></el-table-column>
-					<el-table-column label="产品" prop="cargoName" align="center"></el-table-column>
-					<el-table-column label="数量（袋）" prop="cargoQuantity"  align="center"  width='120'></el-table-column>
-					<el-table-column label="重量（吨）" prop="cargoWeight"  align="center"  width='120'></el-table-column>
-					<el-table-column label="创建时间" width="140" align="center">
+					<el-table-column label="监控级别" align="center" prop="level"></el-table-column>
+                    <el-table-column label="车牌号" align="center" prop="plateNo"></el-table-column>
+					<el-table-column label="工厂" prop="shipperName" align="center"  min-width="120" :show-overflow-tooltip="true"></el-table-column>
+					<el-table-column label="客户" min-width="120" :show-overflow-tooltip="true" prop="consigneeName" align="center" ></el-table-column>
+					<el-table-column label="产品" min-width="100" :show-overflow-tooltip="true" prop="cargoName" align="center"></el-table-column>
+					<el-table-column label="数量（袋）" min-width="100" :show-overflow-tooltip="true" prop="cargoQuantity"  align="center" ></el-table-column>
+					<el-table-column label="重量（吨）" min-width="100" :show-overflow-tooltip="true" prop="cargoWeight"  align="center" ></el-table-column>
+					<el-table-column label="创建时间" min-width="120" :show-overflow-tooltip="true" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.createTime">{{ moment(scope.row.createTime).format('YYYY-MM-DD HH:mm:ss')}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="业务状态" prop="status"  align="center"  width='100'>
+					<el-table-column label="业务状态" prop="status"  align="center" >
                         <template slot-scope="scope">
 						    {{scope.row.status=='Loaded'?'已装车':'已卸货'}}
 						</template>
                     </el-table-column>
-					<el-table-column label="数据来源"  align="center"  width='120'>
+					<el-table-column label="数据来源"  align="center" >
                         <template slot-scope="scope">
 						    {{scope.row.comeFrom=='TMS'?'手工录入':'DL系统'}}
 						</template>
                     </el-table-column>
-					<el-table-column label="数据校验"  align="center"  width='120'>
+					<el-table-column label="数据校验"  align="center" >
 						<template slot-scope="scope">
                             <span v-if="scope.row.verifyFlag=='Y'" stytle="color:#67C23A">已通过</span>
                             <span v-else style="color:#F56C6C">未通过</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="备注" prop="verifyRemark"></el-table-column>
-					<el-table-column label="操作" width="80" align="center" fixed="right">
+					<el-table-column label="备注" min-width="120" :show-overflow-tooltip="true" prop="verifyRemark"></el-table-column>
+					<el-table-column label="操作" min-width="80" :show-overflow-tooltip="true" align="center" fixed="right">
 						<template slot-scope="scope">
 							<el-dropdown 
 								@command="handleCommand" 
@@ -193,7 +194,7 @@
 									<el-dropdown-item :command="{type: 'delete', id: scope.row.deliveryOrderID}" v-if="permissions[$route.name]&&permissions[$route.name]['delete']">删除</el-dropdown-item>
 								</el-dropdown-menu>
 							</el-dropdown>
-                            <span v-else>已调度</span>
+                            <span v-else>{{scope.row.verifyFlag =='N' ? '':'已调度'}}</span>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -385,10 +386,6 @@ export default {
                     })
 					this.getList()
 				}).catch(err => {
-                    Message({ 
-                        type: 'error', 
-                        message: res.data.msg 
-                    })
                     this.getList()
                 })
 			},this.selectedList)

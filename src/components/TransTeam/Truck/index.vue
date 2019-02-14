@@ -54,7 +54,7 @@
 					<el-table-column label="编号" align="center">
 						<template slot-scope="scope">{{scope.$index+1}}</template>
 					</el-table-column>
-					<el-table-column label="手机号" prop="mobile" align="center">
+					<el-table-column label="手机号" prop="mobile" min-width="100" :show-overflow-tooltip="true" align="center">
 						<template slot-scope="scope">
 							<router-link 
 								tag="span" 
@@ -67,15 +67,15 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="姓名" prop="realName" align="center" ></el-table-column>
-					<el-table-column label="APP最后上线" prop="mobile" align="center">
+					<el-table-column label="APP最后上线" min-width="120" :show-overflow-tooltip="true" prop="mobile" align="center">
 						<template slot-scope="scope">
 							<span v-if="scope.row.latestStartup">
 								{{moment(scope.row.latestStartup).format('YYYY-MM-DD hh:mm:ss')}}
 							</span>
 						</template>
 					</el-table-column>
-					<el-table-column label="当前车辆" prop="plateNo" align="center"></el-table-column>
-					<el-table-column label="车长/车型" align="center">
+					<el-table-column label="当前车辆" prop="plateNo" min-width="100" :show-overflow-tooltip="true" align="center"></el-table-column>
+					<el-table-column label="车长/车型" min-width="100" :show-overflow-tooltip="true" align="center">
 						<!-- <template slot-scope="scope">{{TRUCKTYPE[scope.row.truckType]}}</template> -->
 						<template slot-scope="scope">
 							{{[
@@ -87,7 +87,7 @@
 					<el-table-column label="安装GPS" align="center">
 						<template slot-scope="scope">{{scope.row.gpsFlag == 'Y' ? '已安装' : '未安装'}}</template>
 					</el-table-column>
-					<el-table-column label="便携终端号" prop="deviceNumber" align="center"></el-table-column>
+					<el-table-column label="便携终端号" min-width="100" :show-overflow-tooltip="true" prop="deviceNumber" align="center"></el-table-column>
 
 					<el-table-column label="业务状态" prop="workStatus" align="center">
 						<template slot-scope="scope">
